@@ -14,9 +14,9 @@
     "exact_source_rows": 22,
     "declared_operations": 22,
     "declared_percent": 100,
-    "enabled_operations": 9,
-    "enabled_percent": 40.91,
-    "disabled_operations": 13,
+    "enabled_operations": 6,
+    "enabled_percent": 27.27,
+    "disabled_operations": 16,
     "documented_deletes": 3,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 13
+        "count": 16
       }
     ],
     "transport": {
@@ -84,20 +84,29 @@
       }
     },
     "declaration_pending_ids": [
+      "runnable-command-binding-service-now",
       "typed-operation-contract-service-now",
       "sync-transport-source-definition-service-now"
     ],
     "declaration_pending": [
       {
+        "id": "runnable-command-binding-service-now",
+        "count": 3
+      },
+      {
         "id": "typed-operation-contract-service-now",
         "count": 13
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 0,
+    "typed_write_actions": 6,
+    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_typed_write_actions": 6
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -121,20 +130,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "incidents"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-service-now",
+          "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[0] is bound to ETL stream \"incidents\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[0] is bound to ETL stream \"incidents\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "incidents"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-service-now",
+        "contract": null
       }
     },
     {
@@ -157,20 +171,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "users"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-service-now",
+          "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[1] is bound to ETL stream \"users\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[1] is bound to ETL stream \"users\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "users"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-service-now",
+        "contract": null
       }
     },
     {
@@ -193,20 +212,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "groups"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-service-now",
+          "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[2] is bound to ETL stream \"groups\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[2] is bound to ETL stream \"groups\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "groups"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-service-now",
+        "contract": null
       }
     },
     {
@@ -240,7 +264,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-record detail fetch for a resource the incidents stream (GET /api/now/table/incident) already lists in full; no additional field is reachable only through this endpoint"
       },
       "declaration": {
@@ -279,7 +303,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-record detail fetch for a resource the users stream (GET /api/now/table/sys_user) already lists in full"
       },
       "declaration": {
@@ -318,7 +342,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-record detail fetch for a resource the groups stream (GET /api/now/table/sys_user_group) already lists in full"
       },
       "declaration": {
@@ -349,14 +373,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[6] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[6] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_incident"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_incident"
         },
@@ -394,14 +418,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[7] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[7] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_user"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_user"
         },
@@ -439,14 +463,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[8] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[8] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_group"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_group"
         },
@@ -484,14 +508,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[9] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[9] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_incident"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_incident"
         },
@@ -529,14 +553,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[10] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[10] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_user"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_user"
         },
@@ -574,14 +598,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[11] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/service-now/api_surface.json endpoints[11] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_group"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_group"
         },
@@ -627,7 +651,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "ServiceNow's Table API documents PUT and PATCH as functionally identical on this resource (both modify only the fields present in the request body, unlike standard REST PUT's whole-resource replace semantics) — update_incident (PATCH) already covers this exact capability; declaring both would send byte-identical requests for any accepted input"
       },
       "declaration": {
@@ -675,7 +699,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "same PUT/PATCH functional-identity reasoning as incident; update_user (PATCH) already covers it"
       },
       "declaration": {
@@ -723,7 +747,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "same PUT/PATCH functional-identity reasoning as incident; update_group (PATCH) already covers it"
       },
       "declaration": {
@@ -771,7 +795,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "a hard, unrecoverable delete of an incident record gated by ServiceNow's own delete ACL; legacy exposed zero mutation capability (Capabilities{Write:false}) and this expansion's write additions are scoped to the reversible/low-risk create+update surface, not destructive deletes"
       },
       "declaration": {
@@ -819,7 +843,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "a hard, unrecoverable delete of a user account record gated by ServiceNow's own delete ACL; deleting a sys_user row can cascade-orphan every record that references it (assigned incidents, group membership, approvals) and is normally performed only through ServiceNow's own admin UI, not an unattended API mutation"
       },
       "declaration": {
@@ -867,7 +891,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "a hard, unrecoverable delete of a group record gated by ServiceNow's own delete ACL; deleting a group can orphan every membership/assignment rule that references it"
       },
       "declaration": {
@@ -915,7 +939,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "group-membership join table not implemented by legacy and not one of this migration's 3 legacy-parity tables; a future capability expansion could add it as a 4th table following the identical stream+write shape used here"
       },
       "declaration": {
@@ -954,7 +978,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "the separate Aggregate API (COUNT/SUM/AVG/MIN/MAX over a table) is a distinct API surface from the Table API this connector targets; not implemented by legacy"
       },
       "declaration": {
@@ -993,7 +1017,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "the separate Import Set API for staged bulk loads is a distinct API surface from the Table API this connector targets; not implemented by legacy"
       },
       "declaration": {
@@ -1041,7 +1065,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "the separate Attachment API returns/accepts binary file payloads (multipart upload, raw byte download), not JSON table rows; the engine's declarative HTTP dialect has no multipart/binary-body primitive"
       },
       "declaration": {

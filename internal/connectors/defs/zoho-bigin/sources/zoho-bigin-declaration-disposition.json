@@ -14,9 +14,9 @@
     "exact_source_rows": 50,
     "declared_operations": 50,
     "declared_percent": 100,
-    "enabled_operations": 20,
-    "enabled_percent": 40,
-    "disabled_operations": 30,
+    "enabled_operations": 6,
+    "enabled_percent": 12,
+    "disabled_operations": 44,
     "documented_deletes": 6,
     "enabled_deletes": 2,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 30
+        "count": 44
       }
     ],
     "transport": {
@@ -84,20 +84,29 @@
       }
     },
     "declaration_pending_ids": [
+      "runnable-command-binding-zoho-bigin",
       "typed-operation-contract-zoho-bigin",
       "sync-transport-source-definition-zoho-bigin"
     ],
     "declaration_pending": [
       {
+        "id": "runnable-command-binding-zoho-bigin",
+        "count": 14
+      },
+      {
         "id": "typed-operation-contract-zoho-bigin",
         "count": 30
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 0,
+    "typed_write_actions": 6,
+    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_typed_write_actions": 6
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -121,20 +130,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "pipelines"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[0] is bound to ETL stream \"pipelines\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[0] is bound to ETL stream \"pipelines\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "pipelines"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -157,20 +171,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "records"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[1] is bound to ETL stream \"records\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[1] is bound to ETL stream \"records\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "records"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -193,20 +212,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "contacts"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[2] is bound to ETL stream \"contacts\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[2] is bound to ETL stream \"contacts\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "contacts"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -229,20 +253,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "companies"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[3] is bound to ETL stream \"companies\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[3] is bound to ETL stream \"companies\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "companies"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -265,20 +294,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "products"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[4] is bound to ETL stream \"products\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[4] is bound to ETL stream \"products\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "products"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -301,20 +335,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[5] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "tasks"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[5] is bound to ETL stream \"tasks\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[5] is bound to ETL stream \"tasks\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "tasks"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -337,20 +376,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[6] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "events"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[6] is bound to ETL stream \"events\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[6] is bound to ETL stream \"events\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "events"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -373,20 +417,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[7] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "calls"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[7] is bound to ETL stream \"calls\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[7] is bound to ETL stream \"calls\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "calls"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -409,20 +458,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[8] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "notes"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[8] is bound to ETL stream \"notes\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[8] is bound to ETL stream \"notes\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "notes"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -445,20 +499,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[9] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "users"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[9] is bound to ETL stream \"users\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[9] is bound to ETL stream \"users\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "users"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -481,20 +540,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[10] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "tags"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[10] is bound to ETL stream \"tags\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[10] is bound to ETL stream \"tags\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "tags"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -517,20 +581,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[11] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "modules"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[11] is bound to ETL stream \"modules\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[11] is bound to ETL stream \"modules\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "modules"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -553,20 +622,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[12] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "fields"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[12] is bound to ETL stream \"fields\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[12] is bound to ETL stream \"fields\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "fields"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -592,14 +666,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[13] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[13] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_record"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_record"
         },
@@ -637,14 +711,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[14] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[14] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_record"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_record"
         },
@@ -682,14 +756,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[15] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[15] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "upsert_record"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "upsert_record"
         },
@@ -727,14 +801,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[16] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[16] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_record"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_record"
         },
@@ -772,14 +846,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[17] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[17] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_note"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_note"
         },
@@ -817,14 +891,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[18] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[18] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_note"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_note"
         },
@@ -870,7 +944,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-record fetch by id is a strict subset of the records/contacts/companies/etc. list streams already covered; no dedicated single-record stream is needed since the engine's declarative read path always lists, never fetches-by-id"
       },
       "declaration": {
@@ -909,7 +983,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "related-list traversal needs a per-parent-record fan_out (docs/migration/conventions.md's fan_out dialect) whose id source would itself be one of the already-covered list streams (contacts/companies/pipelines); a dedicated per-relation stream per module pairing is combinatorial (Contacts->Notes, Companies->Tasks, Pipelines->Products, etc.) and not requested by any known consumer of this bundle -- Notes is already covered as its own top-level module-scoped stream (GET /Notes), which is the one related-list relation with real read demand"
       },
       "declaration": {
@@ -948,7 +1022,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "criteria/email/phone/word search is a query-shaped read (parameterized filter, not a syncable list), out of scope for this bundle's declarative full-table stream model; the existing list streams already page through every record"
       },
       "declaration": {
@@ -987,7 +1061,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "attachment listing returns file metadata but the actual file/photo download (GET .../Attachments/{id}) and upload (POST multipart/form-data) are binary payloads the JSON declarative dialect cannot express; a metadata-only list stream with no way to fetch the underlying binary has limited standalone value and was not prioritized for this pass"
       },
       "declaration": {
@@ -1026,7 +1100,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "returns raw image bytes, not JSON; the dialect has no binary-response stream type"
       },
       "declaration": {
@@ -1065,7 +1139,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "multipart/form-data file upload; the write dialect's body_type is json|form|none, none of which express a multipart file part"
       },
       "declaration": {
@@ -1113,7 +1187,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "multipart/form-data image upload; same limitation as record attachment upload"
       },
       "declaration": {
@@ -1161,7 +1235,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deleting a specific attachment is only meaningful paired with the attachment listing/upload surface this pass excludes as binary_payload; no read stream exists to source attachment_id from"
       },
       "declaration": {
@@ -1209,7 +1283,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "paired with the excluded photo upload/download surface"
       },
       "declaration": {
@@ -1246,20 +1320,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[28] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "fields"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-zoho-bigin",
+          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[28] is bound to ETL stream \"fields\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[28] is bound to ETL stream \"fields\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "fields"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
+        "contract": null
       }
     },
     {
@@ -1293,7 +1372,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "related-list layout metadata (which related lists exist per module), not itself a syncable record stream; supports the already-excluded related-list read surface"
       },
       "declaration": {
@@ -1332,7 +1411,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "page-layout/field-arrangement UI metadata, not syncable business data"
       },
       "declaration": {
@@ -1371,7 +1450,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "sub-pipeline/stage configuration metadata for the Pipelines module; the pipelines stream (GET /Pipelines) already covers the pipeline records themselves, and this settings variant is the same information from the metadata/configuration side, not additional record data"
       },
       "declaration": {
@@ -1410,7 +1489,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "organization currency configuration (symbol, decimal places, exchange rate), not a syncable business-record stream"
       },
       "declaration": {
@@ -1449,7 +1528,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "user role/hierarchy metadata; no read demand identified for this pass beyond the users stream's own embedded role/profile lookup objects"
       },
       "declaration": {
@@ -1488,7 +1567,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "permission-profile metadata; same reasoning as /settings/roles"
       },
       "declaration": {
@@ -1527,7 +1606,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "sales-territory hierarchy metadata; no read demand identified for this pass"
       },
       "declaration": {
@@ -1566,7 +1645,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creating a new tag definition (distinct from tagging a record) is a settings/admin-shaped mutation with low sync-pipeline demand relative to the record CRUD + notes surface prioritized this pass"
       },
       "declaration": {
@@ -1614,7 +1693,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "renaming an existing tag definition; same reasoning as tag creation"
       },
       "declaration": {
@@ -1662,7 +1741,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deleting a tag definition; same reasoning as tag creation"
       },
       "declaration": {
@@ -1710,7 +1789,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "associates existing tags with one or more records (a many-to-many join mutation on the tags stream, not a record CRUD action); lower priority than the core record/notes write surface for this pass"
       },
       "declaration": {
@@ -1758,7 +1837,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "removes tag associations from one or more records; same reasoning as add_tags"
       },
       "declaration": {
@@ -1806,7 +1885,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "note content update; create_note/delete_note cover the note write lifecycle's create and destroy ends, which is the pairing with the most sync-pipeline demand (append an activity note, retract one); update was not prioritized this pass"
       },
       "declaration": {
@@ -1854,7 +1933,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-user fetch by id is a strict subset of the users stream (GET /users) already covered"
       },
       "declaration": {
@@ -1893,7 +1972,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creating a Bigin user is an organization-administration action requiring an admin-tier OAuth scope beyond the standard record-CRUD scopes this bundle's refresh-token grant is documented/tested against"
       },
       "declaration": {
@@ -1941,7 +2020,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "modifying a user's role/profile/status is an organization-administration action, same elevated-scope reasoning as user creation"
       },
       "declaration": {
@@ -1989,7 +2068,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deactivating/deleting an organizational user account is an irreversible administration action outside this bundle's record-sync purpose"
       },
       "declaration": {
@@ -2037,7 +2116,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "organization metadata snapshot (company profile, license, feature flags), not a syncable object stream"
       },
       "declaration": {
@@ -2076,7 +2155,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "the separate Bulk Read/Write API (CSV-oriented, async job-submit-then-poll-then-download-a-file protocol) is architecturally distinct from this bundle's synchronous per-page REST reads; large-volume sync is already served by this bundle's ordinary paginated list streams for Bigin's realistic per-org record volumes (a small-business CRM, not a large-record-count system) -- if a genuine need for async bulk export/import surfaces, it is a StreamHook/WriteHook (Tier-2) candidate, not a Tier-1 addition, since it needs job-poll-then-download orchestration this dialect cannot express"
       },
       "declaration": {
@@ -2124,7 +2203,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "the Notifications (webhook subscription) API registers Bigin-initiated push callbacks to a consumer-hosted URL; this is an inbound-webhook-receiver concern for the connector's OWN operator infrastructure, not a pollable read/write surface this connector's outbound HTTP dialect can express"
       },
       "declaration": {
@@ -2172,7 +2251,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "the CRM Object Query Language (COQL) API accepts an arbitrary SQL-like query string in a POST body and is a power-user ad hoc query surface, not a fixed syncable stream shape; every record set it could return is already reachable via this bundle's ordinary list streams"
       },
       "declaration": {

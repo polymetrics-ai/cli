@@ -14,9 +14,9 @@
     "exact_source_rows": 188,
     "declared_operations": 188,
     "declared_percent": 100,
-    "enabled_operations": 3,
-    "enabled_percent": 1.6,
-    "disabled_operations": 185,
+    "enabled_operations": 0,
+    "enabled_percent": 0,
+    "disabled_operations": 188,
     "documented_deletes": 27,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 185
+        "count": 188
       }
     ],
     "transport": {
@@ -84,20 +84,29 @@
       }
     },
     "declaration_pending_ids": [
+      "runnable-command-binding-segment",
       "typed-operation-contract-segment",
       "sync-transport-source-definition-segment"
     ],
     "declaration_pending": [
       {
+        "id": "runnable-command-binding-segment",
+        "count": 3
+      },
+      {
         "id": "typed-operation-contract-segment",
         "count": 185
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 0,
+    "typed_write_actions": 0,
+    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_typed_write_actions": 0
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -121,20 +130,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "workspaces"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-segment",
+          "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[0] is bound to ETL stream \"workspaces\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[0] is bound to ETL stream \"workspaces\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "workspaces"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-segment",
+        "contract": null
       }
     },
     {
@@ -168,7 +182,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -216,7 +230,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -255,7 +269,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -303,7 +317,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -351,7 +365,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -399,7 +413,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -438,7 +452,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -486,7 +500,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -534,7 +548,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -582,7 +596,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -630,7 +644,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -678,7 +692,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -726,7 +740,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -774,7 +788,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -813,7 +827,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -861,7 +875,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -909,7 +923,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -948,7 +962,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -996,7 +1010,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1044,7 +1058,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -1092,7 +1106,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -1131,7 +1145,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1179,7 +1193,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1227,7 +1241,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1275,7 +1289,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -1314,7 +1328,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1362,7 +1376,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1399,20 +1413,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[28] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "destinations"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-segment",
+          "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[28] is bound to ETL stream \"destinations\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[28] is bound to ETL stream \"destinations\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "destinations"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-segment",
+        "contract": null
       }
     },
     {
@@ -1446,7 +1465,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1494,7 +1513,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -1533,7 +1552,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1581,7 +1600,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "starts or returns a customer-insights download artifact rather than a simple structured record write"
       },
       "declaration": {
@@ -1629,7 +1648,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -1668,7 +1687,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1716,7 +1735,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
       },
       "declaration": {
@@ -1755,7 +1774,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1803,7 +1822,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
       },
       "declaration": {
@@ -1842,7 +1861,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1890,7 +1909,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -1938,7 +1957,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
       },
       "declaration": {
@@ -1977,7 +1996,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2025,7 +2044,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -2064,7 +2083,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2112,7 +2131,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -2160,7 +2179,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
       },
       "declaration": {
@@ -2199,7 +2218,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2247,7 +2266,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
       },
       "declaration": {
@@ -2295,7 +2314,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -2334,7 +2353,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2382,7 +2401,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2430,7 +2449,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
       },
       "declaration": {
@@ -2469,7 +2488,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2506,20 +2525,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[53] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "sources"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-segment",
+          "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[53] is bound to ETL stream \"sources\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[53] is bound to ETL stream \"sources\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "sources"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-segment",
+        "contract": null
       }
     },
     {
@@ -2553,7 +2577,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
       },
       "declaration": {
@@ -2601,7 +2625,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -2640,7 +2664,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2688,7 +2712,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
       },
       "declaration": {
@@ -2727,7 +2751,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2775,7 +2799,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
       },
       "declaration": {
@@ -2814,7 +2838,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
       },
       "declaration": {
@@ -2862,7 +2886,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -2901,7 +2925,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2949,7 +2973,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -2997,7 +3021,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
       },
       "declaration": {
@@ -3036,7 +3060,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -3084,7 +3108,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -3123,7 +3147,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -3171,7 +3195,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -3219,7 +3243,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -3258,7 +3282,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -3306,7 +3330,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -3354,7 +3378,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -3393,7 +3417,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -3441,7 +3465,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -3489,7 +3513,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -3528,7 +3552,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -3576,7 +3600,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -3624,7 +3648,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -3663,7 +3687,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -3711,7 +3735,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -3759,7 +3783,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -3807,7 +3831,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -3855,7 +3879,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -3894,7 +3918,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -3942,7 +3966,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -3990,7 +4014,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -4029,7 +4053,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
       },
       "declaration": {
@@ -4077,7 +4101,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -4125,7 +4149,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -4164,7 +4188,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -4212,7 +4236,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -4260,7 +4284,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -4299,7 +4323,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
       },
       "declaration": {
@@ -4347,7 +4371,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -4395,7 +4419,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -4434,7 +4458,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -4482,7 +4506,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -4530,7 +4554,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -4569,7 +4593,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -4617,7 +4641,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -4656,7 +4680,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -4704,7 +4728,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -4752,7 +4776,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "testing echo endpoint, not a data stream"
       },
       "declaration": {
@@ -4791,7 +4815,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -4839,7 +4863,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -4878,7 +4902,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -4926,7 +4950,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -4974,7 +4998,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -5013,7 +5037,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -5061,7 +5085,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -5100,7 +5124,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -5148,7 +5172,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -5196,7 +5220,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -5235,7 +5259,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -5274,7 +5298,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -5322,7 +5346,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -5370,7 +5394,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -5409,7 +5433,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -5457,7 +5481,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -5505,7 +5529,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -5544,7 +5568,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -5583,7 +5607,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -5622,7 +5646,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -5661,7 +5685,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -5700,7 +5724,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
       },
       "declaration": {
@@ -5739,7 +5763,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
       },
       "declaration": {
@@ -5778,7 +5802,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -5817,7 +5841,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -5856,7 +5880,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -5895,7 +5919,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -5934,7 +5958,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -5973,7 +5997,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6012,7 +6036,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -6060,7 +6084,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -6108,7 +6132,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6147,7 +6171,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -6186,7 +6210,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
       },
       "declaration": {
@@ -6225,7 +6249,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6264,7 +6288,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -6303,7 +6327,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6342,7 +6366,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
       },
       "declaration": {
@@ -6381,7 +6405,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
       },
       "declaration": {
@@ -6420,7 +6444,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6459,7 +6483,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6498,7 +6522,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -6546,7 +6570,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -6594,7 +6618,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -6633,7 +6657,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
       },
       "declaration": {
@@ -6672,7 +6696,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
       },
       "declaration": {
@@ -6711,7 +6735,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "current Segment OpenAPI exposes workspace metadata at the API root; the existing legacy-parity workspaces stream preserves the older /workspaces endpoint and top-level workspaces array shape until the Segment surface is unblocked"
       },
       "declaration": {
@@ -6750,7 +6774,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6789,7 +6813,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6828,7 +6852,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -6867,7 +6891,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6906,7 +6930,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6945,7 +6969,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -6984,7 +7008,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7023,7 +7047,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7062,7 +7086,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -7110,7 +7134,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -7149,7 +7173,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7188,7 +7212,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -7227,7 +7251,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7266,7 +7290,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -7314,7 +7338,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -7362,7 +7386,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -7410,7 +7434,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7449,7 +7473,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
       },
       "declaration": {
@@ -7497,7 +7521,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7536,7 +7560,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7575,7 +7599,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -7623,7 +7647,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
       },
       "declaration": {
@@ -7662,7 +7686,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7701,7 +7725,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -7740,7 +7764,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7779,7 +7803,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
       },
       "declaration": {
@@ -7818,7 +7842,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
       },
       "declaration": {
@@ -7857,7 +7881,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -7905,7 +7929,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -7953,7 +7977,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -8001,7 +8025,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -8049,7 +8073,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -8097,7 +8121,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -8145,7 +8169,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -8193,7 +8217,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
       },
       "declaration": {
@@ -8241,7 +8265,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {
@@ -8289,7 +8313,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
       },
       "declaration": {

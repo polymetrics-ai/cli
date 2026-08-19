@@ -14,9 +14,9 @@
     "exact_source_rows": 73,
     "declared_operations": 73,
     "declared_percent": 100,
-    "enabled_operations": 10,
-    "enabled_percent": 13.7,
-    "disabled_operations": 63,
+    "enabled_operations": 0,
+    "enabled_percent": 0,
+    "disabled_operations": 73,
     "documented_deletes": 6,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 63
+        "count": 73
       }
     ],
     "transport": {
@@ -84,20 +84,29 @@
       }
     },
     "declaration_pending_ids": [
+      "runnable-command-binding-braintree",
       "typed-operation-contract-braintree",
       "sync-transport-source-definition-braintree"
     ],
     "declaration_pending": [
       {
+        "id": "runnable-command-binding-braintree",
+        "count": 10
+      },
+      {
         "id": "typed-operation-contract-braintree",
         "count": 63
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 0,
+    "typed_write_actions": 0,
+    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_typed_write_actions": 0
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -121,20 +130,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "transactions"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[0] is bound to ETL stream \"transactions\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[0] is bound to ETL stream \"transactions\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "transactions"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -168,7 +182,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single transaction lookup by id; the transactions stream covers the same transaction resource family for sync"
       },
       "declaration": {
@@ -207,7 +221,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "SDK search method for transactions; represented by the transactions list stream on the legacy gateway HTTP shape"
       },
       "declaration": {
@@ -235,20 +249,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "customers"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[3] is bound to ETL stream \"customers\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[3] is bound to ETL stream \"customers\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "customers"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -282,7 +301,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single customer lookup by id; covered by the customers stream's resource shape"
       },
       "declaration": {
@@ -321,7 +340,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "SDK customer search method; represented by the customers list stream on the legacy gateway HTTP shape"
       },
       "declaration": {
@@ -349,20 +368,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[6] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "subscriptions"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[6] is bound to ETL stream \"subscriptions\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[6] is bound to ETL stream \"subscriptions\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "subscriptions"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -396,7 +420,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single subscription lookup by id; covered by the subscriptions stream's resource shape"
       },
       "declaration": {
@@ -435,7 +459,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "SDK subscription search method; represented by the subscriptions stream"
       },
       "declaration": {
@@ -463,20 +487,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[9] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "add_ons"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[9] is bound to ETL stream \"add_ons\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[9] is bound to ETL stream \"add_ons\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "add_ons"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -499,20 +528,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[10] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "discounts"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[10] is bound to ETL stream \"discounts\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[10] is bound to ETL stream \"discounts\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "discounts"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -535,20 +569,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[11] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "plans"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[11] is bound to ETL stream \"plans\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[11] is bound to ETL stream \"plans\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "plans"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -582,7 +621,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single plan lookup by id; covered by the plans stream"
       },
       "declaration": {
@@ -610,20 +649,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[13] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "merchant_accounts"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[13] is bound to ETL stream \"merchant_accounts\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[13] is bound to ETL stream \"merchant_accounts\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "merchant_accounts"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -657,7 +701,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single merchant-account lookup by id; covered by the merchant_accounts stream"
       },
       "declaration": {
@@ -685,20 +729,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[15] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "payment_methods"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[15] is bound to ETL stream \"payment_methods\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[15] is bound to ETL stream \"payment_methods\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "payment_methods"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -732,7 +781,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single vaulted payment-method lookup by token; covered by the payment_methods stream"
       },
       "declaration": {
@@ -760,20 +809,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[17] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "disputes"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[17] is bound to ETL stream \"disputes\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[17] is bound to ETL stream \"disputes\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "disputes"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -807,7 +861,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single dispute lookup by id; covered by the disputes stream"
       },
       "declaration": {
@@ -835,20 +889,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[19] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "apple_pay_domains"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braintree",
+          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[19] is bound to ETL stream \"apple_pay_domains\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[19] is bound to ETL stream \"apple_pay_domains\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "apple_pay_domains"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braintree",
+        "contract": null
       }
     },
     {
@@ -882,7 +941,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "date-window lookup for expiring cards; requires caller-supplied start/end dates and does not define a stable list-all sync stream"
       },
       "declaration": {
@@ -921,7 +980,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "ad hoc verification search keyed by caller criteria; not a fixed list/detail resource and tied to payment-method verification workflow data"
       },
       "declaration": {
@@ -960,7 +1019,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "line items are enumerable only under an already-known transaction id; adding a transaction fan_out was deferred for this gateway connector"
       },
       "declaration": {
@@ -999,7 +1058,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "fee report requires caller-supplied report criteria and returns computed reporting data rather than a stable resource collection"
       },
       "declaration": {
@@ -1038,7 +1097,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "settlement batch summary is a parameterized generated report, not a list/detail collection with a stable record id"
       },
       "declaration": {
@@ -1077,7 +1136,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "transaction sale is documented as an XML API POST/SDK payment-processing call with nested XML body and nonce/payment-method requirements; not expressible as this dialect's JSON/form single-record write"
       },
       "declaration": {
@@ -1125,7 +1184,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "captures an authorized payment and moves funds; payment lifecycle side effect, not a safe reverse-ETL record mutation"
       },
       "declaration": {
@@ -1173,7 +1232,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "captures part of an authorized payment; payment lifecycle side effect requiring payment-specific validation"
       },
       "declaration": {
@@ -1221,7 +1280,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "refunds a real transaction; irreversible money-movement side effect"
       },
       "declaration": {
@@ -1269,7 +1328,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "voids an authorized transaction; payment lifecycle side effect"
       },
       "declaration": {
@@ -1317,7 +1376,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "clones a previous payment transaction through an SDK/XML request body; not a flat JSON/form record mutation"
       },
       "declaration": {
@@ -1365,7 +1424,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "transaction detail update is an XML/SDK body shape with payment-specific validation, not expressible by the flat write dialect"
       },
       "declaration": {
@@ -1413,7 +1472,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "marketplace escrow lifecycle action; elevated money-movement side effect"
       },
       "declaration": {
@@ -1461,7 +1520,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "marketplace escrow release moves funds; elevated money-movement side effect"
       },
       "declaration": {
@@ -1509,7 +1568,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "marketplace escrow lifecycle action; elevated money-movement side effect"
       },
       "declaration": {
@@ -1557,7 +1616,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "changes an authorization amount; payment lifecycle side effect rather than data sync"
       },
       "declaration": {
@@ -1605,7 +1664,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "customer creation is documented through SDK/XML request bodies with nested customer/payment-method/address data; the flat JSON/form write dialect cannot express the correct wire body"
       },
       "declaration": {
@@ -1653,7 +1712,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "customer update shares the SDK/XML nested body shape used by customer creation"
       },
       "declaration": {
@@ -1701,7 +1760,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletes a vaulted customer and associated payment methods/addresses"
       },
       "declaration": {
@@ -1749,7 +1808,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "address creation is a nested per-customer XML/SDK sub-resource; not a top-level JSON/form write"
       },
       "declaration": {
@@ -1797,7 +1856,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "address detail requires a caller-supplied customer id and address id; no top-level address list endpoint exists to sync"
       },
       "declaration": {
@@ -1836,7 +1895,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "address update is nested under customer and uses XML/SDK body construction outside the flat write dialect"
       },
       "declaration": {
@@ -1884,7 +1943,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletes a vaulted customer address"
       },
       "declaration": {
@@ -1932,7 +1991,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "subscription creation is an XML/SDK billing workflow with nested plan/payment method/add-on/discount fields; not expressible as a flat JSON/form write"
       },
       "declaration": {
@@ -1980,7 +2039,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "subscription update shares the XML/SDK nested billing body shape"
       },
       "declaration": {
@@ -2028,7 +2087,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "cancels recurring billing for a customer subscription"
       },
       "declaration": {
@@ -2076,7 +2135,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "attempts a real subscription charge; money-movement side effect"
       },
       "declaration": {
@@ -2124,7 +2183,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "vaults PCI-scoped payment method data or nonces through SDK/XML flows; not safe as a generic reverse-ETL write"
       },
       "declaration": {
@@ -2172,7 +2231,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates vaulted payment method data; PCI/payment workflow scope outside ordinary data sync"
       },
       "declaration": {
@@ -2220,7 +2279,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletes a vaulted payment method token"
       },
       "declaration": {
@@ -2268,7 +2327,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Braintree Auth grant/revoke payment-method sharing workflow requiring connected-merchant authorization"
       },
       "declaration": {
@@ -2316,7 +2375,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Braintree Auth grant/revoke payment-method sharing workflow requiring connected-merchant authorization"
       },
       "declaration": {
@@ -2364,7 +2423,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "generates or looks up a transient payment-method nonce, not durable syncable account data"
       },
       "declaration": {
@@ -2412,7 +2471,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "transient nonce lookup; not a stable resource collection"
       },
       "declaration": {
@@ -2451,7 +2510,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "vaults PCI-scoped credit card data through SDK/XML flows"
       },
       "declaration": {
@@ -2499,7 +2558,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "credit card detail is one payment-method subtype; covered by the payment_methods stream at the generic vaulted-method layer"
       },
       "declaration": {
@@ -2538,7 +2597,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates PCI-scoped vaulted card details"
       },
       "declaration": {
@@ -2586,7 +2645,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletes a vaulted credit card payment method"
       },
       "declaration": {
@@ -2634,7 +2693,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "initiates a payment-method verification workflow, not a durable record mutation"
       },
       "declaration": {
@@ -2682,7 +2741,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates a sub-merchant/merchant account; account administration beyond normal data sync"
       },
       "declaration": {
@@ -2730,7 +2789,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Braintree Auth merchant-account provisioning for a currency; admin/account setup workflow"
       },
       "declaration": {
@@ -2778,7 +2837,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates merchant account onboarding/business details; elevated account administration"
       },
       "declaration": {
@@ -2826,7 +2885,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates recurring billing plan configuration; account/billing administration rather than sync data"
       },
       "declaration": {
@@ -2874,7 +2933,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates recurring billing plan configuration"
       },
       "declaration": {
@@ -2922,7 +2981,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "generates a client authorization token for checkout SDKs, not a data resource"
       },
       "declaration": {
@@ -2970,7 +3029,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "registers a domain for Apple Pay checkout; account/payment-method configuration side effect"
       },
       "declaration": {
@@ -3018,7 +3077,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "unregisters a domain for Apple Pay checkout; account/payment-method configuration side effect"
       },
       "declaration": {
@@ -3066,7 +3125,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "accepts liability for a dispute/chargeback; financial/legal workflow side effect"
       },
       "declaration": {
@@ -3114,7 +3173,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "dispute evidence submission is a workflow action with text/file variants, not a syncable record mutation"
       },
       "declaration": {
@@ -3162,7 +3221,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "uploads a dispute evidence file; binary upload outside json/form/none body construction"
       },
       "declaration": {
@@ -3210,7 +3269,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "removes submitted dispute evidence from a chargeback workflow"
       },
       "declaration": {
@@ -3258,7 +3317,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "finalizes chargeback evidence submission; irreversible workflow action"
       },
       "declaration": {
@@ -3306,7 +3365,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "uploads an evidence/document file; binary payload not expressible by the declarative write dialect"
       },
       "declaration": {

@@ -14,9 +14,9 @@
     "exact_source_rows": 95,
     "declared_operations": 95,
     "declared_percent": 100,
-    "enabled_operations": 50,
-    "enabled_percent": 52.63,
-    "disabled_operations": 45,
+    "enabled_operations": 29,
+    "enabled_percent": 30.53,
+    "disabled_operations": 66,
     "documented_deletes": 4,
     "enabled_deletes": 2,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 45
+        "count": 66
       }
     ],
     "transport": {
@@ -84,20 +84,29 @@
       }
     },
     "declaration_pending_ids": [
+      "runnable-command-binding-braze",
       "typed-operation-contract-braze",
       "sync-transport-source-definition-braze"
     ],
     "declaration_pending": [
       {
+        "id": "runnable-command-binding-braze",
+        "count": 21
+      },
+      {
         "id": "typed-operation-contract-braze",
         "count": 45
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 0,
+    "typed_write_actions": 29,
+    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_typed_write_actions": 29
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -121,20 +130,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "campaigns"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[0] is bound to ETL stream \"campaigns\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[0] is bound to ETL stream \"campaigns\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "campaigns"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -157,20 +171,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "campaign_details"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[1] is bound to ETL stream \"campaign_details\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[1] is bound to ETL stream \"campaign_details\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "campaign_details"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -204,7 +223,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign analytics time series requiring a length/ending_at window coupling for a single campaign id; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage, distinct from the already-covered list/details metadata streams"
       },
       "declaration": {
@@ -232,20 +251,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "canvases"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[3] is bound to ETL stream \"canvases\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[3] is bound to ETL stream \"canvases\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "canvases"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -268,20 +292,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "canvas_details"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[4] is bound to ETL stream \"canvas_details\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[4] is bound to ETL stream \"canvas_details\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "canvas_details"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -315,7 +344,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-Canvas step/variant-breakdown analytics time series; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
       },
       "declaration": {
@@ -343,20 +372,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[6] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "canvas_data_summary"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[6] is bound to ETL stream \"canvas_data_summary\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[6] is bound to ETL stream \"canvas_data_summary\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "canvas_data_summary"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -379,20 +413,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[7] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "catalogs"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[7] is bound to ETL stream \"catalogs\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[7] is bound to ETL stream \"catalogs\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "catalogs"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -418,14 +457,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[8] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[8] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_catalog"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_catalog"
         },
@@ -463,14 +502,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[9] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[9] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_catalog"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_catalog"
         },
@@ -516,7 +555,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "catalog ITEM listing requires an already-known catalog_name (available via the catalogs stream) and a separate per-catalog request/pagination sequence with no engine fan_out wired to this bundle's catalogs stream this pass; the catalogs stream itself already syncs every catalog's name/description/fields/item-count metadata"
       },
       "declaration": {
@@ -547,14 +586,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[11] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[11] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_catalog_items"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_catalog_items"
         },
@@ -600,7 +639,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "bulk full-replace of catalog items; the same item-array upsert shape create_catalog_items (POST) already covers, using PUT semantics this dialect's single body_type/method-per-action model does not need a second action to express"
       },
       "declaration": {
@@ -640,14 +679,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[13] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[13] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_catalog_items"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_catalog_items"
         },
@@ -693,7 +732,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "bulk multi-item delete-by-id-array over the same catalog the single-item delete_catalog_item action already covers per-record"
       },
       "declaration": {
@@ -741,7 +780,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single catalog item detail; requires an item_id already in hand with no list-discovery endpoint feeding it (catalog items list is excluded above for the same reason), not a distinct syncable resource"
       },
       "declaration": {
@@ -780,7 +819,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-item create-by-id variant of the batch create_catalog_items action, same underlying mutation shape"
       },
       "declaration": {
@@ -828,7 +867,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-item full-replace variant of the batch update_catalog_items action, same underlying mutation shape"
       },
       "declaration": {
@@ -868,14 +907,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[18] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[18] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_catalog_item"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_catalog_item"
         },
@@ -913,14 +952,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[19] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[19] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_catalog_item"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_catalog_item"
         },
@@ -958,14 +997,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[20] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[20] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_content_block"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_content_block"
         },
@@ -1011,7 +1050,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single content block detail; identical record shape to the content_blocks list stream's per-item object plus its own content body, already covered by that stream for sync purposes"
       },
       "declaration": {
@@ -1039,20 +1078,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[22] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "content_blocks"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[22] is bound to ETL stream \"content_blocks\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[22] is bound to ETL stream \"content_blocks\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "content_blocks"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -1078,14 +1122,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[23] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[23] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_content_block"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_content_block"
         },
@@ -1131,7 +1175,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "legacy alias of the identical POST /email/blocklist mutation (Braze's own docs deprecate the blacklist wording in favor of blocklist); create_email_blocklist already covers this mutation shape"
       },
       "declaration": {
@@ -1171,14 +1215,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[25] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[25] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_email_blocklist"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_email_blocklist"
         },
@@ -1216,14 +1260,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[26] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[26] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "remove_email_hard_bounce"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "remove_email_hard_bounce"
         },
@@ -1258,20 +1302,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[27] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "email_hard_bounces"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[27] is bound to ETL stream \"email_hard_bounces\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[27] is bound to ETL stream \"email_hard_bounces\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "email_hard_bounces"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -1297,14 +1346,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[28] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[28] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "remove_email_spam"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "remove_email_spam"
         },
@@ -1342,14 +1391,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[29] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[29] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "set_email_subscription_status"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "set_email_subscription_status"
         },
@@ -1384,20 +1433,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[30] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "email_unsubscribes"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[30] is bound to ETL stream \"email_unsubscribes\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[30] is bound to ETL stream \"email_unsubscribes\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "email_unsubscribes"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -1431,7 +1485,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-custom-event-name analytics time series requiring an event name already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
       },
       "declaration": {
@@ -1470,7 +1524,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "engine's declarative array extraction (connsdk.RecordsAt) only yields JSON-object array elements; Braze's events/list returns an array of bare event-name STRINGS, which RecordsAt silently drops rather than wrapping into a record the way legacy's decodeRecords does; see docs.md Known limits (ENGINE_GAP, unchanged from wave2)"
       },
       "declaration": {
@@ -1509,7 +1563,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-Content-Card analytics time series requiring a card_id already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
       },
       "declaration": {
@@ -1548,7 +1602,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single Content Card detail; identical record shape to the feed_cards list stream's per-item object, already covered by that stream"
       },
       "declaration": {
@@ -1576,20 +1630,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[35] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "feed_cards"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[35] is bound to ETL stream \"feed_cards\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[35] is bound to ETL stream \"feed_cards\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "feed_cards"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -1612,20 +1671,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[36] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "kpi_dau"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[36] is bound to ETL stream \"kpi_dau\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[36] is bound to ETL stream \"kpi_dau\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "kpi_dau"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -1648,20 +1712,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[37] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "kpi_mau"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[37] is bound to ETL stream \"kpi_mau\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[37] is bound to ETL stream \"kpi_mau\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "kpi_mau"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -1684,20 +1753,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[38] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "kpi_new_users"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[38] is bound to ETL stream \"kpi_new_users\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[38] is bound to ETL stream \"kpi_new_users\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "kpi_new_users"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -1720,20 +1794,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[39] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "kpi_uninstalls"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[39] is bound to ETL stream \"kpi_uninstalls\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[39] is bound to ETL stream \"kpi_uninstalls\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "kpi_uninstalls"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -1767,7 +1846,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "real-time Live Activity push-state update, a narrow iOS-specific messaging extension distinct from Braze's general campaign/data model; Pass B breadth-vs-cost triage"
       },
       "declaration": {
@@ -1815,7 +1894,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates an asynchronous scheduled-send job with its own lifecycle (a schedule_id to later update/cancel), not a plain synchronous data mutation this dialect's fire-once write model fits; messages/send (immediate send) already covers the core messaging mutation shape"
       },
       "declaration": {
@@ -1863,7 +1942,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "cancels a job created by the excluded messages/schedule/create; no scheduled job is ever created by this bundle to cancel"
       },
       "declaration": {
@@ -1911,7 +1990,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "mutates a job created by the excluded messages/schedule/create; no scheduled job is ever created by this bundle to update"
       },
       "declaration": {
@@ -1948,20 +2027,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[44] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "scheduled_broadcasts"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[44] is bound to ETL stream \"scheduled_broadcasts\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[44] is bound to ETL stream \"scheduled_broadcasts\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "scheduled_broadcasts"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -1987,14 +2071,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[45] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[45] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "send_message"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "send_message"
         },
@@ -2032,14 +2116,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[46] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[46] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_preference_center"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_preference_center"
         },
@@ -2074,20 +2158,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[47] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "preference_centers"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[47] is bound to ETL stream \"preference_centers\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[47] is bound to ETL stream \"preference_centers\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "preference_centers"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -2121,7 +2210,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single preference center detail; identical record shape to the preference_centers list stream's per-item object, already covered by that stream"
       },
       "declaration": {
@@ -2152,14 +2241,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[49] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[49] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_preference_center"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_preference_center"
         },
@@ -2205,7 +2294,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "generates a one-time signed preference-center URL for a specific user, not a syncable object or a data mutation"
       },
       "declaration": {
@@ -2244,7 +2333,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "same ENGINE_GAP class as /events/list: the response's products array is a bare list of NAME STRINGS, not objects (`{\"products\": [\"product_name\", ...]}`), which the engine's declarative array extraction (connsdk.RecordsAt) silently drops rather than wrapping into a one-field record; see docs.md Known limits"
       },
       "declaration": {
@@ -2283,7 +2372,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-product purchase-quantity analytics time series requiring a product name already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
       },
       "declaration": {
@@ -2322,7 +2411,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-product revenue analytics time series requiring a product name already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
       },
       "declaration": {
@@ -2361,7 +2450,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "SCIM 2.0 identity list is a distinct, separately-authenticated (bearer SCIM token, not the standard Braze API key) protocol for managing Braze DASHBOARD USER accounts, not Braze's own customer/campaign data model; out of scope for this data connector"
       },
       "declaration": {
@@ -2400,7 +2489,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "SCIM 2.0 identity provisioning is a distinct, separately-authenticated (bearer SCIM token, not the standard Braze API key) protocol for managing Braze DASHBOARD USER accounts, not Braze's own customer/campaign data model; out of scope for this data connector"
       },
       "declaration": {
@@ -2448,7 +2537,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "SCIM 2.0 identity read; same separately-authenticated dashboard-user-provisioning protocol as the SCIM write endpoints, out of scope for this data connector"
       },
       "declaration": {
@@ -2487,7 +2576,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "SCIM 2.0 identity update; same separately-authenticated dashboard-user-provisioning protocol, out of scope for this data connector"
       },
       "declaration": {
@@ -2535,7 +2624,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "SCIM 2.0 identity deprovisioning; same separately-authenticated dashboard-user-provisioning protocol, out of scope for this data connector"
       },
       "declaration": {
@@ -2572,20 +2661,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[59] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "segments"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[59] is bound to ETL stream \"segments\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[59] is bound to ETL stream \"segments\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "segments"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -2608,20 +2702,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[60] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "segment_details"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[60] is bound to ETL stream \"segment_details\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[60] is bound to ETL stream \"segment_details\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "segment_details"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -2655,7 +2754,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-segment size-over-time analytics time series requiring a segment id already in hand; part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
       },
       "declaration": {
@@ -2694,7 +2793,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-send-id analytics time series requiring a send_id already in hand (send ids are generated at send time, not enumerable via any list endpoint); part of the analytics-breakdown surface excluded this pass for breadth-vs-cost triage"
       },
       "declaration": {
@@ -2733,7 +2832,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "pre-generates a send_id label for a future campaign trigger send; a naming/bookkeeping helper, not itself a data mutation on any Braze object"
       },
       "declaration": {
@@ -2770,20 +2869,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[64] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "sessions"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[64] is bound to ETL stream \"sessions\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[64] is bound to ETL stream \"sessions\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "sessions"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -2806,20 +2910,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[65] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "sms_invalid_phone_numbers"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[65] is bound to ETL stream \"sms_invalid_phone_numbers\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[65] is bound to ETL stream \"sms_invalid_phone_numbers\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "sms_invalid_phone_numbers"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -2845,14 +2954,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[66] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[66] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "remove_sms_invalid_phone_numbers"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "remove_sms_invalid_phone_numbers"
         },
@@ -2898,7 +3007,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-user subscription-group status lookup keyed by an external_id/email already in hand, with no list/enumeration variant; not a syncable collection stream"
       },
       "declaration": {
@@ -2937,7 +3046,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-user, single-subscription-group variant superseded by the v2 batch endpoint (POST /v2/subscription/status/set), which set_subscription_status_v2 covers with the identical effect for any input the v1 shape accepts plus multi-group batching"
       },
       "declaration": {
@@ -2977,14 +3086,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[69] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[69] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "set_subscription_status_v2"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "set_subscription_status_v2"
         },
@@ -3030,7 +3139,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-user subscription status lookup by external_id/email already in hand, with no list/enumeration variant; not a syncable collection stream"
       },
       "declaration": {
@@ -3069,7 +3178,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single email template detail; identical record shape to the email_templates list stream's per-item object plus its own body content, already covered by that stream for sync purposes"
       },
       "declaration": {
@@ -3097,20 +3206,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[72] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "email_templates"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-braze",
+          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[72] is bound to ETL stream \"email_templates\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[72] is bound to ETL stream \"email_templates\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "email_templates"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-braze",
+        "contract": null
       }
     },
     {
@@ -3136,14 +3250,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[73] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[73] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_email_template"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_email_template"
         },
@@ -3181,14 +3295,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[74] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[74] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_email_template"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_email_template"
         },
@@ -3234,7 +3348,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Braze Transactional Messaging is a separately-entitled product surface (its own v1-prefixed API family with its own onboarding) layered on top of standard campaigns, not part of the base messaging surface send_message/trigger writes already cover"
       },
       "declaration": {
@@ -3274,14 +3388,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[76] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[76] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_user_alias"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_user_alias"
         },
@@ -3319,14 +3433,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[77] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[77] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_user_alias"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_user_alias"
         },
@@ -3364,14 +3478,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[78] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[78] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_users"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_users"
         },
@@ -3417,7 +3531,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "asynchronous bulk export job kickoff (delivered later to cloud storage), not a synchronous read/write record operation; Pass B breadth-vs-cost triage"
       },
       "declaration": {
@@ -3465,7 +3579,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "asynchronous bulk export job kickoff for a caller-supplied id list, not a synchronous read/write record operation; Pass B breadth-vs-cost triage"
       },
       "declaration": {
@@ -3513,7 +3627,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "asynchronous bulk export job kickoff for an entire segment's membership, not a synchronous read/write record operation; Pass B breadth-vs-cost triage"
       },
       "declaration": {
@@ -3553,14 +3667,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[82] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[82] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "remove_user_external_ids"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "remove_user_external_ids"
         },
@@ -3598,14 +3712,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[83] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[83] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "rename_user_external_ids"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "rename_user_external_ids"
         },
@@ -3643,14 +3757,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[84] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[84] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "identify_users"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "identify_users"
         },
@@ -3688,14 +3802,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[85] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[85] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "merge_users"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "merge_users"
         },
@@ -3733,14 +3847,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[86] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[86] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "track_users"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "track_users"
         },
@@ -3778,14 +3892,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[87] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[87] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "trigger_campaign_send"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "trigger_campaign_send"
         },
@@ -3831,7 +3945,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates an asynchronous scheduled API-triggered-campaign job with its own lifecycle, not a plain synchronous data mutation this dialect's fire-once write model fits; trigger_campaign_send (immediate trigger) already covers the core API-triggered-campaign mutation shape"
       },
       "declaration": {
@@ -3879,7 +3993,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "cancels a job created by the excluded campaigns/trigger/schedule/create; no scheduled job is ever created by this bundle to cancel"
       },
       "declaration": {
@@ -3927,7 +4041,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "mutates a job created by the excluded campaigns/trigger/schedule/create; no scheduled job is ever created by this bundle to update"
       },
       "declaration": {
@@ -3967,14 +4081,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[91] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[91] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "trigger_canvas_send"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "trigger_canvas_send"
         },
@@ -4020,7 +4134,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates an asynchronous scheduled API-triggered-Canvas job with its own lifecycle, not a plain synchronous data mutation this dialect's fire-once write model fits; trigger_canvas_send (immediate trigger) already covers the core API-triggered-Canvas mutation shape"
       },
       "declaration": {
@@ -4068,7 +4182,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "cancels a job created by the excluded canvas/trigger/schedule/create; no scheduled job is ever created by this bundle to cancel"
       },
       "declaration": {
@@ -4116,7 +4230,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "mutates a job created by the excluded canvas/trigger/schedule/create; no scheduled job is ever created by this bundle to update"
       },
       "declaration": {

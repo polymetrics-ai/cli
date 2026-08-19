@@ -14,9 +14,9 @@
     "exact_source_rows": 9,
     "declared_operations": 9,
     "declared_percent": 100,
-    "enabled_operations": 6,
-    "enabled_percent": 66.67,
-    "disabled_operations": 3,
+    "enabled_operations": 0,
+    "enabled_percent": 0,
+    "disabled_operations": 9,
     "documented_deletes": 0,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 3
+        "count": 9
       }
     ],
     "transport": {
@@ -84,20 +84,29 @@
       }
     },
     "declaration_pending_ids": [
+      "runnable-command-binding-klaviyo",
       "typed-operation-contract-klaviyo",
       "sync-transport-source-definition-klaviyo"
     ],
     "declaration_pending": [
       {
+        "id": "runnable-command-binding-klaviyo",
+        "count": 6
+      },
+      {
         "id": "typed-operation-contract-klaviyo",
         "count": 3
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 0,
+    "typed_write_actions": 0,
+    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_typed_write_actions": 0
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -121,20 +130,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "profiles"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-klaviyo",
+          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[0] is bound to ETL stream \"profiles\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[0] is bound to ETL stream \"profiles\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "profiles"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
+        "contract": null
       }
     },
     {
@@ -157,20 +171,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "events"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-klaviyo",
+          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[1] is bound to ETL stream \"events\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[1] is bound to ETL stream \"events\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "events"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
+        "contract": null
       }
     },
     {
@@ -193,20 +212,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "campaigns"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-klaviyo",
+          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[2] is bound to ETL stream \"campaigns\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[2] is bound to ETL stream \"campaigns\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "campaigns"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
+        "contract": null
       }
     },
     {
@@ -229,20 +253,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "lists"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-klaviyo",
+          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[3] is bound to ETL stream \"lists\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[3] is bound to ETL stream \"lists\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "lists"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
+        "contract": null
       }
     },
     {
@@ -265,20 +294,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "metrics"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-klaviyo",
+          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[4] is bound to ETL stream \"metrics\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[4] is bound to ETL stream \"metrics\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "metrics"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
+        "contract": null
       }
     },
     {
@@ -301,20 +335,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[5] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "segments"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-klaviyo",
+          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[5] is bound to ETL stream \"segments\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[5] is bound to ETL stream \"segments\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "segments"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
+        "contract": null
       }
     },
     {
@@ -348,7 +387,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "used only by check.json's connectivity probe, not a data stream"
       },
       "declaration": {
@@ -387,7 +426,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "/api/flows, /api/templates, /api/catalogs, /api/coupons, /api/images, /api/reviews, /api/forms, /api/tags is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
       },
       "declaration": {
@@ -435,7 +474,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Legacy itself is read-only (capabilities.write: false)"
       },
       "declaration": {

@@ -14,9 +14,9 @@
     "exact_source_rows": 159,
     "declared_operations": 159,
     "declared_percent": 100,
-    "enabled_operations": 26,
-    "enabled_percent": 16.35,
-    "disabled_operations": 133,
+    "enabled_operations": 10,
+    "enabled_percent": 6.29,
+    "disabled_operations": 149,
     "documented_deletes": 14,
     "enabled_deletes": 3,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 133
+        "count": 149
       }
     ],
     "transport": {
@@ -84,20 +84,29 @@
       }
     },
     "declaration_pending_ids": [
+      "runnable-command-binding-customer-io",
       "typed-operation-contract-customer-io",
       "sync-transport-source-definition-customer-io"
     ],
     "declaration_pending": [
       {
+        "id": "runnable-command-binding-customer-io",
+        "count": 16
+      },
+      {
         "id": "typed-operation-contract-customer-io",
         "count": 133
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 0,
+    "typed_write_actions": 10,
+    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_typed_write_actions": 10
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -121,20 +130,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "campaigns"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[0] is bound to ETL stream \"campaigns\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[0] is bound to ETL stream \"campaigns\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "campaigns"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -157,20 +171,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "newsletters"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[1] is bound to ETL stream \"newsletters\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[1] is bound to ETL stream \"newsletters\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "newsletters"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -193,20 +212,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "segments"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[2] is bound to ETL stream \"segments\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[2] is bound to ETL stream \"segments\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "segments"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -229,20 +253,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "broadcasts"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[3] is bound to ETL stream \"broadcasts\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[3] is bound to ETL stream \"broadcasts\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "broadcasts"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -265,20 +294,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "activities"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[4] is bound to ETL stream \"activities\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[4] is bound to ETL stream \"activities\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "activities"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -301,20 +335,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[5] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "messages"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[5] is bound to ETL stream \"messages\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[5] is bound to ETL stream \"messages\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "messages"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -337,20 +376,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[6] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "exports"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[6] is bound to ETL stream \"exports\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[6] is bound to ETL stream \"exports\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "exports"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -373,20 +417,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[7] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "transactional"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[7] is bound to ETL stream \"transactional\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[7] is bound to ETL stream \"transactional\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "transactional"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -409,20 +458,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[8] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "object_types"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[8] is bound to ETL stream \"object_types\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[8] is bound to ETL stream \"object_types\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "object_types"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -445,20 +499,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[9] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "reporting_webhooks"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[9] is bound to ETL stream \"reporting_webhooks\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[9] is bound to ETL stream \"reporting_webhooks\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "reporting_webhooks"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -481,20 +540,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[10] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "sender_identities"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[10] is bound to ETL stream \"sender_identities\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[10] is bound to ETL stream \"sender_identities\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "sender_identities"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -517,20 +581,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[11] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "snippets"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[11] is bound to ETL stream \"snippets\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[11] is bound to ETL stream \"snippets\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "snippets"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -553,20 +622,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[12] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "subscription_channels"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[12] is bound to ETL stream \"subscription_channels\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[12] is bound to ETL stream \"subscription_channels\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "subscription_channels"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -589,20 +663,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[13] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "subscription_topics"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[13] is bound to ETL stream \"subscription_topics\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[13] is bound to ETL stream \"subscription_topics\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "subscription_topics"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -625,20 +704,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[14] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "workspaces"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[14] is bound to ETL stream \"workspaces\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[14] is bound to ETL stream \"workspaces\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "workspaces"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -661,20 +745,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[15] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "collections"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-customer-io",
+          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[15] is bound to ETL stream \"collections\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[15] is bound to ETL stream \"collections\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "collections"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
+        "contract": null
       }
     },
     {
@@ -700,14 +789,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[16] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[16] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_snippet"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_snippet"
         },
@@ -745,14 +834,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[17] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[17] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_snippet"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_snippet"
         },
@@ -790,14 +879,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[18] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[18] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_snippet"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_snippet"
         },
@@ -835,14 +924,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[19] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[19] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_reporting_webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_reporting_webhook"
         },
@@ -880,14 +969,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[20] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[20] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_reporting_webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_reporting_webhook"
         },
@@ -925,14 +1014,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[21] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[21] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_reporting_webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_reporting_webhook"
         },
@@ -970,14 +1059,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[22] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[22] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_manual_segment"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_manual_segment"
         },
@@ -1015,14 +1104,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[23] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[23] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_manual_segment"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_manual_segment"
         },
@@ -1060,14 +1149,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[24] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[24] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "send_email"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "send_email"
         },
@@ -1105,14 +1194,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[25] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[25] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "trigger_broadcast"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "trigger_broadcast"
         },
@@ -1158,7 +1247,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1197,7 +1286,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1245,7 +1334,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1284,7 +1373,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1332,7 +1421,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1380,7 +1469,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1419,7 +1508,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1467,7 +1556,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1506,7 +1595,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1554,7 +1643,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope"
       },
       "declaration": {
@@ -1602,7 +1691,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -1641,7 +1730,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -1680,7 +1769,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -1719,7 +1808,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -1767,7 +1856,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -1806,7 +1895,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -1854,7 +1943,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -1893,7 +1982,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -1932,7 +2021,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -1971,7 +2060,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -2010,7 +2099,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -2049,7 +2138,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -2088,7 +2177,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -2127,7 +2216,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook"
       },
       "declaration": {
@@ -2166,7 +2255,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2205,7 +2294,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2244,7 +2333,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2283,7 +2372,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2331,7 +2420,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2370,7 +2459,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2418,7 +2507,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2457,7 +2546,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2496,7 +2585,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2535,7 +2624,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2574,7 +2663,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2613,7 +2702,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above"
       },
       "declaration": {
@@ -2652,7 +2741,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates a new liquid-data collection from an inline data array OR a hosted-file URL (oneOf request body); the dialect's write body construction has no oneOf-discriminated body shape, and the primary practical use (large tabular reference data upload) is a bulk-data-loading operation, not a small-record CRM/reporting mutation this connector's write scope targets"
       },
       "declaration": {
@@ -2700,7 +2789,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-collection detail/delete/update, keyed by a single collection_id already enumerated by the collections stream; same fan-out limitation as broadcast/campaign sub-resources"
       },
       "declaration": {
@@ -2739,7 +2828,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-collection detail/delete/update, keyed by a single collection_id already enumerated by the collections stream; same fan-out limitation as broadcast/campaign sub-resources"
       },
       "declaration": {
@@ -2787,7 +2876,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-collection detail/delete/update, keyed by a single collection_id already enumerated by the collections stream; same fan-out limitation as broadcast/campaign sub-resources"
       },
       "declaration": {
@@ -2835,7 +2924,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-collection content-rows fetch, keyed by a single collection_id already enumerated by the collections stream"
       },
       "declaration": {
@@ -2874,7 +2963,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "replaces an entire collection's data rows in one request (bulk tabular data replacement) -- same bulk-data-loading rationale as create above, not a small-record mutation"
       },
       "declaration": {
@@ -2922,7 +3011,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "single-customer lookup requiring a specific email as a REQUIRED query param (not a bulk list) -- there is no list-all-customers endpoint in the App API by design (person/profile data is meant to be looked up by identifier, not paginated wholesale); no declarative list stream can be built from a lookup-only endpoint"
       },
       "declaration": {
@@ -2961,7 +3050,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "bulk customer-search-by-filter endpoint (POST body carries filter criteria, JSONata-like query object) -- a query/filter surface, not a syncable list or a simple flat-body mutation; capabilities.query is false for this connector"
       },
       "declaration": {
@@ -3009,7 +3098,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "bulk customer lookup by a list of ids in the POST body -- a batch-lookup surface, not a syncable list stream"
       },
       "declaration": {
@@ -3057,7 +3146,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
       },
       "declaration": {
@@ -3096,7 +3185,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
       },
       "declaration": {
@@ -3135,7 +3224,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
       },
       "declaration": {
@@ -3174,7 +3263,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
       },
       "declaration": {
@@ -3213,7 +3302,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
       },
       "declaration": {
@@ -3252,7 +3341,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)"
       },
       "declaration": {
@@ -3291,7 +3380,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates workspace-level attribute/event metadata definitions (data dictionary configuration), not a data-stream mutation of a customer/campaign/message record"
       },
       "declaration": {
@@ -3339,7 +3428,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates workspace-level attribute/event metadata definitions (data dictionary configuration), not a data-stream mutation of a customer/campaign/message record"
       },
       "declaration": {
@@ -3387,7 +3476,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3426,7 +3515,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3474,7 +3563,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3513,7 +3602,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3561,7 +3650,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3609,7 +3698,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3648,7 +3737,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3696,7 +3785,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3735,7 +3824,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3783,7 +3872,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3831,7 +3920,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3870,7 +3959,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3918,7 +4007,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -3957,7 +4046,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -4005,7 +4094,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -4053,7 +4142,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -4092,7 +4181,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -4140,7 +4229,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -4179,7 +4268,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -4227,7 +4316,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets"
       },
       "declaration": {
@@ -4275,7 +4364,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
       },
       "declaration": {
@@ -4314,7 +4403,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
       },
       "declaration": {
@@ -4353,7 +4442,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
       },
       "declaration": {
@@ -4392,7 +4481,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
       },
       "declaration": {
@@ -4440,7 +4529,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data"
       },
       "declaration": {
@@ -4488,7 +4577,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "kicks off an asynchronous bulk-export JOB (people or deliveries data dump); the exports stream already reads the resulting job metadata list, but starting a new export job is an async-job-creation action outside this connector's flat-record write scope"
       },
       "declaration": {
@@ -4536,7 +4625,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "kicks off an asynchronous bulk-export JOB (people or deliveries data dump); the exports stream already reads the resulting job metadata list, but starting a new export job is an async-job-creation action outside this connector's flat-record write scope"
       },
       "declaration": {
@@ -4584,7 +4673,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-export detail sub-resource, keyed by a single export_id already enumerated by the exports stream"
       },
       "declaration": {
@@ -4623,7 +4712,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-export detail/download sub-resource, keyed by a single export_id already enumerated by the exports stream; download in particular returns a binary/zip payload"
       },
       "declaration": {
@@ -4662,7 +4751,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "kicks off an asynchronous bulk people-IMPORT job from an uploaded file URL -- an async bulk-load action, not a flat-record write"
       },
       "declaration": {
@@ -4710,7 +4799,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-import-job status lookup; this connector implements no import-job-creation action to produce an import_id to look up, so there is no corresponding list/catalog surface for this detail endpoint"
       },
       "declaration": {
@@ -4749,7 +4838,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "returns Customer.io's own outbound IP allowlist (a static reference list for firewall configuration), not workspace data"
       },
       "declaration": {
@@ -4788,7 +4877,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-message detail/archived-content sub-resource, keyed by a single message_id already enumerated by the messages stream"
       },
       "declaration": {
@@ -4827,7 +4916,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-message detail/archived-content sub-resource, keyed by a single message_id already enumerated by the messages stream"
       },
       "declaration": {
@@ -4866,7 +4955,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates a new newsletter; body is a 6-way oneOf discriminated by message channel type (email/sms/push/in_app/webhook/inbox), each with a different required-field shape -- the dialect's single flat record_schema per write action has no oneOf/discriminator primitive to express six mutually-exclusive body shapes under one action name"
       },
       "declaration": {
@@ -4914,7 +5003,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter detail, keyed by a single newsletter_id already enumerated by the newsletters stream"
       },
       "declaration": {
@@ -4953,7 +5042,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "permanently deletes a newsletter and all its variants/metrics; omitted pending product-owner sign-off on adding a destructive per-object delete beyond the two already-covered destructive deletes (delete_manual_segment/delete_reporting_webhook) -- flaggable for a future increment, not a dialect limitation"
       },
       "declaration": {
@@ -5001,7 +5090,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter variant-content list, keyed by a single newsletter_id"
       },
       "declaration": {
@@ -5040,7 +5129,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter-variant detail, keyed by newsletter_id+content_id"
       },
       "declaration": {
@@ -5079,7 +5168,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates a specific newsletter language/test variant's subject/body content -- content-authoring mutation, a CMS-shaped write distinct from this connector's flat-record CRM/reporting mutations"
       },
       "declaration": {
@@ -5127,7 +5216,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter-variant metrics, keyed by newsletter_id+content_id"
       },
       "declaration": {
@@ -5166,7 +5255,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter-variant link-click metrics, keyed by newsletter_id+content_id"
       },
       "declaration": {
@@ -5205,7 +5294,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates a new language variant of a newsletter's content -- content-authoring mutation, not a flat-record CRM/reporting write"
       },
       "declaration": {
@@ -5253,7 +5342,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter-language-variant detail, keyed by newsletter_id+language"
       },
       "declaration": {
@@ -5292,7 +5381,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates a newsletter's language-variant content -- content-authoring mutation"
       },
       "declaration": {
@@ -5340,7 +5429,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletes a newsletter's language variant -- content-authoring mutation, omitted pending product sign-off on adding it as a destructive action"
       },
       "declaration": {
@@ -5388,7 +5477,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter delivery-message list, keyed by a single newsletter_id"
       },
       "declaration": {
@@ -5427,7 +5516,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter aggregate metrics, keyed by a single newsletter_id"
       },
       "declaration": {
@@ -5466,7 +5555,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter link-click metrics, keyed by a single newsletter_id"
       },
       "declaration": {
@@ -5505,7 +5594,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "schedules a newsletter to send at a future time -- a send-lifecycle action tightly coupled to Design Studio content authoring, out of scope alongside it"
       },
       "declaration": {
@@ -5553,7 +5642,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "sends a newsletter immediately -- a send-lifecycle action; sends real messages to a newsletter's full recipient list with no dry-run, higher blast-radius than the already-covered trigger_broadcast (which targets one specific broadcast_id's configured audience) and design_studio-adjacent content authoring"
       },
       "declaration": {
@@ -5601,7 +5690,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates a language variant for an A/B test group -- content-authoring mutation"
       },
       "declaration": {
@@ -5649,7 +5738,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-test-group-language-variant detail, keyed by newsletter_id+test_group_id+language"
       },
       "declaration": {
@@ -5688,7 +5777,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates an A/B test group's language variant -- content-authoring mutation"
       },
       "declaration": {
@@ -5736,7 +5825,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "deletes an A/B test group's language variant -- content-authoring mutation"
       },
       "declaration": {
@@ -5784,7 +5873,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-newsletter A/B test-group list, keyed by a single newsletter_id"
       },
       "declaration": {
@@ -5823,7 +5912,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "creates an A/B test group on a newsletter -- content-authoring/experiment-configuration mutation"
       },
       "declaration": {
@@ -5871,7 +5960,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "bulk custom-object lookup by filter/query in the POST body -- a query/filter surface (capabilities.query is false), not a syncable list stream"
       },
       "declaration": {
@@ -5919,7 +6008,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-object-instance attribute detail, keyed by object_type_id+object_id with no bulk list-all-instances endpoint documented for a given object_type_id"
       },
       "declaration": {
@@ -5958,7 +6047,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-object-instance relationship detail, keyed by object_type_id+object_id, same no-bulk-list limitation"
       },
       "declaration": {
@@ -5997,7 +6086,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-webhook detail, keyed by a single webhook_id already enumerated by the reporting_webhooks stream"
       },
       "declaration": {
@@ -6036,7 +6125,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-segment detail, keyed by a single segment_id already enumerated by the segments stream"
       },
       "declaration": {
@@ -6075,7 +6164,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-segment membership count, keyed by a single segment_id"
       },
       "declaration": {
@@ -6114,7 +6203,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-segment membership list, keyed by a single segment_id"
       },
       "declaration": {
@@ -6153,7 +6242,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-segment dependency (\"what references this segment\") lookup, keyed by a single segment_id"
       },
       "declaration": {
@@ -6192,7 +6281,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "sends a live transactional in-app message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change"
       },
       "declaration": {
@@ -6240,7 +6329,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "sends a live transactional inbox message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change"
       },
       "declaration": {
@@ -6288,7 +6377,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "sends a live transactional push message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change"
       },
       "declaration": {
@@ -6336,7 +6425,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "sends a live transactional SMS message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change"
       },
       "declaration": {
@@ -6384,7 +6473,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-sender-identity detail, keyed by a single sender_id already enumerated by the sender_identities stream"
       },
       "declaration": {
@@ -6423,7 +6512,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-sender-identity dependency lookup, keyed by a single sender_id"
       },
       "declaration": {
@@ -6462,7 +6551,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "mints a signed subscription-preferences-center token for one specific customer_id, for embedding in an outbound email link -- a per-request token-generation action, not catalog data or a flat-record mutation"
       },
       "declaration": {
@@ -6501,7 +6590,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
       },
       "declaration": {
@@ -6540,7 +6629,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
       },
       "declaration": {
@@ -6579,7 +6668,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
       },
       "declaration": {
@@ -6618,7 +6707,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
       },
       "declaration": {
@@ -6657,7 +6746,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
       },
       "declaration": {
@@ -6696,7 +6785,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream"
       },
       "declaration": {
@@ -6735,7 +6824,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates a transactional template's content body -- content-authoring mutation, a CMS-shaped write distinct from this connector's flat-record mutations"
       },
       "declaration": {
@@ -6783,7 +6872,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "updates a transactional template's language-variant content -- content-authoring mutation"
       },
       "declaration": {

@@ -7,7 +7,7 @@
 - Merges into: main
 - Delivery: Pull request open against `main` with the declared source locks, six-class disposition ledgers, local validation, and repository connector gates green.
 - Working branch: fm/cli-map-batch67-r1
-- Task: Add a credential-free, public-source-locked six-class parity map for `close-com`, `outreach`, `salesloft`, `copper`, `zoho-bigin`, `klaviyo`, `braze`, `customer-io`, `intercom`, `freshdesk`, `segment`, `activecampaign`, `iterable`, `help-scout`, `gorgias`, `service-now`, `chatwoot`, `chargebee`, `square`, and `braintree`. Every current documented `api_surface.json` endpoint receives exactly one disposition row. ETL is declaration-pending when a connector-owned source transport is absent. Typed write action endpoints remain enabled `direct_write`; their reverse-ETL eligibility is a separate attribute blocked by `generic-typed-destination-executor`.
+- Task: Add a credential-free, public-source-locked six-class parity map for `close-com`, `outreach`, `salesloft`, `copper`, `zoho-bigin`, `klaviyo`, `braze`, `customer-io`, `intercom`, `freshdesk`, `segment`, `activecampaign`, `iterable`, `help-scout`, `gorgias`, `service-now`, `chatwoot`, `chargebee`, `square`, and `braintree`. Every current documented `api_surface.json` endpoint receives exactly one disposition row. `enabled` requires an actual API-surface command or typed write-action binding: an unbound ETL stream remains `declaration-pending`. Typed write action endpoints remain enabled `direct_write`; their reverse-ETL eligibility is a separate attribute blocked by `generic-typed-destination-executor`.
 - Verification: Run the ledger-invariant checker, `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`, the relevant package tests, and `make verify` gates individually, including `connector-boundary` through a bounded poll.
 
 ## Evidence Table
@@ -16,7 +16,7 @@
 | --- | --- | --- |
 | Each in-scope connector has a pinned, public-source lock | live | The source-lock file names every `api_surface.json` endpoint and records public document URL/hash/bytes; removing a lock makes the checker fail. |
 | Every documented operation has one six-class disposition | live | The checker compares endpoint identities to ledger rows, rejects duplicates/missing rows, and counts every documented DELETE. |
-| Reasons describe present engine capability accurately | live | The checker rejects a typed write action classified as `reverse_etl`, and verifies its separate reverse-ETL foundation-gap attribute against the supplied destination-executor evidence/minimal change. |
+| Reasons describe present engine capability accurately | live | The checker rejects a typed write action classified as `reverse_etl`, an enabled operation without a command/action binding, and verifies the separate reverse-ETL foundation-gap attribute against the supplied destination-executor evidence/minimal change. |
 | Generator and connector surfaces remain valid | live | `connectorgen validate` and `surface-sync --check` operate on the real changed definition directories. |
 
 ## Lifecycle record

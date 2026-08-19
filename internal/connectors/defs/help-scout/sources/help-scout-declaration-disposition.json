@@ -14,9 +14,9 @@
     "exact_source_rows": 144,
     "declared_operations": 144,
     "declared_percent": 100,
-    "enabled_operations": 139,
-    "enabled_percent": 96.53,
-    "disabled_operations": 5,
+    "enabled_operations": 115,
+    "enabled_percent": 79.86,
+    "disabled_operations": 29,
     "documented_deletes": 18,
     "enabled_deletes": 18,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 5
+        "count": 29
       }
     ],
     "transport": {
@@ -84,20 +84,29 @@
       }
     },
     "declaration_pending_ids": [
+      "runnable-command-binding-help-scout",
       "typed-operation-contract-help-scout",
       "sync-transport-source-definition-help-scout"
     ],
     "declaration_pending": [
       {
+        "id": "runnable-command-binding-help-scout",
+        "count": 24
+      },
+      {
         "id": "typed-operation-contract-help-scout",
         "count": 5
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 139,
+    "typed_write_actions": 65,
+    "endpoint_bound_cli_commands": 50,
+    "endpoint_bound_typed_write_actions": 65
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -121,20 +130,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "conversations"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[0] is bound to ETL stream \"conversations\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[0] is bound to ETL stream \"conversations\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "conversations"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -160,14 +174,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[1] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[1] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_conversation"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_conversation"
         },
@@ -205,14 +219,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[2] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[2] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_conversation"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_conversation"
         },
@@ -250,14 +264,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[3] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[3] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-conversation"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-conversation"
         }
@@ -286,14 +300,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[4] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[4] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_conversation"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_conversation"
         },
@@ -331,14 +345,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[5] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[5] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_attachment"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_attachment"
         },
@@ -376,14 +390,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[6] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[6] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-attachment-data"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-attachment-data"
         }
@@ -412,14 +426,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[7] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[7] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "attachments download"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "attachments download"
         }
@@ -448,14 +462,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[8] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[8] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_chat_thread"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_chat_thread"
         },
@@ -493,14 +507,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[9] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[9] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_customer_thread"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_customer_thread"
         },
@@ -538,14 +552,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[10] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[10] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_custom_fields"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_custom_fields"
         },
@@ -583,14 +597,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[11] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[11] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_note"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_note"
         },
@@ -628,14 +642,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[12] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[12] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_phone_thread"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_phone_thread"
         },
@@ -673,14 +687,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[13] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[13] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_reply_thread"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_reply_thread"
         },
@@ -718,14 +732,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[14] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[14] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_snooze"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_snooze"
         },
@@ -763,14 +777,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[15] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[15] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_snooze"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_snooze"
         },
@@ -808,14 +822,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[16] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[16] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_tags"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_tags"
         },
@@ -850,20 +864,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[17] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "conversations_threads"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[17] is bound to ETL stream \"conversations_threads\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[17] is bound to ETL stream \"conversations_threads\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "conversations_threads"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -889,14 +908,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[18] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[18] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_thread"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_thread"
         },
@@ -934,14 +953,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[19] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[19] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "upload_attachment"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "upload_attachment"
         },
@@ -979,14 +998,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[20] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[20] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-thread-original-source"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-thread-original-source"
         }
@@ -1015,14 +1034,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[21] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[21] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_thread_schedule"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_thread_schedule"
         },
@@ -1060,14 +1079,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[22] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[22] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "publish_thread_schedule"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "publish_thread_schedule"
         },
@@ -1105,14 +1124,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[23] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[23] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_thread_schedule"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_thread_schedule"
         },
@@ -1147,20 +1166,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[24] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "customer_properties"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[24] is bound to ETL stream \"customer_properties\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[24] is bound to ETL stream \"customer_properties\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "customer_properties"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -1186,14 +1210,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[25] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[25] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_customer_property_definition"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_customer_property_definition"
         },
@@ -1231,14 +1255,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[26] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[26] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_customer_property_definition"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_customer_property_definition"
         },
@@ -1273,20 +1297,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[27] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "customers"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[27] is bound to ETL stream \"customers\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[27] is bound to ETL stream \"customers\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "customers"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -1312,14 +1341,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[28] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[28] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_customer"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_customer"
         },
@@ -1357,14 +1386,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[29] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[29] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_customer"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_customer"
         },
@@ -1402,14 +1431,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[30] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[30] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-customer"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-customer"
         }
@@ -1438,14 +1467,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[31] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[31] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_customer"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_customer"
         },
@@ -1483,14 +1512,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[32] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[32] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "overwrite_customer"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "overwrite_customer"
         },
@@ -1528,14 +1557,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[33] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[33] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_address"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_address"
         },
@@ -1573,14 +1602,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[34] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[34] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-address"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-address"
         }
@@ -1609,14 +1638,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[35] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[35] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_address"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_address"
         },
@@ -1654,14 +1683,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[36] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[36] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_address"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_address"
         },
@@ -1696,20 +1725,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[37] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "customers_chats"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[37] is bound to ETL stream \"customers_chats\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[37] is bound to ETL stream \"customers_chats\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "customers_chats"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -1735,14 +1769,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[38] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[38] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_chat_handle"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_chat_handle"
         },
@@ -1780,14 +1814,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[39] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[39] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_chat_handle"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_chat_handle"
         },
@@ -1825,14 +1859,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[40] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[40] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_chat_handles"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_chat_handles"
         },
@@ -1867,20 +1901,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[41] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "customers_emails"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[41] is bound to ETL stream \"customers_emails\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[41] is bound to ETL stream \"customers_emails\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "customers_emails"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -1906,14 +1945,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[42] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[42] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_email"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_email"
         },
@@ -1951,14 +1990,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[43] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[43] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_email"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_email"
         },
@@ -1996,14 +2035,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[44] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[44] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_email"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_email"
         },
@@ -2038,20 +2077,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[45] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "customers_phones"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[45] is bound to ETL stream \"customers_phones\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[45] is bound to ETL stream \"customers_phones\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "customers_phones"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -2077,14 +2121,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[46] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[46] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_phone"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_phone"
         },
@@ -2122,14 +2166,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[47] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[47] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_phone"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_phone"
         },
@@ -2167,14 +2211,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[48] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[48] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_phone"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_phone"
         },
@@ -2212,14 +2256,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[49] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[49] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_customer_properties"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_customer_properties"
         },
@@ -2254,20 +2298,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[50] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "customers_social_profiles"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[50] is bound to ETL stream \"customers_social_profiles\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[50] is bound to ETL stream \"customers_social_profiles\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "customers_social_profiles"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -2293,14 +2342,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[51] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[51] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_social_profile"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_social_profile"
         },
@@ -2338,14 +2387,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[52] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[52] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_social_profile"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_social_profile"
         },
@@ -2383,14 +2432,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[53] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[53] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_social_profile"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_social_profile"
         },
@@ -2425,20 +2474,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[54] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "customers_websites"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[54] is bound to ETL stream \"customers_websites\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[54] is bound to ETL stream \"customers_websites\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "customers_websites"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -2464,14 +2518,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[55] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[55] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_website"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_website"
         },
@@ -2509,14 +2563,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[56] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[56] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_website"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_website"
         },
@@ -2554,14 +2608,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[57] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[57] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_website"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_website"
         },
@@ -2596,20 +2650,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[58] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "mailboxes"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[58] is bound to ETL stream \"mailboxes\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[58] is bound to ETL stream \"mailboxes\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "mailboxes"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -2635,14 +2694,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[59] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[59] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-inbox"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-inbox"
         }
@@ -2668,20 +2727,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[60] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "mailboxes_fields"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[60] is bound to ETL stream \"mailboxes_fields\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[60] is bound to ETL stream \"mailboxes_fields\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "mailboxes_fields"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -2704,20 +2768,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[61] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "mailboxes_folders"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[61] is bound to ETL stream \"mailboxes_folders\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[61] is bound to ETL stream \"mailboxes_folders\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "mailboxes_folders"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -2743,14 +2812,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[62] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[62] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-routing-configuration"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-routing-configuration"
         }
@@ -2779,14 +2848,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[63] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[63] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_routing_configuration"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_routing_configuration"
         },
@@ -2821,20 +2890,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[64] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "mailboxes_saved_replies"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[64] is bound to ETL stream \"mailboxes_saved_replies\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[64] is bound to ETL stream \"mailboxes_saved_replies\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "mailboxes_saved_replies"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -2860,14 +2934,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[65] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[65] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_saved_reply"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_saved_reply"
         },
@@ -2905,14 +2979,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[66] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[66] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_saved_reply"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_saved_reply"
         },
@@ -2950,14 +3024,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[67] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[67] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-saved-reply"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-saved-reply"
         }
@@ -2986,14 +3060,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[68] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[68] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_saved_reply"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_saved_reply"
         },
@@ -3028,20 +3102,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[69] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "organizations"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[69] is bound to ETL stream \"organizations\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[69] is bound to ETL stream \"organizations\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "organizations"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -3067,14 +3146,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[70] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[70] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_organization"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_organization"
         },
@@ -3109,20 +3188,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[71] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "organizations_properties"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[71] is bound to ETL stream \"organizations_properties\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[71] is bound to ETL stream \"organizations_properties\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "organizations_properties"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -3148,14 +3232,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[72] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[72] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_organization_property_definition"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_organization_property_definition"
         },
@@ -3193,14 +3277,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[73] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[73] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_organization_property_definition"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_organization_property_definition"
         },
@@ -3238,14 +3322,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[74] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[74] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-organization-property-definition"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-organization-property-definition"
         }
@@ -3274,14 +3358,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[75] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[75] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_organization_property_definition"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_organization_property_definition"
         },
@@ -3319,14 +3403,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[76] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[76] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_organization_by_id"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_organization_by_id"
         },
@@ -3364,14 +3448,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[77] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[77] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-organization-by-id"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-organization-by-id"
         }
@@ -3400,14 +3484,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[78] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[78] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_organization"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_organization"
         },
@@ -3442,20 +3526,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[79] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "organizations_conversations"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[79] is bound to ETL stream \"organizations_conversations\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[79] is bound to ETL stream \"organizations_conversations\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "organizations_conversations"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -3478,20 +3567,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[80] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "organizations_customers"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[80] is bound to ETL stream \"organizations_customers\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[80] is bound to ETL stream \"organizations_customers\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "organizations_customers"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -3517,14 +3611,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[81] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[81] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "remove_organization_property_value"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "remove_organization_property_value"
         },
@@ -3562,14 +3656,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[82] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[82] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "set_organization_property_value"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "set_organization_property_value"
         },
@@ -3607,14 +3701,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[83] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[83] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-satisfaction-rating"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-satisfaction-rating"
         }
@@ -3643,14 +3737,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[84] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[84] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct chat-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct chat-report"
         }
@@ -3679,14 +3773,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[85] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[85] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct company-overall-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct company-overall-report"
         }
@@ -3715,14 +3809,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[86] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[86] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct company-customers-helped"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct company-customers-helped"
         }
@@ -3751,14 +3845,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[87] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[87] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct company-drilldown"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct company-drilldown"
         }
@@ -3787,14 +3881,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[88] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[88] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct conversations-overall-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct conversations-overall-report"
         }
@@ -3823,14 +3917,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[89] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[89] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct conversations-busiest-time-of-day"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct conversations-busiest-time-of-day"
         }
@@ -3859,14 +3953,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[90] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[90] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct conversations-drilldown"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct conversations-drilldown"
         }
@@ -3895,14 +3989,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[91] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[91] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct conversations-drilldown-by-field"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct conversations-drilldown-by-field"
         }
@@ -3931,14 +4025,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[92] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[92] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct conversations-new-conversations"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct conversations-new-conversations"
         }
@@ -3967,14 +4061,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[93] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[93] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct conversations-new-conversations-drilldown"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct conversations-new-conversations-drilldown"
         }
@@ -4003,14 +4097,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[94] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[94] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct conversations-received-messages-statistics"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct conversations-received-messages-statistics"
         }
@@ -4039,14 +4133,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[95] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[95] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct all-channels-volumes-by-channel"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct all-channels-volumes-by-channel"
         }
@@ -4075,14 +4169,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[96] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[96] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct docs-overall-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct docs-overall-report"
         }
@@ -4111,14 +4205,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[97] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[97] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct email-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct email-report"
         }
@@ -4147,14 +4241,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[98] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[98] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct happiness-overall-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct happiness-overall-report"
         }
@@ -4183,14 +4277,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[99] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[99] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct happiness-ratings-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct happiness-ratings-report"
         }
@@ -4219,14 +4313,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[100] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[100] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct phone-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct phone-report"
         }
@@ -4255,14 +4349,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[101] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[101] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct productivity-overall-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct productivity-overall-report"
         }
@@ -4291,14 +4385,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[102] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[102] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct productivity-first-response-time"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct productivity-first-response-time"
         }
@@ -4327,14 +4421,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[103] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[103] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct productivity-replies-sent"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct productivity-replies-sent"
         }
@@ -4363,14 +4457,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[104] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[104] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct productivity-resolution-time"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct productivity-resolution-time"
         }
@@ -4399,14 +4493,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[105] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[105] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct productivity-resolved"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct productivity-resolved"
         }
@@ -4435,14 +4529,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[106] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[106] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct productivity-response-time"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct productivity-response-time"
         }
@@ -4471,14 +4565,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[107] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[107] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct user-team-overall-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct user-team-overall-report"
         }
@@ -4507,14 +4601,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[108] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[108] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct user-team-chat-report"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct user-team-chat-report"
         }
@@ -4543,14 +4637,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[109] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[109] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct user-conversation-history"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct user-conversation-history"
         }
@@ -4579,14 +4673,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[110] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[110] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct user-customers-helped"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct user-customers-helped"
         }
@@ -4615,14 +4709,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[111] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[111] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct user-drill-down"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct user-drill-down"
         }
@@ -4651,14 +4745,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[112] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[112] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct user-happiness"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct user-happiness"
         }
@@ -4687,14 +4781,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[113] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[113] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct user-happiness-drilldown"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct user-happiness-drilldown"
         }
@@ -4723,14 +4817,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[114] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[114] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct user-replies"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct user-replies"
         }
@@ -4759,14 +4853,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[115] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[115] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct user-resolutions"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct user-resolutions"
         }
@@ -4792,20 +4886,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[116] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "tags"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[116] is bound to ETL stream \"tags\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[116] is bound to ETL stream \"tags\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "tags"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -4831,14 +4930,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[117] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[117] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-tag-by-id"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-tag-by-id"
         }
@@ -4864,20 +4963,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[118] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "teams"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[118] is bound to ETL stream \"teams\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[118] is bound to ETL stream \"teams\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "teams"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -4900,20 +5004,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[119] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "teams_members"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[119] is bound to ETL stream \"teams_members\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[119] is bound to ETL stream \"teams_members\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "teams_members"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -4939,14 +5048,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[120] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[120] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_team_members"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_team_members"
         },
@@ -4981,20 +5090,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[121] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "users"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[121] is bound to ETL stream \"users\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[121] is bound to ETL stream \"users\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "users"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -5020,14 +5134,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[122] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[122] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_user"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_user"
         },
@@ -5065,14 +5179,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[123] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[123] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-resource-owner"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-resource-owner"
         }
@@ -5098,20 +5212,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[124] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "users_status"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[124] is bound to ETL stream \"users_status\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[124] is bound to ETL stream \"users_status\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "users_status"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -5137,14 +5256,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[125] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[125] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_user"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_user"
         },
@@ -5182,14 +5301,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[126] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[126] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-user"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-user"
         }
@@ -5218,14 +5337,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[127] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[127] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-conversation-reassignment-configuration"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-conversation-reassignment-configuration"
         }
@@ -5254,14 +5373,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[128] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[128] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_conversation_reassignment_configuration"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_conversation_reassignment_configuration"
         },
@@ -5299,14 +5418,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[129] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[129] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-user-status"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-user-status"
         }
@@ -5335,14 +5454,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[130] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[130] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "set_user_status"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "set_user_status"
         },
@@ -5377,20 +5496,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[131] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "webhooks"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[131] is bound to ETL stream \"webhooks\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[131] is bound to ETL stream \"webhooks\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "webhooks"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -5416,14 +5540,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[132] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[132] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_webhook"
         },
@@ -5461,14 +5585,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[133] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[133] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_webhook"
         },
@@ -5506,14 +5630,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[134] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[134] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "direct get-webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "direct get-webhook"
         }
@@ -5542,14 +5666,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[135] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[135] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_webhook"
         },
@@ -5584,20 +5708,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[136] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "workflows"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-help-scout",
+          "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[136] is bound to ETL stream \"workflows\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[136] is bound to ETL stream \"workflows\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "workflows"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-help-scout",
+        "contract": null
       }
     },
     {
@@ -5623,14 +5752,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[137] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[137] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_workflow_status"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_workflow_status"
         },
@@ -5668,14 +5797,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[138] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/help-scout/api_surface.json endpoints[138] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "run_manual_workflows"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "run_manual_workflows"
         },
@@ -5729,7 +5858,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
       },
       "declaration": {
@@ -5776,7 +5905,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
       },
       "declaration": {
@@ -5823,7 +5952,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
       },
       "declaration": {
@@ -5870,7 +5999,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
       },
       "declaration": {
@@ -5917,7 +6046,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
       },
       "declaration": {

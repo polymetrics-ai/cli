@@ -14,9 +14,9 @@
     "exact_source_rows": 5,
     "declared_operations": 5,
     "declared_percent": 100,
-    "enabled_operations": 5,
-    "enabled_percent": 100,
-    "disabled_operations": 0,
+    "enabled_operations": 0,
+    "enabled_percent": 0,
+    "disabled_operations": 5,
     "documented_deletes": 0,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -58,7 +58,12 @@
         "count": 1
       }
     ],
-    "rejected_by_reason": [],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 5
+      }
+    ],
     "transport": {
       "contract": "docs/sync-transport-definition.md",
       "source_transport": {
@@ -79,20 +84,24 @@
       }
     },
     "declaration_pending_ids": [
-      "typed-operation-contract-copper",
+      "runnable-command-binding-copper",
       "sync-transport-source-definition-copper"
     ],
     "declaration_pending": [
       {
-        "id": "typed-operation-contract-copper",
-        "count": 0
+        "id": "runnable-command-binding-copper",
+        "count": 5
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 0,
+    "typed_write_actions": 0,
+    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_typed_write_actions": 0
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -116,20 +125,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[0] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "people"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-copper",
+          "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[0] is bound to ETL stream \"people\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[0] is bound to ETL stream \"people\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "people"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-copper",
+        "contract": null
       }
     },
     {
@@ -152,20 +166,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[1] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "companies"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-copper",
+          "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[1] is bound to ETL stream \"companies\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[1] is bound to ETL stream \"companies\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "companies"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-copper",
+        "contract": null
       }
     },
     {
@@ -188,20 +207,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[2] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "opportunities"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-copper",
+          "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[2] is bound to ETL stream \"opportunities\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[2] is bound to ETL stream \"opportunities\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "opportunities"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-copper",
+        "contract": null
       }
     },
     {
@@ -224,20 +248,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[3] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "leads"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-copper",
+          "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[3] is bound to ETL stream \"leads\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[3] is bound to ETL stream \"leads\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "leads"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-copper",
+        "contract": null
       }
     },
     {
@@ -260,20 +289,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[4] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "tasks"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-copper",
+          "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[4] is bound to ETL stream \"tasks\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[4] is bound to ETL stream \"tasks\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "tasks"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-copper",
+        "contract": null
       }
     }
   ]

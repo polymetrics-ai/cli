@@ -14,9 +14,9 @@
     "exact_source_rows": 148,
     "declared_operations": 148,
     "declared_percent": 100,
-    "enabled_operations": 101,
-    "enabled_percent": 68.24,
-    "disabled_operations": 47,
+    "enabled_operations": 94,
+    "enabled_percent": 63.51,
+    "disabled_operations": 54,
     "documented_deletes": 18,
     "enabled_deletes": 14,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 47
+        "count": 54
       }
     ],
     "transport": {
@@ -85,19 +85,28 @@
     },
     "declaration_pending_ids": [
       "typed-operation-contract-chatwoot",
+      "runnable-command-binding-chatwoot",
       "sync-transport-source-definition-chatwoot"
     ],
     "declaration_pending": [
       {
         "id": "typed-operation-contract-chatwoot",
         "count": 47
+      },
+      {
+        "id": "runnable-command-binding-chatwoot",
+        "count": 7
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 101,
+    "typed_write_actions": 60,
+    "endpoint_bound_cli_commands": 34,
+    "endpoint_bound_typed_write_actions": 60
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -141,7 +150,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Documented without the /api/v1 prefix every other Application API operation carries; the operationId (getConversationMessages), tag (Conversation), summary, and response shape are otherwise identical to the correctly-prefixed GET /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages this bundle already implements as the messages stream. Treated as a provider documentation artifact for the same operation, not an independently routable endpoint."
       },
       "declaration": {
@@ -172,14 +181,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[1] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[1] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "account get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "account get"
         }
@@ -208,14 +217,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[2] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[2] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_account"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_account"
         },
@@ -253,14 +262,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[3] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[3] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "merge_contacts"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "merge_contacts"
         },
@@ -298,14 +307,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[4] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[4] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "agent-bots list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "agent-bots list"
         }
@@ -334,14 +343,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[5] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[5] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_agent_bot"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_agent_bot"
         },
@@ -379,14 +388,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[6] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[6] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "agent-bots get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "agent-bots get"
         }
@@ -415,14 +424,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[7] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[7] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_agent_bot"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_agent_bot"
         },
@@ -460,14 +469,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[8] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[8] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_agent_bot"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_agent_bot"
         },
@@ -502,20 +511,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[9] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "agents"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-chatwoot",
+          "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[9] is bound to ETL stream \"agents\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[9] is bound to ETL stream \"agents\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "agents"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-chatwoot",
+        "contract": null
       }
     },
     {
@@ -541,14 +555,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[10] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[10] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_agent"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_agent"
         },
@@ -586,14 +600,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[11] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[11] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_agent"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_agent"
         },
@@ -631,14 +645,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[12] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[12] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_agent"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_agent"
         },
@@ -676,14 +690,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[13] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[13] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "audit-logs list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "audit-logs list"
         }
@@ -712,14 +726,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[14] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[14] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "automation-rules list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "automation-rules list"
         }
@@ -748,14 +762,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[15] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[15] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_automation_rule"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_automation_rule"
         },
@@ -793,14 +807,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[16] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[16] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "automation-rules get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "automation-rules get"
         }
@@ -829,14 +843,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[17] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[17] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_automation_rule"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_automation_rule"
         },
@@ -874,14 +888,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[18] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[18] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_automation_rule"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_automation_rule"
         },
@@ -919,14 +933,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[19] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[19] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "account get-branded-email-layout"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "account get-branded-email-layout"
         }
@@ -955,14 +969,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[20] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[20] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_branded_email_layout"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_branded_email_layout"
         },
@@ -1000,14 +1014,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[21] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[21] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "canned-responses list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "canned-responses list"
         }
@@ -1036,14 +1050,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[22] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[22] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_canned_response"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_canned_response"
         },
@@ -1081,14 +1095,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[23] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[23] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_canned_response"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_canned_response"
         },
@@ -1126,14 +1140,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[24] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[24] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_canned_response"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_canned_response"
         },
@@ -1168,20 +1182,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[25] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "contacts"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-chatwoot",
+          "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[25] is bound to ETL stream \"contacts\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[25] is bound to ETL stream \"contacts\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "contacts"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-chatwoot",
+        "contract": null
       }
     },
     {
@@ -1207,14 +1226,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[26] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[26] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_contact"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_contact"
         },
@@ -1252,14 +1271,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[27] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[27] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "contacts filter"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "contacts filter"
         }
@@ -1288,14 +1307,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[28] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[28] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "contacts search"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "contacts search"
         }
@@ -1324,14 +1343,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[29] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[29] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "contacts get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "contacts get"
         }
@@ -1360,14 +1379,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[30] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[30] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_contact"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_contact"
         },
@@ -1405,14 +1424,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[31] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[31] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_contact"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_contact"
         },
@@ -1450,14 +1469,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[32] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[32] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_contact_inbox"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_contact_inbox"
         },
@@ -1495,14 +1514,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[33] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[33] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "contacts list-contactable-inboxes"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "contacts list-contactable-inboxes"
         }
@@ -1531,14 +1550,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[34] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[34] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "contacts list-conversations"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "contacts list-conversations"
         }
@@ -1567,14 +1586,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[35] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[35] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "contacts list-labels"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "contacts list-labels"
         }
@@ -1603,14 +1622,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[36] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[36] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_contact_labels"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_contact_labels"
         },
@@ -1645,20 +1664,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[37] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "conversations"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-chatwoot",
+          "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[37] is bound to ETL stream \"conversations\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[37] is bound to ETL stream \"conversations\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "conversations"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-chatwoot",
+        "contract": null
       }
     },
     {
@@ -1684,14 +1708,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[38] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[38] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_conversation"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_conversation"
         },
@@ -1729,14 +1753,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[39] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[39] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "conversations filter"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "conversations filter"
         }
@@ -1765,14 +1789,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[40] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[40] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "conversations meta"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "conversations meta"
         }
@@ -1801,14 +1825,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[41] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[41] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "conversations get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "conversations get"
         }
@@ -1837,14 +1861,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[42] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[42] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_conversation"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_conversation"
         },
@@ -1882,14 +1906,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[43] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[43] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "assign_conversation"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "assign_conversation"
         },
@@ -1927,14 +1951,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[44] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[44] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_conversation_custom_attributes"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_conversation_custom_attributes"
         },
@@ -1972,14 +1996,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[45] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[45] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "destroy_conversation_custom_attributes"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "destroy_conversation_custom_attributes"
         },
@@ -2017,14 +2041,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[46] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[46] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "conversations list-labels"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "conversations list-labels"
         }
@@ -2053,14 +2077,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[47] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[47] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_conversation_labels"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_conversation_labels"
         },
@@ -2095,20 +2119,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[48] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "messages"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-chatwoot",
+          "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[48] is bound to ETL stream \"messages\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[48] is bound to ETL stream \"messages\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "messages"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-chatwoot",
+        "contract": null
       }
     },
     {
@@ -2134,14 +2163,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[49] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[49] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "send_message"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "send_message"
         },
@@ -2179,14 +2208,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[50] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[50] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_message"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_message"
         },
@@ -2224,14 +2253,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[51] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[51] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "conversations list-reporting-events"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "conversations list-reporting-events"
         }
@@ -2260,14 +2289,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[52] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[52] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "toggle_conversation_priority"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "toggle_conversation_priority"
         },
@@ -2305,14 +2334,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[53] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[53] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "toggle_conversation_status"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "toggle_conversation_status"
         },
@@ -2350,14 +2379,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[54] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[54] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "toggle_conversation_typing_status"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "toggle_conversation_typing_status"
         },
@@ -2395,14 +2424,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[55] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[55] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "custom-attributes list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "custom-attributes list"
         }
@@ -2431,14 +2460,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[56] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[56] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_custom_attribute_definition"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_custom_attribute_definition"
         },
@@ -2476,14 +2505,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[57] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[57] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "custom-attributes get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "custom-attributes get"
         }
@@ -2512,14 +2541,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[58] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[58] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_custom_attribute_definition"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_custom_attribute_definition"
         },
@@ -2557,14 +2586,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[59] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[59] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_custom_attribute_definition"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_custom_attribute_definition"
         },
@@ -2602,14 +2631,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[60] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[60] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "custom-filters list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "custom-filters list"
         }
@@ -2638,14 +2667,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[61] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[61] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_custom_filter"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_custom_filter"
         },
@@ -2683,14 +2712,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[62] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[62] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "custom-filters get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "custom-filters get"
         }
@@ -2719,14 +2748,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[63] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[63] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_custom_filter"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_custom_filter"
         },
@@ -2764,14 +2793,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[64] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[64] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_custom_filter"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_custom_filter"
         },
@@ -2809,14 +2838,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[65] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[65] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "add_inbox_members"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "add_inbox_members"
         },
@@ -2854,14 +2883,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[66] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[66] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "set_inbox_members"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "set_inbox_members"
         },
@@ -2899,14 +2928,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[67] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[67] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "remove_inbox_members"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "remove_inbox_members"
         },
@@ -2944,14 +2973,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[68] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[68] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "inbox-members list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "inbox-members list"
         }
@@ -2977,20 +3006,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[69] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "inboxes"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-chatwoot",
+          "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[69] is bound to ETL stream \"inboxes\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[69] is bound to ETL stream \"inboxes\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "inboxes"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-chatwoot",
+        "contract": null
       }
     },
     {
@@ -3032,7 +3066,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Inbox channel provisioning/update is a true oneOf across ~10 channel types (website, email, sms, whatsapp, api, telegram, line, facebook page, twitter) each with distinct required per-channel secrets. Per AGENTS.md's 'Command Surface Must Stay Executable' rule, a declarative reverse-ETL record_schema rooted at oneOf is not one executable command contract; modeling every reachable arm as its own named write action is out of scope for this parity pass."
       },
       "declaration": {
@@ -3072,14 +3106,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[71] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[71] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "inboxes get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "inboxes get"
         }
@@ -3124,7 +3158,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Inbox channel provisioning/update is a true oneOf across ~10 channel types (website, email, sms, whatsapp, api, telegram, line, facebook page, twitter) each with distinct required per-channel secrets. Per AGENTS.md's 'Command Surface Must Stay Executable' rule, a declarative reverse-ETL record_schema rooted at oneOf is not one executable command contract; modeling every reachable arm as its own named write action is out of scope for this parity pass."
       },
       "declaration": {
@@ -3164,14 +3198,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[73] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[73] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "inboxes get-agent-bot"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "inboxes get-agent-bot"
         }
@@ -3200,14 +3234,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[74] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[74] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "inboxes list-message-templates"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "inboxes list-message-templates"
         }
@@ -3236,14 +3270,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[75] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[75] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "set_inbox_agent_bot"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "set_inbox_agent_bot"
         },
@@ -3281,14 +3315,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[76] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[76] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "integrations list-apps"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "integrations list-apps"
         }
@@ -3317,14 +3351,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[77] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[77] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_integration_hook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_integration_hook"
         },
@@ -3362,14 +3396,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[78] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[78] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_integration_hook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_integration_hook"
         },
@@ -3407,14 +3441,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[79] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[79] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_integration_hook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_integration_hook"
         },
@@ -3449,20 +3483,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[80] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "labels"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-chatwoot",
+          "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[80] is bound to ETL stream \"labels\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[80] is bound to ETL stream \"labels\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "labels"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-chatwoot",
+        "contract": null
       }
     },
     {
@@ -3488,14 +3527,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[81] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[81] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_label"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_label"
         },
@@ -3533,14 +3572,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[82] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[82] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "labels get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "labels get"
         }
@@ -3569,14 +3608,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[83] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[83] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_label"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_label"
         },
@@ -3614,14 +3653,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[84] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[84] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_label"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_label"
         },
@@ -3659,14 +3698,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[85] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[85] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "portals list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "portals list"
         }
@@ -3695,14 +3734,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[86] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[86] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_portal"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_portal"
         },
@@ -3740,14 +3779,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[87] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[87] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_portal"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_portal"
         },
@@ -3785,14 +3824,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[88] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[88] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_portal_article"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_portal_article"
         },
@@ -3830,14 +3869,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[89] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[89] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_portal_category"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_portal_category"
         },
@@ -3875,14 +3914,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[90] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[90] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "reporting-events list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "reporting-events list"
         }
@@ -3908,20 +3947,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[91] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "teams"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-chatwoot",
+          "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[91] is bound to ETL stream \"teams\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[91] is bound to ETL stream \"teams\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "teams"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-chatwoot",
+        "contract": null
       }
     },
     {
@@ -3947,14 +3991,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[92] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[92] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_team"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_team"
         },
@@ -3992,14 +4036,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[93] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[93] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "teams get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "teams get"
         }
@@ -4028,14 +4072,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[94] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[94] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_team"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_team"
         },
@@ -4073,14 +4117,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[95] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[95] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_team"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_team"
         },
@@ -4118,14 +4162,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[96] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[96] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "teams list-members"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "teams list-members"
         }
@@ -4154,14 +4198,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[97] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[97] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "add_team_members"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "add_team_members"
         },
@@ -4199,14 +4243,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[98] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[98] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "set_team_members"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "set_team_members"
         },
@@ -4244,14 +4288,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[99] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[99] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "remove_team_members"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "remove_team_members"
         },
@@ -4289,14 +4333,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[100] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[100] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "webhooks list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "webhooks list"
         }
@@ -4325,14 +4369,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[101] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[101] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_webhook"
         },
@@ -4370,14 +4414,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[102] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[102] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_webhook"
         },
@@ -4415,14 +4459,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[103] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/chatwoot/api_surface.json endpoints[103] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_webhook"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_webhook"
         },
@@ -4476,7 +4520,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "The caller's own agent profile is addressed at /api/v1/profile, a sibling of /api/v1/accounts rather than nested under it, so it falls outside this bundle's single account-scoped base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4523,7 +4567,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Updating the caller's own agent profile is addressed at /api/v1/profile, a sibling of /api/v1/accounts rather than nested under it, so it falls outside this bundle's single account-scoped base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4579,7 +4623,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Account-level report summary listing lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4626,7 +4670,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Account conversation metrics report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4673,7 +4717,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Agent conversation metrics report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4720,7 +4764,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "First response time distribution report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4767,7 +4811,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Inbox/label matrix report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4814,7 +4858,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Outgoing message count report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4861,7 +4905,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Account report summary lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4908,7 +4952,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Per-agent summary report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -4955,7 +4999,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Per-channel summary report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5002,7 +5046,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Per-inbox summary report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5049,7 +5093,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Per-team summary report lives under /api/v2, a different path prefix than this bundle's single account-scoped /api/v1 base. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5096,7 +5140,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5152,7 +5196,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5199,7 +5243,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5255,7 +5299,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5311,7 +5355,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5358,7 +5402,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5414,7 +5458,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5470,7 +5514,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5517,7 +5561,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5573,7 +5617,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5620,7 +5664,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5676,7 +5720,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5732,7 +5776,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5788,7 +5832,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API endpoints live under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and require a platformAppApiKey credential value (a distinct, super-admin-privileged token) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5835,7 +5879,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5891,7 +5935,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Platform API account/user provisioning lives under /platform/api/v1, a different path prefix than this bundle's account-scoped /api/v1 base, and requires a platformAppApiKey credential (instance-wide super-admin scope: creates/deletes entire Chatwoot accounts and users) rather than the per-account api_access_token this connector's spec.json collects. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -5947,7 +5991,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Returns a single-sign-on URL embedding a live login/impersonation token for the target user -- a token-derived value. This repository forbids printing or storing credential or token-derived values outright (AGENTS.md 'Agent Rules'), independent of any base-URL or credential-scope constraint."
       },
       "declaration": {
@@ -5994,7 +6038,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6041,7 +6085,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6097,7 +6141,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6144,7 +6188,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6200,7 +6244,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6247,7 +6291,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6303,7 +6347,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6350,7 +6394,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6397,7 +6441,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6453,7 +6497,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6509,7 +6553,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6565,7 +6609,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6621,7 +6665,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "This is Chatwoot's public Client/widget API, addressed under /public/api/v1 (a different path prefix than this bundle's account-scoped /api/v1 base) and authenticated by inbox_identifier + contact_identifier path pseudo-secrets instead of the api_access_token this connector's spec.json collects. It acts as an anonymous end-customer / chat-widget actor, not the authenticated agent this connector's Application API surface represents. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {
@@ -6677,7 +6721,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Public unauthenticated CSAT survey response page, addressed under /survey (a different path prefix than this bundle's account-scoped /api/v1 base) and keyed by a conversation UUID this connector's conversation records do not expose. Per-operation base URL override in internal/connectors/engine (the bundle's streams.json declares exactly one HTTPBase.URL, {{ config.base_url }}/api/v1/accounts/{{ config.account_id }}; connsdk.Requester.resolveURL always string-concatenates BaseURL+path, and engine.resolveSurfaceEndpointPath explicitly rejects an absolute http(s) path override for rest_read/rest_write operations, so a path outside /api/v1/accounts/{account_id} cannot be addressed without restructuring every existing stream/write path in lockstep)"
       },
       "declaration": {

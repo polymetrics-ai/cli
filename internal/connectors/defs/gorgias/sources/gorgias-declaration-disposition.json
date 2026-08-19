@@ -14,9 +14,9 @@
     "exact_source_rows": 114,
     "declared_operations": 114,
     "declared_percent": 100,
-    "enabled_operations": 108,
-    "enabled_percent": 94.74,
-    "disabled_operations": 6,
+    "enabled_operations": 104,
+    "enabled_percent": 91.23,
+    "disabled_operations": 10,
     "documented_deletes": 18,
     "enabled_deletes": 18,
     "parity_class_counts": [
@@ -61,7 +61,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 6
+        "count": 10
       }
     ],
     "transport": {
@@ -84,20 +84,29 @@
       }
     },
     "declaration_pending_ids": [
+      "runnable-command-binding-gorgias",
       "typed-operation-contract-gorgias",
       "sync-transport-source-definition-gorgias"
     ],
     "declaration_pending": [
       {
+        "id": "runnable-command-binding-gorgias",
+        "count": 4
+      },
+      {
         "id": "typed-operation-contract-gorgias",
         "count": 6
       }
-    ]
+    ],
+    "runnable_cli_surface_commands": 108,
+    "typed_write_actions": 61,
+    "endpoint_bound_cli_commands": 43,
+    "endpoint_bound_typed_write_actions": 61
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
-    "Missing typed contracts and commands are declaration-pending, not foundation gaps.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented."
   ],
   "ledger_dispositions": [
@@ -124,14 +133,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[0] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[0] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "account get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "account get"
         }
@@ -160,14 +169,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[1] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[1] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "account settings list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "account settings list"
         }
@@ -196,14 +205,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[2] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[2] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_account_setting"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_account_setting"
         },
@@ -241,14 +250,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[3] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[3] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_account_setting"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_account_setting"
         },
@@ -286,14 +295,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[4] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[4] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "custom-fields list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "custom-fields list"
         }
@@ -322,14 +331,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[5] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[5] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_custom_field"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_custom_field"
         },
@@ -367,14 +376,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[6] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[6] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_custom_fields"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_custom_fields"
         },
@@ -412,14 +421,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[7] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[7] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "custom-fields get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "custom-fields get"
         }
@@ -448,14 +457,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[8] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[8] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_custom_field"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_custom_field"
         },
@@ -493,14 +502,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[9] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[9] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_customers"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_customers"
         },
@@ -535,20 +544,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[10] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "customers"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[10] is bound to ETL stream \"customers\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[10] is bound to ETL stream \"customers\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "customers"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-gorgias",
+        "contract": null
       }
     },
     {
@@ -574,14 +588,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[11] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[11] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_customer"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_customer"
         },
@@ -619,14 +633,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[12] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[12] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "merge_customers"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "merge_customers"
         },
@@ -664,14 +678,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[13] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[13] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "customers custom-fields list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "customers custom-fields list"
         }
@@ -700,14 +714,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[14] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[14] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_customer_custom_field_values"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_customer_custom_field_values"
         },
@@ -745,14 +759,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[15] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[15] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_customer_custom_field_value"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_customer_custom_field_value"
         },
@@ -806,7 +820,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "'Update customer field value' sends a bare top-level JSON scalar (string, integer, or boolean per its oneOf request schema) as the ENTIRE request body, not an object of record fields. This repository's write body_type dialect (json/form/json_array/multipart/base64_upload) always produces an object or array wrapper and has no mode for a bare scalar body. Source: https://developers.gorgias.com/reference/update-customer-custom-field-value"
       },
       "declaration": {
@@ -846,14 +860,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[17] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[17] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_customer_data"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_customer_data"
         },
@@ -891,14 +905,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[18] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[18] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_customer"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_customer"
         },
@@ -936,14 +950,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[19] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[19] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "customers get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "customers get"
         }
@@ -972,14 +986,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[20] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[20] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_customer"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_customer"
         },
@@ -1017,14 +1031,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[21] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[21] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "events list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "events list"
         }
@@ -1053,14 +1067,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[22] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[22] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "events get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "events get"
         }
@@ -1089,14 +1103,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[23] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[23] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "integrations list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "integrations list"
         }
@@ -1125,14 +1139,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[24] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[24] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_integration"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_integration"
         },
@@ -1170,14 +1184,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[25] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[25] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_integration"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_integration"
         },
@@ -1215,14 +1229,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[26] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[26] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "integrations get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "integrations get"
         }
@@ -1251,14 +1265,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[27] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[27] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_integration"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_integration"
         },
@@ -1296,14 +1310,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[28] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[28] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "jobs list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "jobs list"
         }
@@ -1332,14 +1346,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[29] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[29] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_job"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_job"
         },
@@ -1377,14 +1391,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[30] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[30] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "cancel_job"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "cancel_job"
         },
@@ -1422,14 +1436,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[31] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[31] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "jobs get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "jobs get"
         }
@@ -1458,14 +1472,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[32] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[32] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_job"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_job"
         },
@@ -1503,14 +1517,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[33] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[33] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "macros list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "macros list"
         }
@@ -1539,14 +1553,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[34] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[34] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_macro"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_macro"
         },
@@ -1584,14 +1598,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[35] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[35] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "bulk_archive_macros"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "bulk_archive_macros"
         },
@@ -1629,14 +1643,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[36] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[36] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "bulk_unarchive_macros"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "bulk_unarchive_macros"
         },
@@ -1674,14 +1688,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[37] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[37] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_macro"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_macro"
         },
@@ -1719,14 +1733,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[38] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[38] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "macros get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "macros get"
         }
@@ -1755,14 +1769,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[39] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[39] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_macro"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_macro"
         },
@@ -1797,20 +1811,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[40] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "messages"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[40] is bound to ETL stream \"messages\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[40] is bound to ETL stream \"messages\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "messages"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-gorgias",
+        "contract": null
       }
     },
     {
@@ -1836,14 +1855,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[41] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[41] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "metric-cards list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "metric-cards list"
         }
@@ -1872,14 +1891,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[42] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[42] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "metric-cards get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "metric-cards get"
         }
@@ -1908,14 +1927,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[43] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[43] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_metric_card_feedback"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_metric_card_feedback"
         },
@@ -1953,14 +1972,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[44] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[44] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "voice-call-events list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "voice-call-events list"
         }
@@ -1989,14 +2008,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[45] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[45] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "voice-call-events get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "voice-call-events get"
         }
@@ -2025,14 +2044,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[46] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[46] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "voice-call-recordings list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "voice-call-recordings list"
         }
@@ -2061,14 +2080,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[47] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[47] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_voice_call_recording"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_voice_call_recording"
         },
@@ -2106,14 +2125,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[48] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[48] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "voice-call-recordings get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "voice-call-recordings get"
         }
@@ -2142,14 +2161,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[49] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[49] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "voice-calls list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "voice-calls list"
         }
@@ -2178,14 +2197,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[50] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[50] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "voice-calls get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "voice-calls get"
         }
@@ -2230,7 +2249,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "'Retrieve a statistic' requires a top-level 'query' field whose schema is a 50-arm discriminated union implementing the Statistics API's recursive filter-expression grammar (and/or/comparison nodes), with no typed scalar leaf and no neutral empty default. This repository's authoring rule for an implemented direct-read POST command requires every required operations.json rest.body_schema path to be satisfied by a static rest.body or a required command flag mapped to body.*; no single flag or static literal can honestly stand in for an arbitrary filter tree. Source: https://developers.gorgias.com/reference/get-statistic"
       },
       "declaration": {
@@ -2261,14 +2280,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[52] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[52] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "rules list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "rules list"
         }
@@ -2297,14 +2316,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[53] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[53] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_rule"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_rule"
         },
@@ -2342,14 +2361,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[54] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[54] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_rules_priorities"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_rules_priorities"
         },
@@ -2387,14 +2406,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[55] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[55] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_rule"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_rule"
         },
@@ -2432,14 +2451,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[56] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[56] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "rules get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "rules get"
         }
@@ -2468,14 +2487,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[57] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[57] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_rule"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_rule"
         },
@@ -2510,20 +2529,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[58] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "satisfaction_surveys"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[58] is bound to ETL stream \"satisfaction_surveys\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[58] is bound to ETL stream \"satisfaction_surveys\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "satisfaction_surveys"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-gorgias",
+        "contract": null
       }
     },
     {
@@ -2549,14 +2573,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[59] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[59] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_satisfaction_survey"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_satisfaction_survey"
         },
@@ -2594,14 +2618,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[60] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[60] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "satisfaction-surveys get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "satisfaction-surveys get"
         }
@@ -2630,14 +2654,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[61] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[61] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_satisfaction_survey"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_satisfaction_survey"
         },
@@ -2675,14 +2699,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[62] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[62] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "search"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "search"
         }
@@ -2711,14 +2735,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[63] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[63] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "stats get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "stats get"
         }
@@ -2763,7 +2787,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "'Download a statistic' returns text/csv from a POST request that carries a required JSON filter body. This repository's binary download executor (engine.OperationBinaryDownload / commandrunner.validateBinaryDownloadCommand) requires GET, so a POST-triggered CSV export cannot be wired through it. Source: https://developers.gorgias.com/reference/download-legacy-statistic"
       },
       "declaration": {
@@ -2794,14 +2818,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[65] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[65] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_tags"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_tags"
         },
@@ -2839,14 +2863,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[66] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[66] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "tags list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "tags list"
         }
@@ -2875,14 +2899,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[67] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[67] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_tag"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_tag"
         },
@@ -2920,14 +2944,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[68] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[68] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "merge_tags"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "merge_tags"
         },
@@ -2965,14 +2989,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[69] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[69] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_tag"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_tag"
         },
@@ -3010,14 +3034,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[70] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[70] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "tags get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "tags get"
         }
@@ -3046,14 +3070,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[71] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[71] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_tag"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_tag"
         },
@@ -3091,14 +3115,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[72] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[72] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "teams list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "teams list"
         }
@@ -3127,14 +3151,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[73] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[73] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_team"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_team"
         },
@@ -3172,14 +3196,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[74] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[74] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_team"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_team"
         },
@@ -3217,14 +3241,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[75] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[75] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "teams get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "teams get"
         }
@@ -3253,14 +3277,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[76] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[76] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_team"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_team"
         },
@@ -3295,20 +3319,25 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[77] binds the pinned source operation to an existing etl declaration.",
-        "contract": {
-          "stream": "tickets"
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[77] is bound to ETL stream \"tickets\" but has no runnable cli_surface command or typed write action binding.",
+          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
         }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[77] is bound to ETL stream \"tickets\" but has no runnable cli_surface command or typed write action binding."
+      },
       "declaration": {
-        "status": "enabled; existing etl declaration binds the pinned source contract",
-        "contract": {
-          "stream": "tickets"
-        }
+        "status": "disabled; declaration-pending runnable-command-binding-gorgias",
+        "contract": null
       }
     },
     {
@@ -3334,14 +3363,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[78] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[78] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_ticket"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_ticket"
         },
@@ -3379,14 +3408,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[79] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[79] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_ticket"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_ticket"
         },
@@ -3424,14 +3453,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[80] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[80] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "tickets get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "tickets get"
         }
@@ -3460,14 +3489,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[81] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[81] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_ticket"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_ticket"
         },
@@ -3505,14 +3534,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[82] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[82] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "tickets custom-fields list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "tickets custom-fields list"
         }
@@ -3541,14 +3570,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[83] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[83] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_ticket_custom_fields"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_ticket_custom_fields"
         },
@@ -3586,14 +3615,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[84] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[84] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_ticket_custom_field"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_ticket_custom_field"
         },
@@ -3647,7 +3676,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "'Update ticket field value' sends a bare top-level JSON scalar (string, integer, or boolean per its oneOf request schema) as the ENTIRE request body, not an object of record fields. This repository's write body_type dialect (json/form/json_array/multipart/base64_upload) always produces an object or array wrapper and has no mode for a bare scalar body. Source: https://developers.gorgias.com/reference/update-ticket-custom-field"
       },
       "declaration": {
@@ -3703,7 +3732,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "Provider-deprecated 'List messages of a ticket' endpoint. The OpenAPI document marks it deprecated:true and its own description says 'Use list messages endpoint instead' (GET /api/messages, implemented here as the messages stream, which accepts a ticket_id filter). Source: https://developers.gorgias.com/reference/list-ticket-messages"
       },
       "declaration": {
@@ -3734,14 +3763,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[87] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[87] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_ticket_message"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_ticket_message"
         },
@@ -3779,14 +3808,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[88] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[88] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_ticket_message"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_ticket_message"
         },
@@ -3824,14 +3853,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[89] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[89] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "tickets messages get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "tickets messages get"
         }
@@ -3860,14 +3889,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[90] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[90] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_ticket_message"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_ticket_message"
         },
@@ -3905,14 +3934,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[91] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[91] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_ticket_tags"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_ticket_tags"
         },
@@ -3950,14 +3979,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[92] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[92] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "tickets tags list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "tickets tags list"
         }
@@ -3986,14 +4015,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[93] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[93] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_ticket_tags"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_ticket_tags"
         },
@@ -4031,14 +4060,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[94] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[94] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_ticket_tags"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_ticket_tags"
         },
@@ -4076,14 +4105,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[95] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[95] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "upload_file"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "upload_file"
         },
@@ -4121,14 +4150,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[96] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[96] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "users list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "users list"
         }
@@ -4157,14 +4186,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[97] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[97] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_user"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_user"
         },
@@ -4202,14 +4231,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[98] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[98] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_user"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_user"
         },
@@ -4247,14 +4276,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[99] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[99] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "users get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "users get"
         }
@@ -4283,14 +4312,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[100] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[100] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_user"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_user"
         },
@@ -4328,14 +4357,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[101] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[101] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "views list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "views list"
         }
@@ -4364,14 +4393,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[102] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[102] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_view"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_view"
         },
@@ -4409,14 +4438,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[103] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[103] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_view"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_view"
         },
@@ -4454,14 +4483,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[104] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[104] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "views get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "views get"
         }
@@ -4490,14 +4519,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[105] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[105] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_view"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_view"
         },
@@ -4535,14 +4564,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[106] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[106] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "views items list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "views items list"
         }
@@ -4587,7 +4616,7 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The source operation has no runnable command or typed action binding.",
         "evidence": "'Search for view's items' takes its filter/order criteria in a request body but the provider requires PUT, not GET or POST. This repository's operation direct-read executor (commandrunner.validateOperationDirectReadCommand) accepts only GET or POST endpoints, so a PUT-bodied read cannot be wired through it. The common case (an unfiltered, cursor-paginated listing of a view's items) is already served by the GET sibling, implemented here as the 'views items list' direct read. Source: https://developers.gorgias.com/reference/update-view-items"
       },
       "declaration": {
@@ -4618,14 +4647,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[108] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[108] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "widgets list"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "widgets list"
         }
@@ -4654,14 +4683,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[109] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[109] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "create_widget"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "create_widget"
         },
@@ -4699,14 +4728,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[110] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[110] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "delete_widget"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "delete_widget"
         },
@@ -4744,14 +4773,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[111] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[111] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_read": "widgets get"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_read": "widgets get"
         }
@@ -4780,14 +4809,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[112] binds the pinned source operation to an existing direct_write declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[112] has a runnable typed write action binding for the pinned source operation.",
         "contract": {
           "write": "update_widget"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_write declaration binds the pinned source contract",
+        "status": "enabled; runnable typed write action binds the pinned source contract",
         "contract": {
           "write": "update_widget"
         },
@@ -4827,7 +4856,7 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[113] binds the pinned source operation to an existing direct_read declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[113] has a runnable cli command binding for the pinned source operation.",
         "contract": {
           "direct_reads": [
             "files download"
@@ -4836,7 +4865,7 @@
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing direct_read declaration binds the pinned source contract",
+        "status": "enabled; runnable cli command binds the pinned source contract",
         "contract": {
           "direct_reads": [
             "files download"
