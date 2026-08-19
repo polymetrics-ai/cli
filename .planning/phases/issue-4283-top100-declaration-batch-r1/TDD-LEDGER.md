@@ -460,3 +460,20 @@ Each pending entry is bound to its connector's precise source-identity,
 nested-object, or `action-scoped-source-binding` foundation record; no entry
 uses risk, privilege, deletion, cost, or missing live credentials as an
 ineligibility reason.
+
+### Documented-operation command reachability boundary — 2026-08-20
+
+**Red:** joining every source-crosswalk operation to the current API-surface
+coverage leaves 3,366 of 4,378 pinned operations without a declared command
+binding. A representative Jira blocked body and a CircleCI unmaterialized
+endpoint cannot be added as partial commands: `checkCLISurfaceEndpointCoverage`
+rejects their unbound endpoints, and `resolvePreflightCommand` rejects the
+operation-backed partial route before provider dispatch.
+
+**Green boundary:** no connector-local workaround was added. The ledger and
+foundation-gap log retain the exact per-connector count, source crosswalk,
+rejection records, and refusing source lines. The smallest compatible shared
+change is a closed `disabled_operation` target that produces
+`BlockedCommandError` for exactly one declared endpoint and cannot carry raw
+provider input. It needs a keyed foundation decision; the existing declarative
+destination work in #4304 does not provide it.

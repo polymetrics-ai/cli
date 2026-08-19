@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "phase": "top100-daily-use-increment-001",
-  "state": "reconciliation-slice-1-verified-pending-next-reachability-slice",
+  "state": "reconciliation-command-reachability-foundation-decision-needed",
   "delivery_mode": "connector-local declarations; non-live certification only; stacked on PR-4304",
   "connectors": [
     "dockerhub",
@@ -17,6 +17,6 @@
     "asana"
   ],
   "live_certification": "pending",
-  "next": "Continue source-operation command reachability and exact typed-action dispositions in bounded connector commits. Before any final push, fetch and merge the latest origin/fm/cli-reverse-etl-destination-r1, prove that head is an ancestor, and exercise the installed persisted App/CLI destination path. Do not claim application-level reverse-ETL deployment until that upstream dispatch integration lands. Do not use provider credentials or provider I/O.",
+  "next": "A keyed foundation decision is required for declaration-bound disabled-operation commands: connector-local cli_surface metadata cannot bind the 3,366 unbound source operations without failing validation/runtime, and no generic provider-I/O workaround is allowed. Once that foundation is available, continue bounded connector commits; before any final push, fetch and merge the latest origin/fm/cli-reverse-etl-destination-r1, prove that head is an ancestor, and exercise the installed persisted App/CLI destination path. Do not claim application-level reverse-ETL deployment until that upstream dispatch integration lands. Do not use provider credentials or provider I/O.",
   "updated_at": "2026-08-20T00:00:00Z"
 }

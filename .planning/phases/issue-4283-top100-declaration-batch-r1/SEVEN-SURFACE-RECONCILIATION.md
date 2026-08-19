@@ -30,3 +30,21 @@ selected action. `action-scoped-source-binding` is therefore the precise
 remaining foundation dependency for multi-action destination coverage. The
 application/CLI dispatch integration remains upstream in #4304; no row in this
 ledger claims provider-live reverse-ETL deployment.
+
+## Documented-operation command reachability boundary
+
+The source crosswalk-to-current-surface join records 3,366 of 4,378 documented
+operations without a declared command binding: Docker Hub 11, Notion 5, Stripe
+581, Bitbucket 134, GitLab 1,751, CircleCI 95, Sentry 220, Vercel 378, Asana
+164, and Jira 27. This count excludes the documented surface-only variants
+that are not in each pinned provider source denominator.
+
+Existing operation-level rejections identify every affected endpoint. The
+current connector-local schema cannot give one of those rejected endpoints a
+direct CLI command: `checkCLISurfaceEndpointCoverage` rejects its unbound
+`api_surface` reference and `resolvePreflightCommand` rejects an
+operation-backed partial command. The needed closed foundation is
+`declaration-bound-disabled-command-surface`, which would produce a precise
+`BlockedCommandError` for exactly one declared endpoint without permitting
+generic provider I/O. This connector lane does not implement that shared change
+without a keyed foundation decision.

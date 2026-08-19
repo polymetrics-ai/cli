@@ -83,3 +83,11 @@ not selected action, so `action-scoped-source-binding` remains a precise
 foundation dependency for differing action field maps. Persisted App/CLI
 destination dispatch is additionally pending in the #4304 foundation branch.
 No provider credential was used; live certification remains pending.
+
+The same audit establishes a separate command-reachability foundation boundary:
+3,366 source-documented operations have no declared command binding. Current
+validation and runtime refuse a connector-authored placeholder for a blocked
+or unmaterialized endpoint, which correctly prevents a generic provider-I/O
+escape hatch but also prevents direct CLI reachability. The exact counts and
+per-operation rejections are recorded; the minimal closed
+`declaration-bound-disabled-command-surface` needs a keyed foundation decision.

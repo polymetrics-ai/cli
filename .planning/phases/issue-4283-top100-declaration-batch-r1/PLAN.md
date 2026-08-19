@@ -381,3 +381,20 @@ never relabelled as a REST write or reverse destination.
   implementation procedure, remote reproducibility guidance, migration
   conventions, architecture v2, and certification design were reviewed before
   declaration edits.
+
+## Command-reachability foundation boundary — 2026-08-20
+
+The source map now provides an exact proof that 3,366 of the 4,378 pinned
+operations lack a declared command binding. The unbound operation's existing
+endpoint rejection remains the source of record; it cannot be duplicated as a
+connector-local partial command because `checkCLISurfaceEndpointCoverage`
+rejects an unbound API endpoint and `resolvePreflightCommand` rejects a
+partial operation before dispatch.
+
+The needed capability is deliberately narrow: a declaration-bound disabled
+operation target naming exactly one existing API-surface endpoint and its
+rejection, returning `BlockedCommandError` without any generic HTTP/SQL/shell
+payload or provider I/O. This is shared engine/command-surface work and needs a
+keyed decision outside this connector-local lane. Until then the row remains a
+precise foundation gap, never a safety, scope, credential, or paid-tier
+exclusion.

@@ -1697,11 +1697,18 @@
     }
   ],
   "reconciliation": {
-    "at": "2026-08-19T19:16:23Z",
+  "at": "2026-08-19T19:39:57Z",
     "artifact": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.json",
     "summary": ".planning/phases/issue-4283-top100-declaration-batch-r1/SEVEN-SURFACE-RECONCILIATION.md",
     "scope": "The existing ten PR #4294 connector directories only; excludes the obsolete top-100 expansion.",
     "supersedes": "The per-connector generic-typed-destination-executor summaries above. #4304 composes the destination factory, while its persisted App/CLI dispatch integration remains an upstream prerequisite.",
+    "command_reachability": {
+      "documented_source_operations": 4378,
+      "without_declared_command_binding": 3366,
+      "state": "needs-keyed-foundation-decision",
+      "foundation_gap": "declaration-bound-disabled-command-surface",
+      "evidence": "SEVEN-SURFACE-RECONCILIATION.json command_reachability; FOUNDATION-GAP-REASONS.json"
+    },
     "destination_static_mappings": {
       "notion": "views -> update_view",
       "stripe": "customers -> update_customer",
@@ -1709,6 +1716,6 @@
       "vercel": "projects -> update_project"
     },
     "non_live_certification": "focused connector validation and installed command preflight reached missing --credential without provider I/O; provider-live certification remains pending.",
-    "resume_pointer": "Before final push, merge the newest origin/fm/cli-reverse-etl-destination-r1, prove its SHA is an ancestor, then exercise the installed App/CLI reverse-ETL dispatch path."
+    "resume_pointer": "Await a keyed decision for declaration-bound disabled-operation commands; then continue connector-local reachability declarations. Before final push, merge the newest origin/fm/cli-reverse-etl-destination-r1, prove its SHA is an ancestor, then exercise the installed App/CLI reverse-ETL dispatch path."
   }
 }

@@ -182,6 +182,17 @@
             "destination_disposition": "eligible_pending_source_identity_fixture"
           }
         ]
+      },
+      "command_reachability": {
+        "source_operations": 54,
+        "source_operations_with_declared_surface_binding": 43,
+        "source_operations_without_declared_surface_binding": 11,
+        "blocked_operation_contracts": 11,
+        "missing_operation_contracts": 0,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     },
     {
@@ -383,6 +394,17 @@
             "destination_disposition": "eligible_pending_action_scoped_source_binding"
           }
         ]
+      },
+      "command_reachability": {
+        "source_operations": 49,
+        "source_operations_with_declared_surface_binding": 44,
+        "source_operations_without_declared_surface_binding": 5,
+        "blocked_operation_contracts": 4,
+        "missing_operation_contracts": 1,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/notion/sources/notion-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     },
     {
@@ -461,6 +483,17 @@
             "destination_disposition": "eligible_pending_action_scoped_source_binding"
           }
         ]
+      },
+      "command_reachability": {
+        "source_operations": 589,
+        "source_operations_with_declared_surface_binding": 8,
+        "source_operations_without_declared_surface_binding": 581,
+        "blocked_operation_contracts": 581,
+        "missing_operation_contracts": 0,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/stripe/sources/stripe-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     },
     {
@@ -832,6 +865,17 @@
             "destination_disposition": "eligible_pending_source_identity_fixture"
           }
         ]
+      },
+      "command_reachability": {
+        "source_operations": 331,
+        "source_operations_with_declared_surface_binding": 197,
+        "source_operations_without_declared_surface_binding": 134,
+        "blocked_operation_contracts": 134,
+        "missing_operation_contracts": 0,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     },
     {
@@ -875,6 +919,17 @@
         "action_count": 0,
         "state": "not-applicable",
         "action_dispositions": []
+      },
+      "command_reachability": {
+        "source_operations": 1755,
+        "source_operations_with_declared_surface_binding": 4,
+        "source_operations_without_declared_surface_binding": 1751,
+        "blocked_operation_contracts": 1751,
+        "missing_operation_contracts": 0,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/gitlab/sources/gitlab-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     },
     {
@@ -977,6 +1032,17 @@
             "destination_disposition": "eligible_pending_action_scoped_source_binding"
           }
         ]
+      },
+      "command_reachability": {
+        "source_operations": 111,
+        "source_operations_with_declared_surface_binding": 16,
+        "source_operations_without_declared_surface_binding": 95,
+        "blocked_operation_contracts": 0,
+        "missing_operation_contracts": 95,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/circleci/sources/circleci-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     },
     {
@@ -1020,6 +1086,17 @@
         "action_count": 0,
         "state": "not-applicable",
         "action_dispositions": []
+      },
+      "command_reachability": {
+        "source_operations": 223,
+        "source_operations_with_declared_surface_binding": 3,
+        "source_operations_without_declared_surface_binding": 220,
+        "blocked_operation_contracts": 0,
+        "missing_operation_contracts": 220,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/sentry/sources/sentry-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     },
     {
@@ -1185,6 +1262,17 @@
             "destination_disposition": "eligible_pending_action_scoped_source_binding"
           }
         ]
+      },
+      "command_reachability": {
+        "source_operations": 400,
+        "source_operations_with_declared_surface_binding": 22,
+        "source_operations_without_declared_surface_binding": 378,
+        "blocked_operation_contracts": 0,
+        "missing_operation_contracts": 378,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/vercel/sources/vercel-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     },
     {
@@ -1670,6 +1758,17 @@
             "destination_disposition": "eligible_pending_closed_nested_object_mapping"
           }
         ]
+      },
+      "command_reachability": {
+        "source_operations": 249,
+        "source_operations_with_declared_surface_binding": 85,
+        "source_operations_without_declared_surface_binding": 164,
+        "blocked_operation_contracts": 164,
+        "missing_operation_contracts": 0,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/asana/sources/asana-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     },
     {
@@ -3469,11 +3568,30 @@
             "destination_disposition": "eligible_pending_action_scoped_source_binding"
           }
         ]
+      },
+      "command_reachability": {
+        "source_operations": 617,
+        "source_operations_with_declared_surface_binding": 590,
+        "source_operations_without_declared_surface_binding": 27,
+        "blocked_operation_contracts": 27,
+        "missing_operation_contracts": 0,
+        "state": "foundation-gap",
+        "foundation_gap_id": "declaration-bound-disabled-command-surface",
+        "exact_operation_record": "internal/connectors/defs/jira/sources/jira-operation-crosswalk.json",
+        "rejection_record": ".planning/phases/issue-4283-top100-declaration-batch-r1/REJECTION-LIST.json"
       }
     }
   ],
   "certification": {
     "non_live": "Schema and generator validation are in scope; fixture proofs are recorded for the five static destination mappings.",
     "provider_live": "pending; no provider credentials were requested or used."
+  },
+  "command_reachability_foundation_gap": {
+    "id": "declaration-bound-disabled-command-surface",
+    "affected_source_operations": 3366,
+    "reason": "Current connector-local CLI metadata cannot bind a documented endpoint that has no materialized operation, stream, or typed write: validation rejects the api_surface reference, while runtime rejects an operation-backed partial command before dispatch. A declaration-bound blocked command would make the exact provider operation CLI-reachable without introducing generic provider I/O.",
+    "evidence": "cmd/connectorgen/validate.go:2106-2169; internal/connectors/commandrunner/runner.go:365-458",
+    "minimal_change": "Add a closed disabled-operation command target that names exactly one existing api_surface endpoint and its operation-level rejection record; it must resolve as BlockedCommandError and never construct HTTP/SQL/shell input or dispatch provider I/O.",
+    "status": "needs-keyed-foundation-decision"
   }
 }

@@ -220,3 +220,8 @@
   persisted App/CLI dispatch proof, `connector-boundary`, full `make verify`,
   and provider-live certification remain outstanding. Live certification is
   intentionally pending; no credentials are authorized.
+- [ ] The source-crosswalk audit finds 3,366 documented endpoints without a
+  declared command binding. The required closed disabled-operation command
+  target is recorded as `declaration-bound-disabled-command-surface` with
+  exact refusing code in the foundation-gap log. It requires a keyed shared
+  foundation decision and is not implemented in this connector-local lane.

@@ -11938,6 +11938,66 @@
           "capability": "reverse_etl_eligibility"
         }
       ]
+    },
+    {
+      "reason": "Connector-local cli_surface metadata cannot bind a documented endpoint that has no materialized operation, stream, or typed write: validation rejects that api_surface reference, while runtime rejects an operation-backed partial command before dispatch. A closed disabled-operation command target is required to make the exact provider operation CLI-reachable without introducing generic provider I/O.",
+      "evidence": [
+        "cmd/connectorgen/validate.go:2106-2169",
+        "internal/connectors/commandrunner/runner.go:365-458"
+      ],
+      "recoverability": "Requires a keyed shared-foundation decision to add a declaration-bound disabled-operation target. It must name exactly one existing api_surface endpoint and rejection record, resolve as BlockedCommandError, and never construct or dispatch generic HTTP, SQL, shell, or provider input.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {"kind": "all-unbound-source-operations", "count": 11},
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "notion",
+          "operation": {"kind": "all-unbound-source-operations", "count": 5},
+          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json"
+        },
+        {
+          "connector": "stripe",
+          "operation": {"kind": "all-unbound-source-operations", "count": 581},
+          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
+        },
+        {
+          "connector": "bitbucket",
+          "operation": {"kind": "all-unbound-source-operations", "count": 134},
+          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json"
+        },
+        {
+          "connector": "gitlab",
+          "operation": {"kind": "all-unbound-source-operations", "count": 1751},
+          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json"
+        },
+        {
+          "connector": "circleci",
+          "operation": {"kind": "all-unbound-source-operations", "count": 95},
+          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json"
+        },
+        {
+          "connector": "sentry",
+          "operation": {"kind": "all-unbound-source-operations", "count": 220},
+          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json"
+        },
+        {
+          "connector": "vercel",
+          "operation": {"kind": "all-unbound-source-operations", "count": 378},
+          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
+        },
+        {
+          "connector": "asana",
+          "operation": {"kind": "all-unbound-source-operations", "count": 164},
+          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
+        },
+        {
+          "connector": "jira",
+          "operation": {"kind": "all-unbound-source-operations", "count": 27},
+          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json"
+        }
+      ]
     }
   ],
   "complete_map_declaration_pending": [
