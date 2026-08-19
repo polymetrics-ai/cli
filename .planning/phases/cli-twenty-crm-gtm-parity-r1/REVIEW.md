@@ -25,7 +25,8 @@ review routing policy. Required Go and connector skills are recorded in
 ## Findings
 
 No actionable implementation, safety, or scope finding was identified in the
-manual review. `go test -timeout 20m ./internal/cli` passed in 1184.608s; the
+manual review. `go test -timeout 20m ./internal/cli` passed in 596.926s on the
+rebased head; the
 final connector-definition, generator, docs, GSD-evidence, formatting, and
 built-binary live-auth checks are recorded in `VERIFICATION.md`.
 

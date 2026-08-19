@@ -96,6 +96,25 @@ go test -timeout 20m ./internal/cli
 # PASS (1184.608s)
 ```
 
+After rebasing the committed branch onto the latest `origin/main`, the final
+pre-push run passed again:
+
+```text
+go test -timeout 20m ./internal/cli
+# PASS (596.926s)
+go test -timeout 20m ./internal/connectors/defs/twenty
+go run ./cmd/connectorgen validate internal/connectors/defs/twenty
+go run ./cmd/connectorgen surface-sync --check
+go run ./cmd/connectorgen certification-sweep --connector twenty --check
+make docs-check-no-build
+make smoke-no-build
+make lint
+make connector-boundary
+go build ./cmd/pm
+git diff --check
+# PASS; boundary: 553 connectors loaded, zero findings
+```
+
 `make verify` was not invoked as a monolithic command because this repository's
 agent guidance explicitly forbids it under a per-command timeout: it embeds
 the whole suite and a timeout is indistinguishable from a hang. Its named
