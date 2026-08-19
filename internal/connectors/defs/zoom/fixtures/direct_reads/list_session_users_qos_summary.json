@@ -1,0 +1,19 @@
+{
+  "status": 200,
+  "body": {
+    "next_page_token": "",
+    "page_size": 30,
+    "users": [
+      {
+        "user_id": "fixture-user-1",
+        "name": "Fixture User",
+        "qos": [
+          {
+            "type": "cpu_usage",
+            "cpu_usage": [{ "date_time": "2026-08-05T00:00:00Z", "avg": "12%" }]
+          }
+        ]
+      }
+    ]
+  }
+}

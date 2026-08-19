@@ -1,0 +1,15 @@
+{
+  "status": 200,
+  "body": {
+    "forecasts": [
+      {
+        "forecast_id": "fixture-wfm-forecast",
+        "forecast_name": "Fixture Workforce Management forecast",
+        "description": "Fixture Workforce Management forecast description",
+        "scheduling_group_id": "fixture-wfm-scheduling-group"
+      }
+    ],
+    "next_page_token": "fixture-wfm-forecast-page",
+    "total_records": 1
+  }
+}

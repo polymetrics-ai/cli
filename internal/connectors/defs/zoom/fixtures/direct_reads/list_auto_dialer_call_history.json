@@ -1,0 +1,8 @@
+{
+  "status": 200,
+  "body": {
+    "call_history": [{"call_history_id": "fixture-ad-call-history", "call_id": "fixture-ad-call", "call_note": "fixture Auto Dialer history note"}],
+    "next_page_token": "fixture-ad-page-token",
+    "token": "fixture-ad-response-token"
+  }
+}

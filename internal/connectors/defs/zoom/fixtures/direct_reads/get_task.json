@@ -1,0 +1,23 @@
+{
+  "status": 200,
+  "body": {
+    "task_id": "fixture-task-detail",
+    "title": "Fixture Task detail title",
+    "description": "Fixture Task detail description",
+    "priority": "High",
+    "status": "In progress",
+    "is_public": false,
+    "due_date": "2026-08-09",
+    "is_ai_generated": false,
+    "starred": true,
+    "source_type": "user",
+    "assignees": [{"user_id": "fixture-task-detail-user", "display_name": "Fixture Task Detail User", "email": "fixture.task.detail@example.invalid", "avatar": "https://example.invalid/fixture-task-detail-user.png"}],
+    "collaborators": [{"user_id": "fixture-task-detail-collaborator", "display_name": "Fixture Task Detail Collaborator", "email": "fixture.task.detail.collaborator@example.invalid", "avatar": "https://example.invalid/fixture-task-detail-collaborator.png"}],
+    "tasks_attachments": [{"attachment_id": "fixture-task-attachment", "download_url": "https://example.invalid/fixture-task-download", "file_name": "fixture-task.json", "file_size": 24, "mime_type": "application/json", "upload_time": "2026-08-08T10:00:00Z"}],
+    "friendly_task_id": "FIXTURE-TASK-2",
+    "link": "https://example.invalid/tasks/fixture-task-detail",
+    "associated_meeting": {"id": 12345, "uuid": "fixture-task-meeting-uuid", "topic": "Fixture Task meeting", "meeting_date": "2026-08-08T10:00:00Z"},
+    "create_time": "2026-08-08T10:00:00Z",
+    "modify_time": "2026-08-08T10:05:00Z"
+  }
+}

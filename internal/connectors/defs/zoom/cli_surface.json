@@ -1,6 +1,6 @@
 {
-  "tagline": "Read the currently stream-backed Zoom users, meetings, and webinars API routes.",
-  "usage": "pm zoom <users|meetings|webinars> list [flags]",
+  "tagline": "Run existing Zoom stream reads and 70 bounded module-specific direct reads.",
+  "usage": "pm zoom <group> <command> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
     "docs": "https://developers.zoom.us/docs/api/",
@@ -11,12 +11,108 @@
     {
       "id": "users",
       "title": "Users",
-      "commands": ["users"]
+      "commands": [
+        "users"
+      ]
     },
     {
       "id": "meetings",
       "title": "Meetings and webinars",
-      "commands": ["meetings", "webinars"]
+      "commands": [
+        "meetings",
+        "webinars"
+      ]
+    },
+    {
+      "id": "qss",
+      "title": "Quality of Service Summaries",
+      "commands": [
+        "qss"
+      ]
+    },
+    {
+      "id": "ai-companion",
+      "title": "AI Companion",
+      "commands": [
+        "ai-companion"
+      ]
+    },
+    {
+      "id": "my-notes",
+      "title": "My Notes",
+      "commands": [
+        "my-notes"
+      ]
+    },
+    {
+      "id": "healthcare",
+      "title": "Healthcare",
+      "commands": [
+        "healthcare"
+      ]
+    },
+    {
+      "id": "quality-management",
+      "title": "Quality Management",
+      "commands": [
+        "quality-management"
+      ]
+    },
+    {
+      "id": "cobrowse-sdk",
+      "title": "Cobrowse SDK",
+      "commands": [
+        "cobrowse-sdk"
+      ]
+    },
+    {
+      "id": "scim2",
+      "title": "SCIM2",
+      "commands": [
+        "scim2"
+      ]
+    },
+    {
+      "id": "virtual-agent",
+      "title": "Virtual Agent",
+      "commands": [
+        "virtual-agent"
+      ]
+    },
+    {
+      "id": "auto-dialer",
+      "title": "Auto Dialer",
+      "commands": [
+        "auto-dialer"
+      ]
+    },
+    {
+      "id": "tasks",
+      "title": "Tasks",
+      "commands": [
+        "tasks"
+      ]
+    },
+    {
+      "id": "workforce-management",
+      "title": "Workforce Management",
+      "commands": [
+        "workforce-management"
+      ]
+    },
+    {
+      "id": "clips",
+      "title": "Clips",
+      "commands": [
+        "clips"
+      ]
+    },
+    {
+      "id": "crc",
+      "title": "Conference Room Connector (CRC)",
+      "commands": [
+        "crc"
+      ]
     }
   ],
   "global_flags": [
@@ -56,7 +152,10 @@
       "source_cli_path": "GET /v2/users",
       "source_url": "https://developers.zoom.us/docs/api/users.md",
       "api_surface": [
-        { "method": "GET", "path": "/v2/users" }
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
       ],
       "examples": [
         "pm zoom users list --credential zoom-fixture --limit 25 --json"
@@ -80,7 +179,10 @@
         }
       ],
       "api_surface": [
-        { "method": "GET", "path": "/v2/users/{userId}/meetings" }
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/meetings"
+        }
       ],
       "examples": [
         "pm zoom meetings list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
@@ -104,11 +206,1949 @@
         }
       ],
       "api_surface": [
-        { "method": "GET", "path": "/v2/users/{userId}/webinars" }
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/webinars"
+        }
       ],
       "examples": [
         "pm zoom webinars list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
       ]
+    },
+    {
+      "path": "qss meeting-participants list",
+      "summary": "List a past meeting's participants' Quality of Service summary.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_meeting_participants_qos_summary",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "flags": [
+        {
+          "name": "meeting-id",
+          "type": "string",
+          "summary": "Zoom meeting ID or UUID.",
+          "maps_to": "path.meetingId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required meeting-id path parameter.",
+      "examples": [
+        "pm zoom qss meeting-participants list --credential zoom-fixture --meeting-id 123456789 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "qss webinar-participants list",
+      "summary": "List a live or past webinar's participants' Quality of Service summary.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_webinar_participants_qos_summary",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "flags": [
+        {
+          "name": "webinar-id",
+          "type": "string",
+          "summary": "Zoom webinar ID or UUID.",
+          "maps_to": "path.webinarId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required webinar-id path parameter.",
+      "examples": [
+        "pm zoom qss webinar-participants list --credential zoom-fixture --webinar-id 123456789 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/webinars/{webinarId}/participants/qos_summary"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "qss session-users list",
+      "summary": "List a past Video SDK session's users' Quality of Service summary.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_session_users_qos_summary",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "flags": [
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Zoom Video SDK session ID.",
+          "maps_to": "path.sessionId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required session-id path parameter.",
+      "examples": [
+        "pm zoom qss session-users list --credential zoom-fixture --session-id abc123 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "ai-companion conversation-archive get",
+      "summary": "Get a user's AI Companion conversation archive.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_ai_companion_conversation_archives",
+      "source_url": "https://developers.zoom.us/docs/api/ai-companion.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom user ID or email.",
+          "maps_to": "path.userId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required user-id path parameter. Response download-URL fields are redacted by the json_redacted output policy.",
+      "examples": [
+        "pm zoom ai-companion conversation-archive get --credential zoom-fixture --user-id fixture-user --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/aic/users/{userId}/conversation_archive"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "my-notes list",
+      "summary": "List the authenticated user's My Notes.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_my_notes",
+      "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+      "notes": "Bounded Zoom read; fixed method and path with no request parameters (the live artifact documents none for this operation).",
+      "examples": [
+        "pm zoom my-notes list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/my_notes/notes"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "my-notes content get",
+      "summary": "Get a My Notes note's content, and optionally its meeting transcript.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_my_notes_content",
+      "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+      "flags": [
+        {
+          "name": "note-id",
+          "type": "string",
+          "summary": "My Notes note ID.",
+          "maps_to": "path.noteId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "include",
+          "type": "enum",
+          "values": [
+            "transcript"
+          ],
+          "summary": "Include the associated meeting transcript in the response.",
+          "maps_to": "query.include",
+          "required": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required note-id path parameter and an optional include=transcript query flag (explicitly documented in provider prose, unlike qss's response-only pagination fields).",
+      "examples": [
+        "pm zoom my-notes content get --credential zoom-fixture --note-id note_abc123 --json",
+        "pm zoom my-notes content get --credential zoom-fixture --note-id note_abc123 --include transcript --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/my_notes/notes/{noteId}/content"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "healthcare clinical-notes list",
+      "summary": "List clinical notes, optionally filtered by owner and/or meeting.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_clinical_notes",
+      "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+      "flags": [
+        {
+          "name": "note-owner-user-id",
+          "type": "string",
+          "summary": "Return only clinical notes owned by this Zoom user.",
+          "maps_to": "query.note_owner_user_id",
+          "required": false,
+          "allow_empty": false
+        },
+        {
+          "name": "meeting-id",
+          "type": "string",
+          "summary": "Return only clinical notes associated with this meeting.",
+          "maps_to": "query.meeting_id",
+          "required": false,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read. Only note-owner-user-id and meeting-id are explicit provider request inputs; response-only dates and paging fields are not CLI flags. The clinical_json_redacted policy redacts clinical-note content and identifiers.",
+      "examples": [
+        "pm zoom healthcare clinical-notes list --credential zoom-fixture --json",
+        "pm zoom healthcare clinical-notes list --credential zoom-fixture --meeting-id 123456789 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/clinical_notes/notes"
+        }
+      ],
+      "output_policy": "clinical_json_redacted"
+    },
+    {
+      "path": "healthcare clinical-notes get",
+      "summary": "Get a single clinical note by ID.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_clinical_note",
+      "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+      "flags": [
+        {
+          "name": "note-id",
+          "type": "string",
+          "summary": "Clinical note ID.",
+          "maps_to": "path.noteId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required note-id path parameter. The clinical_json_redacted policy redacts clinical-note content and identifiers.",
+      "examples": [
+        "pm zoom healthcare clinical-notes get --credential zoom-fixture --note-id fixture-note --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/clinical_notes/notes/{noteId}"
+        }
+      ],
+      "output_policy": "clinical_json_redacted"
+    },
+    {
+      "path": "quality-management automated-evaluations list",
+      "summary": "List Quality Management automated evaluations.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_quality_management_automated_evaluations",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "notes": "Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination fields are not CLI flags; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management automated-evaluations list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/automated_evaluations"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "quality-management evaluations list",
+      "summary": "List completed Quality Management evaluations.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_quality_management_evaluations",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "notes": "Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination fields are not CLI flags; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management evaluations list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/evaluation"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "quality-management evaluations get",
+      "summary": "View one Quality Management evaluation.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_quality_management_evaluation",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "flags": [
+        {
+          "name": "evaluation-id",
+          "type": "string",
+          "summary": "Quality Management evaluation ID.",
+          "maps_to": "path.evaluationId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required evaluation-id path parameter; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management evaluations get --credential zoom-fixture --evaluation-id fixture-evaluation --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/evaluation/{evaluationId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "quality-management interactions list",
+      "summary": "List Quality Management interactions.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_quality_management_interactions",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "notes": "Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination/date fields are not CLI flags; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management interactions list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/interactions"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "quality-management interactions get",
+      "summary": "View one Quality Management interaction.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_quality_management_interaction",
+      "source_url": "https://developers.zoom.us/docs/api/quality-management.md",
+      "flags": [
+        {
+          "name": "interaction-id",
+          "type": "string",
+          "summary": "Quality Management interaction ID.",
+          "maps_to": "path.interactionId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required interaction-id path parameter; identifiers and personal-contact fields are redacted before output.",
+      "examples": [
+        "pm zoom quality-management interactions get --credential zoom-fixture --interaction-id fixture-interaction --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/qm/interactions/{interactionId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "cobrowse-sdk live-sessions list",
+      "summary": "List live Cobrowse SDK sessions for an optional monthly date range.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_cobrowse_live_sessions",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "flags": [
+        {
+          "name": "from",
+          "type": "string",
+          "summary": "Optional report start date (YYYY-MM-DD).",
+          "maps_to": "query.from",
+          "allow_empty": false
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "summary": "Optional report end date (YYYY-MM-DD).",
+          "maps_to": "query.to",
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags.",
+      "examples": [
+        "pm zoom cobrowse-sdk live-sessions list --credential zoom-fixture --from 2026-08-01 --to 2026-08-08 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cobrowsesdk/live_sessions"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "cobrowse-sdk past-sessions list",
+      "summary": "List past Cobrowse SDK sessions for an optional monthly date range.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_cobrowse_past_sessions",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "flags": [
+        {
+          "name": "from",
+          "type": "string",
+          "summary": "Optional report start date (YYYY-MM-DD).",
+          "maps_to": "query.from",
+          "allow_empty": false
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "summary": "Optional report end date (YYYY-MM-DD).",
+          "maps_to": "query.to",
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags.",
+      "examples": [
+        "pm zoom cobrowse-sdk past-sessions list --credential zoom-fixture --from 2026-08-01 --to 2026-08-08 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cobrowsesdk/past_sessions"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "cobrowse-sdk sessions get",
+      "summary": "Get details for one Cobrowse SDK session.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_cobrowse_session",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "flags": [
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Cobrowse SDK session ID.",
+          "maps_to": "path.sessionId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required session-id path parameter; session pins, user/session identifiers, display names, connection IDs, and IP addresses are redacted before output.",
+      "examples": [
+        "pm zoom cobrowse-sdk sessions get --credential zoom-fixture --session-id fixture-session --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cobrowsesdk/sessions/{sessionId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "cobrowse-sdk sessions users list",
+      "summary": "List users from one Cobrowse SDK session.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_cobrowse_session_users",
+      "source_url": "https://developers.zoom.us/docs/api/cobrowse-sdk.md",
+      "flags": [
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Cobrowse SDK session ID.",
+          "maps_to": "path.sessionId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required session-id path parameter; page_size and next_page_token are response-only fields and session/user connection data is redacted before output.",
+      "examples": [
+        "pm zoom cobrowse-sdk sessions users list --credential zoom-fixture --session-id fixture-session --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cobrowsesdk/sessions/{sessionId}/users"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 groups list",
+      "summary": "List Zoom SCIM2 groups.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_scim2_groups",
+      "source_cli_path": "GET /scim2/Groups",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "notes": "Bounded sensitive Zoom SCIM2 read with a fixed provider root path. The live artifact does not declare a standalone paging input, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom scim2 groups list --credential zoom-scim2 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim2/Groups"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 groups get",
+      "summary": "Get one Zoom SCIM2 group.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_scim2_group",
+      "source_cli_path": "GET /scim2/Groups/{groupId}",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "group-id",
+          "type": "string",
+          "summary": "Zoom SCIM2 group identifier.",
+          "maps_to": "path.groupId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom SCIM2 read with a typed required group-id path parameter. The live artifact documents no standalone paging input.",
+      "examples": [
+        "pm zoom scim2 groups get --credential zoom-scim2 --group-id group --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim2/Groups/{groupId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 users list",
+      "summary": "List Zoom SCIM2 users.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_scim2_users",
+      "source_cli_path": "GET /scim2/Users",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "notes": "Bounded sensitive Zoom SCIM2 read with a fixed provider root path. The live artifact does not declare a standalone paging input, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom scim2 users list --credential zoom-scim2 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim2/Users"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim2 users get",
+      "summary": "Get one Zoom SCIM2 user.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_scim2_user",
+      "source_cli_path": "GET /scim2/Users/{userId}",
+      "source_url": "https://developers.zoom.us/docs/api/scim2.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom SCIM2 user identifier.",
+          "maps_to": "path.userId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom SCIM2 read with a typed required user-id path parameter. The live artifact documents no standalone paging input.",
+      "examples": [
+        "pm zoom scim2 users get --credential zoom-scim2 --user-id user --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim2/Users/{userId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "virtual-agent knowledge-bases articles list",
+      "summary": "List Zoom Virtual Agent knowledge base articles.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_virtual_agent_articles",
+      "source_cli_path": "GET /v2/km/kbs/{kbId}/articles",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "flags": [
+        {
+          "name": "kb-id",
+          "type": "string",
+          "summary": "Zoom Virtual Agent knowledge base identifier.",
+          "maps_to": "path.kbId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Virtual Agent read with a fixed knowledge-base path. The live artifact declares paging values only in response schemas, so no paging, token, date, or guessed query flag is exposed.",
+      "examples": [
+        "pm zoom virtual-agent knowledge-bases articles list --credential zoom-fixture --kb-id knowledge-base --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/km/kbs/{kbId}/articles"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "virtual-agent knowledge-bases articles get",
+      "summary": "Get one Zoom Virtual Agent knowledge base article.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_virtual_agent_article",
+      "source_cli_path": "GET /v2/km/kbs/{kbId}/articles/{articleId}",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "flags": [
+        {
+          "name": "kb-id",
+          "type": "string",
+          "summary": "Zoom Virtual Agent knowledge base identifier.",
+          "maps_to": "path.kbId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "article-id",
+          "type": "string",
+          "summary": "Zoom Virtual Agent article identifier.",
+          "maps_to": "path.articleId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Virtual Agent read with fixed knowledge-base and article path parameters. The live artifact declares no standalone request paging input.",
+      "examples": [
+        "pm zoom virtual-agent knowledge-bases articles get --credential zoom-fixture --kb-id knowledge-base --article-id article --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/km/kbs/{kbId}/articles/{articleId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "virtual-agent knowledge-bases sync get",
+      "summary": "Get one Zoom Virtual Agent knowledge base sync.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_virtual_agent_sync",
+      "source_cli_path": "GET /v2/km/kbs/{kbId}/sync/{syncId}",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "flags": [
+        {
+          "name": "kb-id",
+          "type": "string",
+          "summary": "Zoom Virtual Agent knowledge base identifier.",
+          "maps_to": "path.kbId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "sync-id",
+          "type": "string",
+          "summary": "Zoom Virtual Agent synchronization request identifier.",
+          "maps_to": "path.syncId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Virtual Agent read with fixed knowledge-base and sync path parameters. The live artifact declares no standalone request paging input.",
+      "examples": [
+        "pm zoom virtual-agent knowledge-bases sync get --credential zoom-fixture --kb-id knowledge-base --sync-id sync --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/km/kbs/{kbId}/sync/{syncId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "virtual-agent reports engagements list",
+      "summary": "List Zoom Virtual Agent engagements.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_virtual_agent_engagements",
+      "source_cli_path": "GET /v2/virtual_agent/report/engagements",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom virtual-agent reports engagements list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/virtual_agent/report/engagements"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "virtual-agent reports engagements query-details list",
+      "summary": "List Zoom Virtual Agent engagement query details.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_virtual_agent_engagement_query_details",
+      "source_cli_path": "GET /v2/virtual_agent/report/engagements/query_details",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom virtual-agent reports engagements query-details list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/virtual_agent/report/engagements/query_details"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "virtual-agent reports engagements variable-details list",
+      "summary": "List Zoom Virtual Agent engagement variable details.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_virtual_agent_engagement_variable_details",
+      "source_cli_path": "GET /v2/virtual_agent/report/engagements/variables",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom virtual-agent reports engagements variable-details list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/virtual_agent/report/engagements/variables"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "virtual-agent reports surveys list",
+      "summary": "List Zoom Virtual Agent surveys.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_virtual_agent_surveys",
+      "source_cli_path": "GET /v2/virtual_agent/report/surveys",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom virtual-agent reports surveys list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/virtual_agent/report/surveys"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "virtual-agent reports transcripts list",
+      "summary": "List Zoom Virtual Agent transcripts.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_virtual_agent_transcripts",
+      "source_cli_path": "GET /v2/virtual_agent/report/transcripts",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "notes": "Bounded sensitive Virtual Agent report read. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom virtual-agent reports transcripts list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/virtual_agent/report/transcripts"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "virtual-agent reports operation-logs list",
+      "summary": "List Zoom AI Management operation logs.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_virtual_agent_operation_logs",
+      "source_cli_path": "GET /v2/ai_studio/reports/operation_logs",
+      "source_url": "https://developers.zoom.us/docs/api/virtual-agent.md",
+      "notes": "Bounded sensitive AI Management report read under Zoom's Virtual Agent artifact. The live artifact declares paging/date values only in the response schema, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom virtual-agent reports operation-logs list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/ai_studio/reports/operation_logs"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-histories get",
+      "summary": "Get one Zoom Auto Dialer call-history record.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_auto_dialer_call_history",
+      "source_cli_path": "GET /v2/dialer/call-histories/{callHistoryId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {
+          "name": "call-history-id",
+          "type": "string",
+          "summary": "Auto Dialer call-history identifier.",
+          "maps_to": "path.callHistoryId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Auto Dialer read at a fixed path. The provider artifact declares no request paging, token, date, or query input.",
+      "examples": [
+        "pm zoom auto-dialer call-histories get --credential zoom-fixture --call-history-id call-history --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/dialer/call-histories/{callHistoryId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-history list",
+      "summary": "List Zoom Auto Dialer call history.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_auto_dialer_call_history",
+      "source_cli_path": "GET /v2/dialer/call-history",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "notes": "Bounded sensitive Auto Dialer read. The provider artifact declares paging values only in the response schema, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom auto-dialer call-history list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/dialer/call-history"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer reports call-history list",
+      "summary": "List Zoom Auto Dialer report call history.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_auto_dialer_report_call_history",
+      "source_cli_path": "GET /v2/dialer/reports/call-history",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "notes": "Bounded sensitive Auto Dialer report read. The provider artifact declares no request paging, token, date, or query input.",
+      "examples": [
+        "pm zoom auto-dialer reports call-history list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/dialer/reports/call-history"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer reports seller-productivity get",
+      "summary": "Get the Zoom Auto Dialer seller-productivity report.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_auto_dialer_seller_productivity_report",
+      "source_cli_path": "GET /v2/dialer/reports/seller-productivity",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "notes": "Bounded sensitive Auto Dialer report read. The provider artifact declares no request paging, token, date, or query input.",
+      "examples": [
+        "pm zoom auto-dialer reports seller-productivity get --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/dialer/reports/seller-productivity"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists list",
+      "summary": "List Zoom Auto Dialer call lists.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_auto_dialer_call_lists",
+      "source_cli_path": "GET /v2/dialer/call-lists",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "notes": "Bounded sensitive Auto Dialer call-list read. The provider artifact declares paging values only in the response schema, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom auto-dialer call-lists list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/dialer/call-lists"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists get",
+      "summary": "Get one Zoom Auto Dialer call list.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_auto_dialer_call_list",
+      "source_cli_path": "GET /v2/dialer/call-lists/{callListId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {
+          "name": "call-list-id",
+          "type": "string",
+          "summary": "Auto Dialer call-list identifier.",
+          "maps_to": "path.callListId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Auto Dialer call-list read at a fixed path. The provider artifact declares no request query input.",
+      "examples": [
+        "pm zoom auto-dialer call-lists get --credential zoom-fixture --call-list-id call-list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/dialer/call-lists/{callListId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer call-lists prospects list",
+      "summary": "List prospects in one Zoom Auto Dialer call list.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_auto_dialer_call_list_prospects",
+      "source_cli_path": "GET /v2/dialer/call-lists/{callListId}/prospects",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {
+          "name": "call-list-id",
+          "type": "string",
+          "summary": "Auto Dialer call-list identifier.",
+          "maps_to": "path.callListId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Auto Dialer prospect read at a fixed call-list path. The provider artifact declares response-only paging values, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom auto-dialer call-lists prospects list --credential zoom-fixture --call-list-id call-list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/dialer/call-lists/{callListId}/prospects"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "auto-dialer prospects get",
+      "summary": "Get one Zoom Auto Dialer prospect.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_auto_dialer_prospect",
+      "source_cli_path": "GET /v2/dialer/prospects/{prospectId}",
+      "source_url": "https://developers.zoom.us/docs/api/auto-dialer.md",
+      "flags": [
+        {
+          "name": "prospect-id",
+          "type": "string",
+          "summary": "Auto Dialer prospect identifier.",
+          "maps_to": "path.prospectId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Auto Dialer prospect read at a fixed path. The provider artifact declares no request query input.",
+      "examples": [
+        "pm zoom auto-dialer prospects get --credential zoom-fixture --prospect-id prospect --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/dialer/prospects/{prospectId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "tasks assignees list",
+      "summary": "List assignees of one Zoom Task.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_task_assignees",
+      "source_cli_path": "GET /v2/tasks/items/{taskId}/assignees",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "flags": [
+        {
+          "name": "task-id",
+          "type": "string",
+          "summary": "Zoom Task identifier.",
+          "maps_to": "path.taskId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Task assignee read at a fixed path. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom tasks assignees list --credential zoom-fixture --task-id task --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tasks/items/{taskId}/assignees"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "tasks collaborators list",
+      "summary": "List collaborators of one Zoom Task.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_task_collaborators",
+      "source_cli_path": "GET /v2/tasks/items/{taskId}/collaborators",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "flags": [
+        {
+          "name": "task-id",
+          "type": "string",
+          "summary": "Zoom Task identifier.",
+          "maps_to": "path.taskId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Task collaborator read at a fixed path. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom tasks collaborators list --credential zoom-fixture --task-id task --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tasks/items/{taskId}/collaborators"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "tasks comments list",
+      "summary": "List comments on one Zoom Task.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_task_comments",
+      "source_cli_path": "GET /v2/tasks/items/{taskId}/comments",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "flags": [
+        {
+          "name": "task-id",
+          "type": "string",
+          "summary": "Zoom Task identifier.",
+          "maps_to": "path.taskId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Task comment read at a fixed path. The provider artifact declares response-only paging values, so no request query flag is exposed.",
+      "examples": [
+        "pm zoom tasks comments list --credential zoom-fixture --task-id task --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tasks/items/{taskId}/comments"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "tasks imports get",
+      "summary": "Get one Zoom Tasks import job.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_task_import",
+      "source_cli_path": "GET /v2/tasks/imports/{importId}",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "flags": [
+        {
+          "name": "import-id",
+          "type": "string",
+          "summary": "Tasks import job identifier.",
+          "maps_to": "path.importId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Task import-job read at a fixed path. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom tasks imports get --credential zoom-fixture --import-id import --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tasks/imports/{importId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "tasks items list",
+      "summary": "List Zoom Tasks items.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_tasks",
+      "source_cli_path": "GET /v2/tasks/items",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "notes": "Bounded sensitive Task item read. The provider artifact declares response-only paging values but no request query, filter, sort, token, or date input, so no such flag is exposed.",
+      "examples": [
+        "pm zoom tasks items list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tasks/items"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "tasks items get",
+      "summary": "Get one Zoom Task.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_task",
+      "source_cli_path": "GET /v2/tasks/items/{taskId}",
+      "source_url": "https://developers.zoom.us/docs/api/tasks.md",
+      "flags": [
+        {
+          "name": "task-id",
+          "type": "string",
+          "summary": "Zoom Task identifier.",
+          "maps_to": "path.taskId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Task detail read at a fixed path. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom tasks items get --credential zoom-fixture --task-id task --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tasks/items/{taskId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management filter-groups list",
+      "summary": "List Zoom Workforce Management filter groups.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_workforce_filter_groups",
+      "source_cli_path": "GET /v2/workforce-management/filter-groups",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "notes": "Bounded sensitive Workforce Management filter-group read. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management filter-groups list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/filter-groups"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management forecasts list",
+      "summary": "List Zoom Workforce Management forecasts.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_workforce_forecasts",
+      "source_cli_path": "GET /v2/workforce-management/forecasts",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "notes": "Bounded sensitive Workforce Management forecast read. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management forecasts list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/forecasts"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management forecasts scheduling-groups get",
+      "summary": "Get a Workforce Management forecast for one scheduling group.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_workforce_forecast_scheduling_group",
+      "source_cli_path": "GET /v2/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "flags": [
+        {
+          "name": "forecast-id",
+          "type": "string",
+          "summary": "Workforce Management forecast identifier.",
+          "maps_to": "path.forecastId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "scheduling-group-id",
+          "type": "string",
+          "summary": "Workforce Management scheduling-group identifier.",
+          "maps_to": "path.schedulingGroupId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive forecast scheduling-group read at the provider's fixed path. The artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management forecasts scheduling-groups get --credential zoom-fixture --forecast-id forecast --scheduling-group-id group --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/forecasts/{forecastId}/scheduling-groups/{schedulingGroupId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management imports historical-queue-metrics get",
+      "summary": "Get Workforce Management historical queue-metrics import metadata.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_workforce_historical_queue_metrics_import",
+      "source_cli_path": "GET /v2/workforce-management/imports/{importId}/historical-queue-metrics",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "flags": [
+        {
+          "name": "import-id",
+          "type": "string",
+          "summary": "Workforce Management queue-metrics import identifier.",
+          "maps_to": "path.importId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive historical queue-metrics import-metadata read at the provider's fixed path. The artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management imports historical-queue-metrics get --credential zoom-fixture --import-id import --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/imports/{importId}/historical-queue-metrics"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management organizational-groups list",
+      "summary": "List Zoom Workforce Management organizational groups.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_workforce_organizational_groups",
+      "source_cli_path": "GET /v2/workforce-management/organizational-groups",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "notes": "Bounded sensitive Workforce Management organizational-group read. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management organizational-groups list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/organizational-groups"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management organizational-groups get",
+      "summary": "Get one Zoom Workforce Management organizational group.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_workforce_organizational_group",
+      "source_cli_path": "GET /v2/workforce-management/organizational-groups/{organizationalGroupId}",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "flags": [
+        {
+          "name": "organizational-group-id",
+          "type": "string",
+          "summary": "Workforce Management organizational-group identifier.",
+          "maps_to": "path.organizationalGroupId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive organizational-group detail read at the provider's fixed path. The artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management organizational-groups get --credential zoom-fixture --organizational-group-id group --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/organizational-groups/{organizationalGroupId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management reports adherence agents list",
+      "summary": "List Zoom Workforce Management adherence agents.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_workforce_adherence_agents",
+      "source_cli_path": "GET /v2/workforce-management/reports/adherence/agents",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "notes": "Bounded sensitive Workforce Management adherence-agent report read. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management reports adherence agents list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/reports/adherence/agents"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management reports schedules agents list",
+      "summary": "List Zoom Workforce Management report schedule agents.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_workforce_report_schedule_agents",
+      "source_cli_path": "GET /v2/workforce-management/reports/schedules/agents",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "notes": "Bounded sensitive Workforce Management report schedule-agent read. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management reports schedules agents list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/reports/schedules/agents"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management schedules agents list",
+      "summary": "List Zoom Workforce Management schedule agents.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_workforce_schedule_agents",
+      "source_cli_path": "GET /v2/workforce-management/schedules/agents",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "notes": "Bounded sensitive Workforce Management schedule-agent read. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management schedules agents list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/schedules/agents"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management scheduling-groups list",
+      "summary": "List Zoom Workforce Management scheduling groups.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_workforce_scheduling_groups",
+      "source_cli_path": "GET /v2/workforce-management/scheduling-groups",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "notes": "Bounded sensitive Workforce Management scheduling-group read. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management scheduling-groups list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/scheduling-groups"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "workforce-management users list",
+      "summary": "List Zoom Workforce Management users.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_workforce_users",
+      "source_cli_path": "GET /v2/workforce-management/users",
+      "source_url": "https://developers.zoom.us/docs/api/workforce-management.md",
+      "notes": "Bounded sensitive Workforce Management user read. The provider artifact declares no request query or paging input.",
+      "examples": [
+        "pm zoom workforce-management users list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workforce-management/users"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "clips list",
+      "summary": "List all Zoom Clips.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_clips",
+      "source_cli_path": "GET /clips",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Optional Zoom user ID, email, or me selector documented for Clip listing.",
+          "maps_to": "query.user_id",
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Clips list read. The provider artifact documents optional user_id but exposes paging values only in the response, so no request paging flag is exposed.",
+      "examples": [
+        "pm zoom clips list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clips"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "clips collaborators list",
+      "summary": "List collaborators of one Zoom Clip.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_clip_collaborators",
+      "source_cli_path": "GET /clips/{clipId}/collaborators",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "flags": [
+        {
+          "name": "clip-id",
+          "type": "string",
+          "summary": "Zoom Clip identifier.",
+          "maps_to": "path.clipId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Clip collaborator read. The provider artifact exposes paging values only in the response, so no request paging flag is exposed.",
+      "examples": [
+        "pm zoom clips collaborators list --credential zoom-fixture --clip-id clip --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clips/{clipId}/collaborators"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "clips comments list",
+      "summary": "List comments on one Zoom Clip.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_clip_comments",
+      "source_cli_path": "GET /clips/{clipId}/comments",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "flags": [
+        {
+          "name": "clip-id",
+          "type": "string",
+          "summary": "Zoom Clip identifier.",
+          "maps_to": "path.clipId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Clip comment read. The provider artifact exposes paging values only in the response, so no request paging flag is exposed.",
+      "examples": [
+        "pm zoom clips comments list --credential zoom-fixture --clip-id clip --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clips/{clipId}/comments"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "clips get",
+      "summary": "Get one Zoom Clip's metadata and sharing state.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_clip",
+      "source_cli_path": "GET /clips/{clipId}",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "flags": [
+        {
+          "name": "clip-id",
+          "type": "string",
+          "summary": "Zoom Clip identifier.",
+          "maps_to": "path.clipId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Clip metadata read at the provider's fixed path.",
+      "examples": [
+        "pm zoom clips get --credential zoom-fixture --clip-id clip --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clips/{clipId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "clips chapters get",
+      "summary": "Get the complete chapter list for one Zoom Clip.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_clip_chapters",
+      "source_cli_path": "GET /clips/{clipId}/chapters",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "flags": [
+        {
+          "name": "clip-id",
+          "type": "string",
+          "summary": "Zoom Clip identifier.",
+          "maps_to": "path.clipId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Clip chapter read at the provider's fixed path.",
+      "examples": [
+        "pm zoom clips chapters get --credential zoom-fixture --clip-id clip --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clips/{clipId}/chapters"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "clips transfers get",
+      "summary": "Get one Zoom Clip ownership-transfer task.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_clip_transfer",
+      "source_cli_path": "GET /clips/transfers/{taskId}",
+      "source_url": "https://developers.zoom.us/docs/api/clips.md",
+      "flags": [
+        {
+          "name": "task-id",
+          "type": "string",
+          "summary": "Zoom Clip transfer task identifier.",
+          "maps_to": "path.taskId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive asynchronous Clip transfer-task read at the provider's fixed path.",
+      "examples": [
+        "pm zoom clips transfers get --credential zoom-fixture --task-id task --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clips/transfers/{taskId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc managed-rooms account-setting get",
+      "summary": "Get the CRC managed-room account setting.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_managed_room_account_setting",
+      "source_cli_path": "GET /crc/managed_rooms/account_setting",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "account_id",
+        "connector_id",
+        "connector_log_level",
+        "firmware_key",
+        "ip_address",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Reads sensitive CRC account settings.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom crc managed-rooms account-setting get --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/managed_rooms/account_setting"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc api-connectors list",
+      "summary": "List CRC API Connectors.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_crc_api_connectors",
+      "source_cli_path": "GET /crc/api_connectors",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "connector_id",
+        "description",
+        "managed_rooms",
+        "networks",
+        "private_key"
+      ],
+      "risk": "Reads sensitive CRC API Connector details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom crc api-connectors list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/api_connectors"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc api-connectors get",
+      "summary": "Get one CRC API Connector.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_api_connector",
+      "source_cli_path": "GET /crc/api_connectors/{connectorId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "connector-id",
+          "type": "string",
+          "summary": "CRC API Connector identifier.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.connectorId"
+        }
+      ],
+      "redact_fields": [
+        "connector_id",
+        "description",
+        "managed_rooms",
+        "networks",
+        "private_key"
+      ],
+      "risk": "Reads sensitive CRC API Connector details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The connector ID is a fixed provider path parameter and is redacted in output.",
+      "examples": [
+        "pm zoom crc api-connectors get --credential zoom-fixture --connector-id connector --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/api_connectors/{connectorId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc api-connectors private-key get",
+      "summary": "Get one CRC API Connector private key.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_api_connector_private_key",
+      "source_cli_path": "GET /crc/api_connectors/{connectorId}/private_key",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "connector-id",
+          "type": "string",
+          "summary": "CRC API Connector identifier.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.connectorId"
+        }
+      ],
+      "redact_fields": [
+        "connector_id",
+        "private_key"
+      ],
+      "risk": "Reads a private key only through redacted output.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The declared json_redacted policy prevents the private key from reaching CLI output.",
+      "examples": [
+        "pm zoom crc api-connectors private-key get --credential zoom-fixture --connector-id connector --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/api_connectors/{connectorId}/private_key"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc managed-rooms list",
+      "summary": "List CRC managed rooms.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_crc_managed_rooms",
+      "source_cli_path": "GET /crc/managed_rooms",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "auth_password",
+        "auth_username",
+        "connector_id",
+        "device_id",
+        "device_password",
+        "device_username",
+        "firmware_key",
+        "ip_address",
+        "name",
+        "room_host_key",
+        "serial_number",
+        "template_id"
+      ],
+      "risk": "Reads sensitive CRC managed-room details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom crc managed-rooms list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/managed_rooms"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc managed-rooms get",
+      "summary": "Get one CRC managed room.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_managed_room",
+      "source_cli_path": "GET /crc/managed_rooms/{deviceId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "device-id",
+          "type": "string",
+          "summary": "CRC managed-room device identifier.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.deviceId"
+        }
+      ],
+      "redact_fields": [
+        "auth_password",
+        "auth_username",
+        "connector_id",
+        "device_id",
+        "device_password",
+        "device_username",
+        "firmware_key",
+        "ip_address",
+        "name",
+        "room_host_key",
+        "serial_number",
+        "template_id"
+      ],
+      "risk": "Reads sensitive CRC managed-room details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The device ID is a fixed provider path parameter and is redacted in output.",
+      "examples": [
+        "pm zoom crc managed-rooms get --credential zoom-fixture --device-id device --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/managed_rooms/{deviceId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc participant-identifier-code get",
+      "summary": "Get the CRC participant identifier code.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_participant_identifier_code",
+      "source_cli_path": "GET /crc/participant_identifier_code",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "meeting_id",
+        "participant_identifier_code",
+        "participant_id"
+      ],
+      "risk": "Reads a CRC meeting authentication identifier.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The participant identifier code is redacted in output.",
+      "examples": [
+        "pm zoom crc participant-identifier-code get --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/participant_identifier_code"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc room-templates list",
+      "summary": "List CRC room templates.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_crc_room_templates",
+      "source_cli_path": "GET /crc/room_templates",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [],
+      "redact_fields": [
+        "device_type",
+        "name",
+        "template_id",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Reads sensitive CRC room-template details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The provider artifact exposes response-only paging values, so no paging flag is exposed.",
+      "examples": [
+        "pm zoom crc room-templates list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/room_templates"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "crc room-templates get",
+      "summary": "Get one CRC room template.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_crc_room_template",
+      "source_cli_path": "GET /crc/room_templates/{templateId}",
+      "source_url": "https://developers.zoom.us/docs/api/crc.md",
+      "flags": [
+        {
+          "name": "template-id",
+          "type": "string",
+          "summary": "CRC room-template identifier.",
+          "required": true,
+          "allow_empty": false,
+          "maps_to": "path.templateId"
+        }
+      ],
+      "redact_fields": [
+        "device_type",
+        "name",
+        "template_id",
+        "time_server",
+        "time_zone"
+      ],
+      "risk": "Reads sensitive CRC room-template details.",
+      "approval": "Read-only; no write approval is required.",
+      "notes": "The template ID is a fixed provider path parameter and is redacted in output.",
+      "examples": [
+        "pm zoom crc room-templates get --credential zoom-fixture --template-id template --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crc/room_templates/{templateId}"
+        }
+      ],
+      "output_policy": "json_redacted"
     }
   ],
   "help_topics": [

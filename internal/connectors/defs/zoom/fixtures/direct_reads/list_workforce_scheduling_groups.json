@@ -1,0 +1,13 @@
+{
+  "status": 200,
+  "body": {
+    "scheduling_groups": [
+      {
+        "scheduling_group_id": "fixture-wfm-scheduling-group",
+        "name": "Fixture Workforce Management scheduling group"
+      }
+    ],
+    "next_page_token": "fixture-wfm-scheduling-page",
+    "total_records": 1
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "status": 200,
+  "body": {
+    "forecast_id": "fixture-wfm-forecast",
+    "scheduling_group_id": "fixture-wfm-scheduling-group",
+    "forecast_intervals": [
+      {
+        "start_time": "2026-01-01T00:00:00Z",
+        "end_time": "2026-01-01T00:15:00Z",
+        "required_staffing": 7
+      }
+    ]
+  }
+}

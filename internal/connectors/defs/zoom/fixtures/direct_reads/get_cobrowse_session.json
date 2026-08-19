@@ -1,0 +1,9 @@
+{
+  "status": 200,
+  "body": {
+    "session_id": "fixture-session",
+    "start_time": "2026-08-08T09:00:00Z",
+    "session_pin": "fixture-session-pin",
+    "user_count": 2
+  }
+}

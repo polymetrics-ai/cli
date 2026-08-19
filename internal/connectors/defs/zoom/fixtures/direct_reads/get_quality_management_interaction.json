@@ -1,0 +1,13 @@
+{
+  "status": 200,
+  "body": {
+    "account_id": "fixture-account",
+    "interaction_info": {
+      "agent_email": "fixture-agent@example.invalid",
+      "consumer_name": "fixture-consumer",
+      "from": "+15550000001",
+      "interaction_id": "fixture-interaction",
+      "to": "+15550000002"
+    }
+  }
+}

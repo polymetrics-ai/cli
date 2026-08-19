@@ -60,7 +60,7 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 	gotMethods := make(map[string]int, len(wantMethods))
 	seen := make(map[string]struct{}, len(bundle.Surface.Endpoints))
 	unclassified := make([]string, 0)
-	covered, implementableNow, providerRestricted, deprecated := 0, 0, 0, 0
+	streamBacked, directReadCovered, implementableNow, providerRestricted, deprecated := 0, 0, 0, 0, 0
 
 	for _, endpoint := range bundle.Surface.Endpoints {
 		method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
@@ -82,10 +82,14 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			if endpoint.Operation != nil || endpoint.Excluded != nil {
 				t.Errorf("executable %s carries another disposition", key)
 			}
-			if endpoint.CoveredBy.Stream == "" {
-				t.Errorf("executable %s is not bound to a stream", key)
+			switch {
+			case endpoint.CoveredBy.Stream != "":
+				streamBacked++
+			case endpoint.CoveredBy.DirectRead != "" || len(endpoint.CoveredBy.DirectReads) > 0:
+				directReadCovered++
+			default:
+				t.Errorf("executable %s is not bound to a stream or direct read", key)
 			}
-			covered++
 		case endpoint.Operation != nil:
 			operation := endpoint.Operation
 			if operation.Status != "blocked" || !operation.BlockedByDefault || strings.TrimSpace(operation.Reason) == "" {
@@ -120,10 +124,13 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 3 {
+	if got := streamBacked; got != 3 {
 		t.Errorf("executable stream-backed rows = %d, want 3", got)
 	}
-	if got := implementableNow; got != 1839 {
+	if got := directReadCovered; got != 70 {
+		t.Errorf("executable direct-read rows = %d, want 70", got)
+	}
+	if got := implementableNow; got != 1769 {
 		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1839", got)
 	}
 	if got := providerRestricted; got != 17 {
@@ -137,10 +144,9 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 	}
 }
 
-// TestCoveredStreamsHaveReachableCommands proves the executable subset through
-// the real command runner. Before cli_surface.json exists this deliberately
-// fails: engine.synthesizeCommandSurface returns nil and `pm zoom <command>`
-// cannot resolve the existing streams.
+// TestCoveredStreamsHaveReachableCommands preserves the three existing ETL
+// commands through the real command runner while later parity waves add other
+// declarative intents to the same Zoom surface.
 func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 	bundle := loadZoomBundle(t)
 	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
@@ -178,8 +184,8 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 			userScoped: true,
 		},
 	}
-	if got := len(surface.Commands); got != len(wants) {
-		t.Fatalf("Zoom cli_surface commands = %d, want exactly %d in Wave 1", got, len(wants))
+	if got := len(surface.Commands); got < len(wants) {
+		t.Fatalf("Zoom cli_surface commands = %d, want at least the %d existing ETL commands", got, len(wants))
 	}
 
 	commands := make(map[string]struct {
@@ -241,13 +247,16 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 		}
 	}
 
-	for path := range commands {
+	for path, command := range commands {
+		if command.intent != "etl" {
+			continue
+		}
 		if _, ok := map[string]struct{}{
 			"users list":    {},
 			"meetings list": {},
 			"webinars list": {},
 		}[path]; !ok {
-			t.Errorf("Wave 1 must not promote additional Zoom operations; found %q", path)
+			t.Errorf("unexpected Zoom ETL command %q", path)
 		}
 	}
 
@@ -358,6 +367,221 @@ func TestCoveredStreamCommandsExecuteWithFixtures(t *testing.T) {
 		if got := requests[path]; got != 1 {
 			t.Errorf("fixture requests for %s = %d, want 1", path, got)
 		}
+	}
+}
+
+// TestReviewedDirectReadSalvageCohort keeps Wave 2's reviewed declarations,
+// command paths, and sanitized fixture corpus together. Preflight is the real
+// runner boundary: a generated surface is not enough when a command cannot
+// dispatch its named operation.
+func TestReviewedDirectReadSalvageCohort(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+
+	operations := make(map[string]struct{}, 70)
+	for _, operation := range bundle.Operations {
+		if operation.Kind == "rest_read" {
+			operations[operation.ID] = struct{}{}
+		}
+	}
+	if got := len(operations); got != 70 {
+		t.Fatalf("reviewed rest_read operations = %d, want 70", got)
+	}
+
+	surface := connector.CommandSurface()
+	if surface == nil {
+		t.Fatal("Zoom direct-read cohort has no command surface")
+	}
+	commands := 0
+	for _, command := range surface.Commands {
+		if command.Intent != "direct_read" {
+			continue
+		}
+		commands++
+		if _, ok := operations[command.Operation]; !ok {
+			t.Errorf("direct-read command %q references unknown operation %q", command.Path, command.Operation)
+			continue
+		}
+		if command.Availability != "implemented" {
+			t.Errorf("direct-read command %q availability = %q, want implemented", command.Path, command.Availability)
+		}
+		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want nil", command.Path, err)
+		}
+	}
+	if commands != 70 {
+		t.Fatalf("reviewed direct-read commands = %d, want 70", commands)
+	}
+
+	entries, err := os.ReadDir(filepath.Join("fixtures", "direct_reads"))
+	if err != nil {
+		t.Fatalf("read direct-read fixtures: %v", err)
+	}
+	fixtures := 0
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".json" {
+			continue
+		}
+		raw, err := os.ReadFile(filepath.Join("fixtures", "direct_reads", entry.Name()))
+		if err != nil {
+			t.Fatalf("read direct-read fixture %q: %v", entry.Name(), err)
+		}
+		if !json.Valid(raw) {
+			t.Errorf("direct-read fixture %q is not JSON", entry.Name())
+		}
+		fixtures++
+	}
+	if fixtures != 52 {
+		t.Fatalf("sanitized direct-read fixtures = %d, want 52", fixtures)
+	}
+}
+
+// TestReviewedDirectReadFixturesExecute exercises every salvaged fixture
+// through the operation executor against a loopback Zoom provider double. The
+// companion cohort test proves each CLI command reaches this executor through
+// its real preflight path; this test proves the declared method, path binding,
+// bearer transport, response bound, and redacting output policy run together.
+func TestReviewedDirectReadFixturesExecute(t *testing.T) {
+	type fixture struct {
+		Status int             `json:"status"`
+		Body   json.RawMessage `json:"body"`
+	}
+	type action struct {
+		name       string
+		operation  engine.OperationSpec
+		pathParams map[string]string
+		requestURL string
+		response   fixture
+	}
+
+	bundle := loadZoomBundle(t)
+	operations := make(map[string]engine.OperationSpec, len(bundle.Operations))
+	for _, operation := range bundle.Operations {
+		if operation.Kind == "rest_read" {
+			operations[operation.ID] = operation
+		}
+	}
+
+	entries, err := os.ReadDir(filepath.Join("fixtures", "direct_reads"))
+	if err != nil {
+		t.Fatalf("read direct-read fixtures: %v", err)
+	}
+	fixtureOperationIDs := map[string]string{
+		// These fixtures preserve their original item-read names even though
+		// the provider contracts are collection reads.
+		"get_task_assignees":     "zoom.list_task_assignees",
+		"get_task_collaborators": "zoom.list_task_collaborators",
+	}
+	actions := make([]action, 0, len(entries))
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".json" {
+			continue
+		}
+		raw, err := os.ReadFile(filepath.Join("fixtures", "direct_reads", entry.Name()))
+		if err != nil {
+			t.Fatalf("read direct-read fixture %q: %v", entry.Name(), err)
+		}
+		var response fixture
+		if err := json.Unmarshal(raw, &response); err != nil {
+			t.Fatalf("decode direct-read fixture %q: %v", entry.Name(), err)
+		}
+		fixtureID := strings.TrimSuffix(entry.Name(), ".json")
+		operationID := fixtureOperationIDs[fixtureID]
+		if operationID == "" {
+			operationID = "zoom." + fixtureID
+		}
+		operation, ok := operations[operationID]
+		if !ok {
+			t.Fatalf("direct-read fixture %q does not map to a reviewed operation", entry.Name())
+		}
+		params, requestURL := zoomFixturePathParams(operation.REST.Path)
+		if response.Status == 0 {
+			response.Status = http.StatusOK
+		}
+		actions = append(actions, action{
+			name:       entry.Name(),
+			operation:  operation,
+			pathParams: params,
+			requestURL: requestURL,
+			response:   response,
+		})
+	}
+	if len(actions) != 52 {
+		t.Fatalf("fixture actions = %d, want 52", len(actions))
+
+	}
+
+	byRequest := make(map[string]action, len(actions))
+	for _, action := range actions {
+		key := action.operation.REST.Method + " " + action.requestURL
+		if _, duplicate := byRequest[key]; duplicate {
+			t.Fatalf("direct-read fixture repeats request %s", key)
+		}
+		byRequest[key] = action
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action, ok := byRequest[request.Method+" "+request.URL.Path]
+		if !ok {
+			http.Error(w, "undeclared fixture request", http.StatusNotFound)
+			t.Errorf("direct-read fixture received undeclared request %s %s", request.Method, request.URL.Path)
+			return
+		}
+		if got := request.Header.Get("Authorization"); got != "Bearer fixture-direct-read-access-token" {
+			http.Error(w, "missing bearer credential", http.StatusUnauthorized)
+			t.Errorf("direct-read fixture %q authorization = %q, want fixture bearer credential", action.name, got)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(action.response.Status)
+		_, _ = w.Write(action.response.Body)
+	}))
+	defer server.Close()
+
+	config := connectors.RuntimeConfig{
+		Config:  map[string]string{"base_url": server.URL},
+		Secrets: map[string]string{"access_token": "fixture-direct-read-access-token"},
+	}
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			result, err := engine.OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+				Operation:    action.operation.ID,
+				Config:       config,
+				PathParams:   action.pathParams,
+				MaxBytes:     action.operation.REST.MaxBytes,
+				OutputPolicy: action.operation.OutputPolicy,
+			}, engine.HooksFor(bundle.Name))
+			if err != nil {
+				t.Fatalf("OperationDirectRead(%q): %v", action.operation.ID, err)
+			}
+			if result.Status != action.response.Status {
+				t.Fatalf("OperationDirectRead(%q) status = %d, want %d", action.operation.ID, result.Status, action.response.Status)
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("direct-read fixture requests = %d, want %d", requests, len(actions))
+	}
+}
+
+func zoomFixturePathParams(path string) (map[string]string, string) {
+	params := make(map[string]string)
+	resolved := path
+	for {
+		start := strings.Index(resolved, "{")
+		if start < 0 {
+			return params, resolved
+		}
+		end := strings.Index(resolved[start:], "}")
+		if end < 0 {
+			return params, resolved
+		}
+		end += start
+		name := resolved[start+1 : end]
+		value := "fixture-" + strings.ToLower(name)
+		params[name] = value
+		resolved = strings.Replace(resolved, resolved[start:end+1], value, 1)
 	}
 }
 

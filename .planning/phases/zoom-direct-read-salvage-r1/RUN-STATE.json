@@ -1,0 +1,13 @@
+{
+  "issue": 4267,
+  "phase": "zoom-direct-read-salvage-r1",
+  "canonical_state": "code_review_complete",
+  "mode": "inline_manual_gsd_fallback",
+  "reason": "canonical connector delivery contract forbids role spawning",
+  "certification": {
+    "state": "implemented_pending_certification",
+    "scope_gate": "expected HALT capability/zoom/missing",
+    "owner": "firstmate central scope lane",
+    "integration_eligible": false
+  }
+}

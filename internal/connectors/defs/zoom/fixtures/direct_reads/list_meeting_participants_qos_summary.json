@@ -1,0 +1,24 @@
+{
+  "status": 200,
+  "body": {
+    "next_page_token": "",
+    "page_size": 30,
+    "participants": [
+      {
+        "user_id": "fixture-participant-1",
+        "user_name": "Fixture Participant",
+        "email": "participant@example.com",
+        "qos": [
+          {
+            "type": "audio_input",
+            "bitrate": [{ "date_time": "2026-08-05T00:00:00Z", "avg": "32.0 kbps" }],
+            "latency": [{ "date_time": "2026-08-05T00:00:00Z", "avg": "10 ms" }],
+            "jitter": [{ "date_time": "2026-08-05T00:00:00Z", "avg": "1 ms" }],
+            "avg_loss": [{ "date_time": "2026-08-05T00:00:00Z", "avg": "0%" }],
+            "max_loss": [{ "date_time": "2026-08-05T00:00:00Z", "avg": "0%" }]
+          }
+        ]
+      }
+    ]
+  }
+}

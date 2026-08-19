@@ -1,0 +1,24 @@
+{
+  "status": 200,
+  "body": {
+    "engagement_variable_details": [
+      {
+        "engagement_id": "fixture-va-engagement",
+        "variable_details": [
+          {
+            "variable_id": "fixture-va-variable",
+            "name": "fixture variable name",
+            "value": "fixture variable value",
+            "group_id": "fixture-va-group",
+            "group_name": "Fixture variable group",
+            "need_mask": true,
+            "submitted_at": "2026-01-01T00:00:00Z"
+          }
+        ]
+      }
+    ],
+    "next_page_token": "fixture-va-page-token",
+    "page_size": 10,
+    "token": "fixture-va-response-token"
+  }
+}
