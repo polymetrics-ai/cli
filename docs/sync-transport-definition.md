@@ -58,22 +58,58 @@ connection warehouse. A declaration with a destination `change_capture` mode,
 a missing strategy, an unlisted action, a duplicate mode, a malformed source
 binding, or an incompatible executor family fails before source I/O.
 
+## `declarative_api/declarative_typed_destination`
+
+`declarative_api/declarative_typed_destination` is the reusable destination
+adapter for a declarative API connector. It is intentionally narrower than a
+generic HTTP writer:
+
+- Declare only action names that already exist in that connector's
+  `writes.json`; each declared mode selects one of those exact names through
+  `apply_strategies`.
+- The selected action must be an ordinary, schema-backed `writes.json` action
+  with a concrete method and path. It must not carry `transport_binding`:
+  that field selects a different, specialized closed adapter such as the
+  issue-label destination.
+- Supply at least one `source_bindings` entry, all with `input_fields`. Its
+  `input` is an action record field and its `field` is a source record field.
+  The adapter copies only those declared values and validates every result
+  against the selected action's `record_schema` before it constructs a
+  provider request.
+- Declare `acknowledgement: "durable_warehouse"`,
+  `delivery.idempotency: "keyed"`, and
+  `delivery.deletes: "not_available"`. This adapter does not accept
+  tombstones, so a connector must not claim delete propagation it cannot
+  perform.
+- Record conformance evidence from the declaring connector. Composition
+  gathers all exact evidence references for this executor and registers one
+  shared factory; evidence from a different connector is not interchangeable.
+
+At plan time the adapter verifies the declared mode, action and source
+binding, then requires the existing reverse-ETL plan, preview, approval and
+per-unit authorization. At apply time it accepts only a reopened
+connection-owned workset, validates the mapped records before I/O, and calls
+the declaration-selected action. A successful action response for every
+record, plus the keyed replay guarantee, supplies the durable acknowledgement
+used by the checkpoint contract. Its read-back verifies the acknowledgement,
+the declared route, and the reopened workset before checkpoint commit; an
+adapter that needs provider-state read-back must use a separately named
+closed executor.
+
 ## Typed action contract
 
 A destination action is a connector-owned, named action, not a generic HTTP
 or SQL writer. For the action to be executable, its `writes.json` entry must
-be present in `eligible_actions` and carry the closed transport binding that
-the destination adapter implements. The binding defines the action role and
-the typed input-to-record-field shape. The `source_bindings` mapping supplies
-only the upstream values; it cannot add action fields, an operation name, an
-endpoint, or a body template.
+be present in `eligible_actions` and satisfy the exact closed adapter's
+contract. The `source_bindings` mapping supplies only the upstream values; it
+cannot add action fields, an operation name, an endpoint, or a body template.
 
 The adapter must validate the declaration-selected strategy and source binding
 at planning time, operate on a reopened owned warehouse receipt, perform the
-approved named action, return a durable acknowledgement, and independently
-read it back before the checkpoint advances. Reverse-ETL approval remains
-plan, preview, approval, then execution; a declaration never bypasses that
-lifecycle.
+approved named action, return a durable acknowledgement, and perform the
+read-back promised by its exact adapter before the checkpoint advances.
+Reverse-ETL approval remains plan, preview, approval, then execution; a
+declaration never bypasses that lifecycle.
 
 ## Minimal review checklist
 
