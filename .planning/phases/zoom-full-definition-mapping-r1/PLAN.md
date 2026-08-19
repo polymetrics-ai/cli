@@ -1,28 +1,30 @@
 # Plan — Zoom full definition mapping
 
 Issue: #4265 (parent mapping session)
-Base: `origin/main` at `31bfe62eb`
+Base: `origin/main` at `362d7ccf9`
 
 ## Task Delivery Header
 
 - Issue: Refs #4265 — Zoom connector parity mapping session.
-- Base branch: `main` at `31bfe62eb`.
-- Merges into: `fm/cli-zoom-full-definition-mapping-r1` → `main` through the existing draft parent PR #4271; captain approval remains required for any main merge.
-- Delivery: a committed, locally-verified connector-local Zoom definition and exhaustive disposition ledger; certification and parent merge are explicitly out of scope.
+- Base branch: `main` at `362d7ccf9`.
+- Merges into: `fm/cli-zoom-full-definition-mapping-r1` → `main` through the existing draft parent PR #4285; captain approval remains required for any main merge.
+- Delivery: a committed, locally-verified Zoom command surface, typed write actions, source contracts, and exhaustive disposition ledger; certification and parent merge are explicitly out of scope.
 - Working branch: `fm/cli-zoom-full-definition-mapping-r1`.
-- Task: pin public provider provenance, crosswalk Zoom's ledger, add only source-backed executable declarations, and record every other endpoint as disabled with evidence, a fixed-vocabulary reason, and recovery path.
+- Task: pin public provider provenance, crosswalk Zoom's ledger, bind every executable source-backed contract to a runnable command and typed action where applicable, and record every other endpoint as disabled with evidence, a fixed-vocabulary reason, and recovery path.
 - Verification: focused Zoom bundle tests, `connectorgen validate`, `surface-sync --check`, `connector-boundary`, the required non-Zoom certification regression, and `make verify` before pushing.
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
 | Every declared endpoint is tied to the pinned provider source and Zoom ledger | live | The committed crosswalk counts every provider and ledger identity; validation rejects a declaration that lacks a matching ledger endpoint. |
-| All non-delivered operations remain visible and actionable | live | The committed disposition ledger has one state, reason/evidence, and recoverability outcome per Zoom ledger endpoint. |
+| Every executable contract is user-reachable | local | `cli_surface.json` has 712 implemented commands bound to exact source contracts and `api_surface` rows; `writes.json` has 204 typed actions including 185 guarded deletes. |
+| All non-delivered operations remain visible and actionable | local | The committed disposition ledger has one state, reason/evidence, and recoverability outcome per Zoom ledger endpoint. |
 | No shared engine/auth/generator code is changed | live | `make connector-boundary` and the changed-path review show only Zoom definitions plus required GSD evidence. |
 
 ## Authoritative inventory
 
-`api_surface.json` has 1,913 endpoints: five covered rows (the preserved three streams and two
-source-backed warehouse actions) and 1,908 explicitly blocked operation rows. Operation models:
+`api_surface.json` has 1,913 endpoints: 712 covered rows on this branch (the preserved three
+streams, two source-backed warehouse actions, 505 direct reads, and 202 newly typed actions) and
+1,131 explicitly blocked operation rows. Operation models:
 846 direct reads, 684 sensitive reverse-ETL writes, 312 destructive actions, 11 admin reverse-ETL
 writes, one binary read, and 54 deprecated. Methods: 881 GET, 392 POST, 269 PATCH, 52 PUT, and 319
 DELETE.
@@ -35,7 +37,11 @@ Every declaration must bind to a real API-surface row. The ledger provides metho
 
 1. Pin and hash the Zoom provider artifact; compare it against all 1,913 ledger method/path rows.
 2. Derive source operation facts and explicit blocked/rejection records from the ledger/source pairing. The lock remains immutable after its initial pin; the crosswalk is the contract-bearing derivative.
-3. Derive only executable operation and write declarations that have a complete source contract, a real supported executor, typed schema, approval policy, and fixture proof. The two reviewed reverse-ETL actions are the only actual warehouse destination actions. DELETE records retain `mutation_class=delete` in the disposition ledger; do not invent 311 `writes.json` actions merely to mirror provider inventory.
+3. Derive every executable operation as a command and every no-body scalar mutation as a typed
+   write action with an exact source contract and approval policy. DELETE records retain
+   `mutation_class=delete` and destructive confirmation. Hold body-schema, array-encoding,
+   binary, upload, paid-tier, and source-mismatch cases in the disposition ledger; do not infer a
+   substitute contract.
 4. Preserve the existing streams and derive only source-backed schemas/fixtures. Omit `sync_transport.json` until an executor identity and conformance run prove a closed source or destination transport; a placeholder is invalid.
 5. Do not reconcile held credentials in this lane. No credential access or auth/engine change is permitted. Update metadata capabilities only for executable definitions.
 6. Generate the required declared/blocked/per-class/foundation-gap report. Certification begins only after these surfaces validate.
@@ -69,3 +75,43 @@ source difference as 24 rows. Measured source-lock data instead show 26 source-o
 ledger-only rows, and the lane is expressly limited to `internal/connectors/defs/zoom/`. This plan
 therefore uses a committed connector-local crosswalk/disposition ledger rather than a new command,
 and records the measured 26+2 split.
+
+## Corrected runnable-command delivery (2026-08-19)
+
+The prior mapping completion condition is superseded by
+`data/PARITY-DELIVERABLE-CORRECTION.md`: an operation inventory is supporting evidence, not a user
+capability. This phase now delivers every Zoom operation that has an executable operation contract
+as an `availability: implemented` command in `cli_surface.json`, and it exposes each eligible
+mutation through the guarded direct-write plan lifecycle. `ENABLED%` is calculated from runnable
+commands, never from the operation inventory.
+
+The implementation passes proceed in dependency order:
+
+1. Add a red connector-local test that fails while Zoom exposes only five commands and while an
+   `requires-elevated-scope` disposition is disabled. Green requires deterministic command coverage
+   for every eligible `rest_read` and no ordinary DELETE classified `unsafe-to-exercise`.
+2. Materialize source-backed direct-read commands with the declaration-owned path/query flags and
+   output policy. Use the parameter-import paging exclusion so opaque cursors remain reachable only
+   through `--page`/`--page-cursor`; do not hand-author them or infer pagination.
+3. Materialize guarded reverse-ETL commands for source-backed no-body scalar DELETEs and other
+   writes with a complete declared request contract. Every DELETE keeps `mutation_class: delete`, an exact
+   `api_surface` binding, and plan/preview/approval/execute protection.
+4. Reclassify `requires-elevated-scope` rows as enabled: required scopes are command metadata and
+   a missing permission is a provider 403 at runtime, not a compile-time disable. Reclassify
+   ordinary deletion from `unsafe-to-exercise`; reserve that reason for credential-minting or an
+   equivalently dangerous operation. Continue to disable only paid-tier, foundation-gap,
+   schema-incompatible, provider-not-exposed, and genuinely unsafe operations, each with evidence.
+5. Do not manufacture a root JSON write payload. The current operation records do not retain a
+   per-operation request-body schema and `operationDirectReadOverrides` only permits a root `body`
+   mapping for `direct_read`. If that makes a write non-executable, record the exact engine gap and
+   minimal external foundation change; do not alter the engine in this connector lane.
+
+Each pass gets focused no-credential preflight evidence and the command-count/rejection evidence is
+kept in the TDD ledger and verification record before the required full `make verify` gate.
+
+## Required skills
+
+Loaded for this connector/CLI/test/documentation work: `golang-how-to`, `golang-cli`, `golang-testing`,
+`golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`,
+`golang-structs-interfaces`, and `golang-documentation`. The work remains connector-local; no shared
+engine, auth, generator, certification allowlist, or status code is modified.

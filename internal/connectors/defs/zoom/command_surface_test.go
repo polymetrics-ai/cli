@@ -4,6 +4,7 @@
 package zoom
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -15,6 +16,7 @@ import (
 	"sync"
 	"testing"
 
+	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
@@ -61,7 +63,7 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 	gotMethods := make(map[string]int, len(wantMethods))
 	seen := make(map[string]struct{}, len(bundle.Surface.Endpoints))
 	unclassified := make([]string, 0)
-	covered, coveredWrites, implementableNow, providerRestricted, deprecated := 0, 0, 0, 0, 0
+	covered, coveredDirectReads, coveredWrites, implementableNow, providerRestricted, deprecated := 0, 0, 0, 0, 0, 0
 
 	for _, endpoint := range bundle.Surface.Endpoints {
 		method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
@@ -83,8 +85,12 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			if endpoint.Operation != nil || endpoint.Excluded != nil {
 				t.Errorf("executable %s carries another disposition", key)
 			}
-			if endpoint.CoveredBy.Stream == "" && len(endpoint.CoveredBy.WriteTargets()) == 0 {
-				t.Errorf("executable %s is not bound to a stream or named write action", key)
+			if endpoint.CoveredBy.Stream == "" && len(endpoint.CoveredBy.WriteTargets()) == 0 && endpoint.CoveredBy.DirectRead == "" && len(endpoint.CoveredBy.DirectReads) == 0 && len(endpoint.CoveredBy.OperationTargets()) == 0 {
+				t.Errorf("executable %s is not bound to a stream, direct read, operation, or named write action", key)
+			}
+			coveredDirectReads += len(endpoint.CoveredBy.DirectReads)
+			if endpoint.CoveredBy.DirectRead != "" {
+				coveredDirectReads++
 			}
 			coveredWrites += len(endpoint.CoveredBy.WriteTargets())
 			covered++
@@ -122,17 +128,20 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 5 {
-		t.Errorf("executable provider rows = %d, want 5 (three ETL streams and two reverse-ETL actions)", got)
+	if got := covered; got != 712 {
+		t.Errorf("executable provider rows = %d, want 712", got)
 	}
-	if got := coveredWrites; got != 2 {
-		t.Errorf("executable write-backed rows = %d, want 2", got)
+	if got := coveredDirectReads; got != 505 {
+		t.Errorf("executable direct-read-backed rows = %d, want 505", got)
 	}
-	if got := implementableNow; got != 1837 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1837", got)
+	if got := coveredWrites; got != 204 {
+		t.Errorf("executable write-backed rows = %d, want 204", got)
 	}
-	if got := providerRestricted; got != 17 {
-		t.Errorf("provider-restricted operations = %d, want 17", got)
+	if got := implementableNow; got != 1134 {
+		t.Errorf("operations still blocked after declared runnable coverage = %d, want 1134", got)
+	}
+	if got := providerRestricted; got != 13 {
+		t.Errorf("provider-restricted operations = %d, want 13", got)
 	}
 	if got := deprecated; got != 54 {
 		t.Errorf("provider-deprecated justified exclusions = %d, want 54", got)
@@ -346,6 +355,10 @@ func TestDeclarationDispositionAccountsForThePinnedSourceAndLedger(t *testing.T)
 			DisabledSourceOnlyRows           int `json:"disabled_source_only_rows"`
 			OperationInventoryEntries        int `json:"operation_inventory_entries"`
 			DeleteOperationInventoryEntries  int `json:"delete_operation_inventory_entries"`
+			ImplementedPendingCertification  int `json:"implemented_pending_certification"`
+			RunnableCLICommands              int `json:"runnable_cli_commands"`
+			RunnableWriteActions             int `json:"runnable_write_actions"`
+			RunnableDeleteActions            int `json:"runnable_delete_actions"`
 		} `json:"summary"`
 		LedgerDispositions     []disposition `json:"ledger_dispositions"`
 		SourceOnlyDispositions []disposition `json:"source_only_dispositions"`
@@ -376,8 +389,8 @@ func TestDeclarationDispositionAccountsForThePinnedSourceAndLedger(t *testing.T)
 	if got := report.Summary.DeclaredPendingParentIntegration; got != 70 {
 		t.Errorf("parent-pending declarations = %d, want 70", got)
 	}
-	if got := report.Summary.DisabledAPISurfaceRows; got != 1838 {
-		t.Errorf("disabled api surface rows = %d, want 1838", got)
+	if got := report.Summary.DisabledAPISurfaceRows; got != 1131 {
+		t.Errorf("disabled api surface rows = %d, want 1131", got)
 	}
 	if got := report.Summary.DisabledSourceOnlyRows; got != 26 {
 		t.Errorf("disabled source-only rows = %d, want 26", got)
@@ -388,15 +401,24 @@ func TestDeclarationDispositionAccountsForThePinnedSourceAndLedger(t *testing.T)
 	if got := report.Summary.DeleteOperationInventoryEntries; got != 311 {
 		t.Errorf("delete operation inventory entries = %d, want 311", got)
 	}
+	if got := report.Summary.ImplementedPendingCertification; got != 707 {
+		t.Errorf("implemented pending certification rows = %d, want 707", got)
+	}
+	if got := report.Summary.RunnableCLICommands; got != 712 {
+		t.Errorf("runnable CLI commands = %d, want 712", got)
+	}
+	if got := report.Summary.RunnableWriteActions; got != 204 {
+		t.Errorf("runnable write actions = %d, want 204", got)
+	}
+	if got := report.Summary.RunnableDeleteActions; got != 185 {
+		t.Errorf("runnable delete actions = %d, want 185", got)
+	}
 
 	allowedReasons := map[string]bool{
 		"provider-does-not-expose": true,
 		"requires-paid-tier":       true,
-		"requires-elevated-scope":  true,
 		"foundation-gap":           true,
 		"schema-incompatible":      true,
-		"unsafe-to-exercise":       true,
-		"needs-human-decision":     true,
 	}
 	seen := map[string]bool{}
 	operationDeclarations := 0
@@ -411,21 +433,27 @@ func TestDeclarationDispositionAccountsForThePinnedSourceAndLedger(t *testing.T)
 			}
 			seen[key] = true
 		}
-		if row.State != "disabled" {
-			return
-		}
-		if row.Rejection == nil {
-			t.Errorf("disabled %s %s has no rejection", label, key)
-			return
-		}
-		if !allowedReasons[row.Rejection.Reason] {
-			t.Errorf("disabled %s %s uses unsupported reason %q", label, key, row.Rejection.Reason)
-		}
-		if strings.TrimSpace(row.Rejection.Detail) == "" || row.Rejection.Evidence == nil {
-			t.Errorf("disabled %s %s lacks evidence/detail: %+v", label, key, row.Rejection)
-		}
 		if row.Declaration.ID != "" {
 			operationDeclarations++
+		}
+		switch row.State {
+		case "disabled":
+			if row.Rejection == nil {
+				t.Errorf("disabled %s %s has no rejection", label, key)
+				return
+			}
+			if !allowedReasons[row.Rejection.Reason] {
+				t.Errorf("disabled %s %s uses unsupported reason %q", label, key, row.Rejection.Reason)
+			}
+			if strings.TrimSpace(row.Rejection.Detail) == "" || row.Rejection.Evidence == nil {
+				t.Errorf("disabled %s %s lacks evidence/detail: %+v", label, key, row.Rejection)
+			}
+		case "declared", "declared-pending-certification", "declared-pending-parent-integration", "implemented-pending-certification":
+			if row.Rejection != nil {
+				t.Errorf("enabled %s %s unexpectedly has rejection %+v", label, key, row.Rejection)
+			}
+		default:
+			t.Errorf("%s %s has unsupported state %q", label, key, row.State)
 		}
 	}
 	for _, row := range report.LedgerDispositions {
@@ -438,7 +466,7 @@ func TestDeclarationDispositionAccountsForThePinnedSourceAndLedger(t *testing.T)
 		t.Errorf("unique ledger dispositions = %d, want 1913", got)
 	}
 	if got := operationDeclarations; got != 1748 {
-		t.Errorf("disabled source-contract operation declarations = %d, want 1748", got)
+		t.Errorf("source-contract operation declarations = %d, want 1748", got)
 	}
 }
 
@@ -448,8 +476,13 @@ func TestDeclarationDispositionAccountsForThePinnedSourceAndLedger(t *testing.T)
 // never invokes Zoom or resolves a real credential.
 func TestSourceBackedReverseETLActionsUseSanitizedFixtures(t *testing.T) {
 	bundle := loadZoomBundle(t)
-	if got := len(bundle.Writes); got != 2 {
-		t.Fatalf("Zoom warehouse destination actions = %d, want 2", got)
+	if got := len(bundle.Writes); got != 204 {
+		t.Fatalf("Zoom typed write actions = %d, want 204", got)
+	}
+	for _, name := range []string{"update_clinical_note", "create_quality_management_interaction"} {
+		if _, ok := findZoomWriteAction(bundle.Writes, name); !ok {
+			t.Fatalf("Zoom source-backed fixture action %q is missing", name)
+		}
 	}
 	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
 
@@ -562,6 +595,15 @@ type zoomWriteFixture struct {
 	} `json:"response"`
 }
 
+func findZoomWriteAction(actions []engine.WriteAction, name string) (engine.WriteAction, bool) {
+	for _, action := range actions {
+		if action.Name == name {
+			return action, true
+		}
+	}
+	return engine.WriteAction{}, false
+}
+
 func (fixture zoomWriteFixture) Status() int {
 	if fixture.Expect.Status != 0 {
 		return fixture.Expect.Status
@@ -626,10 +668,6 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 			userScoped: true,
 		},
 	}
-	if got := len(surface.Commands); got != len(wants)+2 {
-		t.Fatalf("Zoom cli_surface commands = %d, want %d existing ETL commands plus two reverse-ETL actions", got, len(wants))
-	}
-
 	commands := make(map[string]struct {
 		stream     string
 		intent     string
@@ -689,18 +727,237 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 		}
 	}
 
-	for path := range commands {
-		if _, ok := map[string]struct{}{
-			"users list":                             {},
-			"meetings list":                          {},
-			"webinars list":                          {},
-			"healthcare clinical-notes update":       {},
-			"quality-management interactions create": {},
-		}[path]; !ok {
-			t.Errorf("Zoom mapping must not promote an untracked terminal operation; found %q", path)
+}
+
+// TestRunnableOperationContractsHaveCommands is the corrected parity gate: an
+// operation contract is useful only when a user can reach it through an
+// implemented command. It deliberately limits the first promoted write cohort
+// to operations with no request body. A content type alone is not a typed root
+// payload schema, so an application/json write cannot be made runnable by
+// inventing an --input wrapper.
+func TestRunnableOperationContractsHaveCommands(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	if bundle.Surface == nil || connector.CommandSurface() == nil {
+		t.Fatal("Zoom has no API or CLI surface")
+	}
+
+	type disposition struct {
+		Method string `json:"method"`
+		Path   string `json:"path"`
+		State  string `json:"state"`
+		Source struct {
+			Prerequisites any `json:"prerequisites"`
+		} `json:"source"`
+		Rejection *struct {
+			Reason string `json:"reason"`
+		} `json:"rejection"`
+		Declaration struct {
+			ID string `json:"id"`
+		} `json:"declaration"`
+	}
+	var report struct {
+		LedgerDispositions []disposition `json:"ledger_dispositions"`
+	}
+	raw, err := os.ReadFile(filepath.Join("sources", "zoom-declaration-disposition.json"))
+	if err != nil {
+		t.Fatalf("read declaration disposition: %v", err)
+	}
+	if err := json.Unmarshal(raw, &report); err != nil {
+		t.Fatalf("decode declaration disposition: %v", err)
+	}
+
+	paid := make(map[string]bool, len(report.LedgerDispositions))
+	runnable := make(map[string]bool, len(report.LedgerDispositions))
+	for _, row := range report.LedgerDispositions {
+		if row.Rejection != nil && (row.Rejection.Reason == "requires-elevated-scope" || row.Rejection.Reason == "unsafe-to-exercise") {
+			t.Errorf("operation %q remains disabled with disallowed reason %q", row.Declaration.ID, row.Rejection.Reason)
+		}
+		if row.Declaration.ID == "" {
+			continue
+		}
+		prerequisites := strings.ToLower(strings.TrimSpace(stringifyZoomPrerequisites(row.Source.Prerequisites)))
+		paid[row.Declaration.ID] = row.Rejection != nil && row.Rejection.Reason == "requires-paid-tier" || zoomPrerequisitesRequirePaidTier(prerequisites)
+		runnable[row.Declaration.ID] = row.State == "implemented-pending-certification"
+	}
+
+	commands := make(map[string]connectors.CommandSurfaceCommand, len(connector.CommandSurface().Commands))
+	for _, command := range connector.CommandSurface().Commands {
+		if command.Intent == "direct_read" && command.Operation != "" {
+			commands[command.Operation] = command
+		}
+		if command.Intent == "reverse_etl" && strings.HasPrefix(command.Write, "zoom_") {
+			commands[command.Write] = command
+		}
+	}
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+
+	wantReads, wantWrites, wantDeletes := 0, 0, 0
+	for _, operation := range bundle.Operations {
+		if paid[operation.ID] {
+			if command, ok := commands[operation.ID]; ok && command.Availability == "implemented" {
+				t.Errorf("paid-tier operation %q must not have an implemented command %q", operation.ID, command.Path)
+			}
+			continue
+		}
+		if !runnable[operation.ID] {
+			continue
+		}
+		switch {
+		case operation.Kind == "rest_read" && zoomOperationParametersRunnable(operation):
+			wantReads++
+			assertRunnableZoomOperation(t, connector, commands, actions, operation, "direct_read")
+		case operation.Kind == "rest_write" && operation.REST != nil && operation.REST.ContentType == "" && zoomOperationParametersRunnable(operation):
+			wantWrites++
+			if operation.MutationClass == "delete" {
+				wantDeletes++
+			}
+			assertRunnableZoomOperation(t, connector, commands, actions, operation, "reverse_etl")
 		}
 	}
 
+	if wantReads != 505 || wantWrites != 202 || wantDeletes != 185 {
+		t.Fatalf("runnable cohort reads=%d writes=%d deletes=%d, want 505/202/185", wantReads, wantWrites, wantDeletes)
+	}
+	if got := len(connector.CommandSurface().Commands); got != 712 {
+		t.Fatalf("Zoom runnable CLI commands = %d, want 712", got)
+	}
+}
+
+// TestEveryImplementedZoomCommandStopsAtCredentialBoundary proves each generated
+// command reaches the real CLI dispatcher and refuses before provider I/O when
+// the initialized project has no Zoom credential. Required fixture values only
+// exercise local parsing; they are never stored or sent to Zoom.
+func TestEveryImplementedZoomCommandStopsAtCredentialBoundary(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	surface := connector.CommandSurface()
+	if surface == nil {
+		t.Fatal("Zoom has no CLI surface")
+	}
+
+	root := t.TempDir()
+	var initStdout, initStderr bytes.Buffer
+	if code := cli.Run([]string{"init", "--root", root, "--json"}, &initStdout, &initStderr); code != 0 {
+		t.Fatalf("initialize no-credential project: code=%d stdout=%s stderr=%s", code, initStdout.String(), initStderr.String())
+	}
+
+	for _, command := range surface.Commands {
+		args := []string{"--root", root, "zoom"}
+		args = append(args, strings.Fields(command.Path)...)
+		for _, flag := range command.Flags {
+			if flag.Required {
+				args = append(args, "--"+flag.Name, zoomFixtureFlagValue(flag))
+			}
+		}
+		if command.Intent == "reverse_etl" && strings.HasPrefix(command.Write, "zoom_") {
+			args = append(args, "--confirm", "destructive")
+		}
+		args = append(args, "--json")
+
+		var stdout, stderr bytes.Buffer
+		if code := cli.Run(args, &stdout, &stderr); code != 1 || !strings.Contains(stdout.String()+stderr.String(), "missing --credential") {
+			t.Errorf("CLI %q = code=%d stdout=%s stderr=%s, want missing --credential before provider I/O", command.Path, code, stdout.String(), stderr.String())
+		}
+	}
+}
+
+func zoomFixtureFlagValue(flag connectors.CommandSurfaceFlag) string {
+	if len(flag.Values) > 0 {
+		return flag.Values[0]
+	}
+	switch flag.Type {
+	case "boolean":
+		return "true"
+	case "integer", "number":
+		return "1"
+	default:
+		return "fixture-value"
+	}
+}
+
+func assertRunnableZoomOperation(t *testing.T, connector connectors.Connector, commands map[string]connectors.CommandSurfaceCommand, actions map[string]engine.WriteAction, operation engine.OperationSpec, wantIntent string) {
+	t.Helper()
+	commandKey := operation.ID
+	if wantIntent == "reverse_etl" {
+		commandKey = zoomWriteActionName(operation.ID)
+	}
+	command, ok := commands[commandKey]
+	if !ok {
+		t.Errorf("runnable operation %q has no CLI command", operation.ID)
+		return
+	}
+	if command.Intent != wantIntent || command.Availability != "implemented" {
+		t.Errorf("operation %q command %q = intent=%q availability=%q, want implemented %s", operation.ID, command.Path, command.Intent, command.Availability, wantIntent)
+	}
+	if len(command.APISurface) != 1 || operation.REST == nil || command.APISurface[0].Method != operation.REST.Method || command.APISurface[0].Path != operation.REST.Path {
+		t.Errorf("operation %q command %q does not bind its exact API surface", operation.ID, command.Path)
+	}
+	if wantIntent == "reverse_etl" {
+		action, ok := actions[command.Write]
+		if !ok {
+			t.Errorf("operation %q command %q references missing write action %q", operation.ID, command.Path, command.Write)
+		} else {
+			if action.Kind != operation.MutationClass || action.Method != operation.REST.Method {
+				t.Errorf("operation %q action %q = kind=%q method=%q, want kind=%q method=%q", operation.ID, action.Name, action.Kind, action.Method, operation.MutationClass, operation.REST.Method)
+			}
+			if operation.MutationClass == "delete" && (action.Confirmation == nil || action.Confirmation.Kind != "destructive") {
+				t.Errorf("delete operation %q action %q lacks destructive confirmation", operation.ID, action.Name)
+			}
+		}
+	}
+	if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+		t.Errorf("Preflight(%q) = %v", command.Path, err)
+	}
+}
+
+func zoomOperationParametersRunnable(operation engine.OperationSpec) bool {
+	if operation.REST == nil {
+		return false
+	}
+	for _, parameter := range operation.REST.Parameters {
+		switch parameter.Type {
+		case "string", "integer", "number", "boolean":
+		default:
+			return false
+		}
+	}
+	return true
+}
+
+func zoomWriteActionName(operationID string) string {
+	name := strings.TrimPrefix(operationID, "zoom.")
+	name = strings.NewReplacer(".", "_", "-", "_").Replace(name)
+	return "zoom_" + name
+}
+
+func stringifyZoomPrerequisites(value any) string {
+	switch typed := value.(type) {
+	case string:
+		return typed
+	case []any:
+		parts := make([]string, 0, len(typed))
+		for _, item := range typed {
+			parts = append(parts, stringifyZoomPrerequisites(item))
+		}
+		return strings.Join(parts, " ")
+	default:
+		return ""
+	}
+}
+
+func zoomPrerequisitesRequirePaidTier(prerequisites string) bool {
+	for _, marker := range []string{
+		"paid", "pro or a higher", "pro or higher", "pro plan", "business", "education", "api plan", "webinar plan", "webinar add-on", "webinar add on", "zoom room license", "zoom rooms license", "licensed user", "licensed or an on-prem license", "video sdk account", "subscription",
+	} {
+		if strings.Contains(prerequisites, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 // TestCoveredStreamCommandsExecuteWithFixtures runs each Wave 1 command

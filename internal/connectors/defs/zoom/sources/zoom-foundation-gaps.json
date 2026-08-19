@@ -22,11 +22,38 @@
       ],
       "minimal_change": "Admit an exact REST rest_write operation identity, method, path, policy, and request-contract binding without treating it as a GraphQL operation.",
       "recoverable": true,
-      "affected_count": 575,
+      "affected_count": 0,
       "applicable_source_contract_count": 971,
       "applicable_delete_contract_count": 311,
-      "primary_rejection_count": 575,
-      "restricted_additional_count": 396
+      "primary_rejection_count": 0,
+      "restricted_additional_count": 396,
+      "alternate_typed_write_actions": 202
+    },
+    {
+      "id": "rest-write-root-json-input",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/commandrunner/runner.go:1372-1430 permits a literal root body override only for direct reads, not reverse-ETL REST writes.",
+        "internal/connectors/engine/direct_write.go:616-635 builds a body from declared dotted record fields; the pinned Zoom contracts do not carry closed root body schemas for these writes."
+      ],
+      "minimal_change": "Retain provider-derived closed request body schemas and admit a typed root JSON input only when that schema validates, without adding a generic raw HTTP body escape hatch.",
+      "recoverable": true,
+      "affected_count": 471,
+      "applicable_source_contract_count": 471,
+      "primary_rejection_count": 471
+    },
+    {
+      "id": "rest-query-array-encoding",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/commandrunner/runner.go:1543-1548 stringifies array flag values instead of preserving the provider's declared query serialization.",
+        "The pinned Zoom source contracts identify 25 non-paid read or write operations with array query parameters; no array wire format was inferred."
+      ],
+      "minimal_change": "Carry provider-derived array query serialization and encode only that declared style at the REST transport boundary.",
+      "recoverable": true,
+      "affected_count": 25,
+      "applicable_source_contract_count": 25,
+      "primary_rejection_count": 25
     },
     {
       "id": "file-upload-executor",

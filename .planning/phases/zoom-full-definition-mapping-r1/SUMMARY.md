@@ -1,32 +1,30 @@
-# Summary — Zoom full definition mapping
+# Summary — Zoom runnable command surface
 
 Issue: #4265
 Phase: `zoom-full-definition-mapping-r1`
 
 ## Delivered
 
-- Pinned the public Zoom Developer Docs source set: 35 documents, 12,127,228 bytes, and 1,937 REST
-  operations. The source lock retains URL, capture time, per-document and aggregate SHA-256, byte,
-  OpenAPI, server-root, and method-count evidence.
-- Crosswalked all source and ledger identities: 1,911 exact matches, 26 source-only identities, and
-  two ledger-only Phone paths. The path-variable difference is recorded rather than rewritten.
-- Added 1,748 source-contract inventory declarations: 776 `rest_read`, 971 `rest_write`, and one
-  `binary_download`, including 311 typed destructive DELETE declarations.
-- Added the two real warehouse destination actions, their sanitized fixtures, CLI surface, generated
-  help/manual/catalog/website artifacts, and loopback proof of plan/preview plus write request shape.
-- Added a per-row declare-or-disable disposition ledger for all 1,913 tracked endpoints and all 26
-  source-only operations, plus a separate foundation-gap log.
+- Pinned 35 public Zoom Developer Docs modules (12,127,228 bytes; 1,937 source operations) and
+  crosswalked them with the 1,913-row provider ledger.
+- Declared 1,748 source-backed executor contracts: 776 `rest_read`, 971 `rest_write`, and one
+  bounded binary-download contract, including 311 destructive DELETE contracts.
+- Added 505 source-backed direct-read commands and 202 new approval-gated no-body scalar write
+  commands. Together with three preserved ETL commands and two existing write actions, Zoom now
+  has 712 runnable commands, 204 typed write actions, and 185 typed guarded deletes.
+- Rebuilt connector manuals, catalog/website data, root-help golden transcripts, and the generated
+  operation endpoint ledger from the command declarations.
+- Recorded a disposition for every 1,913 ledger row and 26 source-only rows. The 1,131 disabled
+  ledger rows use only `foundation-gap`, `schema-incompatible`, `provider-does-not-expose`, or
+  `requires-paid-tier`, with evidence and recovery state.
 
 ## Honest limits
 
-- Five ledger rows are declared on this branch: three preserved ETL streams and two fixture-proven,
-  live-uncertified destination actions. The externally-owned Wave 2 cohort contributes 70 direct
-  reads only after parent integration. This is not provider-wide executable parity.
-- `sync_transport.json` is intentionally absent. The required declarative stream source executor is
-  not registered and no source-to-warehouse conformance evidence exists.
-- The foundation log records: operation-backed REST-write coverage (#4281; 971 contracts including
-  311 deletes), bounded file upload (G12; 34 contracts), Clip redirect/origin safety (one contract),
-  and source transport registration/conformance (three existing streams).
-- No credentialed call, live mutation, certification claim, auth change, engine change, generator
-  change, certification-scope edit, or main-branch merge was made. A later central scope admission
-  was consumed only by regenerating Zoom's local uncertified matrix.
+- This is not provider-wide complete parity. It does not claim a runnable command for JSON-body
+  writes, array-query contracts, file uploads, the bounded Clip download redirect case, paid-tier
+  operations, or source/ledger mismatches.
+- No connector-specific sync transport is declared in this slice; that needs the newly merged
+  definition-owned transport foundation and is handled in the following committed slice.
+- The current matrix has no new live certification claim. The next slice adds the candidate
+  declaration and executes only provider-supported live cells with the held Zoom credential.
+- No auth, engine, generator, certification allowlist, or status code was changed.

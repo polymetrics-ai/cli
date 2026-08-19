@@ -1,49 +1,38 @@
-# Verification — Zoom full definition mapping
+# Verification — Zoom runnable command surface
 
 Issue: #4265
 Phase: `zoom-full-definition-mapping-r1`
 
 ## Result
 
-PASS. The final full repository gate completed successfully after the intentionally changed Zoom
-command surface regenerated its golden transcripts. No credentialed Zoom request was made.
+PASS. The clean post-disk-recovery full repository gate completed successfully. No Zoom
+credential or provider request was used in this command-surface slice.
 
-## Focused definition evidence
-
-| Command | Result |
-| --- | --- |
-| `go test -timeout 20m ./internal/connectors/defs/zoom -count=1` | PASS — source inventory, all 311 destructive DELETE contracts, exhaustive disposition accounting, write fixture loopbacks, and command reachability. |
-| `go run ./cmd/connectorgen validate internal/connectors/defs/zoom --json` | PASS — one bundle checked, no findings or warnings. |
-| `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check` | PASS — 552 bundles scanned, zero generated-field drift. |
-| `go run ./cmd/connectorgen certification-sweep . --connector github --check` | PASS — GitHub regression artifact current (1,575 rows / 1,571 CLI commands). |
-| `make connector-boundary` | PASS — whole-tree report clean (292 checked files, 552 loaded connectors). |
-
-## CLI/docs/website parity evidence
+## Focused evidence
 
 | Command | Result |
 | --- | --- |
-| `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors` | PASS — generated connector manual, skill, catalog, and docs outputs. |
-| `pnpm run gen:website-data` in `website/` | PASS — regenerated connector website data and catalog artifacts. |
-| `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1` | PASS — regenerated the nine root-help transcript entries affected by Zoom's command summary. |
-| `go run ./cmd/pm help zoom` | PASS — lists the two approval-gated actions and source-disposition help topic without resolving credentials. |
-| `go run ./cmd/pm zoom --help` | PASS — renders the Zoom command namespace. |
-| `go run ./cmd/pm zoom healthcare clinical-notes update --help` | PASS — renders the typed reverse-ETL action help without a provider call. |
-
-`docs/cli/**` has no Zoom-specific command page; the applicable generated connector manual/skill,
-catalog, golden command manual, and website connector data were regenerated instead.
+| `go test -timeout 20m ./internal/connectors/defs/zoom -count=1` | PASS — 1,748 source contracts, 311 delete contracts, 712 runnable commands, and the exhaustive no-credential preflight sweep. |
+| `go test -timeout 20m ./internal/connectors/engine -run '^TestEveryShippedWriteActionHasExpectedBatchability$' -count=1` | PASS — Zoom actions use the repository default batchability policy while retaining reverse-ETL approval. |
+| `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1` | PASS — regenerated root-help transcripts for the declared Zoom surface. |
+| `go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1` | PASS — regenerated transcripts are asserted without update mode. |
+| `go run ./cmd/connectorgen validate internal/connectors/defs/zoom --json` | PASS — no Zoom definition findings. |
+| `go run ./cmd/connectorgen surface-sync --check` | PASS — zero generated field drift. |
+| `make connector-boundary` | PASS — whole-tree boundary report clean. |
 
 ## Full gate
 
-`make verify` — PASS. It completed `gofmt`, module tidiness, `go vet ./...`, `go test -timeout 20m
-./...`, `go build ./cmd/pm`, connector docs validation, smoke, lint, agent-contract check,
-definition validation, surface sync, GitHub certification regressions, connector boundary, connector
-canon, pinned build dependency, Homebrew notification, and release-target parity checks.
+`make verify` — PASS after disk recovery. It completed `gofmt`, `go mod tidy`, `go vet ./...`,
+`go test -timeout 20m ./...`, `go build ./cmd/pm`, connector docs validation, smoke, lint,
+agent-contract check, definition validation, surface sync, certification artifact checks, connector
+boundary, connector canon, pinned build dependencies, Homebrew notification, and release-target
+parity checks. The all-package test reported `internal/cli` PASS in 1073.053s and the Zoom bundle
+PASS in 825.169s.
 
-## Certification boundary
+## Command/certification boundary
 
-Fixture proof is intentionally not recorded as live certification. After this branch was rebased,
-the centrally-owned Zoom scope admission required a regenerated connector-local
-`certification-matrix.json`; it records fixture evidence and `live_tested: false`. This lane changed
-no allowlist, status, auth, or engine file. The two destination actions are
-`declared-pending-certification`, while all other disabled rows carry their evidence and recovery
-state in `sources/zoom-declaration-disposition.json`.
+The branch exposes 712 commands: 505 direct reads, three preserved ETL streams, and 204 guarded
+reverse-ETL commands backed by 204 typed write actions, including 185 DELETE actions. All are
+implemented pending certification; this verification record makes no fixture or live-certification
+claim. The connector-local certification matrix still records zero live-tested cells for these new
+commands.

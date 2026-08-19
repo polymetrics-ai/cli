@@ -90,12 +90,9 @@
         "applicable": true,
         "declared": true,
         "implemented": true,
-        "fixture_tested": true,
+        "fixture_tested": false,
         "live_tested": false,
-        "fixture_evidence": [
-          "internal/connectors/defs/zoom/fixtures/writes/create_quality_management_interaction.json",
-          "internal/connectors/defs/zoom/fixtures/writes/update_clinical_note.json"
-        ],
+        "fixture_evidence": [],
         "live_evidence": []
       },
       {
@@ -492,12 +489,9 @@
         "applicable": true,
         "declared": true,
         "implemented": true,
-        "fixture_tested": true,
+        "fixture_tested": false,
         "live_tested": false,
-        "fixture_evidence": [
-          "internal/connectors/defs/zoom/fixtures/writes/create_quality_management_interaction.json",
-          "internal/connectors/defs/zoom/fixtures/writes/update_clinical_note.json"
-        ],
+        "fixture_evidence": null,
         "live_evidence": []
       },
       {
