@@ -1528,30 +1528,30 @@
     },
     {
       "connector": "paypal-transaction",
-      "api_surface_rows": 2,
-      "exact_source_rows": 2,
-      "operations_found": 2,
+      "api_surface_rows": 115,
+      "exact_source_rows": 115,
+      "operations_found": 115,
       "coverage_confidence": {
         "level": "complete",
-        "basis": "provider-published Transaction Search OpenAPI document"
+        "basis": "all provider-published PayPal REST OpenAPI documents under openapi/ in the official paypal-rest-api-specifications repository"
       },
       "enabled_operations": 0,
       "enabled_percent": 0,
-      "disabled_operations": 2,
-      "documented_deletes": 0,
+      "disabled_operations": 115,
+      "documented_deletes": 8,
       "enabled_deletes": 0,
       "parity_class_counts": [
         {
           "key": "direct_read",
-          "count": 0
+          "count": 34
         },
         {
           "key": "direct_write",
-          "count": 0
+          "count": 77
         },
         {
           "key": "etl",
-          "count": 2
+          "count": 4
         },
         {
           "key": "reverse_etl",
@@ -1566,7 +1566,7 @@
           "count": 0
         }
       ],
-      "stream_bindings": 2,
+      "stream_bindings": 4,
       "writes_actions": 0,
       "terminal_commands": 0,
       "live_certification": "pending",
@@ -1583,7 +1583,7 @@
       "rejected_by_reason": [
         {
           "key": "declaration-pending",
-          "count": 2
+          "count": 115
         }
       ],
       "reverse_etl_eligibility": {
@@ -1615,12 +1615,17 @@
         }
       },
       "declaration_pending_ids": [
+        "typed-operation-contract-paypal-transaction",
         "sync-transport-source-definition-paypal-transaction"
       ],
       "declaration_pending": [
         {
+          "id": "typed-operation-contract-paypal-transaction",
+          "count": 111
+        },
+        {
           "id": "sync-transport-source-definition-paypal-transaction",
-          "count": 2
+          "count": 4
         }
       ]
     },

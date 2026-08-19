@@ -724,5 +724,11 @@
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
       }
     ]
+  },
+  "counts": {
+    "rest": 69,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 69
   }
 }

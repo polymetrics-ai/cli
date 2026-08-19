@@ -2004,5 +2004,11 @@
         "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json"
       }
     ]
+  },
+  "counts": {
+    "rest": 197,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 197
   }
 }

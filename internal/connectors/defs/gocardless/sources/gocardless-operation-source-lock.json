@@ -1402,5 +1402,11 @@
         "source_url": "https://developer.gocardless.com/openapi-schema-public.json"
       }
     ]
+  },
+  "counts": {
+    "rest": 137,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 137
   }
 }

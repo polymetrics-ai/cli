@@ -4132,5 +4132,11 @@
         "bytes": 11938
       }
     ]
+  },
+  "counts": {
+    "rest": 370,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 370
   }
 }

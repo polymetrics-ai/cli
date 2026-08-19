@@ -109,6 +109,1436 @@
         "source_url": "https://developer.paypal.com/api/rest/",
         "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/plans",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.1; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/billing/plans",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.2; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/billing/plans/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.3; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}\"].get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/billing/plans/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.4; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}\"].patch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/plans/{id}/activate",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.5; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}/activate\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/plans/{id}/deactivate",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.6; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}/deactivate\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/plans/{id}/update-pricing-schemes",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.7; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}/update-pricing-schemes\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/subscriptions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.8; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/billing/subscriptions/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.9; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}\"].get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/billing/subscriptions/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.10; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}\"].patch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/subscriptions/{id}/revise",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.11; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/revise\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/subscriptions/{id}/suspend",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.12; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/suspend\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/subscriptions/{id}/cancel",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.13; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/cancel\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/subscriptions/{id}/activate",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.14; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/activate\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/billing/subscriptions/{id}/capture",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.15; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/capture\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/billing/subscriptions/{id}/transactions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/billing_subscriptions_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.billing.subscriptions.v1.json.16; source_location=openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/transactions\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/catalogs/products",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/catalogs_products_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.catalogs.products.v1.json.1; source_location=openapi/catalogs_products_v1.json:paths[\"/v1/catalogs/products\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/catalogs/products/{product_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/catalogs_products_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.catalogs.products.v1.json.3; source_location=openapi/catalogs_products_v1.json:paths[\"/v1/catalogs/products/{product_id}\"].get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/catalogs/products/{product_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/catalogs_products_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.catalogs.products.v1.json.4; source_location=openapi/catalogs_products_v1.json:paths[\"/v1/catalogs/products/{product_id}\"].patch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/checkout/orders",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/checkout_orders_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.checkout.orders.v2.json.1; source_location=openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/checkout/orders/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/checkout_orders_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.checkout.orders.v2.json.2; source_location=openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}\"].get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/checkout/orders/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/checkout_orders_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.checkout.orders.v2.json.3; source_location=openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}\"].patch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/checkout/orders/{id}/confirm-payment-source",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/checkout_orders_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.checkout.orders.v2.json.4; source_location=openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/confirm-payment-source\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/checkout/orders/{id}/authorize",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/checkout_orders_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.checkout.orders.v2.json.5; source_location=openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/authorize\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/checkout/orders/{id}/capture",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/checkout_orders_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.checkout.orders.v2.json.6; source_location=openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/capture\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/checkout/orders/{id}/track",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/checkout_orders_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.checkout.orders.v2.json.7; source_location=openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/track\"].post"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/checkout/orders/{id}/trackers/{tracker_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/checkout_orders_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.checkout.orders.v2.json.8; source_location=openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/trackers/{tracker_id}\"].patch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/checkout/orders/order-update-callback",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/checkout_orders_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.checkout.orders.v2.json.9; source_location=openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/order-update-callback\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customer/disputes/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.2; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}\"].get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/customer/disputes/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.3; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}\"].patch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/provide-evidence",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.4; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/provide-evidence\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/appeal",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.5; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/appeal\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/adjudicate",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.7; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/adjudicate\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/require-evidence",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.8; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/require-evidence\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/escalate",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.9; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/escalate\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/send-message",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.10; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/send-message\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/make-offer",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.11; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/make-offer\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/accept-offer",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.12; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/accept-offer\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/deny-offer",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.13; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/deny-offer\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/acknowledge-return-item",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.14; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/acknowledge-return-item\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/customer/disputes/{id}/provide-supporting-info",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_disputes_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.disputes.v1.json.15; source_location=openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/provide-supporting-info\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customer/partner-referrals",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_partner_referrals_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.partner.referrals.v2.json.1; source_location=openapi/customer_partner_referrals_v2.json:paths[\"/v2/customer/partner-referrals\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customer/partner-referrals/{partner_referral_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/customer_partner_referrals_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.customer.partner.referrals.v2.json.2; source_location=openapi/customer_partner_referrals_v2.json:paths[\"/v2/customer/partner-referrals/{partner_referral_id}\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/invoices",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.1; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoicing/invoices",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.2; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/invoices/{invoice_id}/send",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.3; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/send\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/invoices/{invoice_id}/remind",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.4; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/remind\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/invoices/{invoice_id}/cancel",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.5; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/cancel\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/invoices/{invoice_id}/payments",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.6; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/payments\"].post"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invoicing/invoices/{invoice_id}/payments/{transaction_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.7; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/payments/{transaction_id}\"].delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/invoices/{invoice_id}/refunds",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.8; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/refunds\"].post"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invoicing/invoices/{invoice_id}/refunds/{transaction_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.9; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/refunds/{transaction_id}\"].delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/invoices/{invoice_id}/generate-qr-code",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.10; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/generate-qr-code\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/generate-next-invoice-number",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.11; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/generate-next-invoice-number\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoicing/invoices/{invoice_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.12; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}\"].get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/invoicing/invoices/{invoice_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.13; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}\"].put"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invoicing/invoices/{invoice_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.14; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}\"].delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/search-invoices",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.15; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/search-invoices\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoicing/templates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.16; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoicing/templates",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.17; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoicing/templates/{template_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.18; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates/{template_id}\"].get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/invoicing/templates/{template_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.19; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates/{template_id}\"].put"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invoicing/templates/{template_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.20; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates/{template_id}\"].delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoicing/accounting-sync/merchant/connections",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.21; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/accounting-sync/merchant/connections\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoicing/accounting-sync/invoices/{id}/connections",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.22; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/accounting-sync/invoices/{id}/connections\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/notifications/webhooks",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.1; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.2; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks/{webhook_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.3; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks/{webhook_id}\"].get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/notifications/webhooks/{webhook_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.4; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks/{webhook_id}\"].patch"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/notifications/webhooks/{webhook_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.5; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks/{webhook_id}\"].delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks/{webhook_id}/event-types",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.6; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks/{webhook_id}/event-types\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/notifications/webhooks-lookup",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.7; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks-lookup",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.8; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks-lookup/{webhook_lookup_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.9; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup/{webhook_lookup_id}\"].get"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/notifications/webhooks-lookup/{webhook_lookup_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.10; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup/{webhook_lookup_id}\"].delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/notifications/verify-webhook-signature",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.11; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/verify-webhook-signature\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks-event-types",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.12; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-event-types\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks-events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.13; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-events\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks-events/{event_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.14; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-events/{event_id}\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/notifications/webhooks-events/{event_id}/resend",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.15; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-events/{event_id}/resend\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/notifications/simulate-event",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.16; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/simulate-event\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/payment-experience/web-profiles",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.1; source_location=openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payment-experience/web-profiles",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.2; source_location=openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles\"].get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/payment-experience/web-profiles/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.3; source_location=openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles/{id}\"].put"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/payment-experience/web-profiles/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.4; source_location=openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles/{id}\"].patch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payment-experience/web-profiles/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.5; source_location=openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles/{id}\"].get"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/payment-experience/web-profiles/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.6; source_location=openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles/{id}\"].delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payments/authorizations/{authorization_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payment_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payment.v2.json.1; source_location=openapi/payments_payment_v2.json:paths[\"/v2/payments/authorizations/{authorization_id}\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/authorizations/{authorization_id}/capture",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payment_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payment.v2.json.2; source_location=openapi/payments_payment_v2.json:paths[\"/v2/payments/authorizations/{authorization_id}/capture\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/authorizations/{authorization_id}/reauthorize",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payment_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payment.v2.json.3; source_location=openapi/payments_payment_v2.json:paths[\"/v2/payments/authorizations/{authorization_id}/reauthorize\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/authorizations/{authorization_id}/void",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payment_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payment.v2.json.4; source_location=openapi/payments_payment_v2.json:paths[\"/v2/payments/authorizations/{authorization_id}/void\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payments/captures/{capture_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payment_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payment.v2.json.5; source_location=openapi/payments_payment_v2.json:paths[\"/v2/payments/captures/{capture_id}\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/captures/{capture_id}/refund",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payment_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payment.v2.json.6; source_location=openapi/payments_payment_v2.json:paths[\"/v2/payments/captures/{capture_id}/refund\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/find-eligible-methods",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payment_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payment.v2.json.7; source_location=openapi/payments_payment_v2.json:paths[\"/v2/payments/find-eligible-methods\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payments/refunds/{refund_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payment_v2.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payment.v2.json.8; source_location=openapi/payments_payment_v2.json:paths[\"/v2/payments/refunds/{refund_id}\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/payments/payouts",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payouts_batch_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payouts.batch.v1.json.1; source_location=openapi/payments_payouts_batch_v1.json:paths[\"/v1/payments/payouts\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payments/payouts/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payouts_batch_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payouts.batch.v1.json.2; source_location=openapi/payments_payouts_batch_v1.json:paths[\"/v1/payments/payouts/{id}\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payments/payouts-item/{payout_item_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payouts_batch_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payouts.batch.v1.json.3; source_location=openapi/payments_payouts_batch_v1.json:paths[\"/v1/payments/payouts-item/{payout_item_id}\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/payments/payouts-item/{payout_item_id}/cancel",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payments_payouts_batch_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payments.payouts.batch.v1.json.4; source_location=openapi/payments_payouts_batch_v1.json:paths[\"/v1/payments/payouts-item/{payout_item_id}/cancel\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shipping/trackers-batch",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/shipping_shipment_tracking_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.1; source_location=openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers-batch\"].post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/shipping/trackers",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/shipping_shipment_tracking_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.2; source_location=openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shipping/trackers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/shipping_shipment_tracking_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.3; source_location=openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers\"].get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/shipping/trackers/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/shipping_shipment_tracking_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.4; source_location=openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers/{id}\"].put"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/shipping/trackers/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/shipping_shipment_tracking_v1.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.5; source_location=openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers/{id}\"].get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/vault/payment-tokens",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/vault_payment_tokens_v3.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.1; source_location=openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/payment-tokens\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/vault/payment-tokens",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/vault_payment_tokens_v3.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.2; source_location=openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/payment-tokens\"].get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/vault/payment-tokens/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/vault_payment_tokens_v3.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.3; source_location=openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/payment-tokens/{id}\"].get"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v3/vault/payment-tokens/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/vault_payment_tokens_v3.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.4; source_location=openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/payment-tokens/{id}\"].delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/vault/setup-tokens",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/vault_payment_tokens_v3.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.5; source_location=openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/setup-tokens\"].post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/vault/setup-tokens/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/vault_payment_tokens_v3.json",
+        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.6; source_location=openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/setup-tokens/{id}\"].get"
+      }
     }
   ],
   "operation_ledger_version": 1

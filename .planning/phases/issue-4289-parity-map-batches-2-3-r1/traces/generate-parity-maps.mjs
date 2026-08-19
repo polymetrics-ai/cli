@@ -26,7 +26,14 @@ const batch3Sources = {
   "linkedin-ads": { url: "https://learn.microsoft.com/_sitemaps/linkedin_en-us_1.xml", parser: "linkedin-rendered", confidence: { level: "complete", basis: "provider sitemap plus every current LinkedIn Marketing rendered-reference page" } },
   "aircall": { url: "https://developers.aircall.io/api-references", parser: "aircall-rendered", confidence: { level: "complete", basis: "provider's single complete rendered Public API reference; every rendered endpoint index entry is parsed, while the two literal example IDs are excluded in favour of their documented parameter templates" } },
   "xero": { url: "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml", parser: "surface-machine", confidence: { level: "complete", basis: "provider-published Xero Accounting OpenAPI document" } },
-  "paypal-transaction": { url: "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/reporting_transactions_v1.json", parser: "openapi", confidence: { level: "complete", basis: "provider-published Transaction Search OpenAPI document" } },
+  "paypal-transaction": {
+    url: "https://codeload.github.com/paypal/paypal-rest-api-specifications/tar.gz/refs/heads/main",
+    parser: "paypal-specifications",
+    confidence: {
+      level: "complete",
+      basis: "all provider-published PayPal REST OpenAPI documents under openapi/ in the official paypal-rest-api-specifications repository"
+    }
+  },
   "gocardless": { url: "https://developer.gocardless.com/openapi-schema-public.json", parser: "openapi", confidence: { level: "complete", basis: "provider-published GoCardless OpenAPI document served to its public API reference" } },
   "amazon-seller-partner": { url: "https://codeload.github.com/amzn/selling-partner-api-models/tar.gz/refs/heads/main", parser: "amazon-models", confidence: { level: "complete", basis: "all provider-published Selling Partner OpenAPI model documents under models/" } },
   "miro": { url: "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json", parser: "openapi", confidence: { level: "complete", basis: "provider-published Miro OpenAPI document linked by the API reference" } }
@@ -210,6 +217,35 @@ async function amazonModelOperations(connector, archiveURL) {
       operation.id = `${connector}.rest.${model.path.replace(/[^A-Za-z0-9]+/g, ".")}.${operation.id.split(".").pop()}`;
       operation.source_location = `${model.path}:${operation.source_location}`;
       operations.push(operation);
+    }
+  }
+  return { operations, bytes: archive.bytes.length, sha256: archive.sha256, contentType: archive.contentType, sourceDocuments };
+}
+
+async function paypalSpecificationsOperations(connector, archiveURL) {
+  const archive = await fetchPublicBytes(archiveURL);
+  const specifications = tarEntries(archive.bytes)
+    .filter((entry) => /(?:^|\/)openapi\/[^/]+\.json$/.test(entry.path))
+    .map((entry) => ({
+      path: entry.path.replace(/^.*?openapi\//, "openapi/"),
+      content: entry.content
+    }))
+    .sort((left, right) => left.path.localeCompare(right.path));
+  if (specifications.length === 0) throw new Error("PayPal source archive has no OpenAPI documents");
+  const operations = [];
+  const sourceDocuments = [];
+  for (const specification of specifications) {
+    const sourceURL = `https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/${specification.path}`;
+    const sha256 = createHash("sha256").update(specification.content).digest("hex");
+    sourceDocuments.push({ path: specification.path, source_url: sourceURL, sha256, bytes: specification.content.length });
+    const document = JSON.parse(specification.content.toString("utf8"));
+    const prefix = specification.path.replace(/[^A-Za-z0-9]+/g, ".").replace(/^\.|\.$/g, "").toLowerCase();
+    for (const [index, operation] of openAPIOperations(connector, document, sourceURL).entries()) {
+      operations.push({
+        ...operation,
+        id: `${connector}.rest.${prefix}.${index + 1}`,
+        source_location: `${specification.path}:${operation.source_location}`
+      });
     }
   }
   return { operations, bytes: archive.bytes.length, sha256: archive.sha256, contentType: archive.contentType, sourceDocuments };
@@ -571,6 +607,11 @@ async function batch3Lock(connector, surface) {
     artifact = { sha256: aggregate.sha256, bytes: aggregate.bytes, contentType: aggregate.contentType };
     operations = aggregate.operations;
     sourceDocuments = aggregate.sourceDocuments;
+  } else if (plan.parser === "paypal-specifications") {
+    const aggregate = await paypalSpecificationsOperations(connector, plan.url);
+    artifact = { sha256: aggregate.sha256, bytes: aggregate.bytes, contentType: aggregate.contentType };
+    operations = aggregate.operations;
+    sourceDocuments = aggregate.sourceDocuments;
   } else if (plan.parser === "linkedin-rendered") {
     const aggregate = await linkedInRenderedOperations(connector, plan.url);
     artifact = { sha256: aggregate.sha256, bytes: aggregate.bytes, contentType: "application/vnd.microsoft.learn.rendered-reference-set+html" };
@@ -599,10 +640,13 @@ async function batch3Lock(connector, surface) {
       source_url: plan.url
     }));
   }
+  const rootCounts = { rest: operations.length, graphql_query: 0, graphql_mutation: 0, total: operations.length };
+  const restCounts = { total: operations.length, by_kind: { rest: operations.length }, by_method: methodCounts(operations) };
   return {
     schema_version: 2,
     connector,
     captured_at: generatedAt,
+    counts: rootCounts,
     rest: {
       source_url: plan.url,
       sha256: artifact.sha256,
@@ -616,9 +660,11 @@ async function batch3Lock(connector, surface) {
           ? "parsed from every current LinkedIn Marketing rendered-reference page listed in the provider sitemap"
           : plan.parser === "aircall-rendered"
             ? "parsed from every rendered endpoint-index entry in Aircall's complete Public API reference"
+            : plan.parser === "paypal-specifications"
+              ? "parsed from every provider-published PayPal REST OpenAPI document under openapi/ in the official specifications repository"
           : "parsed from the pinned provider machine-readable source artifact",
       coverage_confidence: plan.confidence,
-      counts: { total: operations.length, by_kind: { rest: operations.length }, by_method: methodCounts(operations) },
+      counts: restCounts,
       operation_counts: methodCounts(operations),
       operations,
       ...(plan.parser === "facebook-codegen" ? { dynamic_surface: { kind: "graph-node-edge", basis: "The provider source declares operations by owner type and edge while the concrete Graph path is selected by a runtime object ID; counts.total is the finite count of named source declarations, not an estimate of object instances." } } : {}),
@@ -640,6 +686,7 @@ async function loadSourceLock(connector, surface) {
   }
   lock.captured_at = generatedAt;
   const operations = sourceOperations(lock);
+  lock.counts = { ...lock.counts, rest: operations.length, total: operations.length };
   lock.rest.counts = { total: operations.length, by_kind: { rest: operations.length }, by_method: methodCounts(operations) };
   lock.rest.coverage_confidence = { level: "complete", basis: "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document" };
   return lock;
@@ -714,8 +761,14 @@ function summary(connector, lock, rows) {
 }
 
 async function main() {
+  const requested = process.argv.slice(2);
+  const known = new Set([...batch2, ...batch3]);
+  for (const connector of requested) {
+    if (!known.has(connector)) throw new Error(`unknown connector ${connector}`);
+  }
+  const targets = requested.length === 0 ? [...batch2, ...batch3] : requested;
   const reports = [];
-  for (const connector of [...batch2, ...batch3]) {
+  for (const connector of targets) {
     const surface = mergeBaselineSurface(connector, JSON.parse(await readFile(definitionPath(connector, "api_surface.json"), "utf8")));
     const lock = await loadSourceLock(connector, surface);
     const mapped = mapSurface(connector, surface, lock);
@@ -741,7 +794,9 @@ async function main() {
     await writeFile(definitionPath(connector, "api_surface.json"), pretty(mapped.surface));
     reports.push({ connector, ...disposition.summary });
   }
-  await writeFile(path.join(root, ".planning", "phases", "issue-4289-parity-map-batches-2-3-r1", "traces", "parity-map-summary.json"), pretty({ generated_at: generatedAt, connectors: reports }));
+  if (requested.length === 0) {
+    await writeFile(path.join(root, ".planning", "phases", "issue-4289-parity-map-batches-2-3-r1", "traces", "parity-map-summary.json"), pretty({ generated_at: generatedAt, connectors: reports }));
+  }
 }
 
 await main();

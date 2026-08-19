@@ -2382,5 +2382,11 @@
         "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml"
       }
     ]
+  },
+  "counts": {
+    "rest": 235,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 235
   }
 }

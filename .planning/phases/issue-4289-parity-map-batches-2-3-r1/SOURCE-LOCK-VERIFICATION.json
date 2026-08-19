@@ -381,23 +381,23 @@
       "api_surface_counts": {
         "baseline_revision": "acb85dc03",
         "old": 10,
-        "new": 10,
-        "basis": "provider-published Transaction Search OpenAPI document"
+        "new": 120,
+        "basis": "all provider-published PayPal REST OpenAPI documents under openapi/ in the official paypal-rest-api-specifications repository"
       },
-      "operations_found": 2,
+      "operations_found": 115,
       "coverage_confidence": {
         "level": "complete",
-        "basis": "provider-published Transaction Search OpenAPI document"
+        "basis": "all provider-published PayPal REST OpenAPI documents under openapi/ in the official paypal-rest-api-specifications repository"
       },
       "enabled_operations": 0,
-      "disabled_operations": 2,
-      "documented_deletes": 0,
+      "disabled_operations": 115,
+      "documented_deletes": 8,
       "enabled_deletes": 0,
       "source_lock": {
-        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/reporting_transactions_v1.json",
+        "source_url": "https://codeload.github.com/paypal/paypal-rest-api-specifications/tar.gz/refs/heads/main",
         "captured_at": "2026-08-19T00:00:00Z",
-        "bytes": 75463,
-        "sha256": "40f2af0c02c204dde9227b14a6f9f91c2a6cc4222fe2c7c20983c6bc6f9e52b4",
+        "bytes": 421176,
+        "sha256": "dda4b70942c2b45281d7d3330c2fb203d6e0097e84aeacc012d28d6581b5e1bf",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },

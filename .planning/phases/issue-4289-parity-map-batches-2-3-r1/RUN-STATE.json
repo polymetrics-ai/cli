@@ -2,7 +2,7 @@
   "issue": 4289,
   "branch": "fm/cli-map-batch23-r1",
   "base": "main",
-  "state": "source-lock-remediation-verified",
+  "state": "held-pr-source-accounting-repair-verified",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "commands_reviewed": [
@@ -18,7 +18,7 @@
     "batch_3": ["gong", "google-ads", "facebook-marketing", "linkedin-ads", "aircall", "xero", "paypal-transaction", "gocardless", "amazon-seller-partner", "miro"]
   },
   "evidence": {
-    "map_integrity": "green: 19 connectors / 3340 documented operations",
+    "map_integrity": "green: 19 connectors / 5127 documented operations (PayPal complete-corpus and root-count repair)",
     "connectorgen_validate": "green: 552 connectors / 0 findings",
     "surface_sync": "green: 552 connectors / 0 field changes"
   },
@@ -27,6 +27,6 @@
     "runtime_preflight": "green",
     "connector_boundary": "green: clean / 292 files / 552 connectors",
     "repository_gates": "source-map, connectorgen validate, surface-sync, targeted conformance/runtime preflight, internal/cli, build, vet, generated checks, and connector-boundary green after source-lock remediation",
-    "source_lock_remediation": "all 19 locks carry counts.total, per-kind/method counts, operations_found, old/new api_surface report, and complete confidence basis; provider inventories are no longer bounded by the prior api_surface"
+    "source_lock_remediation": "all 19 locks carry root counts.total, nested per-kind/method counts, operations_found, old/new api_surface report, and complete confidence basis; PayPal maps all 13 official OpenAPI documents and provider inventories are no longer bounded by the prior api_surface"
   }
 }

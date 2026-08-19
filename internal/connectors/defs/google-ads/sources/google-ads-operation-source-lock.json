@@ -1660,5 +1660,11 @@
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22"
       }
     ]
+  },
+  "counts": {
+    "rest": 163,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 163
   }
 }
