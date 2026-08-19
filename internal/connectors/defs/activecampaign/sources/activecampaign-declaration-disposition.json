@@ -57,15 +57,8 @@
     "stream_bindings": 11,
     "writes_actions": 0,
     "terminal_commands": 0,
-    "gap_ids": [
-      "generic-typed-destination-executor"
-    ],
-    "foundation_gaps": [
-      {
-        "id": "generic-typed-destination-executor",
-        "count": 157
-      }
-    ],
+    "gap_ids": [],
+    "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
@@ -83,18 +76,19 @@
         }
       },
       "destination_transport": {
-        "state": "foundation-gap",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-destination-definition-activecampaign",
+          "evidence": "docs/sync-transport-definition.md defines the destination contract; internal/connectors/defs/activecampaign/sync_transport.json and a connector-owned typed writes.json action are absent.",
+          "minimal_change": "Author a closed connector-owned typed writes.json action, then declare exact source bindings, per-mode strategy, acknowledgement, fixture, and conformance evidence in sync_transport.json using the #4304 declarative typed-destination foundation."
         }
       }
     },
     "declaration_pending_ids": [
       "runnable-command-binding-activecampaign",
-      "typed-operation-contract-activecampaign",
-      "sync-transport-source-definition-activecampaign"
+      "sync-transport-destination-definition-activecampaign",
+      "sync-transport-source-definition-activecampaign",
+      "typed-operation-contract-activecampaign"
     ],
     "declaration_pending": [
       {
@@ -104,6 +98,10 @@
       {
         "id": "typed-operation-contract-activecampaign",
         "count": 285
+      },
+      {
+        "id": "sync-transport-destination-definition-activecampaign",
+        "count": 157
       }
     ],
     "runnable_cli_surface_commands": 0,
@@ -157,12 +155,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -211,12 +205,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -265,12 +255,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -319,12 +305,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -373,12 +355,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -427,12 +405,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -481,12 +455,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -535,12 +505,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -589,12 +555,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -643,12 +605,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -697,12 +655,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -751,12 +705,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -805,12 +755,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -859,12 +805,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -913,12 +855,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -967,12 +905,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1021,12 +955,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1075,12 +1005,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1129,12 +1055,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1183,12 +1105,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1237,12 +1155,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1291,12 +1205,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1345,12 +1255,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1399,12 +1305,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1453,12 +1355,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1507,12 +1405,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1561,12 +1455,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1615,12 +1505,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1669,12 +1555,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1723,12 +1605,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1777,12 +1655,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1831,12 +1705,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1885,12 +1755,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1939,12 +1805,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -1993,12 +1855,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2047,12 +1905,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2101,12 +1955,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2155,12 +2005,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2209,12 +2055,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2263,12 +2105,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2317,12 +2155,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2371,12 +2205,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2425,12 +2255,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2479,12 +2305,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2533,12 +2355,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2587,12 +2405,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2641,12 +2455,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2695,12 +2505,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2749,12 +2555,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -2803,12 +2605,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9068,12 +8866,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9122,12 +8916,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9176,12 +8966,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9230,12 +9016,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9284,12 +9066,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9338,12 +9116,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9392,12 +9166,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9446,12 +9216,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9500,12 +9266,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9554,12 +9316,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9608,12 +9366,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9662,12 +9416,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9716,12 +9466,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9770,12 +9516,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9824,12 +9566,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9878,12 +9616,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9932,12 +9666,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -9986,12 +9716,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10040,12 +9766,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10094,12 +9816,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10148,12 +9866,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10202,12 +9916,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10256,12 +9966,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10310,12 +10016,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10364,12 +10066,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10418,12 +10116,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10472,12 +10166,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10526,12 +10216,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10580,12 +10266,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10634,12 +10316,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10688,12 +10366,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10742,12 +10416,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10796,12 +10466,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10850,12 +10516,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10904,12 +10566,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -10958,12 +10616,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11012,12 +10666,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11066,12 +10716,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11120,12 +10766,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11174,12 +10816,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11228,12 +10866,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11282,12 +10916,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11336,12 +10966,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11390,12 +11016,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11444,12 +11066,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11498,12 +11116,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11552,12 +11166,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11606,12 +11216,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11660,12 +11266,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11714,12 +11316,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11768,12 +11366,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11822,12 +11416,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11876,12 +11466,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11930,12 +11516,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -11984,12 +11566,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12038,12 +11616,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12092,12 +11666,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12146,12 +11716,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12200,12 +11766,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12254,12 +11816,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12308,12 +11866,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12362,12 +11916,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12416,12 +11966,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12470,12 +12016,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12524,12 +12066,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12578,12 +12116,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12632,12 +12166,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12686,12 +12216,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12740,12 +12266,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12794,12 +12316,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12848,12 +12366,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12902,12 +12416,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -12956,12 +12466,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13010,12 +12516,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13064,12 +12566,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13118,12 +12616,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13172,12 +12666,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13226,12 +12716,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13280,12 +12766,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13334,12 +12816,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13388,12 +12866,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13442,12 +12916,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13496,12 +12966,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13550,12 +13016,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13604,12 +13066,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13658,12 +13116,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13712,12 +13166,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13766,12 +13216,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13820,12 +13266,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13874,12 +13316,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13928,12 +13366,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -13982,12 +13416,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14036,12 +13466,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14090,12 +13516,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14144,12 +13566,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14198,12 +13616,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14252,12 +13666,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14306,12 +13716,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14360,12 +13766,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14414,12 +13816,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14468,12 +13866,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14522,12 +13916,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14576,12 +13966,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14630,12 +14016,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14684,12 +14066,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14738,12 +14116,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     },
@@ -14792,12 +14166,8 @@
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination factory selects issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
         }
       }
     }
@@ -14806,6 +14176,6 @@
   "notes": [
     "Complete six-class source-locked map regenerated from the provider OpenAPI 3.1.0 document; every 296 pinned operation has exactly one primary parity class.",
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
-    "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound."
+    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped."
   ]
 }

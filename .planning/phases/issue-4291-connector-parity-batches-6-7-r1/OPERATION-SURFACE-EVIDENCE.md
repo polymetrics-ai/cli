@@ -22,7 +22,16 @@ and conformance work named.
 | --- | ---: | --- |
 | `declarative-operation-route-override` | 5 | Open: Help Scout v3 route selection; owned by `cli-operation-route-override-foundation-r1` |
 | `declarative-typed-destination-action-specific-source-bindings` | 1 | Open: exact Help Scout `update_customer` source binding |
-| `generic-typed-destination-executor` | 612 | Stale only on the five remaining unreconciled ledgers; next independent increment removes it |
+
+## Increment 2 — stale destination-gap reconciliation complete
+
+`segment`, `activecampaign`, `iterable`, `square`, and `braintree` supplied the remaining 612
+stale generic-destination entries. As in increment 1, none has a connector-owned typed
+`writes.json` action, so every direct write is explicitly `declaration-pending` for reverse ETL.
+The generic-destination identifier now occurs in no in-scope source ledger or operation-evidence
+row. This is not a declaration of deployability: each connector still needs its closed typed action,
+source binding, acknowledgement, per-mode strategy, fixture, conformance evidence, generated CLI,
+and provider-live certification.
 
 The operation-level fixture/conformance cells are intentionally recorded as `not_recorded` where
 the current declaration does not tie evidence to that exact provider operation. They are not

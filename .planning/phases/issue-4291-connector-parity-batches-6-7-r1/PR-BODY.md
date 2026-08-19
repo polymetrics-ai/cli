@@ -79,6 +79,14 @@ certification never make an operation unreachable.
 - `FOUNDATION-GAPS.json` records shared provider-neutral gaps once per stable ID, with exact
   source URL/version/hash rows and batch/portfolio fan-out. Its current `merge_ready: false` is
   authoritative: no open foundation-gap operation is counted as enabled or merge-ready.
+- `OPERATION-SURFACE-EVIDENCE.json` is the captain-required machine record for all 3,932 provider
+  operations: source URL/version/SHA-256, canonical mapping, seven surface cells, generated
+  projection cells, fixture/conformance status, and merge readiness. Its first independent
+  reconciliation removed all 1,111 stale pre-#4304 generic-destination gap rows in Salesloft,
+  Copper, Klaviyo, Intercom, Freshdesk, Segment, ActiveCampaign, Iterable, Square, and Braintree;
+  the connectors still lack typed actions, so those rows are honestly `declaration-pending`.
+  Missing per-operation fixture/conformance evidence is explicit `not_recorded`, never N/A or
+  provider-live success.
 
 ## Lifecycle and verification
 
@@ -91,6 +99,8 @@ certification never make an operation unreachable.
 - Current foundation-reconciliation checks all pass: `go run ./cmd/connectorgen validate`,
   `go run ./cmd/connectorgen surface-sync --check`, Help Scout commandrunner/engine/App/CLI/
   connectors focused tests, `npm --prefix website run gen:website-data`, and `git diff --check`.
+  The first operation-evidence increment also passed exact five-ledger and 3,932-row `jq`
+  assertions before its connector validation and surface-sync checks.
   The installed, fresh-built binary exposes the closed declarative transport command and Help Scout
   inspection; the connection path stops at missing credentials before provider I/O. Full repository
   gates will be recorded after the connector-owned increments complete.

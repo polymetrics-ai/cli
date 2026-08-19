@@ -329,3 +329,25 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   five ledgers and no direct-write reverse-ETL state differs from `declaration-pending`. The
   operation evidence retains exactly 612 stale rows in the five untouched ledgers as the next
   bounded increment, plus five Help Scout route and one action-specific source-binding open rows.
+
+# Stale typed-destination gap reconciliation — increment 2 (2026-08-20)
+
+- **RED:** The first increment deliberately retained 612 stale generic-gap rows in Segment,
+  ActiveCampaign, Iterable, Square, and Braintree so the connector scope stayed bounded.
+- **GREEN:** Those five ledgers now have the same explicit connector-owned declaration-pending
+  state as increment 1. All 1,111 affected direct-write rows are preserved as direct writes; none
+  is hidden as unsafe, privileged, destructive, uncommon, binary, or un-certified.
+- **ASSERTION:** The 3,932-row operation evidence has complete source URL/version/SHA-256 trace
+  and all seven cell keys for every row; it contains no `generic-typed-destination-executor` gap.
+  Exactly six open foundation-gap rows remain: five Help Scout route-override rows and one Help
+  Scout action-specific source-binding row. `FOUNDATION-GAPS.json` has the same two open stable IDs
+  and portfolio `merge_ready: false`.
+- **GATES (all pass):** the exact five-ledger and 3,932-row `jq -e` assertions described above;
+  `go run ./cmd/connectorgen validate` (`552 connector(s) checked, 0 findings`);
+  `go run ./cmd/connectorgen surface-sync --check` (`552 connector(s)` and `0` drift);
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1`;
+  `go test -timeout 20m ./internal/connectors/engine -run
+  'TestShippedOperationEndpointLedgerRejectsMissingProjection|TestLoadAll' -count=1`;
+  `npm --prefix website run gen:website-data`; `make connector-boundary` (managed detached run,
+  exit `0`, log `/tmp/cli-map-batch67-r1-connector-boundary.log`); and `git diff --check`.
