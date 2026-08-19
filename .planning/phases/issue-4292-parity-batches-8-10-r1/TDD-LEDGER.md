@@ -219,6 +219,20 @@
   1,249 precise partials). The focused trace, bundle validation, surface sync,
   and uncached runtime-preflight sweep pass.
 
+### CLI manual snapshot proof
+
+- **Red:** the full `internal/cli` suite exposed stale root-help golden
+  transcripts after the generated connector namespaces became visible in the
+  runtime manual. The failure is a snapshot parity failure, not a connector
+  dispatch failure.
+- **Green:** the test-supported
+  `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1` path refreshed only the nine root
+  help variants; the focused transcript test and a full uncached
+  `go test -timeout 20m ./internal/cli` rerun pass. The installed binary also
+  proves an implemented Brex command reaches `missing --credential` in an
+  initialized credential-free project, while a no-singular-binding Zoho action
+  returns its exact declared partial block reason.
+
 ## Red
 
 - The captain's `SOURCE-LOCK-DEFECT.md` established the initial red state:

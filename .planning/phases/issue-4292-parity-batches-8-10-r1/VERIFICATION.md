@@ -249,7 +249,26 @@
   reran all three declaration integrity checks, connector validation,
   `surface-sync --check`, targeted Go tests, `go build`, lint, and the agent
   contract check. No map retains the superseded HEAD/pagination engine-gap IDs.
-- [ ] Materialize and verify the remaining 25 connector groups' typed-write
-  CLI surfaces, preserving every exact route-binding failure as partial rather
-  than guessing a route.
-- [ ] Review, commit, push, and update existing PR #4301.
+- [x] Full uncached `go test -timeout 20m ./internal/cli` after the supported
+  nine-root-transcript refresh — passed in 779.762s. The focused
+  `TestGoldenTranscripts` red/green repair passed first.
+- [x] Built `/tmp/pm-4292-reachability-probe`, initialized a credential-free
+  project, and exercised the real connector CLI: Brex `update vendor apply`
+  stops at `error: missing --credential`; Zoho `update contact person 2 apply`
+  returns its exact singular-`covered_by.write` partial blocker.
+- [x] Fetched `origin/fm/cli-reverse-etl-destination-r1` at
+  `c6f03c937c1f4e516d339b48e8c2143726179fdf`; it is an ancestor of this
+  branch. Its installed `pm etl` manual exposes only the existing closed
+  GitHub/PostgreSQL transport routes, so application-level declarative
+  destination dispatch remains correctly pending the foundation lane.
+- [x] Final map/ledger gates: `verify-parity-maps.mjs` for batches 8, 9, and
+  10; `reconcile-seven-surfaces.mjs --check` for all 30; real promotability
+  audit; `connectorgen validate`; and `surface-sync --check` all passed.
+- [x] Final repository gates: `go test -timeout 20m` for connectorgen,
+  conformance, and commandrunner; `go vet ./...`; `go build ./cmd/pm`; and
+  individual `make tidy-check`, `lint`, `docs-check-no-build`,
+  `smoke-no-build`, `agent-contract-check`, and `release-workflow-check`
+  passed. Detached `go run ./cmd/connectorgen boundary . --json` completed
+  with zero findings (capture: `/tmp/pm-4292-connector-boundary.json`).
+- [ ] Refresh the foundation head once its App/CLI dispatch lands, exercise
+  that installed route, then push and update existing PR #4301.
