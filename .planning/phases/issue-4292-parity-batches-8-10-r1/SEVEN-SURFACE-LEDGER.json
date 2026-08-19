@@ -2,6 +2,21 @@
   "schema_version": 1,
   "issue": 4292,
   "application_dispatch": "pending-foundation-app-cli-integration",
+  "pre_merge_gate": {
+    "status": "blocked-common-foundations",
+    "rule": "every provider-defined operation requires source trace, canonical mapping, enabled runtime reachability, generated CLI command, generated website row, and executable fixture/conformance evidence",
+    "capability_classes": [
+      "etl",
+      "reverse_etl",
+      "direct_read",
+      "direct_write",
+      "binary_download",
+      "binary_upload"
+    ],
+    "absence_rule": "N/A is valid only when provider evidence proves the capability absent; scope, tier, destructive classification, or safety metadata never disable a capability",
+    "runtime_rule": "scope, tier, destructive, and safety constraints are typed runtime metadata and confirmations",
+    "current_evidence": "batch ledger has source/canonical mapping and action-level CLI dispositions, but lacks common operation-level runtime, website, and fixture/conformance projections"
+  },
   "rows": [
     {
       "batch": 8,

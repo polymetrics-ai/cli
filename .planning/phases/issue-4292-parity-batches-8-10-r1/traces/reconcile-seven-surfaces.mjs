@@ -16,6 +16,19 @@ const defs = resolve(root, "internal/connectors/defs");
 const ledgerPath = resolve(phase, "SEVEN-SURFACE-LEDGER.json");
 const summaryPath = resolve(phase, "SEVEN-SURFACE-SUMMARY.md");
 
+// Captain pre-merge gate. The aggregate seven-surface report is not evidence
+// that every provider operation has the complete runtime/CLI/website/fixture
+// chain below. Keep that missing common-foundation work explicit in the
+// machine ledger until an operation-level projection can prove each cell.
+const preMergeGate = {
+  status: "blocked-common-foundations",
+  rule: "every provider-defined operation requires source trace, canonical mapping, enabled runtime reachability, generated CLI command, generated website row, and executable fixture/conformance evidence",
+  capability_classes: ["etl", "reverse_etl", "direct_read", "direct_write", "binary_download", "binary_upload"],
+  absence_rule: "N/A is valid only when provider evidence proves the capability absent; scope, tier, destructive classification, or safety metadata never disable a capability",
+  runtime_rule: "scope, tier, destructive, and safety constraints are typed runtime metadata and confirmations",
+  current_evidence: "batch ledger has source/canonical mapping and action-level CLI dispositions, but lacks common operation-level runtime, website, and fixture/conformance projections",
+};
+
 // These are runtime-preflight refusals reproduced through the real registered
 // connector, not route or schema guesses. Keep the action callable as partial
 // while the native bridge lacks the closed preflight hook required by the
@@ -458,7 +471,7 @@ function summary(rows) {
     const s = row.surfaces;
     lines.push(`| ${row.batch} | ${row.connector} | ${row.provider_operations.operations ?? row.provider_operations.state} | ${s.direct_read} | ${s.direct_write} | ${s.binary_read}/${s.binary_write} | ${s.etl.executable_streams.length} | ${s.reverse_etl.selected_initial_proof ?? "—"} | ${s.reverse_etl.exact_record_driven_actions.length} | ${s.cli.implemented_commands}/${s.cli.partial_commands}/${s.cli.declared_commands} |`);
   }
-  lines.push("", "Each typed write action has a machine-readable `reverse_etl_eligibility` disposition and `direct_write_cli_status` in `SEVEN-SURFACE-LEDGER.json`. `partial-blocked` has a directly invokable CLI path plus an exact closed-contract blocker; `declaration-pending-cli-binding` is an unfinished reachability obligation, not a safety exclusion. When more than one action is structurally representable, the declaration lists every eligible action but the current closed destination multiplicity selects one action per mode; unselected actions are explicitly pending the foundation's multi-action selection capability. Semantic exclusions name the exact record-schema incompatibility and remain subject to direct CLI reachability.", "");
+  lines.push("", "Each typed write action has a machine-readable `reverse_etl_eligibility` disposition and `direct_write_cli_status` in `SEVEN-SURFACE-LEDGER.json`. `partial-blocked` has a directly invokable CLI path plus an exact closed-contract blocker; `declaration-pending-cli-binding` is an unfinished reachability obligation, not a safety exclusion. When more than one action is structurally representable, the declaration lists every eligible action but the current closed destination multiplicity selects one action per mode; unselected actions are explicitly pending the foundation's multi-action selection capability. Semantic exclusions name the exact record-schema incompatibility and remain subject to direct CLI reachability.", "", "Captain pre-merge gate: **blocked-common-foundations**. This aggregate ledger is not yet an operation-level proof of enabled runtime reachability, generated website rows, and executable fixture/conformance evidence for every provider-defined operation. Those omissions are explicit and remain a hard pre-merge gate; scope, tier, destructive, and safety constraints remain runtime metadata/confirmations, not disablement.", "");
   return lines.join("\n");
 }
 
@@ -492,7 +505,7 @@ if (writeCLIIndex >= 0) {
   rows.length = 0;
   for (const connector of connectors) rows.push(await inspect(connector));
 }
-const document = { schema_version: 1, issue: 4292, application_dispatch: "pending-foundation-app-cli-integration", rows };
+const document = { schema_version: 1, issue: 4292, application_dispatch: "pending-foundation-app-cli-integration", pre_merge_gate: preMergeGate, rows };
 if (checkIndex >= 0) {
   for (const row of rows.filter((row) => targets.includes(row.connector))) {
     verifyDeclaration(row, await readJSON(file(row.connector, "sync_transport.json"), null));

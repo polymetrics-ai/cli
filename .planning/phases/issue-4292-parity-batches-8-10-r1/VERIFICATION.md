@@ -2,6 +2,18 @@
 
 ## Reconciliation status — 2026-08-20
 
+## Captain operation-evidence pre-merge gate — 2026-08-20
+
+- [ ] **Blocked common foundation:** every provider-defined operation needs a
+  source URL/version/hash trace, canonical mapping, enabled runtime
+  reachability, generated CLI command, generated website row, and executable
+  fixture/conformance evidence. The gate applies separately to ETL, reverse
+  ETL, direct read, direct write, binary download, and binary upload.
+- [ ] `N/A` must cite provider evidence that the capability is absent. Scope,
+  tier, destructive, and safety metadata are runtime confirmation/authorization
+  constraints, never disablement reasons. See `PREMERGE-GATE.md` and the
+  generated ledger's `pre_merge_gate` object.
+
 - [x] Existing PR #4301 retargeted through the GitHub API to
   `fm/cli-reverse-etl-destination-r1`; API read-back reported that exact base.
 - [x] Foundation SHA `c6f03c937c1f4e516d339b48e8c2143726179fdf` merged as
