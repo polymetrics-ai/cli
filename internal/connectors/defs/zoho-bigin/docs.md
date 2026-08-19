@@ -121,8 +121,11 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 - `sync_transport.json` declares all 13 stream-backed endpoint groups as ETL sources and the
   fixture/dry `records(id) → delete_record` typed-destination proof. The destructive action remains
   confirmation- and approval-governed; it has keyed delivery, durable warehouse acknowledgement,
-  and all closed modes. Persisted App/CLI destination dispatch remains pending #4304.
+  and all closed modes. Foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies persisted
+  App/CLI destination dispatch; this declaration still needs its installed App/CLI fixture path and
+  provider-live certification.
 - Every declared typed action has an explicit reverse-ETL eligibility disposition: `delete_record`
-  is the bound proof and the other five await the closed exact-action selection contract. Other
+  is the bound proof and the other five are declaration-pending exact source mappings and conformance.
+  Other
   source-locked mutations await connector-owned typed contracts and CLI bindings; privilege,
   destructive kind, binary form, and provider-live certification are not omission reasons.
