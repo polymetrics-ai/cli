@@ -8,7 +8,8 @@
   lint, build, and verification results recorded with exact commands.
 - [x] Built-binary live read, pagination, create, update, round-trip, delete,
   and post-delete absence evidence recorded without secret material.
-- [ ] PR base is read back through GitHub API and equals `main` (after PR creation).
+- [x] PR base read back through GitHub API equals `main`: PR #4298,
+  `fm/cli-twenty-crm-gtm-parity-r1` → `main`.
 
 ## Live proof — passed
 
@@ -132,3 +133,10 @@ proof project:
 
 The credential value, record values, record identifiers, approval material,
 and endpoint configuration are intentionally absent from this evidence.
+
+## Pull request
+
+Created non-draft PR [#4298](https://github.com/polymetrics-ai/cli/pull/4298)
+with `Refs #277`. The API read-back returned base `main` and head
+`fm/cli-twenty-crm-gtm-parity-r1`; automatic Claude review is the selected
+primary route.
