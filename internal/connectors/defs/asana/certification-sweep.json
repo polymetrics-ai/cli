@@ -3,8 +3,8 @@
   "connector": "asana",
   "source": "connector declarations",
   "declared_commands": 249,
-  "declared_rows": 251,
-  "status_total": 251,
+  "declared_rows": 252,
+  "status_total": 252,
   "commands": [
     {
       "summary": "Planned fixed-target Asana mutation: Approve an access request.",
@@ -8480,6 +8480,18 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [

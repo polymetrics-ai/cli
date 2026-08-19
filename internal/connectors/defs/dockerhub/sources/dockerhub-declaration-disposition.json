@@ -49,7 +49,7 @@
       }
     ],
     "direct_read_commands": 17,
-    "reverse_etl_commands": 20,
+    "reverse_etl_commands": 0,
     "parity_class_counts": [
       {
         "key": "direct_read",
@@ -57,15 +57,11 @@
       },
       {
         "key": "direct_write",
-        "count": 7
+        "count": 27
       },
       {
         "key": "etl",
         "count": 4
-      },
-      {
-        "key": "reverse_etl",
-        "count": 20
       },
       {
         "key": "binary_read",
@@ -78,7 +74,8 @@
     ],
     "gap_ids": [
       "head-response-less-operation-executor",
-      "operation-scoped-rest-pagination"
+      "operation-scoped-rest-pagination",
+      "generic-typed-destination-executor"
     ],
     "foundation_gaps": [
       {
@@ -88,37 +85,75 @@
       {
         "id": "operation-scoped-rest-pagination",
         "count": 2
+      },
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 1
       }
     ],
     "declaration_pending_ids": [
-      "declaration-pending-dockerhub",
-      "sync-transport-source-definition-dockerhub",
-      "sync-transport-destination-definition-dockerhub"
+      "declaration-pending-dockerhub"
     ],
     "transport": {
-      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
       "source_transport": {
-        "state": "declaration-pending",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-dockerhub",
-          "evidence": "docs/sync-transport-definition.md:15-38; dockerhub sync_transport.json is absent.",
-          "minimal_change": "Add the connector-owned source declaration and evidence; no engine change is requested."
-        }
+        "state": "declared",
+        "file": "sync_transport.json",
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "repositories",
+          "tags",
+          "repository_detail",
+          "tag_detail"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "dockerhub_all_executable_streams_v1"
+        },
+        "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83; source descriptor is loaded and registered through definition-owned composition."
       },
       "destination_transport": {
-        "state": "declaration-pending",
-        "declaration_pending": {
-          "id": "sync-transport-destination-definition-dockerhub",
-          "evidence": "docs/sync-transport-definition.md:39-75; dockerhub sync_transport.json is absent.",
-          "minimal_change": "Add the connector-owned destination declaration and evidence; no engine change is requested."
-        }
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "reason": "The production composition has no connector-neutral typed destination DefinitionFactory for these declarative API bundles.",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        },
+        "recoverable": true
       }
+    },
+    "direct_write_commands": 20,
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "applicable_direct_write_operations": 27,
+      "eligible_operations": 0,
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+      "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+      "recoverable": true
     }
   },
   "notes": [
-    "Complete six-class source-locked map. Each row has exactly one primary parity class.",
-    "Only five Docker Hub rows request shared foundation work: three response-less HEAD operations and two operation-scoped pagination operations.",
-    "All other non-enabled rows are declaration-pending or source-schema dispositions, not foundation requests."
+    "All other non-enabled rows are declaration-pending or source-schema dispositions, not foundation requests.",
+    "Complete source-locked endpoint map. Every documented operation has one primary endpoint class: direct_read, direct_write, etl, binary_read, or binary_write.",
+    "Reverse ETL is an eligibility attribute on every direct_write row, not an endpoint class. It is currently blocked by generic-typed-destination-executor because no connector-neutral typed destination factory accepts these definitions.",
+    "ETL source transport is declared through the connector-neutral declarative_stream_source adapter; no transport_binding action is invented."
   ],
   "ledger_dispositions": [
     {
@@ -192,6 +227,15 @@
           "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
           "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -265,6 +309,15 @@
           "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
           "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -335,6 +388,15 @@
           "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
           "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -413,6 +475,15 @@
           "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
           "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -537,7 +608,7 @@
       },
       "state": "enabled",
       "declaration": {
-        "status": "enabled; typed update write action \"update_personal_access_token\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed update write action \"update_personal_access_token\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -545,13 +616,22 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
       },
-      "rejection": null
+      "rejection": null,
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
     },
     {
       "method": "GET",
@@ -663,7 +743,7 @@
       },
       "state": "enabled",
       "declaration": {
-        "status": "enabled; typed delete write action \"delete_personal_access_token\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed delete write action \"delete_personal_access_token\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -671,13 +751,22 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
       },
-      "rejection": null
+      "rejection": null,
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
     },
     {
       "method": "GET",
@@ -969,7 +1058,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed update write action \"update_organization_settings\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed update write action \"update_organization_settings\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -977,11 +1066,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1060,6 +1158,15 @@
           "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
           "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
         }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1271,7 +1378,7 @@
       },
       "state": "enabled",
       "declaration": {
-        "status": "enabled; typed update write action \"update_organization_access_token\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed update write action \"update_organization_access_token\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -1279,13 +1386,22 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
       },
-      "rejection": null
+      "rejection": null,
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
     },
     {
       "method": "DELETE",
@@ -1340,7 +1456,7 @@
       },
       "state": "enabled",
       "declaration": {
-        "status": "enabled; typed delete write action \"delete_organization_access_token\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed delete write action \"delete_organization_access_token\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -1348,13 +1464,22 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
       },
-      "rejection": null
+      "rejection": null,
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
     },
     {
       "method": "GET",
@@ -1734,7 +1859,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed update write action \"update_repository_immutable_tags\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed update write action \"update_repository_immutable_tags\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -1742,11 +1867,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1804,7 +1938,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed create write action \"verify_repository_immutable_tags\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed create write action \"verify_repository_immutable_tags\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -1812,11 +1946,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1875,7 +2018,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed create write action \"create_repository_group\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed create write action \"create_repository_group\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -1883,11 +2026,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2029,7 +2181,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed create write action \"create_repository\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed create write action \"create_repository\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "BearerAuth"
@@ -2037,11 +2189,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2452,7 +2613,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed update write action \"update_organization_member\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed update write action \"update_organization_member\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -2460,11 +2621,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2517,7 +2687,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed delete write action \"delete_organization_member\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed delete write action \"delete_organization_member\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -2525,11 +2695,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2718,7 +2897,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed create write action \"create_organization_group\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed create write action \"create_organization_group\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -2726,11 +2905,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2852,7 +3040,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed update write action \"replace_organization_group\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed update write action \"replace_organization_group\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -2860,11 +3048,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2920,7 +3117,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed update write action \"update_organization_group\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed update write action \"update_organization_group\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -2928,11 +3125,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2985,7 +3191,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed delete write action \"delete_organization_group\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed delete write action \"delete_organization_group\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -2993,11 +3199,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3133,7 +3348,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed create write action \"add_organization_group_member\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed create write action \"add_organization_group_member\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -3141,11 +3356,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3204,7 +3428,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed delete write action \"delete_organization_group_member\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed delete write action \"delete_organization_group_member\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -3212,11 +3436,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3263,7 +3496,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed delete write action \"delete_organization_invite\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed delete write action \"delete_organization_invite\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -3271,11 +3504,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3322,7 +3564,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed update write action \"resend_organization_invite\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed update write action \"resend_organization_invite\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -3330,11 +3572,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3376,7 +3627,7 @@
       "state": "enabled",
       "rejection": null,
       "declaration": {
-        "status": "enabled; typed create write action \"create_organization_invites\" and runnable reverse_etl command bind the pinned source contract",
+        "status": "enabled; typed create write action \"create_organization_invites\" and runnable typed write command bind the pinned source contract",
         "authorization": {
           "required_security_schemes": [
             "bearerAuth"
@@ -3384,11 +3635,20 @@
           "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
         }
       },
-      "parity_class": "reverse_etl",
+      "parity_class": "direct_write",
       "foundation": {
         "state": "present",
         "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3860,6 +4120,15 @@
       "foundation": {
         "state": "present",
         "evidence": "No shared executor request is opened for this row; the pinned source shape remains schema-incompatible with the current connector declaration."
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4026,6 +4295,15 @@
       "foundation": {
         "state": "present",
         "evidence": "No shared executor request is opened for this row; the pinned source shape remains schema-incompatible with the current connector declaration."
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     }
   ],

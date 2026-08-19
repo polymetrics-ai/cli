@@ -36,15 +36,18 @@ Captain clarification on 2026-08-19 defines this as a parity-declaration lane, n
 | Reverse destination | Existing typed action plus durable acknowledgement and registered destination executor | Do not invent a transport. Record `foundation-gap` when only raw REST writes exist. |
 | Live certification | Credentialed provider interaction, bounded cleanup/receipt, accepted artifact | Explicitly pending; prohibited by task scope. |
 
-The concrete registration gap was confirmed for this cohort. No `sync_transport.json` was emitted because the generic source/destination adapter is not registered; `FOUNDATION-GAPS.md` links #4093 and exact engine/test evidence.
-
-Transport gate follow-up: Captain review required the omission to be explicit before increment 2. `TRANSPORT-GAP.md` records the path-(b) decision, the runtime evidence, the smallest safe recovery, and ten recoverable rejection entries. No new descriptor may use GitHub's evidence or issue-label action contract for another connector.
+PR #4286 subsequently supplied the connector-neutral declarative source
+factory. The ten `sync_transport.json` source declarations now carry concrete
+stream allowlists and per-connector evidence. The source-only production route
+is structurally proved by App open/composition; it is not live certification.
+The only remaining transport claim is the truthful reverse-ETL foundation gap
+`generic-typed-destination-executor`, documented in `TRANSPORT-GAP.md`.
 
 ## Increment 2 Plan
 
 1. Retrieve and pin the confirmed public provider artifacts for Gitea, Grafana, Trello, Slack, n8n, Google Calendar, Gmail, Twilio, Amazon SQS, and Elasticsearch. Preserve the source artifact's actual document format: OpenAPI/Swagger where published, Google Discovery metadata for the Google APIs, and the AWS-owned SQS service model for the native Query API.
 2. Mechanically reconcile every documented method/path with its bundle's `api_surface.json`. Preserve an existing enabled binding only when it is the same documented method/path; add every remaining source operation as a disabled declaration with the fixed-vocabulary reason and source evidence. Do not create request, response, pagination, or body schemas.
-3. Retain existing typed operations and writes, add empty ledgers only where they are absent, and ensure every source DELETE is either represented by an existing delete action or explicitly disabled. Do not manufacture `sync_transport.json`: add a recoverable `foundation-gap` record referencing #4093 for both transport directions unless the declared adapter, evidence constants, action binding, and acknowledgement contract all already exist.
+3. Retain existing typed operations and writes, add empty ledgers only where they are absent, and ensure every source DELETE is either represented by an existing delete action or explicitly disabled. Declare the reusable ETL source only when the bundle has concrete streams and source evidence. Do not invent destination `transport_binding` actions: record `generic-typed-destination-executor` until a definition-selected typed destination factory exists.
 4. Extend the source-lock verification, progress ledger, rejection list, foundation-gap log, TDD/verification evidence, connector certification sweeps, and generated documentation evidence. No live provider calls are permitted; live certification stays `pending`.
 5. Run the declaration and generated-artifact gates for the ten affected bundles, then commit the increment and report its elapsed time and file count before starting increment 3.
 
@@ -79,8 +82,8 @@ No Docker Hub source-contract inventory entry is a terminal direct-read or
 direct-write command. A terminal command would additionally require its own
 complete request/response/pagination or body contract, output policy, fixture,
 and Foundation Check. This slice intentionally leaves the existing blocked API
-surface rows blocked, records live certification as pending, and does not create
-`sync_transport.json` while #4093 remains open.
+surface rows blocked and records live certification as pending. The later PR
+#4286 source declaration is governed by the current transport correction below.
 
 ### Docker Hub Foundation Check
 
@@ -90,7 +93,7 @@ surface rows blocked, records live certification as pending, and does not create
 | Direct-read/direct-write terminal command | Complete source contract, fixture, command surface, and real runtime preflight | Not claimed. Inventory rows remain non-terminal and their API-surface row remains blocked. |
 | HEAD operation | A bounded response-less status/existence executor | `foundation-gap`; retain an explicit disabled disposition. |
 | Deprecated login | Pinned source marks `deprecated: true` | `provider-does-not-expose`; do not materialize a terminal contract. |
-| Sync transport | Connector-neutral registration, connector evidence, and destination acknowledgement | Existing recoverable #4093 record; no placeholder descriptor. |
+| Sync transport | Registered source executor, connector evidence, and typed destination acknowledgement | Declare the source-only contract; keep reverse ETL as `generic-typed-destination-executor` until its typed destination exists. |
 
 ## Captain correction — elevated scope is runtime authorization, not a disabled declaration
 
@@ -184,12 +187,30 @@ evidence and minimal change. `COMPLETE-PARITY-MAP.md` records the batch
 denominators, command-derived enabled percentages, deletes and gap IDs.
 
 ETL and reverse ETL are assessed only using the definition-owned transport
-contract in `docs/sync-transport-definition.md` (PR #4286). Every connector is
-an explicit two-direction transport declaration-pending record until it provides
-its own exact executor, delivery facts, typed action strategy/acknowledgement,
-and conformance evidence. No `sync_transport.json` is copied or invented.
+contract in `docs/sync-transport-definition.md` (PR #4286). Every connector
+now declares the registered source role with connector-owned evidence. Reverse
+ETL is one recoverable `generic-typed-destination-executor` foundation gap: no
+destination binding, acknowledgement, strategy, or generic HTTP writer is
+invented.
 
 ### Refactor
 
 Do not run certification until this map is stable. This definitions-only change
 does not add engine code, provider schemas, credentials, or live provider I/O.
+
+## Captain classification correction — direct write versus reverse-ETL eligibility
+
+The earlier six-primary-class wording is superseded. A documented mutation is
+`direct_write`, including a typed create, update, upsert, or delete action.
+Reverse ETL is an attribute on that direct-write operation, not an endpoint
+class and not an inference from a typed action. It is eligible only after the
+definition carries a destination transport binding, per-mode apply strategies,
+and an acknowledgement contract.
+
+For all ten bundles the `reverse_etl_eligibility` attribute is currently
+`foundation-gap` / `generic-typed-destination-executor`: the only production
+destination factory remains the issue-label-specific one at
+`internal/app/issue_label_warehouse_transport.go:85-95`. The map must report
+five primary endpoint classes plus this separate eligibility. It must report
+enabled direct writes as direct writes, while reverse-ETL eligibility remains
+zero until the connector-neutral typed destination factory lands.

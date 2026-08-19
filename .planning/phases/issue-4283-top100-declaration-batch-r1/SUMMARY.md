@@ -9,8 +9,9 @@ declaration-only, non-live-certification checkpoint.
   typed delete actions across 54 pinned operations.
 - Docker Hub disabled dispositions: 13 (ten named foundation gaps and three
   schema/media incompatibilities; `unsafe-to-exercise` is zero).
-- All ten connectors retain the recoverable #4093 `sync_transport` gap; no
-  generic transport descriptor was invented.
+- All ten connectors now declare the reusable ETL source transport. Reverse
+  ETL eligibility is the recoverable `generic-typed-destination-executor` gap;
+  no generic writer or destination binding was invented.
 - No credential was requested or used; all live certification remains pending.
 
 ## Docker Hub corrected deliverable
@@ -34,3 +35,12 @@ Verification evidence is recorded in `VERIFICATION.md`, source pin evidence in
 `REJECTION-LIST.json`. Complete the current local gates and commit this Docker
 Hub slice before selecting another connector. Gitea is not a definition bundle
 on `main` and must be created or substituted before a later increment.
+
+## Classification correction
+
+Every provider mutation is now classified as a direct-write endpoint. The
+cohort has 2,370 direct-write endpoints and 118 enabled direct-write bindings;
+the former reverse-ETL primary-class count is zero. Reverse ETL is an
+eligibility attribute on those direct writes and stays zero-eligible until a
+connector-neutral typed destination factory supplies the required transport
+binding, apply strategies, and acknowledgement contract.

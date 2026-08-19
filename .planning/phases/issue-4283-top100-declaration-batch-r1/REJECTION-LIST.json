@@ -36909,159 +36909,6 @@
       "recoverability": "Enable after a connector-local bounded executor contract and the referenced foundation capability are available."
     },
     {
-      "connector": "gitlab",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
-      "connector": "jira",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
-      "connector": "vercel",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
-      "connector": "notion",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
-      "connector": "stripe",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
-      "connector": "bitbucket",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
-      "connector": "circleci",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
-      "connector": "sentry",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
-      "connector": "asana",
-      "parity_class": "sync_transport",
-      "operation": {
-        "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
-      },
-      "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
-      "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
-      "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
       "connector": "dockerhub",
       "operation": {
         "method": "POST",
@@ -37219,244 +37066,187 @@
     },
     {
       "connector": "dockerhub",
-      "parity_class": "sync_transport",
       "operation": {
         "kind": "sync_transport",
-        "roles": [
-          "source_transport",
-          "destination_transport"
-        ]
+        "role": "destination_transport"
       },
       "reason": "foundation-gap",
-      "evidence": "No connector-local sync_transport descriptor can truthfully name a registered source and destination executor: the only declarative destination is the GitHub-specific issue_label_destination contract, while the reusable-looking source executor accepts only the GitHub exact conformance evidence. This bundle has no transport_binding write action.",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
       "recoverable": true,
-      "recoverability": "Register a connector-neutral declarative source adapter with per-bundle conformance evidence, and a closed typed destination adapter for a named eligible action (never a generic HTTP write); then declare bounded delivery and apply strategies from that action contract.",
-      "foundation_issue": 4093
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-dockerhub"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/dockerhub/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "dockerhub",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-dockerhub"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/dockerhub/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     },
     {
       "connector": "notion",
       "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-notion"
+        "kind": "sync_transport",
+        "role": "destination_transport"
       },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/notion/sync_transport.json is absent.",
+      "reason": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "notion",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-notion"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/notion/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverable": true,
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     },
     {
       "connector": "stripe",
       "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-stripe"
+        "kind": "sync_transport",
+        "role": "destination_transport"
       },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/stripe/sync_transport.json is absent.",
+      "reason": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "stripe",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-stripe"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/stripe/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverable": true,
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     },
     {
       "connector": "bitbucket",
       "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-bitbucket"
+        "kind": "sync_transport",
+        "role": "destination_transport"
       },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/bitbucket/sync_transport.json is absent.",
+      "reason": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "bitbucket",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-bitbucket"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/bitbucket/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverable": true,
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     },
     {
       "connector": "gitlab",
       "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-gitlab"
+        "kind": "sync_transport",
+        "role": "destination_transport"
       },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/gitlab/sync_transport.json is absent.",
+      "reason": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "gitlab",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-gitlab"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/gitlab/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverable": true,
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     },
     {
       "connector": "circleci",
       "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-circleci"
+        "kind": "sync_transport",
+        "role": "destination_transport"
       },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/circleci/sync_transport.json is absent.",
+      "reason": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "circleci",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-circleci"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/circleci/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverable": true,
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     },
     {
       "connector": "sentry",
       "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-sentry"
+        "kind": "sync_transport",
+        "role": "destination_transport"
       },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/sentry/sync_transport.json is absent.",
+      "reason": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "sentry",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-sentry"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/sentry/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverable": true,
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     },
     {
       "connector": "vercel",
       "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-vercel"
+        "kind": "sync_transport",
+        "role": "destination_transport"
       },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/vercel/sync_transport.json is absent.",
+      "reason": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "vercel",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-vercel"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/vercel/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverable": true,
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     },
     {
       "connector": "asana",
       "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-asana"
+        "kind": "sync_transport",
+        "role": "destination_transport"
       },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/asana/sync_transport.json is absent.",
+      "reason": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "asana",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-asana"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/asana/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverable": true,
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     },
     {
       "connector": "jira",
       "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-source-definition-jira"
+        "kind": "sync_transport",
+        "role": "destination_transport"
       },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:15-38 requires exact executor, eligible streams, delivery and connector-owned conformance; internal/connectors/defs/jira/sync_transport.json is absent.",
+      "reason": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
-    },
-    {
-      "connector": "jira",
-      "operation": {
-        "method": "SYNC_TRANSPORT",
-        "path": "sync-transport-destination-definition-jira"
-      },
-      "reason": "declaration-pending",
-      "evidence": "docs/sync-transport-definition.md:39-75 requires typed actions, durable acknowledgement, per-mode strategy and connector-owned conformance; internal/connectors/defs/jira/sync_transport.json is absent.",
-      "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
-      "recoverability": "Connector-local declaration work: add the definition-owned descriptor and its evidence; no shared engine change is requested."
+      "recoverable": true,
+      "recoverability": "Enable after register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies.",
+      "capability": "reverse_etl_eligibility",
+      "eligibility": {
+        "state": "foundation-gap",
+        "eligible": false
+      }
     }
   ],
   "supersession": {
     "at": "2026-08-19T00:00:00Z",
-    "note": "The complete connector-local declaration-disposition maps are authoritative. declaration-pending is connector work, not a foundation-lane request; requires-elevated-scope is runtime authorization metadata, never a current disabled disposition."
+    "note": "PR #4286 closed #4093 for declarative source composition. Batch 1 declares source transport and records only the still-missing connector-neutral typed destination executor as a foundation gap; declaration-pending remains connector work, not a foundation-lane request."
   }
 }

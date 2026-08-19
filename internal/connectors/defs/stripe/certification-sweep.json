@@ -3,8 +3,8 @@
   "connector": "stripe",
   "source": "connector declarations",
   "declared_commands": 8,
-  "declared_rows": 10,
-  "status_total": 10,
+  "declared_rows": 11,
+  "status_total": 11,
   "commands": [
     {
       "summary": "Read Stripe charges through the declared ETL stream.",
@@ -236,6 +236,18 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [],

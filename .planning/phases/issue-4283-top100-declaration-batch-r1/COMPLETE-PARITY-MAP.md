@@ -1,37 +1,43 @@
-# Batch 1 complete six-class map
+# Batch 1 complete endpoint map
 
-Captain order 2026-08-19: map every source-locked operation before any
-certification runs. Docker Hub at `3ee815c01` remains the accepted reference;
-the other nine connector-local disposition and crosswalk artifacts now use the
-same source-lock basis. `ENABLED%` is source operations with an implemented
-CLI command, not an operation-inventory or declared-coverage number.
+Captain’s 2026-08-19 classification correction: a provider mutation is a
+`direct_write` endpoint. Reverse ETL is not an endpoint class and a typed write
+action never establishes it. It is a separate eligibility attribute that needs a
+destination transport binding, per-sync-mode apply strategies, and a durable
+acknowledgement contract.
 
-Every listed connector has no `sync_transport.json`. Its ETL and reverse-ETL
-transport result is therefore `declaration-pending`, assessed against the
-definition-owned contract in `docs/sync-transport-definition.md` from PR
-#4286. The missing descriptor/evidence is connector declaration work, not a
-foundation-lane request. None is inferred from provider REST documentation.
+Every documented operation has exactly one endpoint class: direct read, direct
+write, ETL, binary read, or binary write. ETL source is separately declared in
+each connector’s `sync_transport.json` through the definition-owned
+`declarative_api/declarative_stream_source` executor. All direct-write rows
+carry `reverse_etl_eligibility`; it is false for every connector because the
+only destination factory remains the issue-label-specific one.
 
-| Connector | Documented | Enabled | Disabled | ENABLED% | Deletes | Primary source classes: DR / DW / ETL / RETL / BR / BW | ETL transport | Reverse-ETL transport | gap_ids | declaration_pending_ids |
-| --- | ---: | ---: | ---: | ---: | ---: | --- | --- | --- | --- |
-| Docker Hub | 54 | 41 | 13 | 75.93 | 6 / 6 | 23 / 7 / 4 / 20 / 0 / 0 | declaration-pending | declaration-pending | `head-response-less-operation-executor`, `operation-scoped-rest-pagination` | `declaration-pending-dockerhub`, transport descriptors |
-| Notion | 49 | 43 | 6 | 87.76 | 4 / 4 | 18 / 3 / 5 / 22 / 0 / 1 | declaration-pending | declaration-pending | none | `command-availability-notion`, `cli-command-contract-notion`, transport descriptors |
-| Stripe | 589 | 8 | 581 | 1.36 | 1 / 32 | 254 / 323 / 5 / 3 / 4 / 0 | declaration-pending | declaration-pending | none | `typed-operation-contract-stripe`, transport descriptors |
-| Bitbucket | 331 | 3 | 328 | 0.91 | 1 / 54 | 21 / 94 / 143 / 54 / 15 / 4 | declaration-pending | declaration-pending | none | `cli-command-contract-bitbucket`, `typed-operation-contract-bitbucket`, transport descriptors |
-| GitLab | 1,755 | 4 | 1,751 | 0.23 | 0 / 212 | 699 / 1,006 / 4 / 0 / 46 / 0 | declaration-pending | declaration-pending | none | `typed-operation-contract-gitlab`, transport descriptors |
-| CircleCI | 111 | 0 | 111 | 0.00 | 0 / 16 | 52 / 43 / 9 / 7 / 0 / 0 | declaration-pending | declaration-pending | none | `cli-surface-missing-circleci`, transport descriptors |
-| Sentry | 223 | 0 | 223 | 0.00 | 0 / 35 | 117 / 103 / 3 / 0 / 0 / 0 | declaration-pending | declaration-pending | none | `cli-surface-missing-sentry`, transport descriptors |
-| Vercel | 400 | 0 | 400 | 0.00 | 0 / 56 | 156 / 222 / 7 / 15 / 0 / 0 | declaration-pending | declaration-pending | none | `cli-surface-missing-vercel`, transport descriptors |
-| Asana | 249 | 82 | 167 | 32.93 | 4 / 23 | 10 / 0 / 109 / 129 / 0 / 1 | declaration-pending | declaration-pending | none | `command-availability-asana`, transport descriptors |
-| Jira | 617 | 295 | 322 | 47.81 | 0 / 89 | 292 / 319 / 3 / 0 / 3 / 0 | declaration-pending | declaration-pending | none | `typed-operation-contract-jira`, transport descriptors |
+| Connector | Documented | Enabled | Disabled | ENABLED% | Deletes | Endpoint classes: DR / DW / ETL / BR / BW | ETL source | Reverse-ETL eligibility | gap_ids | declaration_pending_ids |
+| --- | ---: | ---: | ---: | ---: | ---: | --- | --- | --- | --- | --- |
+| Docker Hub | 54 | 41 | 13 | 75.93 | 6 / 6 | 23 / 27 / 4 / 0 / 0 | declared (4 streams) | foundation-gap (0 eligible) | `head-response-less-operation-executor`, `operation-scoped-rest-pagination`, `generic-typed-destination-executor` | `declaration-pending-dockerhub` |
+| Notion | 49 | 43 | 6 | 87.76 | 4 / 4 | 18 / 25 / 5 / 0 / 1 | declared (6 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `command-availability-notion`, `cli-command-contract-notion` |
+| Stripe | 589 | 8 | 581 | 1.36 | 1 / 32 | 254 / 326 / 5 / 4 / 0 | declared (5 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `typed-operation-contract-stripe` |
+| Bitbucket | 331 | 3 | 328 | 0.91 | 1 / 54 | 21 / 148 / 143 / 15 / 4 | declared (143 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `cli-command-contract-bitbucket`, `typed-operation-contract-bitbucket` |
+| GitLab | 1,755 | 4 | 1,751 | 0.23 | 0 / 212 | 699 / 1,006 / 4 / 46 / 0 | declared (4 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `typed-operation-contract-gitlab` |
+| CircleCI | 111 | 0 | 111 | 0.00 | 0 / 16 | 52 / 50 / 9 / 0 / 0 | declared (9 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `cli-surface-missing-circleci` |
+| Sentry | 223 | 0 | 223 | 0.00 | 0 / 35 | 117 / 103 / 3 / 0 / 0 | declared (4 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `cli-surface-missing-sentry` |
+| Vercel | 400 | 0 | 400 | 0.00 | 0 / 56 | 156 / 237 / 7 / 0 / 0 | declared (9 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `cli-surface-missing-vercel` |
+| Asana | 249 | 82 | 167 | 32.93 | 4 / 23 | 10 / 129 / 109 / 0 / 1 | declared (12 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `command-availability-asana` |
+| Jira | 617 | 295 | 322 | 47.81 | 0 / 89 | 292 / 319 / 3 / 3 / 0 | declared (3 streams) | foundation-gap (0 eligible) | `generic-typed-destination-executor` | `typed-operation-contract-jira` |
 
-The Jira source lock contains 617 operations. The order's parenthetical 590
-matches the pre-existing CLI-surface count, not the pinned-document count, so
-the map uses the locked 617 as its documented denominator.
+Totals: 4,378 documented and declared (100%); 476 command-backed enabled;
+3,902 source operations disabled (3,894 declaration-pending, five
+operation-level engine gaps, and three schema-incompatible). There are 2,370
+direct-write endpoints and 118 enabled direct-write bindings. Reverse-ETL
+eligibility is zero of 2,370 because
+`generic-typed-destination-executor` is the remaining shared foundation gap.
 
-`DR`, `DW`, `ETL`, `RETL`, `BR`, and `BW` mean direct read, direct write,
-ETL, reverse ETL, binary read, and binary write. Each source-operation row in
-the connector-local declaration disposition has exactly one primary class and
-names either its present foundation, a `declaration-pending` record, or one of
-the five evidence-backed engine gaps.
-Live credentialed certification remains pending for every connector.
+The exact gap evidence is
+`internal/app/issue_label_warehouse_transport.go:85-95`: only
+`issue_label_destination` is registered and it calls the closed
+`issueLabelTransportConnectorContract`. The recoverable minimum is a
+connector-neutral typed destination `DefinitionFactory` selected by the
+definition, with per-connector evidence, explicit source bindings,
+acknowledgement, and per-mode apply strategies. No `transport_binding` action
+or destination declaration is fabricated.

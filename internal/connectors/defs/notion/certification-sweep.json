@@ -3,8 +3,8 @@
   "connector": "notion",
   "source": "connector declarations",
   "declared_commands": 49,
-  "declared_rows": 51,
-  "status_total": 51,
+  "declared_rows": 52,
+  "status_total": 52,
   "commands": [
     {
       "summary": "Retrieve an async task",
@@ -1540,6 +1540,18 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "cohort": "top100-daily-use-increment-001",
-  "scope": "public-source declarations plus complete six-class mapping; only engine-refused shapes are foundation gaps; non-live certification completed without provider I/O",
+  "scope": "public-source declarations plus complete endpoint-class mapping; reverse-ETL is an eligibility attribute, not a write endpoint class; only engine-refused shapes are foundation gaps; non-live certification completed without provider I/O",
   "generated_at": "2026-08-19T00:00:00Z",
   "connectors": [
     {
@@ -29,7 +29,8 @@
         "writes.json",
         "certification-sweep.json",
         "sources/asana-operation-crosswalk.json",
-        "sources/asana-declaration-disposition.json"
+        "sources/asana-declaration-disposition.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 249,
@@ -43,33 +44,52 @@
         "enabled_percent": 32.93,
         "enabled_deletes": 4,
         "documented_deletes": 23,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-asana",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/asana/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "asana_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 12,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-asana",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 129,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/asana/certification-sweep.json",
-        "declared_rows": 251,
+        "declared_rows": 252,
         "cli_commands": 249,
         "statuses": {
-          "fixture_required": 84,
+          "product_defect": 156,
           "not_applicable": 11,
-          "product_defect": 156
+          "fixture_required": 85
         },
         "live_certification": "pending"
       },
@@ -77,14 +97,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 73,
         "kinds": {
@@ -103,15 +123,11 @@
           },
           {
             "key": "direct_write",
-            "count": 0
+            "count": 129
           },
           {
             "key": "etl",
             "count": 109
-          },
-          {
-            "key": "reverse_etl",
-            "count": 129
           },
           {
             "key": "binary_read",
@@ -122,13 +138,20 @@
             "count": 1
           }
         ],
-        "gap_ids": [],
+        "gap_ids": [
+          "generic-typed-destination-executor"
+        ],
         "live_certification": "pending",
         "declaration_pending_ids": [
-          "command-availability-asana",
-          "sync-transport-source-definition-asana",
-          "sync-transport-destination-definition-asana"
-        ]
+          "command-availability-asana"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 129,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     },
     {
@@ -155,7 +178,8 @@
         "writes.json",
         "certification-sweep.json",
         "sources/bitbucket-operation-crosswalk.json",
-        "sources/bitbucket-declaration-disposition.json"
+        "sources/bitbucket-declaration-disposition.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 331,
@@ -169,33 +193,52 @@
         "enabled_percent": 0.91,
         "enabled_deletes": 1,
         "documented_deletes": 54,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-bitbucket",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/bitbucket/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "bitbucket_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 143,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-bitbucket",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 148,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/bitbucket/certification-sweep.json",
-        "declared_rows": 7,
+        "declared_rows": 8,
         "cli_commands": 5,
         "statuses": {
-          "fixture_required": 5,
-          "not_applicable": 1,
-          "product_defect": 1
+          "product_defect": 1,
+          "fixture_required": 6,
+          "not_applicable": 1
         },
         "live_certification": "pending"
       },
@@ -203,14 +246,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 54,
         "kinds": {
@@ -228,15 +271,11 @@
           },
           {
             "key": "direct_write",
-            "count": 94
+            "count": 148
           },
           {
             "key": "etl",
             "count": 143
-          },
-          {
-            "key": "reverse_etl",
-            "count": 54
           },
           {
             "key": "binary_read",
@@ -247,14 +286,21 @@
             "count": 4
           }
         ],
-        "gap_ids": [],
+        "gap_ids": [
+          "generic-typed-destination-executor"
+        ],
         "live_certification": "pending",
         "declaration_pending_ids": [
           "cli-command-contract-bitbucket",
-          "typed-operation-contract-bitbucket",
-          "sync-transport-source-definition-bitbucket",
-          "sync-transport-destination-definition-bitbucket"
-        ]
+          "typed-operation-contract-bitbucket"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 148,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     },
     {
@@ -282,7 +328,8 @@
         "writes.json",
         "certification-sweep.json",
         "sources/circleci-operation-crosswalk.json",
-        "sources/circleci-declaration-disposition.json"
+        "sources/circleci-declaration-disposition.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 111,
@@ -296,31 +343,50 @@
         "enabled_percent": 0,
         "enabled_deletes": 0,
         "documented_deletes": 16,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-circleci",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/circleci/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "circleci_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 9,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-circleci",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 50,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/circleci/certification-sweep.json",
-        "declared_rows": 2,
+        "declared_rows": 3,
         "cli_commands": 0,
         "statuses": {
-          "fixture_required": 2
+          "fixture_required": 3
         },
         "live_certification": "pending"
       },
@@ -328,14 +394,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 7,
         "kinds": {
@@ -354,15 +420,11 @@
           },
           {
             "key": "direct_write",
-            "count": 43
+            "count": 50
           },
           {
             "key": "etl",
             "count": 9
-          },
-          {
-            "key": "reverse_etl",
-            "count": 7
           },
           {
             "key": "binary_read",
@@ -373,13 +435,20 @@
             "count": 0
           }
         ],
-        "gap_ids": [],
+        "gap_ids": [
+          "generic-typed-destination-executor"
+        ],
         "live_certification": "pending",
         "declaration_pending_ids": [
-          "cli-surface-missing-circleci",
-          "sync-transport-source-definition-circleci",
-          "sync-transport-destination-definition-circleci"
-        ]
+          "cli-surface-missing-circleci"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 50,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     },
     {
@@ -412,7 +481,8 @@
         "sources/dockerhub-operation-crosswalk.json",
         "spec.json",
         "streams.json",
-        "writes.json"
+        "writes.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 54,
@@ -432,32 +502,51 @@
         "enabled_deletes": 6,
         "documented_deletes": 6,
         "terminal_commands": 41,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request.",
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request.",
         "coverage_percent": 100
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-dockerhub",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/dockerhub/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "dockerhub_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 4,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-dockerhub",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 27,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/dockerhub/certification-sweep.json",
-        "declared_rows": 43,
+        "declared_rows": 44,
         "cli_commands": 41,
         "statuses": {
-          "fixture_required": 43
+          "fixture_required": 44
         },
         "static_contract_validation": "connectorgen validate and surface-sync --check pass locally; fixture or live proof remains pending.",
         "live_certification": "pending",
@@ -470,14 +559,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 20,
         "kinds": {
@@ -498,15 +587,11 @@
           },
           {
             "key": "direct_write",
-            "count": 7
+            "count": 27
           },
           {
             "key": "etl",
             "count": 4
-          },
-          {
-            "key": "reverse_etl",
-            "count": 20
           },
           {
             "key": "binary_read",
@@ -519,14 +604,20 @@
         ],
         "gap_ids": [
           "head-response-less-operation-executor",
-          "operation-scoped-rest-pagination"
+          "operation-scoped-rest-pagination",
+          "generic-typed-destination-executor"
         ],
         "live_certification": "pending",
         "declaration_pending_ids": [
-          "declaration-pending-dockerhub",
-          "sync-transport-source-definition-dockerhub",
-          "sync-transport-destination-definition-dockerhub"
-        ]
+          "declaration-pending-dockerhub"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 27,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     },
     {
@@ -555,7 +646,8 @@
         "writes.json",
         "certification-sweep.json",
         "sources/gitlab-operation-crosswalk.json",
-        "sources/gitlab-declaration-disposition.json"
+        "sources/gitlab-declaration-disposition.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 1755,
@@ -569,31 +661,50 @@
         "enabled_percent": 0.23,
         "enabled_deletes": 0,
         "documented_deletes": 212,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-gitlab",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/gitlab/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "gitlab_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 4,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-gitlab",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 1006,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/gitlab/certification-sweep.json",
-        "declared_rows": 5,
+        "declared_rows": 6,
         "cli_commands": 4,
         "statuses": {
-          "fixture_required": 5
+          "fixture_required": 6
         },
         "live_certification": "pending"
       },
@@ -601,14 +712,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 0,
         "kinds": {}
@@ -630,10 +741,6 @@
             "count": 4
           },
           {
-            "key": "reverse_etl",
-            "count": 0
-          },
-          {
             "key": "binary_read",
             "count": 46
           },
@@ -642,13 +749,20 @@
             "count": 0
           }
         ],
-        "gap_ids": [],
+        "gap_ids": [
+          "generic-typed-destination-executor"
+        ],
         "live_certification": "pending",
         "declaration_pending_ids": [
-          "typed-operation-contract-gitlab",
-          "sync-transport-source-definition-gitlab",
-          "sync-transport-destination-definition-gitlab"
-        ]
+          "typed-operation-contract-gitlab"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 1006,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     },
     {
@@ -675,7 +789,8 @@
         "writes.json",
         "certification-sweep.json",
         "sources/jira-operation-crosswalk.json",
-        "sources/jira-declaration-disposition.json"
+        "sources/jira-declaration-disposition.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 617,
@@ -689,31 +804,50 @@
         "enabled_percent": 47.81,
         "enabled_deletes": 0,
         "documented_deletes": 89,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-jira",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/jira/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "jira_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 3,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-jira",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 319,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/jira/certification-sweep.json",
-        "declared_rows": 592,
+        "declared_rows": 593,
         "cli_commands": 590,
         "statuses": {
-          "fixture_required": 586,
+          "fixture_required": 587,
           "not_applicable": 6
         },
         "live_certification": "pending"
@@ -722,14 +856,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 292,
         "kinds": {
@@ -755,10 +889,6 @@
             "count": 3
           },
           {
-            "key": "reverse_etl",
-            "count": 0
-          },
-          {
             "key": "binary_read",
             "count": 3
           },
@@ -767,13 +897,20 @@
             "count": 0
           }
         ],
-        "gap_ids": [],
+        "gap_ids": [
+          "generic-typed-destination-executor"
+        ],
         "live_certification": "pending",
         "declaration_pending_ids": [
-          "typed-operation-contract-jira",
-          "sync-transport-source-definition-jira",
-          "sync-transport-destination-definition-jira"
-        ]
+          "typed-operation-contract-jira"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 319,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     },
     {
@@ -800,7 +937,8 @@
         "writes.json",
         "certification-sweep.json",
         "sources/notion-operation-crosswalk.json",
-        "sources/notion-declaration-disposition.json"
+        "sources/notion-declaration-disposition.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 49,
@@ -814,31 +952,50 @@
         "enabled_percent": 87.76,
         "enabled_deletes": 4,
         "documented_deletes": 4,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-notion",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/notion/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "notion_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 6,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-notion",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 25,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/notion/certification-sweep.json",
-        "declared_rows": 51,
+        "declared_rows": 52,
         "cli_commands": 49,
         "statuses": {
-          "fixture_required": 47,
+          "fixture_required": 48,
           "not_applicable": 3,
           "product_defect": 1
         },
@@ -848,14 +1005,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 24,
         "kinds": {
@@ -874,15 +1031,11 @@
           },
           {
             "key": "direct_write",
-            "count": 3
+            "count": 25
           },
           {
             "key": "etl",
             "count": 5
-          },
-          {
-            "key": "reverse_etl",
-            "count": 22
           },
           {
             "key": "binary_read",
@@ -893,14 +1046,21 @@
             "count": 1
           }
         ],
-        "gap_ids": [],
+        "gap_ids": [
+          "generic-typed-destination-executor"
+        ],
         "live_certification": "pending",
         "declaration_pending_ids": [
           "command-availability-notion",
-          "cli-command-contract-notion",
-          "sync-transport-source-definition-notion",
-          "sync-transport-destination-definition-notion"
-        ]
+          "cli-command-contract-notion"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 25,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     },
     {
@@ -928,7 +1088,8 @@
         "writes.json",
         "certification-sweep.json",
         "sources/sentry-operation-crosswalk.json",
-        "sources/sentry-declaration-disposition.json"
+        "sources/sentry-declaration-disposition.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 223,
@@ -942,31 +1103,50 @@
         "enabled_percent": 0,
         "enabled_deletes": 0,
         "documented_deletes": 35,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-sentry",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/sentry/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "sentry_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 4,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-sentry",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 103,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/sentry/certification-sweep.json",
-        "declared_rows": 1,
+        "declared_rows": 2,
         "cli_commands": 0,
         "statuses": {
-          "fixture_required": 1
+          "fixture_required": 2
         },
         "live_certification": "pending"
       },
@@ -974,14 +1154,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 0,
         "kinds": {}
@@ -1003,10 +1183,6 @@
             "count": 3
           },
           {
-            "key": "reverse_etl",
-            "count": 0
-          },
-          {
             "key": "binary_read",
             "count": 0
           },
@@ -1015,13 +1191,20 @@
             "count": 0
           }
         ],
-        "gap_ids": [],
+        "gap_ids": [
+          "generic-typed-destination-executor"
+        ],
         "live_certification": "pending",
         "declaration_pending_ids": [
-          "cli-surface-missing-sentry",
-          "sync-transport-source-definition-sentry",
-          "sync-transport-destination-definition-sentry"
-        ]
+          "cli-surface-missing-sentry"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 103,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     },
     {
@@ -1047,7 +1230,8 @@
         "writes.json",
         "certification-sweep.json",
         "sources/stripe-operation-crosswalk.json",
-        "sources/stripe-declaration-disposition.json"
+        "sources/stripe-declaration-disposition.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 589,
@@ -1061,31 +1245,50 @@
         "enabled_percent": 1.36,
         "enabled_deletes": 1,
         "documented_deletes": 32,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-stripe",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/stripe/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "stripe_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 5,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-stripe",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 326,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/stripe/certification-sweep.json",
-        "declared_rows": 10,
+        "declared_rows": 11,
         "cli_commands": 8,
         "statuses": {
-          "fixture_required": 10
+          "fixture_required": 11
         },
         "live_certification": "pending"
       },
@@ -1093,14 +1296,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 3,
         "kinds": {
@@ -1119,15 +1322,11 @@
           },
           {
             "key": "direct_write",
-            "count": 323
+            "count": 326
           },
           {
             "key": "etl",
             "count": 5
-          },
-          {
-            "key": "reverse_etl",
-            "count": 3
           },
           {
             "key": "binary_read",
@@ -1138,13 +1337,20 @@
             "count": 0
           }
         ],
-        "gap_ids": [],
+        "gap_ids": [
+          "generic-typed-destination-executor"
+        ],
         "live_certification": "pending",
         "declaration_pending_ids": [
-          "typed-operation-contract-stripe",
-          "sync-transport-source-definition-stripe",
-          "sync-transport-destination-definition-stripe"
-        ]
+          "typed-operation-contract-stripe"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 326,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     },
     {
@@ -1173,7 +1379,8 @@
         "writes.json",
         "certification-sweep.json",
         "sources/vercel-operation-crosswalk.json",
-        "sources/vercel-declaration-disposition.json"
+        "sources/vercel-declaration-disposition.json",
+        "sync_transport.json"
       ],
       "operations": {
         "documented": 400,
@@ -1187,31 +1394,50 @@
         "enabled_percent": 0,
         "enabled_deletes": 0,
         "documented_deletes": 56,
-        "coverage_basis": "Complete source-locked six-class map; ENABLED% counts source operations with an implemented CLI binding. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
       },
       "sync_transport": {
-        "state": "declaration-pending",
-        "contract": "docs/sync-transport-definition.md (PR #4286)",
+        "state": "partial",
+        "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
         "source_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-source-definition-vercel",
-          "evidence": "docs/sync-transport-definition.md:15-38; connector-local sync_transport.json absent"
+          "state": "declared",
+          "file": "internal/connectors/defs/vercel/sync_transport.json",
+          "executor": {
+            "family": "declarative_api",
+            "id": "declarative_stream_source"
+          },
+          "conformance": {
+            "suite": "batch1_declarative_stream_transport",
+            "run_id": "vercel_all_executable_streams_v1"
+          },
+          "eligible_stream_count": 9,
+          "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83"
         },
         "destination_transport": {
-          "state": "declaration-pending",
-          "reason": "declaration-pending",
-          "declaration_id": "sync-transport-destination-definition-vercel",
-          "evidence": "docs/sync-transport-definition.md:39-75; connector-local sync_transport.json absent"
+          "state": "foundation-gap",
+          "reason": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
         },
-        "recoverable": true
+        "recoverable": true,
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 237,
+          "eligible_operations": 0,
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+          "recoverable": true
+        }
       },
       "non_live_certification": {
         "sweep_artifact": "internal/connectors/defs/vercel/certification-sweep.json",
-        "declared_rows": 2,
+        "declared_rows": 3,
         "cli_commands": 0,
         "statuses": {
-          "fixture_required": 2
+          "fixture_required": 3
         },
         "live_certification": "pending"
       },
@@ -1219,14 +1445,14 @@
         "direct-read",
         "direct-write",
         "etl",
-        "reverse-etl",
         "binary-read",
         "binary-write",
-        "definition-owned-transport-gap"
+        "reverse-etl-eligibility",
+        "definition-owned-etl-source"
       ],
-      "state": "complete-source-locked-six-class-map-certification-deferred",
+      "state": "complete-source-locked-endpoint-map-certification-deferred",
       "timestamp": "2026-08-19T00:00:00Z",
-      "resume_pointer": "Do not certify until the captain releases the stable complete-map target and the relevant foundation gap is closed.",
+      "resume_pointer": "ETL source is declared through the definition-owned contract. Every direct-write endpoint has reverse-ETL eligibility recorded separately; it remains unavailable until generic-typed-destination-executor lands. Live certification remains pending.",
       "writes": {
         "actions": 18,
         "kinds": {
@@ -1245,15 +1471,11 @@
           },
           {
             "key": "direct_write",
-            "count": 222
+            "count": 237
           },
           {
             "key": "etl",
             "count": 7
-          },
-          {
-            "key": "reverse_etl",
-            "count": 15
           },
           {
             "key": "binary_read",
@@ -1264,13 +1486,20 @@
             "count": 0
           }
         ],
-        "gap_ids": [],
+        "gap_ids": [
+          "generic-typed-destination-executor"
+        ],
         "live_certification": "pending",
         "declaration_pending_ids": [
-          "cli-surface-missing-vercel",
-          "sync-transport-source-definition-vercel",
-          "sync-transport-destination-definition-vercel"
-        ]
+          "cli-surface-missing-vercel"
+        ],
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "foundation_gap_id": "generic-typed-destination-executor",
+          "applicable_direct_write_operations": 237,
+          "eligible_operations": 0,
+          "recoverable": true
+        }
       }
     }
   ]

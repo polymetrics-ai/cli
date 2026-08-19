@@ -13,14 +13,20 @@ Manual GSD code-review fallback: the project-local Pi adapter generated the `cod
 No Critical, Warning, or Info findings. In particular, review confirmed:
 
 - no files under `defs/github/` or `defs/zoom/` changed;
-- no engine/foundation code, credentials, live provider calls, or generic transport declarations were added;
+- no engine/foundation code, credentials, live provider calls, generic writer, or invented destination transport declaration was added;
 - each newly surfaced GitLab, Notion, Vercel, and Sentry endpoint is disabled with source provenance;
 - GitHub-source-lock aggregate schema parity was restored with `counts`, while per-method counts remain recorded; and
 - the source-to-surface denominator is 4,378 / 4,378, checked again after the review.
 
 ## Transport follow-up review
 
-Path (b) was reviewed after the increment checkpoint. `go test -timeout 20m ./internal/connectors/certify -run '^TestCertificationDeclaredTransportPairFailsWhenRegistrationIsMissing$'` and `go test -timeout 20m ./internal/synctransport -run 'TestRegisterDeclaredTransports'` pass. The ten transport rejections are recoverable and do not weaken the runtime's factory/evidence admission.
+After PR #4286, the ten source declarations were reviewed against the real
+definition-owned composition. `go test -timeout 20m ./internal/app -run
+'^TestOpenRegistersDefinitionOwnedProductionTransports$'` passes with the
+loaded declarations. The reverse leg is correctly retained as the one
+recoverable `generic-typed-destination-executor` gap: the only declarative
+destination is still the closed issue-label adapter. No action binding or
+generic writer was fabricated.
 
 ## Docker Hub full-parity review
 
@@ -78,10 +84,10 @@ Hub reference summary against the captain's map contract.
 - `ENABLED%` counts only operations with an implemented CLI binding. It does
   not promote an operation inventory, elevated scope, stream, write action or
   source URL into a runnable command.
-- Source and destination transport declaration-pending records are distinct. Both cite the
-  definition-owned #4286 contract and retain the minimum recovery; no
-  `sync_transport.json`, GitHub evidence constant or generic write transport
-  was invented.
+- Source transport is now declared through the definition-owned #4286 contract.
+  Destination transport is the precise `generic-typed-destination-executor`
+  gap; no GitHub evidence, action binding, or generic write transport was
+  invented.
 - The maps retain every documented DELETE and report enabled/documented delete
   counts. No provider call, credential, engine edit, GitHub bundle or Zoom
   bundle change was made.
@@ -96,6 +102,17 @@ The complete-map dispositions were re-reviewed to keep the foundation lane
 honest. All 3,889 non-enabled rows from the nine new maps are
 `declaration-pending`; their retained minimal change is connector declaration,
 not engine work. Docker Hub has been normalized to the same primary-class row
-shape. Exactly five rows remain `foundation-gap`, with the two distinct engine
-refusal sites cited in `FOUNDATION-GAP-REASONS.json`. All six primary classes
-are represented across the ten maps.
+shape. Five source-operation rows remain engine gaps; the ten reverse legs add
+one shared typed-destination foundation-gap ID, cited in
+`FOUNDATION-GAP-REASONS.json`.
+
+## Classification correction review
+
+The preceding “six primary classes” language is superseded. Review found that
+250 ordinary typed write endpoints had been classified as `reverse_etl`, which
+incorrectly hid 118 enabled direct-write bindings. The maps now classify those
+endpoints as `direct_write` (2,370 total, 118 enabled) and retain reverse ETL
+only as a zero-eligible attribute on every direct-write row. The one shared,
+recoverable reason is `generic-typed-destination-executor`, with the existing
+destination-factory evidence and minimum recovery. No Critical, Warning, or
+Info finding remains from this correction.

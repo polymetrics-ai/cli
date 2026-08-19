@@ -3,8 +3,8 @@
   "connector": "sentry",
   "source": "connector declarations",
   "declared_commands": 0,
-  "declared_rows": 1,
-  "status_total": 1,
+  "declared_rows": 2,
+  "status_total": 2,
   "commands": [
     {
       "summary": "Declared read capability",
@@ -17,6 +17,18 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared read capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [],

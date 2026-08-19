@@ -33,10 +33,6 @@
         "count": 3
       },
       {
-        "key": "reverse_etl",
-        "count": 0
-      },
-      {
         "key": "binary_read",
         "count": 0
       },
@@ -49,8 +45,15 @@
     "writes_actions": 0,
     "terminal_commands": 0,
     "live_certification": "pending",
-    "gap_ids": [],
-    "foundation_gaps": [],
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 1
+      }
+    ],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
@@ -58,35 +61,69 @@
       }
     ],
     "transport": {
-      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
       "source_transport": {
-        "state": "declaration-pending",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-sentry",
-          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/sentry/sync_transport.json is absent.",
-          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
-        }
+        "state": "declared",
+        "file": "sync_transport.json",
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "projects",
+          "issues",
+          "events",
+          "releases"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "sentry_all_executable_streams_v1"
+        },
+        "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83; source descriptor is loaded and registered through definition-owned composition."
       },
       "destination_transport": {
-        "state": "declaration-pending",
-        "declaration_pending": {
-          "id": "sync-transport-destination-definition-sentry",
-          "evidence": "docs/sync-transport-definition.md:39-75 lists the declaration fields; internal/connectors/defs/sentry/sync_transport.json is absent.",
-          "minimal_change": "Add the connector-owned destination transport declaration, typed binding, acknowledgement, apply strategies and conformance evidence; no engine change is required."
-        }
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "reason": "The production composition has no connector-neutral typed destination DefinitionFactory for these declarative API bundles.",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        },
+        "recoverable": true
       }
     },
     "declaration_pending_ids": [
-      "cli-surface-missing-sentry",
-      "sync-transport-source-definition-sentry",
-      "sync-transport-destination-definition-sentry"
+      "cli-surface-missing-sentry"
     ],
     "declaration_pending": [
       {
         "id": "cli-surface-missing-sentry",
         "count": 223
       }
-    ]
+    ],
+    "direct_write_commands": 0,
+    "reverse_etl_commands": 0,
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "applicable_direct_write_operations": 103,
+      "eligible_operations": 0,
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+      "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+      "recoverable": true
+    }
   },
   "ledger_dispositions": [
     {
@@ -204,6 +241,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -321,6 +367,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -399,6 +454,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -438,6 +502,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -516,6 +589,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -555,6 +637,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -633,6 +724,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -672,6 +772,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -750,6 +859,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -828,6 +946,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -867,6 +994,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1062,6 +1198,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1101,6 +1246,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1140,6 +1294,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1218,6 +1381,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1257,6 +1429,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1296,6 +1477,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1413,6 +1603,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1491,6 +1690,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1530,6 +1738,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1608,6 +1825,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1686,6 +1912,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1725,6 +1960,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1764,6 +2008,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1803,6 +2056,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1842,6 +2104,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1920,6 +2191,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -1998,6 +2278,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2037,6 +2326,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2154,6 +2452,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2232,6 +2539,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2271,6 +2587,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2427,6 +2752,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2700,6 +3034,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2739,6 +3082,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2897,6 +3249,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -2975,6 +3336,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3014,6 +3384,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3131,6 +3510,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3209,6 +3597,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3287,6 +3684,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3326,6 +3732,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3638,6 +4053,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3716,6 +4140,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3755,6 +4188,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3833,6 +4275,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3911,6 +4362,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -3950,6 +4410,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4262,6 +4731,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4535,6 +5013,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4574,6 +5061,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4613,6 +5109,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4691,6 +5196,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4730,6 +5244,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4808,6 +5331,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4847,6 +5379,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -4925,6 +5466,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5003,6 +5553,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5317,6 +5876,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5395,6 +5963,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5473,6 +6050,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5512,6 +6098,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5629,6 +6224,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5668,6 +6272,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5785,6 +6398,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5863,6 +6485,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -5941,6 +6572,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6019,6 +6659,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6214,6 +6863,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6292,6 +6950,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6331,6 +6998,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6370,6 +7046,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6604,6 +7289,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6682,6 +7376,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6799,6 +7502,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6838,6 +7550,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6877,6 +7598,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6955,6 +7685,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -6994,6 +7733,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7150,6 +7898,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7189,6 +7946,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7267,6 +8033,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7306,6 +8081,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7345,6 +8129,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7384,6 +8177,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7423,6 +8225,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7540,6 +8351,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7657,6 +8477,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7735,6 +8564,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7813,6 +8651,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7852,6 +8699,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7932,6 +8788,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -7971,6 +8836,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8127,6 +9001,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8166,6 +9049,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8205,6 +9097,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8244,6 +9145,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8322,6 +9232,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8361,6 +9280,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8439,6 +9367,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8673,6 +9610,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8712,6 +9658,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8751,6 +9706,15 @@
       "declaration": {
         "status": "disabled; declaration-pending cli-surface-missing-sentry",
         "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
       }
     },
     {
@@ -8795,8 +9759,10 @@
   ],
   "source_only_dispositions": [],
   "notes": [
-    "Complete six-class source-locked map required before certification. Each row has exactly one primary parity class.",
     "ENABLED% is implemented CLI commands bound to source operations, never inventory count or declared coverage.",
-    "Missing typed contracts, commands and sync-transport definitions are declaration-pending, not foundation gaps."
+    "Missing typed contracts, commands and sync-transport definitions are declaration-pending, not foundation gaps.",
+    "Complete source-locked endpoint map. Every documented operation has one primary endpoint class: direct_read, direct_write, etl, binary_read, or binary_write.",
+    "Reverse ETL is an eligibility attribute on every direct_write row, not an endpoint class. It is currently blocked by generic-typed-destination-executor because no connector-neutral typed destination factory accepts these definitions.",
+    "ETL source transport is declared through the connector-neutral declarative_stream_source adapter; no transport_binding action is invented."
   ]
 }

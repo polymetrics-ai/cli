@@ -11895,14 +11895,110 @@
           "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
         }
       ]
+    },
+    {
+      "id": "generic-typed-destination-executor",
+      "reason": "The production composition has no connector-neutral typed destination DefinitionFactory for these declarative API bundles.",
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+      "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        },
+        {
+          "connector": "notion",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        },
+        {
+          "connector": "stripe",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        },
+        {
+          "connector": "bitbucket",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        },
+        {
+          "connector": "gitlab",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        },
+        {
+          "connector": "circleci",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        },
+        {
+          "connector": "sentry",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        },
+        {
+          "connector": "vercel",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        },
+        {
+          "connector": "asana",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        },
+        {
+          "connector": "jira",
+          "operation": {
+            "kind": "sync_transport",
+            "role": "destination_transport"
+          },
+          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
+          "capability": "reverse_etl_eligibility"
+        }
+      ]
     }
   ],
   "complete_map_declaration_pending": [
     "typed-operation-contract",
     "cli-surface-missing",
     "cli-command-contract",
-    "command-availability",
-    "sync-transport-source-definition",
-    "sync-transport-destination-definition"
+    "command-availability"
   ]
 }

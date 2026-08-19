@@ -3,8 +3,8 @@
   "connector": "gitlab",
   "source": "connector declarations",
   "declared_commands": 4,
-  "declared_rows": 5,
-  "status_total": 5,
+  "declared_rows": 6,
+  "status_total": 6,
   "commands": [
     {
       "summary": "List GitLab groups as ETL records.",
@@ -89,6 +89,18 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared read capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [],

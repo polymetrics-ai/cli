@@ -3,8 +3,8 @@
   "connector": "dockerhub",
   "source": "connector declarations",
   "declared_commands": 41,
-  "declared_rows": 43,
-  "status_total": 43,
+  "declared_rows": 44,
+  "status_total": 44,
   "commands": [
     {
       "summary": "List audit log actions",
@@ -1440,6 +1440,18 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [],

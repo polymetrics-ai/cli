@@ -4,13 +4,19 @@
 - [x] Source-lock operation inventory and `api_surface.json` method/path inventory are reconciled: 4,378 / 4,378 (100%).
 - [x] `go run ./cmd/connectorgen validate` passes: 552 connectors, zero findings.
 - [x] `go run ./cmd/connectorgen surface-sync --check` passes: zero fields filled or corrected.
-- [x] `make connector-runtime-preflight`, `make connector-canon-check`, and `make connector-boundary` pass.
+- [x] `make connector-runtime-preflight` and `make connector-canon-check` pass.
+- [ ] `connector-boundary` is required and CI-verified: the detached local
+  capture was terminated by the worker boundary before it produced an exit
+  record, so it is not claimed as locally passed.
 - [x] Fixture-backed conformance runs for the ten selected bundles pass via `go test -timeout 20m ./internal/connectors/conformance -run 'TestConformance/(dockerhub|gitlab|jira|vercel|notion|stripe|bitbucket|circleci|sentry|asana)$'`.
 - [x] Generated non-live sweep artifacts were generated and byte-checked for every selected connector.
 - [x] `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, `make tidy-check`, `make lint`, and `go build ./cmd/pm` pass.
 - [x] No provider credential is requested, read, printed, or stored.
 - [x] Live certification is recorded `pending` for every connector.
-- [x] Transport-parity blocker is explicit: 10 `sync_transport` entries are `foundation-gap` and `recoverable: true`; `TRANSPORT-GAP.md` has file-and-line evidence plus a smallest safe recovery. No GitHub-only transport evidence or destination contract was copied.
+- [x] All ten source-only `sync_transport.json` files validate and App opens
+  through definition-owned source composition. The ten reverse legs are
+  explicit, recoverable `generic-typed-destination-executor` gaps; no GitHub
+  evidence, destination action, or generic writer was copied.
 
 ## Docker Hub full-parity proof — secret-policy retrofit (2026-08-19)
 
@@ -49,8 +55,8 @@
   `sources/<connector>-declaration-disposition.json`.
 - [x] Local map-integrity assertion: each crosswalk and disposition has exactly
   its pinned source count, every operation has one primary class and a
-  foundation record, class counts sum to the source count, and both
-  definition-owned transport declaration-pending records are present.
+  foundation record, class counts sum to the source count, and the current
+  source-declared/reverse-destination-gap transport disposition is present.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs/notion --json`
   — 0 findings.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
@@ -64,8 +70,8 @@
 - [x] After the map gate: `go run ./cmd/connectorgen certification-sweep .
   --connector <connector> --check` passed for Docker Hub, Notion, Stripe,
   Bitbucket, GitLab, CircleCI, Sentry, Vercel, Asana, and Jira. The respective
-  current row/CLI counts were 43/41, 51/49, 10/8, 7/5, 5/4, 2/0, 1/0, 2/0,
-  251/249, and 592/590.
+  current row/CLI counts after source-transport generation are 44/41, 52/49,
+  11/8, 8/5, 6/4, 3/0, 2/0, 3/0, 252/249, and 593/590.
 - [x] `go test -timeout 20m ./internal/connectors/conformance -run
   'TestConformance/(dockerhub|gitlab|jira|vercel|notion|stripe|bitbucket|circleci|sentry|asana)$'
   -count=1` — pass (3.861s), fixture-backed only.
@@ -76,6 +82,24 @@
   again vanished before it wrote `result.txt`, stdout or stderr, so no exit
   status exists to claim. This is the third observed worker-containment
   failure; CI remains the required gate and no check was weakened.
+
+## Definition-owned ETL source retrofit (PR #4286)
+
+- [x] Added source-only `sync_transport.json` for Docker Hub, Notion, Stripe,
+  Bitbucket, GitLab, CircleCI, Sentry, Vercel, Asana, and Jira. Each has a
+  concrete stream allowlist matching `streams.json`, the exact registered
+  `declarative_stream_source` executor, and unique evidence reference.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs --json` —
+  552 connectors, zero findings.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — 552 connectors, zero
+  filled or corrected fields.
+- [x] `go test -timeout 20m ./internal/app -run
+  '^TestOpenRegistersDefinitionOwnedProductionTransports$' -count=1` — pass
+  (2.487s), proving production App composition accepts the declarations.
+- [x] `generic-typed-destination-executor` is recorded for all ten reverse
+  legs with the exact `issue_label_destination` factory evidence and the
+  definition-selected typed-factory recovery. Live certification remains
+  pending; no provider request was made.
 
 ## Vocabulary correction
 
@@ -88,3 +112,17 @@
   engine refusal file/line. The 3,889 disabled rows in the nine newly mapped
   connectors use `declaration-pending`, not `foundation-gap`; Docker Hub is
   normalized to the same six-class row shape.
+
+## Classification correction — direct-write endpoint taxonomy
+
+- [x] Map-integrity assertion confirms exactly five primary endpoint classes
+  (`direct_read`, `direct_write`, `etl`, `binary_read`, `binary_write`) and a
+  separate `reverse_etl_eligibility` attribute on every direct-write row.
+- [x] The correction reclassifies 250 rows: the cohort now records 2,370
+  direct-write endpoints and 118 enabled direct-write bindings; reverse-ETL
+  eligibility is zero.
+- [x] Every zero-eligible attribute cites the recoverable
+  `generic-typed-destination-executor` gap and
+  `internal/app/issue_label_warehouse_transport.go:85-95`; no destination
+  descriptor, acknowledgement, apply strategy, or `transport_binding` action
+  was invented.

@@ -3,8 +3,8 @@
   "connector": "jira",
   "source": "connector declarations",
   "declared_commands": 590,
-  "declared_rows": 592,
-  "status_total": 592,
+  "declared_rows": 593,
+  "status_total": 593,
   "commands": [
     {
       "summary": "Get announcement banner configuration.",
@@ -14835,6 +14835,18 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [],

@@ -24,9 +24,15 @@ Observed non-live green result: each selected bundle's `certification-sweep.json
 
 ### Transport parity follow-up
 
-**Red:** all ten selected bundles lack `sync_transport.json`; copying GitHub's declaration would name its exact evidence and issue-label destination actions without a source-derived contract.
+**Red:** before PR #4286, no reusable declarative source factory could admit
+connector-owned evidence, while the sole destination remained the closed
+issue-label adapter.
 
-**Green:** `REJECTION-LIST.json` has one `sync_transport`/`foundation-gap` entry with `recoverable: true` for every selected connector, and `TRANSPORT-GAP.md` cites the factory/evidence admission code and its smallest safe recovery. No invalid descriptor is introduced.
+**Green:** each selected bundle now has a source-only `sync_transport.json`
+with a concrete stream allowlist and its own evidence reference. App open
+registers the shared source adapter. `REJECTION-LIST.json` records only the
+reverse leg as recoverable `generic-typed-destination-executor`; no invalid
+destination is introduced.
 
 ## Increment 2 TDD Ledger
 
@@ -52,7 +58,11 @@ The generated certification sweeps, structural validation, `surface-sync --check
 
 **Red:** none of the ten selected bundles has a connector-specific registered declarative source and typed destination factory with its own evidence and acknowledgement contract.
 
-**Green:** each selected connector receives recoverable source/destination `sync_transport` foundation-gap records tied to #4093, with the evidence and smallest safe recovery already documented in `TRANSPORT-GAP.md`. No descriptor is copied from GitHub or invented from REST documentation.
+**Green:** this later-superseded draft must use the current source-only
+declaration rule: the source is declared through the shared adapter and any
+reverse leg without a typed destination uses
+`generic-typed-destination-executor`. No descriptor is copied from GitHub or
+invented from REST documentation.
 
 ## Full-parity correction — Docker Hub source-contract inventory
 
@@ -222,3 +232,25 @@ expressible by `direct_read_paginate.go:126-130`.
 Foundation dashboards consume only `foundation_gap` records and `gap_ids`.
 `declaration_pending_ids` is an explicit separate backlog and cannot be used to
 request shared engine work.
+
+## Classification correction — direct write is not reverse ETL
+
+### Red
+
+The completed map placed 250 ordinary write endpoints in the `reverse_etl`
+primary class. That made direct-write enabled counts appear as zero and claimed
+118 enabled reverse-ETL operations despite no destination transport contract.
+
+### Green
+
+All 250 rows are now `direct_write`, yielding 2,370 direct-write endpoints and
+118 enabled direct-write bindings. Each direct-write row carries a distinct
+`reverse_etl_eligibility` attribute set to the recoverable
+`generic-typed-destination-executor` gap, with zero eligible operations. ETL
+remains a primary endpoint class where its source transport is declared.
+
+### Refactor
+
+Keep the map taxonomy independent of legacy command lifecycle intent: no typed
+write action, create/update/upsert/delete kind, or CLI binding can imply a
+reverse-ETL destination. Only the definition-owned destination contract can.
