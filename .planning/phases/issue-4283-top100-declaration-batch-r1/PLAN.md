@@ -40,6 +40,14 @@ The concrete registration gap was confirmed for this cohort. No `sync_transport.
 
 Transport gate follow-up: Captain review required the omission to be explicit before increment 2. `TRANSPORT-GAP.md` records the path-(b) decision, the runtime evidence, the smallest safe recovery, and ten recoverable rejection entries. No new descriptor may use GitHub's evidence or issue-label action contract for another connector.
 
+## Increment 2 Plan
+
+1. Retrieve and pin the confirmed public provider artifacts for Gitea, Grafana, Trello, Slack, n8n, Google Calendar, Gmail, Twilio, Amazon SQS, and Elasticsearch. Preserve the source artifact's actual document format: OpenAPI/Swagger where published, Google Discovery metadata for the Google APIs, and the AWS-owned SQS service model for the native Query API.
+2. Mechanically reconcile every documented method/path with its bundle's `api_surface.json`. Preserve an existing enabled binding only when it is the same documented method/path; add every remaining source operation as a disabled declaration with the fixed-vocabulary reason and source evidence. Do not create request, response, pagination, or body schemas.
+3. Retain existing typed operations and writes, add empty ledgers only where they are absent, and ensure every source DELETE is either represented by an existing delete action or explicitly disabled. Do not manufacture `sync_transport.json`: add a recoverable `foundation-gap` record referencing #4093 for both transport directions unless the declared adapter, evidence constants, action binding, and acknowledgement contract all already exist.
+4. Extend the source-lock verification, progress ledger, rejection list, foundation-gap log, TDD/verification evidence, connector certification sweeps, and generated documentation evidence. No live provider calls are permitted; live certification stays `pending`.
+5. Run the declaration and generated-artifact gates for the ten affected bundles, then commit the increment and report its elapsed time and file count before starting increment 3.
+
 ## Lifecycle Record
 
 - Inline/manual GSD fallback: this execution environment does not provide the compatible Pi runtime and the canonical contract forbids spawning GSD roles. Generated and reviewed: `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, `code-review` for issue `4283`.
