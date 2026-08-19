@@ -1,10 +1,13 @@
 # quickbooks parity map
 
-- Documented endpoints: 11
+- API-surface rows: 11 old → 134 regenerated
+- Mapped operation rows: 134
+- Operations found in provider source: 129
+- Coverage confidence: machine-readable-spec — The public Intuit API Explorer entity document enumerates 74 QuickBooks Online entities and 129 unique normalized HTTP method/path operations.
 - Enabled: 0
-- Declaration pending: 10
-- Disabled: 1
+- Declaration pending: 134
+- Disabled: 0
 - Documented DELETEs: 0; enabled DELETEs: 0
-- Parity classes: binary_write=1, direct_read=4, direct_write=1, etl=5
+- Parity classes: direct_read=84, direct_write=45, etl=5
 - Foundation gaps: generic-typed-destination-executor
 - Public source retrieval: undefined

@@ -1,10 +1,13 @@
 # woocommerce parity map
 
-- Documented endpoints: 10
+- API-surface rows: 10 old → 140 regenerated
+- Mapped operation rows: 140
+- Operations found in provider source: 140
+- Coverage confidence: complete-rendered-reference — Official WooCommerce REST v3 reference has 140 unique normalized method/path request examples after the duplicated root query variant is deduplicated.
 - Enabled: 0
-- Declaration pending: 10
+- Declaration pending: 140
 - Disabled: 0
-- Documented DELETEs: 1; enabled DELETEs: 0
-- Parity classes: direct_read=3, direct_write=3, etl=4
+- Documented DELETEs: 18; enabled DELETEs: 0
+- Parity classes: direct_read=63, direct_write=73, etl=4
 - Foundation gaps: generic-typed-destination-executor
 - Public source retrieval: undefined

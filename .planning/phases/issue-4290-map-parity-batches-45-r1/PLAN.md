@@ -3,25 +3,26 @@
 - Issue: Refs #4290 — chore(connectors): map parity batches 4 and 5
 - Base branch: main
 - Merges into: main
-- Delivery: A pull request against `main`, with the two ten-connector parity-map increments committed separately, source locks and six-class disposition ledgers present for every assigned bundle, and the named local validation gates green.
+- Delivery: A pull request against `main`, with source-driven API-surface inventories and rematerialized six-class disposition ledgers for every assigned bundle. The earlier PR is held until public-source operation totals, confidence, provenance, and every regenerated inventory agree.
 - Working branch: fm/cli-map-batch45-r1
-- Task: Produce source-locked, complete operation disposition maps for Batch 4 (`salesforce`, `hubspot`, `pipedrive`, `mailchimp`, `zendesk-support`, `quickbooks`, `bamboo-hr`, `airtable`, `google-analytics-data-api`, `woocommerce`) and Batch 5 (`pinterest`, `tiktok-marketing`, `linear`, `buildkite`, `sonar-cloud`, `launchdarkly`, `fastly`, `squarespace`, `ebay-fulfillment`, `shipstation`). Every normalized, documented `api_surface.json` endpoint must occur exactly once and use the proven batch-1 row shape.
+- Task: Produce source-locked, complete operation disposition maps for Batch 4 (`salesforce`, `hubspot`, `pipedrive`, `mailchimp`, `zendesk-support`, `quickbooks`, `bamboo-hr`, `airtable`, `google-analytics-data-api`, `woocommerce`) and Batch 5 (`pinterest`, `tiktok-marketing`, `linear`, `buildkite`, `sonar-cloud`, `launchdarkly`, `fastly`, `squarespace`, `ebay-fulfillment`, `shipstation`). A pre-existing `api_surface.json` is not an inventory boundary: validate each against the provider's complete public source, regenerate every understated surface, then map every resulting operation exactly once in the proven batch-1 row shape.
 - Verification: Source-lock/map inventory assertions; `go run ./cmd/connectorgen validate`; `go run ./cmd/connectorgen surface-sync --check`; the connector-boundary check; `go test -timeout 20m ./cmd/connectorgen ./internal/connectors/engine`; and generated/docs checks that apply to definitions-only changes.
 
 ## Evidence Table
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| Every Batch 4 normalized documented endpoint has one map row | live | A local inventory assertion compares the method/path multiset in each Batch 4 `api_surface.json` with its source lock and disposition map; removing a row makes the assertion fail. |
-| Every Batch 5 normalized documented endpoint has one map row | live | The same assertion compares each Batch 5 bundle; it detects duplicate and missing rows. |
+| Every Batch 4 documented endpoint has one map row | live | The rebuilt method/path multiset in each Batch 4 `api_surface.json` must match its provider-source lock and disposition map exactly; removing or retaining an unsupported row makes the assertion fail. |
+| Every Batch 5 documented endpoint has one map row | live | The same source-to-surface-to-map assertion compares each Batch 5 bundle; it detects duplicate and missing rows. |
+| The provider source is complete enough to support its count | live | Every lock records `counts.total`, method/protocol counts, `operations_found`, and coverage confidence/basis. Machine-readable artifacts are SHA-256/byte pinned; rendered references record the complete crawl; genuinely dynamic or inaccessible surfaces retain explicit `null` totals and their basis. |
 | Row vocabulary distinguishes unauthored work from engine incapability | live | The assertion rejects any endpoint-level `foundation-gap` without engine file/line evidence and minimal change, checks unauthored rows use `declaration-pending`, and verifies that reverse-ETL is only an eligibility attribute carrying the verified generic typed-destination limitation. |
 | Existing connector definitions remain valid and synchronized | live | `connectorgen validate` and `surface-sync --check` parse the real affected bundles and report no drift. |
 | No credentialed provider operation is performed | fake | This is a documentation-only mapping lane; locks are public descriptions retrieved without credentials, while all provider behavior remains unexercised. |
 
 ## Scope and Ownership Guard
 
-- Allowed production paths are only `internal/connectors/defs/{salesforce,hubspot,pipedrive,mailchimp,zendesk-support,quickbooks,bamboo-hr,airtable,google-analytics-data-api,woocommerce,pinterest,tiktok-marketing,linear,buildkite,sonar-cloud,launchdarkly,fastly,squarespace,ebay-fulfillment,shipstation}/sources/`.
-- This phase also owns its required `.planning/phases/issue-4290-map-parity-batches-45-r1/` evidence. No engine, generator, schema, source-operation contract, CLI surface, or other connector files may change.
+- Allowed production paths are only `internal/connectors/defs/{salesforce,hubspot,pipedrive,mailchimp,zendesk-support,quickbooks,bamboo-hr,airtable,google-analytics-data-api,woocommerce,pinterest,tiktok-marketing,linear,buildkite,sonar-cloud,launchdarkly,fastly,squarespace,ebay-fulfillment,shipstation}/{api_surface.json,sources/}`.
+- This phase also owns its required `.planning/phases/issue-4290-map-parity-batches-45-r1/` evidence. No engine, schema, source-operation contract, CLI surface, or other connector files may change.
 - The issue body has three trailing connector names after the explicit Batch 5 ten. The launch brief's exact twenty-connector list is authoritative; `gocardless`, `amazon-seller-partner`, and `miro` are deliberately not touched.
 - `bamboohr` and `sonarcloud` resolve to the repository-owned `bamboo-hr` and `sonar-cloud` definition directories.
 
@@ -31,10 +32,20 @@
 2. `requires-elevated-scope` is enabled with source/runtime scope metadata; it is never a rejection or disabled state.
 3. Every DELETE is represented. A delete requested by this issue is not `unsafe-to-exercise` merely because it mutates data.
 4. PR #4286's merged `docs/sync-transport-definition.md` is the only transport contract. ETL is connector-neutral where a bundle can truthfully supply the declarative source contract; absence of a connector-owned `sync_transport.json` is `declaration-pending`, never the retired #4093 gap. A typed write action is an enabled `direct_write` endpoint, including DELETE. Reverse ETL is an eligibility attribute on that direct-write declaration, and is a real shared `foundation-gap` (`generic-typed-destination-executor`): `internal/app/issue_label_warehouse_transport.go:85-95` still registers and enforces only the GitHub issue-label destination. Its minimal change is: `register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies`. Do not invent a transport-binding action or descriptor.
-5. Source maps reproduce the batch-1 shape: `method`, `path`, `parity_class`, `api_surface`, `source`, `state`, `foundation`, `rejection`, and `declaration`. Existing normalized `api_surface.json` endpoint inventory is the connector-local crosswalk; each lock records its public documentation source and exact endpoint inventory.
-6. No provider credential, tenant discovery, API request, or write is used. Salesforce tenant-defined object/field dependencies remain named runtime metadata, not discovered facts.
+5. Main now includes PR #4297. `head-response-less-operation-executor` and `operation-scoped-rest-pagination` are closed runtime capabilities, so a fresh materialization must not preserve either as a foundation gap; an operation that otherwise has a complete connector-owned declaration is enabled.
+6. Merge is frozen until issue #4303 makes a connector-neutral typed reverse-ETL destination declarable across the portfolio. Until then, retain `generic-typed-destination-executor` solely as a nested eligibility gap on each enabled, connector-owned typed direct write. Do not fabricate a `transport_binding` or author a typed action without a provider-declared request contract; all other mutations stay identified as `direct_write` and `declaration-pending` until they have one.
+7. Source maps reproduce the batch-1 shape: `method`, `path`, `parity_class`, `api_surface`, `source`, `state`, `foundation`, `rejection`, and `declaration`. The regenerated, provider-source-derived `api_surface.json` inventory is the connector-local crosswalk; each lock records its public documentation source, provider total, confidence, and exact endpoint inventory. Never report `declared_percent`.
+8. No provider credential, tenant discovery, API request, or write is used. Salesforce tenant-defined object/field dependencies remain named runtime metadata, not discovered facts.
 
 ## TDD Delivery Plan
+
+### Red — source-bounded inventory defect
+
+The earlier source lock only compared a map with the pre-existing `api_surface.json`, which hid provider operations not already in the bundle. This is a failing acceptance condition: a well-known provider's old count must not be accepted as a complete count merely because the source map agrees with it. Rebuild every retrievable source from its provider artifact/reference and compare the rebuilt surface with the exact artifact operations.
+
+### Green — source-derived API surfaces
+
+For every connector with a complete machine-readable source, pin the exact bytes and digest, derive its unique request operations, and materialize `api_surface.json` version-2 provenance. Preserve an executable stream/write binding only when the source method/path is identical; record all other provider operations as blocked operation-ledger rows without fabricating body, response, pagination, or schema contracts. For rendered sources, crawl the complete reference before producing the same inventory. For Salesforce's instance-dependent object surface and unavailable browser-only sources, retain an explicit dynamic/unavailable basis and an unknown total rather than a fabricated count.
 
 ### Red — complete-map invariants
 
@@ -42,15 +53,17 @@ Before materialization, every target lacked both `sources/<connector>-operation-
 
 ### Green — Batch 4
 
-Pin public description evidence and materialize the ten Batch 4 locks/maps from their normalized provider inventories. Preserve every `covered_by` binding; classify streams as `etl`, typed write bindings as enabled `direct_write`, other bounded operation bindings as direct read/write, and documented binary endpoints as binary read/write. Assess ETL against the connector-neutral source contract; a missing descriptor/conformance claim is pending. Record reverse-ETL eligibility beneath every typed direct-write action, with the verified generic typed-destination foundation gap and never a fabricated action binding. Commit only the Batch 4 source directories after its assertions and connector generation gates pass.
+Rematerialize the ten Batch 4 locks/maps from the regenerated provider inventories. Preserve only provider-matching `covered_by` bindings; classify streams as `etl`, typed write bindings as enabled `direct_write`, other bounded operation bindings as direct read/write, and documented binary endpoints as binary read/write. Assess ETL against the connector-neutral source contract; a missing descriptor/conformance claim is pending. Record reverse-ETL eligibility beneath every typed direct-write action, with the verified generic typed-destination foundation gap and never a fabricated action binding. Commit the regenerated Batch 4 surfaces and source evidence after assertions and connector generation gates pass.
+
+Mailchimp source exception resolved: its public Swagger root was available to the ordinary client but its 181 `$ref` path documents returned Akamai 503 after serialized retry. Chrome successfully retrieved all 181 documents, recording a per-document UTF-8 byte count and SHA-256. Their current unique physical request inventory is 295, not the inherited 298-row bundle count. The materialized surface has 323 rows because its 28 historical executor bindings are retained as explicit local compatibility rows; the provider total remains 295.
 
 ### Green — Batch 5
 
-Repeat the same source-lock and full-inventory materialization for Batch 5, including GraphQL/native-hook inventory facts without inventing GraphQL documents or tenant schemas. TikTok Marketing and eBay Fulfillment are browser-source failures in this environment (TikTok: `ERR_SSL_PROTOCOL_ERROR`; eBay: official error page/403), so their locks explicitly record `skipped: no-public-api-description` with exact browser evidence; their existing normalized endpoint inventory is still mapped without inventing a provider pin. Commit only the Batch 5 source directories after its assertions and connector generation gates pass.
+Repeat the same source-lock and full-inventory materialization for Batch 5, including GraphQL/native-hook inventory facts without inventing GraphQL documents or tenant schemas. TikTok Marketing and eBay Fulfillment are browser-source failures in this environment (TikTok: `ERR_SSL_PROTOCOL_ERROR`; eBay: official error page/403), so their locks explicitly record `skipped: no-public-api-description` with exact browser evidence and unknown totals. Commit the regenerated Batch 5 surfaces and source evidence after its assertions and connector generation gates pass.
 
 ### Refactor / verification
 
-Review generated JSON for deterministic ordering and no source data invented beyond the already-normalized provider inventory. Run the required generated-file, boundary, focused test, and source-map assertions; document any check the local per-command limit cannot complete.
+Review generated JSON for deterministic ordering and no source data invented beyond the retrieved provider inventory. Per connector report the old API-surface count, regenerated count, and source basis. Run the required generated-file, boundary, focused test, and source-map assertions; document any check the local per-command limit cannot complete.
 
 ## Lifecycle Record
 

@@ -1,10 +1,13 @@
 # zendesk-support parity map
 
-- Documented endpoints: 631
+- API-surface rows: 631 old → 635 regenerated
+- Mapped operation rows: 635
+- Operations found in provider source: 629
+- Coverage confidence: machine-readable-spec — Official Zendesk Support OpenAPI document; count is HTTP method plus path.
 - Enabled: 122
-- Declaration pending: 509
+- Declaration pending: 513
 - Disabled: 0
-- Documented DELETEs: 86; enabled DELETEs: 9
-- Parity classes: direct_read=307, direct_write=291, etl=33
+- Documented DELETEs: 87; enabled DELETEs: 9
+- Parity classes: direct_read=308, direct_write=294, etl=33
 - Foundation gaps: generic-typed-destination-executor
 - Public source retrieval: undefined
