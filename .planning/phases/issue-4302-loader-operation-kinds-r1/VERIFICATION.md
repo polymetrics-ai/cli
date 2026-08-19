@@ -8,7 +8,7 @@
 - [x] Confirmed `expectedOperationBlock` lacks `rest_status` and `text_export`, while their schema enum and semantic validation already exist.
 - [x] Plan and TDD ledger created before production edits.
 
-## Pending checks
+## Completed checks
 
 - [x] Record focused red loader test failure before the block-map edit.
 - [x] Record focused green loader test success after the edit: `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestBundleLoadRegistersStatusAndTextExportOperations|TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations)$'` (pass).

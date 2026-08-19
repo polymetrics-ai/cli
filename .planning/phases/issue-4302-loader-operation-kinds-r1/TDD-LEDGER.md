@@ -13,5 +13,5 @@
 
 ## Slice 2 — fail-closed declaration semantics
 
-- Red: pending focused engine test. Invalid status response/body behavior, non-HEAD status method, unbounded CSV export, and wrong execution blocks must each be rejected by `Load` before any executor can issue I/O.
+- Red: The initial focused loader run in Slice 1 rejected every malformed declaration as unsupported before semantic validation. The named response/body, method, cap, and wrong-block cases needed to reach `Load`'s existing validators before any executor could issue I/O.
 - Green: the same focused command passed. Its named cases assert that status rejects JSON output/body declarations and non-HEAD methods, while text export rejects an absent byte bound and a REST block in place of its binary block. Each refusal occurs in `Load`, before any runtime or I/O path exists.
