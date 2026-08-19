@@ -19,7 +19,7 @@ Required skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-inte
 1. **Red — generic selection:** Add a synthetic declarative API connector whose destination describes a typed named action, source field bindings, acknowledgment, and closed strategies. Show App composition rejects it because the destination factory accepts only `issue_label_destination`.
 2. **Green — generic typed adapter:** Make production factory selection definition-derived for a new declarative typed-destination executor. Build the same typed adapter for every declaring connector, derive its contract only from that connector’s declaration and action metadata, and register it once.
 3. **Red/Green — tenancy and refusals:** Add a second synthetic destination with distinct evidence and action metadata. Assert each gets its own evidence admission and action contract; malformed action contract, unknown executor/evidence, wrong source binding/role, and `change_capture` are refused before reads, plans, writes, or read-back.
-4. **Parity/refactor:** Route GitHub’s issue-label contract through the generic executor and delete the special factory branch only after the existing approval, recovery, and real-provider proof pass.
+4. **Parity/refactor:** Route GitHub’s issue-label contract through the same definition-evidence/factory loop while retaining its specialized typed adapter and provider-state read-back. Delete the bespoke composition branch only after the existing approval, recovery, and real-provider proof pass.
 5. **Documentation/review:** Update the declaration guide with exact typed action and acknowledgement requirements, no-generic-writer boundary, mode/action strategies, source binding constraints, and evidence admission. Run full local verification and record review disposition.
 
 ## Commit checkpoints
@@ -38,3 +38,17 @@ Required skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-inte
 | Malformed, unknown, wrong-role, and capture destination declarations fail closed | fake | In-memory declarations can assert zero source reads, destination plans, applies, and read-backs after the refusal. |
 | GitHub issue labels retain observable write/reconciliation behavior | live | The purpose-built real GitHub API proof executes the named action through plan, preview, approval, run, acknowledgement, and read-back; the independently read label is the required effect. |
 | Connector authors can declare destinations mechanically | live | `docs/sync-transport-definition.md` states the exact accepted fields, typed-action boundary, evidence rule, source binding rule, acknowledgement, and mode strategy requirement. |
+
+## Completion evidence
+
+- `make verify` passed locally, including the full Go suite, generated parity
+  checks, documentation validation, lint, and connector-boundary.
+- The separately detached-and-polled `make connector-boundary` gate completed
+  cleanly: 552 connectors loaded, 293 files checked, no findings.
+- The opt-in real API proof
+  `TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels` passed with its
+  dedicated proof repository. It independently confirmed add, set, keyed
+  replay, destination read-back, acknowledgement, and checkpoint behavior.
+- The required code-review stage was performed inline because compatible
+  isolated reviewer agents are unavailable and the canonical single-worker
+  contract forbids spawning them. Its clean disposition is in `REVIEW.md`.
