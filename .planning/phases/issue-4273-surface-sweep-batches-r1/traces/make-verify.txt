@@ -1,0 +1,346 @@
+gofmt -w cmd internal
+go mod tidy
+git diff --exit-code -- go.mod go.sum
+go vet ./...
+go test -timeout 20m ./...
+ok  	polymetrics.ai/cmd/agentcontractgen	10.571s
+?   	polymetrics.ai/cmd/certifytiming	[no test files]
+ok  	polymetrics.ai/cmd/connectorgen	155.023s
+ok  	polymetrics.ai/cmd/iconregistrygen	1.634s
+ok  	polymetrics.ai/cmd/pm	1.164s
+ok  	polymetrics.ai/cmd/prissueguard	1.332s
+ok  	polymetrics.ai/internal/agentcontract	7.152s
+ok  	polymetrics.ai/internal/agentmode	2.076s
+ok  	polymetrics.ai/internal/app	283.231s
+ok  	polymetrics.ai/internal/certificationcatalog	2.547s
+ok  	polymetrics.ai/internal/certifytiming	2.658s
+ok  	polymetrics.ai/internal/cli	584.826s
+ok  	polymetrics.ai/internal/config	3.922s
+ok  	polymetrics.ai/internal/connectors	4.307s
+ok  	polymetrics.ai/internal/connectors/boundary	287.058s
+ok  	polymetrics.ai/internal/connectors/bundleregistry	8.997s
+ok  	polymetrics.ai/internal/connectors/certifications	(cached)
+ok  	polymetrics.ai/internal/connectors/certify	19.601s
+ok  	polymetrics.ai/internal/connectors/commandrunner	24.554s
+ok  	polymetrics.ai/internal/connectors/conformance	46.227s
+ok  	polymetrics.ai/internal/connectors/connsdk	5.911s
+ok  	polymetrics.ai/internal/connectors/database	17.001s
+ok  	polymetrics.ai/internal/connectors/defs	7.077s
+ok  	polymetrics.ai/internal/connectors/defs/asana	4.946s
+ok  	polymetrics.ai/internal/connectors/defs/ashby	1.906s
+ok  	polymetrics.ai/internal/connectors/defs/crisp	2.549s
+?   	polymetrics.ai/internal/connectors/defs/google-calendar	[no test files]
+ok  	polymetrics.ai/internal/connectors/defs/recurly	1.986s
+ok  	polymetrics.ai/internal/connectors/defs/zendesk-support	7.868s
+ok  	polymetrics.ai/internal/connectors/defs/zoom	2.358s
+ok  	polymetrics.ai/internal/connectors/discovery	1.383s
+ok  	polymetrics.ai/internal/connectors/engine	10.933s
+ok  	polymetrics.ai/internal/connectors/hooks/akeneo	1.694s
+ok  	polymetrics.ai/internal/connectors/hooks/alpha-vantage	1.797s
+ok  	polymetrics.ai/internal/connectors/hooks/amazon-ads	0.586s
+ok  	polymetrics.ai/internal/connectors/hooks/amazon-seller-partner	0.571s
+ok  	polymetrics.ai/internal/connectors/hooks/apify-dataset	0.629s
+ok  	polymetrics.ai/internal/connectors/hooks/apple-search-ads	0.894s
+ok  	polymetrics.ai/internal/connectors/hooks/appsflyer	1.062s
+ok  	polymetrics.ai/internal/connectors/hooks/ashby	0.913s
+ok  	polymetrics.ai/internal/connectors/hooks/aws-cloudtrail	1.354s
+ok  	polymetrics.ai/internal/connectors/hooks/babelforce	1.141s
+ok  	polymetrics.ai/internal/connectors/hooks/basecamp	0.904s
+ok  	polymetrics.ai/internal/connectors/hooks/blogger	1.242s
+ok  	polymetrics.ai/internal/connectors/hooks/bunny-inc	0.587s
+ok  	polymetrics.ai/internal/connectors/hooks/canny	0.856s
+ok  	polymetrics.ai/internal/connectors/hooks/chift	1.110s
+ok  	polymetrics.ai/internal/connectors/hooks/copper	1.481s
+ok  	polymetrics.ai/internal/connectors/hooks/dixa	1.134s
+ok  	polymetrics.ai/internal/connectors/hooks/ebay-fulfillment	1.423s
+ok  	polymetrics.ai/internal/connectors/hooks/elasticsearch	1.416s
+ok  	polymetrics.ai/internal/connectors/hooks/fastbill	1.731s
+ok  	polymetrics.ai/internal/connectors/hooks/feishu	1.415s
+ok  	polymetrics.ai/internal/connectors/hooks/free-agent-connector	1.775s
+ok  	polymetrics.ai/internal/connectors/hooks/freightview	1.816s
+ok  	polymetrics.ai/internal/connectors/hooks/github	6.201s
+ok  	polymetrics.ai/internal/connectors/hooks/gmail	1.946s
+ok  	polymetrics.ai/internal/connectors/hooks/google-ads	2.096s
+ok  	polymetrics.ai/internal/connectors/hooks/google-analytics-data-api	1.932s
+ok  	polymetrics.ai/internal/connectors/hooks/google-calendar	1.646s
+ok  	polymetrics.ai/internal/connectors/hooks/google-classroom	1.963s
+ok  	polymetrics.ai/internal/connectors/hooks/google-forms	2.436s
+ok  	polymetrics.ai/internal/connectors/hooks/google-pagespeed-insights	1.936s
+ok  	polymetrics.ai/internal/connectors/hooks/google-search-console	2.188s
+ok  	polymetrics.ai/internal/connectors/hooks/hookset	2.235s
+ok  	polymetrics.ai/internal/connectors/hooks/hoorayhr	2.012s
+ok  	polymetrics.ai/internal/connectors/hooks/jamf-pro	2.097s
+ok  	polymetrics.ai/internal/connectors/hooks/keka	1.942s
+ok  	polymetrics.ai/internal/connectors/hooks/less-annoying-crm	2.057s
+ok  	polymetrics.ai/internal/connectors/hooks/lokalise	1.999s
+ok  	polymetrics.ai/internal/connectors/hooks/mendeley	2.365s
+ok  	polymetrics.ai/internal/connectors/hooks/mercado-ads	2.042s
+ok  	polymetrics.ai/internal/connectors/hooks/metabase	1.116s
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-dataverse	0.627s
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-entra-id	0.609s
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-lists	0.613s
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-teams	0.980s
+ok  	polymetrics.ai/internal/connectors/hooks/mixpanel	0.540s
+ok  	polymetrics.ai/internal/connectors/hooks/mode	0.708s
+ok  	polymetrics.ai/internal/connectors/hooks/monday	1.122s
+ok  	polymetrics.ai/internal/connectors/hooks/my-hours	1.358s
+ok  	polymetrics.ai/internal/connectors/hooks/netsuite	1.069s
+ok  	polymetrics.ai/internal/connectors/hooks/nexus-datasets	1.519s
+ok  	polymetrics.ai/internal/connectors/hooks/notion	1.996s
+ok  	polymetrics.ai/internal/connectors/hooks/outlook	0.866s
+ok  	polymetrics.ai/internal/connectors/hooks/paypal-transaction	0.655s
+ok  	polymetrics.ai/internal/connectors/hooks/pinterest	0.572s
+ok  	polymetrics.ai/internal/connectors/hooks/plaid	0.616s
+ok  	polymetrics.ai/internal/connectors/hooks/pocket	0.993s
+ok  	polymetrics.ai/internal/connectors/hooks/prestashop	1.207s
+ok  	polymetrics.ai/internal/connectors/hooks/quickbooks	1.627s
+ok  	polymetrics.ai/internal/connectors/hooks/rootly	2.088s
+ok  	polymetrics.ai/internal/connectors/hooks/rss	11.423s
+ok  	polymetrics.ai/internal/connectors/hooks/safetyculture	3.129s
+ok  	polymetrics.ai/internal/connectors/hooks/salesloft	3.317s
+ok  	polymetrics.ai/internal/connectors/hooks/sentry	2.719s
+ok  	polymetrics.ai/internal/connectors/hooks/serpstat	2.588s
+ok  	polymetrics.ai/internal/connectors/hooks/slack	2.517s
+ok  	polymetrics.ai/internal/connectors/hooks/smartsheets	2.546s
+ok  	polymetrics.ai/internal/connectors/hooks/snapchat-marketing	2.644s
+ok  	polymetrics.ai/internal/connectors/hooks/stigg	6.403s
+ok  	polymetrics.ai/internal/connectors/hooks/strava	2.128s
+ok  	polymetrics.ai/internal/connectors/hooks/twilio	1.619s
+ok  	polymetrics.ai/internal/connectors/hooks/uptick	1.848s
+ok  	polymetrics.ai/internal/connectors/hooks/us-census	1.814s
+ok  	polymetrics.ai/internal/connectors/hooks/wasabi-stats-api	1.789s
+ok  	polymetrics.ai/internal/connectors/hooks/yahoo-finance-price	1.789s
+ok  	polymetrics.ai/internal/connectors/hooks/youtube-analytics	1.546s
+ok  	polymetrics.ai/internal/connectors/hooks/zoho-analytics-metadata-api	1.460s
+ok  	polymetrics.ai/internal/connectors/hooks/zoho-bigin	1.465s
+ok  	polymetrics.ai/internal/connectors/native/alpha-vantage	1.096s
+ok  	polymetrics.ai/internal/connectors/native/amazon-sqs	1.793s
+ok  	polymetrics.ai/internal/connectors/native/apify-dataset	1.553s
+ok  	polymetrics.ai/internal/connectors/native/ashby	1.298s
+ok  	polymetrics.ai/internal/connectors/native/aws-cloudtrail	1.541s
+ok  	polymetrics.ai/internal/connectors/native/babelforce	1.565s
+ok  	polymetrics.ai/internal/connectors/native/basecamp	1.834s
+ok  	polymetrics.ai/internal/connectors/native/bing-ads	2.300s
+ok  	polymetrics.ai/internal/connectors/native/bunny-inc	2.599s
+ok  	polymetrics.ai/internal/connectors/native/canny	2.682s
+ok  	polymetrics.ai/internal/connectors/native/copper	2.854s
+ok  	polymetrics.ai/internal/connectors/native/dbtest	3.125s
+ok  	polymetrics.ai/internal/connectors/native/dixa	3.341s
+ok  	polymetrics.ai/internal/connectors/native/dynamodb	2.791s
+ok  	polymetrics.ai/internal/connectors/native/faker	3.002s
+ok  	polymetrics.ai/internal/connectors/native/fastbill	2.882s
+ok  	polymetrics.ai/internal/connectors/native/feishu	2.780s
+ok  	polymetrics.ai/internal/connectors/native/free-agent-connector	4.076s
+ok  	polymetrics.ai/internal/connectors/native/freightview	4.170s
+ok  	polymetrics.ai/internal/connectors/native/google-analytics-data-api	4.232s
+ok  	polymetrics.ai/internal/connectors/native/google-calendar	4.421s
+ok  	polymetrics.ai/internal/connectors/native/google-classroom	4.175s
+ok  	polymetrics.ai/internal/connectors/native/google-pagespeed-insights	3.767s
+ok  	polymetrics.ai/internal/connectors/native/hubspot	4.163s
+ok  	polymetrics.ai/internal/connectors/native/less-annoying-crm	3.799s
+ok  	polymetrics.ai/internal/connectors/native/lokalise	3.486s
+ok  	polymetrics.ai/internal/connectors/native/mendeley	2.893s
+ok  	polymetrics.ai/internal/connectors/native/mercado-ads	2.804s
+ok  	polymetrics.ai/internal/connectors/native/metabase	2.678s
+ok  	polymetrics.ai/internal/connectors/native/mode	2.725s
+ok  	polymetrics.ai/internal/connectors/native/my-hours	2.881s
+ok  	polymetrics.ai/internal/connectors/native/mysql	1.556s
+ok  	polymetrics.ai/internal/connectors/native/nativeset	2.359s
+ok  	polymetrics.ai/internal/connectors/native/pocket	2.399s
+ok  	polymetrics.ai/internal/connectors/native/postgres	3.335s
+ok  	polymetrics.ai/internal/connectors/native/prestashop	2.703s
+ok  	polymetrics.ai/internal/connectors/native/rootly	3.120s
+ok  	polymetrics.ai/internal/connectors/native/safetyculture	3.112s
+ok  	polymetrics.ai/internal/connectors/native/sqltls	2.813s
+ok  	polymetrics.ai/internal/connectors/native/tally-prime	3.721s
+ok  	polymetrics.ai/internal/connectors/native/yahoo-finance-price	3.921s
+?   	polymetrics.ai/internal/connectors/transportpolicy	[no test files]
+ok  	polymetrics.ai/internal/coordination	7.954s
+ok  	polymetrics.ai/internal/coordination/issueguard	2.847s
+ok  	polymetrics.ai/internal/durability	3.259s
+ok  	polymetrics.ai/internal/failures	3.551s
+ok  	polymetrics.ai/internal/flow	2.624s
+ok  	polymetrics.ai/internal/ledger	2.582s
+ok  	polymetrics.ai/internal/perf	5.003s
+ok  	polymetrics.ai/internal/rlm	1.842s
+ok  	polymetrics.ai/internal/rlm/router	1.798s
+ok  	polymetrics.ai/internal/runtime	1.645s
+ok  	polymetrics.ai/internal/runtimecheck	1.970s
+ok  	polymetrics.ai/internal/safety	1.255s
+ok  	polymetrics.ai/internal/schedule	2.142s
+ok  	polymetrics.ai/internal/state	2.283s
+ok  	polymetrics.ai/internal/synccontract	1.682s
+ok  	polymetrics.ai/internal/synctransport	2.332s
+ok  	polymetrics.ai/internal/temporalprobe	2.094s
+ok  	polymetrics.ai/internal/vault	2.040s
+ok  	polymetrics.ai/internal/warehouse	2.627s
+ok  	polymetrics.ai/internal/worker	0.844s
+go build ./cmd/pm
+./pm docs validate --connectors-dir docs/connectors
+Validated connector docs in docs/connectors
+set -eu; \
+SMOKE_DIR=$(mktemp -d); \
+export PM_SAMPLE_TOKEN=sample-token; \
+./pm init --root "$SMOKE_DIR" --json >/dev/null; \
+./pm credentials add sample-local --connector sample --from-env token=PM_SAMPLE_TOKEN --root "$SMOKE_DIR" --json >/dev/null; \
+./pm credentials add warehouse-local --connector warehouse --config path="$SMOKE_DIR/.polymetrics/warehouse" --root "$SMOKE_DIR" --json >/dev/null; \
+./pm credentials add outbox-local --connector outbox --config path="$SMOKE_DIR/.polymetrics/outbox" --root "$SMOKE_DIR" --json >/dev/null; \
+./pm connections create sample_to_warehouse --source sample:sample-local --destination warehouse:warehouse-local --stream customers --primary-key id --cursor updated_at --table sample_customers --root "$SMOKE_DIR" --json >/dev/null; \
+./pm catalog refresh --connection sample_to_warehouse --root "$SMOKE_DIR" --json >/dev/null; \
+./pm etl run --connection sample_to_warehouse --stream customers --root "$SMOKE_DIR" --json >/dev/null; \
+PLAN_OUTPUT=$(./pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map name:full_name --map email:email --root "$SMOKE_DIR"); \
+PLAN_ID=$(printf '%s\n' "$PLAN_OUTPUT" | awk '/Created reverse plan/ {print $4}'); \
+./pm reverse preview "$PLAN_ID" --root "$SMOKE_DIR" --json >/dev/null; \
+APPROVAL=$(printf '%s\n' "$PLAN_OUTPUT" | awk '/Approval token:/ {print $3}'); \
+printf '%s\n' "$APPROVAL" | ./pm reverse run "$PLAN_ID" --approval-token-stdin --root "$SMOKE_DIR" --json >/dev/null; \
+TABLE=$(ls "$SMOKE_DIR"/.polymetrics/warehouse/*/*/*/tables/sample_customers.parquet); \
+test -s "$TABLE"; \
+test -s "$(dirname "$(dirname "$TABLE")")/owner.json"; \
+test -s "$SMOKE_DIR/.polymetrics/outbox/customers_to_outbox.jsonl"; \
+printf 'smoke ok: %s\n' "$SMOKE_DIR"
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.lvceJIWN50
+golangci-lint run ./internal/connectors/engine/... ./internal/connectors/defs/... ./internal/connectors/hooks/... ./internal/connectors/native/... ./internal/connectors/conformance/... ./internal/connectors/certify/... ./internal/connectors/boundary/... ./internal/agentcontract/... ./cmd/connectorgen/... ./cmd/agentcontractgen/... ./cmd/certifytiming/...
+0 issues.
+go run ./cmd/agentcontractgen check
+agentcontractgen: canonical contract and registered projections are current
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 552 connector(s) checked, 0 findings
+go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+node --test scripts/tests/github-combined-operation-ledger.test.mjs scripts/tests/gen-github-graphql-parity.test.mjs scripts/tests/github-source-drift.test.mjs
+✔ generates one fixed source-derived contract per GraphQL root (15.4305ms)
+✔ preserves fixed supplemental GraphQL operations on the shared transport (3.926292ms)
+✔ fails closed for a missing canary, duplicate root command, unbounded list, or unclassified deleteIssue (2.726ms)
+✔ uses the declared environment-only secret contract only for source fields that carry secret values (23.350084ms)
+✔ parses every root Query and Mutation field with multiline signatures and directives (9.431375ms)
+✔ builds a source-locked combined ledger with the enterprise-organization canary (13.733792ms)
+✔ imports typed GraphQL root contracts and source-derived projection possibilities (1.716625ms)
+✔ fails closed when GraphQL root types or the enterprise typed input contract drift (3.06575ms)
+✔ rejects a v2 lock that loses an explicit typed root argument contract (1.672166ms)
+✔ rejects a GraphQL source lock without createEnterpriseOrganization (1.822375ms)
+✔ records source-wide fixed node projections and GraphQL mutation safety from the real GitHub bundle (84.222ms)
+✔ publishes separate inventory, implementation, and live-proof progress from ledger rows (78.199708ms)
+✔ permanent source-inventory gates do not retain the fixed four-operation GraphQL denominator (1.244708ms)
+✔ source drift keeps separately pinned REST and GraphQL inventories stable (17.774917ms)
+✔ source drift fails loudly for an upstream GraphQL root addition or REST change (2.575084ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 250.1615
+node scripts/gen-github-graphql-parity.mjs --check
+github graphql parity artifacts: ok
+node scripts/github-combined-operation-ledger.mjs --check
+github combined operation ledger: ok rest=1220 graphql_query=31 graphql_mutation=274 total=1525
+go run ./cmd/connectorgen certification-matrix --check
+certification shards are current: connectors=2 capability_complete=0 certified=0
+go run ./cmd/connectorgen certification-candidates --connector github --check
+certification candidates are current: connector=github
+go run ./cmd/connectorgen certification-sweep --connector github --check
+connectorgen certification-sweep: /Users/karthiksivadas/.treehouse/cli-83d592/46/cli/internal/connectors/defs/github/certification-sweep.json is current (1575 rows; 1571 CLI commands)
+go run ./cmd/connectorgen boundary . --json
+{
+  "api_version": "polymetrics.ai/v1",
+  "kind": "ConnectorBoundaryReport",
+  "outcome": "clean",
+  "repo_root": "/Users/karthiksivadas/.treehouse/cli-83d592/46/cli",
+  "mode": "whole_tree",
+  "checked_files": 292,
+  "connectors_loaded": 552,
+  "findings": [],
+  "warnings": [],
+  "exceptions": [
+    {
+      "id": "bahmni-guide-examples",
+      "rule": "docs_example",
+      "connector": "bahmni",
+      "path": "internal/connectors/guide.go",
+      "match": "bahmni",
+      "matches": 4,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/535",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-certification-matrix-allowlist",
+      "rule": "connector_literal",
+      "connector": "github",
+      "path": "cmd/connectorgen/certificationallowlist.go",
+      "match": "github",
+      "matches": 1,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/4015",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-cli-connector-docs-catalog-validation",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/connector_docs.go",
+      "match": "github",
+      "matches": 2,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-cli-docs-help-examples",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/docs.go",
+      "match": "github",
+      "matches": 4,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-cli-skills-examples",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/skills.go",
+      "match": "github",
+      "matches": 5,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-guide-examples-and-links",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/connectors/guide.go",
+      "match": "github",
+      "matches": 34,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-operation-secret-encryption-kind",
+      "rule": "provider_policy",
+      "connector": "github",
+      "path": "internal/connectors/engine/bundle.go",
+      "match": "github_secret_encryption",
+      "matches": 1,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/65",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    }
+  ]
+}
+bash scripts/tests/connector-canon.sh
+connector canon check: ok
+./scripts/tests/pinned-build-dependencies.sh
+pinned build dependencies: all workflow actions and literal build images are immutable
+./scripts/tests/homebrew-release-notify.sh
+homebrew release notification assertions passed
+./scripts/tests/release-target-parity.sh
+release target parity: assembler, verifier and build matrix agree on:
+  darwin/amd64
+  darwin/arm64
+  linux/amd64
+  linux/arm64

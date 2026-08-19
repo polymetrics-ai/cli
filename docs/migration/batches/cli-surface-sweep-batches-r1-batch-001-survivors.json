@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 20,
+    "min_operations": 20,
+    "max_operations": 250,
+    "criteria": "status=done; artifact_kind=openapi|swagger; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope"
+  },
+  "connectors": [
+    {
+      "connector": "avni",
+      "operations_total": 31,
+      "operations_read": 13,
+      "operations_write": 18,
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+        "kind": "openapi",
+        "version": "1.0.0; OpenAPI 3.0.0; master",
+        "retrieved_at": "2026-08-05"
+      },
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "provider-owned avniproject/avni-server external API OpenAPI definition",
+      "counting_note": "Counted all HTTP operation objects in Avni's provider-published external-api.yaml. GET/HEAD are reads; remaining verbs are writes.",
+      "processed_at": "2026-08-05T17:39:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "defillama",
+      "operations_total": 31,
+      "operations_read": 31,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+        "kind": "openapi",
+        "version": "DefiLlama API 1.0.0-oas3; OpenAPI 3.0.0; current provider-published free-tier artifact",
+        "retrieved_at": "2026-08-05"
+      },
+      "auth_model": "none",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; DefiLlama's own public api-docs repository artifact",
+      "counting_note": "Counted every HTTP operation object in DefiLlama's provider-published free-tier OpenAPI artifact: all 31 are GET actions and therefore reads. The artifact supplies the current documented public surface; it includes no mutation or inbound-webhook operations.",
+      "processed_at": "2026-08-05T21:03:31Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "dockerhub",
+      "operations_total": 41,
+      "operations_read": 24,
+      "operations_write": 17,
+      "artifact": {
+        "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "kind": "openapi",
+        "version": "Docker Hub API 2-beta; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-05"
+      },
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Docker's provider-published latest Docker Hub OpenAPI YAML export",
+      "counting_note": "Docker's provider-published latest Hub YAML exposes 54 HTTP operation objects: 24 GET, three HEAD, 12 POST, four PUT, five PATCH, and six DELETE. Thirteen authentication/access-token operations are credential infrastructure (three login/token exchanges plus all ten personal/org token-management actions) and are excluded consistently with r1's token-flow convention. Of the remaining 41 data operations, GET/HEAD actions are reads and POST Verify repository immutable tags is a semantic read; the other six POST, four PUT, three PATCH, and four DELETE actions are writes. No inbound event type is described by this artifact.",
+      "processed_at": "2026-08-05T21:23:37Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "oura",
+      "operations_total": 41,
+      "operations_read": 37,
+      "operations_write": 4,
+      "artifact": {
+        "url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+        "kind": "openapi",
+        "version": "Oura API v2.0, OpenAPI revision 1.37 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-06"
+      },
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "Provider-published Oura v2 Redoc page links this direct OpenAPI 3.1.0 artifact; parsed without credentials.",
+      "counting_note": "Parsed the provider-published v2 OpenAPI artifact and excluded its 34 /v2/sandbox/* testing duplicates under the policy against double-counting equivalent API surfaces. The remaining production surface has 37 GET reads plus four webhook-subscription management mutations (POST create, two PUT renewal/update operations, and DELETE). Webhook delivery notifications themselves are inbound events and are excluded. The artifact states v1 is sunset.",
+      "processed_at": "2026-08-06T09:41:54Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "flexmail",
+      "operations_total": 43,
+      "operations_read": 23,
+      "operations_write": 20,
+      "artifact": {
+        "url": "https://api.flexmail.eu/documentation/openapi.php",
+        "kind": "openapi",
+        "version": "Flexmail email marketing API 1.2.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-06"
+      },
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider documentation's loaded `openapi.php` resource; direct parse of paths and security scheme",
+      "counting_note": "Parsed all 43 operation objects in Flexmail's provider-published OpenAPI JSON: 23 GET, 10 POST, four PATCH, two PUT, and four DELETE. The specification labels POST as creation and every non-GET operation mutates a contact-management resource, so no semantic POST read is present.",
+      "processed_at": "2026-08-06T01:25:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "perigon",
+      "operations_total": 45,
+      "operations_read": 30,
+      "operations_write": 15,
+      "artifact": {
+        "url": "https://api.perigon.io/v1/openapi/public",
+        "kind": "openapi",
+        "version": "Perigon API 1.0.0; OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-06"
+      },
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "The metadata docs host redirects to Perigon's current provider-owned perigon.io documentation. Its .well-known/api-catalog declares api.perigon.io/v1 as the API item and links this service description. The downloaded artifact defines bearer apiKeyAuth; Perigon's current documentation also describes a free API plan and API-key enrollment.",
+      "counting_note": "Perigon's current provider API catalog links this complete public OpenAPI artifact. It contains 33 paths and 45 HTTP operations: 26 GET, 11 POST, 4 PATCH, and 4 DELETE. GET actions are reads. Four POST actions are explicitly retrieval/search work and are semantic reads: cached article-refresh peek, Search Summarizer, vector news search, and vector Wikipedia search. The article-refresh job submission creates/schedules background processing, and the other POST actions create, activate, or pause contact points, monitors, source groups, and watchlists; together with all PATCH and DELETE actions, these are writes. Callable management of monitor/contact-point/source-group/watchlist objects is retained; no inbound delivery event is counted.",
+      "processed_at": "2026-08-06T14:27:10Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "pingdom",
+      "operations_total": 50,
+      "operations_read": 29,
+      "operations_write": 21,
+      "artifact": {
+        "url": "https://docs.pingdom.com/api/API_3.1.yaml",
+        "kind": "openapi",
+        "version": "Pingdom Public API 3.1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Pingdom's live provider-owned API reference labels the surface `Pingdom Public API (3.1)`, presents a Download link to this OpenAPI document, and its navigation covers Uptime, Alerting Settings, and Transaction API sections. Its authentication documentation says a Pingdom API token is generated in My Pingdom and is normally supplied through HTTP Bearer authentication, with Basic-token compatibility retained. The OpenAPI document identifies server `https://api.pingdom.com/api/3.1` and API version 3.1.",
+      "counting_note": "Pingdom's rendered current API 3.1 reference directly links this complete provider-hosted OpenAPI artifact. Its 50 HTTP operation objects are 29 GET, five POST, seven PUT, and nine DELETE. Every GET retrieves actions, alerting contacts/teams, analysis, checks, credits, maintenance data, probes, reference data, results, summaries, transaction-check reports/checks, or traceroutes and is a read. The five POST operations expressly create contacts, teams, uptime checks, maintenance windows, or transaction checks; all PUT and DELETE operations expressly modify, pause, or delete provider state, so none is a semantic non-GET read. The artifact contains no API-token issuance or credential-management operation to exclude. Request/response schemas, rate-limit prose, examples, and UI concepts do not add callable actions.",
+      "processed_at": "2026-08-06T14:57:53Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "alpaca-broker-api",
+      "operations_total": 52,
+      "operations_read": 28,
+      "operations_write": 24,
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+        "kind": "openapi",
+        "version": "1.0.0",
+        "retrieved_at": "2026-08-05"
+      },
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published alpacahq/alpaca-docs Broker OpenAPI",
+      "counting_note": "Counted all provider-published Broker API OpenAPI 3.0.0 operations across 36 paths: 28 GET reads (including four documented SSE subscription endpoints) and 11 POST, 2 PATCH, 1 PUT, and 10 DELETE writes. No webhook event types were counted.",
+      "processed_at": "2026-08-05T16:40:53Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

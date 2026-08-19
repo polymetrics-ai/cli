@@ -1,15 +1,664 @@
 {
-  "api": "Perigon News API v1 (https://api.perigon.io)",
+  "api": "Perigon News API v1 (https://api.perigon.io); provider artifact version: Perigon API 1.0.0; OpenAPI 3.0.1",
   "docs": "https://docs.goperigon.com/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: all 7 documented Perigon v1 search/list endpoints (articles, stories, journalists, sources, companies, people, topics) are now covered as read streams. Perigon is a read-only public news-intelligence API; it publishes no write/mutation endpoints of any kind.",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (45 documented HTTP operations). Existing executable stream/write bindings are retained only when the fetched provider method/path still matches; every other operation is explicitly provider-blocked or excluded.",
+  "artifacts": [
+    {
+      "id": "perigon-artifact-2026-08-19",
+      "url": "https://api.perigon.io/v1/openapi/public",
+      "retrieved_at": "2026-08-19",
+      "sha256": "d068f150de740e8231bf1bbf713af24d9ff0c29a57a5df09c601fde51cfff3c3"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v1/articles/all", "covered_by": { "stream": "articles" } },
-    { "method": "GET", "path": "/v1/stories/all", "covered_by": { "stream": "stories" } },
-    { "method": "GET", "path": "/v1/journalists/all", "covered_by": { "stream": "journalists" } },
-    { "method": "GET", "path": "/v1/sources/all", "covered_by": { "stream": "sources" } },
-    { "method": "GET", "path": "/v1/companies/all", "covered_by": { "stream": "companies" } },
-    { "method": "GET", "path": "/v1/people/all", "covered_by": { "stream": "people" } },
-    { "method": "GET", "path": "/v1/topics/all", "covered_by": { "stream": "topics" } }
+    {
+      "method": "GET",
+      "path": "/v1/api/contactPoints",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/api/contactPoints",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/contactPoints/{uuid}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/api/contactPoints/{uuid}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/api/contactPoints/{uuid}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/monitors",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/api/monitors",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/monitors/{uuid}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/api/monitors/{uuid}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/api/monitors/{uuid}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/api/monitors/{uuid}/activate",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/monitors/{uuid}/events",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/monitors/{uuid}/newsletters",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/api/monitors/{uuid}/pause",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/monitors/{uuid}/summary",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/sourceGroups",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/api/sourceGroups",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/sourceGroups/resolve",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/sourceGroups/{id}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/api/sourceGroups/{id}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/api/sourceGroups/{id}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/watchlists",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/api/watchlists",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/watchlists/resolve",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/api/watchlists/{id}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/api/watchlists/{id}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/api/watchlists/{id}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/articles/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "covered_by": {
+        "stream": "articles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/articles/refresh/jobs",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/articles/refresh/jobs/{id}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/articles/refresh/peek",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/journalists/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "covered_by": {
+        "stream": "journalists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/journalists/{id}",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/limits",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/people/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/sources/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "covered_by": {
+        "stream": "sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/stories/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "covered_by": {
+        "stream": "stories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/stories/history",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/stories/stats",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/summarize",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/topics/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "covered_by": {
+        "stream": "topics"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/vector/news/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/vector/wikipedia/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/wikipedia/all",
+      "provenance": {
+        "artifact": "perigon-artifact-2026-08-19",
+        "source_url": "https://api.perigon.io/v1/openapi/public"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    }
   ]
 }

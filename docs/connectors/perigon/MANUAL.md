@@ -67,6 +67,19 @@ SECURITY
   approval: none; read-only public news API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Perigon's declared streams and reverse-ETL actions.
+  Usage: pm perigon <command> [flags]
+  Read streams
+  Other Commands
+    articles list - Run the articles ETL stream [intent=etl availability=implemented stream=articles]
+    companies list - Run the companies ETL stream [intent=etl availability=implemented stream=companies]
+    journalists list - Run the journalists ETL stream [intent=etl availability=implemented stream=journalists]
+    people list - Run the people ETL stream [intent=etl availability=implemented stream=people]
+    sources list - Run the sources ETL stream [intent=etl availability=implemented stream=sources]
+    stories list - Run the stories ETL stream [intent=etl availability=implemented stream=stories]
+    topics list - Run the topics ETL stream [intent=etl availability=implemented stream=topics]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect perigon

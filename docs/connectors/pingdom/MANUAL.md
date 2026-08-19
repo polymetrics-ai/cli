@@ -121,6 +121,36 @@ SECURITY
   approval: required for update_check/update_contact/update_team/delete_check/delete_contact/delete_team/delete_maintenance; create_check/create_contact/create_team/create_maintenance require no approval (low-risk, non-destructive)
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Pingdom's declared streams and reverse-ETL actions.
+  Usage: pm pingdom <command> [flags]
+  Global flags:
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+  Read streams
+  Reverse ETL writes
+  Other Commands
+    actions list - Run the actions ETL stream [intent=etl availability=implemented stream=actions]
+    alerting contacts list - Run the alerting contacts ETL stream [intent=etl availability=implemented stream=alerting_contacts]
+    alerting teams list - Run the alerting teams ETL stream [intent=etl availability=implemented stream=alerting_teams]
+    checks list - Run the checks ETL stream [intent=etl availability=implemented stream=checks]
+    create check apply - Plan and execute the create check reverse-ETL action [intent=reverse_etl availability=implemented write=create_check]; approval: requires plan, preview, approval, and execute; risk: creates a new Pingdom uptime check (this action models the common HTTP-type check shape; Pingdom's other 8 check types share the same name/host/type/paused/resolution/notification fields plus type-specific attributes not modeled here, see docs.md Known limits); low-risk external mutation, no approval required; flags: --host (required), --name (required), --type (required)
+    create contact apply - Plan and execute the create contact reverse-ETL action [intent=reverse_etl availability=implemented write=create_contact]; approval: requires plan, preview, approval, and execute; risk: creates a new alerting contact with email/SMS notification targets; low-risk external mutation, no approval required; flags: --name (required), --notification_targets (required)
+    create maintenance apply - Plan and execute the create maintenance reverse-ETL action [intent=reverse_etl availability=implemented write=create_maintenance]; approval: requires plan, preview, approval, and execute; risk: creates a new maintenance window that suppresses alerting for the assigned checks during the scheduled period; low-risk external mutation, no approval required; flags: --description (required), --from (required), --to (required)
+    create team apply - Plan and execute the create team reverse-ETL action [intent=reverse_etl availability=implemented write=create_team]; approval: requires plan, preview, approval, and execute; risk: creates a new alerting team from a list of contact ids; low-risk external mutation, no approval required; flags: --member_ids (required), --name (required)
+    credits list - Run the credits ETL stream [intent=etl availability=implemented stream=credits]
+    delete check apply - Plan and execute the delete check reverse-ETL action [intent=reverse_etl availability=implemented write=delete_check]; approval: requires plan, preview, approval, and execute; risk: permanently deletes an uptime check and its historical results; destructive external mutation, approval required; flags: --id (required)
+    delete contact apply - Plan and execute the delete contact reverse-ETL action [intent=reverse_etl availability=implemented write=delete_contact]; approval: requires plan, preview, approval, and execute; risk: permanently deletes an alerting contact and its notification targets; destructive external mutation, approval required; flags: --id (required)
+    delete maintenance apply - Plan and execute the delete maintenance reverse-ETL action [intent=reverse_etl availability=implemented write=delete_maintenance]; approval: requires plan, preview, approval, and execute; risk: permanently deletes a maintenance window, immediately resuming alerting for its assigned checks; destructive external mutation, approval required; flags: --id (required)
+    delete team apply - Plan and execute the delete team reverse-ETL action [intent=reverse_etl availability=implemented write=delete_team]; approval: requires plan, preview, approval, and execute; risk: permanently deletes an alerting team; destructive external mutation, approval required; flags: --id (required)
+    maintenance list - Run the maintenance ETL stream [intent=etl availability=implemented stream=maintenance]
+    maintenance occurrences list - Run the maintenance occurrences ETL stream [intent=etl availability=implemented stream=maintenance_occurrences]
+    probes list - Run the probes ETL stream [intent=etl availability=implemented stream=probes]
+    reference list - Run the reference ETL stream [intent=etl availability=implemented stream=reference]
+    tms checks list - Run the tms checks ETL stream [intent=etl availability=implemented stream=tms_checks]
+    update check apply - Plan and execute the update check reverse-ETL action [intent=reverse_etl availability=implemented write=update_check]; approval: requires plan, preview, approval, and execute; risk: updates an existing check's settings (name/host/paused/resolution/tags); external mutation, approval required; flags: --id (required)
+    update contact apply - Plan and execute the update contact reverse-ETL action [intent=reverse_etl availability=implemented write=update_contact]; approval: requires plan, preview, approval, and execute; risk: updates an existing alerting contact's name/paused state/notification targets (Pingdom's PUT is a full replacement, requiring name/paused/notification_targets together); external mutation, approval required; flags: --id (required), --name (required), --notification_targets (required), --paused (required)
+    update team apply - Plan and execute the update team reverse-ETL action [intent=reverse_etl availability=implemented write=update_team]; approval: requires plan, preview, approval, and execute; risk: updates an existing alerting team's name/member list; external mutation, approval required; flags: --id (required), --member_ids (required), --name (required)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect pingdom

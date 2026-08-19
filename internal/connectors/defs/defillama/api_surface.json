@@ -1,14 +1,14 @@
 {
   "api": "DefiLlama public API (api.llama.fi, coins.llama.fi, stablecoins.llama.fi, yields.llama.fi); provider artifact version: DefiLlama API 1.0.0-oas3; OpenAPI 3.0.0; current provider-published free-tier artifact",
   "docs": "https://defillama.com/docs/api",
-  "reviewed_at": "2026-08-06",
+  "reviewed_at": "2026-08-19",
   "operation_ledger_version": 2,
   "scope": "Provider-artifact inventory generated from the cited openapi artifact (31 documented HTTP operations). Existing executable stream/write bindings are retained only when the fetched provider method/path still matches; every other operation is explicitly provider-blocked or excluded.",
   "artifacts": [
     {
-      "id": "defillama-artifact-2026-08-06",
+      "id": "defillama-artifact-2026-08-19",
       "url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
-      "retrieved_at": "2026-08-06",
+      "retrieved_at": "2026-08-19",
       "sha256": "fb4bd72cea397a05f127ce7edde5d45d30acf4f865dcbbf27cfbb83993682cff"
     }
   ],
@@ -17,7 +17,7 @@
       "method": "GET",
       "path": "/batchHistorical",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -32,7 +32,7 @@
       "method": "GET",
       "path": "/block/{chain}/{timestamp}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -47,7 +47,7 @@
       "method": "GET",
       "path": "/chart/{coins}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -62,7 +62,7 @@
       "method": "GET",
       "path": "/chart/{pool}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -77,7 +77,7 @@
       "method": "GET",
       "path": "/overview/dexs",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -88,7 +88,7 @@
       "method": "GET",
       "path": "/overview/dexs/{chain}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -103,7 +103,7 @@
       "method": "GET",
       "path": "/overview/fees",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -114,7 +114,7 @@
       "method": "GET",
       "path": "/overview/fees/{chain}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -129,7 +129,7 @@
       "method": "GET",
       "path": "/overview/open-interest",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -140,7 +140,7 @@
       "method": "GET",
       "path": "/overview/options",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -151,7 +151,7 @@
       "method": "GET",
       "path": "/overview/options/{chain}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -166,7 +166,7 @@
       "method": "GET",
       "path": "/percentage/{coins}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -181,7 +181,7 @@
       "method": "GET",
       "path": "/pools",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -192,7 +192,7 @@
       "method": "GET",
       "path": "/prices/current/{coins}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -207,7 +207,7 @@
       "method": "GET",
       "path": "/prices/first/{coins}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -222,7 +222,7 @@
       "method": "GET",
       "path": "/prices/historical/{timestamp}/{coins}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -237,7 +237,7 @@
       "method": "GET",
       "path": "/protocol/{protocol}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -252,7 +252,7 @@
       "method": "GET",
       "path": "/protocols",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -263,7 +263,7 @@
       "method": "GET",
       "path": "/stablecoin/{asset}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -278,7 +278,7 @@
       "method": "GET",
       "path": "/stablecoinchains",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -289,7 +289,7 @@
       "method": "GET",
       "path": "/stablecoincharts/all",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -304,7 +304,7 @@
       "method": "GET",
       "path": "/stablecoincharts/{chain}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -319,7 +319,7 @@
       "method": "GET",
       "path": "/stablecoinprices",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -334,7 +334,7 @@
       "method": "GET",
       "path": "/stablecoins",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -345,7 +345,7 @@
       "method": "GET",
       "path": "/summary/dexs/{protocol}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -360,7 +360,7 @@
       "method": "GET",
       "path": "/summary/fees/{protocol}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -375,7 +375,7 @@
       "method": "GET",
       "path": "/summary/options/{protocol}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -390,7 +390,7 @@
       "method": "GET",
       "path": "/tvl/{protocol}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {
@@ -405,7 +405,7 @@
       "method": "GET",
       "path": "/v2/chains",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -416,7 +416,7 @@
       "method": "GET",
       "path": "/v2/historicalChainTvl",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "covered_by": {
@@ -427,7 +427,7 @@
       "method": "GET",
       "path": "/v2/historicalChainTvl/{chain}",
       "provenance": {
-        "artifact": "defillama-artifact-2026-08-06",
+        "artifact": "defillama-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json"
       },
       "operation": {

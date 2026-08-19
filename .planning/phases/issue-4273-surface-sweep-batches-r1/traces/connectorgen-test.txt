@@ -1,0 +1,1 @@
+ok  	polymetrics.ai/cmd/connectorgen	104.433s

@@ -1,14 +1,14 @@
 {
   "api": "Alpaca Broker API v1 (https://broker-api.alpaca.markets/v1); provider artifact version: 1.0.0",
   "docs": "https://docs.alpaca.markets/docs/broker-api",
-  "reviewed_at": "2026-08-06",
+  "reviewed_at": "2026-08-19",
   "operation_ledger_version": 2,
   "scope": "Provider-artifact inventory generated from the cited openapi artifact (52 documented HTTP operations). Existing executable stream/write bindings are retained only when the fetched provider method/path still matches; every other operation is explicitly provider-blocked or excluded.",
   "artifacts": [
     {
-      "id": "alpaca-broker-api-artifact-2026-08-06",
+      "id": "alpaca-broker-api-artifact-2026-08-19",
       "url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
-      "retrieved_at": "2026-08-06",
+      "retrieved_at": "2026-08-19",
       "sha256": "9c557d2ea72d93992bfdb689847539a4b9474f99858a80cee955484b8a8c3ae1"
     }
   ],
@@ -17,7 +17,7 @@
       "method": "GET",
       "path": "/v1/accounts",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -28,7 +28,7 @@
       "method": "POST",
       "path": "/v1/accounts",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -43,7 +43,7 @@
       "method": "GET",
       "path": "/v1/accounts/activities",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -54,7 +54,7 @@
       "method": "GET",
       "path": "/v1/accounts/activities/{activity_type}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -69,7 +69,7 @@
       "method": "GET",
       "path": "/v1/accounts/{account_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -84,7 +84,7 @@
       "method": "PATCH",
       "path": "/v1/accounts/{account_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -99,7 +99,7 @@
       "method": "DELETE",
       "path": "/v1/accounts/{account_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -114,7 +114,7 @@
       "method": "GET",
       "path": "/v1/accounts/{account_id}/ach_relationships",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -129,7 +129,7 @@
       "method": "POST",
       "path": "/v1/accounts/{account_id}/ach_relationships",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -144,7 +144,7 @@
       "method": "DELETE",
       "path": "/v1/accounts/{account_id}/ach_relationships/{ach_relationship_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -159,7 +159,7 @@
       "method": "GET",
       "path": "/v1/accounts/{account_id}/documents",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -170,7 +170,7 @@
       "method": "POST",
       "path": "/v1/accounts/{account_id}/documents/upload",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -185,7 +185,7 @@
       "method": "GET",
       "path": "/v1/accounts/{account_id}/documents/{document_id}/download",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -200,7 +200,7 @@
       "method": "GET",
       "path": "/v1/accounts/{account_id}/recipient_banks",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -215,7 +215,7 @@
       "method": "POST",
       "path": "/v1/accounts/{account_id}/recipient_banks",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -230,7 +230,7 @@
       "method": "DELETE",
       "path": "/v1/accounts/{account_id}/recipient_banks/{bank_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -245,7 +245,7 @@
       "method": "GET",
       "path": "/v1/accounts/{account_id}/transfers",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -260,7 +260,7 @@
       "method": "POST",
       "path": "/v1/accounts/{account_id}/transfers",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -275,7 +275,7 @@
       "method": "DELETE",
       "path": "/v1/accounts/{account_id}/transfers/{transfer_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -290,7 +290,7 @@
       "method": "GET",
       "path": "/v1/accounts/{account_id}/watchlists/{watchlist_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -305,7 +305,7 @@
       "method": "PUT",
       "path": "/v1/accounts/{account_id}/watchlists/{watchlist_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -320,7 +320,7 @@
       "method": "DELETE",
       "path": "/v1/accounts/{account_id}/watchlists/{watchlist_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -335,7 +335,7 @@
       "method": "GET",
       "path": "/v1/assets",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -346,7 +346,7 @@
       "method": "GET",
       "path": "/v1/assets/{symbol_or_asset_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -361,7 +361,7 @@
       "method": "GET",
       "path": "/v1/calendar",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -372,7 +372,7 @@
       "method": "GET",
       "path": "/v1/clock",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -383,7 +383,7 @@
       "method": "GET",
       "path": "/v1/corporate_actions/announcements",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -398,7 +398,7 @@
       "method": "GET",
       "path": "/v1/documents/{document_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -413,7 +413,7 @@
       "method": "GET",
       "path": "/v1/events/accounts/status",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -428,7 +428,7 @@
       "method": "GET",
       "path": "/v1/events/journals/status",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -443,7 +443,7 @@
       "method": "GET",
       "path": "/v1/events/trades",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -458,7 +458,7 @@
       "method": "GET",
       "path": "/v1/events/transfers/status",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -473,7 +473,7 @@
       "method": "GET",
       "path": "/v1/journals",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -484,7 +484,7 @@
       "method": "POST",
       "path": "/v1/journals",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -499,7 +499,7 @@
       "method": "POST",
       "path": "/v1/journals/batch",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -514,7 +514,7 @@
       "method": "DELETE",
       "path": "/v1/journals/{journal_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -529,7 +529,7 @@
       "method": "POST",
       "path": "/v1/oauth/authorize",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -544,7 +544,7 @@
       "method": "GET",
       "path": "/v1/oauth/clients/{client_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -559,7 +559,7 @@
       "method": "POST",
       "path": "/v1/oauth/token",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -574,7 +574,7 @@
       "method": "GET",
       "path": "/v1/trading/accounts/{account_id}/account",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -589,7 +589,7 @@
       "method": "GET",
       "path": "/v1/trading/accounts/{account_id}/orders",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -600,7 +600,7 @@
       "method": "POST",
       "path": "/v1/trading/accounts/{account_id}/orders",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -615,7 +615,7 @@
       "method": "DELETE",
       "path": "/v1/trading/accounts/{account_id}/orders",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -630,7 +630,7 @@
       "method": "GET",
       "path": "/v1/trading/accounts/{account_id}/orders/{order_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -645,7 +645,7 @@
       "method": "PATCH",
       "path": "/v1/trading/accounts/{account_id}/orders/{order_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -660,7 +660,7 @@
       "method": "DELETE",
       "path": "/v1/trading/accounts/{account_id}/orders/{order_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -675,7 +675,7 @@
       "method": "GET",
       "path": "/v1/trading/accounts/{account_id}/positions",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -686,7 +686,7 @@
       "method": "DELETE",
       "path": "/v1/trading/accounts/{account_id}/positions",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -701,7 +701,7 @@
       "method": "GET",
       "path": "/v1/trading/accounts/{account_id}/positions/{symbol_or_asset_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -716,7 +716,7 @@
       "method": "DELETE",
       "path": "/v1/trading/accounts/{account_id}/positions/{symbol_or_asset_id}",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {
@@ -731,7 +731,7 @@
       "method": "GET",
       "path": "/v1/trading/accounts/{account_id}/watchlists",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "covered_by": {
@@ -742,7 +742,7 @@
       "method": "POST",
       "path": "/v1/trading/accounts/{account_id}/watchlists",
       "provenance": {
-        "artifact": "alpaca-broker-api-artifact-2026-08-06",
+        "artifact": "alpaca-broker-api-artifact-2026-08-19",
         "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml"
       },
       "operation": {

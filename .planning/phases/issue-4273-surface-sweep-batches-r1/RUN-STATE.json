@@ -1,0 +1,12 @@
+{
+  "phase": "issue-4273-surface-sweep-batches-r1",
+  "status": "verified_ready_for_parent_integration",
+  "delivery": "direct-pr",
+  "base": "chore/4277-connector-surface-sweep",
+  "working_branch": "fm/cli-surface-sweep-batches-r1",
+  "gsd_mode": "inline_manual_fallback",
+  "reason": "Canonical delivery contract prohibits GSD role spawning; Firstmate task explicitly authorizes autonomous inline completion. Captain parity-bar gap revision is recorded as an inline/manual GSD gap-plan fallback.",
+  "issue": 4273,
+  "batch": 1,
+  "resume": "PR #4275 is verified against the parent branch and awaits Firstmate integration. The durable sweep resume pointer remains batch 2 in .planning/trackers/cli-surface-sweep-batches-r1-progress.json; batch 2 must retain the coverage/rejection contract."
+}

@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "manifest": "docs/migration/batches/cli-surface-sweep-batches-r1-batch-001.json",
+  "candidates": 20,
+  "included": [
+    {
+      "connector": "avni",
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+        "version": "1.0.0; OpenAPI 3.0.0; master",
+        "retrieved_at": "2026-08-19",
+        "sha256": "891a67622e7b542142453fd1ef224eba5128ec301739e3fac8d2310adca20ea5"
+      },
+      "artifact_operations": 31,
+      "declared_operations": 31,
+      "operation_split": {
+        "executable": 7,
+        "provider_blocked": 0,
+        "excluded": 24
+      },
+      "cli_commands": 7,
+      "operation_executors": 0
+    },
+    {
+      "connector": "defillama",
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+        "version": "DefiLlama API 1.0.0-oas3; OpenAPI 3.0.0; current provider-published free-tier artifact",
+        "retrieved_at": "2026-08-19",
+        "sha256": "fb4bd72cea397a05f127ce7edde5d45d30acf4f865dcbbf27cfbb83993682cff"
+      },
+      "artifact_operations": 31,
+      "declared_operations": 31,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 0,
+        "excluded": 21
+      },
+      "cli_commands": 10,
+      "operation_executors": 0
+    },
+    {
+      "connector": "dockerhub",
+      "artifact": {
+        "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "version": "Docker Hub API 2-beta; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-19",
+        "sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756"
+      },
+      "artifact_operations": 54,
+      "declared_operations": 54,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 0,
+        "excluded": 50
+      },
+      "cli_commands": 4,
+      "operation_executors": 0
+    },
+    {
+      "connector": "oura",
+      "artifact": {
+        "url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+        "version": "Oura API v2.0, OpenAPI revision 1.37 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-19",
+        "sha256": "8b8ae3b61eda046c9305d868eadc258301ad60d4857307ff984bfbe115dce9e8"
+      },
+      "artifact_operations": 75,
+      "declared_operations": 75,
+      "operation_split": {
+        "executable": 35,
+        "provider_blocked": 0,
+        "excluded": 40
+      },
+      "cli_commands": 35,
+      "operation_executors": 0
+    },
+    {
+      "connector": "flexmail",
+      "artifact": {
+        "url": "https://api.flexmail.eu/documentation/openapi.php",
+        "version": "Flexmail email marketing API 1.2.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-19",
+        "sha256": "f7280a3b90cf5efba92bf6c048a2621f923d5652d076d765b7a3f67efd39e1f6"
+      },
+      "artifact_operations": 43,
+      "declared_operations": 43,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 22,
+        "excluded": 16
+      },
+      "cli_commands": 5,
+      "operation_executors": 0
+    },
+    {
+      "connector": "perigon",
+      "artifact": {
+        "url": "https://api.perigon.io/v1/openapi/public",
+        "version": "Perigon API 1.0.0; OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-19",
+        "sha256": "d068f150de740e8231bf1bbf713af24d9ff0c29a57a5df09c601fde51cfff3c3"
+      },
+      "artifact_operations": 45,
+      "declared_operations": 45,
+      "operation_split": {
+        "executable": 7,
+        "provider_blocked": 23,
+        "excluded": 15
+      },
+      "cli_commands": 7,
+      "operation_executors": 0
+    },
+    {
+      "connector": "pingdom",
+      "artifact": {
+        "url": "https://docs.pingdom.com/api/API_3.1.yaml",
+        "version": "Pingdom Public API 3.1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-19",
+        "sha256": "d05c91a3c64bbb437329c775712e5e375b2313f56ca16c8c6eeaefe6f708ddca"
+      },
+      "artifact_operations": 50,
+      "declared_operations": 50,
+      "operation_split": {
+        "executable": 21,
+        "provider_blocked": 0,
+        "excluded": 29
+      },
+      "cli_commands": 21,
+      "operation_executors": 0
+    },
+    {
+      "connector": "alpaca-broker-api",
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+        "version": "1.0.0",
+        "retrieved_at": "2026-08-19",
+        "sha256": "9c557d2ea72d93992bfdb689847539a4b9474f99858a80cee955484b8a8c3ae1"
+      },
+      "artifact_operations": 52,
+      "declared_operations": 52,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 5,
+        "excluded": 37
+      },
+      "cli_commands": 10,
+      "operation_executors": 0
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "eventzilla",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "paypal-transaction",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "persistiq",
+      "stage": "coverage",
+      "reason": "executable coverage GET /v1/mailboxes is absent from the cited artifact"
+    },
+    {
+      "connector": "docuseal",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: top-level webhooks (formCompletedWebhook, formDeclinedWebhook, formStartedWebhook, formViewedWebhook, submissionArchivedWebhook, submissionCompletedWebhook, submissionCreatedWebhook, submissionExpiredWebhook, templateArchivedWebhook, templateCreatedWebhook, templateUpdatedWebhook) cannot be represented as provider request paths"
+    },
+    {
+      "connector": "watchmode",
+      "stage": "coverage",
+      "reason": "executable coverage GET /v1/search/ is absent from the cited artifact"
+    },
+    {
+      "connector": "blogger",
+      "stage": "artifact_parse",
+      "reason": "artifact is not an OpenAPI or Swagger document"
+    },
+    {
+      "connector": "judge-me-reviews",
+      "stage": "artifact_parse",
+      "reason": "artifact path \"reviews/{id}\" must be non-empty and connector-relative"
+    },
+    {
+      "connector": "oncehub",
+      "stage": "artifact_parse",
+      "reason": "artifact is not an OpenAPI or Swagger document"
+    },
+    {
+      "connector": "printify",
+      "stage": "coverage",
+      "reason": "executable coverage GET /v1/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping.json is absent from the cited artifact"
+    },
+    {
+      "connector": "finnworlds",
+      "stage": "artifact_fetch",
+      "reason": "fetch artifact: provider returned HTTP 403"
+    },
+    {
+      "connector": "nebius-ai",
+      "stage": "coverage",
+      "reason": "executable coverage GET /v1/batches is absent from the cited artifact"
+    },
+    {
+      "connector": "coin-api",
+      "stage": "coverage",
+      "reason": "executable coverage GET /v1/symbols is absent from the cited artifact"
+    }
+  ]
+}
