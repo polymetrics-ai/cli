@@ -57,20 +57,8 @@
     "stream_bindings": 96,
     "writes_actions": 163,
     "terminal_commands": 0,
-    "gap_ids": [
-      "declarative-typed-destination-app-dispatch",
-      "declarative-typed-destination-exact-action-selection"
-    ],
-    "foundation_gaps": [
-      {
-        "id": "declarative-typed-destination-app-dispatch",
-        "count": 1
-      },
-      {
-        "id": "declarative-typed-destination-exact-action-selection",
-        "count": 162
-      }
-    ],
+    "gap_ids": [],
+    "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
@@ -85,10 +73,11 @@
         "conformance": "declarative_stream_transport/outreach_fixture_source_v1"
       },
       "destination_transport": {
-        "state": "declared_pending_foundation_dispatch",
+        "state": "declared_foundation_available_pending_connector_app_cli_proof",
         "declaration": "sync_transport.json",
         "action": "activate_sequence",
-        "foundation_dependency": "#4304 persisted App/CLI dispatch integration"
+        "foundation_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57",
+        "provider_live_certification": "pending"
       }
     },
     "declaration_pending_ids": [
@@ -144,12 +133,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -186,12 +171,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -228,12 +209,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -270,12 +247,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -312,12 +285,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -354,12 +323,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -396,12 +361,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -438,12 +399,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -480,12 +437,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -522,12 +475,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -564,12 +513,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -606,12 +551,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -648,12 +589,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -690,12 +627,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -732,12 +665,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -774,12 +703,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -816,12 +741,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -858,12 +779,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -900,12 +817,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -942,12 +855,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -984,12 +893,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1026,12 +931,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1068,12 +969,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1110,12 +1007,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1152,12 +1045,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1194,12 +1083,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1236,12 +1121,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1278,12 +1159,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1320,12 +1197,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1362,12 +1235,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1404,12 +1273,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1446,12 +1311,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1488,12 +1349,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1530,12 +1387,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1572,12 +1425,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -1614,12 +1463,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5592,12 +5437,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5634,12 +5475,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5676,12 +5513,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5718,12 +5551,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5760,12 +5589,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5802,12 +5627,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5844,12 +5665,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5886,12 +5703,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5928,12 +5741,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -5970,12 +5779,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6012,12 +5817,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6054,12 +5855,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6096,12 +5893,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6138,12 +5931,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6180,12 +5969,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6222,12 +6007,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6264,12 +6045,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6306,12 +6083,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6348,12 +6121,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6390,12 +6159,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6432,12 +6197,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6474,12 +6235,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6516,12 +6273,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6558,12 +6311,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6600,12 +6349,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6642,12 +6387,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6684,12 +6425,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6726,12 +6463,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6768,12 +6501,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6810,12 +6539,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6852,12 +6577,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6894,12 +6615,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6936,12 +6653,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -6978,12 +6691,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7020,12 +6729,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7062,12 +6767,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7104,12 +6805,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7146,12 +6843,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7188,12 +6881,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7230,12 +6919,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7272,12 +6957,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7314,12 +6995,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7356,12 +7033,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7398,12 +7071,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7440,12 +7109,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7482,12 +7147,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7524,12 +7185,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7566,12 +7223,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7608,12 +7261,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7650,12 +7299,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7692,12 +7337,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7734,12 +7375,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7776,12 +7413,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7818,12 +7451,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7860,12 +7489,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7902,12 +7527,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7944,12 +7565,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -7986,12 +7603,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8028,12 +7641,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8070,12 +7679,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8112,12 +7717,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8154,12 +7755,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8196,12 +7793,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8238,12 +7831,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8280,12 +7869,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8322,12 +7907,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "bound_pending_foundation_dispatch",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-app-dispatch",
-            "evidence": "#4304 currently composes declarative typed destinations but persisted App/CLI dispatch integration is pending; no connector workaround is permitted.",
-            "minimal_change": "Land and exercise the #4304 persisted App/CLI generic destination dispatch, then certify this exact connector declaration."
-          }
+          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "evidence": "#4304 foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 supplies persisted exact action selection and App/CLI dispatch; this connector still needs its installed App/CLI fixture path and provider-live certification remains pending."
         }
       }
     },
@@ -8364,12 +7945,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8406,12 +7983,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8448,12 +8021,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8490,12 +8059,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8532,12 +8097,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8574,12 +8135,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8616,12 +8173,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8658,12 +8211,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8700,12 +8249,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8742,12 +8287,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8784,12 +8325,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8826,12 +8363,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8868,12 +8401,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8910,12 +8439,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8952,12 +8477,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -8994,12 +8515,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9036,12 +8553,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9078,12 +8591,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9120,12 +8629,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9162,12 +8667,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9204,12 +8705,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9246,12 +8743,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9288,12 +8781,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9330,12 +8819,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9372,12 +8857,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9414,12 +8895,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9456,12 +8933,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9498,12 +8971,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9540,12 +9009,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9582,12 +9047,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9624,12 +9085,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9666,12 +9123,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9708,12 +9161,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9750,12 +9199,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9792,12 +9237,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9834,12 +9275,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9876,12 +9313,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9918,12 +9351,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -9960,12 +9389,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10002,12 +9427,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10044,12 +9465,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10086,12 +9503,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10128,12 +9541,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10170,12 +9579,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10212,12 +9617,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10254,12 +9655,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10296,12 +9693,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10338,12 +9731,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10380,12 +9769,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10422,12 +9807,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10464,12 +9845,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10506,12 +9883,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10548,12 +9921,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10590,12 +9959,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10632,12 +9997,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10674,12 +10035,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10716,12 +10073,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10758,12 +10111,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10800,12 +10149,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10842,12 +10187,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     },
@@ -10884,12 +10225,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "eligible_pending_exact_action_selection",
-          "foundation_gap": {
-            "id": "declarative-typed-destination-exact-action-selection",
-            "evidence": "internal/connectors/sync_transport.go:405-409 requires a destination action to be listed in eligible_actions; internal/connectors/sync_transport.go:468-480 selects only the mode strategy. The closed #4304 declaration cannot yet select each exact eligible action without a connector workaround.",
-            "minimal_change": "Extend the closed definition-owned destination selection contract to select the exact eligible action without a connector-specific dispatcher, then bind and exercise this action."
-          }
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
         }
       }
     }

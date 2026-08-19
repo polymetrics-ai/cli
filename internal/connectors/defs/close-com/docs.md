@@ -120,11 +120,12 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 - Batch defaults: read_page_size=100.
 - `sync_transport.json` declares all 14 stream-backed endpoint groups as ETL sources and the
   fixture/dry `leads(id,name,description,url,status_id) → update_lead` typed-destination proof.
-  It has keyed delivery, durable warehouse acknowledgement, and all closed modes. Persisted
-  App/CLI destination dispatch remains pending #4304, so this does not claim application-level
-  reverse-ETL deployment.
+  It has keyed delivery, durable warehouse acknowledgement, and all closed modes. Foundation
+  `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies persisted App/CLI destination dispatch; this
+  declaration still needs its installed App/CLI fixture path and provider-live certification.
 - Every declared typed action has an explicit reverse-ETL eligibility disposition: `update_lead`
-  is the bound proof and the other 11 await the closed exact-action selection contract. The
+  is the bound proof and the other 11 are declaration-pending exact source mappings and conformance.
+  The
   remaining source-locked operations await connector-owned typed contracts and CLI bindings;
   destructive, privileged, binary, and provider-live-certification status are execution metadata,
   not reasons to make an operation unreachable.

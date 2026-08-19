@@ -145,10 +145,11 @@ beneath an explicit `--dest-root`.
 - **Declarative typed destination proof.** `sync_transport.json` declares every Gorgias ETL stream
   as a `declarative_stream_source` and binds `update_ticket` to `tickets` with the exact `id` and
   `status` source fields. The route is keyed, warehouse-acknowledged, and has explicit strategies
-  for overwrite, append, and upsert modes. This is fixture/dry declaration evidence only: provider
-  live certification and persisted App/CLI destination dispatch remain pending the #4304 foundation.
-  The declaration disposition records all 61 typed-action eligibility decisions; the remaining
-  ordinary actions need closed, definition-owned exact-action selection, while multipart `upload_file`
+  for overwrite, append, and upsert modes. Foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`
+  supplies persisted App/CLI dispatch and exact action selection; this declaration still needs an
+  installed App/CLI fixture path, and provider-live certification remains pending. The declaration
+  disposition records all 61 typed-action eligibility decisions; the remaining ordinary actions are
+  declaration-pending exact source mappings and conformance evidence, while multipart `upload_file`
   needs a separate bounded binary/multipart destination contract and remains reachable as `files upload`.
 - **Direct reads use `json_redacted`.** That is the only general-purpose output policy the runtime
   supports for direct reads (`commandrunner.supportedDirectReadOutputPolicies`).

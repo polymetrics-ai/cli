@@ -20,11 +20,12 @@ Service API documentation: https://developers.chatwoot.com/api-reference.
 `sync_transport.json` declares every executable Chatwoot stream as a
 `declarative_stream_source` and binds `contacts(id, blocked)` to the exact typed
 `update_contact` action for overwrite, append, and upsert modes. The declaration has keyed
-delivery, durable warehouse acknowledgement, and fixture/dry conformance evidence. It is not an
-application-level deployment claim: persisted App/CLI generic-destination dispatch and provider-live
-certification remain pending #4304. The source disposition records all 60 typed-action eligibility
-decisions; 59 ordinary actions await closed exact-action selection, while all remain reachable through
-their approval-governed connector commands.
+delivery, durable warehouse acknowledgement, and fixture/dry conformance evidence. Foundation
+`609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies persisted App/CLI generic-destination dispatch
+and exact action selection; this declaration still needs its installed App/CLI fixture path and
+provider-live certification. The source disposition records all 60 typed-action eligibility decisions;
+59 ordinary actions are declaration-pending exact source mappings and conformance evidence, while all
+remain reachable through their approval-governed connector commands.
 
 ## Auth setup
 
