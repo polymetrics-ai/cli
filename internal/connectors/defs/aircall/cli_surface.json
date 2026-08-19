@@ -1,0 +1,625 @@
+{
+  "commands": [
+    {
+      "path": "add user to team apply",
+      "summary": "Plan and execute the add user to team reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_user_to_team",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "POST /v1/teams/:team_id/users/:user_id",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/teams/:team_id/users/:user_id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "team_id",
+          "type": "integer",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "adds an agent to a team, changing that agent's call routing/membership; low-risk, reversible via remove_user_from_team",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall add user to team apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "archive call apply",
+      "summary": "Plan and execute the archive call reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "archive_call",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "PUT /v1/calls/:id/archive",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/calls/:id/archive"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "marks a call as archived, hiding it from default call-list views; reversible via unarchive_call",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall archive call apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "comment call apply",
+      "summary": "Plan and execute the comment call reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "comment_call",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "POST /v1/calls/:id/comments",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calls/:id/comments"
+        }
+      ],
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "adds an internal comment note to a call record; visible to other agents with call access, no external side effect",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall comment call apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "POST /v1/contacts",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts"
+        }
+      ],
+      "flags": [],
+      "risk": "creates a new shared/personal directory contact; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall create contact apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "POST /v1/tags",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/tags"
+        }
+      ],
+      "flags": [
+        {
+          "name": "color",
+          "type": "string",
+          "summary": "Required color record field.",
+          "maps_to": "record.color",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new call-tagging label; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall create tag apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create team apply",
+      "summary": "Plan and execute the create team reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_team",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "POST /v1/teams",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/teams"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new team container; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall create team apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create user apply",
+      "summary": "Plan and execute the create user reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "POST /v1/users",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users"
+        }
+      ],
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new Aircall agent seat, which may consume a billable license; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall create user apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "POST /v1/webhooks",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/webhooks"
+        }
+      ],
+      "flags": [
+        {
+          "name": "events",
+          "type": "string_array",
+          "summary": "Required events record field.",
+          "maps_to": "record.events",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "risk": "registers a new outbound webhook that will POST live call/event data to an external URL of the caller's choosing; verify the target endpoint before enabling",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall create webhook apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "DELETE /v1/contacts/:id",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/contacts/:id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes a directory contact; irreversible",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall delete contact apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete tag apply",
+      "summary": "Plan and execute the delete tag reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tag",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "DELETE /v1/tags/:id",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/tags/:id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes a tag; it is un-applied from every call that previously carried it",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall delete tag apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete team apply",
+      "summary": "Plan and execute the delete team reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_team",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "DELETE /v1/teams/:id",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/teams/:id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes a team; agents assigned to it lose that team's routing/membership immediately",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall delete team apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "DELETE /v1/users/:id",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/users/:id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes an Aircall agent seat; irreversible, frees the associated license; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall delete user apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "DELETE /v1/webhooks/:id",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/webhooks/:id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall delete webhook apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "remove user from team apply",
+      "summary": "Plan and execute the remove user from team reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_user_from_team",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "DELETE /v1/teams/:team_id/users/:user_id",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/teams/:team_id/users/:user_id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "team_id",
+          "type": "integer",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "removes an agent from a team, changing that agent's call routing/membership immediately",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall remove user from team apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "tag call apply",
+      "summary": "Plan and execute the tag call reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "tag_call",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "POST /v1/calls/:id/tags",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calls/:id/tags"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "tag_ids",
+          "type": "json",
+          "summary": "Required tag ids record field.",
+          "maps_to": "record.tag_ids",
+          "required": true
+        }
+      ],
+      "risk": "applies the given tags to a call; additive, does not remove tags already present",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall tag call apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "unarchive call apply",
+      "summary": "Plan and execute the unarchive call reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unarchive_call",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "PUT /v1/calls/:id/unarchive",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/calls/:id/unarchive"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "restores a previously archived call to default call-list views",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall unarchive call apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update tag apply",
+      "summary": "Plan and execute the update tag reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tag",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "PUT /v1/tags/:id",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/tags/:id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "renames or recolors an existing tag; a visible change everywhere the tag is already applied",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall update tag apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "PUT /v1/users/:id",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/users/:id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing agent's profile/availability; a visible change for that agent's call routing",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall update user apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://developers.aircall.io/api-references",
+      "source_cli_path": "PUT /v1/webhooks/:id",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/webhooks/:id"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing webhook's target URL, subscribed events, or active state; a changed url redirects future event deliveries to a different endpoint",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm aircall update webhook apply --plan <plan-name>"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add user to team apply",
+        "archive call apply",
+        "comment call apply",
+        "create contact apply",
+        "create tag apply",
+        "create team apply",
+        "create user apply",
+        "create webhook apply",
+        "delete contact apply",
+        "delete tag apply",
+        "delete team apply",
+        "delete user apply",
+        "delete webhook apply",
+        "remove user from team apply",
+        "tag call apply",
+        "unarchive call apply",
+        "update tag apply",
+        "update user apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "tagline": "Run Aircall's declared streams and reverse-ETL actions.",
+  "usage": "pm aircall <command> [flags]"
+}

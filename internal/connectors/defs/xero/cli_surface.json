@@ -42,6 +42,99 @@
         "streams bank_transactions_history",
         "streams bank_transfer"
       ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create account apply",
+        "delete account apply",
+        "update account apply",
+        "upsert bank transactions apply",
+        "create bank transactions apply",
+        "update bank transaction apply",
+        "create bank transaction history record apply",
+        "create bank transfer apply",
+        "delete bank transfers apply",
+        "delete bank transfer apply",
+        "create bank transfer history record apply",
+        "delete batch payment apply",
+        "create batch payment apply",
+        "delete batch payment by url param apply",
+        "create batch payment history record apply",
+        "create branding theme payment services apply",
+        "create contact group apply",
+        "update contact group apply",
+        "delete contact group contacts apply",
+        "create contact group contacts apply",
+        "delete contact group contact apply",
+        "upsert contacts apply",
+        "create contacts apply",
+        "update contact apply",
+        "create contact history apply",
+        "upsert credit notes apply",
+        "create credit notes apply",
+        "update credit note apply",
+        "create credit note allocation apply",
+        "delete credit note allocations apply",
+        "create credit note history apply",
+        "create currency apply",
+        "create expense claims apply",
+        "update expense claim apply",
+        "create expense claim history apply",
+        "upsert invoices apply",
+        "create invoices apply",
+        "update invoice apply",
+        "email invoice apply",
+        "create invoice history apply",
+        "upsert items apply",
+        "create items apply",
+        "delete item apply",
+        "update item apply",
+        "create item history apply",
+        "create linked transaction apply",
+        "delete linked transaction apply",
+        "update linked transaction apply",
+        "upsert manual journals apply",
+        "create manual journals apply",
+        "update manual journal apply",
+        "create manual journal history record apply",
+        "create overpayment allocations apply",
+        "delete overpayment allocations apply",
+        "create overpayment history apply",
+        "create payment apply",
+        "create payments apply",
+        "delete payment apply",
+        "create payment history apply",
+        "create payment service apply",
+        "create prepayment allocations apply",
+        "delete prepayment allocations apply",
+        "create prepayment history apply",
+        "upsert purchase orders apply",
+        "create purchase orders apply",
+        "update purchase order apply",
+        "create purchase order history apply",
+        "upsert quotes apply",
+        "create quotes apply",
+        "update quote apply",
+        "create quote history apply",
+        "create receipt apply",
+        "update receipt apply",
+        "create receipt history apply",
+        "upsert repeating invoices apply",
+        "create repeating invoices apply",
+        "update repeating invoice apply",
+        "create repeating invoice history apply",
+        "setup organisation apply",
+        "update tax rate apply",
+        "create tax rates apply",
+        "create tracking category apply",
+        "delete tracking category apply",
+        "update tracking category apply",
+        "create tracking options apply",
+        "delete tracking options apply",
+        "update tracking options apply"
+      ]
     }
   ],
   "global_flags": [
@@ -1474,6 +1567,2399 @@
       "risk": "blocked shared-runtime binary/file transfer dependency",
       "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
       "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "create account apply",
+      "summary": "Plan and execute the create account reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_account",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Accounts",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Accounts"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero account resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create account apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete account apply",
+      "summary": "Plan and execute the delete account reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_account",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /Accounts/{AccountID}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero account resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete account apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update account apply",
+      "summary": "Plan and execute the update account reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_account",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Accounts/{AccountID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero account resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update account apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert bank transactions apply",
+      "summary": "Plan and execute the upsert bank transactions reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_bank_transactions",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /BankTransactions",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/BankTransactions"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero bank transactions resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero upsert bank transactions apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create bank transactions apply",
+      "summary": "Plan and execute the create bank transactions reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_bank_transactions",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /BankTransactions",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/BankTransactions"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero bank transactions resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create bank transactions apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update bank transaction apply",
+      "summary": "Plan and execute the update bank transaction reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_bank_transaction",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /BankTransactions/{BankTransactionID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/BankTransactions/{BankTransactionID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "bank_transaction_id",
+          "type": "string",
+          "summary": "Required bank transaction id record field.",
+          "maps_to": "record.bank_transaction_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero bank transaction resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update bank transaction apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create bank transaction history record apply",
+      "summary": "Plan and execute the create bank transaction history record reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_bank_transaction_history_record",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /BankTransactions/{BankTransactionID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/BankTransactions/{BankTransactionID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "bank_transaction_id",
+          "type": "string",
+          "summary": "Required bank transaction id record field.",
+          "maps_to": "record.bank_transaction_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero bank transaction history record resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create bank transaction history record apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create bank transfer apply",
+      "summary": "Plan and execute the create bank transfer reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_bank_transfer",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /BankTransfers",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/BankTransfers"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero bank transfer resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create bank transfer apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete bank transfers apply",
+      "summary": "Plan and execute the delete bank transfers reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_bank_transfers",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /BankTransfers",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/BankTransfers"
+        }
+      ],
+      "flags": [
+        {
+          "name": "BankTransfers",
+          "type": "json",
+          "summary": "Required BankTransfers record field.",
+          "maps_to": "record.BankTransfers",
+          "required": true
+        }
+      ],
+      "risk": "Destructive Xero Accounting API action: sets one or more bank transfers to DELETED; reverse ETL must preview records and require explicit approval before execute.",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete bank transfers apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete bank transfer apply",
+      "summary": "Plan and execute the delete bank transfer reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_bank_transfer",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /BankTransfers/{BankTransferID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/BankTransfers/{BankTransferID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "Status",
+          "type": "string",
+          "summary": "Required Status record field.",
+          "maps_to": "record.Status",
+          "required": true
+        },
+        {
+          "name": "bank_transfer_id",
+          "type": "string",
+          "summary": "Required bank transfer id record field.",
+          "maps_to": "record.bank_transfer_id",
+          "required": true
+        }
+      ],
+      "risk": "Destructive Xero Accounting API action: sets a bank transfer to DELETED; reverse ETL must preview the resolved bank_transfer_id and require explicit approval before execute.",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete bank transfer apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create bank transfer history record apply",
+      "summary": "Plan and execute the create bank transfer history record reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_bank_transfer_history_record",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /BankTransfers/{BankTransferID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/BankTransfers/{BankTransferID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "bank_transfer_id",
+          "type": "string",
+          "summary": "Required bank transfer id record field.",
+          "maps_to": "record.bank_transfer_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero bank transfer history record resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create bank transfer history record apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete batch payment apply",
+      "summary": "Show the exact delete batch payment action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_batch_payment",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /BatchPayments",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/BatchPayments"
+        }
+      ],
+      "risk": "deletes Xero batch payment resources in the connected tenant; approval required",
+      "approval": "Partial command: ambiguous BatchPaymentID: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm xero delete batch payment apply --json"
+      ]
+    },
+    {
+      "path": "create batch payment apply",
+      "summary": "Plan and execute the create batch payment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_batch_payment",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /BatchPayments",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/BatchPayments"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero batch payment resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create batch payment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete batch payment by url param apply",
+      "summary": "Show the exact delete batch payment by url param action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_batch_payment_by_url_param",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /BatchPayments/{BatchPaymentID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/BatchPayments/{BatchPaymentID}"
+        }
+      ],
+      "risk": "deletes Xero batch payment by url param resources in the connected tenant; approval required",
+      "approval": "Partial command: ambiguous Status: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm xero delete batch payment by url param apply --json"
+      ]
+    },
+    {
+      "path": "create batch payment history record apply",
+      "summary": "Plan and execute the create batch payment history record reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_batch_payment_history_record",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /BatchPayments/{BatchPaymentID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/BatchPayments/{BatchPaymentID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "batch_payment_id",
+          "type": "string",
+          "summary": "Required batch payment id record field.",
+          "maps_to": "record.batch_payment_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero batch payment history record resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create batch payment history record apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create branding theme payment services apply",
+      "summary": "Plan and execute the create branding theme payment services reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_branding_theme_payment_services",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /BrandingThemes/{BrandingThemeID}/PaymentServices",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/BrandingThemes/{BrandingThemeID}/PaymentServices"
+        }
+      ],
+      "flags": [
+        {
+          "name": "branding_theme_id",
+          "type": "string",
+          "summary": "Required branding theme id record field.",
+          "maps_to": "record.branding_theme_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero branding theme payment services resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create branding theme payment services apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create contact group apply",
+      "summary": "Plan and execute the create contact group reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact_group",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /ContactGroups",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ContactGroups"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero contact group resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create contact group apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update contact group apply",
+      "summary": "Plan and execute the update contact group reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact_group",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /ContactGroups/{ContactGroupID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ContactGroups/{ContactGroupID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "contact_group_id",
+          "type": "string",
+          "summary": "Required contact group id record field.",
+          "maps_to": "record.contact_group_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero contact group resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update contact group apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete contact group contacts apply",
+      "summary": "Plan and execute the delete contact group contacts reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact_group_contacts",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /ContactGroups/{ContactGroupID}/Contacts",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/ContactGroups/{ContactGroupID}/Contacts"
+        }
+      ],
+      "flags": [
+        {
+          "name": "contact_group_id",
+          "type": "string",
+          "summary": "Required contact group id record field.",
+          "maps_to": "record.contact_group_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero contact group contacts resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete contact group contacts apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create contact group contacts apply",
+      "summary": "Plan and execute the create contact group contacts reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact_group_contacts",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /ContactGroups/{ContactGroupID}/Contacts",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ContactGroups/{ContactGroupID}/Contacts"
+        }
+      ],
+      "flags": [
+        {
+          "name": "contact_group_id",
+          "type": "string",
+          "summary": "Required contact group id record field.",
+          "maps_to": "record.contact_group_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero contact group contacts resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create contact group contacts apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete contact group contact apply",
+      "summary": "Plan and execute the delete contact group contact reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact_group_contact",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /ContactGroups/{ContactGroupID}/Contacts/{ContactID}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/ContactGroups/{ContactGroupID}/Contacts/{ContactID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "contact_group_id",
+          "type": "string",
+          "summary": "Required contact group id record field.",
+          "maps_to": "record.contact_group_id",
+          "required": true
+        },
+        {
+          "name": "contact_id",
+          "type": "string",
+          "summary": "Required contact id record field.",
+          "maps_to": "record.contact_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero contact group contact resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete contact group contact apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert contacts apply",
+      "summary": "Plan and execute the upsert contacts reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_contacts",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Contacts",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Contacts"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero contacts resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero upsert contacts apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create contacts apply",
+      "summary": "Plan and execute the create contacts reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contacts",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Contacts",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Contacts"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero contacts resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create contacts apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Contacts/{ContactID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Contacts/{ContactID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "contact_id",
+          "type": "string",
+          "summary": "Required contact id record field.",
+          "maps_to": "record.contact_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero contact resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update contact apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create contact history apply",
+      "summary": "Plan and execute the create contact history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Contacts/{ContactID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Contacts/{ContactID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "contact_id",
+          "type": "string",
+          "summary": "Required contact id record field.",
+          "maps_to": "record.contact_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero contact history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create contact history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert credit notes apply",
+      "summary": "Plan and execute the upsert credit notes reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_credit_notes",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /CreditNotes",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/CreditNotes"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero credit notes resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero upsert credit notes apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create credit notes apply",
+      "summary": "Plan and execute the create credit notes reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_credit_notes",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /CreditNotes",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/CreditNotes"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero credit notes resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create credit notes apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update credit note apply",
+      "summary": "Plan and execute the update credit note reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_credit_note",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /CreditNotes/{CreditNoteID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/CreditNotes/{CreditNoteID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "credit_note_id",
+          "type": "string",
+          "summary": "Required credit note id record field.",
+          "maps_to": "record.credit_note_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero credit note resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update credit note apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create credit note allocation apply",
+      "summary": "Plan and execute the create credit note allocation reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_credit_note_allocation",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /CreditNotes/{CreditNoteID}/Allocations",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/CreditNotes/{CreditNoteID}/Allocations"
+        }
+      ],
+      "flags": [
+        {
+          "name": "credit_note_id",
+          "type": "string",
+          "summary": "Required credit note id record field.",
+          "maps_to": "record.credit_note_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero credit note allocation resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create credit note allocation apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete credit note allocations apply",
+      "summary": "Plan and execute the delete credit note allocations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_credit_note_allocations",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /CreditNotes/{CreditNoteID}/Allocations/{AllocationID}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/CreditNotes/{CreditNoteID}/Allocations/{AllocationID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "allocation_id",
+          "type": "string",
+          "summary": "Required allocation id record field.",
+          "maps_to": "record.allocation_id",
+          "required": true
+        },
+        {
+          "name": "credit_note_id",
+          "type": "string",
+          "summary": "Required credit note id record field.",
+          "maps_to": "record.credit_note_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero credit note allocations resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete credit note allocations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create credit note history apply",
+      "summary": "Plan and execute the create credit note history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_credit_note_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /CreditNotes/{CreditNoteID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/CreditNotes/{CreditNoteID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "credit_note_id",
+          "type": "string",
+          "summary": "Required credit note id record field.",
+          "maps_to": "record.credit_note_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero credit note history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create credit note history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create currency apply",
+      "summary": "Plan and execute the create currency reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_currency",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Currencies",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Currencies"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero currency resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create currency apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create expense claims apply",
+      "summary": "Plan and execute the create expense claims reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_expense_claims",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /ExpenseClaims",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ExpenseClaims"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero expense claims resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create expense claims apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update expense claim apply",
+      "summary": "Plan and execute the update expense claim reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_expense_claim",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /ExpenseClaims/{ExpenseClaimID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ExpenseClaims/{ExpenseClaimID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "expense_claim_id",
+          "type": "string",
+          "summary": "Required expense claim id record field.",
+          "maps_to": "record.expense_claim_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero expense claim resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update expense claim apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create expense claim history apply",
+      "summary": "Plan and execute the create expense claim history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_expense_claim_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /ExpenseClaims/{ExpenseClaimID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ExpenseClaims/{ExpenseClaimID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "expense_claim_id",
+          "type": "string",
+          "summary": "Required expense claim id record field.",
+          "maps_to": "record.expense_claim_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero expense claim history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create expense claim history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert invoices apply",
+      "summary": "Plan and execute the upsert invoices reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_invoices",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Invoices",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Invoices"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero invoices resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero upsert invoices apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create invoices apply",
+      "summary": "Plan and execute the create invoices reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_invoices",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Invoices",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Invoices"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero invoices resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create invoices apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update invoice apply",
+      "summary": "Plan and execute the update invoice reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_invoice",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Invoices/{InvoiceID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Invoices/{InvoiceID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "invoice_id",
+          "type": "string",
+          "summary": "Required invoice id record field.",
+          "maps_to": "record.invoice_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero invoice resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update invoice apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "email invoice apply",
+      "summary": "Plan and execute the email invoice reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "email_invoice",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Invoices/{InvoiceID}/Email",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Invoices/{InvoiceID}/Email"
+        }
+      ],
+      "flags": [
+        {
+          "name": "invoice_id",
+          "type": "string",
+          "summary": "Required invoice id record field.",
+          "maps_to": "record.invoice_id",
+          "required": true
+        }
+      ],
+      "risk": "executes Xero email invoice resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero email invoice apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create invoice history apply",
+      "summary": "Plan and execute the create invoice history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_invoice_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Invoices/{InvoiceID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Invoices/{InvoiceID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "invoice_id",
+          "type": "string",
+          "summary": "Required invoice id record field.",
+          "maps_to": "record.invoice_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero invoice history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create invoice history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert items apply",
+      "summary": "Plan and execute the upsert items reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_items",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Items",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Items"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero items resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero upsert items apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create items apply",
+      "summary": "Plan and execute the create items reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_items",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Items",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Items"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero items resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create items apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete item apply",
+      "summary": "Plan and execute the delete item reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_item",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /Items/{ItemID}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Items/{ItemID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero item resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete item apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update item apply",
+      "summary": "Plan and execute the update item reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_item",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Items/{ItemID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Items/{ItemID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero item resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update item apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create item history apply",
+      "summary": "Plan and execute the create item history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_item_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Items/{ItemID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Items/{ItemID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero item history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create item history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create linked transaction apply",
+      "summary": "Plan and execute the create linked transaction reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_linked_transaction",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /LinkedTransactions",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/LinkedTransactions"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero linked transaction resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create linked transaction apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete linked transaction apply",
+      "summary": "Plan and execute the delete linked transaction reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_linked_transaction",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /LinkedTransactions/{LinkedTransactionID}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/LinkedTransactions/{LinkedTransactionID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "linked_transaction_id",
+          "type": "string",
+          "summary": "Required linked transaction id record field.",
+          "maps_to": "record.linked_transaction_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero linked transaction resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete linked transaction apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update linked transaction apply",
+      "summary": "Plan and execute the update linked transaction reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_linked_transaction",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /LinkedTransactions/{LinkedTransactionID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/LinkedTransactions/{LinkedTransactionID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "linked_transaction_id",
+          "type": "string",
+          "summary": "Required linked transaction id record field.",
+          "maps_to": "record.linked_transaction_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero linked transaction resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update linked transaction apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert manual journals apply",
+      "summary": "Plan and execute the upsert manual journals reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_manual_journals",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /ManualJournals",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ManualJournals"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero manual journals resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero upsert manual journals apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create manual journals apply",
+      "summary": "Plan and execute the create manual journals reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_manual_journals",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /ManualJournals",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ManualJournals"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero manual journals resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create manual journals apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update manual journal apply",
+      "summary": "Plan and execute the update manual journal reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_manual_journal",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /ManualJournals/{ManualJournalID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ManualJournals/{ManualJournalID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "manual_journal_id",
+          "type": "string",
+          "summary": "Required manual journal id record field.",
+          "maps_to": "record.manual_journal_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero manual journal resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update manual journal apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create manual journal history record apply",
+      "summary": "Plan and execute the create manual journal history record reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_manual_journal_history_record",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /ManualJournals/{ManualJournalID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ManualJournals/{ManualJournalID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "manual_journal_id",
+          "type": "string",
+          "summary": "Required manual journal id record field.",
+          "maps_to": "record.manual_journal_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero manual journal history record resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create manual journal history record apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create overpayment allocations apply",
+      "summary": "Plan and execute the create overpayment allocations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_overpayment_allocations",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Overpayments/{OverpaymentID}/Allocations",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Overpayments/{OverpaymentID}/Allocations"
+        }
+      ],
+      "flags": [
+        {
+          "name": "overpayment_id",
+          "type": "string",
+          "summary": "Required overpayment id record field.",
+          "maps_to": "record.overpayment_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero overpayment allocations resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create overpayment allocations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete overpayment allocations apply",
+      "summary": "Plan and execute the delete overpayment allocations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_overpayment_allocations",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /Overpayments/{OverpaymentID}/Allocations/{AllocationID}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Overpayments/{OverpaymentID}/Allocations/{AllocationID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "allocation_id",
+          "type": "string",
+          "summary": "Required allocation id record field.",
+          "maps_to": "record.allocation_id",
+          "required": true
+        },
+        {
+          "name": "overpayment_id",
+          "type": "string",
+          "summary": "Required overpayment id record field.",
+          "maps_to": "record.overpayment_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero overpayment allocations resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete overpayment allocations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create overpayment history apply",
+      "summary": "Plan and execute the create overpayment history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_overpayment_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Overpayments/{OverpaymentID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Overpayments/{OverpaymentID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "overpayment_id",
+          "type": "string",
+          "summary": "Required overpayment id record field.",
+          "maps_to": "record.overpayment_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero overpayment history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create overpayment history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create payment apply",
+      "summary": "Plan and execute the create payment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_payment",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Payments",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Payments"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero payment resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create payment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create payments apply",
+      "summary": "Plan and execute the create payments reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_payments",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Payments",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Payments"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero payments resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create payments apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete payment apply",
+      "summary": "Show the exact delete payment action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_payment",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Payments/{PaymentID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Payments/{PaymentID}"
+        }
+      ],
+      "risk": "deletes Xero payment resources in the connected tenant; approval required",
+      "approval": "Partial command: ambiguous Status: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm xero delete payment apply --json"
+      ]
+    },
+    {
+      "path": "create payment history apply",
+      "summary": "Plan and execute the create payment history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_payment_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Payments/{PaymentID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Payments/{PaymentID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "payment_id",
+          "type": "string",
+          "summary": "Required payment id record field.",
+          "maps_to": "record.payment_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero payment history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create payment history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create payment service apply",
+      "summary": "Plan and execute the create payment service reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_payment_service",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /PaymentServices",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/PaymentServices"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero payment service resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create payment service apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create prepayment allocations apply",
+      "summary": "Plan and execute the create prepayment allocations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_prepayment_allocations",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Prepayments/{PrepaymentID}/Allocations",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Prepayments/{PrepaymentID}/Allocations"
+        }
+      ],
+      "flags": [
+        {
+          "name": "prepayment_id",
+          "type": "string",
+          "summary": "Required prepayment id record field.",
+          "maps_to": "record.prepayment_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero prepayment allocations resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create prepayment allocations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete prepayment allocations apply",
+      "summary": "Plan and execute the delete prepayment allocations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_prepayment_allocations",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /Prepayments/{PrepaymentID}/Allocations/{AllocationID}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Prepayments/{PrepaymentID}/Allocations/{AllocationID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "allocation_id",
+          "type": "string",
+          "summary": "Required allocation id record field.",
+          "maps_to": "record.allocation_id",
+          "required": true
+        },
+        {
+          "name": "prepayment_id",
+          "type": "string",
+          "summary": "Required prepayment id record field.",
+          "maps_to": "record.prepayment_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero prepayment allocations resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete prepayment allocations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create prepayment history apply",
+      "summary": "Plan and execute the create prepayment history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_prepayment_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Prepayments/{PrepaymentID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Prepayments/{PrepaymentID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "prepayment_id",
+          "type": "string",
+          "summary": "Required prepayment id record field.",
+          "maps_to": "record.prepayment_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero prepayment history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create prepayment history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert purchase orders apply",
+      "summary": "Plan and execute the upsert purchase orders reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_purchase_orders",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /PurchaseOrders",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/PurchaseOrders"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero purchase orders resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero upsert purchase orders apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create purchase orders apply",
+      "summary": "Plan and execute the create purchase orders reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_purchase_orders",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /PurchaseOrders",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/PurchaseOrders"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero purchase orders resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create purchase orders apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update purchase order apply",
+      "summary": "Plan and execute the update purchase order reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_purchase_order",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /PurchaseOrders/{PurchaseOrderID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/PurchaseOrders/{PurchaseOrderID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "purchase_order_id",
+          "type": "string",
+          "summary": "Required purchase order id record field.",
+          "maps_to": "record.purchase_order_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero purchase order resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update purchase order apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create purchase order history apply",
+      "summary": "Plan and execute the create purchase order history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_purchase_order_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /PurchaseOrders/{PurchaseOrderID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/PurchaseOrders/{PurchaseOrderID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "purchase_order_id",
+          "type": "string",
+          "summary": "Required purchase order id record field.",
+          "maps_to": "record.purchase_order_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero purchase order history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create purchase order history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert quotes apply",
+      "summary": "Plan and execute the upsert quotes reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_quotes",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Quotes",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Quotes"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero quotes resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero upsert quotes apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create quotes apply",
+      "summary": "Plan and execute the create quotes reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_quotes",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Quotes",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Quotes"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero quotes resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create quotes apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update quote apply",
+      "summary": "Plan and execute the update quote reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_quote",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Quotes/{QuoteID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Quotes/{QuoteID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "quote_id",
+          "type": "string",
+          "summary": "Required quote id record field.",
+          "maps_to": "record.quote_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero quote resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update quote apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create quote history apply",
+      "summary": "Plan and execute the create quote history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_quote_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Quotes/{QuoteID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Quotes/{QuoteID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "quote_id",
+          "type": "string",
+          "summary": "Required quote id record field.",
+          "maps_to": "record.quote_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero quote history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create quote history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create receipt apply",
+      "summary": "Plan and execute the create receipt reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_receipt",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Receipts",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Receipts"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero receipt resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create receipt apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update receipt apply",
+      "summary": "Plan and execute the update receipt reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_receipt",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Receipts/{ReceiptID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Receipts/{ReceiptID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "receipt_id",
+          "type": "string",
+          "summary": "Required receipt id record field.",
+          "maps_to": "record.receipt_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero receipt resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update receipt apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create receipt history apply",
+      "summary": "Plan and execute the create receipt history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_receipt_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /Receipts/{ReceiptID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Receipts/{ReceiptID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "receipt_id",
+          "type": "string",
+          "summary": "Required receipt id record field.",
+          "maps_to": "record.receipt_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero receipt history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create receipt history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert repeating invoices apply",
+      "summary": "Plan and execute the upsert repeating invoices reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_repeating_invoices",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /RepeatingInvoices",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/RepeatingInvoices"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero repeating invoices resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero upsert repeating invoices apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create repeating invoices apply",
+      "summary": "Plan and execute the create repeating invoices reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_repeating_invoices",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /RepeatingInvoices",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/RepeatingInvoices"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero repeating invoices resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create repeating invoices apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update repeating invoice apply",
+      "summary": "Plan and execute the update repeating invoice reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_repeating_invoice",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /RepeatingInvoices/{RepeatingInvoiceID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/RepeatingInvoices/{RepeatingInvoiceID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "repeating_invoice_id",
+          "type": "string",
+          "summary": "Required repeating invoice id record field.",
+          "maps_to": "record.repeating_invoice_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero repeating invoice resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update repeating invoice apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create repeating invoice history apply",
+      "summary": "Plan and execute the create repeating invoice history reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_repeating_invoice_history",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /RepeatingInvoices/{RepeatingInvoiceID}/History",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/RepeatingInvoices/{RepeatingInvoiceID}/History"
+        }
+      ],
+      "flags": [
+        {
+          "name": "HistoryRecords",
+          "type": "json",
+          "summary": "Required HistoryRecords record field.",
+          "maps_to": "record.HistoryRecords",
+          "required": true
+        },
+        {
+          "name": "repeating_invoice_id",
+          "type": "string",
+          "summary": "Required repeating invoice id record field.",
+          "maps_to": "record.repeating_invoice_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero repeating invoice history resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create repeating invoice history apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "setup organisation apply",
+      "summary": "Plan and execute the setup organisation reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "setup_organisation",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /Setup",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Setup"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero setup resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero setup organisation apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update tax rate apply",
+      "summary": "Plan and execute the update tax rate reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tax_rate",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /TaxRates",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/TaxRates"
+        }
+      ],
+      "flags": [],
+      "risk": "mutates Xero tax rate resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update tax rate apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create tax rates apply",
+      "summary": "Plan and execute the create tax rates reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tax_rates",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /TaxRates",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/TaxRates"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero tax rates resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create tax rates apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create tracking category apply",
+      "summary": "Plan and execute the create tracking category reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tracking_category",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /TrackingCategories",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/TrackingCategories"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Xero tracking category resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create tracking category apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete tracking category apply",
+      "summary": "Plan and execute the delete tracking category reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tracking_category",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /TrackingCategories/{TrackingCategoryID}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/TrackingCategories/{TrackingCategoryID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "tracking_category_id",
+          "type": "string",
+          "summary": "Required tracking category id record field.",
+          "maps_to": "record.tracking_category_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero tracking category resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete tracking category apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update tracking category apply",
+      "summary": "Plan and execute the update tracking category reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tracking_category",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /TrackingCategories/{TrackingCategoryID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/TrackingCategories/{TrackingCategoryID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "tracking_category_id",
+          "type": "string",
+          "summary": "Required tracking category id record field.",
+          "maps_to": "record.tracking_category_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero tracking category resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update tracking category apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create tracking options apply",
+      "summary": "Plan and execute the create tracking options reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tracking_options",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "PUT /TrackingCategories/{TrackingCategoryID}/Options",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/TrackingCategories/{TrackingCategoryID}/Options"
+        }
+      ],
+      "flags": [
+        {
+          "name": "tracking_category_id",
+          "type": "string",
+          "summary": "Required tracking category id record field.",
+          "maps_to": "record.tracking_category_id",
+          "required": true
+        }
+      ],
+      "risk": "creates Xero tracking options resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero create tracking options apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete tracking options apply",
+      "summary": "Plan and execute the delete tracking options reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tracking_options",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "DELETE /TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "tracking_category_id",
+          "type": "string",
+          "summary": "Required tracking category id record field.",
+          "maps_to": "record.tracking_category_id",
+          "required": true
+        },
+        {
+          "name": "tracking_option_id",
+          "type": "string",
+          "summary": "Required tracking option id record field.",
+          "maps_to": "record.tracking_option_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes Xero tracking options resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero delete tracking options apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update tracking options apply",
+      "summary": "Plan and execute the update tracking options reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tracking_options",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "source_cli_path": "POST /TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "tracking_category_id",
+          "type": "string",
+          "summary": "Required tracking category id record field.",
+          "maps_to": "record.tracking_category_id",
+          "required": true
+        },
+        {
+          "name": "tracking_option_id",
+          "type": "string",
+          "summary": "Required tracking option id record field.",
+          "maps_to": "record.tracking_option_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates Xero tracking options resources in the connected tenant; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm xero update tracking options apply --plan <plan-name>"
+      ]
     }
   ],
   "help_topics": [
