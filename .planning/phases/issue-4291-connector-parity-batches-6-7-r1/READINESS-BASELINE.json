@@ -415,7 +415,15 @@
       "direct_read": {
         "documented": 55,
         "command_bindings": 50,
-        "cli_commands": 49
+        "cli_commands": 49,
+        "open_foundation_gap_operations": [
+          "GET /v3/conversations/{conversationId}",
+          "GET /v3/conversations/{conversationId}/threads",
+          "GET /v3/customers",
+          "GET /v3/system-users",
+          "GET /v3/system-users/{systemUserId}"
+        ],
+        "foundation_gap": "declarative-operation-route-override / cli-operation-route-override-foundation-r1"
       },
       "direct_write": {
         "documented": 65,

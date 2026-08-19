@@ -65,6 +65,12 @@ certification never make an operation unreachable.
   `FOUNDATION-GAPS.json` records the exact source-traced
   `declarative-typed-destination-action-specific-source-bindings` dependency; no connector-specific
   workaround was added.
+- Five source-locked Help Scout Mailbox API v3 reads are explicitly not enabled behind the assigned
+  `declarative-operation-route-override` foundation lane
+  `cli-operation-route-override-foundation-r1`. The current `/v2` bundle base would construct
+  `/v2/v3/...`; no base rewrite, caller URL, generic HTTP path, or silent fallback is permitted.
+  Their source URL/version/hash, exact runtime evidence, owner, fan-out, and closure checks are in
+  `FOUNDATION-GAPS.json`; portfolio `merge_ready` remains false.
 - Braze, Help Scout, and Braintree source inventories remain unproven; the rest use a complete
   provider specification/reference or ServiceNow's explicitly dynamic fixed-template basis.
 - Help Scout still needs its binary command represented as a binary parity row; Gorgias now is.

@@ -287,6 +287,17 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
   machine-readable `declarative-typed-destination-action-specific-source-bindings` row records the
   source URL/revision/hash, fan-out, owner #4304, and exact closure verification. No connector-specific
   workaround was added.
+- **OPEN FOUNDATION GAP — assigned route override:** all five source-locked Help Scout Mailbox API v3
+  direct reads remain not enabled under `declarative-operation-route-override`, owned by
+  `cli-operation-route-override-foundation-r1`. `internal/connectors/engine/direct_read.go:701-717`
+  preserves a path whose version differs from the configured v2 base, and
+  `internal/connectors/engine/direct_read_paginate.go:499-504` joins it into `/v2/v3/...`.
+  Rewriting the stored base would break v2 connections, so no Help Scout workaround is permitted.
+  The five operation rows retain exact provider URL/v3 revision/source hash, direct-read/CLI surfaces,
+  failure evidence, fan-out, owner, and closure tests in `FOUNDATION-GAPS.json`. The common foundation
+  must close definition-owned per-operation route selection across direct read/write, binary
+  download/upload, ETL, and reverse ETL, refusing arbitrary caller URLs, undeclared routes, and
+  silent fallback before I/O.
 
 ## Captain zero-omission pre-merge gate — 2026-08-20
 
@@ -297,9 +308,9 @@ binary upload are independent cells. `N/A` requires provider evidence that the c
 scope, tier, destructive, and safety controls are typed runtime/confirmation metadata, never omission
 reasons.
 
-`FOUNDATION-GAPS.json` is the required machine-readable complement: it retains four stable
+`FOUNDATION-GAPS.json` is the required machine-readable complement: it retains five stable
 provider-neutral gap IDs (three resolved by foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` and
-one open) with one provenance-rich row per affected operation, explicit per-batch and portfolio
+two open) with one provenance-rich row per affected operation, explicit per-batch and portfolio
 fan-out, owner/lane/status, and exact closure verification. Its portfolio rollup is currently
-`merge_ready: false`; the `update_customer` row with the open foundation gap is not enabled and cannot
-contribute to a merge-ready verdict.
+`merge_ready: false`; `update_customer` and all five Help Scout v3 direct-read rows with open
+foundation gaps are not enabled and cannot contribute to a merge-ready verdict.

@@ -121,4 +121,7 @@ and the connection route stops at missing credentials before provider I/O. `upda
 enabled: its required `customers(id) → customerId` binding cannot coexist with the conversation binding
 for one declarative source executor. That is the open provider-neutral
 `declarative-typed-destination-action-specific-source-bindings` gap, not a connector workaround. The
-inventory and binary-ledger defect remain open.
+five source-locked `/v3` direct reads are separately not enabled behind the assigned
+`declarative-operation-route-override` common foundation, which must provide closed per-operation
+base/version/route selection rather than a connector base rewrite or caller URL. The inventory and
+binary-ledger defect remain open.

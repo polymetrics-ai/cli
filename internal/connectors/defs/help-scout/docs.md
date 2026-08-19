@@ -120,5 +120,12 @@ mailbox, team, tag, webhook, workflow, and user data.
   without a connector-specific workaround. Other typed actions are declaration-pending their exact
   source mapping and conformance evidence. Direct-read gaps and source-inventory recovery remain
   connector work, not a safety or certification exclusion.
+- The five source-locked Mailbox API v3 reads remain explicitly foundation-blocked by
+  `declarative-operation-route-override`, owned by
+  `cli-operation-route-override-foundation-r1`. The configured v2 base cannot faithfully execute a
+  v3 route: the current requester would form `/v2/v3/...`. The required closure is a closed,
+  definition-owned per-operation base/version/route contract shared by all execution surfaces; callers
+  must never supply a URL and there is no fallback. These operations are not declaration-pending,
+  enabled, or provider-live certified while that foundation remains open.
 - Fixture-only evidence: no live Help Scout credentials, provider calls, provider writes, or
   certification run were used.

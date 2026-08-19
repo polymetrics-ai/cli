@@ -50,9 +50,14 @@
     "terminal_commands": 50,
     "live_certification": "pending",
     "gap_ids": [
+      "declarative-operation-route-override",
       "declarative-typed-destination-action-specific-source-bindings"
     ],
     "foundation_gaps": [
+      {
+        "id": "declarative-operation-route-override",
+        "count": 5
+      },
       {
         "id": "declarative-typed-destination-action-specific-source-bindings",
         "count": 1
@@ -61,7 +66,11 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 29
+        "count": 24
+      },
+      {
+        "key": "foundation-gap",
+        "count": 5
       }
     ],
     "transport": {
@@ -80,17 +89,12 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-help-scout",
-      "typed-operation-contract-help-scout"
+      "runnable-command-binding-help-scout"
     ],
     "declaration_pending": [
       {
         "id": "runnable-command-binding-help-scout",
         "count": 24
-      },
-      {
-        "id": "typed-operation-contract-help-scout",
-        "count": 5
       }
     ],
     "runnable_cli_surface_commands": 139,
@@ -103,7 +107,8 @@
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
     "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is separate; declared source mappings and conformance evidence decide destination readiness without inventing a transport binding or action.",
-    "2026-08-20 reconciliation: source transport declares all 24 current fixture streams; #4304 foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 validates conversations.id -> update_conversation.conversationId through the closed declarative destination contract. update_customer is not enabled because one executor cannot yet hold a second exact action-specific customers.id -> customerId binding; this is the shared declarative-typed-destination-action-specific-source-bindings foundation gap. All other typed actions are explicitly eligible but declaration-pending their exact stream/input mapping and conformance evidence. Provider-live certification remains pending."
+    "2026-08-20 reconciliation: source transport declares all 24 current fixture streams; #4304 foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 validates conversations.id -> update_conversation.conversationId through the closed declarative destination contract. update_customer is not enabled because one executor cannot yet hold a second exact action-specific customers.id -> customerId binding; this is the shared declarative-typed-destination-action-specific-source-bindings foundation gap. All other typed actions are explicitly eligible but declaration-pending their exact stream/input mapping and conformance evidence. Provider-live certification remains pending.",
+    "2026-08-20 route-override foundation assignment: all five source-locked Mailbox API v3 direct reads are explicitly foundation-blocked by declarative-operation-route-override, owned by cli-operation-route-override-foundation-r1. They remain disabled and are not counted as declaration-pending, enabled, or merge-ready until a closed definition-owned route selection contract lands."
   ],
   "ledger_dispositions": [
     {
@@ -5588,22 +5593,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-help-scout",
-          "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
-          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        "state": "foundation-gap",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+        "foundation_gap": {
+          "id": "declarative-operation-route-override",
+          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
         }
       },
       "rejection": {
-        "reason": "declaration-pending",
+        "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
+        "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
       },
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-help-scout",
+        "status": "disabled; foundation-gap declarative-operation-route-override",
         "contract": null
       }
     },
@@ -5635,22 +5640,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-help-scout",
-          "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
-          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        "state": "foundation-gap",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+        "foundation_gap": {
+          "id": "declarative-operation-route-override",
+          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
         }
       },
       "rejection": {
-        "reason": "declaration-pending",
+        "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
+        "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
       },
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-help-scout",
+        "status": "disabled; foundation-gap declarative-operation-route-override",
         "contract": null
       }
     },
@@ -5682,22 +5687,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-help-scout",
-          "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
-          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        "state": "foundation-gap",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+        "foundation_gap": {
+          "id": "declarative-operation-route-override",
+          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
         }
       },
       "rejection": {
-        "reason": "declaration-pending",
+        "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
+        "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
       },
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-help-scout",
+        "status": "disabled; foundation-gap declarative-operation-route-override",
         "contract": null
       }
     },
@@ -5729,22 +5734,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-help-scout",
-          "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
-          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        "state": "foundation-gap",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+        "foundation_gap": {
+          "id": "declarative-operation-route-override",
+          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
         }
       },
       "rejection": {
-        "reason": "declaration-pending",
+        "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
+        "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
       },
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-help-scout",
+        "status": "disabled; foundation-gap declarative-operation-route-override",
         "contract": null
       }
     },
@@ -5776,22 +5781,22 @@
       },
       "state": "disabled",
       "foundation": {
-        "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-help-scout",
-          "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
-          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        "state": "foundation-gap",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+        "foundation_gap": {
+          "id": "declarative-operation-route-override",
+          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
+          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
         }
       },
       "rejection": {
-        "reason": "declaration-pending",
+        "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path."
+        "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
+        "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
       },
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-help-scout",
+        "status": "disabled; foundation-gap declarative-operation-route-override",
         "contract": null
       }
     }

@@ -4,16 +4,22 @@
   "generated_at": "2026-08-20",
   "gap_definitions": [
     {
-      "stable_gap_id": "declarative-typed-destination-app-dispatch",
-      "missing_provider_neutral_capability": "Persisted App/CLI dispatch must select the generic declarative typed destination exactly as it selects specialized adapters.",
-      "owning_issue": "#4304",
-      "owning_lane": "fm/cli-reverse-etl-destination-r1",
-      "status": "resolved",
-      "resolved_by_foundation_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57"
+      "stable_gap_id": "declarative-operation-route-override",
+      "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
+      "owning_issue": "cli-operation-route-override-foundation-r1",
+      "owning_lane": "cli-operation-route-override-foundation-r1",
+      "status": "open"
     },
     {
-      "stable_gap_id": "declarative-typed-destination-exact-action-selection",
-      "missing_provider_neutral_capability": "The closed declarative destination contract must select each exact eligible typed action without a connector-specific dispatcher; current per-mode strategy only names one action.",
+      "stable_gap_id": "declarative-typed-destination-action-specific-source-bindings",
+      "missing_provider_neutral_capability": "A declarative typed destination needs definition-owned source bindings selected by the persisted exact action, so distinct eligible actions from one source executor can carry distinct input_fields mappings.",
+      "owning_issue": "#4304",
+      "owning_lane": "fm/cli-reverse-etl-destination-r1",
+      "status": "open"
+    },
+    {
+      "stable_gap_id": "declarative-typed-destination-app-dispatch",
+      "missing_provider_neutral_capability": "Persisted App/CLI dispatch must select the generic declarative typed destination exactly as it selects specialized adapters.",
       "owning_issue": "#4304",
       "owning_lane": "fm/cli-reverse-etl-destination-r1",
       "status": "resolved",
@@ -28,11 +34,12 @@
       "resolved_by_foundation_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57"
     },
     {
-      "stable_gap_id": "declarative-typed-destination-action-specific-source-bindings",
-      "missing_provider_neutral_capability": "A declarative typed destination needs definition-owned source bindings selected by the persisted exact action, so distinct eligible actions from one source executor can carry distinct input_fields mappings.",
+      "stable_gap_id": "declarative-typed-destination-exact-action-selection",
+      "missing_provider_neutral_capability": "The closed declarative destination contract must select each exact eligible typed action without a connector-specific dispatcher; current per-mode strategy only names one action.",
       "owning_issue": "#4304",
       "owning_lane": "fm/cli-reverse-etl-destination-r1",
-      "status": "open"
+      "status": "resolved",
+      "resolved_by_foundation_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57"
     }
   ],
   "rows": [
@@ -16756,10 +16763,251 @@
         "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
         "exercise installed App/CLI path for each persisted action selection with fixtures"
       ]
+    },
+    {
+      "stable_gap_id": "declarative-operation-route-override",
+      "connector": "help-scout",
+      "provider_operation": {
+        "source_id": "help-scout.rest.get.V3ConversationsConversationId139",
+        "operation_id": "GET /v3/conversations/{conversationId}",
+        "method": "GET",
+        "path": "/v3/conversations/{conversationId}",
+        "canonical_mapping": {
+          "parity_class": "direct_read",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
+        "version": "Help Scout Mailbox API v3",
+        "sha256": "4862f8a5463105cdd88e915325053b1b5ecbed9919f1293ad75e402ec08bca63",
+        "source_lock": "sources/help-scout-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "direct_read",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
+      ],
+      "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "cli-operation-route-override-foundation-r1",
+      "owning_lane": "cli-operation-route-override-foundation-r1",
+      "status": "open",
+      "closure_verification": [
+        "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
+        "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
+        "generated Help Scout CLI commands and website rows exist for all five operations",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
+      ]
+    },
+    {
+      "stable_gap_id": "declarative-operation-route-override",
+      "connector": "help-scout",
+      "provider_operation": {
+        "source_id": "help-scout.rest.get.V3ConversationsConversationIdThreads140",
+        "operation_id": "GET /v3/conversations/{conversationId}/threads",
+        "method": "GET",
+        "path": "/v3/conversations/{conversationId}/threads",
+        "canonical_mapping": {
+          "parity_class": "direct_read",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
+        "version": "Help Scout Mailbox API v3",
+        "sha256": "4862f8a5463105cdd88e915325053b1b5ecbed9919f1293ad75e402ec08bca63",
+        "source_lock": "sources/help-scout-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "direct_read",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
+      ],
+      "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "cli-operation-route-override-foundation-r1",
+      "owning_lane": "cli-operation-route-override-foundation-r1",
+      "status": "open",
+      "closure_verification": [
+        "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
+        "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
+        "generated Help Scout CLI commands and website rows exist for all five operations",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
+      ]
+    },
+    {
+      "stable_gap_id": "declarative-operation-route-override",
+      "connector": "help-scout",
+      "provider_operation": {
+        "source_id": "help-scout.rest.get.V3Customers141",
+        "operation_id": "GET /v3/customers",
+        "method": "GET",
+        "path": "/v3/customers",
+        "canonical_mapping": {
+          "parity_class": "direct_read",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
+        "version": "Help Scout Mailbox API v3",
+        "sha256": "4862f8a5463105cdd88e915325053b1b5ecbed9919f1293ad75e402ec08bca63",
+        "source_lock": "sources/help-scout-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "direct_read",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
+      ],
+      "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "cli-operation-route-override-foundation-r1",
+      "owning_lane": "cli-operation-route-override-foundation-r1",
+      "status": "open",
+      "closure_verification": [
+        "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
+        "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
+        "generated Help Scout CLI commands and website rows exist for all five operations",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
+      ]
+    },
+    {
+      "stable_gap_id": "declarative-operation-route-override",
+      "connector": "help-scout",
+      "provider_operation": {
+        "source_id": "help-scout.rest.get.V3SystemUsers142",
+        "operation_id": "GET /v3/system-users",
+        "method": "GET",
+        "path": "/v3/system-users",
+        "canonical_mapping": {
+          "parity_class": "direct_read",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
+        "version": "Help Scout Mailbox API v3",
+        "sha256": "4862f8a5463105cdd88e915325053b1b5ecbed9919f1293ad75e402ec08bca63",
+        "source_lock": "sources/help-scout-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "direct_read",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
+      ],
+      "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "cli-operation-route-override-foundation-r1",
+      "owning_lane": "cli-operation-route-override-foundation-r1",
+      "status": "open",
+      "closure_verification": [
+        "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
+        "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
+        "generated Help Scout CLI commands and website rows exist for all five operations",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
+      ]
+    },
+    {
+      "stable_gap_id": "declarative-operation-route-override",
+      "connector": "help-scout",
+      "provider_operation": {
+        "source_id": "help-scout.rest.get.V3SystemUsersSystemUserId143",
+        "operation_id": "GET /v3/system-users/{systemUserId}",
+        "method": "GET",
+        "path": "/v3/system-users/{systemUserId}",
+        "canonical_mapping": {
+          "parity_class": "direct_read",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
+        "version": "Help Scout Mailbox API v3",
+        "sha256": "4862f8a5463105cdd88e915325053b1b5ecbed9919f1293ad75e402ec08bca63",
+        "source_lock": "sources/help-scout-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "direct_read",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
+      ],
+      "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "cli-operation-route-override-foundation-r1",
+      "owning_lane": "cli-operation-route-override-foundation-r1",
+      "status": "open",
+      "closure_verification": [
+        "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
+        "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
+        "generated Help Scout CLI commands and website rows exist for all five operations",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
+      ]
     }
   ],
   "rollups": {
     "per_gap": [
+      {
+        "stable_gap_id": "declarative-operation-route-override",
+        "status": "open",
+        "affected_operations": 5,
+        "affected_connectors": [
+          "help-scout"
+        ],
+        "connector_count": 1,
+        "owning_issue": "cli-operation-route-override-foundation-r1",
+        "owning_lane": "cli-operation-route-override-foundation-r1"
+      },
       {
         "stable_gap_id": "declarative-typed-destination-action-specific-source-bindings",
         "status": "open",
@@ -16856,6 +17104,17 @@
       ],
       "batch_7": [
         {
+          "stable_gap_id": "declarative-operation-route-override",
+          "status": "open",
+          "affected_operations": 5,
+          "affected_connectors": [
+            "help-scout"
+          ],
+          "connector_count": 1,
+          "owning_issue": "cli-operation-route-override-foundation-r1",
+          "owning_lane": "cli-operation-route-override-foundation-r1"
+        },
+        {
           "stable_gap_id": "declarative-typed-destination-action-specific-source-bindings",
           "status": "open",
           "affected_operations": 1,
@@ -16909,6 +17168,7 @@
     },
     "portfolio": {
       "open_gap_ids": [
+        "declarative-operation-route-override",
         "declarative-typed-destination-action-specific-source-bindings"
       ],
       "merge_ready": false,
