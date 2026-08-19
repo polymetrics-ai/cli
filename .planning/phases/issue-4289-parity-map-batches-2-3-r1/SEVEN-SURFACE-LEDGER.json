@@ -23,6 +23,10 @@
         "declaration": "not-applicable",
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -48,6 +52,10 @@
         "declaration": "not-applicable",
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -73,6 +81,10 @@
         "declaration": "not-applicable",
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -100,6 +112,10 @@
         "bound_actions": 0,
         "missing_actions": 29,
         "source_input_bindings_pending": 29,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 29,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -128,6 +144,10 @@
         "bound_actions": 0,
         "missing_actions": 26,
         "source_input_bindings_pending": 26,
+        "installed_command_actions": 26,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -156,6 +176,10 @@
         "bound_actions": 0,
         "missing_actions": 40,
         "source_input_bindings_pending": 40,
+        "installed_command_actions": 37,
+        "missing_installed_command_actions": 3,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -184,6 +208,10 @@
         "bound_actions": 0,
         "missing_actions": 94,
         "source_input_bindings_pending": 94,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 94,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -212,6 +240,10 @@
         "bound_actions": 0,
         "missing_actions": 16,
         "source_input_bindings_pending": 16,
+        "installed_command_actions": 16,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -238,6 +270,10 @@
         "declaration": "not-applicable",
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -265,6 +301,10 @@
         "bound_actions": 0,
         "missing_actions": 27,
         "source_input_bindings_pending": 27,
+        "installed_command_actions": 3,
+        "missing_installed_command_actions": 24,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -293,6 +333,10 @@
         "bound_actions": 0,
         "missing_actions": 7,
         "source_input_bindings_pending": 7,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 7,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -321,6 +365,10 @@
         "bound_actions": 0,
         "missing_actions": 3,
         "source_input_bindings_pending": 3,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 3,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -347,6 +395,10 @@
         "declaration": "not-applicable",
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -374,6 +426,10 @@
         "bound_actions": 0,
         "missing_actions": 20,
         "source_input_bindings_pending": 20,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 20,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -402,6 +458,10 @@
         "bound_actions": 0,
         "missing_actions": 87,
         "source_input_bindings_pending": 87,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 87,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -428,6 +488,10 @@
         "declaration": "not-applicable",
         "eligible_actions": 0,
         "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "not-applicable"
       },
       "executable_commands": 0
@@ -455,6 +519,10 @@
         "bound_actions": 0,
         "missing_actions": 76,
         "source_input_bindings_pending": 76,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 76,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -483,6 +551,10 @@
         "bound_actions": 0,
         "missing_actions": 98,
         "source_input_bindings_pending": 98,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 98,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
@@ -511,6 +583,10 @@
         "bound_actions": 0,
         "missing_actions": 98,
         "source_input_bindings_pending": 98,
+        "installed_command_actions": 0,
+        "missing_installed_command_actions": 98,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
