@@ -4,7 +4,8 @@ Ten ranked daily-use API connectors have reproducible public-source locks and
 exact source-to-`api_surface` declaration records. This remains a
 declaration-only, non-live-certification checkpoint.
 
-- Public operations pinned and declared: 4,378 / 4,378 (100%).
+- Public operations found and mapped: 4,378 / 4,378; every Batch-1 source is
+  a complete provider-published OpenAPI document with high input confidence.
 - Docker Hub runnable retrofit: 41 commands, 20 typed write actions, and six
   typed delete actions across 54 pinned operations.
 - Docker Hub disabled dispositions: 13 (ten named foundation gaps and three

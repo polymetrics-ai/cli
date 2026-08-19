@@ -3001,5 +3001,14 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 331
+  },
+  "source_completeness": {
+    "coverage_confidence": "high",
+    "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree",
+    "verified_counts": {
+      "total": 331,
+      "per_method_sum": 331,
+      "operation_inventory_rows": 331
+    }
   }
 }

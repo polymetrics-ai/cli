@@ -110,8 +110,9 @@ the immutable-tag routes are normal provider-authorized actions, not paid-plan
 gates. Exactly the session/token minting and access-token management routes
 remain `unsafe-to-exercise`; three HEAD routes and two collection-paging routes
 remain `foundation-gap`; the CSV export and two SCIM media-type writes remain
-`schema-incompatible`. The Docker Hub ledger reports both `declared_percent`
-and `enabled_percent`, while live certification remains pending.
+`schema-incompatible`. The Docker Hub ledger reports operations found with
+source-input confidence and the separate `enabled_percent`, while live
+certification remains pending.
 
 ### Refactor
 
@@ -172,8 +173,9 @@ token creation routes declare `token` as a redacted secret response; login,
 response secrets. All five remain recoverable `foundation-gap` because
 `internal/connectors/engine/bundle.go:2772-2776` explicitly withholds live
 secret-write execution. After `surface-sync`, `connectorgen validate` and
-`surface-sync --check` are green; Docker Hub reports 54/54 declared (100.00%)
-and 41/54 enabled (75.93%), with zero `unsafe-to-exercise` rows.
+`surface-sync --check` are green; Docker Hub reports 54 operations found from
+a high-confidence machine-readable source and 41/54 enabled (75.93%), with
+zero `unsafe-to-exercise` rows.
 
 ### Refactor
 
@@ -232,6 +234,30 @@ expressible by `direct_read_paginate.go:126-130`.
 Foundation dashboards consume only `foundation_gap` records and `gap_ids`.
 `declaration_pending_ids` is an explicit separate backlog and cannot be used to
 request shared engine work.
+
+## Source-lock completeness correction
+
+### Red
+
+A declaration percentage can only compare a map to its own source-lock count.
+It cannot establish that the source lock is the provider’s complete API, so it
+is a self-referential and invalid coverage signal.
+
+### Green
+
+Batch 1’s ten locks each expose `counts.total`, per-method counts and a
+same-sized operation inventory from a provider-published OpenAPI document:
+Docker Hub 54, Notion 49, Stripe 589, Bitbucket 331, GitLab 1,755, CircleCI
+111, Sentry 223, Vercel 400, Asana 249, and Jira 617. The maps and progress
+ledger now report `operations_found` and `coverage_confidence: high` with their
+machine-readable-spec basis; they no longer report `declared_percent` or a
+percentage based on mapping a lock to itself.
+
+### Refactor
+
+Before a future connector is mapped, reject a lock without `counts.total` or
+per-kind counts, and re-pin any implausibly small complete-surface count rather
+than treating map parity as source completeness.
 
 ## Classification correction — direct write is not reverse ETL
 

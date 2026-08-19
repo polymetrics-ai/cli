@@ -13,7 +13,6 @@
     "api_surface_rows": 111,
     "exact_source_rows": 111,
     "declared_operations": 111,
-    "declared_percent": 100,
     "enabled_operations": 0,
     "enabled_percent": 0,
     "disabled_operations": 111,
@@ -128,7 +127,17 @@
       "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
       "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
       "recoverable": true
-    }
+    },
+    "operations_found": 111,
+    "operations_mapped": 111,
+    "coverage_confidence": {
+      "level": "high",
+      "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+      "source_kind": "openapi",
+      "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
+      "operations_found": 111
+    },
+    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage."
   },
   "ledger_dispositions": [
     {
@@ -4945,6 +4954,7 @@
   ],
   "source_only_dispositions": [],
   "notes": [
+    "Source-input completeness: 111 operations found in the complete provider-published OpenAPI document; confidence=high because counts.total, per-method counts, and operation inventory agree.",
     "ENABLED% is implemented CLI commands bound to source operations, never inventory count or declared coverage.",
     "Missing typed contracts, commands and sync-transport definitions are declaration-pending, not foundation gaps.",
     "Complete source-locked endpoint map. Every documented operation has one primary endpoint class: direct_read, direct_write, etl, binary_read, or binary_write.",

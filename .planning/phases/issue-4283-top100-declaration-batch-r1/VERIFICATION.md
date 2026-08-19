@@ -1,7 +1,11 @@
 # Issue #4283 — Verification Checklist
 
 - [x] Source-lock file exists and parses for each increment-1 connector; `SOURCE-LOCK-VERIFICATION.json` confirms raw byte and SHA-256 agreement (10 / 10).
-- [x] Source-lock operation inventory and `api_surface.json` method/path inventory are reconciled: 4,378 / 4,378 (100%).
+- [x] Source-lock operation inventory and `api_surface.json` method/path
+  inventory are reconciled: 4,378 operations found and 4,378 mapped rows.
+- [x] Every Batch-1 source lock records `counts.total`, per-method counts and
+  an equal-sized operation inventory from a complete provider-published OpenAPI
+  document; each map records high machine-readable-spec input confidence.
 - [x] `go run ./cmd/connectorgen validate` passes: 552 connectors, zero findings.
 - [x] `go run ./cmd/connectorgen surface-sync --check` passes: zero fields filled or corrected.
 - [x] `make connector-runtime-preflight` and `make connector-canon-check` pass.

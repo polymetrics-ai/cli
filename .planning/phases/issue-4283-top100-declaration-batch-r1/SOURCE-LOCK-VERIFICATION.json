@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "check": "pinned public source raw-byte and SHA-256 verification",
+  "check": "pinned public source raw-byte/SHA-256 and source-lock completeness verification",
   "entries": [
     {
       "connector": "asana",
@@ -11,7 +11,21 @@
       "expected_bytes": 3066750,
       "actual_bytes": 3066750,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 249,
+        "per_kind": {
+          "GET": 119,
+          "POST": 81,
+          "PUT": 26,
+          "DELETE": 23
+        },
+        "operation_inventory_rows": 249
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     },
     {
       "connector": "bitbucket",
@@ -22,7 +36,21 @@
       "expected_bytes": 1485729,
       "actual_bytes": 1485729,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 331,
+        "per_kind": {
+          "DELETE": 54,
+          "PUT": 48,
+          "GET": 179,
+          "POST": 50
+        },
+        "operation_inventory_rows": 331
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     },
     {
       "connector": "circleci",
@@ -33,7 +61,22 @@
       "expected_bytes": 621321,
       "actual_bytes": 621321,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 111,
+        "per_kind": {
+          "GET": 61,
+          "POST": 25,
+          "DELETE": 16,
+          "PATCH": 7,
+          "PUT": 2
+        },
+        "operation_inventory_rows": 111
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     },
     {
       "connector": "dockerhub",
@@ -44,7 +87,23 @@
       "expected_bytes": 148322,
       "actual_bytes": 148322,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 54,
+        "per_kind": {
+          "POST": 12,
+          "GET": 24,
+          "PATCH": 5,
+          "DELETE": 6,
+          "PUT": 4,
+          "HEAD": 3
+        },
+        "operation_inventory_rows": 54
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     },
     {
       "connector": "gitlab",
@@ -55,7 +114,23 @@
       "expected_bytes": 3500933,
       "actual_bytes": 3500933,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 1755,
+        "per_kind": {
+          "POST": 438,
+          "PUT": 329,
+          "GET": 746,
+          "PATCH": 27,
+          "DELETE": 212,
+          "HEAD": 3
+        },
+        "operation_inventory_rows": 1755
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     },
     {
       "connector": "jira",
@@ -66,7 +141,21 @@
       "expected_bytes": 2455064,
       "actual_bytes": 2455064,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 617,
+        "per_kind": {
+          "GET": 276,
+          "PUT": 118,
+          "POST": 134,
+          "DELETE": 89
+        },
+        "operation_inventory_rows": 617
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     },
     {
       "connector": "notion",
@@ -77,7 +166,21 @@
       "expected_bytes": 884260,
       "actual_bytes": 884260,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 49,
+        "per_kind": {
+          "GET": 20,
+          "POST": 17,
+          "PATCH": 8,
+          "DELETE": 4
+        },
+        "operation_inventory_rows": 49
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     },
     {
       "connector": "sentry",
@@ -88,7 +191,22 @@
       "expected_bytes": 3868570,
       "actual_bytes": 3868570,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 223,
+        "per_kind": {
+          "GET": 120,
+          "PUT": 32,
+          "POST": 34,
+          "DELETE": 35,
+          "PATCH": 2
+        },
+        "operation_inventory_rows": 223
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     },
     {
       "connector": "stripe",
@@ -99,7 +217,20 @@
       "expected_bytes": 7967776,
       "actual_bytes": 7967776,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 589,
+        "per_kind": {
+          "GET": 263,
+          "POST": 294,
+          "DELETE": 32
+        },
+        "operation_inventory_rows": 589
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     },
     {
       "connector": "vercel",
@@ -110,7 +241,29 @@
       "expected_bytes": 10420235,
       "actual_bytes": 10420235,
       "sha256_matches": true,
-      "bytes_match": true
+      "bytes_match": true,
+      "counts": {
+        "total": 400,
+        "per_kind": {
+          "GET": 159,
+          "POST": 120,
+          "DELETE": 56,
+          "PATCH": 43,
+          "PUT": 18,
+          "HEAD": 4
+        },
+        "operation_inventory_rows": 400
+      },
+      "coverage_confidence": {
+        "level": "high",
+        "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree"
+      }
     }
-  ]
+  ],
+  "source_lock_completeness": {
+    "requirement": "counts.total, per-kind operation counts, and a complete-surface confidence basis are required for every mapped connector",
+    "result": "pass",
+    "coverage_confidence": "high",
+    "basis": "each Batch-1 lock pins a complete provider-published OpenAPI document; counts.total, per-method counts, and operation inventory rows agree"
+  }
 }

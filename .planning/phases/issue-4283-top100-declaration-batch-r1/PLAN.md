@@ -13,7 +13,7 @@
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
 | The planned source is public and reproducibly pinned | green | `SOURCE-LOCK-VERIFICATION.json` verifies byte count and SHA-256 for all 10 locally retained public downloads against their source locks. |
-| Every declared operation has a corresponding API surface entry | green | `PROGRESS-LEDGER.json` records 4,378 / 4,378 source method/path bindings (100%) and `connectorgen validate` passes with zero findings. |
+| Every found source operation has a corresponding API surface entry | green | `PROGRESS-LEDGER.json` records 4,378 operations found and 4,378 source method/path bindings, each with high confidence based on a complete provider-published OpenAPI source; `connectorgen validate` passes with zero findings. |
 | Live certification remains pending without credentials | green | Generated `certification-sweep.json` artifacts byte-check successfully for all 10 bundles and the ledger explicitly records `live_certification: pending`. |
 
 ## Scope Interpretation
@@ -116,8 +116,9 @@ source-backed bounded byte contract for an executable binary transfer.
 This correction does not turn a source-contract inventory record into a
 terminal CLI command. Terminal direct read/write still requires the separate
 complete command contract and preflight evidence. Docker Hub reporting must
-therefore distinguish 100% declared coverage from the enabled source-contract
-percentage, and state that live certification remains pending.
+therefore report operations found, source-input confidence and mapped rows
+separately from the enabled source-contract percentage, and state that live
+certification remains pending.
 
 ## Captain deliverable correction — runnable command/action parity
 
@@ -214,3 +215,12 @@ destination factory remains the issue-label-specific one at
 five primary endpoint classes plus this separate eligibility. It must report
 enabled direct writes as direct writes, while reverse-ETL eligibility remains
 zero until the connector-neutral typed destination factory lands.
+
+## Source-lock completeness correction
+
+The Batch-1 inputs pass the captain’s source-lock completeness check: every
+lock records `counts.total`, per-method counts and an equal-sized operation
+inventory from a complete provider-published OpenAPI document. The maps report
+`operations_found` and high-confidence machine-readable-spec basis instead of
+a self-referential declaration percentage. PR #4294 remains held while the
+fleet-wide suspect-lock correction is completed.

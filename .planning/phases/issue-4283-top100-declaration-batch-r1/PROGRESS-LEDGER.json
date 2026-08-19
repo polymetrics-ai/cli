@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4283,
   "cohort": "top100-daily-use-increment-001",
-  "scope": "public-source declarations plus complete endpoint-class mapping; reverse-ETL is an eligibility attribute, not a write endpoint class; only engine-refused shapes are foundation gaps; non-live certification completed without provider I/O",
+  "scope": "public-source declarations plus complete endpoint-class mapping; source completeness is reported as operations_found plus confidence and basis, never a self-referential declaration percentage; reverse-ETL is an eligibility attribute, not a write endpoint class; only engine-refused shapes are foundation gaps; non-live certification completed without provider I/O",
   "generated_at": "2026-08-19T00:00:00Z",
   "connectors": [
     {
@@ -37,14 +37,21 @@
         "declared": 249,
         "surface_unblocked": 82,
         "disabled": 167,
-        "coverage_percent": 100,
         "operation_ledger_entries": 189,
-        "declared_percent": 100,
         "runnable_commands": 82,
         "enabled_percent": 32.93,
         "enabled_deletes": 4,
         "documented_deletes": 23,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 249,
+        "operations_mapped": 249,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
+          "operations_found": 249
+        }
       },
       "sync_transport": {
         "state": "partial",
@@ -186,14 +193,21 @@
         "declared": 331,
         "surface_unblocked": 3,
         "disabled": 328,
-        "coverage_percent": 100,
         "operation_ledger_entries": 134,
-        "declared_percent": 100,
         "runnable_commands": 3,
         "enabled_percent": 0.91,
         "enabled_deletes": 1,
         "documented_deletes": 54,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 331,
+        "operations_mapped": 331,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+          "operations_found": 331
+        }
       },
       "sync_transport": {
         "state": "partial",
@@ -336,14 +350,21 @@
         "declared": 111,
         "surface_unblocked": 0,
         "disabled": 111,
-        "coverage_percent": 100,
         "operation_ledger_entries": 0,
-        "declared_percent": 100,
         "runnable_commands": 0,
         "enabled_percent": 0,
         "enabled_deletes": 0,
         "documented_deletes": 16,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 111,
+        "operations_mapped": 111,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
+          "operations_found": 111
+        }
       },
       "sync_transport": {
         "state": "partial",
@@ -487,7 +508,6 @@
       "operations": {
         "documented": 54,
         "declared": 54,
-        "declared_percent": 100,
         "runnable_commands": 41,
         "surface_unblocked": 41,
         "disabled": 13,
@@ -502,8 +522,16 @@
         "enabled_deletes": 6,
         "documented_deletes": 6,
         "terminal_commands": 41,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request.",
-        "coverage_percent": 100
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 54,
+        "operations_mapped": 54,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+          "operations_found": 54
+        }
       },
       "sync_transport": {
         "state": "partial",
@@ -654,14 +682,21 @@
         "declared": 1755,
         "surface_unblocked": 4,
         "disabled": 1751,
-        "coverage_percent": 100,
         "operation_ledger_entries": 0,
-        "declared_percent": 100,
         "runnable_commands": 4,
         "enabled_percent": 0.23,
         "enabled_deletes": 0,
         "documented_deletes": 212,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 1755,
+        "operations_mapped": 1755,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "operations_found": 1755
+        }
       },
       "sync_transport": {
         "state": "partial",
@@ -797,14 +832,21 @@
         "declared": 617,
         "surface_unblocked": 295,
         "disabled": 322,
-        "coverage_percent": 100,
         "operation_ledger_entries": 25,
-        "declared_percent": 100,
         "runnable_commands": 295,
         "enabled_percent": 47.81,
         "enabled_deletes": 0,
         "documented_deletes": 89,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 617,
+        "operations_mapped": 617,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
+          "operations_found": 617
+        }
       },
       "sync_transport": {
         "state": "partial",
@@ -945,14 +987,21 @@
         "declared": 49,
         "surface_unblocked": 43,
         "disabled": 6,
-        "coverage_percent": 100,
         "operation_ledger_entries": 19,
-        "declared_percent": 100,
         "runnable_commands": 43,
         "enabled_percent": 87.76,
         "enabled_deletes": 4,
         "documented_deletes": 4,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 49,
+        "operations_mapped": 49,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
+          "operations_found": 49
+        }
       },
       "sync_transport": {
         "state": "partial",
@@ -1096,14 +1145,21 @@
         "declared": 223,
         "surface_unblocked": 0,
         "disabled": 223,
-        "coverage_percent": 100,
         "operation_ledger_entries": 0,
-        "declared_percent": 100,
         "runnable_commands": 0,
         "enabled_percent": 0,
         "enabled_deletes": 0,
         "documented_deletes": 35,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 223,
+        "operations_mapped": 223,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
+          "operations_found": 223
+        }
       },
       "sync_transport": {
         "state": "partial",
@@ -1238,14 +1294,21 @@
         "declared": 589,
         "surface_unblocked": 8,
         "disabled": 581,
-        "coverage_percent": 100,
         "operation_ledger_entries": 0,
-        "declared_percent": 100,
         "runnable_commands": 8,
         "enabled_percent": 1.36,
         "enabled_deletes": 1,
         "documented_deletes": 32,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 589,
+        "operations_mapped": 589,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
+          "operations_found": 589
+        }
       },
       "sync_transport": {
         "state": "partial",
@@ -1387,14 +1450,21 @@
         "declared": 400,
         "surface_unblocked": 0,
         "disabled": 400,
-        "coverage_percent": 100,
         "operation_ledger_entries": 0,
-        "declared_percent": 100,
         "runnable_commands": 0,
         "enabled_percent": 0,
         "enabled_deletes": 0,
         "documented_deletes": 56,
-        "coverage_basis": "Complete source-locked endpoint-class map; ENABLED% counts source operations with an implemented CLI binding. Typed write actions are direct_write; reverse-ETL eligibility separately requires a destination transport contract. Non-enabled declaration work is declaration-pending, never a foundation request."
+        "coverage_basis": "operations_found is the complete source-lock count from a provider-published machine-readable OpenAPI document. operations_mapped is the exact connector-local classification count; no declaration percentage is reported because it would be self-referential.",
+        "operations_found": 400,
+        "operations_mapped": 400,
+        "coverage_confidence": {
+          "level": "high",
+          "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+          "source_kind": "openapi",
+          "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
+          "operations_found": 400
+        }
       },
       "sync_transport": {
         "state": "partial",

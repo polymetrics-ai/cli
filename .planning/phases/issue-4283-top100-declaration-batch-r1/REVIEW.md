@@ -116,3 +116,14 @@ only as a zero-eligible attribute on every direct-write row. The one shared,
 recoverable reason is `generic-typed-destination-executor`, with the existing
 destination-factory evidence and minimum recovery. No Critical, Warning, or
 Info finding remains from this correction.
+
+## Source-lock completeness review
+
+The captain’s fleet-wide defect report was applied before further PR movement.
+Batch 1 is not among the suspect locks: each of its ten source locks has
+`counts.total`, per-method counts, and an equal-sized operation inventory from
+a complete provider-published OpenAPI document. The concrete source totals are
+54, 49, 589, 331, 1,755, 111, 223, 400, 249, and 617. The progress/map records
+now state `operations_found` plus a high-confidence machine-readable-spec
+basis, instead of `declared_percent`. PR #4294 remains held pending the
+fleet-wide correction; no new PR activity is authorized by this review.
