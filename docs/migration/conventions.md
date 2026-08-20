@@ -382,13 +382,16 @@ not a full override by default.
   conflicts with its explicit type, is a foundation gap and is rejected before I/O. `prefixItems`
   must cover every allowed position or pair with `items` to constrain the remaining positions. The
   engine additionally refuses a schema deeper than 16 levels, with more than 256 object fields, or
-  more than 1024 allowed collection items. A command may use `type:"json"` only for one declared,
+  more than 1024 allowed collection items, and enforces aggregate node and byte limits before it
+  copies or serializes caller values. A command may use `type:"json"` only for one declared,
   top-level `maps_to:"body.<field>"` object or array. Keep scalar fields as their normal typed
   flags; dotted JSON traversals and raw `body`, method, path, content-type, action, connector, or
   header inputs are not legal command targets. Mark a structured field required when it supplies a
   required schema branch. `connectorgen validate`, runtime preflight, and the shared engine
   materializer verify the same declaration before I/O, and preview/approval binds the resulting
-  canonical payload. This is also the canonical materializer used by typed-action/reverse-ETL
+  canonical payload and declaration-owned headers. Header values are represented by a canonical
+  hash rather than rendered in previews or errors, then dispatched without re-resolution after
+  approval. This is also the canonical materializer used by typed-action/reverse-ETL
   execution; do not add a second request builder. A `path.<name>` mapping must match an exact
   `{name}` route placeholder, while every scalar or nested `body.<path>` mapping must resolve
   through declared object properties or array item schemas (including any declared bounds); a caller cannot introduce an

@@ -554,10 +554,14 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	if err != nil {
 		return nil, err
 	}
+	return newRuntimeWithResolvedHTTP(ctx, b, cfg, h, baseURL, headers)
+}
+
+func newRuntimeWithResolvedHTTP(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks, baseURL string, headers map[string]string) (*Runtime, error) {
 	requester := &connsdk.Requester{
 		BaseURL:                   baseURL,
 		UserAgent:                 b.HTTP.UserAgent,
-		DefaultHeaders:            headers,
+		DefaultHeaders:            cloneResolvedHeaders(headers),
 		RateLimitEvents:           rateLimitEventSinkFor(cfg.ProjectDir),
 		RateLimitAdmissionTimeout: rateLimitAdmissionTimeoutFor(cfg.ProjectDir),
 	}
@@ -572,7 +576,10 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	// all (e.g. a fully public API, or a test double) — selectAuth itself
 	// requires at least one candidate spec, so that case is handled here
 	// rather than forcing every caller to declare a trivial "none" rule.
-	var auth connsdk.Authenticator
+	var (
+		auth connsdk.Authenticator
+		err  error
+	)
 	if len(b.HTTP.Auth) > 0 {
 		auth, err = selectAuthWithDeclaredRoute(ctx, cfg, b.HTTP.Auth, h, declaredRouteRequester{runtime: authRuntime})
 		if err != nil {
@@ -585,6 +592,17 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 		return nil, err
 	}
 	return &Runtime{Requester: defaultRequester, baseRequester: requester, Bundle: &b, Config: cfg, rateLimits: resolver, budget: budget}, nil
+}
+
+func cloneResolvedHeaders(headers map[string]string) map[string]string {
+	if len(headers) == 0 {
+		return nil
+	}
+	clone := make(map[string]string, len(headers))
+	for name, value := range headers {
+		clone[name] = value
+	}
+	return clone
 }
 
 // NewRuntime builds the bundle-authenticated requester used by a native

@@ -36,6 +36,9 @@ const (
 type preparedOperationDirectWrite struct {
 	op              OperationSpec
 	cfg             connectors.RuntimeConfig
+	baseURL         string
+	headers         map[string]string
+	identity        string
 	method          string
 	path            string
 	requestPath     string
@@ -97,7 +100,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		requestCtx, cancel := context.WithTimeout(gated, defaultOperationDirectWriteTimeout)
 		defer cancel()
 
-		rt, err := newRuntime(requestCtx, b, prepared.cfg, h)
+		rt, err := newRuntimeWithResolvedHTTP(requestCtx, b, prepared.cfg, h, prepared.baseURL, prepared.headers)
 		if err != nil {
 			return err
 		}
@@ -139,14 +142,14 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(err, prepared.op.Kind == "graphql_mutation" && !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)
+			message := operationDirectWriteErrorText(err, prepared.identity, prepared.op.Kind == "graphql_mutation" && !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)
 			if hint != "" {
 				message += ": " + hint
 			}
 			if class != "" {
 				message = class + ": " + message
 			}
-			return &operationDirectWriteError{operation: prepared.op.ID, message: message, cause: err}
+			return &operationDirectWriteError{operation: prepared.op.ID, message: message, cause: operationDirectWriteErrorCause(err, prepared.identity)}
 		}
 		if len(response.Body) > prepared.maxBytes {
 			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
@@ -211,7 +214,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 // diagnostics, but a fixed GraphQL mutation must redact its HTTP error body:
 // unlike a successful GraphQL response it has no errors[] envelope sanitizer
 // and can otherwise echo a caller value in its raw provider body.
-func operationDirectWriteErrorText(err error, redact bool, values []string) string {
+func operationDirectWriteErrorText(err error, identity string, redact bool, values []string) string {
 	var output string
 	var httpErr *connsdk.HTTPError
 	if errors.As(err, &httpErr) {
@@ -219,11 +222,33 @@ func operationDirectWriteErrorText(err error, redact bool, values []string) stri
 		if message == "" {
 			message = http.StatusText(httpErr.Status)
 		}
-		output = fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+		output = fmt.Sprintf("http %d for %s: %s", httpErr.Status, identity, message)
+	} else if operationDirectWriteErrorMayExposeURL(err) {
+		output = fmt.Sprintf("request failed for %s", identity)
 	} else {
 		output = err.Error()
 	}
 	return redactOperationDirectWriteErrorText(output, redact, values)
+}
+
+func operationDirectWriteErrorCause(err error, identity string) error {
+	var httpErr *connsdk.HTTPError
+	if errors.As(err, &httpErr) {
+		return &connsdk.HTTPError{Status: httpErr.Status, URL: identity, Body: httpErr.Body}
+	}
+	if operationDirectWriteErrorMayExposeURL(err) {
+		return nil
+	}
+	return err
+}
+
+func operationDirectWriteErrorMayExposeURL(err error) bool {
+	var urlErr *url.Error
+	if errors.As(err, &urlErr) {
+		return true
+	}
+	message := err.Error()
+	return strings.Contains(message, "http://") || strings.Contains(message, "https://")
 }
 
 func redactOperationDirectWriteErrorText(text string, redact bool, values []string) string {
@@ -425,6 +450,13 @@ func validateOperationDirectWritePathParams(op OperationSpec, pathParams map[str
 func operationDirectWriteBodySchemaRoot(op OperationSpec) (map[string]any, error) {
 	if op.REST == nil || len(op.REST.BodySchema) == 0 {
 		return nil, fmt.Errorf("operation %q does not declare body_schema", op.ID)
+	}
+	if operationDirectWriteUsesJSONBody(op) && operationHasStructuredRESTBodyField(op) {
+		compiled, err := compileStructuredRESTBodySchema(op)
+		if err != nil {
+			return nil, err
+		}
+		return compiled.root, nil
 	}
 	var root map[string]any
 	if err := json.Unmarshal(op.REST.BodySchema, &root); err != nil {
@@ -703,6 +735,11 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		return preparedOperationDirectWrite{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
+	identity := operationDirectWriteIdentity(b, op, method)
+	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
+	}
 	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -758,16 +795,16 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			return preparedOperationDirectWrite{}, err
 		}
 	}
-	baseURL, err := operationDirectWriteBaseURL(b, cfg)
+	baseURL, err := operationDirectWriteBaseURL(b, cfg, identity)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL)
-	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, query)
+	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, query, identity)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	targetURLWithoutQuery, err := operationDirectWriteRequestURL(baseURL, requestPath, nil)
+	targetURLWithoutQuery, err := operationDirectWriteRequestURL(baseURL, requestPath, nil, identity)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -802,11 +839,15 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			ContentType: contentType,
 			BodyFormat:  format,
 			Body:        encodedBody,
+			Headers:     cloneResolvedHeaders(headers),
 		}},
 	}
 	return preparedOperationDirectWrite{
 		op:              op,
 		cfg:             cfg,
+		baseURL:         baseURL,
+		headers:         cloneResolvedHeaders(headers),
+		identity:        identity,
 		method:          method,
 		path:            resolvedPath,
 		requestPath:     requestPath,
@@ -834,6 +875,11 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q fixed GraphQL mutation does not accept query overrides", op.ID)
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
+	identity := operationDirectWriteIdentity(b, op, method)
+	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
+	}
 	policy := strings.TrimSpace(op.OutputPolicy)
 	if requested := strings.TrimSpace(req.OutputPolicy); requested != "" {
 		if requested != policy {
@@ -853,12 +899,12 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	baseURL, err := operationDirectWriteBaseURL(b, cfg)
+	baseURL, err := operationDirectWriteBaseURL(b, cfg, identity)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
 	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, baseURL)
-	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, nil)
+	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, nil, identity)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -886,11 +932,15 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 			ContentType: "application/json",
 			BodyFormat:  "json",
 			Body:        encodedBody,
+			Headers:     cloneResolvedHeaders(headers),
 		}},
 	}
 	return preparedOperationDirectWrite{
 		op:              op,
 		cfg:             cfg,
+		baseURL:         baseURL,
+		headers:         cloneResolvedHeaders(headers),
+		identity:        identity,
 		method:          method,
 		path:            op.GraphQL.Path,
 		requestPath:     requestPath,
@@ -990,6 +1040,16 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 		return nil, nil
 	}
 	structured := operationDirectWriteUsesJSONBody(op) && operationHasStructuredRESTBodyField(op)
+	if structured {
+		body, err := materializeStructuredRESTBody(op, op.REST.Body, overrides)
+		if err != nil {
+			return nil, err
+		}
+		if len(body) == 0 {
+			return nil, nil
+		}
+		return body, nil
+	}
 	canonicalOverrides := cloneAnyMap(overrides)
 	if len(canonicalOverrides) > 0 {
 		if len(op.REST.BodySchema) == 0 {
@@ -1017,20 +1077,12 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 		body[key] = value
 	}
 	if len(op.REST.BodySchema) > 0 {
-		if structured {
-			canonical, err := materializeStructuredRESTBody(op, body)
-			if err != nil {
-				return nil, err
-			}
-			body = canonical
-		} else {
-			sch, err := CompileSchema(op.REST.BodySchema)
-			if err != nil {
-				return nil, fmt.Errorf("operation %q: compile body_schema: %w", op.ID, err)
-			}
-			if err := sch.Validate(body); err != nil {
-				return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
-			}
+		sch, err := CompileSchema(op.REST.BodySchema)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q: compile body_schema: %w", op.ID, err)
+		}
+		if err := sch.Validate(body); err != nil {
+			return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
 		}
 	}
 	if len(body) == 0 {
@@ -1285,24 +1337,63 @@ func clampOperationDirectWriteMaxBytes(declared int) int {
 	return declared
 }
 
-func operationDirectWriteBaseURL(b Bundle, cfg connectors.RuntimeConfig) (string, error) {
+func operationDirectWriteIdentity(b Bundle, op OperationSpec, method string) string {
+	path := ""
+	if op.Kind == "graphql_mutation" && op.GraphQL != nil {
+		path = op.GraphQL.Path
+	} else if op.REST != nil {
+		path = op.REST.Path
+	}
+	return fmt.Sprintf("connector %q operation %q %s %s", b.Name, op.ID, strings.ToUpper(method), path)
+}
+
+func operationDirectWriteBaseURL(b Bundle, cfg connectors.RuntimeConfig, identity string) (string, error) {
 	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
 	if err != nil {
-		return "", fmt.Errorf("operation direct write resolve base URL: %w", err)
+		return "", operationDirectWriteInterpolationError(identity, "base URL", b.HTTP.URL)
 	}
 	if strings.TrimSpace(baseURL) == "" {
-		return "", fmt.Errorf("operation direct write base URL is required")
+		return "", fmt.Errorf("%s: declared base URL is required", identity)
 	}
 	return baseURL, nil
 }
 
-func operationDirectWriteRequestURL(baseURL, requestPath string, query url.Values) (string, error) {
+func operationDirectWriteInterpolationError(identity, location, template string) error {
+	if reference := operationDirectWriteDeclaredSecretReference(template); reference != "" {
+		return fmt.Errorf("%s: resolve declared %s for %s", identity, location, reference)
+	}
+	return fmt.Errorf("%s: resolve declared %s", identity, location)
+}
+
+func operationDirectWriteDeclaredSecretReference(template string) string {
+	for {
+		start := strings.Index(template, "{{")
+		if start < 0 {
+			return ""
+		}
+		template = template[start+2:]
+		end := strings.Index(template, "}}")
+		if end < 0 {
+			return ""
+		}
+		expression := strings.TrimSpace(template[:end])
+		reference, _, _ := strings.Cut(expression, "|")
+		reference = strings.TrimSpace(reference)
+		parts := strings.Split(reference, ".")
+		if len(parts) == 2 && parts[0] == "secrets" && safety.ValidateIdentifier(parts[1], "secret reference") == nil {
+			return reference
+		}
+		template = template[end+2:]
+	}
+}
+
+func operationDirectWriteRequestURL(baseURL, requestPath string, query url.Values, identity string) (string, error) {
 	parsed, err := url.Parse(joinURL(baseURL, requestPath))
 	if err != nil {
-		return "", fmt.Errorf("resolve operation direct write URL: %w", err)
+		return "", fmt.Errorf("%s: declared request URL is invalid", identity)
 	}
 	if parsed.Scheme == "" || parsed.Host == "" {
-		return "", fmt.Errorf("operation direct write base URL is invalid")
+		return "", fmt.Errorf("%s: declared base URL is invalid", identity)
 	}
 	if len(query) > 0 {
 		existing := parsed.Query()

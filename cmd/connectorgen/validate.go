@@ -1289,7 +1289,11 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	if err := engine.ValidateOperationDirectWriteMappings(op, pathFields, bodyFields); err != nil {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q has invalid caller bindings: %v", i, cmd.Path, op.ID, err)})
 	}
-	if len(op.REST.BodySchema) > 0 {
+	if engine.OperationDirectWriteHasStructuredRESTBody(op) {
+		if err := engine.ValidateOperationDirectWriteCLIFlags(op, cmd.Flags); err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q has invalid canonical body projection: %v", i, cmd.Path, op.ID, err)})
+		}
+	} else if len(op.REST.BodySchema) > 0 {
 		findings = append(findings, checkCLISurfaceOperationBodyMappingsForIntent(b, i, cmd, op, "direct write")...)
 	}
 	findings = append(findings, checkCLISurfaceDirectWriteRequiredQueryMappings(b, i, cmd, op)...)
