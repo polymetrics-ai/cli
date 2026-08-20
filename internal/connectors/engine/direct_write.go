@@ -39,26 +39,27 @@ const (
 )
 
 type preparedOperationDirectWrite struct {
-	op               OperationSpec
-	cfg              connectors.RuntimeConfig
-	baseURL          string
-	headers          map[string]string
-	operationHeaders http.Header
-	runtimeAuth      []AuthSpec
-	rateLimitAuth    []AuthSpec
-	identity         string
-	method           string
-	path             string
-	requestPath      string
-	query            url.Values
-	body             map[string]any
-	form             url.Values
-	format           string
-	contentType      string
-	policy           string
-	maxBytes         int
-	redactionValues  []string
-	prepared         PreparedWrite
+	op                   OperationSpec
+	cfg                  connectors.RuntimeConfig
+	baseURL              string
+	headers              map[string]string
+	operationHeaders     http.Header
+	runtimeAuth          []AuthSpec
+	rateLimitAuth        []AuthSpec
+	identity             string
+	method               string
+	path                 string
+	requestPath          string
+	query                url.Values
+	body                 map[string]any
+	form                 url.Values
+	format               string
+	contentType          string
+	policy               string
+	maxBytes             int
+	redactionValues      []string
+	sensitiveHTTPBinding bool
+	prepared             PreparedWrite
 }
 
 // sealRuntimeConfig copies every mutable request input a prepared write can
@@ -212,12 +213,18 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				}
 			}
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(
-				err,
-				prepared.identity,
-				operationDirectWritePrintsProviderHTTPBody(prepared),
-				operationDirectWriteDiagnosticValues(prepared.redactionValues, prepared.cfg.Secrets, prepared.cfg.Config),
-			)
+			message := "provider returned an HTTP error"
+			if prepared.op.Kind == "graphql_mutation" {
+				message = "provider returned a GraphQL HTTP error"
+			}
+			if !prepared.sensitiveHTTPBinding {
+				message = operationDirectWriteErrorText(
+					err,
+					prepared.identity,
+					operationDirectWritePrintsProviderHTTPBody(prepared),
+					operationDirectWriteDiagnosticValues(prepared.redactionValues, prepared.cfg.Secrets, prepared.cfg.Config),
+				)
+			}
 			if hint != "" {
 				message += ": " + hint
 			}
@@ -338,7 +345,7 @@ func operationDirectWriteDiagnosticValues(values []string, secrets, config map[s
 // GraphQL, secret, and explicitly redacted output contracts retain their
 // complete receipt only through the typed result/cause, never synthetic text.
 func operationDirectWritePrintsProviderHTTPBody(prepared preparedOperationDirectWrite) bool {
-	return prepared.op.Kind == "rest_write" && prepared.format != "multipart" && prepared.policy == directWritePolicyJSON
+	return prepared.op.Kind == "rest_write" && prepared.format != "multipart" && prepared.policy == directWritePolicyJSON && !prepared.sensitiveHTTPBinding
 }
 
 func operationDirectWriteErrorCause(err error, identity string) error {
@@ -1672,6 +1679,49 @@ func operationDirectWritePayloadFileMaxBytes(op OperationSpec) map[string]int64 
 	return maxBytes
 }
 
+func operationDirectWriteHasSensitiveHTTPBinding(cfg connectors.RuntimeConfig, httpBase HTTPBase, headers map[string]string) (bool, error) {
+	spec, found, err := selectedOperationDirectWriteAuthSpec(cfg, httpBase.Auth)
+	if err != nil {
+		return false, err
+	}
+	if found && !strings.EqualFold(strings.TrimSpace(spec.Mode), "none") {
+		return true, nil
+	}
+	return operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers)
+}
+
+func operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers map[string]string) (bool, error) {
+	names := make([]string, 0, len(headers))
+	for name := range headers {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		tokens, err := parseWriteQueryTemplate(headers[name])
+		if err != nil {
+			return false, err
+		}
+		for _, token := range tokens {
+			if token.expression == "" {
+				continue
+			}
+			if operationDirectWriteHeaderExpressionReferencesRuntimeValues(token.expression) {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
+}
+
+func operationDirectWriteHeaderExpressionReferencesRuntimeValues(expr string) bool {
+	if _, coalesced, err := coalesceRecordPathsExpression(expr); coalesced || err != nil {
+		return false
+	}
+	ref := strings.TrimSpace(strings.Split(expr, "|")[0])
+	parts := strings.Split(ref, ".")
+	return len(parts) == 2 && (parts[0] == "config" || parts[0] == "secrets")
+}
+
 func bindOperationDirectWriteHTTPMutations(cfg connectors.RuntimeConfig, httpBase HTTPBase, headers, query map[string]string) (map[string]string, map[string]string, []AuthSpec, []AuthSpec, error) {
 	boundHeaders := cloneResolvedHeaders(headers)
 	if boundHeaders == nil {
@@ -1865,6 +1915,10 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP mutations: %w", identity, err)
 	}
+	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(cfg, b.HTTP, b.HTTP.Headers)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: inspect declared HTTP bindings: %w", identity, err)
+	}
 	query, err := directReadQuery(queryMap)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -1983,26 +2037,27 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		return preparedOperationDirectWrite{}, err
 	}
 	return preparedOperationDirectWrite{
-		op:               op,
-		cfg:              cfg,
-		baseURL:          baseURL,
-		headers:          cloneResolvedHeaders(headers),
-		operationHeaders: cloneOperationHeaders(operationHeaders),
-		runtimeAuth:      runtimeAuth,
-		rateLimitAuth:    rateLimitAuth,
-		identity:         identity,
-		method:           method,
-		path:             resolvedPath,
-		requestPath:      requestPath,
-		query:            query,
-		body:             body,
-		form:             form,
-		format:           format,
-		contentType:      contentType,
-		policy:           policy,
-		maxBytes:         maxBytes,
-		redactionValues:  redactionValues,
-		prepared:         prepared,
+		op:                   op,
+		cfg:                  cfg,
+		baseURL:              baseURL,
+		headers:              cloneResolvedHeaders(headers),
+		operationHeaders:     cloneOperationHeaders(operationHeaders),
+		runtimeAuth:          runtimeAuth,
+		rateLimitAuth:        rateLimitAuth,
+		identity:             identity,
+		method:               method,
+		path:                 resolvedPath,
+		requestPath:          requestPath,
+		query:                query,
+		body:                 body,
+		form:                 form,
+		format:               format,
+		contentType:          contentType,
+		policy:               policy,
+		maxBytes:             maxBytes,
+		redactionValues:      redactionValues,
+		sensitiveHTTPBinding: sensitiveHTTPBinding,
+		prepared:             prepared,
 	}, nil
 }
 
@@ -2029,6 +2084,10 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, nil)
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP mutations: %w", identity, err)
+	}
+	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(cfg, b.HTTP, b.HTTP.Headers)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: inspect declared HTTP bindings: %w", identity, err)
 	}
 	query, err := directReadQuery(queryMap)
 	if err != nil {
@@ -2107,24 +2166,25 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		return preparedOperationDirectWrite{}, err
 	}
 	return preparedOperationDirectWrite{
-		op:              op,
-		cfg:             cfg,
-		baseURL:         baseURL,
-		headers:         cloneResolvedHeaders(headers),
-		runtimeAuth:     runtimeAuth,
-		rateLimitAuth:   rateLimitAuth,
-		identity:        identity,
-		method:          method,
-		path:            op.GraphQL.Path,
-		requestPath:     requestPath,
-		query:           query,
-		body:            payload,
-		format:          "graphql",
-		contentType:     "application/json",
-		policy:          policy,
-		maxBytes:        maxBytes,
-		redactionValues: redactionValues,
-		prepared:        prepared,
+		op:                   op,
+		cfg:                  cfg,
+		baseURL:              baseURL,
+		headers:              cloneResolvedHeaders(headers),
+		runtimeAuth:          runtimeAuth,
+		rateLimitAuth:        rateLimitAuth,
+		identity:             identity,
+		method:               method,
+		path:                 op.GraphQL.Path,
+		requestPath:          requestPath,
+		query:                query,
+		body:                 payload,
+		format:               "graphql",
+		contentType:          "application/json",
+		policy:               policy,
+		maxBytes:             maxBytes,
+		redactionValues:      redactionValues,
+		sensitiveHTTPBinding: sensitiveHTTPBinding,
+		prepared:             prepared,
 	}, nil
 }
 
