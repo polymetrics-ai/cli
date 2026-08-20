@@ -8,4 +8,6 @@ Remote pull-heads re-read through `gh-axi` and verified against `origin` are rec
 
 #4312 and #4311 are composed through preserved merge commits. The #4308 probe exposed a genuine overlap: #4311's typed declaration-owned header retention used the ordinary response path, while #4308's status-only contract must retain a final non-2xx result after retry. The production-shaped red test reproduced the loss as an `http 404` error before final metadata was returned. The merged correction keeps #4311's exact typed request/response header handling and uses #4308's closed `DoStatusCheck` only for declared `rest_status` HEAD operations. Focused engine, connsdk retry, commandrunner, and CLI tests are green. Binary/text GET error handling remains on its ordinary bounded response path; no generic HTTP authority was added.
 
+The exact #4312, #4311, and #4308 component heads are ancestors of this branch through merge commits `223f7b126eb4039f5c940a3cf233b15d6a18eff6`, `1cb9cdb31c2fc446fe1da0b176b7422f04e81111`, and `9e3cd99b7ebd2ebac2303ad8770e50fee85c92c6` respectively. No component history was copied, rewritten, or mutated.
+
 The remaining integration boundary is the outstanding #4305 and #4303 handoff. No older or unpushed head has been substituted.

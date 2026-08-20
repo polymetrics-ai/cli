@@ -31,7 +31,9 @@
       "sha": "19a32bd0bc08faf217be8f45b39841b5ff589a92",
       "remote_ref_verified": true,
       "qualification": "firstmate-issued exact published head; remote ref re-read",
-      "state": "merged_preserved_history"
+      "state": "merged_preserved_history",
+      "integration_merge_commit": "223f7b126eb4039f5c940a3cf233b15d6a18eff6",
+      "component_head_is_ancestor": true
     },
     {
       "issue": 4307,
@@ -40,7 +42,9 @@
       "sha": "3c768cade6703426afd2272fbc01bfd60583e04f",
       "remote_ref_verified": true,
       "qualification": "firstmate-issued exact published head; remote ref re-read",
-      "state": "merged_preserved_history"
+      "state": "merged_preserved_history",
+      "integration_merge_commit": "1cb9cdb31c2fc446fe1da0b176b7422f04e81111",
+      "component_head_is_ancestor": true
     },
     {
       "issue": 4302,
@@ -55,6 +59,8 @@
         "live_assertions": ["HEAD 200", "HEAD 404", "exact text export", "exact binary export", "missing-path error with no artifact"]
       },
       "state": "merged_preserved_history_targeted_green",
+      "integration_merge_commit": "9e3cd99b7ebd2ebac2303ad8770e50fee85c92c6",
+      "component_head_is_ancestor": true,
       "integration_correction": "closed rest_status response path preserves final non-2xx metadata while retaining declaration-owned response headers"
     },
     {
