@@ -1112,6 +1112,9 @@ func canonicalizeStructuredRESTBodyValue(node map[string]any, value reflect.Valu
 	}
 	if value.CanInterface() {
 		if number, ok := value.Interface().(json.Number); ok {
+			if !isStructuredRESTBodyJSONNumber(number) {
+				return nil, fmt.Errorf("%s has invalid JSON number", path)
+			}
 			if err := state.addNode(path); err != nil {
 				return nil, err
 			}
@@ -1261,13 +1264,17 @@ func canonicalizeStructuredRESTBodyValue(node map[string]any, value reflect.Valu
 		}
 		return value.Bool(), nil
 	case reflect.String:
+		text := value.String()
+		if !utf8.ValidString(text) {
+			return nil, fmt.Errorf("%s has invalid UTF-8", path)
+		}
 		if err := state.addNode(path); err != nil {
 			return nil, err
 		}
-		if err := state.addJSONString(path, value.String()); err != nil {
+		if err := state.addJSONString(path, text); err != nil {
 			return nil, err
 		}
-		return value.String(), nil
+		return text, nil
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		number := json.Number(strconv.FormatInt(value.Int(), 10))
 		if err := state.addNode(path); err != nil {
@@ -1303,6 +1310,54 @@ func canonicalizeStructuredRESTBodyValue(node map[string]any, value reflect.Valu
 	default:
 		return nil, fmt.Errorf("%s does not permit values of type %s", path, value.Type())
 	}
+}
+
+func isStructuredRESTBodyJSONNumber(number json.Number) bool {
+	literal := number.String()
+	if literal == "" {
+		return false
+	}
+	index := 0
+	if literal[index] == '-' {
+		index++
+		if index == len(literal) {
+			return false
+		}
+	}
+	if literal[index] == '0' {
+		index++
+	} else if literal[index] >= '1' && literal[index] <= '9' {
+		index++
+		for index < len(literal) && literal[index] >= '0' && literal[index] <= '9' {
+			index++
+		}
+	} else {
+		return false
+	}
+	if index < len(literal) && literal[index] == '.' {
+		index++
+		fractionStart := index
+		for index < len(literal) && literal[index] >= '0' && literal[index] <= '9' {
+			index++
+		}
+		if index == fractionStart {
+			return false
+		}
+	}
+	if index < len(literal) && (literal[index] == 'e' || literal[index] == 'E') {
+		index++
+		if index < len(literal) && (literal[index] == '+' || literal[index] == '-') {
+			index++
+		}
+		exponentStart := index
+		for index < len(literal) && literal[index] >= '0' && literal[index] <= '9' {
+			index++
+		}
+		if index == exponentStart {
+			return false
+		}
+	}
+	return index == len(literal)
 }
 
 func structuredRESTBodyArrayMaxItems(node map[string]any) (int, error) {
@@ -1343,6 +1398,9 @@ func structuredRESTBodyObjectMinProperties(node map[string]any) (int, error) {
 
 func normalizeStructuredRESTBodyValue(value any, path string) (any, error) {
 	if number, ok := value.(json.Number); ok {
+		if !isStructuredRESTBodyJSONNumber(number) {
+			return nil, fmt.Errorf("%s has invalid JSON number", path)
+		}
 		return number, nil
 	}
 	return normalizeStructuredRESTBodyReflectValue(reflect.ValueOf(value), path, 0)
@@ -1358,6 +1416,12 @@ func normalizeStructuredRESTBodyReflectValue(value reflect.Value, path string, d
 	if value.CanInterface() {
 		if _, ok := value.Interface().(json.Marshaler); ok {
 			return nil, fmt.Errorf("%s does not permit custom JSON marshalers", path)
+		}
+		if number, ok := value.Interface().(json.Number); ok {
+			if !isStructuredRESTBodyJSONNumber(number) {
+				return nil, fmt.Errorf("%s has invalid JSON number", path)
+			}
+			return number, nil
 		}
 	}
 	switch value.Kind() {
@@ -1409,7 +1473,11 @@ func normalizeStructuredRESTBodyReflectValue(value reflect.Value, path string, d
 	case reflect.Bool:
 		return value.Bool(), nil
 	case reflect.String:
-		return value.String(), nil
+		text := value.String()
+		if !utf8.ValidString(text) {
+			return nil, fmt.Errorf("%s has invalid UTF-8", path)
+		}
+		return text, nil
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return json.Number(strconv.FormatInt(value.Int(), 10)), nil
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:

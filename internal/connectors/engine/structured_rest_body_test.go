@@ -289,6 +289,125 @@ func TestOperationDirectWriteStructuredRESTBodyRejectsInvalidInputBeforeIO(t *te
 	}
 }
 
+func TestOperationDirectWriteStructuredRESTBodyRejectsMalformedScalarsBeforeIO(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := structuredRESTBodyBundle(server.URL)
+	rest := *bundle.Operations[0].REST
+	rest.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["label", "price", "details"],
+		"properties": {
+			"label": {"type": "string"},
+			"price": {"type": "number"},
+			"details": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["active"],
+				"properties": {"active": {"type": "boolean"}}
+			}
+		}
+	}`)
+	bundle.Operations[0].REST = &rest
+
+	valid := structuredRESTBodyRequest()
+	valid.Body = map[string]any{"label": "valid", "price": json.Number("-12.5e+3"), "details": map[string]any{"active": true}}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, valid, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite valid number: %v", err)
+	}
+	if got, ok := prepared.body["price"].(json.Number); !ok || got != json.Number("-12.5e+3") {
+		t.Fatalf("canonical price = %#v, want exact valid JSON number", prepared.body["price"])
+	}
+
+	for _, literal := range []string{"", "-", "+1", "01", "1.", "1e", "1e+", "NaN", "Infinity", "malformed-number-canary"} {
+		request := valid
+		request.Body = map[string]any{"label": "valid", "price": json.Number(literal), "details": map[string]any{"active": true}}
+		_, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+		if err == nil || !strings.Contains(err.Error(), "invalid JSON number") {
+			t.Fatalf("OperationDirectWrite malformed number error = %v, want invalid JSON number", err)
+		}
+		if literal == "malformed-number-canary" && strings.Contains(err.Error(), literal) {
+			t.Fatalf("OperationDirectWrite exposed malformed number: %v", err)
+		}
+	}
+
+	invalidUTF8 := "invalid-utf8-canary" + string([]byte{0xff})
+	request := valid
+	request.Body = map[string]any{"label": invalidUTF8, "price": json.Number("1"), "details": map[string]any{"active": true}}
+	_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil || !strings.Contains(err.Error(), "invalid UTF-8") {
+		t.Fatalf("OperationDirectWrite invalid UTF-8 error = %v, want rejection", err)
+	}
+	if strings.Contains(err.Error(), "invalid-utf8-canary") {
+		t.Fatalf("OperationDirectWrite exposed invalid UTF-8 value: %v", err)
+	}
+	if calls != 0 {
+		t.Fatalf("malformed scalar reached transport; calls = %d, want 0", calls)
+	}
+}
+
+func TestOperationDirectWriteRejectsMalformedScalarOnlyJSONBodiesBeforeIO(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := structuredRESTBodyBundle(server.URL)
+	rest := *bundle.Operations[0].REST
+	rest.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["label", "price"],
+		"properties": {
+			"label": {"type": "string"},
+			"price": {"type": "number"}
+		}
+	}`)
+	bundle.Operations[0].REST = &rest
+
+	for _, test := range []struct {
+		name      string
+		body      map[string]any
+		want      string
+		forbidden string
+	}{
+		{
+			name:      "invalid number",
+			body:      map[string]any{"label": "valid", "price": json.Number("malformed-number-canary")},
+			want:      "invalid JSON number",
+			forbidden: "malformed-number-canary",
+		},
+		{
+			name:      "invalid UTF-8",
+			body:      map[string]any{"label": "invalid-utf8-canary" + string([]byte{0xff}), "price": json.Number("1")},
+			want:      "invalid UTF-8",
+			forbidden: "invalid-utf8-canary",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			request := structuredRESTBodyRequest()
+			request.Body = test.body
+			_, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("OperationDirectWrite error = %v, want %q", err, test.want)
+			}
+			if strings.Contains(err.Error(), test.forbidden) {
+				t.Fatalf("OperationDirectWrite exposed malformed scalar: %v", err)
+			}
+		})
+	}
+	if calls != 0 {
+		t.Fatalf("malformed scalar-only body reached transport; calls = %d, want 0", calls)
+	}
+}
+
 func TestOperationDirectWriteStructuredRESTBodyStopsAtDeclaredBoundsBeforeIO(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {

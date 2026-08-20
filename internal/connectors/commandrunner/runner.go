@@ -15,6 +15,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/failures"
@@ -2247,6 +2248,9 @@ func coerceDeclaredStructuredJSONRecordFlagValue(flag connectors.CommandSurfaceF
 		return nil, fmt.Errorf("invalid --%s: structured JSON flags accept exactly one value", flag.Name)
 	}
 	raw := values[0]
+	if !utf8.ValidString(raw) {
+		return nil, fmt.Errorf("invalid --%s: structured JSON must be valid UTF-8", flag.Name)
+	}
 	maxBytes := maxStructuredJSONFlagBytes
 	if flag.MaxBytes > 0 && flag.MaxBytes < maxBytes {
 		maxBytes = flag.MaxBytes
