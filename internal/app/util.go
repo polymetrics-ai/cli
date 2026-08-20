@@ -217,24 +217,52 @@ func asRecordMap(value any) (map[string]any, bool) {
 // namespaces that collide by name in at least one bundle, so a fallback could
 // withhold an unrelated action's fields. An operation whose metadata cannot be
 // resolved is an error, never an empty withhold set.
-func connectorCommandRedactFields(connector connectors.Connector, operation, actionName string) ([]string, error) {
+func connectorCommandRedactFields(connector connectors.Connector, operation, actionName string) ([]string, bool, error) {
 	operation = strings.TrimSpace(operation)
 	prefix := connectorCommandRecordPrefix(operation)
 	if operation == "" {
-		return recordRelativeFields(reversePlanRedactFields(connector, actionName), prefix), nil
+		return recordRelativeFields(reversePlanRedactFields(connector, actionName), prefix), false, nil
 	}
+	metadata, err := connectorCommandDirectWriteMetadata(connector, operation)
+	if err != nil {
+		return nil, false, err
+	}
+	return recordRelativeFields(metadata.RedactFields, prefix), metadata.StructuredBody, nil
+}
+
+func connectorCommandDirectWriteMetadata(connector connectors.Connector, operation string) (connectors.OperationDirectWriteMetadata, error) {
 	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
-		return nil, fmt.Errorf("connector %q does not expose direct-write metadata for operation %q", connector.Name(), operation)
+		return connectors.OperationDirectWriteMetadata{}, fmt.Errorf("connector %q does not expose direct-write metadata for operation %q", connector.Name(), operation)
 	}
 	metadata, err := provider.OperationDirectWriteMetadata(operation)
 	if err != nil {
-		return nil, err
+		return connectors.OperationDirectWriteMetadata{}, err
 	}
 	if metadata.Operation != operation {
-		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
+		return connectors.OperationDirectWriteMetadata{}, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
 	}
-	return recordRelativeFields(metadata.RedactFields, prefix), nil
+	return metadata, nil
+}
+
+func connectorCommandPlanRecords(connector connectors.Connector, operation string, structuredBody bool, record, redacted connectors.Record, fields []string) (connectors.Record, []string, []connectors.Record, error) {
+	if !structuredBody {
+		withheld, withheldFields := withholdRecordFields(record, fields)
+		return withheld, withheldFields, RedactReversePlanRecords([]connectors.Record{cloneRecord(redacted)}, fields), nil
+	}
+	transformer, ok := connector.(connectors.OperationDirectWriteBodyPlanTransformer)
+	if !ok {
+		return nil, nil, nil, fmt.Errorf("connector %q does not expose direct-write body plan transformation", connector.Name())
+	}
+	withheld, withheldFields, err := transformer.WithholdOperationDirectWriteBodyFields(operation, map[string]any(record), fields)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	sample, err := transformer.RedactOperationDirectWriteBodyFields(operation, map[string]any(redacted), fields)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	return connectors.Record(withheld), withheldFields, []connectors.Record{connectors.Record(sample)}, nil
 }
 
 // connectorCommandRecordPrefix is the field-path prefix the declaring surface

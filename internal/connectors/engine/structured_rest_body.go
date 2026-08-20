@@ -218,6 +218,12 @@ func validateStructuredRESTBodyCLILowerBounds(operation string, node map[string]
 			}
 			childPath := structuredRESTBodyCoveragePath(path, operationDirectWriteBodyPathStep{key: name})
 			if childCoverage == nil {
+				child, _ := properties[name].(map[string]any)
+				if child != nil && (isObjectType(child) || isArrayType(child)) {
+					if err := validateStructuredRESTBodyCLILowerBounds(operation, child, nil, childPath); err != nil {
+						return err
+					}
+				}
 				return fmt.Errorf("operation %q requires %s but no required command flag maps to it and rest.body does not provide it", operation, structuredRESTBodyCoverageLabel(childPath))
 			}
 			child, _ := properties[name].(map[string]any)

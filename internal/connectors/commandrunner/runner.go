@@ -815,6 +815,11 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	if metadata.OutputPolicy != cmd.OutputPolicy {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write command output_policy does not match declared operation"}
 	}
+	if metadata.StructuredBody {
+		if _, ok := connector.(connectors.OperationDirectWriteBodyPlanTransformer); !ok {
+			return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write body plan transformation"}
+		}
+	}
 	queryFields := make([]string, 0, len(cmd.Flags))
 	pathFields := make([]string, 0, len(cmd.Flags))
 	bodyFields := make([]string, 0, len(cmd.Flags))
@@ -1228,6 +1233,22 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 	if err != nil {
 		return nil, nil, err
 	}
+	if strings.TrimSpace(cmd.Operation) != "" {
+		provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+		if !ok {
+			return nil, nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write metadata"}
+		}
+		metadata, err := provider.OperationDirectWriteMetadata(cmd.Operation)
+		if err != nil {
+			return nil, nil, err
+		}
+		if metadata.Operation != cmd.Operation {
+			return nil, nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector direct-write metadata did not match command operation"}
+		}
+		if metadata.StructuredBody {
+			return reconstituteOperationDirectWriteWithheldFields(connector, cmd, fields, flags)
+		}
+	}
 	// A direct_write command's record IS its body, so its fields are declared
 	// as body.<path>; a reverse_etl command declares record.<path>. Dispatch on
 	// mode rather than trying both, so a plan can never resolve a field through
@@ -1271,6 +1292,106 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 		missing = append(missing, unresolved...)
 	}
 	return record, missing, nil
+}
+
+func reconstituteOperationDirectWriteWithheldFields(connector connectors.Connector, cmd connectors.CommandSurfaceCommand, fields []string, flags map[string][]string) (connectors.Record, []string, error) {
+	materializer, ok := connector.(connectors.OperationDirectWriteBodyMaterializer)
+	if !ok {
+		return nil, nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write body materialization"}
+	}
+	transformer, ok := connector.(connectors.OperationDirectWriteBodyPlanTransformer)
+	if !ok {
+		return nil, nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write body plan transformation"}
+	}
+	byTarget := map[string]connectors.CommandSurfaceFlag{}
+	for _, flag := range cmd.Flags {
+		if target, ok := strings.CutPrefix(flag.MapsTo, "body."); ok && target != "" {
+			byTarget[target] = flag
+		}
+	}
+	mappings := make(map[string]any)
+	missing := make([]string, 0, len(fields))
+	missingSet := make(map[string]struct{})
+	addMissing := func(value string) {
+		if _, exists := missingSet[value]; exists {
+			return
+		}
+		missingSet[value] = struct{}{}
+		missing = append(missing, value)
+	}
+	addMapping := func(target string, flag connectors.CommandSurfaceFlag) error {
+		values := flags[flag.Name]
+		if len(values) == 0 {
+			addMissing("--" + flag.Name)
+			return nil
+		}
+		value, err := coerceRecordFlagValue(flag, values)
+		if err != nil {
+			return err
+		}
+		mappings[target] = value
+		return nil
+	}
+	for _, rawField := range fields {
+		target := strings.TrimPrefix(strings.TrimSpace(rawField), "body.")
+		if target == "" {
+			continue
+		}
+		if flag, found := byTarget[target]; found {
+			if err := addMapping(target, flag); err != nil {
+				return nil, nil, err
+			}
+			continue
+		}
+		descendants := make([]string, 0, len(byTarget))
+		for candidate := range byTarget {
+			contains, err := transformer.OperationDirectWriteBodyPathContains(cmd.Operation, target, candidate)
+			if err != nil {
+				return nil, nil, err
+			}
+			if contains {
+				descendants = append(descendants, candidate)
+			}
+		}
+		if len(descendants) == 0 {
+			addMissing(target)
+			continue
+		}
+		sort.Strings(descendants)
+		missingBefore := len(missing)
+		applied := 0
+		for _, descendant := range descendants {
+			flag := byTarget[descendant]
+			values := flags[flag.Name]
+			if len(values) == 0 {
+				if flag.Required {
+					addMissing("--" + flag.Name)
+				}
+				continue
+			}
+			value, err := coerceRecordFlagValue(flag, values)
+			if err != nil {
+				return nil, nil, err
+			}
+			mappings[descendant] = value
+			applied++
+		}
+		if applied == 0 && len(missing) == missingBefore {
+			for _, descendant := range descendants {
+				addMissing("--" + byTarget[descendant].Name)
+			}
+		}
+	}
+	if len(mappings) == 0 {
+		sort.Strings(missing)
+		return connectors.Record{}, missing, nil
+	}
+	body, err := materializer.MaterializeOperationDirectWriteBody(cmd.Operation, mappings)
+	if err != nil {
+		return nil, nil, err
+	}
+	sort.Strings(missing)
+	return connectors.Record(body), missing, nil
 }
 
 // reconstituteWithheldSubtree rebuilds a withheld field that no single flag maps

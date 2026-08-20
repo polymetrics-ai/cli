@@ -175,7 +175,9 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
 				message := "graphql errors: provider returned application errors"
-				if !operationRetainsSecretRuntimeContent(prepared.op) {
+				if strings.EqualFold(prepared.op.MutationClass, "secret") {
+					message = "graphql errors: " + graphQLErrorSummary(metadata)
+				} else if !operationRetainsSecretRuntimeContent(prepared.op) {
 					message = "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), true, prepared.redactionValues)
 				}
 				return operationDirectWritePostResponseErrorWithMessage(prepared.op.ID, message, nil, response, prepared.identity)
@@ -373,6 +375,7 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 		ConfirmationChallenge: confirmation,
 		OutputPolicy:          op.OutputPolicy,
 		Batchable:             op.IsBatchable(),
+		StructuredBody:        OperationDirectWriteHasStructuredRESTBody(op),
 		PayloadFileFields:     operationDirectWritePayloadFileFields(op),
 		RedactFields:          operationDirectWriteRedactFields(op),
 	}, nil
@@ -407,7 +410,7 @@ func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, ou
 	if err := validateOperationDirectWriteOutputPolicy(outputPolicy); err != nil {
 		return err
 	}
-	return validateOperationDirectWriteQueryFields(op, queryFields)
+	return validateOperationDirectWriteQueryFieldsWithAuth(op, queryFields, operationDirectWriteStaticAuthQueryParameters(b.HTTP.Auth))
 }
 
 func PreflightOperationDirectWriteBindings(b Bundle, operation string, pathFields, bodyFields []string) error {
@@ -865,18 +868,310 @@ func ResolveOperationDirectWriteBodyMappingValue(b Bundle, operation string, bod
 	return value, found, nil
 }
 
+func WithholdOperationDirectWriteBodyFields(b Bundle, operation string, body map[string]any, fields []string) (map[string]any, []string, error) {
+	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return nil, nil, err
+	}
+	out := cloneOperationDirectWriteBodyMap(body)
+	withheld := make([]string, 0, len(fields))
+	for _, rawField := range fields {
+		field := operationDirectWriteBodyRelativePath(rawField)
+		if field == "" {
+			continue
+		}
+		resolved, err := resolveOperationDirectWriteBodySchemaPath(root, field)
+		if err != nil {
+			return nil, nil, fmt.Errorf("operation %q sensitive body field %q: %w", operation, field, err)
+		}
+		_, removed, err := deleteOperationDirectWriteBodyPathValue(out, resolved.steps, field)
+		if err != nil {
+			return nil, nil, err
+		}
+		if removed {
+			withheld = append(withheld, field)
+		}
+	}
+	if len(withheld) == 0 {
+		return out, nil, nil
+	}
+	return out, withheld, nil
+}
+
+func RedactOperationDirectWriteBodyFields(b Bundle, operation string, body map[string]any, fields []string) (map[string]any, error) {
+	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return nil, err
+	}
+	out := cloneOperationDirectWriteBodyMap(body)
+	for _, rawField := range fields {
+		field := operationDirectWriteBodyRelativePath(rawField)
+		if field == "" {
+			continue
+		}
+		resolved, err := resolveOperationDirectWriteBodySchemaPath(root, field)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q sensitive body field %q: %w", operation, field, err)
+		}
+		if _, found := operationDirectWriteBodyPathValue(out, resolved.steps); !found {
+			continue
+		}
+		updated, err := setOperationDirectWriteBodyPathValue(out, resolved.steps, "redacted", field)
+		if err != nil {
+			return nil, err
+		}
+		bodyMap, ok := updated.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("operation %q redacted body must be an object", operation)
+		}
+		out = bodyMap
+	}
+	return out, nil
+}
+
+func MergeOperationDirectWriteBodyFragments(b Bundle, operation string, base, overlay map[string]any) (map[string]any, error) {
+	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return nil, err
+	}
+	merged, err := mergeOperationDirectWriteBodyFragmentValue(root, base, true, overlay, true, "body")
+	if err != nil {
+		return nil, err
+	}
+	body, ok := merged.(map[string]any)
+	if !ok || body == nil {
+		return nil, fmt.Errorf("operation %q merged body must be an object", operation)
+	}
+	return body, nil
+}
+
+func OperationDirectWriteBodyPathContains(b Bundle, operation, parent, child string) (bool, error) {
+	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return false, err
+	}
+	parentPath, err := resolveOperationDirectWriteBodySchemaPath(root, operationDirectWriteBodyRelativePath(parent))
+	if err != nil {
+		return false, fmt.Errorf("operation %q body field %q: %w", operation, parent, err)
+	}
+	childPath, err := resolveOperationDirectWriteBodySchemaPath(root, operationDirectWriteBodyRelativePath(child))
+	if err != nil {
+		return false, fmt.Errorf("operation %q body field %q: %w", operation, child, err)
+	}
+	if len(parentPath.steps) > len(childPath.steps) {
+		return false, nil
+	}
+	for index, step := range parentPath.steps {
+		other := childPath.steps[index]
+		if step.array != other.array || step.key != other.key || step.index != other.index {
+			return false, nil
+		}
+	}
+	return true, nil
+}
+
+func operationDirectWriteStructuredBodyPlanRoot(b Bundle, operation string) (OperationSpec, map[string]any, error) {
+	op, _, err := operationDirectWriteSpec(b, operation)
+	if err != nil {
+		return OperationSpec{}, nil, err
+	}
+	if op.Kind != "rest_write" || !OperationDirectWriteHasStructuredRESTBody(op) {
+		return OperationSpec{}, nil, fmt.Errorf("operation %q does not expose a structured REST body", operation)
+	}
+	root, err := operationDirectWriteBodySchemaRoot(op)
+	if err != nil {
+		return OperationSpec{}, nil, err
+	}
+	return op, root, nil
+}
+
+func operationDirectWriteBodyRelativePath(path string) string {
+	return strings.TrimPrefix(strings.TrimSpace(path), "body.")
+}
+
+func deleteOperationDirectWriteBodyPathValue(current any, steps []operationDirectWriteBodyPathStep, path string) (any, bool, error) {
+	if len(steps) == 0 {
+		return current, false, nil
+	}
+	step := steps[0]
+	if step.array {
+		items, ok := current.([]any)
+		if !ok {
+			if current == nil {
+				return current, false, nil
+			}
+			return nil, false, fmt.Errorf("body field %q conflicts with existing non-array value", path)
+		}
+		if step.index < 0 || step.index >= len(items) || items[step.index] == nil {
+			return items, false, nil
+		}
+		if len(steps) == 1 {
+			items[step.index] = nil
+			return items, true, nil
+		}
+		updated, removed, err := deleteOperationDirectWriteBodyPathValue(items[step.index], steps[1:], path)
+		if err != nil {
+			return nil, false, err
+		}
+		if removed {
+			items[step.index] = updated
+		}
+		return items, removed, nil
+	}
+	object, ok := current.(map[string]any)
+	if !ok {
+		if current == nil {
+			return current, false, nil
+		}
+		return nil, false, fmt.Errorf("body field %q conflicts with existing non-object value", path)
+	}
+	value, found := object[step.key]
+	if !found || value == nil {
+		return object, false, nil
+	}
+	if len(steps) == 1 {
+		delete(object, step.key)
+		return object, true, nil
+	}
+	updated, removed, err := deleteOperationDirectWriteBodyPathValue(value, steps[1:], path)
+	if err != nil {
+		return nil, false, err
+	}
+	if removed {
+		object[step.key] = updated
+	}
+	return object, removed, nil
+}
+
+func mergeOperationDirectWriteBodyFragmentValue(node map[string]any, base any, hasBase bool, overlay any, hasOverlay bool, path string) (any, error) {
+	if !hasOverlay {
+		return cloneOperationDirectWriteBodyValue(base), nil
+	}
+	if !hasBase {
+		return cloneOperationDirectWriteBodyValue(overlay), nil
+	}
+	object, array := operationDirectWriteBodyNodeKinds(node)
+	if object && array {
+		return nil, fmt.Errorf("%s has an ambiguous declared schema", path)
+	}
+	if object {
+		baseObject, ok := operationDirectWriteBodyObject(base)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with existing non-object value", path)
+		}
+		overlayObject, ok := operationDirectWriteBodyObject(overlay)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with a non-object replacement", path)
+		}
+		properties, ok := node["properties"].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("%s has no declared object properties", path)
+		}
+		merged := cloneOperationDirectWriteBodyMap(baseObject)
+		for _, name := range sortedMapKeys(overlayObject) {
+			child, ok := properties[name].(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("%s.%s is not declared", path, name)
+			}
+			baseValue, basePresent := merged[name]
+			value, err := mergeOperationDirectWriteBodyFragmentValue(child, baseValue, basePresent, overlayObject[name], true, path+"."+name)
+			if err != nil {
+				return nil, err
+			}
+			merged[name] = value
+		}
+		return merged, nil
+	}
+	if array {
+		baseItems, ok := arrayElements(base)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with existing non-array value", path)
+		}
+		overlayItems, ok := arrayElements(overlay)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with a non-array replacement", path)
+		}
+		length := len(baseItems)
+		if len(overlayItems) > length {
+			length = len(overlayItems)
+		}
+		merged := make([]any, length)
+		for index := 0; index < length; index++ {
+			basePresent := index < len(baseItems) && baseItems[index] != nil
+			overlayPresent := index < len(overlayItems)
+			if !overlayPresent {
+				if basePresent {
+					merged[index] = cloneOperationDirectWriteBodyValue(baseItems[index])
+				}
+				continue
+			}
+			item, err := operationDirectWriteBodyArrayItemSchema(node, index)
+			if err != nil {
+				return nil, err
+			}
+			var baseValue any
+			if basePresent {
+				baseValue = baseItems[index]
+			}
+			value, err := mergeOperationDirectWriteBodyFragmentValue(item, baseValue, basePresent, overlayItems[index], true, fmt.Sprintf("%s.%d", path, index))
+			if err != nil {
+				return nil, err
+			}
+			merged[index] = value
+		}
+		return merged, nil
+	}
+	return cloneOperationDirectWriteBodyValue(overlay), nil
+}
+
+func operationDirectWriteBodyObject(value any) (map[string]any, bool) {
+	switch typed := value.(type) {
+	case map[string]any:
+		return typed, true
+	case connectors.Record:
+		return map[string]any(typed), true
+	default:
+		return nil, false
+	}
+}
+
+func cloneOperationDirectWriteBodyMap(value map[string]any) map[string]any {
+	out := make(map[string]any, len(value))
+	for key, item := range value {
+		out[key] = cloneOperationDirectWriteBodyValue(item)
+	}
+	return out
+}
+
+func cloneOperationDirectWriteBodyValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		return cloneOperationDirectWriteBodyMap(typed)
+	case connectors.Record:
+		return cloneOperationDirectWriteBodyMap(map[string]any(typed))
+	case []any:
+		out := make([]any, len(typed))
+		for index, item := range typed {
+			out[index] = cloneOperationDirectWriteBodyValue(item)
+		}
+		return out
+	default:
+		return value
+	}
+}
+
 func operationDirectWriteBodyPathValue(body map[string]any, steps []operationDirectWriteBodyPathStep) (any, bool) {
 	var current any = body
 	for _, step := range steps {
 		if step.array {
-			items, ok := current.([]any)
+			items, ok := arrayElements(current)
 			if !ok || step.index < 0 || step.index >= len(items) || items[step.index] == nil {
 				return nil, false
 			}
 			current = items[step.index]
 			continue
 		}
-		object, ok := current.(map[string]any)
+		object, ok := operationDirectWriteBodyObject(current)
 		if !ok {
 			return nil, false
 		}
@@ -1115,21 +1410,48 @@ func operationDirectWriteRedactFields(op OperationSpec) []string {
 	return append([]string(nil), op.SensitivePolicy.RedactFields...)
 }
 
-func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) []string {
+func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) ([]string, error) {
 	// A live secret operation retains complete runtime output for diagnosis;
 	// secrecy is provided by the encrypted credential store, not deletion from
 	// responses, errors, logs, previews, reports, or fixtures.
 	if op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret") {
-		return nil
+		return nil, nil
 	}
 	if op.SensitivePolicy == nil || len(op.SensitivePolicy.RedactFields) == 0 {
-		return nil
+		return nil, nil
+	}
+	if op.Kind == "rest_write" && OperationDirectWriteHasStructuredRESTBody(op) {
+		root, err := operationDirectWriteBodySchemaRoot(op)
+		if err != nil {
+			return nil, err
+		}
+		seen := make(map[string]bool)
+		for _, rawField := range op.SensitivePolicy.RedactFields {
+			field := operationDirectWriteBodyRelativePath(rawField)
+			if field == "" {
+				continue
+			}
+			resolved, err := resolveOperationDirectWriteBodySchemaPath(root, field)
+			if err != nil {
+				return nil, fmt.Errorf("operation %q sensitive body field %q: %w", op.ID, field, err)
+			}
+			value, found := operationDirectWriteBodyPathValue(body, resolved.steps)
+			if found {
+				collectWriteRedactionValues(value, seen)
+			}
+		}
+		values := make([]string, 0, len(seen))
+		for value := range seen {
+			values = append(values, value)
+		}
+		sortWriteRedactionLiterals(values)
+		return values, nil
 	}
 	fields := make([]string, 0, len(op.SensitivePolicy.RedactFields))
 	for _, field := range op.SensitivePolicy.RedactFields {
 		fields = append(fields, strings.TrimPrefix(strings.TrimSpace(field), "body."))
 	}
-	return writeActionRedactionValues(WriteAction{RedactFields: fields}, connectors.Record(body))
+	return writeActionRedactionValues(WriteAction{RedactFields: fields}, connectors.Record(body)), nil
 }
 
 // operationDirectWritePayloadFileFields keeps multipart file identity
@@ -1160,94 +1482,108 @@ func operationDirectWritePayloadFileFields(op OperationSpec) []string {
 	return fields
 }
 
-func bindOperationDirectWriteHTTPMutations(cfg connectors.RuntimeConfig, httpBase HTTPBase, headers, query map[string]string) (map[string]string, map[string]string, []AuthSpec, []AuthSpec, error) {
-	boundHeaders := cloneResolvedHeaders(headers)
-	if boundHeaders == nil {
-		boundHeaders = make(map[string]string)
-	}
+type operationDirectWriteAuthBinding struct {
+	spec  AuthSpec
+	found bool
+}
+
+func bindOperationDirectWriteQueryMutation(cfg connectors.RuntimeConfig, httpBase HTTPBase, query map[string]string) (map[string]string, operationDirectWriteAuthBinding, error) {
 	boundQuery := make(map[string]string, len(query)+1)
 	for name, value := range query {
 		boundQuery[name] = value
 	}
-	if userAgent := httpBase.UserAgent; userAgent != "" {
-		if err := bindOperationDirectWriteHeader(boundHeaders, "User-Agent", userAgent, "declared user agent"); err != nil {
-			return nil, nil, nil, nil, err
-		}
-	}
 	spec, found, err := selectedOperationDirectWriteAuthSpec(cfg, httpBase.Auth)
 	if err != nil {
-		return nil, nil, nil, nil, err
+		return nil, operationDirectWriteAuthBinding{}, err
 	}
+	binding := operationDirectWriteAuthBinding{spec: spec, found: found}
 	if !found {
-		return boundHeaders, boundQuery, nil, nil, nil
+		return boundQuery, binding, nil
 	}
+	if spec.Mode == "api_key_query" {
+		name := spec.Param
+		if err := safety.ValidateIdentifier(name, "auth query parameter"); err != nil {
+			return nil, operationDirectWriteAuthBinding{}, err
+		}
+		value, err := interpolateOperationDirectWriteAuthValue(spec.Value, cfg)
+		if err != nil {
+			return nil, operationDirectWriteAuthBinding{}, fmt.Errorf("api_key_query value: %w", err)
+		}
+		if _, exists := boundQuery[name]; exists {
+			return nil, operationDirectWriteAuthBinding{}, fmt.Errorf("declared API key query parameter %q collides with a prepared operation query value", name)
+		}
+		boundQuery[name] = strings.TrimSpace(value)
+	}
+	return boundQuery, binding, nil
+}
+
+func bindOperationDirectWriteHeaderMutations(cfg connectors.RuntimeConfig, httpBase HTTPBase, headers map[string]string, binding operationDirectWriteAuthBinding) (map[string]string, []AuthSpec, []AuthSpec, error) {
+	boundHeaders := cloneResolvedHeaders(headers)
+	if boundHeaders == nil {
+		boundHeaders = make(map[string]string)
+	}
+	if userAgent := httpBase.UserAgent; userAgent != "" {
+		if err := bindOperationDirectWriteHeader(boundHeaders, "User-Agent", userAgent, "declared user agent"); err != nil {
+			return nil, nil, nil, err
+		}
+	}
+	if !binding.found {
+		return boundHeaders, nil, nil, nil
+	}
+	spec := binding.spec
 	rateLimitAuth := []AuthSpec{spec}
 	switch spec.Mode {
-	case "none":
-		return boundHeaders, boundQuery, nil, rateLimitAuth, nil
+	case "none", "api_key_query":
+		return boundHeaders, nil, rateLimitAuth, nil
 	case "bearer":
 		token, err := interpolateOperationDirectWriteAuthValue(spec.Token, cfg)
 		if err != nil {
-			return nil, nil, nil, nil, fmt.Errorf("bearer token: %w", err)
+			return nil, nil, nil, fmt.Errorf("bearer token: %w", err)
 		}
 		if err := bindOperationDirectWriteHeader(boundHeaders, "Authorization", "Bearer "+strings.TrimSpace(token), "declared bearer authentication"); err != nil {
-			return nil, nil, nil, nil, err
+			return nil, nil, nil, err
 		}
-		return boundHeaders, boundQuery, nil, rateLimitAuth, nil
+		return boundHeaders, nil, rateLimitAuth, nil
 	case "basic":
 		username, err := interpolateOperationDirectWriteAuthValue(spec.Username, cfg)
 		if err != nil {
-			return nil, nil, nil, nil, fmt.Errorf("basic username: %w", err)
+			return nil, nil, nil, fmt.Errorf("basic username: %w", err)
 		}
 		password, err := interpolateOperationDirectWriteAuthValue(spec.Password, cfg)
 		if err != nil {
-			return nil, nil, nil, nil, fmt.Errorf("basic password: %w", err)
+			return nil, nil, nil, fmt.Errorf("basic password: %w", err)
 		}
 		value := "Basic " + base64.StdEncoding.EncodeToString([]byte(username+":"+password))
 		if err := bindOperationDirectWriteHeader(boundHeaders, "Authorization", value, "declared basic authentication"); err != nil {
-			return nil, nil, nil, nil, err
+			return nil, nil, nil, err
 		}
-		return boundHeaders, boundQuery, nil, rateLimitAuth, nil
+		return boundHeaders, nil, rateLimitAuth, nil
 	case "api_key_header":
 		value, err := interpolateOperationDirectWriteAuthValue(spec.Value, cfg)
 		if err != nil {
-			return nil, nil, nil, nil, fmt.Errorf("api_key_header value: %w", err)
+			return nil, nil, nil, fmt.Errorf("api_key_header value: %w", err)
 		}
 		if err := safety.RejectDangerousChars(spec.Prefix, "api_key_header prefix"); err != nil || strings.ContainsAny(spec.Prefix, "\r\n") {
 			if err != nil {
-				return nil, nil, nil, nil, err
+				return nil, nil, nil, err
 			}
-			return nil, nil, nil, nil, fmt.Errorf("api_key_header prefix contains CR/LF")
+			return nil, nil, nil, fmt.Errorf("api_key_header prefix contains CR/LF")
 		}
 		if _, err := canonicalPreparedRequestHeaderName(spec.Header); err != nil {
-			return nil, nil, nil, nil, fmt.Errorf("declared API key authentication header: %w", err)
+			return nil, nil, nil, fmt.Errorf("declared API key authentication header: %w", err)
 		}
 		headerValue := spec.Prefix + strings.TrimSpace(value)
 		if headerValue == "" {
-			return boundHeaders, boundQuery, nil, rateLimitAuth, nil
+			return boundHeaders, nil, rateLimitAuth, nil
 		}
 		if err := bindOperationDirectWriteHeader(boundHeaders, spec.Header, headerValue, "declared API key authentication"); err != nil {
-			return nil, nil, nil, nil, err
+			return nil, nil, nil, err
 		}
-		return boundHeaders, boundQuery, nil, rateLimitAuth, nil
-	case "api_key_query":
-		name := spec.Param
-		if err := safety.ValidateIdentifier(name, "auth query parameter"); err != nil {
-			return nil, nil, nil, nil, err
-		}
-		value, err := interpolateOperationDirectWriteAuthValue(spec.Value, cfg)
-		if err != nil {
-			return nil, nil, nil, nil, fmt.Errorf("api_key_query value: %w", err)
-		}
-		if _, exists := boundQuery[name]; exists {
-			return nil, nil, nil, nil, fmt.Errorf("declared API key query parameter %q collides with a prepared operation query value", name)
-		}
-		boundQuery[name] = strings.TrimSpace(value)
-		return boundHeaders, boundQuery, nil, rateLimitAuth, nil
+		return boundHeaders, nil, rateLimitAuth, nil
 	case "oauth2_client_credentials", "oauth2_refresh_token", "custom":
-		return boundHeaders, boundQuery, []AuthSpec{spec}, rateLimitAuth, nil
+		return boundHeaders, []AuthSpec{spec}, rateLimitAuth, nil
 	default:
-		return nil, nil, nil, nil, fmt.Errorf("unknown auth mode %q", spec.Mode)
+		return nil, nil, nil, fmt.Errorf("unknown auth mode %q", spec.Mode)
 	}
 }
 
@@ -1338,6 +1674,13 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
+	queryMap, authBinding, err := bindOperationDirectWriteQueryMutation(cfg, b.HTTP, queryMap)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP query mutations: %w", identity, err)
+	}
+	if err := validateOperationDirectWritePreparedQuery(op, queryMap); err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	if err := requireOperationQueryGroups(op, queryMap); err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -1345,9 +1688,9 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
 	}
-	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, queryMap)
+	headers, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHeaderMutations(cfg, b.HTTP, headers, authBinding)
 	if err != nil {
-		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP mutations: %w", identity, err)
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP header mutations: %w", identity, err)
 	}
 	query, err := directReadQuery(queryMap)
 	if err != nil {
@@ -1440,6 +1783,10 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			Headers:     cloneResolvedHeaders(headers),
 		}},
 	}
+	redactionValues, err := operationDirectWriteRedactionValues(op, body)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	return preparedOperationDirectWrite{
 		op:              op,
 		cfg:             cfg,
@@ -1458,7 +1805,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		contentType:     contentType,
 		policy:          policy,
 		maxBytes:        maxBytes,
-		redactionValues: operationDirectWriteRedactionValues(op, body),
+		redactionValues: redactionValues,
 		prepared:        prepared,
 	}, nil
 }
@@ -1476,13 +1823,17 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
 	identity := operationDirectWriteIdentity(b, op, method)
-	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
+	queryMap, authBinding, err := bindOperationDirectWriteQueryMutation(cfg, b.HTTP, nil)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP query mutations: %w", identity, err)
+	}
+	headers, err := resolveDirectWriteHeadersWithVars(b.HTTP.Headers, b.Spec, requestVars(cfg, nil, "", queryMap))
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
 	}
-	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, nil)
+	headers, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHeaderMutations(cfg, b.HTTP, headers, authBinding)
 	if err != nil {
-		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP mutations: %w", identity, err)
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP header mutations: %w", identity, err)
 	}
 	query, err := directReadQuery(queryMap)
 	if err != nil {
@@ -1548,6 +1899,10 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 			Headers:     cloneResolvedHeaders(headers),
 		}},
 	}
+	redactionValues, err := operationDirectWriteRedactionValues(op, variables)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	return preparedOperationDirectWrite{
 		op:              op,
 		cfg:             cfg,
@@ -1565,7 +1920,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		contentType:     "application/json",
 		policy:          policy,
 		maxBytes:        maxBytes,
-		redactionValues: operationDirectWriteRedactionValues(op, variables),
+		redactionValues: redactionValues,
 		prepared:        prepared,
 	}, nil
 }
@@ -1827,6 +2182,10 @@ func operationDirectWriteQueryParameters(op OperationSpec) (map[string]Operation
 }
 
 func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []string) error {
+	return validateOperationDirectWriteQueryFieldsWithAuth(op, queryFields, nil)
+}
+
+func validateOperationDirectWriteQueryFieldsWithAuth(op OperationSpec, queryFields []string, authQueryParameters map[string]struct{}) error {
 	if op.Kind != "rest_write" || op.REST == nil {
 		if len(queryFields) == 0 {
 			return nil
@@ -1847,6 +2206,9 @@ func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []str
 			return fmt.Errorf("operation %q maps more than one command flag to query parameter %q", op.ID, name)
 		}
 		seen[name] = struct{}{}
+		if _, authOwned := authQueryParameters[name]; authOwned {
+			return fmt.Errorf("operation %q query parameter %q is owned by declared API key authentication and cannot be caller-bound", op.ID, name)
+		}
 		if _, fixed := op.REST.Query[name]; fixed {
 			return fmt.Errorf("operation %q query parameter %q is fixed by rest.query and cannot be caller-bound", op.ID, name)
 		}
@@ -1867,11 +2229,26 @@ func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []str
 		if _, fixed := op.REST.Query[name]; fixed {
 			continue
 		}
+		if _, authOwned := authQueryParameters[name]; authOwned {
+			continue
+		}
 		if _, bound := seen[name]; !bound {
 			return fmt.Errorf("operation %q requires query parameter %q", op.ID, name)
 		}
 	}
 	return nil
+}
+
+func operationDirectWriteStaticAuthQueryParameters(specs []AuthSpec) map[string]struct{} {
+	parameters := make(map[string]struct{})
+	for _, spec := range specs {
+		if strings.EqualFold(strings.TrimSpace(spec.Mode), "api_key_query") {
+			if name := strings.TrimSpace(spec.Param); name != "" {
+				parameters[name] = struct{}{}
+			}
+		}
+	}
+	return parameters
 }
 
 func operationDirectWriteQuery(op OperationSpec, requested map[string]string) (map[string]string, error) {
@@ -1884,8 +2261,16 @@ func operationDirectWriteQuery(op OperationSpec, requested map[string]string) (m
 		requestedNames = append(requestedNames, name)
 	}
 	sort.Strings(requestedNames)
-	if err := validateOperationDirectWriteQueryFields(op, requestedNames); err != nil {
-		return nil, err
+	for _, name := range requestedNames {
+		if err := safety.ValidateIdentifier(name, "operation query parameter"); err != nil {
+			return nil, fmt.Errorf("operation %q query field: %w", op.ID, err)
+		}
+		if _, fixed := op.REST.Query[name]; fixed {
+			return nil, fmt.Errorf("operation %q query parameter %q is fixed by rest.query and cannot be caller-bound", op.ID, name)
+		}
+		if _, declared := parameters[name]; !declared {
+			return nil, fmt.Errorf("operation %q query parameter %q is not source-declared in rest.parameters", op.ID, name)
+		}
 	}
 	query := make(map[string]string, len(op.REST.Query)+len(requested))
 	fixedNames := make([]string, 0, len(op.REST.Query))
@@ -1909,18 +2294,31 @@ func operationDirectWriteQuery(op OperationSpec, requested map[string]string) (m
 		}
 		query[name] = value
 	}
-	parameterNames := make([]string, 0, len(parameters))
-	for name := range parameters {
-		parameterNames = append(parameterNames, name)
+	return query, nil
+}
+
+func validateOperationDirectWritePreparedQuery(op OperationSpec, query map[string]string) error {
+	parameters, err := operationDirectWriteQueryParameters(op)
+	if err != nil {
+		return err
 	}
-	sort.Strings(parameterNames)
-	for _, name := range parameterNames {
+	names := make([]string, 0, len(parameters))
+	for name := range parameters {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
 		parameter := parameters[name]
+		if value, present := query[name]; present {
+			if err := validateOperationDirectWriteQueryValue(op, parameter, value); err != nil {
+				return err
+			}
+		}
 		if parameter.Required && strings.TrimSpace(query[name]) == "" {
-			return nil, fmt.Errorf("operation %q requires query parameter %q", op.ID, name)
+			return fmt.Errorf("operation %q requires query parameter %q", op.ID, name)
 		}
 	}
-	return query, nil
+	return nil
 }
 
 func validateOperationDirectWriteQueryValue(op OperationSpec, parameter OperationParameter, value string) error {

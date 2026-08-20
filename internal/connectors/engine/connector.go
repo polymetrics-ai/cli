@@ -299,6 +299,22 @@ func (c *Connector) ResolveOperationDirectWriteBodyValue(operation string, body 
 	return ResolveOperationDirectWriteBodyMappingValue(c.bundle, operation, body, path)
 }
 
+func (c *Connector) WithholdOperationDirectWriteBodyFields(operation string, body map[string]any, fields []string) (map[string]any, []string, error) {
+	return WithholdOperationDirectWriteBodyFields(c.bundle, operation, body, fields)
+}
+
+func (c *Connector) RedactOperationDirectWriteBodyFields(operation string, body map[string]any, fields []string) (map[string]any, error) {
+	return RedactOperationDirectWriteBodyFields(c.bundle, operation, body, fields)
+}
+
+func (c *Connector) MergeOperationDirectWriteBodyFragments(operation string, base, overlay map[string]any) (map[string]any, error) {
+	return MergeOperationDirectWriteBodyFragments(c.bundle, operation, base, overlay)
+}
+
+func (c *Connector) OperationDirectWriteBodyPathContains(operation, parent, child string) (bool, error) {
+	return OperationDirectWriteBodyPathContains(c.bundle, operation, parent, child)
+}
+
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	var result connectors.WritePreview
 	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
@@ -520,6 +536,22 @@ func (b Base) MaterializeOperationDirectWriteBody(operation string, mappings map
 
 func (b Base) ResolveOperationDirectWriteBodyValue(operation string, body map[string]any, path string) (any, bool, error) {
 	return ResolveOperationDirectWriteBodyMappingValue(b.bundle, operation, body, path)
+}
+
+func (b Base) WithholdOperationDirectWriteBodyFields(operation string, body map[string]any, fields []string) (map[string]any, []string, error) {
+	return WithholdOperationDirectWriteBodyFields(b.bundle, operation, body, fields)
+}
+
+func (b Base) RedactOperationDirectWriteBodyFields(operation string, body map[string]any, fields []string) (map[string]any, error) {
+	return RedactOperationDirectWriteBodyFields(b.bundle, operation, body, fields)
+}
+
+func (b Base) MergeOperationDirectWriteBodyFragments(operation string, base, overlay map[string]any) (map[string]any, error) {
+	return MergeOperationDirectWriteBodyFragments(b.bundle, operation, base, overlay)
+}
+
+func (b Base) OperationDirectWriteBodyPathContains(operation, parent, child string) (bool, error) {
+	return OperationDirectWriteBodyPathContains(b.bundle, operation, parent, child)
 }
 
 // PreflightOperationStructuredJSONBodyField validates a native connector's

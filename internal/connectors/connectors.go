@@ -641,6 +641,7 @@ type OperationDirectWriteMetadata struct {
 	ConfirmationChallenge string
 	OutputPolicy          string
 	Batchable             bool
+	StructuredBody        bool
 	// PayloadFileFields is nil for non-multipart operations. For a declared
 	// multipart operation it is the closed set of body paths whose local-file
 	// identities must be captured before preview, even when their names do not
@@ -681,6 +682,13 @@ type OperationDirectWriteBodyMaterializer interface {
 
 type OperationDirectWriteBodyValueResolver interface {
 	ResolveOperationDirectWriteBodyValue(operation string, body map[string]any, path string) (any, bool, error)
+}
+
+type OperationDirectWriteBodyPlanTransformer interface {
+	WithholdOperationDirectWriteBodyFields(operation string, body map[string]any, fields []string) (map[string]any, []string, error)
+	RedactOperationDirectWriteBodyFields(operation string, body map[string]any, fields []string) (map[string]any, error)
+	MergeOperationDirectWriteBodyFragments(operation string, base, overlay map[string]any) (map[string]any, error)
+	OperationDirectWriteBodyPathContains(operation, parent, child string) (bool, error)
 }
 
 // OperationStructuredJSONBodyPreflighter proves that one named top-level
