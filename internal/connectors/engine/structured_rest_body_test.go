@@ -1812,6 +1812,14 @@ func TestValidateOperationDirectWriteCLIFlagsRejectsSparseArrayProjection(t *tes
 	if err := ValidateOperationDirectWriteCLIFlags(op, sparse); err == nil || !strings.Contains(err.Error(), "sparse array index 2") {
 		t.Fatalf("sparse array projection error = %v, want declaration rejection", err)
 	}
+	optionalPrefix := []CLIFlag{
+		{Name: "first-target", Type: "string", MapsTo: "body.targets.0.id"},
+		{Name: "second-target", Type: "string", MapsTo: "body.targets.1.id", Required: true},
+	}
+	if err := ValidateOperationDirectWriteCLIFlags(op, optionalPrefix); err == nil || !strings.Contains(err.Error(), "sparse array index 1") {
+		t.Fatalf("optional-prefix array projection error = %v, want declaration rejection", err)
+	}
+
 	contiguous := []CLIFlag{
 		{Name: "first-target", Type: "string", MapsTo: "body.targets.0.id", Required: true},
 		{Name: "second-target", Type: "string", MapsTo: "body.targets.1.id", Required: true},

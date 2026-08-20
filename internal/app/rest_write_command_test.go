@@ -3,6 +3,7 @@ package app_test
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -14,6 +15,7 @@ import (
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -782,6 +784,91 @@ func TestDirectWriteCommandFailurePersistsProviderResponse(t *testing.T) {
 	}
 	if receipt := run.OperationDirectWrite.Headers["X-Provider-Receipt"].Values; len(receipt) != 2 || receipt[0] != "receipt-one" || receipt[1] != "receipt-two" {
 		t.Fatal("failed direct write did not retain the provider receipt")
+	}
+}
+
+func TestGraphQLCredentialBoundApplicationErrorDoesNotPersistEcho(t *testing.T) {
+	const credential = "graphql-app-credential-placeholder"
+	const responseBody = `{"data":{"updateWidget":null},"errors":[{"message":"graphql-app-credential-placeholder"}]}`
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if got := r.Header.Get("Authorization"); got != "Bearer "+credential {
+			t.Fatalf("Authorization = %q, want bound credential", got)
+		}
+		w.Header().Set("X-Provider-Trace", "app-credential-bound")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(responseBody))
+	}))
+	defer server.Close()
+
+	a, root := operationWithholdingApp(t, ctx, server.URL, func(bundle *engine.Bundle) {
+		bundle.HTTP.Auth = []engine.AuthSpec{{Mode: "bearer", Token: credential}}
+		for index := range bundle.Operations {
+			if bundle.Operations[index].ID != "restwrite-demo.widget-update" {
+				continue
+			}
+			bundle.Operations[index].Kind = "graphql_mutation"
+			bundle.Operations[index].REST = nil
+			bundle.Operations[index].GraphQL = &engine.GraphQLOperationSpec{
+				Document:      "mutation UpdateWidget($id: ID!) { updateWidget(id: $id) { id } }",
+				OperationName: "UpdateWidget",
+				Path:          "/graphql",
+				MaxBytes:      1024,
+				VariablesSchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"required":["id"],
+					"properties":{"id":{"type":"string"}}
+				}`),
+			}
+		}
+		for index := range bundle.CLISurface.Commands {
+			if bundle.CLISurface.Commands[index].Path != "widget update" {
+				continue
+			}
+			bundle.CLISurface.Commands[index].APISurface = []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/graphql"}}
+			bundle.CLISurface.Commands[index].Flags = []engine.CLIFlag{{Name: "id", Type: "string", Summary: "Widget id.", MapsTo: "body.id", Required: true}}
+		}
+		for index := range bundle.Surface.Endpoints {
+			if bundle.Surface.Endpoints[index].Path != "/api/widgets/{id}" {
+				continue
+			}
+			bundle.Surface.Endpoints[index].Method = http.MethodPost
+			bundle.Surface.Endpoints[index].Path = "/graphql"
+			bundle.Surface.Endpoints[index].CoveredBy = &engine.SurfaceCoverage{Operations: []string{"restwrite-demo.widget-update"}}
+		}
+	})
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  restWriteDemoConnector,
+		Credential: "restwrite-local",
+		Path:       []string{"widget", "update"},
+		Flags:      map[string][]string{"id": {"w_1"}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err == nil {
+		t.Fatal("RunReverseETL error = nil, want GraphQL application error")
+	}
+	if strings.Contains(err.Error(), credential) || strings.Contains(run.Error, credential) {
+		t.Fatalf("GraphQL application error leaked bound credential: error=%q persisted=%q", err, run.Error)
+	}
+	if calls != 1 || run.Status != "failed" {
+		t.Fatalf("failed run/calls = %+v/%d, want one failed direct write", run, calls)
+	}
+	if strings.Contains(stateBytes(t, root), credential) {
+		t.Fatal("state.json persisted the bound credential")
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatal("RunReverseETL error did not retain a provider response cause")
+	}
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "app-credential-bound" || providerErr.Body != responseBody {
+		t.Fatal("RunReverseETL provider response did not retain exact status, headers, and body")
 	}
 }
 
