@@ -155,8 +155,11 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				}
 			}
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := "provider returned a GraphQL HTTP error"
-			if !operationDirectWriteSecretGraphQLMutation(prepared.op) {
+			message := "provider returned an HTTP error"
+			if prepared.op.Kind == "graphql_mutation" {
+				message = "provider returned a GraphQL HTTP error"
+			}
+			if !operationRetainsSecretRuntimeContent(prepared.op) {
 				message = operationDirectWriteErrorText(err, prepared.identity, prepared.op.Kind == "graphql_mutation" && !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)
 			}
 			if hint != "" {
@@ -178,7 +181,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
 				message := "graphql errors: provider returned application errors"
-				if !operationDirectWriteSecretGraphQLMutation(prepared.op) && !operationRetainsSecretRuntimeContent(prepared.op) {
+				if !operationRetainsSecretRuntimeContent(prepared.op) {
 					message = "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), true, prepared.redactionValues)
 				}
 				return operationDirectWritePostResponseErrorWithMessage(prepared.op.ID, message, nil, response, prepared.identity)
@@ -339,15 +342,9 @@ func redactOperationDirectWriteErrorText(text string, redact bool, values []stri
 	return safety.RedactErrorText(redactWriteLiterals(text, values))
 }
 
-// operationRetainsSecretRuntimeContent identifies the closed secret-operation
-// path. Its diagnostic output is complete by policy; the declared secret store
-// protects the returned credential at rest rather than deleting runtime fields.
+// operationRetainsSecretRuntimeContent reports whether an operation handles secret-bearing runtime content.
 func operationRetainsSecretRuntimeContent(op OperationSpec) bool {
 	return op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
-}
-
-func operationDirectWriteSecretGraphQLMutation(op OperationSpec) bool {
-	return op.Kind == "graphql_mutation" && strings.EqualFold(op.MutationClass, "secret")
 }
 
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
@@ -415,7 +412,7 @@ func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, ou
 	if err := validateOperationDirectWriteOutputPolicy(outputPolicy); err != nil {
 		return err
 	}
-	authQueryParameters, err := operationDirectWriteStaticAuthQueryParameters(op, b.HTTP.Auth)
+	authQueryParameters, err := OperationDirectWriteAuthOwnedQueryParameters(op, b.HTTP.Auth)
 	if err != nil {
 		return err
 	}
@@ -1437,7 +1434,7 @@ func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) 
 	// A live secret operation retains complete runtime output for diagnosis;
 	// secrecy is provided by the encrypted credential store, not deletion from
 	// responses, errors, logs, previews, reports, or fixtures.
-	if op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret") {
+	if operationRetainsSecretRuntimeContent(op) {
 		return nil, nil
 	}
 	if op.SensitivePolicy == nil || len(op.SensitivePolicy.RedactFields) == 0 {
@@ -2262,9 +2259,10 @@ func validateOperationDirectWriteQueryFieldsWithAuth(op OperationSpec, queryFiel
 	return nil
 }
 
-func operationDirectWriteStaticAuthQueryParameters(op OperationSpec, specs []AuthSpec) (map[string]struct{}, error) {
+// OperationDirectWriteAuthOwnedQueryParameters reports source query parameters supplied by declared API-key authentication.
+func OperationDirectWriteAuthOwnedQueryParameters(op OperationSpec, specs []AuthSpec) (map[string]struct{}, error) {
 	parameters := make(map[string]struct{})
-	selectable := operationDirectWriteSelectableAuthSpecs(specs)
+	selectable, noMatchPossible := operationDirectWriteSelectableAuthSpecs(specs)
 	for _, spec := range selectable {
 		if strings.EqualFold(strings.TrimSpace(spec.Mode), "api_key_query") {
 			if name := strings.TrimSpace(spec.Param); name != "" {
@@ -2289,6 +2287,9 @@ func operationDirectWriteStaticAuthQueryParameters(op OperationSpec, specs []Aut
 		if !found || !parameter.Required {
 			continue
 		}
+		if noMatchPossible {
+			return nil, fmt.Errorf("operation %q required query parameter %q is conditionally supplied by declared API key authentication; every selectable auth rule must supply it", op.ID, name)
+		}
 		for _, spec := range selectable {
 			if strings.EqualFold(strings.TrimSpace(spec.Mode), "api_key_query") && strings.TrimSpace(spec.Param) == name {
 				continue
@@ -2299,15 +2300,15 @@ func operationDirectWriteStaticAuthQueryParameters(op OperationSpec, specs []Aut
 	return parameters, nil
 }
 
-func operationDirectWriteSelectableAuthSpecs(specs []AuthSpec) []AuthSpec {
+func operationDirectWriteSelectableAuthSpecs(specs []AuthSpec) ([]AuthSpec, bool) {
 	selectable := make([]AuthSpec, 0, len(specs))
 	for _, spec := range specs {
 		selectable = append(selectable, spec)
 		if strings.TrimSpace(spec.When) == "" {
-			break
+			return selectable, false
 		}
 	}
-	return selectable
+	return selectable, len(selectable) != 0
 }
 
 func operationDirectWriteQuery(op OperationSpec, requested map[string]string) (map[string]string, error) {
@@ -2631,7 +2632,7 @@ func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (
 // credential store-bound before runtime construction and I/O. The response is
 // deliberately still returned intact: the runtime does not redact content.
 func validateOperationResponseSecretContract(op OperationSpec) error {
-	if !op.SecretSensitive && !strings.EqualFold(op.MutationClass, "secret") {
+	if !operationRetainsSecretRuntimeContent(op) {
 		return nil
 	}
 	if op.SensitivePolicy == nil {

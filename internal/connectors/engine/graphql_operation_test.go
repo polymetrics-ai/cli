@@ -871,9 +871,10 @@ func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
 func TestOperationDirectWriteSecretOperationRetainsProviderErrorProvenance(t *testing.T) {
 	const sensitiveValue = "provider-echoed-github-pat"
 	for _, tt := range []struct {
-		name       string
-		statusCode int
-		body       string
+		name          string
+		statusCode    int
+		body          string
+		mutationClass string
 	}{
 		{
 			name:       "graphql errors",
@@ -884,6 +885,12 @@ func TestOperationDirectWriteSecretOperationRetainsProviderErrorProvenance(t *te
 			name:       "non JSON HTTP error",
 			statusCode: http.StatusBadRequest,
 			body:       "invalid githubPat " + sensitiveValue,
+		},
+		{
+			name:          "secret-sensitive update HTTP error",
+			statusCode:    http.StatusBadRequest,
+			body:          "invalid githubPat " + sensitiveValue,
+			mutationClass: "update",
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -897,6 +904,9 @@ func TestOperationDirectWriteSecretOperationRetainsProviderErrorProvenance(t *te
 			defer server.Close()
 
 			bundle := graphQLMutationWithSensitiveInput(server.URL)
+			if tt.mutationClass != "" {
+				bundle.Operations[0].MutationClass = tt.mutationClass
+			}
 			req := connectors.OperationDirectWriteRequest{
 				Operation: "acme.widgets.mutation",
 				Config: connectors.RuntimeConfig{

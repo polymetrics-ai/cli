@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/fs"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -801,6 +802,55 @@ func TestCheckCLISurfaceDirectWriteQueryBindings(t *testing.T) {
 			t.Fatalf("findings = %+v, want %q", findings, test.want)
 		})
 	}
+}
+
+func TestCheckCLISurfaceDirectWriteRequiredQueryOwnershipParity(t *testing.T) {
+	batchable := false
+	newOperation := func(id, parameter string) engine.OperationSpec {
+		return engine.OperationSpec{
+			ID: id, Kind: "rest_write", Risk: "high", Approval: "plan-preview-confirm-execute", OutputPolicy: "json", MutationClass: "create", Batchable: &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method: http.MethodPost, Path: "/widgets", ContentType: "application/json", MaxBytes: 1024,
+				Parameters: []engine.OperationParameter{{Name: parameter, In: "query", Type: "string", Required: true}},
+			},
+		}
+	}
+	newBundle := func(op engine.OperationSpec, auth []engine.AuthSpec) engine.Bundle {
+		return engine.Bundle{
+			Name: "cli-surface", HTTP: engine.HTTPBase{Auth: auth}, Operations: []engine.OperationSpec{op},
+			Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &engine.SurfaceOperation{Model: "write"}}}},
+		}
+	}
+	newCommand := func(op engine.OperationSpec, flags []engine.CLIFlag) engine.CLICommand {
+		return engine.CLICommand{
+			Path: "widget create", Intent: "direct_write", Availability: "implemented", Operation: op.ID,
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/widgets"}}, OutputPolicy: "json", Flags: flags,
+		}
+	}
+
+	t.Run("unconditional API key ownership", func(t *testing.T) {
+		op := newOperation("cli-surface.widgets.create", "api_key")
+		bundle := newBundle(op, []engine.AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "{{ secrets.api_key }}"}})
+		command := newCommand(op, nil)
+		if findings := checkCLISurfaceDirectWriteOperationSafety(bundle, 0, command, op); len(findings) != 0 {
+			t.Fatalf("findings = %+v, want none", findings)
+		}
+		if err := engine.PreflightOperationDirectWrite(bundle, op.ID, http.MethodPost, "/widgets", "json"); err != nil {
+			t.Fatalf("PreflightOperationDirectWrite: %v", err)
+		}
+	})
+
+	t.Run("caller-owned required parameter", func(t *testing.T) {
+		op := newOperation("cli-surface.widgets.create", "scope")
+		bundle := newBundle(op, nil)
+		command := newCommand(op, []engine.CLIFlag{{Name: "scope", Type: "string", Required: true, MapsTo: "query.scope"}})
+		if findings := checkCLISurfaceDirectWriteOperationSafety(bundle, 0, command, op); len(findings) != 0 {
+			t.Fatalf("findings = %+v, want none", findings)
+		}
+		if err := engine.PreflightOperationDirectWrite(bundle, op.ID, http.MethodPost, "/widgets", "json", "scope"); err != nil {
+			t.Fatalf("PreflightOperationDirectWrite: %v", err)
+		}
+	})
 }
 
 func TestCheckCLISurfaceDirectWriteRequiresDeclaredPathAndBodyMappings(t *testing.T) {
