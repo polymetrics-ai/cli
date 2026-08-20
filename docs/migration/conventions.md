@@ -1523,6 +1523,15 @@ accept source drift. The generated descriptor is an intermediate provider
 contract for later fixed declaration materializers, never an execution command
 or a generic HTTP escape hatch.
 
+The lock must pin an OpenAPI 3.0/3.1 or Swagger 2.0 source document; JSON and
+YAML are accepted only in those forms. Each operation descriptor retains the
+provider `operation_id`, including an empty value, alongside its deterministic
+`source_id`. The source ID falls back to the connector, lower-case method, and
+connector-relative path only when the provider ID is empty. Resolve only
+bounded, unambiguous in-artifact references: external, cyclic, unresolved, or
+ambiguous references, oversized schemas, and unbounded or dynamic request
+contracts fail before descriptor output.
+
 Descriptors preserve fixed method/path and separated typed input schemas, plus
 the complete provider-declared response status shapes and ordinary output
 fields. Output classification is additive; it does not erase fields because

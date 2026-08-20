@@ -3044,12 +3044,12 @@ func (r *sourceReferenceResolver) responseContentExpansionBytes(value any, stack
 func (r *sourceReferenceResolver) responseSwaggerHeadersExpansionBytes(value any, stack map[string]bool, depth int) (int64, error) {
 	headers, ok := value.(map[string]any)
 	if !ok {
-		return 0, fmt.Errorf("Swagger response headers must be an object")
+		return 0, fmt.Errorf("swagger response headers must be an object")
 	}
 	return sourceMapExpandedBytes(headers, func(name string, rawHeader any) (int64, error) {
 		header, ok := rawHeader.(map[string]any)
 		if !ok {
-			return 0, fmt.Errorf("Swagger response header %q must be an object", name)
+			return 0, fmt.Errorf("swagger response header %q must be an object", name)
 		}
 		return sourceMapExpandedBytes(header, func(key string, child any) (int64, error) {
 			if key == "items" {
@@ -3488,19 +3488,19 @@ func (r *sourceReferenceResolver) resolveResponseUnchecked(value any, stack map[
 func (r *sourceReferenceResolver) resolveSwaggerHeaders(value any, stack map[string]bool, depth int) (map[string]any, error) {
 	headers, ok := value.(map[string]any)
 	if !ok {
-		return nil, fmt.Errorf("Swagger response headers must be an object")
+		return nil, fmt.Errorf("swagger response headers must be an object")
 	}
 	out := make(map[string]any, len(headers))
 	for _, name := range sortedSourceMapKeys(headers) {
 		header, ok := headers[name].(map[string]any)
 		if !ok {
-			return nil, fmt.Errorf("Swagger response header %q must be an object", name)
+			return nil, fmt.Errorf("swagger response header %q must be an object", name)
 		}
 		resolvedHeader := sourceCloneMap(header)
 		if items, exists := header["items"]; exists {
 			resolved, err := r.resolveSchema(items, stack, depth)
 			if err != nil {
-				return nil, fmt.Errorf("Swagger response header %q items: %w", name, err)
+				return nil, fmt.Errorf("swagger response header %q items: %w", name, err)
 			}
 			resolvedHeader["items"] = resolved
 		}
@@ -4351,35 +4351,6 @@ func sourceValidateJSONPointer(pointer string) error {
 	return nil
 }
 
-func (r *sourceReferenceResolver) referencePointerCategory(ref string) string {
-	segments := strings.Split(strings.TrimPrefix(ref, "#/"), "/")
-	if r.form.isOpenAPI() && len(segments) == 3 && segments[0] == "components" {
-		return segments[1]
-	}
-	if r.form.isSwagger2() && len(segments) == 2 {
-		switch segments[0] {
-		case "definitions", "parameters", "responses":
-			return segments[0]
-		}
-	}
-	return ""
-}
-
-func sourceReferenceCategoryMatches(kind sourceReferenceKind, category string) bool {
-	return map[sourceReferenceKind]string{
-		sourceReferencePathItem:    "pathItems",
-		sourceReferenceParameter:   "parameters",
-		sourceReferenceRequestBody: "requestBodies",
-		sourceReferenceResponse:    "responses",
-		sourceReferenceHeader:      "headers",
-		sourceReferenceSchema:      "schemas",
-		sourceReferenceCallback:    "callbacks",
-		sourceReferenceLink:        "links",
-		sourceReferenceExample:     "examples",
-		sourceReferenceSecurity:    "securitySchemes",
-	}[kind] == category || (kind == sourceReferenceSchema && category == "definitions")
-}
-
 func sourceValidateReferenceObjectFields(object map[string]any, allowed map[string]bool) error {
 	for key := range object {
 		if allowed[key] || strings.HasPrefix(key, "x-") {
@@ -4461,15 +4432,6 @@ func sourcePointer(root map[string]any, ref string) (any, error) {
 		}
 	}
 	return current, nil
-}
-
-func importSourceDocument(lock sourceImportLock, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, limits sourceImportLimits) ([]sourceOperationDescriptor, error) {
-	budget := sourceImportBudget{limit: sourceResolvedDescriptorLimit(limits)}
-	result, err := importSourceDocumentResult(lock, doc, form, resolver, limits, &budget)
-	if err != nil {
-		return nil, err
-	}
-	return result.Operations, nil
 }
 
 func importSourceDocumentResult(lock sourceImportLock, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
@@ -4764,17 +4726,6 @@ func sourceParameterValues(raw any, resolver *sourceReferenceResolver, form sour
 	return values, nil
 }
 
-func sourceParameterSchema(parameter map[string]any, form sourceDocumentForm) (any, error) {
-	schema, content, err := sourceParameterRepresentation(parameter, form)
-	if err != nil {
-		return nil, err
-	}
-	if content != nil {
-		return nil, fmt.Errorf("uses content rather than schema")
-	}
-	return schema, nil
-}
-
 func sourceParameterRepresentation(parameter map[string]any, form sourceDocumentForm) (any, any, error) {
 	schema, hasSchema := parameter["schema"]
 	content, hasContent := parameter["content"]
@@ -4788,7 +4739,7 @@ func sourceParameterRepresentation(parameter map[string]any, form sourceDocument
 		return nil, content, nil
 	}
 	if hasContent {
-		return nil, nil, fmt.Errorf("Swagger parameter content is unsupported")
+		return nil, nil, fmt.Errorf("swagger parameter content is unsupported")
 	}
 	if hasSchema {
 		return schema, nil, nil
@@ -4849,7 +4800,7 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 			return request, nil
 		}
 		if len(bodyParameters) != 1 {
-			return sourceRequestDescriptor{}, fmt.Errorf("Swagger request body is ambiguous")
+			return sourceRequestDescriptor{}, fmt.Errorf("swagger request body is ambiguous")
 		}
 		body := bodyParameters[0]
 		if err := validateBoundedRequestSchema(body.Schema, form, limits, 0); err != nil {
@@ -5030,14 +4981,14 @@ func sourceSwaggerRequestMediaType(operation, doc map[string]any) (string, error
 		rawConsumes, exists = doc["consumes"]
 	}
 	if !exists {
-		return "", fmt.Errorf("Swagger request body has no declared consumes media type")
+		return "", fmt.Errorf("swagger request body has no declared consumes media type")
 	}
 	mediaTypes, err := sourceStringArray(rawConsumes, "Swagger consumes")
 	if err != nil {
 		return "", err
 	}
 	if len(mediaTypes) != 1 {
-		return "", fmt.Errorf("Swagger request body requires exactly one unambiguous media type")
+		return "", fmt.Errorf("swagger request body requires exactly one unambiguous media type")
 	}
 	if !sourceJSONMediaType(mediaTypes[0]) {
 		return "", fmt.Errorf("unsupported request encoding %q", mediaTypes[0])
@@ -5639,7 +5590,7 @@ func sourceExactDecimal(value string) (*big.Rat, bool) {
 	}
 	mantissa, exponentText, hasExponent := value, "", false
 	if index := strings.IndexAny(value, "eE"); index >= 0 {
-		if strings.IndexAny(value[index+1:], "eE") >= 0 {
+		if strings.ContainsAny(value[index+1:], "eE") {
 			return nil, false
 		}
 		mantissa, exponentText, hasExponent = value[:index], value[index+1:], true

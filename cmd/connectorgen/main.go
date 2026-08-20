@@ -16,6 +16,10 @@
 //	                           (api_surface, output_policy, flag maps_to,
 //	                           rest.max_bytes) and the compact runtime
 //	                           direct-read endpoint ledger from bundle sources
+//	source-import <connector> --out <path> [--defs <dir>] [--check]
+//	                           verifies a connector-owned source lock and
+//	                           emits canonical provider contracts for later
+//	                           declaration materializers
 //	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
 //	                           derives direct-read api_surface coverage and
 //	                           blocked reasons from runtime preflight
