@@ -66,7 +66,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 		if err == nil {
 			err = ErrArrowFastPathInvalid
 		}
-		return result, fmt.Errorf("begin Arrow full-overwrite run: %w", err)
+		return result, fmt.Errorf("begin Arrow full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 	}
 	published := false
 	defer func() {
@@ -76,7 +76,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), request.unitDeadline())
 		defer cancel()
 		if abortErr := session.AbortArrowFullOverwrite(cleanupCtx); abortErr != nil && err == nil {
-			err = fmt.Errorf("abort Arrow full-overwrite run: %w", abortErr)
+			err = fmt.Errorf("abort Arrow full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, abortErr))
 		}
 	}()
 
@@ -84,9 +84,12 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 	segments := make([]FastSegmentReceipt, 0)
 	err = source.ExtractArrowRanges(ctx, cloneArrowExtractRequest(ArrowExtractRequest{
 		Connector: request.Source, Runtime: request.SourceRuntime, Stream: request.Stream, CursorField: request.CursorField,
-		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint),
+		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint, request.RateLimitResumeCheckpoint),
 		BatchSize: request.BatchSize, UnitDeadline: request.unitDeadline(), TransformPlanJSON: request.TransformPlanJSON, TransformHash: request.TransformPlanHash,
-	}), func(batch ArrowSourceBatch) error {
+	}), func(batch ArrowSourceBatch) (callbackErr error) {
+		defer func() {
+			callbackErr = tagTransportExecutionError(TransportExecutionOriginInternal, callbackErr)
+		}()
 		if err := validateArrowSourceBatch(batch, request.BatchSize); err != nil {
 			return err
 		}
@@ -149,7 +152,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 			result.ApplyElapsed += time.Since(applyStarted)
 			cancelApply()
 			if applyErr != nil {
-				return fmt.Errorf("bulk apply Arrow segment: %w", applyErr)
+				return fmt.Errorf("bulk apply Arrow segment: %w", tagTransportExecutionError(TransportExecutionOriginDestination, applyErr))
 			}
 			if reporter, ok := session.(ArrowBulkPhaseReporter); ok {
 				result.IndexConstraintElapsed = reporter.ArrowBulkPhaseMeasurement().IndexConstraintBuildElapsed
@@ -166,7 +169,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 		return nil
 	})
 	if err != nil {
-		return result, err
+		return result, tagTransportExecutionError(TransportExecutionOriginSource, err)
 	}
 	if lastCandidate == nil {
 		if _, allowed := resolved.Source.(EmptyResultSource); !allowed {
@@ -193,7 +196,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 	}
 	cancelPublish()
 	if publishErr != nil {
-		return result, fmt.Errorf("publish Arrow full-overwrite run: %w", publishErr)
+		return result, fmt.Errorf("publish Arrow full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}
 	if reporter, ok := session.(ArrowBulkPhaseReporter); ok {
 		result.IndexConstraintElapsed = reporter.ArrowBulkPhaseMeasurement().IndexConstraintBuildElapsed

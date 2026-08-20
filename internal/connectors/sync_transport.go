@@ -182,8 +182,8 @@ func (m SourceRecordMapping) Validate() error {
 		seenInputs := make(map[string]struct{}, len(m.Inputs))
 		seenFields := make(map[string]struct{}, len(m.Inputs))
 		for _, input := range m.Inputs {
-			if !isConcreteTransportIdentifier(input.Input) || !isConcreteTransportIdentifier(input.Field) {
-				return fmt.Errorf("input_fields source record mapping requires concrete input and field names")
+			if input.Input == "" || input.Field == "" {
+				return fmt.Errorf("input_fields source record mapping requires non-empty input and field names")
 			}
 			if _, duplicate := seenInputs[input.Input]; duplicate {
 				return fmt.Errorf("input_fields source record mapping duplicates input %q", input.Input)
@@ -386,6 +386,7 @@ func (d DestinationTransportDescriptor) Validate() error {
 	}
 
 	strategies := make(map[synccontract.Mode]struct{}, len(d.ApplyStrategies))
+	strategyActions := make(map[synccontract.Mode]map[string]struct{}, len(d.ApplyStrategies))
 	for _, strategy := range d.ApplyStrategies {
 		if err := strategy.Mode.Validate(); err != nil {
 			return err
@@ -405,9 +406,13 @@ func (d DestinationTransportDescriptor) Validate() error {
 		if !containsTransportName(d.EligibleActions, strategy.Action) {
 			return fmt.Errorf("destination apply strategy action %q is not an eligible action", strategy.Action)
 		}
-		if _, exists := strategies[strategy.Mode]; exists {
-			return fmt.Errorf("destination transport declares duplicate apply strategy for sync mode %q", strategy.Mode)
+		if strategyActions[strategy.Mode] == nil {
+			strategyActions[strategy.Mode] = make(map[string]struct{})
 		}
+		if _, exists := strategyActions[strategy.Mode][strategy.Action]; exists {
+			return fmt.Errorf("destination transport declares duplicate apply strategy action %q for sync mode %q", strategy.Action, strategy.Mode)
+		}
+		strategyActions[strategy.Mode][strategy.Action] = struct{}{}
 		strategies[strategy.Mode] = struct{}{}
 	}
 	for _, mode := range d.Modes {
@@ -469,13 +474,37 @@ func containsSourceTransportStream(streams []string, want string) bool {
 // returns a default, which prevents a legacy `upsert` fallback from appearing
 // in a closed transport path.
 func (d DestinationTransportDescriptor) ApplyStrategyFor(mode synccontract.Mode) (DestinationApplyStrategy, error) {
+	return d.ApplyStrategyForAction(mode, "")
+}
+
+// ApplyStrategyForAction resolves the exact definition-owned action selected
+// by a persisted connection stream. Empty selection is accepted only when the
+// descriptor has exactly one strategy for the mode, preserving existing
+// single-action destinations while refusing an ambiguous multi-action route.
+func (d DestinationTransportDescriptor) ApplyStrategyForAction(mode synccontract.Mode, action string) (DestinationApplyStrategy, error) {
 	if err := d.Validate(); err != nil {
 		return DestinationApplyStrategy{}, err
 	}
+	var candidate DestinationApplyStrategy
+	count := 0
 	for _, strategy := range d.ApplyStrategies {
-		if strategy.Mode == mode {
+		if strategy.Mode != mode {
+			continue
+		}
+		if action != "" && strategy.Action == action {
 			return strategy, nil
 		}
+		candidate = strategy
+		count++
+	}
+	if action != "" {
+		return DestinationApplyStrategy{}, fmt.Errorf("destination transport does not declare action %q for sync mode %q", action, mode)
+	}
+	if count == 1 {
+		return candidate, nil
+	}
+	if count > 1 {
+		return DestinationApplyStrategy{}, fmt.Errorf("destination transport requires a persisted action selection for sync mode %q", mode)
 	}
 	return DestinationApplyStrategy{}, fmt.Errorf("destination transport does not support sync mode %q", mode)
 }

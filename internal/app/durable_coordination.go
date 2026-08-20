@@ -12,14 +12,22 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/coordination"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 )
 
 type rateParkingResumeContextKey struct{}
 type authRepairContextKey struct{}
 
+const rateParkingRearmInterruptedError = "rate-limit rearm attempt interrupted"
+
 func isRateParkingResume(ctx context.Context) bool {
-	resuming, _ := ctx.Value(rateParkingResumeContextKey{}).(bool)
+	_, resuming := rateParkingResumeRunID(ctx)
 	return resuming
+}
+
+func rateParkingResumeRunID(ctx context.Context) (string, bool) {
+	runID, ok := ctx.Value(rateParkingResumeContextKey{}).(string)
+	return runID, ok && runID != ""
 }
 
 func isAuthRepair(ctx context.Context) bool {
@@ -31,8 +39,15 @@ func isAuthRepair(ctx context.Context) bool {
 // declaration-resolved opaque scope, a typed reset, and an already committed
 // checkpoint. Every refusal returns before the parking store or run status is
 // mutated.
-func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchRequest, runErr error) (Run, bool, error) {
-	if a == nil || a.rateParking == nil || isRateParkingResume(ctx) {
+func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchRequest, result etlExecutionResult, runErr error) (Run, bool, error) {
+	if a == nil || a.rateParking == nil {
+		return Run{}, false, nil
+	}
+	resumedRunID, rearming := rateParkingResumeRunID(ctx)
+	if rearming && request.runID == resumedRunID {
+		return Run{}, true, errors.New("rate-limit resume attempt reused parked run ID")
+	}
+	if origin, tagged := synctransport.TransportExecutionOriginOf(runErr); tagged && origin != synctransport.TransportExecutionOriginSource {
 		return Run{}, false, nil
 	}
 	var rateErr *connsdk.RateLimitError
@@ -60,20 +75,57 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 	if err != nil {
 		return Run{}, true, err
 	}
-	if _, err := engine.ParkRateLimitedRun(ctx, a.rateParking, request.runID, scope, checkpoint, runErr); err != nil {
+	planID, err := declarativeTypedDestinationRateParkingPlanID(request)
+	if err != nil {
 		return Run{}, true, err
+	}
+	if planID != "" {
+		if err := a.persistDeclarativeTypedDestinationRateParkingPlanID(request.runID, planID); err != nil {
+			return Run{}, true, err
+		}
+	}
+	if rearming {
+		if _, err := engine.RearmRateLimitedRun(ctx, a.rateParking, resumedRunID, scope, checkpoint, runErr); err != nil {
+			return Run{}, true, err
+		}
+	} else {
+		if _, err := engine.ParkRateLimitedRun(ctx, a.rateParking, request.runID, scope, checkpoint, runErr); err != nil {
+			return Run{}, true, err
+		}
+	}
+	status := string(coordination.RateParkingOutcomeParkedRateLimit)
+	runError := ""
+	completedAt := time.Time{}
+	if rearming {
+		status = "failed"
+		runError = coordination.ErrRateLimitRearmed.Error()
+		completedAt = time.Now().UTC()
 	}
 	updated, err := a.updateState(func(current state) (state, error) {
 		for index := range current.Runs {
 			if current.Runs[index].ID != request.runID {
 				continue
 			}
-			if current.Runs[index].Status != "running" && current.Runs[index].Status != string(coordination.RateParkingOutcomeParkedRateLimit) {
+			if rearming && current.Runs[index].Status != "running" {
+				return current, fmt.Errorf("rate-limited resume attempt %q has status %q", request.runID, current.Runs[index].Status)
+			}
+			if !rearming && current.Runs[index].Status != "running" && current.Runs[index].Status != string(coordination.RateParkingOutcomeParkedRateLimit) {
 				return current, fmt.Errorf("rate-limited run %q has terminal status %q", request.runID, current.Runs[index].Status)
 			}
-			current.Runs[index].Status = string(coordination.RateParkingOutcomeParkedRateLimit)
-			current.Runs[index].Error = ""
-			current.Runs[index].CompletedAt = time.Time{}
+			if planID != "" && current.Runs[index].DeclarativeTypedDestinationPlanID != planID {
+				return current, fmt.Errorf("rate-limited run %q declarative typed destination plan changed", request.runID)
+			}
+			current.Runs[index].Status = status
+			current.Runs[index].RecordsRead = result.RecordsRead
+			current.Runs[index].RecordsTransformed = result.RecordsTransformed
+			current.Runs[index].RecordsLoaded = result.RecordsLoaded
+			current.Runs[index].RecordsFailed = result.RecordsFailed
+			current.Runs[index].BatchCount = result.BatchCount
+			current.Runs[index].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[index].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
+			current.Runs[index].DestinationResults = cloneDestinationResults(result.DestinationResults)
+			current.Runs[index].Error = runError
+			current.Runs[index].CompletedAt = completedAt
 			return current, nil
 		}
 		return current, fmt.Errorf("rate-limited run %q not found", request.runID)
@@ -83,10 +135,44 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 	}
 	for _, run := range updated.Runs {
 		if run.ID == request.runID {
+			if rearming {
+				return run, true, coordination.ErrRateLimitRearmed
+			}
 			return run, true, coordination.ErrRateLimitParked
 		}
 	}
 	return Run{}, true, fmt.Errorf("parked run %q was not stored", request.runID)
+}
+
+func declarativeTypedDestinationRateParkingPlanID(request etlModeDispatchRequest) (string, error) {
+	descriptor, declared := connectors.DestinationTransportDescriptorOf(request.destination)
+	if !declared || descriptor.Executor != declarativeTypedDestinationReference {
+		return "", nil
+	}
+	if request.destinationApproval.PlanID == "" {
+		return "", fmt.Errorf("declarative typed destination rate-limit parking requires an approval plan")
+	}
+	return request.destinationApproval.PlanID, nil
+}
+
+func (a *App) persistDeclarativeTypedDestinationRateParkingPlanID(runID, planID string) error {
+	_, err := a.updateState(func(current state) (state, error) {
+		for index := range current.Runs {
+			if current.Runs[index].ID != runID {
+				continue
+			}
+			if current.Runs[index].Status != "running" && current.Runs[index].Status != string(coordination.RateParkingOutcomeParkedRateLimit) {
+				return current, fmt.Errorf("rate-limited run %q has terminal status %q", runID, current.Runs[index].Status)
+			}
+			if existing := current.Runs[index].DeclarativeTypedDestinationPlanID; existing != "" && existing != planID {
+				return current, fmt.Errorf("rate-limited run %q declarative typed destination plan changed", runID)
+			}
+			current.Runs[index].DeclarativeTypedDestinationPlanID = planID
+			return current, nil
+		}
+		return current, fmt.Errorf("rate-limited run %q not found", runID)
+	})
+	return err
 }
 
 func (a *App) resumeParkedRateLimitRun(ctx context.Context, parked coordination.ParkedRateLimitRun) error {
@@ -101,6 +187,9 @@ func (a *App) resumeParkedRateLimitRun(ctx context.Context, parked coordination.
 	if !found || original.Connection == "" || original.Stream == "" {
 		return errors.New("parked run resume metadata is unavailable")
 	}
+	if original.Status == "resumed" {
+		return nil
+	}
 	streamState, found := a.state.StreamStates[streamStateKey(original.Connection, original.Stream)]
 	if !found || streamState.Checkpoint == nil || streamState.Checkpoint.CommittedAt == nil {
 		return errors.New("parked run committed checkpoint is unavailable")
@@ -109,39 +198,153 @@ func (a *App) resumeParkedRateLimitRun(ctx context.Context, parked coordination.
 	if err := validateParkedCheckpointIdentity(current, parked.Checkpoint); err != nil {
 		return err
 	}
-	if transportCheckpointEqual(&current, &parked.Checkpoint) {
-		resumeCtx := context.WithValue(ctx, rateParkingResumeContextKey{}, true)
-		if _, err := a.RunETL(resumeCtx, RunETLRequest{Connection: original.Connection, Stream: original.Stream}); err != nil {
-			return err
-		}
+	linked, completed, err := a.reconcileRateParkingRearmAttempt(original)
+	if err != nil {
+		return err
 	}
-	// If the checkpoint already advanced, the resumed run committed before a
-	// crash between acknowledgement and parking completion. Marking the
-	// original record resumed without executing again prevents replay.
-	updated, err := a.updateState(func(current state) (state, error) {
+	if completed {
+		return a.markParkedRateLimitRunResumed(parked.RunID, original.RateParkingRearmAttemptRunID)
+	}
+	if !transportCheckpointEqual(&current, &parked.Checkpoint) && !linked {
+		return a.markParkedRateLimitRunResumed(parked.RunID, "")
+	}
+	attemptRunID, err := a.startParkedRateLimitRunRearm(ctx, original, current)
+	if err != nil {
+		return err
+	}
+	return a.markParkedRateLimitRunResumed(parked.RunID, attemptRunID)
+}
+
+func (a *App) startParkedRateLimitRunRearm(ctx context.Context, original Run, checkpoint synccontract.CheckpointEnvelope) (string, error) {
+	attemptRunID, err := prefixedID("run")
+	if err != nil {
+		return "", err
+	}
+	if err := a.persistRateParkingRearmAttemptLink(original.ID, attemptRunID); err != nil {
+		return "", err
+	}
+	request, err := parkedRateLimitRunETLRequest(original, checkpoint)
+	if err != nil {
+		return "", err
+	}
+	request.rateParkingRearmAttemptRunID = attemptRunID
+	resumeCtx := context.WithValue(ctx, rateParkingResumeContextKey{}, original.ID)
+	if _, err := a.RunETL(resumeCtx, request); err != nil {
+		return "", err
+	}
+	return attemptRunID, nil
+}
+
+func (a *App) persistRateParkingRearmAttemptLink(runID, attemptRunID string) error {
+	_, err := a.updateState(func(current state) (state, error) {
 		for index := range current.Runs {
-			if current.Runs[index].ID != parked.RunID {
+			if current.Runs[index].ID != runID {
+				continue
+			}
+			if current.Runs[index].Status != string(coordination.RateParkingOutcomeParkedRateLimit) && current.Runs[index].Status != "running" {
+				return current, fmt.Errorf("parked run %q has status %q", runID, current.Runs[index].Status)
+			}
+			current.Runs[index].RateParkingRearmAttemptRunID = attemptRunID
+			return current, nil
+		}
+		return current, fmt.Errorf("parked run %q not found", runID)
+	})
+	return err
+}
+
+func (a *App) reconcileRateParkingRearmAttempt(original Run) (bool, bool, error) {
+	attemptRunID := original.RateParkingRearmAttemptRunID
+	if attemptRunID == "" {
+		return false, false, nil
+	}
+	attempt, found := a.runByID(attemptRunID)
+	if !found {
+		return true, false, nil
+	}
+	if attempt.ID == original.ID || attempt.Type != "etl" || attempt.Connection != original.Connection || attempt.Stream != original.Stream {
+		return false, false, errors.New("rate-limit rearm attempt does not match the parked run")
+	}
+	switch attempt.Status {
+	case "completed":
+		return true, true, nil
+	case "failed":
+		return true, false, nil
+	case "running":
+		if err := a.failInterruptedRateParkingRearmAttempt(original.ID, attemptRunID); err != nil {
+			return false, false, err
+		}
+		return true, false, nil
+	default:
+		return false, false, fmt.Errorf("rate-limit rearm attempt %q has status %q", attemptRunID, attempt.Status)
+	}
+}
+
+func (a *App) failInterruptedRateParkingRearmAttempt(runID, attemptRunID string) error {
+	_, err := a.updateState(func(current state) (state, error) {
+		originalIndex := -1
+		attemptIndex := -1
+		for index := range current.Runs {
+			switch current.Runs[index].ID {
+			case runID:
+				originalIndex = index
+			case attemptRunID:
+				attemptIndex = index
+			}
+		}
+		if originalIndex < 0 || attemptIndex < 0 {
+			return current, errors.New("rate-limit rearm attempt state is unavailable")
+		}
+		original := current.Runs[originalIndex]
+		attempt := current.Runs[attemptIndex]
+		if original.RateParkingRearmAttemptRunID != attemptRunID || attempt.ID == original.ID || attempt.Type != "etl" || attempt.Connection != original.Connection || attempt.Stream != original.Stream {
+			return current, errors.New("rate-limit rearm attempt does not match the parked run")
+		}
+		if attempt.Status != "running" {
+			return current, fmt.Errorf("rate-limit rearm attempt %q has status %q", attemptRunID, attempt.Status)
+		}
+		current.Runs[attemptIndex].Status = "failed"
+		current.Runs[attemptIndex].Error = rateParkingRearmInterruptedError
+		current.Runs[attemptIndex].CompletedAt = time.Now().UTC()
+		return current, nil
+	})
+	return err
+}
+
+func (a *App) markParkedRateLimitRunResumed(runID, expectedAttemptRunID string) error {
+	_, err := a.updateState(func(current state) (state, error) {
+		for index := range current.Runs {
+			if current.Runs[index].ID != runID {
 				continue
 			}
 			if current.Runs[index].Status == "resumed" {
 				return current, nil
 			}
-			// The durable parking record is published before this status. A
-			// process killed between those two commits can legitimately recover
-			// with the original run still marked running.
 			if current.Runs[index].Status != string(coordination.RateParkingOutcomeParkedRateLimit) && current.Runs[index].Status != "running" {
-				return current, fmt.Errorf("parked run %q has status %q", parked.RunID, current.Runs[index].Status)
+				return current, fmt.Errorf("parked run %q has status %q", runID, current.Runs[index].Status)
+			}
+			if current.Runs[index].RateParkingRearmAttemptRunID != expectedAttemptRunID {
+				return current, fmt.Errorf("parked run %q rearm attempt changed", runID)
 			}
 			current.Runs[index].Status = "resumed"
 			current.Runs[index].CompletedAt = time.Now().UTC()
+			current.Runs[index].RateParkingRearmAttemptRunID = ""
 			return current, nil
 		}
-		return current, fmt.Errorf("parked run %q not found", parked.RunID)
+		return current, fmt.Errorf("parked run %q not found", runID)
 	})
-	if err == nil {
-		a.state = updated
-	}
 	return err
+}
+
+func parkedRateLimitRunETLRequest(original Run, checkpoint synccontract.CheckpointEnvelope) (RunETLRequest, error) {
+	if original.BatchSize <= 0 {
+		return RunETLRequest{}, errors.New("parked run effective batch size is unavailable")
+	}
+	resumeCheckpoint := checkpoint.Clone()
+	request := RunETLRequest{Connection: original.Connection, Stream: original.Stream, BatchSize: original.BatchSize, rateParkingResumeCheckpoint: &resumeCheckpoint}
+	if original.DeclarativeTypedDestinationPlanID != "" {
+		request.DestinationApproval.PlanID = original.DeclarativeTypedDestinationPlanID
+	}
+	return request, nil
 }
 
 func (a *App) runByID(id string) (Run, bool) {

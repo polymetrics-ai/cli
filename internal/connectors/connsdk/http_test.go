@@ -57,6 +57,26 @@ func (r *advancingReadCloser) Read(p []byte) (int, error) {
 	return r.ReadCloser.Read(p)
 }
 
+type partialResponseReadCloser struct {
+	body   []byte
+	err    error
+	closed bool
+}
+
+func (r *partialResponseReadCloser) Read(p []byte) (int, error) {
+	if len(r.body) == 0 {
+		return 0, r.err
+	}
+	n := copy(p, r.body)
+	r.body = r.body[n:]
+	return n, r.err
+}
+
+func (r *partialResponseReadCloser) Close() error {
+	r.closed = true
+	return nil
+}
+
 func primeHTTPConnection(t *testing.T, client *http.Client, baseURL string) {
 	t.Helper()
 	resp, err := client.Get(baseURL + "/prime")
@@ -118,6 +138,77 @@ func TestRequesterRetriesOn429ThenSucceeds(t *testing.T) {
 	}
 	if got := atomic.LoadInt32(&calls); got != 2 {
 		t.Fatalf("calls = %d, want 2", got)
+	}
+}
+
+func TestRequesterRetainsPartialResponseOnBodyReadError(t *testing.T) {
+	readErr := errors.New("injected response read failure")
+	body := &partialResponseReadCloser{body: []byte("provider response prefix"), err: readErr}
+	r := &Requester{
+		BaseURL:        "https://example.invalid",
+		DisableRetries: true,
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			return &http.Response{
+				StatusCode: http.StatusAccepted,
+				Header:     http.Header{"X-Provider-Receipt": {"receipt-one", "receipt-two"}},
+				Body:       body,
+				Request:    req,
+			}, nil
+		})},
+	}
+
+	response, err := r.Do(context.Background(), http.MethodPost, "/writes", nil, map[string]string{"id": "one"})
+	if !errors.Is(err, readErr) {
+		t.Fatalf("Do error = %v, want response read failure", err)
+	}
+	if response == nil || response.Status != http.StatusAccepted || string(response.Body) != "provider response prefix" {
+		t.Fatalf("response = %#v, want captured partial provider response", response)
+	}
+	if got := response.Header.Values("X-Provider-Receipt"); !slices.Equal(got, []string{"receipt-one", "receipt-two"}) {
+		t.Fatalf("provider receipts = %#v, want both values", got)
+	}
+	if !body.closed {
+		t.Fatal("response body was not closed after the read failure")
+	}
+}
+
+func TestRequesterRetainsRateLimitClassificationOnBodyReadError(t *testing.T) {
+	readErr := errors.New("injected response read failure")
+	now := time.Date(2026, time.August, 20, 10, 0, 0, 0, time.UTC)
+	body := &partialResponseReadCloser{body: []byte("provider response prefix"), err: readErr}
+	r := &Requester{
+		BaseURL:        "https://example.invalid",
+		DisableRetries: true,
+		Now:            func() time.Time { return now },
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			return &http.Response{
+				StatusCode: http.StatusTooManyRequests,
+				Header:     http.Header{"Retry-After": {"90"}, "X-Provider-Receipt": {"receipt-one", "receipt-two"}},
+				Body:       body,
+				Request:    req,
+			}, nil
+		})},
+	}
+
+	response, err := r.Do(context.Background(), http.MethodGet, "/limited", nil, nil)
+	if !errors.Is(err, readErr) {
+		t.Fatalf("Do error = %v, want response read failure", err)
+	}
+	var rateLimitErr *RateLimitError
+	if !errors.As(err, &rateLimitErr) {
+		t.Fatalf("Do error = %T %v, want *RateLimitError", err, err)
+	}
+	if !rateLimitErr.HasReset || !rateLimitErr.ResetAt.Equal(now.Add(90*time.Second)) {
+		t.Fatalf("rate-limit reset = %#v, want parsed Retry-After reset", rateLimitErr)
+	}
+	if response == nil || response.Status != http.StatusTooManyRequests || string(response.Body) != "provider response prefix" {
+		t.Fatalf("response = %#v, want captured partial provider response", response)
+	}
+	if got := response.Header.Values("X-Provider-Receipt"); !slices.Equal(got, []string{"receipt-one", "receipt-two"}) {
+		t.Fatalf("provider receipts = %#v, want both values", got)
+	}
+	if !body.closed {
+		t.Fatal("response body was not closed after the read failure")
 	}
 }
 
@@ -1302,6 +1393,58 @@ func TestRequesterDoMultipartPreservesEarlyTerminalResponse(t *testing.T) {
 	}
 	if !rateLimitErr.HasRetryAfter || !rateLimitErr.ResetAt.Equal(now.Add(90*time.Second)) {
 		t.Fatalf("rate-limit error = %#v, want parsed Retry-After reset", rateLimitErr)
+	}
+}
+
+func TestRequesterDoMultipartRetainsTerminalResponseOnProducerCleanupError(t *testing.T) {
+	dir := t.TempDir()
+	filePath := dir + "/payload.txt"
+	if err := os.WriteFile(filePath, []byte("payload"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	providerBody := `{"accepted":true,"credential":"provider-returned-token"}`
+	r := &Requester{
+		BaseURL:        "https://example.invalid",
+		DisableRetries: true,
+		Sleep:          noSleep,
+		Auth: AuthFunc(func(context.Context, *http.Request) error {
+			return os.Remove(filePath)
+		}),
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			_, readErr := io.Copy(io.Discard, req.Body)
+			if closeErr := req.Body.Close(); readErr == nil && closeErr != nil {
+				readErr = closeErr
+			}
+			if readErr == nil {
+				t.Fatal("multipart producer unexpectedly completed")
+			}
+			return &http.Response{
+				StatusCode: http.StatusAccepted,
+				Header:     http.Header{"X-Provider-Receipt": {"receipt-one", "receipt-two"}},
+				Body:       io.NopCloser(strings.NewReader(providerBody)),
+				Request:    req,
+			}, nil
+		})},
+	}
+
+	response, err := r.DoMultipartLimited(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Fields: map[string]string{"hold": strings.Repeat("x", 1<<20)},
+		Files:  []MultipartFile{{FieldName: "media", Path: filePath, MaxBytes: 1024}},
+	}, 1024)
+	if err == nil || !strings.Contains(err.Error(), "send request body") {
+		t.Fatalf("DoMultipartLimited error = %v, want producer cleanup diagnostic", err)
+	}
+	if strings.Contains(err.Error(), providerBody) {
+		t.Fatalf("cleanup diagnostic leaked provider body: %q", err)
+	}
+	if response == nil {
+		t.Fatal("DoMultipartLimited dropped terminal provider response")
+	}
+	if response.Status != http.StatusAccepted || string(response.Body) != providerBody {
+		t.Fatalf("terminal response = %#v, want accepted provider response", response)
+	}
+	if got := response.Header.Values("X-Provider-Receipt"); !slices.Equal(got, []string{"receipt-one", "receipt-two"}) {
+		t.Fatalf("terminal receipt = %#v, want both provider values", got)
 	}
 }
 

@@ -216,6 +216,34 @@ func (s *FileRateParkingStore) Create(run ParkedRateLimitRun) (ParkedRateLimitRu
 	return result, created, err
 }
 
+func (s *FileRateParkingStore) Rearm(run ParkedRateLimitRun, owner string, until time.Time) (ParkedRateLimitRun, error) {
+	var result ParkedRateLimitRun
+	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
+		if err := validateRateParkingFileState(state); err != nil {
+			return state, err
+		}
+		if err := validateParkedRateLimitRun(run); err != nil {
+			return state, err
+		}
+		if until.IsZero() {
+			return state, errors.New("rate parking claim deadline is required")
+		}
+		record, found := state.Records[run.RunID]
+		if !found || record.ClaimOwner != owner {
+			return state, ErrRateParkingClaimLost
+		}
+		if record.Run.Scope != run.Scope {
+			return state, ErrRateParkingConflict
+		}
+		record.Run = run.Clone()
+		record.ClaimUntil = until.UTC()
+		state.Records[run.RunID] = record
+		result = run.Clone()
+		return state, nil
+	})
+	return result, err
+}
+
 func (s *FileRateParkingStore) HasScope(scope connectors.RateLimitScopeKey) (bool, error) {
 	state, err := s.load()
 	if err != nil {
@@ -242,6 +270,10 @@ func (s *FileRateParkingStore) Claim(runID, owner string, now, until time.Time) 
 			return state, ErrRateParkingClaimLost
 		}
 		run = record.Run.Clone()
+		if now.Before(record.Run.ResetAt) {
+			retryAt = record.Run.ResetAt
+			return state, nil
+		}
 		if record.ClaimOwner != "" && record.ClaimOwner != owner && record.ClaimUntil.After(now) {
 			retryAt = record.ClaimUntil
 			return state, nil

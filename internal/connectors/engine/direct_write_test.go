@@ -2,10 +2,12 @@ package engine
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -278,13 +280,13 @@ func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
 		directWritePolicyGongBoundedInputRedacted,
 	} {
 		t.Run(policy, func(t *testing.T) {
-			body, err := operationDirectWriteResponseBody(policy, raw, 1024)
+			response, err := operationDirectWriteResponseBody(policy, raw, 1024, nil)
 			if err != nil {
 				t.Fatalf("operationDirectWriteResponseBody: %v", err)
 			}
-			decoded, ok := body.(map[string]any)
+			decoded, ok := response.body.(map[string]any)
 			if !ok {
-				t.Fatalf("body type = %T, want map", body)
+				t.Fatalf("body type = %T, want map", response.body)
 			}
 			if got := decoded["token"]; got != "server-token" {
 				t.Fatalf("token = %#v, want complete response value", got)
@@ -302,12 +304,21 @@ func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
 
 func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.T) {
 	for _, tt := range []struct {
-		name     string
-		policy   string
-		wantBody bool
+		name      string
+		policy    string
+		wantBody  bool
+		bodyless  bool
+		response  string
+		wantErr   string
+		wantNull  bool
+		emptyJSON bool
 	}{
 		{name: "json returns complete decoded body", policy: directWritePolicyJSON, wantBody: true},
-		{name: "none intentionally suppresses response body", policy: directWritePolicyNone},
+		{name: "none retains complete response body", policy: directWritePolicyNone, wantBody: true},
+		{name: "none accepts bodyless response", policy: directWritePolicyNone, bodyless: true},
+		{name: "none rejects empty declared JSON", policy: directWritePolicyNone, emptyJSON: true, wantErr: "not JSON"},
+		{name: "none preserves literal JSON null", policy: directWritePolicyNone, response: `null`, wantNull: true},
+		{name: "json rejects trailing response content", policy: directWritePolicyJSON, response: `{"created":true} trailing`, wantErr: "not JSON"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			calls := 0
@@ -319,8 +330,23 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 				if r.URL.Path != "/widgets" {
 					t.Fatalf("path = %s, want /widgets", r.URL.Path)
 				}
+				if tt.bodyless {
+					w.Header().Set("X-Provider-Receipt", "receipt-204")
+					w.WriteHeader(http.StatusNoContent)
+					return
+				}
+				if tt.emptyJSON {
+					w.Header().Set("Content-Type", "application/json")
+					w.Header().Set("X-Provider-Receipt", "receipt-empty-json")
+					w.WriteHeader(http.StatusOK)
+					return
+				}
 				w.Header().Set("Content-Type", "application/json")
-				_, _ = w.Write([]byte(`{"created":true,"id":"widget-42","nested":{"state":"complete"}}`))
+				response := tt.response
+				if response == "" {
+					response = `{"created":true,"id":"widget-42","nested":{"state":"complete"}}`
+				}
+				_, _ = w.Write([]byte(response))
 			}))
 			defer srv.Close()
 
@@ -366,18 +392,52 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 			req.PreviewDigest = preview.Digest
 
 			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("OperationDirectWrite error = %v, want %q", err, tt.wantErr)
+				}
+				if !result.ResponseReceived || !result.BodyPresent || result.BodyRaw != tt.response {
+					t.Fatalf("trailing response result = %#v, want complete received raw response", result)
+				}
+				if tt.emptyJSON {
+					if result.Status != http.StatusOK || result.BodyBytes != 0 || result.BodyRawEncoding != "text" {
+						t.Fatalf("empty declared JSON result = %#v, want complete zero-value provider response", result)
+					}
+					if receipt := result.Headers["X-Provider-Receipt"].Values; len(receipt) != 1 || receipt[0] != "receipt-empty-json" {
+						t.Fatalf("empty declared JSON receipt = %#v, want preserved provider receipt", receipt)
+					}
+				}
+				return
+			}
 			if err != nil {
 				t.Fatalf("OperationDirectWrite: %v", err)
 			}
 			if calls != 1 {
 				t.Fatalf("request calls = %d, want 1", calls)
 			}
-			if !tt.wantBody {
-				if result.Body != nil {
-					t.Fatalf("none policy body = %#v, want nil", result.Body)
+			if !result.ResponseReceived {
+				t.Fatal("result did not retain the successful provider response")
+			}
+			if tt.bodyless {
+				if result.Status != http.StatusNoContent {
+					t.Fatalf("bodyless response status = %d, want %d", result.Status, http.StatusNoContent)
 				}
-				t.Logf("direct-write policy=%q status=%d response=<none>", tt.policy, result.Status)
+				if receipt := result.Headers["X-Provider-Receipt"].Values; len(receipt) != 1 || receipt[0] != "receipt-204" {
+					t.Fatalf("bodyless response receipt header = %#v, want receipt-204", receipt)
+				}
+				if result.BodyPresent || result.BodyBytes != 0 || result.BodyRaw != "" || result.Body != nil {
+					t.Fatalf("bodyless none result = %#v, want a distinct empty-body response", result)
+				}
 				return
+			}
+			if tt.wantNull {
+				if !result.BodyPresent || result.BodyRaw != "null" || result.BodyBytes != len("null") || result.Body != nil {
+					t.Fatalf("literal JSON null result = %#v, want a present null body", result)
+				}
+				return
+			}
+			if !tt.wantBody || !result.BodyPresent || result.BodyRaw == "" {
+				t.Fatalf("direct-write result = %#v, want a present provider body", result)
 			}
 			body, ok := result.Body.(map[string]any)
 			if !ok {
@@ -462,10 +522,69 @@ func TestOperationDirectWriteRetainsRESTDecodeFailureResponse(t *testing.T) {
 	}
 }
 
+func TestOperationDirectWritePreservesExplicitNonJSONResponses(t *testing.T) {
+	for _, tt := range []struct {
+		name        string
+		contentType string
+		body        []byte
+	}{
+		{name: "text begins t", contentType: "text/plain", body: []byte("thanks")},
+		{name: "text begins f", contentType: "text/plain", body: []byte("false")},
+		{name: "text begins n", contentType: "text/plain", body: []byte("null")},
+		{name: "text begins digit", contentType: "text/plain", body: []byte("123")},
+		{name: "text begins brace", contentType: "text/plain", body: []byte(`{"provider":"text"}`)},
+		{name: "text begins bracket", contentType: "text/plain", body: []byte(`["provider","text"]`)},
+		{name: "binary", contentType: "application/octet-stream", body: []byte{0xff, 0x00, 0x7f}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", tt.contentType)
+				_, _ = w.Write(tt.body)
+			}))
+			defer server.Close()
+
+			bundle := Bundle{
+				Name: "acme",
+				HTTP: HTTPBase{URL: server.URL},
+				Operations: []OperationSpec{{
+					ID: "acme.widgets.create", Kind: "rest_write", Summary: "Create one widget", Risk: "medium", Approval: "none", OutputPolicy: directWritePolicyJSON, MutationClass: "create",
+					REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/widgets", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`)},
+				}},
+				Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &SurfaceOperation{Model: "write_action", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "operation metadata is bound by the executor"}}}},
+			}
+			req := connectors.OperationDirectWriteRequest{Operation: "acme.widgets.create", Body: map[string]any{"name": "widget"}}
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			req.PreviewDigest = preview.Digest
+			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("OperationDirectWrite: %v", err)
+			}
+			if !result.ResponseReceived || !result.BodyPresent || result.Body != nil || result.BodyBytes != len(tt.body) {
+				t.Fatalf("non-JSON result = %#v, want raw provider response", result)
+			}
+			if tt.contentType == "text/plain" {
+				if result.BodyRawEncoding != "text" || result.BodyRaw != string(tt.body) {
+					t.Fatalf("text provider response = %#v, want %q", result, tt.body)
+				}
+				return
+			}
+			if result.BodyRawEncoding != "base64" || result.BodyRaw != base64.StdEncoding.EncodeToString(tt.body) {
+				t.Fatalf("binary provider response = %#v, want byte-exact base64", result)
+			}
+		})
+	}
+}
+
 func TestOperationDirectWriteNeverRetriesNonIdempotentFailure(t *testing.T) {
 	calls := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls++
+		w.Header().Add("X-Provider-Receipt", "receipt-one")
+		w.Header().Add("X-Provider-Receipt", "receipt-two")
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(`{"error":"failed","token":"server-token"}`))
 	}))
@@ -512,10 +631,17 @@ func TestOperationDirectWriteNeverRetriesNonIdempotentFailure(t *testing.T) {
 	}
 	req.PreviewDigest = preview.Digest
 
-	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
 		t.Fatal("OperationDirectWrite error = nil, want HTTP 500")
-	} else if !strings.Contains(err.Error(), "server-token") {
-		t.Fatalf("OperationDirectWrite error = %q, want complete response error content", err)
+	} else if strings.Contains(err.Error(), "server-token") {
+		t.Fatal("OperationDirectWrite error leaked a provider body")
+	}
+	if !result.ResponseReceived || result.Status != http.StatusInternalServerError || result.BodyRaw != `{"error":"failed","token":"server-token"}` {
+		t.Fatal("terminal direct-write result did not retain the provider response")
+	}
+	if got := result.Headers["X-Provider-Receipt"].Values; !reflect.DeepEqual(got, []string{"receipt-one", "receipt-two"}) {
+		t.Fatal("terminal direct-write receipt did not retain both provider values")
 	}
 	if calls != 1 {
 		t.Fatalf("non-idempotent write calls = %d, want exactly 1", calls)

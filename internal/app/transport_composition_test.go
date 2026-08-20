@@ -296,6 +296,13 @@ func TestDefinitionTransportFactoriesSelectDeclaredEvidence(t *testing.T) {
 	if destinationFactory == nil || destinationFactory.DestinationEvidence != destination.Conformance {
 		t.Fatalf("destination factory evidence = %#v, want declaration %#v", destinationFactory, destination.Conformance)
 	}
+	registered, err := destinationFactory.BuildDestination(github)
+	if err != nil {
+		t.Fatalf("build GitHub destination through declared adapter factory: %v", err)
+	}
+	if got, want := registered.TransportExecutorReference(), issueLabelDestinationReference; got != want {
+		t.Fatalf("GitHub declared destination adapter = %#v, want %#v", got, want)
+	}
 }
 
 // TestDefinitionTransportFactoriesRegisterSharedSourceOnce proves a second
@@ -356,9 +363,1530 @@ func TestDefinitionTransportFactoriesRegisterSharedSourceOnce(t *testing.T) {
 	}
 }
 
+// TestDefinitionTransportFactoriesRunTypedDestinationFromDefinition proves a
+// declarative connector can select one closed, named typed action as a
+// destination without App, engine, orchestrator, or dispatch name-routing.
+// The adapter may use only the action, input bindings, acknowledgement, and
+// per-mode strategy declared in this bundle.
+func TestDefinitionTransportFactoriesRunTypedDestinationFromDefinition(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var reads, writes int
+	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		switch {
+		case request.Method == http.MethodGet && request.URL.Path == "/widgets":
+			reads++
+			_ = json.NewEncoder(writer).Encode(map[string]any{"data": []map[string]any{{"id": "widget-1", "value": "definition-owned"}}})
+		case request.Method == http.MethodPost && request.URL.Path == "/widgets/target":
+			var record map[string]any
+			if err := json.NewDecoder(request.Body).Decode(&record); err != nil {
+				writer.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			if !reflect.DeepEqual(record, map[string]any{"target_id": "widget-1", "value": "definition-owned"}) {
+				writer.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			writes++
+			_ = json.NewEncoder(writer).Encode(map[string]any{"ok": true})
+		default:
+			writer.WriteHeader(http.StatusNotFound)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	bundleFS := syntheticTransportBundleFS()
+	bundleFS["synthetic/metadata.json"] = &fstest.MapFile{Data: []byte(`{"name":"synthetic","display_name":"Synthetic typed destination","description":"test-only typed destination","integration_type":"api","release_stage":"ga","capabilities":{"check":true,"read":true,"write":true,"query":false,"cdc":false,"dynamic_schema":false}}`)}
+	bundleFS["synthetic/streams.json"] = &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/widgets"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)}
+	bundleFS["synthetic/api_surface.json"] = &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},{"method":"POST","path":"/widgets/target","covered_by":{"write":"apply_widget"}}]}`)}
+	bundleFS["synthetic/schemas/widgets.json"] = &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","x-primary-key":["id"],"properties":{"id":{"type":"string"},"value":{"type":"string"}}}`)}
+	bundleFS["synthetic/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[{"name":"apply_widget","kind":"create","method":"POST","path":"/widgets/target","body_type":"json","body_fields":["target_id","value"],"risk":"creates a synthetic widget target","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}]}`)}
+	bundleFS["synthetic/sync_transport.json"] = &fstest.MapFile{Data: []byte(`{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
+    "eligible_streams": ["widgets"],
+    "modes": ["full_append"],
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+    "conformance": {"suite": "synthetic_typed_destination", "run_id": "source_v1"}
+  },
+  "destination_transport": {
+    "executor": {"family": "declarative_api", "id": "declarative_typed_destination"},
+    "eligible_actions": ["apply_widget"],
+    "modes": ["full_append"],
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+    "conformance": {"suite": "synthetic_typed_destination", "run_id": "destination_v1"},
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "apply_widget"}],
+    "source_bindings": [{
+      "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
+      "eligible_streams": ["widgets"],
+      "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}
+    }]
+  }
+}`)}
+	bundle, err := engine.Load(bundleFS, "synthetic")
+	if err != nil {
+		t.Fatalf("load synthetic typed destination bundle: %v", err)
+	}
+	connector := engine.New(bundle, nil)
+	a.registry.Register(connector)
+	if err := a.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose synthetic typed destination: %v", err)
+	}
+
+	runtime := connectors.RuntimeConfig{ProjectDir: root, Config: map[string]string{"base_url": server.URL}}
+	commits := 0
+	result, err := synctransport.NewOrchestrator(a.transports).Run(context.Background(), synctransport.RunRequest{
+		ConnectionID:       "synthetic-typed-destination",
+		Generation:         1,
+		Source:             connector,
+		SourceRuntime:      runtime,
+		Destination:        connector,
+		DestinationRuntime: runtime,
+		Stream:             "widgets",
+		Mode:               synccontract.ModeFullAppend,
+		BatchSize:          1,
+		Resume: synccontract.ResumeExpectation{
+			Source:           synccontract.SourceIdentity{Engine: "synthetic", AccountOrCluster: "test", ObjectScope: "widgets"},
+			SourceGeneration: synccontract.OpaqueToken("synthetic-typed-destination-v1"),
+		},
+		Stage:    &syntheticDefinitionStage{owner: "synthetic-typed-destination"},
+		Approval: syntheticTypedDestinationApproval(t, "synthetic", "apply_widget"),
+		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
+			commits++
+			if checkpoint.CommittedAt == nil {
+				return fmt.Errorf("typed destination checkpoint was not acknowledged")
+			}
+			return nil
+		},
+	})
+	if err != nil {
+		t.Fatalf("run synthetic typed destination: %v", err)
+	}
+	if reads != 1 || writes != 1 || commits != 1 {
+		t.Fatalf("synthetic typed destination effects read/write/commit = %d/%d/%d, want 1 each", reads, writes, commits)
+	}
+	if result.RecordsRead != 1 || result.RecordsApplied != 1 || result.CommittedCheckpoint == nil {
+		t.Fatalf("synthetic typed destination result = %#v, want one acknowledged action", result)
+	}
+}
+
+// TestPersistedConnectionSelectsDeclarativeTypedDestinationAction proves the
+// application path, rather than a direct adapter call, owns multi-action
+// selection. The action is persisted on the stream configuration; RunETL has
+// no action input and can therefore neither substitute a different action nor
+// turn this adapter into an arbitrary writer.
+func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	const appendProviderResponse = "{\n  \"id\": \"provider-append-1\",\n  \"large_provider_id\": 9007199254740993,\n  \"rare_field\": {\"enabled\": true},\n  \"paid_tier\": \"enterprise\",\n  \"echoed_secret\": \"destination-secret\",\n  \"duplicate\": \"first\",\n  \"duplicate\": \"second\"\n}\n"
+	var reads, appendWrites, replaceWrites, otherWrites int
+	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		switch {
+		case request.Method == http.MethodGet && request.URL.Path == "/widgets":
+			reads++
+			_, _ = writer.Write([]byte(`{"data":[{"id":"widget-1","value":"definition-owned"}]}`))
+		case request.Method == http.MethodPost && request.URL.Path == "/widgets/append":
+			appendWrites++
+			writer.Header().Set("Content-Type", "application/json")
+			writer.Header().Set("X-Provider-Request-ID", "append-request-1")
+			writer.Header().Set("Authorization", "provider-response-secret")
+			writer.Header().Set("X-Echoed-Credential", "destination-secret")
+			writer.WriteHeader(http.StatusCreated)
+			_, _ = writer.Write([]byte(appendProviderResponse))
+		case request.Method == http.MethodPost && request.URL.Path == "/widgets/replace":
+			replaceWrites++
+			writer.WriteHeader(http.StatusNoContent)
+		case request.Method == http.MethodPost && request.URL.Path == "/widgets/other":
+			otherWrites++
+			writer.WriteHeader(http.StatusNoContent)
+		default:
+			writer.WriteHeader(http.StatusNotFound)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	primaryBundle, err := engine.Load(declarativeTypedDestinationMultiActionBundleFS("typed-multi", "multi-source", "multi-destination"), "typed-multi")
+	if err != nil {
+		t.Fatalf("load multi-action bundle: %v", err)
+	}
+	otherBundle, err := engine.Load(declarativeTypedDestinationActionBundleFS("typed-other", "other-source", "other-destination", "apply_other", "/widgets/other"), "typed-other")
+	if err != nil {
+		t.Fatalf("load other action bundle: %v", err)
+	}
+	a.registry.Register(engine.New(primaryBundle, nil))
+	a.registry.Register(engine.New(otherBundle, nil))
+	if err := a.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose production-shaped typed destinations: %v", err)
+	}
+
+	for _, connector := range []string{"typed-multi", "typed-other"} {
+		if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: connector + "-source", Connector: connector, Config: map[string]string{"base_url": server.URL}}); err != nil {
+			t.Fatalf("add %s source credential: %v", connector, err)
+		}
+		if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: connector + "-destination", Connector: connector, Config: map[string]string{"base_url": server.URL}, Secrets: map[string]string{"fixture_token": "destination-secret"}}); err != nil {
+			t.Fatalf("add %s destination credential: %v", connector, err)
+		}
+	}
+
+	create := func(name, connector, action string) Connection {
+		t.Helper()
+		connection, err := a.CreateConnection(ctx, CreateConnectionRequest{
+			Name:        name,
+			Source:      EndpointConfig{Connector: connector, Credential: connector + "-source"},
+			Destination: EndpointConfig{Connector: connector, Credential: connector + "-destination"},
+			Streams: map[string]StreamConfig{"widgets": {
+				SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"}, DestinationAction: action,
+			}},
+		})
+		if err != nil {
+			t.Fatalf("create %s connection: %v", name, err)
+		}
+		return connection
+	}
+
+	appendConnection := create("typed_multi_append", "typed-multi", "append_widget")
+	replaceConnection := create("typed_multi_replace", "typed-multi", "replace_widget")
+	otherConnection := create("typed_other", "typed-other", "apply_other")
+
+	for _, testCase := range []struct {
+		name       string
+		connection Connection
+		action     string
+		writes     *int
+	}{
+		{name: "first declared action", connection: appendConnection, action: "append_widget", writes: &appendWrites},
+		{name: "second declared action", connection: replaceConnection, action: "replace_widget", writes: &replaceWrites},
+		{name: "one action in another connector", connection: otherConnection, action: "apply_other", writes: &otherWrites},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			plan, err := a.PlanDeclarativeTypedDestinationTransport(ctx, testCase.connection.Name, "widgets")
+			if err != nil {
+				t.Fatalf("plan persisted typed destination: %v", err)
+			}
+			if plan.Action != testCase.action || plan.TransportConnectionID != testCase.connection.ID || plan.TransportStream != "widgets" || plan.TransportActionDefinitionSHA256 == "" {
+				t.Fatalf("typed destination plan = %#v, want persisted action %q and exact connection stream", plan, testCase.action)
+			}
+			previewed, preview, err := a.PreviewDeclarativeTypedDestinationTransport(ctx, plan.ID)
+			if err != nil {
+				t.Fatalf("preview persisted typed destination: %v", err)
+			}
+			if preview.Action != testCase.action || previewed.ApprovalToken == "" {
+				t.Fatalf("typed destination preview = plan=%#v preview=%#v, want exact action and approval token", previewed, preview)
+			}
+			run, err := a.RunETL(ctx, RunETLRequest{
+				Connection: testCase.connection.Name,
+				Stream:     "widgets",
+				BatchSize:  1,
+				DestinationApproval: synctransport.DestinationApproval{
+					PlanID: plan.ID, ApprovalToken: previewed.ApprovalToken,
+					Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+				},
+			})
+			if err != nil {
+				t.Fatalf("run persisted typed destination: %v", err)
+			}
+			if run.Status != "completed" || run.RecordsRead != 1 || run.RecordsLoaded != 1 || *testCase.writes != 1 {
+				t.Fatalf("typed destination run = %#v writes=%d, want one acknowledged action", run, *testCase.writes)
+			}
+			if testCase.action != "append_widget" {
+				return
+			}
+			if len(run.DestinationResults) != 1 {
+				t.Fatalf("typed destination output count = %d, want one persisted action result", len(run.DestinationResults))
+			}
+			var output struct {
+				RecordsWritten    int `json:"records_written"`
+				ProviderResponses []struct {
+					RecordIndex     int    `json:"record_index"`
+					Status          int    `json:"status"`
+					BodyPresent     bool   `json:"body_present"`
+					BodyBytes       int    `json:"body_bytes"`
+					BodyRaw         string `json:"body_raw"`
+					BodyRawEncoding string `json:"body_raw_encoding"`
+					Headers         map[string]struct {
+						Values []string `json:"values,omitempty"`
+						Masked bool     `json:"masked,omitempty"`
+					} `json:"headers"`
+					Body map[string]any `json:"body"`
+				} `json:"provider_responses"`
+			}
+			if err := json.Unmarshal(run.DestinationResults[0], &output); err != nil {
+				t.Fatalf("decode persisted typed destination output: %v", err)
+			}
+			if output.RecordsWritten != 1 || len(output.ProviderResponses) != 1 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[0].Status != http.StatusCreated {
+				t.Fatal("persisted typed destination output did not retain the full provider result")
+			}
+			if got := output.ProviderResponses[0].Headers["X-Provider-Request-Id"].Values; !reflect.DeepEqual(got, []string{"append-request-1"}) {
+				t.Fatal("ordinary provider header did not retain the request ID")
+			}
+			if got := output.ProviderResponses[0].Headers["Authorization"]; got.Masked || !reflect.DeepEqual(got.Values, []string{"provider-response-secret"}) {
+				t.Fatal("unconfigured provider header was not preserved")
+			}
+			if got := output.ProviderResponses[0].Headers["X-Echoed-Credential"]; got.Masked || !reflect.DeepEqual(got.Values, []string{"destination-secret"}) {
+				t.Fatal("provider credential-equal header was not preserved")
+			}
+			if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || got["echoed_secret"] != "destination-secret" {
+				t.Fatal("ordinary provider body fields were not preserved")
+			}
+			if provider := output.ProviderResponses[0]; !provider.BodyPresent || provider.BodyBytes != len(appendProviderResponse) || provider.BodyRaw != appendProviderResponse || provider.BodyRawEncoding != "text" {
+				t.Fatal("ordinary provider raw body was not preserved")
+			}
+			var rawOutput struct {
+				ProviderResponses []struct {
+					Body map[string]json.RawMessage `json:"body"`
+				} `json:"provider_responses"`
+			}
+			if err := json.Unmarshal(run.DestinationResults[0], &rawOutput); err != nil || string(rawOutput.ProviderResponses[0].Body["large_provider_id"]) != "9007199254740993" {
+				t.Fatal("large provider result identifier was not preserved as an exact JSON number")
+			}
+			persistedApp, err := Open(root)
+			if err != nil {
+				t.Fatalf("reopen app with persisted provider result: %v", err)
+			}
+			persisted, err := persistedApp.GetRun(run.ID)
+			if err != nil {
+				t.Fatalf("load persisted typed destination run: %v", err)
+			}
+			if len(persisted.DestinationResults) != len(run.DestinationResults) {
+				t.Fatalf("persisted typed destination result count = %d, want %d", len(persisted.DestinationResults), len(run.DestinationResults))
+			}
+			var persistedOutput, returnedOutput any
+			if err := json.Unmarshal(persisted.DestinationResults[0], &persistedOutput); err != nil {
+				t.Fatalf("decode persisted typed destination result: %v", err)
+			}
+			if err := json.Unmarshal(run.DestinationResults[0], &returnedOutput); err != nil || !reflect.DeepEqual(persistedOutput, returnedOutput) {
+				t.Fatal("persisted typed destination result did not match returned output")
+			}
+			cliEnvelope, err := json.Marshal(struct {
+				Run Run `json:"run"`
+			}{Run: persisted})
+			if err != nil || !bytes.Contains(cliEnvelope, []byte(`"destination_results"`)) || !bytes.Contains(cliEnvelope, []byte(`"body_raw"`)) || !bytes.Contains(cliEnvelope, []byte(`"paid_tier":"enterprise"`)) || !bytes.Contains(cliEnvelope, []byte("destination-secret")) {
+				t.Fatal("CLI-shaped persisted ETL JSON did not retain complete provider output")
+			}
+		})
+	}
+
+	for _, testCase := range []struct {
+		name      string
+		connector string
+		action    string
+	}{
+		{name: "missing action in multi-action connector", connector: "typed-multi", action: ""},
+		{name: "other connector action", connector: "typed-multi", action: "apply_other"},
+		{name: "unlisted action", connector: "typed-other", action: "replace_widget"},
+	} {
+		t.Run("refuses "+testCase.name, func(t *testing.T) {
+			_, err := a.CreateConnection(ctx, CreateConnectionRequest{
+				Name:        "reject_" + strings.ReplaceAll(testCase.name, " ", "_"),
+				Source:      EndpointConfig{Connector: testCase.connector, Credential: testCase.connector + "-source"},
+				Destination: EndpointConfig{Connector: testCase.connector, Credential: testCase.connector + "-destination"},
+				Streams: map[string]StreamConfig{"widgets": {
+					SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"}, DestinationAction: testCase.action,
+				}},
+			})
+			if err == nil {
+				t.Fatal("persisted connection accepted an absent or foreign typed destination action")
+			}
+			if reads != 3 || appendWrites != 1 || replaceWrites != 1 || otherWrites != 1 {
+				t.Fatalf("refused persisted selection caused I/O reads/append/replace/other=%d/%d/%d/%d, want 3/1/1/1", reads, appendWrites, replaceWrites, otherWrites)
+			}
+		})
+	}
+
+	// Persisted state from before multi-action selection existed must also fail
+	// closed on the real RunETL path. Mutating this synthetic state directly
+	// models an old/manual state file; CreateConnection already refuses the same
+	// absent selection above.
+	for index := range a.state.Connections {
+		if a.state.Connections[index].ID == appendConnection.ID {
+			stream := a.state.Connections[index].Streams["widgets"]
+			stream.DestinationAction = ""
+			a.state.Connections[index].Streams["widgets"] = stream
+			break
+		}
+	}
+	if err := a.save(); err != nil {
+		t.Fatalf("persist missing multi-action selection fixture: %v", err)
+	}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: appendConnection.Name, Stream: "widgets", BatchSize: 1}); err == nil {
+		t.Fatal("RunETL accepted a persisted multi-action stream without destination_action")
+	}
+	if reads != 3 || appendWrites != 1 || replaceWrites != 1 || otherWrites != 1 {
+		t.Fatalf("persisted missing action reached I/O reads/append/replace/other=%d/%d/%d/%d, want 3/1/1/1", reads, appendWrites, replaceWrites, otherWrites)
+	}
+}
+
+func TestDeclarativeTypedDestinationMappedNullDefersToSelectedActionSchema(t *testing.T) {
+	name := "typed-nullable-mapping"
+	files := declarativeTypedDestinationBundleFS(name, "nullable_source", "nullable_destination")
+	writes := string(files[name+"/writes.json"].Data)
+	writes = strings.Replace(writes, `"value":{"type":"string"}`, `"value":{"type":["string","null"]}`, 1)
+	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(writes)}
+	bundle, err := engine.Load(files, name)
+	if err != nil {
+		t.Fatalf("load nullable typed destination: %v", err)
+	}
+	connector := engine.New(bundle, nil)
+	contract, err := declarativeTypedDestinationContractFor(connector)
+	if err != nil {
+		t.Fatalf("typed destination contract: %v", err)
+	}
+	strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+	binding, err := contract.plan(connector, "widgets", synccontract.ModeFullAppend, strategy)
+	if err != nil {
+		t.Fatalf("plan nullable typed destination: %v", err)
+	}
+	records, err := declarativeTypedDestinationRecords([]connectors.Record{{"id": "widget-1", "value": nil}}, binding)
+	if err != nil {
+		t.Fatalf("map present null source field: %v", err)
+	}
+	if value, found := records[0]["value"]; !found || value != nil {
+		t.Fatalf("mapped nullable record = %#v, want present nil value", records[0])
+	}
+	if err := connector.ValidateWrite(context.Background(), connectors.WriteRequest{Action: strategy.Action}, records); err != nil {
+		t.Fatalf("selected nullable schema rejected present null: %v", err)
+	}
+	if _, err := declarativeTypedDestinationRecords([]connectors.Record{{"id": "widget-1"}}, binding); err == nil {
+		t.Fatal("mapping accepted an absent selected action field")
+	}
+}
+
+func TestRunETLRejectsPersistedDestinationActionOnLegacyDestinationBeforeRead(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := &streamingSource{total: 1}
+	destination := &batchDestination{}
+	application.registry = connectors.NewEmptyRegistry()
+	application.registry.Register(source)
+	application.registry.Register(destination)
+	if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: "legacy-action-source", Connector: source.Name()}); err != nil {
+		t.Fatalf("add source credential: %v", err)
+	}
+	if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: "legacy-action-destination", Connector: destination.Name()}); err != nil {
+		t.Fatalf("add destination credential: %v", err)
+	}
+	connection, err := application.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "persisted_legacy_destination_action",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "legacy-action-source"},
+		Destination: EndpointConfig{Connector: destination.Name(), Credential: "legacy-action-destination"},
+		Streams: map[string]StreamConfig{"records": {
+			SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"},
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create legacy destination connection: %v", err)
+	}
+	for index := range application.state.Connections {
+		if application.state.Connections[index].ID == connection.ID {
+			stream := application.state.Connections[index].Streams["records"]
+			stream.DestinationAction = "legacy_manual_action"
+			application.state.Connections[index].Streams["records"] = stream
+		}
+	}
+	if _, err := application.RunETL(ctx, RunETLRequest{Connection: connection.Name, Stream: "records", BatchSize: 1}); err == nil || !strings.Contains(err.Error(), "not a declarative typed destination") {
+		t.Fatalf("RunETL legacy persisted destination action error = %v, want pre-read refusal", err)
+	}
+	if len(destination.batches) != 0 {
+		t.Fatalf("legacy persisted destination action reached write path: batches=%v", destination.batches)
+	}
+}
+
+func TestDeclarativeTypedDestinationRejectsActionDefinitionDriftBeforePreviewAndApply(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		requests++
+	}))
+	t.Cleanup(server.Close)
+	name := "typed-definition-drift"
+	initialBundle, err := engine.Load(declarativeTypedDestinationBundleFS(name, "drift_source", "drift_destination"), name)
+	if err != nil {
+		t.Fatalf("load initial typed destination: %v", err)
+	}
+	initial := engine.New(initialBundle, nil)
+	application.registry.Register(initial)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose initial typed destination: %v", err)
+	}
+	for _, endpoint := range []string{"source", "destination"} {
+		if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-" + endpoint, Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+			t.Fatalf("add %s credential: %v", endpoint, err)
+		}
+	}
+	connection, err := application.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "typed_definition_drift",
+		Source:      EndpointConfig{Connector: name, Credential: name + "-source"},
+		Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+		Streams: map[string]StreamConfig{"widgets": {
+			SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"}, DestinationAction: "apply_widget",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create typed destination connection: %v", err)
+	}
+	persistedPlan, err := application.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
+	if err != nil {
+		t.Fatalf("plan typed destination: %v", err)
+	}
+	if persistedPlan.TransportActionDefinitionSHA256 == "" {
+		t.Fatal("persisted typed destination plan has no action definition digest")
+	}
+
+	approval := syntheticTypedDestinationApproval(t, name, "apply_widget")
+	resolved, err := application.transports.Preflight(synctransport.PreflightRequest{Source: initial, Destination: initial, Stream: "widgets", Mode: synccontract.ModeFullAppend, DestinationAction: "apply_widget"})
+	if err != nil {
+		t.Fatalf("preflight initial typed destination: %v", err)
+	}
+	transportPlan, err := resolved.Destination.PlanDestination(ctx, synctransport.DestinationPlanRequest{
+		Connector: initial, Source: initial, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+		ApplyStrategy: resolved.ApplyStrategy, Approval: approval,
+	})
+	if err != nil || transportPlan.ActionDefinitionSHA256 == "" {
+		t.Fatalf("plan typed destination apply contract = %#v err=%v", transportPlan, err)
+	}
+
+	driftFiles := declarativeTypedDestinationActionBundleFS(name, "drift_source", "drift_destination", "apply_widget", "/widgets/drift")
+	driftBundle, err := engine.Load(driftFiles, name)
+	if err != nil {
+		t.Fatalf("load drifted typed destination: %v", err)
+	}
+	drifted := engine.New(driftBundle, nil)
+	_, err = resolved.Destination.ApplyDestination(ctx, synctransport.DestinationApplyRequest{
+		ConnectionID: "typed-definition-drift", Plan: transportPlan,
+		Destination: drifted, Source: initial, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+		Approval: approval,
+	})
+	if err == nil || !strings.Contains(err.Error(), "definition changed") {
+		t.Fatalf("apply drift error = %v, want pre-I/O definition drift refusal", err)
+	}
+
+	application.registry.Register(drifted)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose drifted typed destination: %v", err)
+	}
+	if _, _, err := application.PreviewDeclarativeTypedDestinationTransport(ctx, persistedPlan.ID); err == nil || !strings.Contains(err.Error(), "does not bind") {
+		t.Fatalf("preview drift error = %v, want plan binding refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("definition drift reached provider I/O; requests=%d, want 0", requests)
+	}
+}
+
+func TestDeclarativeTypedDestinationRejectsEffectiveRequestDefinitionDriftBeforePreview(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		requests++
+	}))
+	t.Cleanup(server.Close)
+	name := "typed-effective-definition-drift"
+	requestDefinitionFiles := func(userAgent, providerDefault string) fstest.MapFS {
+		files := declarativeTypedDestinationBundleFS(name, "effective_source", "effective_destination")
+		files[name+"/spec.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["base_url"],"properties":{"base_url":{"type":"string"},"provider_default":{"type":"string","default":%q}}}`, providerDefault))}
+		streams := string(files[name+"/streams.json"].Data)
+		streams = strings.Replace(streams, `"user_agent":"synthetic"`, fmt.Sprintf(`"user_agent":%q`, userAgent), 1)
+		streams = strings.Replace(streams, `"headers":{}`, `"headers":{"X-Definition-Default":"{{ config.provider_default }}"}`, 1)
+		files[name+"/streams.json"] = &fstest.MapFile{Data: []byte(streams)}
+		return files
+	}
+	initialBundle, err := engine.Load(requestDefinitionFiles("synthetic-one", "one"), name)
+	if err != nil {
+		t.Fatalf("load initial request definition: %v", err)
+	}
+	initial := engine.New(initialBundle, nil)
+	initialDigest, err := initial.DeclarativeTypedDestinationActionDigest("apply_widget")
+	if err != nil {
+		t.Fatalf("initial action digest: %v", err)
+	}
+	application.registry.Register(initial)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose initial typed destination: %v", err)
+	}
+	for _, endpoint := range []string{"source", "destination"} {
+		if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-" + endpoint, Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+			t.Fatalf("add %s credential: %v", endpoint, err)
+		}
+	}
+	connection, err := application.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "typed_effective_definition_drift",
+		Source:      EndpointConfig{Connector: name, Credential: name + "-source"},
+		Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+		Streams: map[string]StreamConfig{"widgets": {
+			SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"}, DestinationAction: "apply_widget",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create typed destination connection: %v", err)
+	}
+	plan, err := application.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
+	if err != nil {
+		t.Fatalf("plan typed destination: %v", err)
+	}
+
+	driftBundle, err := engine.Load(requestDefinitionFiles("synthetic-two", "two"), name)
+	if err != nil {
+		t.Fatalf("load drifted request definition: %v", err)
+	}
+	drifted := engine.New(driftBundle, nil)
+	driftDigest, err := drifted.DeclarativeTypedDestinationActionDigest("apply_widget")
+	if err != nil {
+		t.Fatalf("drifted action digest: %v", err)
+	}
+	if driftDigest == initialDigest {
+		t.Fatal("changed user agent and default preserved the typed action digest")
+	}
+	application.registry.Register(drifted)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose drifted typed destination: %v", err)
+	}
+	if _, _, err := application.PreviewDeclarativeTypedDestinationTransport(ctx, plan.ID); err == nil || !strings.Contains(err.Error(), "does not bind") {
+		t.Fatalf("preview request-definition drift error = %v, want pre-I/O binding refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("effective definition drift reached provider I/O; requests=%d, want 0", requests)
+	}
+}
+
+func TestDeclarativeTypedDestinationRefusesRedirectsBeforeRetargeting(t *testing.T) {
+	for _, status := range []int{
+		http.StatusMovedPermanently,
+		http.StatusFound,
+		http.StatusSeeOther,
+		http.StatusTemporaryRedirect,
+		http.StatusPermanentRedirect,
+	} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			originCalls := 0
+			targetCalls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/widgets/target":
+					originCalls++
+					http.Redirect(w, r, "/widgets/retargeted", status)
+				case "/widgets/retargeted":
+					targetCalls++
+					w.WriteHeader(http.StatusCreated)
+				default:
+					w.WriteHeader(http.StatusNotFound)
+				}
+			}))
+			defer server.Close()
+
+			name := fmt.Sprintf("typed-redirect-%d", status)
+			files := declarativeTypedDestinationBundleFS(name, "redirect-source", "redirect-destination")
+			writesPath := name + "/writes.json"
+			files[writesPath] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[writesPath].Data), `"risk":`, `"idempotency_key_header":"Idempotency-Key","risk":`, 1))}
+			bundle, err := engine.Load(files, name)
+			if err != nil {
+				t.Fatalf("load typed destination bundle: %v", err)
+			}
+			connector := engine.New(bundle, nil)
+			executor := &declarativeTypedDestinationExecutor{}
+			approval := syntheticTypedDestinationApproval(t, name, "apply_widget")
+			strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+			plan, err := executor.PlanDestination(context.Background(), synctransport.DestinationPlanRequest{
+				Connector: connector, Source: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend, ApplyStrategy: strategy, Approval: approval,
+			})
+			if err != nil {
+				t.Fatalf("PlanDestination: %v", err)
+			}
+			receipt := synctransport.WarehouseReceipt{
+				ID: "typed-redirect-workset", Owner: "typed-redirect-workset", Generation: 1, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+				CheckpointSHA256: "checkpoint", TombstonesSHA256: "tombstones", ManifestSHA256: "manifest", ContentSHA256: "content", ParquetSHA256: "parquet", Records: 1,
+			}
+			_, err = executor.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{
+				ConnectionID: receipt.Owner, Plan: plan, Receipt: receipt,
+				Workset: synctransport.WarehouseWorkset{ID: receipt.ID, Records: []connectors.Record{{"id": "widget-1", "value": "value"}}},
+				Runtime: connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL}},
+				Source:  connector, Destination: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend, Approval: approval,
+			})
+			if err == nil || !strings.Contains(strings.ToLower(err.Error()), "redirect") {
+				t.Fatalf("ApplyDestination error = %v, want redirect refusal", err)
+			}
+			if originCalls != 1 || targetCalls != 0 {
+				t.Fatalf("redirect calls origin=%d target=%d, want 1/0", originCalls, targetCalls)
+			}
+		})
+	}
+}
+
+func TestDeclarativeTypedDestinationApprovalBindsActionDefinition(t *testing.T) {
+	digest := strings.Repeat("a", 64)
+	approval := synctransport.DestinationApproval{Target: connectors.WriteApprovalTarget{Scope: connectors.WriteApprovalScopeProject}}
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(approval, digest); err == nil || !strings.Contains(err.Error(), "does not bind") {
+		t.Fatalf("missing action digest approval error = %v, want binding refusal", err)
+	}
+	approval.ActionDefinitionSHA256 = digest
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(approval, digest); err != nil {
+		t.Fatalf("matching action digest approval: %v", err)
+	}
+	approval.Target.Scope = connectors.WriteApprovalScopeFixture
+	approval.ActionDefinitionSHA256 = ""
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(approval, digest); err != nil {
+		t.Fatalf("fixture action digest approval: %v", err)
+	}
+}
+
+func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	posts := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/widgets":
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"data":[{"id":"widget-1","value":"first"},{"id":"widget-2","value":"second"}]}`))
+		case r.Method == http.MethodPost && r.URL.Path == "/widgets/target":
+			posts++
+			w.Header().Set("Content-Type", "application/json")
+			w.Header().Set("X-Credential-Echo", "destination-secret")
+			if posts == 1 {
+				_, _ = w.Write([]byte(`{"provider_id":"first","echo":"destination-secret"}`))
+				return
+			}
+			w.Header().Add("X-Provider-Receipt", "receipt-one")
+			w.Header().Add("X-Provider-Receipt", "receipt-two")
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte(`{"provider_id":"second","echo":"destination-secret"}`))
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	}))
+	t.Cleanup(server.Close)
+	name := "typed-partial-results"
+	bundle, err := engine.Load(declarativeTypedDestinationBundleFS(name, "partial_source", "partial_destination"), name)
+	if err != nil {
+		t.Fatalf("load partial-result typed destination: %v", err)
+	}
+	application.registry.Register(engine.New(bundle, nil))
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose partial-result typed destination: %v", err)
+	}
+	if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-source", Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+		t.Fatalf("add source credential: %v", err)
+	}
+	if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-destination", Connector: name, Config: map[string]string{"base_url": server.URL}, Secrets: map[string]string{"token": "destination-secret"}}); err != nil {
+		t.Fatalf("add destination credential: %v", err)
+	}
+	connection, err := application.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "typed_partial_results",
+		Source:      EndpointConfig{Connector: name, Credential: name + "-source"},
+		Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+		Streams: map[string]StreamConfig{"widgets": {
+			SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"}, DestinationAction: "apply_widget",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create partial-result connection: %v", err)
+	}
+	plan, err := application.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
+	if err != nil {
+		t.Fatalf("plan partial-result connection: %v", err)
+	}
+	previewed, _, err := application.PreviewDeclarativeTypedDestinationTransport(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("preview partial-result connection: %v", err)
+	}
+	run, err := application.RunETL(ctx, RunETLRequest{
+		Connection: connection.Name, Stream: "widgets", BatchSize: 2,
+		DestinationApproval: synctransport.DestinationApproval{
+			PlanID: plan.ID, ApprovalToken: previewed.ApprovalToken,
+			Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "HTTP status 500") {
+		t.Fatalf("RunETL error = %v, want failed provider response", err)
+	}
+	if run.Status != "failed" || run.RecordsLoaded != 0 || posts != 2 || len(run.DestinationResults) != 1 {
+		t.Fatal("failed partial-result run did not retain the expected provider output")
+	}
+	var output struct {
+		RecordsWritten    int `json:"records_written"`
+		RecordsFailed     int `json:"records_failed"`
+		ProviderResponses []struct {
+			RecordIndex int `json:"record_index"`
+			Status      int `json:"status"`
+			Headers     map[string]struct {
+				Values []string `json:"values,omitempty"`
+			} `json:"headers"`
+			Body         any    `json:"body"`
+			BodyEncoding string `json:"body_encoding"`
+		} `json:"provider_responses"`
+	}
+	if err := json.Unmarshal(run.DestinationResults[0], &output); err != nil {
+		t.Fatalf("decode failed partial provider result: %v", err)
+	}
+	var secondBody map[string]any
+	secondBodyOK := false
+	if len(output.ProviderResponses) == 2 {
+		secondBody, secondBodyOK = output.ProviderResponses[1].Body.(map[string]any)
+	}
+	if output.RecordsWritten != 1 || output.RecordsFailed != 1 || len(output.ProviderResponses) != 2 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[1].RecordIndex != 1 || output.ProviderResponses[1].Status != http.StatusInternalServerError || output.ProviderResponses[1].BodyEncoding != "" || !reflect.DeepEqual(output.ProviderResponses[1].Headers["X-Provider-Receipt"].Values, []string{"receipt-one", "receipt-two"}) || !secondBodyOK || secondBody["provider_id"] != "second" || secondBody["echo"] != "destination-secret" {
+		t.Fatal("failed partial provider output did not retain ordered results")
+	}
+	serialized, err := json.Marshal(run)
+	if err != nil || !bytes.Contains(serialized, []byte("destination-secret")) {
+		t.Fatal("failed partial provider run did not retain exact provider output")
+	}
+}
+
+// TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields
+// pins the declaration-time field boundary for the reusable destination
+// adapter. Field spelling belongs to the selected writes.json action schema,
+// which is the sole authority for provider-owned property names. This remains
+// a schema/name check, never a dynamic record mapping or runtime action
+// selector, and all refusals occur before source/provider I/O.
+func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields(t *testing.T) {
+	newConnector := func(t *testing.T, name, action, input string) *engine.Connector {
+		t.Helper()
+		files := declarativeTypedDestinationActionBundleFS(name, name+"_source", name+"_destination", action, "/widgets/"+name)
+		for _, path := range []string{name + "/writes.json", name + "/sync_transport.json"} {
+			files[path] = &fstest.MapFile{Data: []byte(strings.ReplaceAll(string(files[path].Data), "target_id", input))}
+		}
+		bundle, err := engine.Load(files, name)
+		if err != nil {
+			t.Fatalf("load %s bundle: %v", name, err)
+		}
+		return engine.New(bundle, nil)
+	}
+
+	snake := newConnector(t, "schema-snake", "apply_snake", "target_id")
+	camel := newConnector(t, "schema-camel", "apply_camel", "targetId")
+	providerOwned := newConnector(t, "schema-provider-owned", "apply_provider_owned", "http")
+	for _, testCase := range []struct {
+		name      string
+		connector *engine.Connector
+		action    string
+		input     string
+	}{
+		{name: "snake case action property", connector: snake, action: "apply_snake", input: "target_id"},
+		{name: "camel case action property", connector: camel, action: "apply_camel", input: "targetId"},
+		{name: "provider owned action property", connector: providerOwned, action: "apply_provider_owned", input: "http"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			contract, err := declarativeTypedDestinationContractFor(testCase.connector)
+			if err != nil {
+				t.Fatalf("load typed destination contract: %v", err)
+			}
+			binding, err := contract.plan(testCase.connector, "widgets", synccontract.ModeFullAppend, connectors.DestinationApplyStrategy{
+				Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: testCase.action,
+			})
+			if err != nil {
+				t.Fatalf("plan selected %s action: %v", testCase.action, err)
+			}
+			if got := binding.RecordMapping.Inputs[0].Input; got != testCase.input {
+				t.Fatalf("selected action input = %q, want exact schema property %q", got, testCase.input)
+			}
+		})
+	}
+
+	app := &App{registry: connectors.NewEmptyRegistry()}
+	app.registry.Register(snake)
+	app.registry.Register(camel)
+	app.registry.Register(providerOwned)
+	if err := app.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose cross-connector typed destinations: %v", err)
+	}
+	for _, testCase := range []struct {
+		name        string
+		destination connectors.Connector
+		action      string
+	}{
+		{name: "snake selected action", destination: snake, action: "apply_snake"},
+		{name: "camel selected action", destination: camel, action: "apply_camel"},
+		{name: "provider owned selected action", destination: providerOwned, action: "apply_provider_owned"},
+	} {
+		t.Run(testCase.name+" preflight", func(t *testing.T) {
+			if _, err := app.transports.Preflight(synctransport.PreflightRequest{Source: testCase.destination, Destination: testCase.destination, Stream: "widgets", Mode: synccontract.ModeFullAppend, DestinationAction: testCase.action}); err != nil {
+				t.Fatalf("preflight selected action %q: %v", testCase.action, err)
+			}
+		})
+	}
+	for _, testCase := range []struct {
+		name        string
+		destination connectors.Connector
+		action      string
+	}{
+		{name: "cross connector action", destination: snake, action: "apply_camel"},
+		{name: "undeclared action", destination: camel, action: "not_declared"},
+	} {
+		t.Run("refuses "+testCase.name, func(t *testing.T) {
+			if _, err := app.transports.Preflight(synctransport.PreflightRequest{Source: testCase.destination, Destination: testCase.destination, Stream: "widgets", Mode: synccontract.ModeFullAppend, DestinationAction: testCase.action}); err == nil {
+				t.Fatalf("preflight accepted %s %q", testCase.name, testCase.action)
+			}
+		})
+	}
+
+	// target_id is valid for the snake action but not the selected camel action.
+	// The exact-schema check must refuse this cross-action mapping before any
+	// workset or provider call.
+	crossActionFiles := declarativeTypedDestinationActionBundleFS("schema-cross-action", "cross_source", "cross_destination", "apply_camel", "/widgets/cross")
+	crossActionFiles["schema-cross-action/writes.json"] = &fstest.MapFile{Data: []byte(strings.ReplaceAll(string(crossActionFiles["schema-cross-action/writes.json"].Data), "target_id", "targetId"))}
+	crossActionBundle, err := engine.Load(crossActionFiles, "schema-cross-action")
+	if err != nil {
+		t.Fatalf("load cross-action bundle: %v", err)
+	}
+	crossActionContract, err := declarativeTypedDestinationContractFor(engine.New(crossActionBundle, nil))
+	if err != nil {
+		t.Fatalf("load cross-action contract: %v", err)
+	}
+	if _, err := crossActionContract.plan(crossActionContract.connector, "widgets", synccontract.ModeFullAppend, connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_camel"}); err == nil {
+		t.Fatal("camel action accepted a source binding for another action schema")
+	}
+
+	for _, testCase := range []struct {
+		name          string
+		input         string
+		wantLoadError bool
+	}{
+		{name: "empty", input: "", wantLoadError: true},
+		{name: "malformed", input: "target/id"},
+		{name: "whitespace", input: " target_id "},
+		{name: "generic", input: "genericHTTP"},
+		{name: "shell", input: "shell"},
+		{name: "undeclared-provider-name", input: "http"},
+	} {
+		t.Run("refuses "+testCase.name+" binding name", func(t *testing.T) {
+			files := declarativeTypedDestinationActionBundleFS("invalid-"+testCase.name, "invalid_source", "invalid_destination", "apply_invalid", "/widgets/invalid")
+			path := "invalid-" + testCase.name + "/sync_transport.json"
+			files[path] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[path].Data), `"input": "target_id"`, `"input": "`+testCase.input+`"`, 1))}
+			bundle, err := engine.Load(files, "invalid-"+testCase.name)
+			if testCase.wantLoadError {
+				if err == nil {
+					t.Fatalf("load accepted %s source binding input %q", testCase.name, testCase.input)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("load %s source binding input %q: %v", testCase.name, testCase.input, err)
+			}
+			contract, err := declarativeTypedDestinationContractFor(engine.New(bundle, nil))
+			if err != nil {
+				t.Fatalf("load %s contract: %v", testCase.name, err)
+			}
+			if _, err := contract.plan(contract.connector, "widgets", synccontract.ModeFullAppend, connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_invalid"}); err == nil {
+				t.Fatalf("plan accepted %s source binding input %q", testCase.name, testCase.input)
+			}
+		})
+	}
+}
+
+func TestDeclarativeTypedDestinationPreflightRejectsIncompleteMappingAndFullOverwriteBeforeIO(t *testing.T) {
+	ctx := context.Background()
+	for _, testCase := range []struct {
+		name     string
+		syncMode string
+		wantErr  string
+		mutate   func(fstest.MapFS, string)
+	}{
+		{
+			name:     "incomplete required mapping",
+			syncMode: string(synccontract.ModeFullAppend),
+			wantErr:  `required field "value" is not mapped`,
+			mutate: func(files fstest.MapFS, name string) {
+				path := name + "/sync_transport.json"
+				files[path] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[path].Data), `, {"input": "value", "field": "value"}`, "", 1))}
+			},
+		},
+		{
+			name:     "default full overwrite",
+			syncMode: "",
+			wantErr:  "does not implement full_overwrite",
+			mutate: func(files fstest.MapFS, name string) {
+				path := name + "/sync_transport.json"
+				contents := strings.ReplaceAll(string(files[path].Data), `"full_append"`, `"full_overwrite"`)
+				contents = strings.ReplaceAll(contents, `"strategy": "append"`, `"strategy": "replace"`)
+				files[path] = &fstest.MapFile{Data: []byte(contents)}
+			},
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			root := t.TempDir()
+			if err := InitProject(root); err != nil {
+				t.Fatal(err)
+			}
+			a, err := Open(root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			name := "preflight-" + strings.ReplaceAll(testCase.name, " ", "-")
+			files := declarativeTypedDestinationBundleFS(name, name+"-source", name+"-destination")
+			testCase.mutate(files, name)
+			bundle, err := engine.Load(files, name)
+			if err != nil {
+				t.Fatalf("load %s bundle: %v", testCase.name, err)
+			}
+
+			requests := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				requests++
+			}))
+			t.Cleanup(server.Close)
+			a.registry.Register(engine.New(bundle, nil))
+			if err := a.composeTransportRegistry(); err != nil {
+				t.Fatalf("compose %s typed destination: %v", testCase.name, err)
+			}
+			for _, endpoint := range []string{"source", "destination"} {
+				if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: name + "-" + endpoint, Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+					t.Fatalf("add %s credential: %v", endpoint, err)
+				}
+			}
+			_, err = a.CreateConnection(ctx, CreateConnectionRequest{
+				Name:        "reject_" + strings.ReplaceAll(testCase.name, " ", "_"),
+				Source:      EndpointConfig{Connector: name, Credential: name + "-source"},
+				Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+				Streams: map[string]StreamConfig{"widgets": {
+					SyncMode: testCase.syncMode, PrimaryKey: []string{"id"}, DestinationAction: "apply_widget",
+				}},
+			})
+			if err == nil || !strings.Contains(err.Error(), testCase.wantErr) {
+				t.Fatalf("CreateConnection error = %v, want %q", err, testCase.wantErr)
+			}
+			if requests != 0 {
+				t.Fatalf("CreateConnection reached source/provider I/O; requests = %d", requests)
+			}
+		})
+	}
+}
+
+func TestDeclarativeTypedDestinationRejectsPersistedFullOverwriteDuringPreparation(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	name := "persisted-full-overwrite"
+	files := declarativeTypedDestinationBundleFS(name, "overwrite_source", "overwrite_destination")
+	transportPath := name + "/sync_transport.json"
+	transport := strings.ReplaceAll(string(files[transportPath].Data), `"full_append"`, `"full_overwrite"`)
+	files[transportPath] = &fstest.MapFile{Data: []byte(strings.ReplaceAll(transport, `"strategy": "append"`, `"strategy": "replace"`))}
+	bundle, err := engine.Load(files, name)
+	if err != nil {
+		t.Fatalf("load full-overwrite typed destination: %v", err)
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		requests++
+	}))
+	t.Cleanup(server.Close)
+	application.registry.Register(engine.New(bundle, nil))
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose full-overwrite typed destination: %v", err)
+	}
+	for _, endpoint := range []string{"source", "destination"} {
+		if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-" + endpoint, Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+			t.Fatalf("add %s credential: %v", endpoint, err)
+		}
+	}
+	application.state.Connections = append(application.state.Connections, Connection{
+		ID: "connection_persisted_full_overwrite", Name: "persisted_full_overwrite",
+		Source: EndpointConfig{Connector: name, Credential: name + "-source"}, Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+		Streams: map[string]StreamConfig{"widgets": {SyncMode: string(synccontract.ModeFullOverwrite), PrimaryKey: []string{"id"}, DestinationAction: "apply_widget"}},
+	})
+	if _, err := application.prepareDeclarativeTypedDestinationTransport(ctx, "persisted_full_overwrite", "widgets"); err == nil || !strings.Contains(err.Error(), "does not implement full_overwrite") {
+		t.Fatalf("prepare persisted full-overwrite error = %v, want pre-I/O refusal", err)
+	}
+	if _, err := application.PlanDeclarativeTypedDestinationTransport(ctx, "persisted_full_overwrite", "widgets"); err == nil || !strings.Contains(err.Error(), "does not implement full_overwrite") {
+		t.Fatalf("plan persisted full-overwrite error = %v, want pre-I/O refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("persisted full-overwrite preparation reached provider I/O; requests=%d, want 0", requests)
+	}
+}
+
+// TestDefinitionTransportFactoriesSelectDistinctTypedDestinationEvidence proves
+// a factory accepts exactly the evidence selected by each declaring bundle,
+// rather than silently admitting the first destination that happened to load.
+func TestDefinitionTransportFactoriesSelectDistinctTypedDestinationEvidence(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	firstBundle, err := engine.Load(declarativeTypedDestinationBundleFS("typed-destination-one", "source_one", "destination_one"), "typed-destination-one")
+	if err != nil {
+		t.Fatal(err)
+	}
+	secondBundle, err := engine.Load(declarativeTypedDestinationBundleFS("typed-destination-two", "source_two", "destination_two"), "typed-destination-two")
+	if err != nil {
+		t.Fatal(err)
+	}
+	first := engine.New(firstBundle, nil)
+	second := engine.New(secondBundle, nil)
+	a.registry.Register(first)
+	a.registry.Register(second)
+
+	factories, err := definitionTransportDefinitionFactories(a, a.registry)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var typedFactory *synctransport.DefinitionFactory
+	for index := range factories {
+		if factories[index].Reference == declarativeTypedDestinationReference {
+			typedFactory = &factories[index]
+			break
+		}
+	}
+	if typedFactory == nil {
+		t.Fatal("declarative typed destination factory was not composed")
+	}
+	accepted := map[connectors.ConformanceEvidenceReference]bool{
+		typedFactory.DestinationEvidence: true,
+	}
+	for _, evidence := range typedFactory.AcceptedDestinationEvidences {
+		accepted[evidence] = true
+	}
+	for _, evidence := range []connectors.ConformanceEvidenceReference{
+		{Suite: "typed_destination", RunID: "destination_one"},
+		{Suite: "typed_destination", RunID: "destination_two"},
+	} {
+		if !accepted[evidence] {
+			t.Fatalf("typed destination evidence %#+v was not collected from its declaring definition", evidence)
+		}
+	}
+
+	if err := a.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose distinct typed destinations: %v", err)
+	}
+	for _, connector := range []connectors.Connector{first, second} {
+		destination, ok := connectors.DestinationTransportDescriptorOf(connector)
+		if !ok {
+			t.Fatal("typed destination declaration is unavailable")
+		}
+		resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+			Source: connector, Destination: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+		})
+		if err != nil {
+			t.Fatalf("preflight %q through shared typed destination = %v", connector.Name(), err)
+		}
+		if got := resolved.Destination.TransportExecutorReference(); got != declarativeTypedDestinationReference {
+			t.Fatalf("%q destination executor = %#v, want %#v", connector.Name(), got, declarativeTypedDestinationReference)
+		}
+		request := synctransport.DestinationPlanRequest{
+			Connector: connector, Source: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+			ApplyStrategy: destination.ApplyStrategies[0],
+		}
+		if _, err := resolved.Destination.PlanDestination(context.Background(), request); err == nil {
+			t.Fatalf("plan %q accepted missing approval before source I/O", connector.Name())
+		}
+		request.Approval = syntheticTypedDestinationApproval(t, connector.Name(), destination.ApplyStrategies[0].Action)
+		if _, err := resolved.Destination.PlanDestination(context.Background(), request); err != nil {
+			t.Fatalf("plan %q through shared typed destination = %v", connector.Name(), err)
+		}
+	}
+}
+
+// TestDefinitionTransportFactoriesRefuseTypedDestinationDeclarationsBeforeIO
+// keeps the generic adapter closed: a declaration may select an already typed
+// action, but it cannot turn a malformed mapping, a foreign adapter, an
+// unknown executor, or capture mode into destination I/O.
+func TestDefinitionTransportFactoriesRefuseTypedDestinationDeclarationsBeforeIO(t *testing.T) {
+	for _, testCase := range []struct {
+		name   string
+		mutate func(fstest.MapFS, string)
+	}{
+		{
+			name: "unknown executor",
+			mutate: func(files fstest.MapFS, name string) {
+				path := name + "/sync_transport.json"
+				files[path] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[path].Data), `"id": "declarative_typed_destination"`, `"id": "unknown_typed_destination"`, 1))}
+			},
+		},
+		{
+			name: "unavailable action",
+			mutate: func(files fstest.MapFS, name string) {
+				path := name + "/sync_transport.json"
+				files[path] = &fstest.MapFile{Data: []byte(strings.ReplaceAll(string(files[path].Data), "apply_widget", "missing_action"))}
+			},
+		},
+		{
+			name: "wrong source mapping role",
+			mutate: func(files fstest.MapFS, name string) {
+				path := name + "/sync_transport.json"
+				files[path] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[path].Data), `"record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}`, `"record_mapping": {"kind": "config_match", "config_key": "configured_widget", "record_field": "id"}`, 1))}
+			},
+		},
+		{
+			name: "change capture destination",
+			mutate: func(files fstest.MapFS, name string) {
+				path := name + "/sync_transport.json"
+				contents := strings.ReplaceAll(string(files[path].Data), `"full_append"`, `"change_capture"`)
+				files[path] = &fstest.MapFile{Data: []byte(strings.ReplaceAll(contents, `"strategy": "append"`, `"strategy": "change_apply"`))}
+			},
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			name := "typed-destination-refusal-" + strings.ReplaceAll(testCase.name, " ", "-")
+			files := declarativeTypedDestinationBundleFS(name, "source_refusal", "destination_refusal")
+			testCase.mutate(files, name)
+			bundle, loadErr := engine.Load(files, name)
+			if loadErr == nil {
+				application := &App{registry: connectors.NewEmptyRegistry()}
+				application.registry.Register(engine.New(bundle, nil))
+				loadErr = application.composeTransportRegistry()
+				if application.transports != nil {
+					t.Fatal("refused typed destination mutated the transport registry")
+				}
+			}
+			if loadErr == nil {
+				t.Fatal("malformed typed destination declaration was accepted")
+			}
+		})
+	}
+}
+
+func TestDeclarativeTypedDestinationAcceptsDefinitionOwningNativeConnector(t *testing.T) {
+	name := "native-typed-destination"
+	files := declarativeTypedDestinationBundleFS(name, "native_source", "native_destination")
+	transport := string(files[name+"/sync_transport.json"].Data)
+	sourceStart := strings.Index(transport, `  "source_transport":`)
+	destinationStart := strings.Index(transport, `  "destination_transport":`)
+	if sourceStart < 0 || destinationStart < 0 {
+		t.Fatal("native typed destination fixture has no removable source declaration")
+	}
+	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(transport[:sourceStart] + transport[destinationStart:])}
+	bundle, err := engine.Load(files, name)
+	if err != nil {
+		t.Fatalf("load native typed destination bundle: %v", err)
+	}
+	sourceBundle, err := engine.Load(declarativeTypedDestinationBundleFS("native-typed-source", "native_source", "native_destination"), "native-typed-source")
+	if err != nil {
+		t.Fatalf("load native typed destination source: %v", err)
+	}
+	source := engine.New(sourceBundle, nil)
+	native := &nativeTypedDestinationTestConnector{Base: engine.NewBase(bundle)}
+	contract, err := declarativeTypedDestinationContractFor(native)
+	if err != nil {
+		t.Fatalf("native typed destination contract: %v", err)
+	}
+	strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+	if _, err := contract.plan(source, "widgets", synccontract.ModeFullAppend, strategy); err != nil {
+		t.Fatalf("native typed destination plan: %v", err)
+	}
+	application := &App{registry: connectors.NewEmptyRegistry()}
+	application.registry.Register(source)
+	application.registry.Register(native)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose native typed destination: %v", err)
+	}
+	if _, err := application.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: native, Stream: "widgets", Mode: synccontract.ModeFullAppend, DestinationAction: strategy.Action}); err != nil {
+		t.Fatalf("preflight native typed destination: %v", err)
+	}
+}
+
+func TestDeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite(t *testing.T) {
+	for _, testCase := range []struct {
+		name    string
+		mutate  func(fstest.MapFS, string)
+		record  connectors.Record
+		tombs   []synccontract.Tombstone
+		planErr bool
+	}{
+		{
+			name: "mapped record misses required action field",
+			mutate: func(files fstest.MapFS, name string) {
+				path := name + "/sync_transport.json"
+				files[path] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[path].Data), `"inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]`, `"inputs": [{"input": "target_id", "field": "id"}]`, 1))}
+			},
+			record:  connectors.Record{"id": "widget-1", "value": "not-mapped"},
+			planErr: true,
+		},
+		{
+			name:   "tombstone delete",
+			record: connectors.Record{"id": "widget-1", "value": "definition-owned"},
+			tombs:  []synccontract.Tombstone{{}},
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			root := t.TempDir()
+			if err := InitProject(root); err != nil {
+				t.Fatal(err)
+			}
+			a, err := Open(root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			writes := 0
+			server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+				if request.Method == http.MethodPost {
+					writes++
+				}
+				writer.WriteHeader(http.StatusNoContent)
+			}))
+			t.Cleanup(server.Close)
+
+			name := "typed-destination-workset-" + strings.ReplaceAll(testCase.name, " ", "-")
+			files := declarativeTypedDestinationBundleFS(name, "source_workset", "destination_workset")
+			if testCase.mutate != nil {
+				testCase.mutate(files, name)
+			}
+			bundle, err := engine.Load(files, name)
+			if err != nil {
+				t.Fatalf("load typed destination bundle: %v", err)
+			}
+			connector := engine.New(bundle, nil)
+			a.registry.Register(connector)
+			if err := a.composeTransportRegistry(); err != nil {
+				t.Fatalf("compose typed destination: %v", err)
+			}
+			resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+				Source: connector, Destination: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+			})
+			if err != nil {
+				t.Fatalf("preflight typed destination: %v", err)
+			}
+			approval := syntheticTypedDestinationApproval(t, connector.Name(), "apply_widget")
+			plan, err := resolved.Destination.PlanDestination(context.Background(), synctransport.DestinationPlanRequest{
+				Connector: connector, Source: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+				ApplyStrategy: resolved.ApplyStrategy, Approval: approval,
+			})
+			if err != nil {
+				if testCase.planErr {
+					if writes != 0 {
+						t.Fatalf("provider write calls = %d, want 0 after pre-I/O plan refusal", writes)
+					}
+					return
+				}
+				t.Fatalf("plan typed destination: %v", err)
+			}
+			if testCase.planErr {
+				t.Fatal("invalid typed destination mapping was planned")
+			}
+			receipt := synctransport.WarehouseReceipt{
+				ID: "typed-destination-workset", Owner: "typed-destination-workset", Generation: 1, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+				CheckpointSHA256: "checkpoint", TombstonesSHA256: "tombstones", ManifestSHA256: "manifest", ContentSHA256: "content", ParquetSHA256: "parquet",
+				Records: 1, Tombstones: len(testCase.tombs),
+			}
+			_, err = resolved.Destination.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{
+				ConnectionID: receipt.Owner, Plan: plan, Receipt: receipt,
+				Workset: synctransport.WarehouseWorkset{ID: receipt.ID, Records: []connectors.Record{testCase.record}, Tombstones: testCase.tombs},
+				Runtime: connectors.RuntimeConfig{ProjectDir: root, Config: map[string]string{"base_url": server.URL}},
+				Source:  connector, Destination: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+				Approval: approval,
+			})
+			if err == nil {
+				t.Fatal("invalid typed destination workset was applied")
+			}
+			if writes != 0 {
+				t.Fatalf("provider write calls = %d, want 0 after pre-I/O workset refusal", writes)
+			}
+		})
+	}
+}
+
+func declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID string) fstest.MapFS {
+	base := syntheticTransportBundleFS()
+	files := make(fstest.MapFS, len(base))
+	for path, file := range base {
+		files[name+"/"+strings.TrimPrefix(path, "synthetic/")] = file
+	}
+	files[name+"/metadata.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"name":%q,"display_name":"Synthetic typed destination","description":"test-only typed destination","integration_type":"api","release_stage":"ga","capabilities":{"check":true,"read":true,"write":true,"query":false,"cdc":false,"dynamic_schema":false}}`, name))}
+	files[name+"/streams.json"] = &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/widgets"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)}
+	files[name+"/api_surface.json"] = &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},{"method":"POST","path":"/widgets/target","covered_by":{"write":"apply_widget"}}]}`)}
+	files[name+"/schemas/widgets.json"] = &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","x-primary-key":["id"],"properties":{"id":{"type":"string"},"value":{"type":"string"}}}`)}
+	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[{"name":"apply_widget","kind":"create","method":"POST","path":"/widgets/target","body_type":"json","body_fields":["target_id","value"],"risk":"creates a synthetic widget target","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}]}`)}
+	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
+    "eligible_streams": ["widgets"],
+    "modes": ["full_append"],
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+    "conformance": {"suite": "typed_destination", "run_id": %q}
+  },
+  "destination_transport": {
+    "executor": {"family": "declarative_api", "id": "declarative_typed_destination"},
+    "eligible_actions": ["apply_widget"],
+    "modes": ["full_append"],
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+    "conformance": {"suite": "typed_destination", "run_id": %q},
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "apply_widget"}],
+    "source_bindings": [{
+      "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
+      "eligible_streams": ["widgets"],
+      "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}
+    }]
+  }
+}`, sourceRunID, destinationRunID))}
+	return files
+}
+
+func declarativeTypedDestinationActionBundleFS(name, sourceRunID, destinationRunID, action, path string) fstest.MapFS {
+	files := declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID)
+	for _, filename := range []string{name + "/writes.json", name + "/api_surface.json", name + "/sync_transport.json"} {
+		contents := strings.ReplaceAll(string(files[filename].Data), "apply_widget", action)
+		contents = strings.ReplaceAll(contents, "/widgets/target", path)
+		files[filename] = &fstest.MapFile{Data: []byte(contents)}
+	}
+	return files
+}
+
+func declarativeTypedDestinationMultiActionBundleFS(name, sourceRunID, destinationRunID string) fstest.MapFS {
+	files := declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID)
+	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[
+  {"name":"append_widget","kind":"create","method":"POST","path":"/widgets/append","body_type":"json","body_fields":["target_id","value"],"risk":"creates a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}},
+  {"name":"replace_widget","kind":"update","method":"POST","path":"/widgets/replace","body_type":"json","body_fields":["target_id","value"],"risk":"replaces a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}
+]}`)}
+	files[name+"/api_surface.json"] = &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},{"method":"POST","path":"/widgets/append","covered_by":{"write":"append_widget"}},{"method":"POST","path":"/widgets/replace","covered_by":{"write":"replace_widget"}}]}`)}
+	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
+    "eligible_streams": ["widgets"],
+    "modes": ["full_append"],
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+    "conformance": {"suite": "typed_destination", "run_id": %q}
+  },
+  "destination_transport": {
+    "executor": {"family": "declarative_api", "id": "declarative_typed_destination"},
+    "eligible_actions": ["append_widget", "replace_widget"],
+    "modes": ["full_append"],
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+    "conformance": {"suite": "typed_destination", "run_id": %q},
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {"mode": "full_append", "strategy": "append", "action": "append_widget"},
+      {"mode": "full_append", "strategy": "append", "action": "replace_widget"}
+    ],
+    "source_bindings": [{
+      "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
+      "eligible_streams": ["widgets"],
+      "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}
+    }]
+  }
+}`, sourceRunID, destinationRunID))}
+	return files
+}
+
+func syntheticTypedDestinationApproval(t *testing.T, connector, action string) synctransport.DestinationApproval {
+	t.Helper()
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		t.Fatalf("create fixture write approval authority: %v", err)
+	}
+	confirmation := connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+	target := connectors.WriteApprovalTarget{
+		Connector:           connector,
+		Operation:           action,
+		Method:              http.MethodPost,
+		MutationClass:       "transport",
+		TargetDigest:        strings.Repeat("a", 64),
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-digest",
+		Batchable:           true,
+		Scope:               connectors.WriteApprovalScopeFixture,
+		Confirmation:        confirmation,
+	}
+	request := connectors.WriteApprovalGrantRequest{
+		PlanID:        "rplan_synthetic_typed_destination",
+		PlanHash:      strings.Repeat("b", 64),
+		Mode:          string(synccontract.ModeFullAppend),
+		PreviewDigest: strings.Repeat("c", 64),
+		ApprovalToken: "fixture-approval-token",
+		Target:        target,
+		Confirmation:  confirmation,
+	}
+	grant, err := authority.IssueWriteGrant(request)
+	if err != nil {
+		t.Fatalf("issue fixture write grant: %v", err)
+	}
+	evidence, err := authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID: request.PlanID, PlanHash: request.PlanHash, Mode: request.Mode,
+		PreviewDigest: request.PreviewDigest, ApprovalToken: request.ApprovalToken,
+		Target: target, Confirmation: confirmation,
+	})
+	if err != nil {
+		t.Fatalf("verify fixture write grant: %v", err)
+	}
+	return synctransport.DestinationApproval{
+		Evidence:      evidence,
+		Target:        target,
+		PreviewDigest: request.PreviewDigest,
+		AuthorizeNextUnit: func(context.Context) error {
+			return nil
+		},
+	}
+}
+
 type syntheticDefinitionConnector struct {
 	*engine.Connector
 	factories []synctransport.DefinitionFactory
+}
+
+type nativeTypedDestinationTestConnector struct {
+	engine.Base
+}
+
+func (*nativeTypedDestinationTestConnector) Check(context.Context, connectors.RuntimeConfig) error {
+	return nil
+}
+
+func (*nativeTypedDestinationTestConnector) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return connectors.Catalog{}, nil
+}
+
+func (*nativeTypedDestinationTestConnector) Read(context.Context, connectors.ReadRequest, func(connectors.Record) error) error {
+	return nil
+}
+
+func (*nativeTypedDestinationTestConnector) Write(_ context.Context, _ connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{RecordsWritten: len(records)}, nil
 }
 
 func (c *syntheticDefinitionConnector) SyncTransportDefinitionFactories() []synctransport.DefinitionFactory {
@@ -418,11 +1946,16 @@ func (d *syntheticDefinitionDestination) ReadBackDestination(_ context.Context, 
 
 type syntheticDefinitionStage struct {
 	stages  int
+	owner   string
 	workset synctransport.WarehouseWorkset
 }
 
 func (s *syntheticDefinitionStage) Stage(_ context.Context, request synctransport.WarehouseStageRequest) (synctransport.WarehouseReceipt, error) {
 	s.stages++
+	owner := s.owner
+	if owner == "" {
+		owner = "synthetic-connection"
+	}
 	s.workset = synctransport.WarehouseWorkset{
 		ID:                  "synthetic-stage",
 		Records:             request.Page.Records,
@@ -430,7 +1963,7 @@ func (s *syntheticDefinitionStage) Stage(_ context.Context, request synctranspor
 		CandidateCheckpoint: request.Page.CandidateCheckpoint.Clone(),
 	}
 	return synctransport.WarehouseReceipt{
-		ID: "synthetic-stage", Owner: "synthetic-connection", Generation: request.Generation, Stream: request.Stream, Mode: request.Mode,
+		ID: "synthetic-stage", Owner: owner, Generation: request.Generation, Stream: request.Stream, Mode: request.Mode,
 		CheckpointSHA256: "synthetic-checkpoint", TombstonesSHA256: "synthetic-tombstones", ManifestSHA256: "synthetic-manifest", ContentSHA256: "synthetic-content", ParquetSHA256: "synthetic-parquet",
 		Records: len(request.Page.Records), Tombstones: len(request.Page.Tombstones),
 	}, nil

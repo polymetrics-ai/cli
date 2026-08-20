@@ -13,6 +13,8 @@ SYNOPSIS
   pm etl run --connection <name> --stream <stream> --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
   pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
   pm etl transport postgres-managed-target preview <plan-id> [--json]
+  pm etl transport declarative-typed-destination plan --connection <name> --stream <stream> [--json]
+  pm etl transport declarative-typed-destination preview <plan-id> [--json]
   pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
@@ -124,6 +126,39 @@ CLOSED POSTGRESQL MANAGED-TARGET TRANSPORT
   Stale, replayed, authentication-refused, and permission-refused runs stop
   before a checkpoint advance. The public PostgreSQL connector remains
   write=false and this route accepts no raw SQL or target identifiers.
+
+DECLARATIVE TYPED DESTINATION TRANSPORT
+  declarative-typed-destination runs only a sync_transport.json destination
+  that declares the exact declarative_typed_destination adapter. The saved
+  stream's destination_action selects one named, eligible writes.json action.
+  This is necessary when one connector exposes multiple
+  record-driven destination actions for the same sync mode; no action is
+  inferred from declaration order.
+
+  Create and preview the connection-owned plan, then use the ordinary approved
+  ETL run:
+
+    pm etl transport declarative-typed-destination plan \
+      --connection <name> --stream <stream> --json
+    pm etl transport declarative-typed-destination preview <plan-id>
+    pm etl run --connection <name> --stream <stream> --batch-size <n> \
+      --approval-plan <plan-id> --approval-token-stdin --confirm destructive
+
+  The CLI accepts no connector, action, route, verb, body, mapping, or evidence
+  flag. Connector JSON owns that behavior; shared Go validates the sealed
+  descriptor, source binding, approval/workset guards, typed action execution,
+  acknowledgement, and read-back. An absent declaration, foreign action,
+  unlisted action, wrong source, malformed mapping, missing evidence, or
+  unsupported mode fails before source or provider I/O. See
+  docs/sync-transport-definition.md for the mechanical declaration contract.
+
+  JSON run and status output retains each acknowledged typed action result in
+  run.destination_results: record accounting plus every ordinary successful
+  provider response field (status, headers, and body). Fields are not removed
+  because they are rare, destructive, paid-tier-specific, or unfamiliar.
+  Provider-returned fields, keys, and values are preserved verbatim, even when
+  they equal configured credential bytes. System-generated plans, logs,
+  request diagnostics, and synthetic errors remain secret-taint-safe.
 
 DIRECT CONNECTOR COMMANDS
   check

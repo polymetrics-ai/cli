@@ -171,6 +171,39 @@ func TestBundleLoadHappyPathFullBundle(t *testing.T) {
 	}
 }
 
+func TestBundleLoadRejectsDuplicateWriteActionNames(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "apply_widget",
+				"kind": "create",
+				"method": "POST",
+				"path": "/widgets/first",
+				"body_type": "json",
+				"body_fields": ["id"],
+				"record_schema": {"type": "object", "properties": {"id": {"type": "string"}}},
+				"risk": "create widget"
+			},
+			{
+				"name": "apply_widget",
+				"kind": "create",
+				"method": "POST",
+				"path": "/widgets/second",
+				"body_type": "json",
+				"body_fields": ["id"],
+				"record_schema": {"type": "object", "properties": {"id": {"type": "string"}}},
+				"risk": "create widget"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil || !strings.Contains(err.Error(), `duplicates write action name "apply_widget"`) {
+		t.Fatalf("Load duplicate action names error = %v, want duplicate-name rejection", err)
+	}
+}
+
 func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	delete(fsys, "acme/fixtures/streams/widgets/page_1.json")

@@ -142,7 +142,8 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		if errors.As(err, &pageErr) {
 			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read pagination: %w", pageErr.err)
 		}
-		if resp == nil {
+		var providerHTTPError *connsdk.HTTPError
+		if resp == nil || errors.As(err, &providerHTTPError) {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			msg := completeEngineErrorText(err)
 			if hint != "" {
@@ -325,7 +326,8 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		if errors.As(err, &pageErr) {
 			return connectors.DirectReadResult{}, fmt.Errorf("direct read pagination: %w", pageErr.err)
 		}
-		if resp == nil {
+		var providerHTTPError *connsdk.HTTPError
+		if resp == nil || errors.As(err, &providerHTTPError) {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			msg := completeEngineErrorText(err)
 			if hint != "" {
@@ -570,10 +572,19 @@ func clampOperationDirectReadMaxBytes(requested, operationMax int) int {
 }
 
 func decodeDirectReadBody(raw []byte, maxBytes int) (any, error) {
+	if maxBytes >= 0 && len(raw) > maxBytes {
+		return nil, fmt.Errorf("response body exceeds limit %d", maxBytes)
+	}
 	var body any
-	dec := json.NewDecoder(io.LimitReader(bytes.NewReader(raw), int64(maxBytes)+1))
+	dec := json.NewDecoder(bytes.NewReader(raw))
 	dec.UseNumber()
 	if err := dec.Decode(&body); err != nil {
+		return nil, err
+	}
+	var extra any
+	if err := dec.Decode(&extra); err == nil {
+		return nil, fmt.Errorf("response contains multiple JSON values")
+	} else if err != io.EOF {
 		return nil, err
 	}
 	return body, nil

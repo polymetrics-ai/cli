@@ -65,6 +65,85 @@ type DestinationExecutor interface {
 	ReadBackDestination(context.Context, DestinationReadBackRequest) error
 }
 
+type TransportExecutionOrigin string
+
+const (
+	TransportExecutionOriginSource      TransportExecutionOrigin = "source"
+	TransportExecutionOriginDestination TransportExecutionOrigin = "destination"
+	TransportExecutionOriginInternal    TransportExecutionOrigin = "internal"
+)
+
+type transportExecutionOriginError struct {
+	origin TransportExecutionOrigin
+	err    error
+}
+
+func (e *transportExecutionOriginError) Error() string {
+	if e == nil || e.err == nil {
+		return "transport execution failed"
+	}
+	return e.err.Error()
+}
+
+func (e *transportExecutionOriginError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.err
+}
+
+func TransportExecutionOriginOf(err error) (TransportExecutionOrigin, bool) {
+	var tagged *transportExecutionOriginError
+	if !errors.As(err, &tagged) || tagged == nil {
+		return "", false
+	}
+	return tagged.origin, true
+}
+
+func tagTransportExecutionError(origin TransportExecutionOrigin, err error) error {
+	if err == nil {
+		return nil
+	}
+	if _, tagged := TransportExecutionOriginOf(err); tagged {
+		return err
+	}
+	return &transportExecutionOriginError{origin: origin, err: err}
+}
+
+type DestinationApplyOutputError struct {
+	err    error
+	output json.RawMessage
+}
+
+func NewDestinationApplyOutputError(err error, output json.RawMessage) error {
+	if err == nil {
+		return nil
+	}
+	return &DestinationApplyOutputError{err: err, output: append(json.RawMessage(nil), output...)}
+}
+
+func (e *DestinationApplyOutputError) Error() string {
+	if e == nil || e.err == nil {
+		return "destination apply failed"
+	}
+	return e.err.Error()
+}
+
+func (e *DestinationApplyOutputError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.err
+}
+
+func DestinationApplyOutput(err error) (json.RawMessage, bool) {
+	var outputErr *DestinationApplyOutputError
+	if !errors.As(err, &outputErr) || outputErr == nil || len(outputErr.output) == 0 {
+		return nil, false
+	}
+	return append(json.RawMessage(nil), outputErr.output...), true
+}
+
 // FullOverwriteDestination is the optional run-scoped destination protocol for
 // the canonical replace mode. It keeps the whole replacement lifecycle behind
 // a destination-neutral port: the orchestrator stages and admits each bounded
@@ -133,6 +212,15 @@ type FullOverwritePublicationRequest struct {
 type ManagedTargetApprovalDestination interface {
 	DestinationExecutor
 	ManagedTargetApprovalDestination()
+}
+
+// DefinitionOwnedApprovalDestination marks a destination whose plan, preview,
+// approval, and workset binding are derived from a persisted connection and
+// the selected connector definition. It exposes no caller-selected action or
+// provider request surface.
+type DefinitionOwnedApprovalDestination interface {
+	DestinationExecutor
+	DefinitionOwnedApprovalDestination()
 }
 
 // SourceRequest is the fixed source invocation context. It has no generic
@@ -300,8 +388,9 @@ type DestinationPlanRequest struct {
 }
 
 type DestinationPlan struct {
-	ApplyStrategy     connectors.DestinationApplyStrategy
-	TransformPlanHash string
+	ApplyStrategy          connectors.DestinationApplyStrategy
+	TransformPlanHash      string
+	ActionDefinitionSHA256 string
 }
 
 // DestinationApproval carries only the ephemeral result of a separately
@@ -309,16 +398,24 @@ type DestinationPlan struct {
 // non-serializable: warehouse receipts, runtime configuration, destination
 // plans, and evidence artifacts never retain the operator token.
 type DestinationApproval struct {
-	PlanID        string                            `json:"-"`
-	ApprovalToken string                            `json:"-"`
-	Confirmation  connectors.WriteConfirmation      `json:"-"`
-	Evidence      *connectors.WriteApprovalEvidence `json:"-"`
-	Target        connectors.WriteApprovalTarget    `json:"-"`
-	PreviewDigest string                            `json:"-"`
+	PlanID                 string                            `json:"-"`
+	ApprovalToken          string                            `json:"-"`
+	Confirmation           connectors.WriteConfirmation      `json:"-"`
+	Evidence               *connectors.WriteApprovalEvidence `json:"-"`
+	Target                 connectors.WriteApprovalTarget    `json:"-"`
+	PreviewDigest          string                            `json:"-"`
+	ActionDefinitionSHA256 string                            `json:"-"`
 	// AuthorizeNextUnit rechecks a standing authorization immediately before a
 	// staged batch can cause a destination side effect. It is in-memory only:
 	// receipts and checkpoints retain no token or authorization callback.
 	AuthorizeNextUnit func(context.Context) error `json:"-"`
+	// IssueWriteEvidence returns a fresh, destination-scoped evidence value for
+	// the next declared typed write. The adapter alone supplies the concrete
+	// prepared request to the connector engine; callers cannot use this hook to
+	// choose a route, action, body, or approval target. A fresh value is needed
+	// because the engine consumes evidence after each provider mutation while a
+	// durable authorization may admit several bounded worksets.
+	IssueWriteEvidence func(context.Context) (*connectors.WriteApprovalEvidence, error) `json:"-"`
 }
 
 type DestinationApplyRequest struct {
@@ -366,10 +463,11 @@ type DestinationReadBackRequest struct {
 // PreflightRequest contains only identities and closed declarations needed to
 // prove dispatch. It has no source payload and performs no provider I/O.
 type PreflightRequest struct {
-	Source      connectors.Connector
-	Destination connectors.Connector
-	Stream      string
-	Mode        synccontract.Mode
+	Source            connectors.Connector
+	Destination       connectors.Connector
+	Stream            string
+	Mode              synccontract.Mode
+	DestinationAction string
 }
 
 // RunRequest wires a resolved connection into one shared orchestrator.
@@ -382,9 +480,12 @@ type RunRequest struct {
 	DestinationRuntime connectors.RuntimeConfig
 	DestinationBinding DestinationBinding
 	Stream             string
-	CursorField        string
-	Mode               synccontract.Mode
-	BatchSize          int
+	// DestinationAction is the stable definition-owned action identity stored
+	// on the connection stream. It is never caller-supplied execution input.
+	DestinationAction string
+	CursorField       string
+	Mode              synccontract.Mode
+	BatchSize         int
 	// MaxInFlightBatches bounds the ordered Arrow full-overwrite pipeline.
 	// Zero keeps the programmatic legacy serial behavior; the CLI/app selects
 	// the user-facing default of two for an admitted fast path.
@@ -397,9 +498,10 @@ type RunRequest struct {
 	FastSegments FastSegmentStore
 	// ByteCreditCapacity bounds retained Arrow payload bytes. Zero selects the
 	// 512 MiB fast-path default; it is never a run deadline.
-	ByteCreditCapacity int64
-	Resume             synccontract.ResumeExpectation
-	Checkpoint         *synccontract.CheckpointEnvelope
+	ByteCreditCapacity        int64
+	Resume                    synccontract.ResumeExpectation
+	Checkpoint                *synccontract.CheckpointEnvelope
+	RateLimitResumeCheckpoint *synccontract.CheckpointEnvelope `json:"-"`
 	// UnitDeadline bounds a single retryable provider-page fetch or destination
 	// apply/read-back unit. Zero selects the conservative default; it is never
 	// a deadline for the full source-to-destination run.
@@ -433,13 +535,19 @@ type Result struct {
 	ParquetBytes           int64
 	PeakCreditBytes        int64
 	CreditWaitElapsed      time.Duration
-	CommittedCheckpoint    *synccontract.CheckpointEnvelope
+	// DestinationResults retain every provider-returned response field, key,
+	// value, receipt, status, body, occurrence ID, and credential-equal byte
+	// verbatim. They remain opaque to the transport core: mapping and provider
+	// protocol stay connector-owned. Only system-generated diagnostics, plans,
+	// logs, and errors are rendered secret-safely.
+	DestinationResults  []json.RawMessage
+	CommittedCheckpoint *synccontract.CheckpointEnvelope
 }
 
 const defaultTransportUnitDeadline = time.Minute
 
 func (r RunRequest) preflightRequest() PreflightRequest {
-	return PreflightRequest{Source: r.Source, Destination: r.Destination, Stream: r.Stream, Mode: r.Mode}
+	return PreflightRequest{Source: r.Source, Destination: r.Destination, Stream: r.Stream, Mode: r.Mode, DestinationAction: r.DestinationAction}
 }
 
 func (r RunRequest) validateExecution() error {
@@ -454,6 +562,11 @@ func (r RunRequest) validateExecution() error {
 	}
 	if r.MaxInFlightBatches < 0 || r.MaxInFlightBatches > 8 {
 		return fmt.Errorf("transport max in-flight batches must be zero or between 1 and 8")
+	}
+	if r.RateLimitResumeCheckpoint != nil {
+		if err := r.RateLimitResumeCheckpoint.Validate(); err != nil {
+			return fmt.Errorf("rate-limit resume checkpoint: %w", err)
+		}
 	}
 	return nil
 }

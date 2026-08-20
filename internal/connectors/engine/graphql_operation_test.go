@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"io"
@@ -566,7 +567,8 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 		if got, want := vars["id"], "widget-1"; got != want {
 			t.Fatalf("variables.id = %#v, want %q", got, want)
 		}
-		_, _ = w.Write([]byte(`{"data":{"deleteWidget":{"deletedId":"widget-1"},"rateLimit":{"limit":4,"cost":4,"remaining":4,"resetAt":""}}}`))
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"data":{"deleteWidget":{"deletedId":"widget-1"},"rateLimit":{"limit":4,"cost":4,"remaining":4,"resetAt":""}},"extensions":{"trace_id":"provider-trace"},"provider_fact":"retained"}`))
 	}))
 	defer server.Close()
 
@@ -625,10 +627,14 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 	}
 	body, ok := result.Body.(map[string]any)
 	if !ok {
-		t.Fatalf("mutation body type = %T, want data object", result.Body)
+		t.Fatalf("mutation body type = %T, want GraphQL envelope", result.Body)
 	}
-	if _, ok := body["deleteWidget"]; !ok {
-		t.Fatalf("mutation body = %#v, want GraphQL data only", body)
+	data, ok := body["data"].(map[string]any)
+	if !ok || data["deleteWidget"] == nil {
+		t.Fatalf("mutation body = %#v, want GraphQL data envelope", body)
+	}
+	if extensions, ok := body["extensions"].(map[string]any); !ok || extensions["trace_id"] != "provider-trace" || body["provider_fact"] != "retained" {
+		t.Fatalf("mutation body = %#v, want complete provider envelope", body)
 	}
 
 	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
@@ -656,10 +662,73 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 	}
 }
 
+func TestOperationDirectWritePreservesExplicitNonJSONGraphQLMutationResponse(t *testing.T) {
+	for _, testCase := range []struct {
+		name        string
+		contentType string
+		body        []byte
+		encoding    string
+		raw         string
+	}{
+		{
+			name:        "text",
+			contentType: "text/plain",
+			body:        []byte(`{"errors":[{"message":"provider text is not a GraphQL envelope"}]}`),
+			encoding:    "text",
+			raw:         `{"errors":[{"message":"provider text is not a GraphQL envelope"}]}`,
+		},
+		{
+			name:        "binary",
+			contentType: "application/octet-stream",
+			body:        []byte{0xff, 0x00, 0x01, 0x7f},
+			encoding:    "base64",
+			raw:         base64.StdEncoding.EncodeToString([]byte{0xff, 0x00, 0x01, 0x7f}),
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				calls++
+				w.Header().Set("Content-Type", testCase.contentType)
+				_, _ = w.Write(testCase.body)
+			}))
+			defer server.Close()
+
+			bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+			req := connectors.OperationDirectWriteRequest{
+				Operation: "acme.widgets.mutation",
+				Config: connectors.RuntimeConfig{
+					CredentialRevision:  "fixture-credential-revision",
+					ConfigurationDigest: "fixture-configuration-digest",
+					WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+				},
+				Body: map[string]any{"id": "widget-1"},
+			}
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			req.PreviewDigest = preview.Digest
+			req.Approval = approvedEvidenceForPreview(t, preview)
+			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("OperationDirectWrite() = %v", err)
+			}
+			if calls != 1 || !result.ResponseReceived || !result.BodyPresent || result.BodyBytes != len(testCase.body) || result.BodyRaw != testCase.raw || result.BodyRawEncoding != testCase.encoding {
+				t.Fatalf("non-JSON GraphQL mutation result = %#v calls=%d, want exact provider bytes", result, calls)
+			}
+			if result.Body != nil || result.GraphQL != nil {
+				t.Fatalf("non-JSON GraphQL mutation parsed a provider body: %#v", result)
+			}
+		})
+	}
+}
+
 func TestOperationDirectWriteFailsClosedOnGraphQLErrors(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calls++
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"data":{"deleteWidget":null},"errors":[{"message":"mutation denied"}]}`))
 	}))
 	defer server.Close()
@@ -680,8 +749,19 @@ func TestOperationDirectWriteFailsClosedOnGraphQLErrors(t *testing.T) {
 	}
 	req.PreviewDigest = preview.Digest
 	req.Approval = approvedEvidenceForPreview(t, preview)
-	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), "graphql errors") {
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil || !strings.Contains(strings.ToLower(err.Error()), "graphql") {
 		t.Fatalf("OperationDirectWrite error = %v, want GraphQL error rejection", err)
+	}
+	if strings.Contains(err.Error(), "mutation denied") {
+		t.Fatal("OperationDirectWrite error leaked a provider GraphQL detail")
+	}
+	body, ok := result.Body.(map[string]any)
+	if !result.ResponseReceived || !result.BodyPresent || !ok || body["errors"] == nil || result.GraphQL == nil || len(result.GraphQL.Errors) != 1 {
+		t.Fatal("GraphQL failed-write result did not retain the received envelope and metadata")
+	}
+	if got := result.GraphQL.Errors[0].Message; got != "mutation denied" {
+		t.Fatalf("GraphQL provider error metadata = %q, want exact provider value", got)
 	}
 	if calls != 1 {
 		t.Fatalf("GraphQL error test calls = %d, want exactly one approved request", calls)
@@ -695,6 +775,7 @@ func TestOperationDirectWriteRetainsGraphQLApplicationErrorResponse(t *testing.T
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calls++
 		w.Header().Set("X-Provider-Trace", "trace-123")
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(responseBody))
 	}))
 	defer server.Close()
@@ -783,7 +864,7 @@ func TestOperationDirectWriteBindsGraphQLQueryAuth(t *testing.T) {
 	}
 }
 
-func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
+func TestOperationDirectWriteRetainsTerminalGraphQLHTTPResponse(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calls++
@@ -808,22 +889,22 @@ func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	}
 	req.PreviewDigest = preview.Digest
 	req.Approval = approvedEvidenceForPreview(t, preview)
-	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
 	if err == nil {
-		t.Fatal("OperationDirectWrite error = nil, want redacted GraphQL HTTP error")
+		t.Fatal("OperationDirectWrite error = nil, want GraphQL HTTP error")
 	}
 	if strings.Contains(err.Error(), "fake-test-value") {
-		t.Fatalf("GraphQL HTTP error leaked provider body value: %v", err)
+		t.Fatal("GraphQL HTTP error leaked a provider body value")
 	}
-	if !strings.Contains(err.Error(), "[redacted]") {
-		t.Fatalf("GraphQL HTTP error = %v, want redaction marker", err)
+	if !result.ResponseReceived || result.Status != http.StatusBadRequest || result.BodyRaw != `{"message":"access_token=fake-test-value"}` {
+		t.Fatal("GraphQL terminal response did not retain the complete provider response")
 	}
 	if calls != 1 {
 		t.Fatalf("GraphQL HTTP error calls = %d, want exactly one approved request", calls)
 	}
 }
 
-func TestOperationDirectWriteSecretOperationRetainsProviderErrors(t *testing.T) {
+func TestOperationDirectWriteSecretOperationRetainsProviderResponses(t *testing.T) {
 	const sensitiveValue = "provider-echoed-github-pat"
 	for _, tt := range []struct {
 		name       string
@@ -845,6 +926,9 @@ func TestOperationDirectWriteSecretOperationRetainsProviderErrors(t *testing.T) 
 			calls := 0
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 				calls++
+				if tt.name == "graphql errors" {
+					w.Header().Set("Content-Type", "application/json")
+				}
 				w.WriteHeader(tt.statusCode)
 				_, _ = w.Write([]byte(tt.body))
 			}))
@@ -866,15 +950,15 @@ func TestOperationDirectWriteSecretOperationRetainsProviderErrors(t *testing.T) 
 			}
 			req.PreviewDigest = preview.Digest
 			req.Approval = approvedEvidenceForPreview(t, preview)
-			_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
 			if err == nil {
 				t.Fatal("OperationDirectWrite error = nil, want provider failure")
 			}
-			if !strings.Contains(err.Error(), sensitiveValue) {
-				t.Fatal("OperationDirectWrite did not retain the complete provider error")
+			if strings.Contains(err.Error(), sensitiveValue) {
+				t.Fatal("OperationDirectWrite leaked a provider response through its synthetic error")
 			}
-			if strings.Contains(err.Error(), "redacted") {
-				t.Fatal("OperationDirectWrite redacted a secret-operation provider error")
+			if !result.ResponseReceived || result.BodyRaw != tt.body {
+				t.Fatal("OperationDirectWrite result did not retain the exact provider response")
 			}
 			if calls != 1 {
 				t.Fatalf("provider error calls = %d, want exactly one approved request", calls)
@@ -887,6 +971,7 @@ func TestOperationDirectWriteFailsClosedOnMissingGraphQLData(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calls++
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"data":null}`))
 	}))
 	defer server.Close()

@@ -483,6 +483,10 @@ type DirectReadResult struct {
 type OperationResponseHeader struct {
 	Values   []string `json:"values,omitempty"`
 	Redacted bool     `json:"redacted,omitempty"`
+	// Masked is the persisted reverse-ETL projection spelling for the same
+	// declared secret boundary. Keep both markers so direct operation results
+	// and full provider write receipts retain their established JSON contracts.
+	Masked bool `json:"masked,omitempty"`
 }
 
 // GraphQLResponseMetadata is the bounded protocol metadata retained for a
@@ -495,9 +499,7 @@ type GraphQLResponseMetadata struct {
 	RateLimit   *GraphQLRateLimit    `json:"rate_limit,omitempty"`
 }
 
-// GraphQLResultError intentionally carries only a sanitized, bounded message.
-// Provider extensions and paths may echo caller inputs or internal identifiers,
-// so neither is a CLI response contract.
+// GraphQLResultError reports one provider GraphQL error.
 type GraphQLResultError struct {
 	Message string `json:"message"`
 }
@@ -637,17 +639,24 @@ type OperationDirectWriteRequest struct {
 }
 
 // OperationDirectWriteResult is the typed result of one declared REST or
-// fixed-document GraphQL mutation. Body is nil only for an output policy that
-// intentionally discards response content.
+// fixed-document GraphQL mutation. Provider-returned output is retained
+// verbatim; output_policy shapes parsing only. System-generated diagnostics,
+// plans, and logs remain separate secret-safe surfaces.
 type OperationDirectWriteResult struct {
-	Connector string                             `json:"connector"`
-	Operation string                             `json:"operation"`
-	Method    string                             `json:"method"`
-	Path      string                             `json:"path"`
-	Status    int                                `json:"status"`
-	Body      any                                `json:"body,omitempty"`
-	Headers   map[string]OperationResponseHeader `json:"headers,omitempty"`
-	GraphQL   *GraphQLResponseMetadata           `json:"graphql,omitempty"`
+	Connector          string                             `json:"connector"`
+	Operation          string                             `json:"operation"`
+	Method             string                             `json:"method"`
+	Path               string                             `json:"path"`
+	ResponseReceived   bool                               `json:"response_received"`
+	Status             int                                `json:"status"`
+	Headers            map[string]OperationResponseHeader `json:"headers,omitempty"`
+	BodyPresent        bool                               `json:"body_present"`
+	BodyBytes          int                                `json:"body_bytes"`
+	BodyRaw            string                             `json:"body_raw,omitempty"`
+	BodyRawEncoding    string                             `json:"body_raw_encoding,omitempty"`
+	Body               any                                `json:"body"`
+	GraphQL            *GraphQLResponseMetadata           `json:"graphql,omitempty"`
+	OutputSecretFields []string                           `json:"-"`
 }
 
 // OperationDirectWriteMetadata is the no-network operation metadata needed by
@@ -884,9 +893,78 @@ func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
 }
 
 type WriteResult struct {
-	RecordsWritten   int `json:"records_written"`
-	RecordsFailed    int `json:"records_failed"`
-	RecordsUnchanged int `json:"records_unchanged,omitempty"`
+	RecordsWritten    int                     `json:"records_written"`
+	RecordsFailed     int                     `json:"records_failed"`
+	RecordsUnchanged  int                     `json:"records_unchanged,omitempty"`
+	ProviderResponses []WriteProviderResponse `json:"provider_responses,omitempty"`
+}
+
+// WriteProviderResponse is the verbatim provider result captured for one named
+// typed write action. System-generated diagnostics are carried separately.
+type WriteProviderResponse struct {
+	RecordIndex     int                            `json:"record_index"`
+	Status          int                            `json:"status"`
+	Headers         map[string]WriteProviderHeader `json:"headers"`
+	BodyPresent     bool                           `json:"body_present"`
+	BodyBytes       int                            `json:"body_bytes"`
+	BodyRaw         string                         `json:"body_raw,omitempty"`
+	BodyRawEncoding string                         `json:"body_raw_encoding,omitempty"`
+	Body            any                            `json:"body"`
+	BodyEncoding    string                         `json:"body_encoding,omitempty"`
+}
+
+// WriteProviderHeader and OperationResponseHeader share the same complete
+// provider-header representation. The alias prevents the declarative reverse
+// result path from narrowing a declaration-owned operation result.
+type WriteProviderHeader = OperationResponseHeader
+
+// SanitizeWriteResultForOutput preserves provider responses exactly for
+// persisted App/CLI output; only separately generated diagnostics are
+// secret-safe.
+func SanitizeWriteResultForOutput(result WriteResult, _ map[string]string) WriteResult {
+	return result
+}
+
+// SanitizeOperationDirectWriteResultForOutput preserves an already named
+// provider operation result exactly; generated diagnostics remain separate.
+func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, _ map[string]string) OperationDirectWriteResult {
+	return result
+}
+
+func SanitizeWriteErrorForOutput(err error, secrets map[string]string) string {
+	if err == nil {
+		return ""
+	}
+	return redactWriteResultString(err.Error(), configuredWriteResultSecrets(secrets))
+}
+
+func configuredWriteResultSecrets(secrets map[string]string) []string {
+	values := make([]string, 0, len(secrets))
+	seen := make(map[string]struct{}, len(secrets))
+	for _, value := range secrets {
+		if value == "" {
+			continue
+		}
+		if _, found := seen[value]; found {
+			continue
+		}
+		seen[value] = struct{}{}
+		values = append(values, value)
+	}
+	sort.Slice(values, func(i, j int) bool {
+		if len(values[i]) == len(values[j]) {
+			return values[i] < values[j]
+		}
+		return len(values[i]) > len(values[j])
+	})
+	return values
+}
+
+func redactWriteResultString(value string, secrets []string) string {
+	for _, secret := range secrets {
+		value = strings.ReplaceAll(value, secret, "[masked]")
+	}
+	return value
 }
 
 type QueryRequest struct {
@@ -1026,6 +1104,14 @@ type CDCTransactionReceiptRestorer interface {
 
 type WriteValidator interface {
 	ValidateWrite(ctx context.Context, req WriteRequest, records []Record) error
+}
+
+type DeclarativeTypedDestination interface {
+	Connector
+	DefinitionProvider
+	WriteValidator
+	PreflightWriteRecordFieldMapping(actionName string, fields []string) error
+	DeclarativeTypedDestinationActionDigest(actionName string) (string, error)
 }
 
 type DryRunWriter interface {

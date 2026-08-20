@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -140,6 +141,10 @@ type StreamConfig struct {
 	// binds the persisted closed form into later plans and approvals.
 	TransformPlan     string `json:"transform_plan,omitempty"`
 	TransformPlanHash string `json:"transform_plan_hash,omitempty"`
+	// DestinationAction is a stable action name from the selected destination
+	// definition. It is required only when that destination declares more than
+	// one action for this stream mode; execution receives no action override.
+	DestinationAction string `json:"destination_action,omitempty"`
 }
 
 type StreamState struct {
@@ -235,30 +240,38 @@ type RunETLRequest struct {
 	// MaxInFlightBatches is an optional ordered Arrow full-overwrite pipeline
 	// bound. Zero means the caller did not select the CLI/app capability
 	// control; admitted fast paths choose their documented default of two.
-	MaxInFlightBatches  int                               `json:"max_in_flight_batches,omitempty"`
-	DestinationApproval synctransport.DestinationApproval `json:"-"`
+	MaxInFlightBatches           int                               `json:"max_in_flight_batches,omitempty"`
+	DestinationApproval          synctransport.DestinationApproval `json:"-"`
+	rateParkingResumeCheckpoint  *synccontract.CheckpointEnvelope
+	rateParkingRearmAttemptRunID string
 }
 
 type Run struct {
-	ID                 string            `json:"id"`
-	Type               string            `json:"type"`
-	Connection         string            `json:"connection,omitempty"`
-	Stream             string            `json:"stream,omitempty"`
-	Status             string            `json:"status"`
-	RecordsRead        int               `json:"records_read"`
-	RecordsTransformed int               `json:"records_transformed"`
-	RecordsLoaded      int               `json:"records_loaded"`
-	RecordsFailed      int               `json:"records_failed"`
-	BatchCount         int               `json:"batch_count,omitempty"`
-	Checkpoint         map[string]string `json:"checkpoint,omitempty"`
+	ID                                string            `json:"id"`
+	Type                              string            `json:"type"`
+	Connection                        string            `json:"connection,omitempty"`
+	Stream                            string            `json:"stream,omitempty"`
+	Status                            string            `json:"status"`
+	RecordsRead                       int               `json:"records_read"`
+	RecordsTransformed                int               `json:"records_transformed"`
+	RecordsLoaded                     int               `json:"records_loaded"`
+	RecordsFailed                     int               `json:"records_failed"`
+	BatchSize                         int               `json:"batch_size,omitempty"`
+	BatchCount                        int               `json:"batch_count,omitempty"`
+	Checkpoint                        map[string]string `json:"checkpoint,omitempty"`
+	DeclarativeTypedDestinationPlanID string            `json:"declarative_typed_destination_plan_id,omitempty"`
+	RateParkingRearmAttemptRunID      string            `json:"rate_parking_rearm_attempt_run_id,omitempty"`
 	// TransportPhaseMeasurement is emitted with the terminal run transition on
 	// closed source -> warehouse -> destination transports. It deliberately
 	// contains counts and elapsed times only, never records, paths, tokens, or
 	// connector configuration.
 	TransportPhaseMeasurement *TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
-	Error                     string                     `json:"error,omitempty"`
-	StartedAt                 time.Time                  `json:"started_at"`
-	CompletedAt               time.Time                  `json:"completed_at,omitempty"`
+	// DestinationResults retains each completed declarative typed destination
+	// action's full provider result.
+	DestinationResults []json.RawMessage `json:"destination_results,omitempty"`
+	Error              string            `json:"error,omitempty"`
+	StartedAt          time.Time         `json:"started_at"`
+	CompletedAt        time.Time         `json:"completed_at,omitempty"`
 }
 
 type TransportPhaseMeasurement struct {
@@ -425,10 +438,11 @@ type ReversePlan struct {
 	// definition-selected transport writes. They bind a pre-run approval to
 	// one connection configuration; neither field is caller-selectable write
 	// input and neither contains an approval token or credential material.
-	TransportConnectionID  string `json:"transport_connection_id,omitempty"`
-	TransportStream        string `json:"transport_stream,omitempty"`
-	TransportBindingSHA256 string `json:"transport_binding_sha256,omitempty"`
-	TransportForwardPlanID string `json:"transport_forward_plan_id,omitempty"`
+	TransportConnectionID           string `json:"transport_connection_id,omitempty"`
+	TransportStream                 string `json:"transport_stream,omitempty"`
+	TransportBindingSHA256          string `json:"transport_binding_sha256,omitempty"`
+	TransportActionDefinitionSHA256 string `json:"transport_action_definition_sha256,omitempty"`
+	TransportForwardPlanID          string `json:"transport_forward_plan_id,omitempty"`
 	// AuthorizationLifetime is a bounded day-scale lifetime requested when a
 	// PostgreSQL managed-target transport plan is created. It is included in
 	// the sealed plan hash before its single-use approval token is issued.
@@ -525,8 +539,9 @@ type ReverseRun struct {
 	RecordsSucceeded int    `json:"records_succeeded"`
 	RecordsFailed    int    `json:"records_failed"`
 	Error            string `json:"error,omitempty"`
-	// OperationDirectWrite is populated only for a successful direct_write
-	// command. Its body is decoded according to the operation output policy.
+	// DestinationResult retains the complete typed write result for regular
+	// reverse ETL.
+	DestinationResult    json.RawMessage                        `json:"destination_result,omitempty"`
 	OperationDirectWrite *connectors.OperationDirectWriteResult `json:"operation_direct_write,omitempty"`
 	StartedAt            time.Time                              `json:"started_at"`
 	CompletedAt          time.Time                              `json:"completed_at,omitempty"`
