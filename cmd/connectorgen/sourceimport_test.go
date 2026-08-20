@@ -701,6 +701,104 @@ func TestSourceImportScopesReferenceResolutionToOpenAPIGrammar(t *testing.T) {
 	}
 }
 
+func TestSourceImportClosesSchemaGrammarAndOperationIDBoundaries(t *testing.T) {
+	t.Parallel()
+	nonStringOperationID := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"operationId":7,"responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/operation-id.json", nonStringOperationID)
+	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return nonStringOperationID, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), `paths["/items"].get.operationId must be a string`) {
+		t.Fatalf("operation ID error = %v", err)
+	}
+
+	resolved := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Bounded":{"type":"string","maxLength":8}},"parameters":{"filter":{"name":"filter","in":"query","schema":{"type":"string","maxLength":8}}}},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","schema":{"$ref":"#/components/parameters/filter/schema"}}],"responses":{"200":{"description":"ok","schema":{"$ref":"https://provider.invalid/literal-response-field"},"content":{"application/json":{"schema":{"type":"array","contentSchema":{"$ref":"#/components/schemas/Bounded"},"unevaluatedItems":{"$ref":"#/components/schemas/Bounded"},"prefixItems":[{"type":"array","unevaluatedItems":false}]}}}}}}}}}`)
+	result := importInlineSourceResult(t, resolved, defaultSourceImportLimits())
+	query := result.Operations[0].Request.Query[0].Schema.(map[string]any)
+	if query["type"] != "string" {
+		t.Fatalf("nested parameter schema reference = %#v", query)
+	}
+	response := descriptorResponse(t, result.Operations[0], "200")
+	declaration := response.Declaration.(map[string]any)
+	if declaration["schema"].(map[string]any)["$ref"] != "https://provider.invalid/literal-response-field" {
+		t.Fatalf("OpenAPI response literal schema field = %#v", declaration["schema"])
+	}
+	schema := declaration["content"].(map[string]any)["application/json"].(map[string]any)["schema"].(map[string]any)
+	if schema["contentSchema"].(map[string]any)["type"] != "string" || schema["unevaluatedItems"].(map[string]any)["type"] != "string" || schema["prefixItems"].([]any)[0].(map[string]any)["unevaluatedItems"] != false {
+		t.Fatalf("resolved OpenAPI 3.1 schema positions = %#v", schema)
+	}
+
+	externalContentSchema := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"string","maxLength":8,"contentSchema":{"$ref":"https://provider.invalid/content-schema"}}}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/content-schema.json", externalContentSchema)
+	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return externalContentSchema, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "external reference") {
+		t.Fatalf("external contentSchema error = %v", err)
+	}
+}
+
+func TestSourceImportRecognizesFiniteOpenAPI31SchemaForms(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name   string
+		schema string
+	}{
+		{name: "const", schema: `{"const":"fixed"}`},
+		{name: "nullable string union", schema: `{"type":["string","null"],"maxLength":8}`},
+		{name: "closed tuple", schema: `{"type":"array","prefixItems":[{"type":"string","maxLength":8}],"items":false}`},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":` + tc.schema + `}}},"responses":{"200":{"description":"ok"}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			if result.Operations[0].Request.Body == nil {
+				t.Fatalf("bounded %s request was not imported", tc.name)
+			}
+		})
+	}
+
+	openAPI30Union := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":["string","null"],"maxLength":8}}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-union.json", openAPI30Union)
+	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return openAPI30Union, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "type union requires OpenAPI 3.1") {
+		t.Fatalf("OpenAPI 3.0 union error = %v", err)
+	}
+
+	contradictory := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"number","minimum":9007199254740993,"maximum":9007199254740992}}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/exact-bounds.json", contradictory)
+	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return contradictory, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "contradictory request schema numeric bounds") {
+		t.Fatalf("exact numeric bounds error = %v", err)
+	}
+}
+
+func TestSourceImportBoundsInlineSchemaResolution(t *testing.T) {
+	t.Parallel()
+	schema := `{"type":"string","maxLength":1}`
+	for range 6 {
+		schema = `{"type":"array","maxItems":1,"items":` + schema + `}`
+	}
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":` + schema + `}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	for _, tc := range []struct {
+		name   string
+		limits sourceImportLimits
+		want   string
+	}{
+		{name: "depth", limits: func() sourceImportLimits {
+			limits := defaultSourceImportLimits()
+			limits.MaxReferenceDepth = 3
+			return limits
+		}(), want: "schema depth limit exceeded"},
+		{name: "nodes", limits: func() sourceImportLimits {
+			limits := defaultSourceImportLimits()
+			limits.MaxSchemaNodes = 3
+			return limits
+		}(), want: "node limit exceeded"},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inline-schema.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), tc.limits)
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("%s inline schema error = %v, want %q", tc.name, err, tc.want)
+			}
+		})
+	}
+}
+
 func importInlineSourceResult(t *testing.T, raw []byte, limits sourceImportLimits) sourceImportResult {
 	t.Helper()
 	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inline-openapi.json", raw)

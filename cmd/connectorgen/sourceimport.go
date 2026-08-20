@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"net"
 	"net/http"
 	"os"
@@ -46,6 +47,7 @@ const (
 	defaultSourceImportOperations      = 10_000
 	defaultSourceImportReferences      = 50_000
 	defaultSourceImportReferenceDepth  = 32
+	defaultSourceImportSchemaNodes     = 100_000
 )
 
 type sourceImportLimits struct {
@@ -55,6 +57,7 @@ type sourceImportLimits struct {
 	MaxOperations              int
 	MaxReferences              int
 	MaxReferenceDepth          int
+	MaxSchemaNodes             int
 }
 
 type sourceDocumentForm struct {
@@ -78,6 +81,10 @@ func (form sourceDocumentForm) allowsReferenceSiblings() bool {
 	return ok && major == 3 && minor == 1
 }
 
+func (form sourceDocumentForm) isOpenAPI31() bool {
+	return form.allowsReferenceSiblings()
+}
+
 func defaultSourceImportLimits() sourceImportLimits {
 	return sourceImportLimits{
 		MaxArtifactBytes:           defaultSourceImportArtifactBytes,
@@ -86,6 +93,7 @@ func defaultSourceImportLimits() sourceImportLimits {
 		MaxOperations:              defaultSourceImportOperations,
 		MaxReferences:              defaultSourceImportReferences,
 		MaxReferenceDepth:          defaultSourceImportReferenceDepth,
+		MaxSchemaNodes:             defaultSourceImportSchemaNodes,
 	}
 }
 
@@ -860,7 +868,8 @@ const (
 )
 
 type sourceSchemaExpansionBudget struct {
-	used int64
+	used  int64
+	nodes int
 }
 
 type sourceSchemaExpansionLimitError struct {
@@ -872,7 +881,57 @@ func (err *sourceSchemaExpansionLimitError) Error() string {
 	if err.Scope == "object" {
 		return fmt.Sprintf("schema byte limit exceeded during resolved expansion while retaining %s", err.Label)
 	}
+	if err.Scope == "node" {
+		return fmt.Sprintf("resolved schema expansion node limit exceeded while retaining %s", err.Label)
+	}
 	return fmt.Sprintf("resolved schema expansion %s byte limit exceeded while retaining %s", err.Scope, err.Label)
+}
+
+type sourceSchemaGrammar struct {
+	mapChildren        []string
+	schemaChildren     []string
+	arrayChildren      []string
+	dependencyChildren bool
+}
+
+func sourceSchemaGrammarFor(form sourceDocumentForm) sourceSchemaGrammar {
+	if form.isSwagger2() {
+		return sourceSchemaGrammar{
+			mapChildren:    []string{"properties"},
+			schemaChildren: []string{"items", "additionalProperties"},
+			arrayChildren:  []string{"allOf"},
+		}
+	}
+	if form.isOpenAPI() && !form.isOpenAPI31() {
+		return sourceSchemaGrammar{
+			mapChildren:    []string{"properties"},
+			schemaChildren: []string{"items", "additionalProperties", "not"},
+			arrayChildren:  []string{"allOf", "anyOf", "oneOf"},
+		}
+	}
+	return sourceSchemaGrammar{
+		mapChildren:        []string{"$defs", "definitions", "properties", "patternProperties", "dependentSchemas"},
+		schemaChildren:     []string{"items", "additionalProperties", "contains", "not", "if", "then", "else", "propertyNames", "unevaluatedProperties", "unevaluatedItems", "contentSchema"},
+		arrayChildren:      []string{"allOf", "anyOf", "oneOf", "prefixItems"},
+		dependencyChildren: true,
+	}
+}
+
+func (grammar sourceSchemaGrammar) handles(key string) bool {
+	for _, children := range [][]string{grammar.mapChildren, grammar.schemaChildren, grammar.arrayChildren} {
+		for _, candidate := range children {
+			if key == candidate {
+				return true
+			}
+		}
+	}
+	return grammar.dependencyChildren && key == "dependencies"
+}
+
+var sourceSchemaBearingKeywords = []string{
+	"$defs", "definitions", "properties", "patternProperties", "dependentSchemas", "dependencies",
+	"items", "additionalProperties", "contains", "not", "if", "then", "else", "propertyNames", "unevaluatedProperties", "unevaluatedItems", "contentSchema",
+	"allOf", "anyOf", "oneOf", "prefixItems",
 }
 
 func (r *sourceReferenceResolver) resolve(value any) (any, error) {
@@ -1077,12 +1136,14 @@ func (r *sourceReferenceResolver) resolveResponse(value any, stack map[string]bo
 		object = sourceMergeReferenceObject(resolved, reference)
 	}
 	out := sourceCloneMap(object)
-	if schema, exists := object["schema"]; exists {
-		resolved, err := r.resolveSchema(schema, nil, 0)
-		if err != nil {
-			return nil, err
+	if r.form.isSwagger2() {
+		if schema, exists := object["schema"]; exists {
+			resolved, err := r.resolveSchema(schema, nil, 0)
+			if err != nil {
+				return nil, err
+			}
+			out["schema"] = resolved
 		}
-		out["schema"] = resolved
 	}
 	if r.form.isOpenAPI() {
 		if content, exists := object["content"]; exists {
@@ -1311,6 +1372,9 @@ func (r *sourceReferenceResolver) resolveExample(value any, stack map[string]boo
 }
 
 func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool, depth int) (any, error) {
+	if err := r.reserveSchemaEntry(value, depth, "schema"); err != nil {
+		return nil, err
+	}
 	object, ok := value.(map[string]any)
 	if !ok {
 		return sourceCloneLiteral(value), nil
@@ -1336,11 +1400,26 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 		}
 		object = sourceOverlayReferenceObject(targetObject, reference)
 	}
+	grammar := sourceSchemaGrammarFor(r.form)
+	for _, key := range sourceSchemaBearingKeywords {
+		if _, exists := object[key]; exists && !grammar.handles(key) {
+			return nil, fmt.Errorf("unsupported %s schema keyword %s", r.form.Family, key)
+		}
+	}
 	var objectUsed int64
 	out := make(map[string]any, len(object))
 	special := map[string]bool{}
-	for _, key := range []string{"properties", "patternProperties", "dependentSchemas", "$defs", "definitions", "items", "additionalProperties", "contains", "not", "if", "then", "else", "propertyNames", "unevaluatedProperties", "allOf", "anyOf", "oneOf", "prefixItems"} {
+	for _, key := range grammar.mapChildren {
 		special[key] = true
+	}
+	for _, key := range grammar.schemaChildren {
+		special[key] = true
+	}
+	for _, key := range grammar.arrayChildren {
+		special[key] = true
+	}
+	if grammar.dependencyChildren {
+		special["dependencies"] = true
 	}
 	for _, key := range sortedSourceMapKeys(object) {
 		if special[key] {
@@ -1351,7 +1430,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 		}
 		out[key] = sourceCloneLiteral(object[key])
 	}
-	for _, key := range []string{"properties", "patternProperties", "dependentSchemas", "$defs", "definitions"} {
+	for _, key := range grammar.mapChildren {
 		if raw, exists := object[key]; exists {
 			children, ok := raw.(map[string]any)
 			if !ok {
@@ -1359,7 +1438,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 			}
 			resolvedChildren := make(map[string]any, len(children))
 			for _, name := range sortedSourceMapKeys(children) {
-				resolved, err := r.resolveSchema(children[name], stack, depth)
+				resolved, err := r.resolveSchemaChild(children[name], stack, depth+1, fmt.Sprintf("schema %s[%q]", key, name))
 				if err != nil {
 					return nil, err
 				}
@@ -1371,17 +1450,42 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 			out[key] = resolvedChildren
 		}
 	}
-	for _, key := range []string{"items", "additionalProperties", "contains", "not", "if", "then", "else", "propertyNames", "unevaluatedProperties"} {
-		if raw, exists := object[key]; exists {
-			var resolved any
-			if _, isObject := raw.(map[string]any); isObject {
-				var err error
-				resolved, err = r.resolveSchema(raw, stack, depth)
-				if err != nil {
-					return nil, err
+	if grammar.dependencyChildren {
+		if raw, exists := object["dependencies"]; exists {
+			children, ok := raw.(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("schema dependencies must be an object")
+			}
+			resolvedChildren := make(map[string]any, len(children))
+			for _, name := range sortedSourceMapKeys(children) {
+				child := children[name]
+				switch child.(type) {
+				case map[string]any, bool:
+					resolved, err := r.resolveSchemaChild(child, stack, depth+1, fmt.Sprintf("schema dependencies[%q]", name))
+					if err != nil {
+						return nil, err
+					}
+					if err := r.reserveSchemaValue(resolved, &objectUsed, fmt.Sprintf("schema dependencies[%q]", name)); err != nil {
+						return nil, err
+					}
+					resolvedChildren[name] = resolved
+				case []any:
+					if err := r.reserveSchemaValue(child, &objectUsed, fmt.Sprintf("schema dependencies[%q]", name)); err != nil {
+						return nil, err
+					}
+					resolvedChildren[name] = sourceCloneLiteral(child)
+				default:
+					return nil, fmt.Errorf("schema dependencies[%q] must be a schema or string array", name)
 				}
-			} else {
-				resolved = sourceCloneLiteral(raw)
+			}
+			out["dependencies"] = resolvedChildren
+		}
+	}
+	for _, key := range grammar.schemaChildren {
+		if raw, exists := object[key]; exists {
+			resolved, err := r.resolveSchemaChild(raw, stack, depth+1, "schema field "+key)
+			if err != nil {
+				return nil, err
 			}
 			if err := r.reserveSchemaValue(resolved, &objectUsed, "schema field "+key); err != nil {
 				return nil, err
@@ -1389,7 +1493,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 			out[key] = resolved
 		}
 	}
-	for _, key := range []string{"allOf", "anyOf", "oneOf", "prefixItems"} {
+	for _, key := range grammar.arrayChildren {
 		if raw, exists := object[key]; exists {
 			items, ok := raw.([]any)
 			if !ok {
@@ -1397,7 +1501,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 			}
 			resolvedItems := make([]any, len(items))
 			for index, item := range items {
-				resolved, err := r.resolveSchema(item, stack, depth)
+				resolved, err := r.resolveSchemaChild(item, stack, depth+1, fmt.Sprintf("schema %s[%d]", key, index))
 				if err != nil {
 					return nil, err
 				}
@@ -1412,21 +1516,63 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 	return out, nil
 }
 
+func (r *sourceReferenceResolver) resolveSchemaChild(value any, stack map[string]bool, depth int, label string) (any, error) {
+	switch value.(type) {
+	case map[string]any, bool:
+		return r.resolveSchema(value, stack, depth)
+	default:
+		return nil, fmt.Errorf("%s must be a schema object or boolean", label)
+	}
+}
+
+func (r *sourceReferenceResolver) reserveSchemaEntry(value any, depth int, label string) error {
+	if depth > r.limits.MaxReferenceDepth {
+		return fmt.Errorf("schema depth limit exceeded")
+	}
+	raw, err := sourceMarshalCompact(value)
+	if err != nil {
+		return fmt.Errorf("encode %s: %w", label, err)
+	}
+	bytes := int64(len(raw))
+	if bytes > sourceSchemaByteLimit(r.limits) {
+		return &sourceSchemaExpansionLimitError{Scope: "object", Label: label}
+	}
+	if r.expansion.nodes >= sourceSchemaNodeLimit(r.limits) {
+		return &sourceSchemaExpansionLimitError{Scope: "node", Label: label}
+	}
+	documentLimit := sourceResolvedDescriptorLimit(r.limits)
+	if bytes > documentLimit || r.expansion.used > documentLimit-bytes {
+		return &sourceSchemaExpansionLimitError{Scope: "document", Label: label}
+	}
+	r.expansion.nodes++
+	r.expansion.used += bytes
+	return nil
+}
+
+func sourceSchemaByteLimit(limits sourceImportLimits) int64 {
+	if limits.MaxSchemaBytes > 0 {
+		return limits.MaxSchemaBytes
+	}
+	return defaultSourceImportSchemaBytes
+}
+
+func sourceSchemaNodeLimit(limits sourceImportLimits) int {
+	if limits.MaxSchemaNodes > 0 {
+		return limits.MaxSchemaNodes
+	}
+	return defaultSourceImportSchemaNodes
+}
+
 func (r *sourceReferenceResolver) reserveSchemaValue(value any, objectUsed *int64, label string) error {
 	raw, err := sourceMarshalCompact(value)
 	if err != nil {
 		return fmt.Errorf("encode %s: %w", label, err)
 	}
 	bytes := int64(len(raw))
-	if bytes > r.limits.MaxSchemaBytes || *objectUsed > r.limits.MaxSchemaBytes-bytes {
+	if bytes > sourceSchemaByteLimit(r.limits) || *objectUsed > sourceSchemaByteLimit(r.limits)-bytes {
 		return &sourceSchemaExpansionLimitError{Scope: "object", Label: label}
 	}
-	documentLimit := sourceResolvedDescriptorLimit(r.limits)
-	if bytes > documentLimit || r.expansion.used > documentLimit-bytes {
-		return &sourceSchemaExpansionLimitError{Scope: "document", Label: label}
-	}
 	*objectUsed += bytes
-	r.expansion.used += bytes
 	return nil
 }
 
@@ -1586,10 +1732,10 @@ func (r *sourceReferenceResolver) validateReferenceTargetKind(target any, kind s
 
 func (r *sourceReferenceResolver) referencePointerCategory(ref string) string {
 	segments := strings.Split(strings.TrimPrefix(ref, "#/"), "/")
-	if r.form.isOpenAPI() && len(segments) >= 2 && segments[0] == "components" {
+	if r.form.isOpenAPI() && len(segments) == 3 && segments[0] == "components" {
 		return segments[1]
 	}
-	if r.form.isSwagger2() && len(segments) >= 1 {
+	if r.form.isSwagger2() && len(segments) == 2 {
 		switch segments[0] {
 		case "definitions", "parameters", "responses":
 			return segments[0]
@@ -1877,7 +2023,14 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, form sourc
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s output: %w", location, err)
 	}
-	providerID, _ := operation["operationId"].(string)
+	providerID := ""
+	if rawProviderID, declared := operation["operationId"]; declared {
+		var ok bool
+		providerID, ok = rawProviderID.(string)
+		if !ok {
+			return sourceOperationDescriptor{}, fmt.Errorf("%s.operationId must be a string", location)
+		}
+	}
 	sourceID := providerID
 	if sourceID == "" {
 		sourceID = fmt.Sprintf("%s.rest.%s_%s", lock.Connector, method, path)
@@ -2053,10 +2206,10 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 			continue
 		}
 		if parameter.Content == nil {
-			if err := validateBoundedRequestSchema(parameter.Schema, limits, 0); err != nil {
+			if err := validateBoundedRequestSchema(parameter.Schema, form, limits, 0); err != nil {
 				return sourceRequestDescriptor{}, fmt.Errorf("parameter %q: %w", parameter.Name, err)
 			}
-		} else if err := validateBoundedParameterContent(parameter.Name, parameter.Content, limits); err != nil {
+		} else if err := validateBoundedParameterContent(parameter.Name, parameter.Content, form, limits); err != nil {
 			return sourceRequestDescriptor{}, err
 		}
 		descriptor := sourceParameterDescriptor{Name: parameter.Name, Required: parameter.Required, Schema: parameter.Schema, Content: parameter.Content, Wire: parameter.Wire}
@@ -2083,7 +2236,7 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 			return sourceRequestDescriptor{}, fmt.Errorf("Swagger request body is ambiguous")
 		}
 		body := bodyParameters[0]
-		if err := validateBoundedRequestSchema(body.Schema, limits, 0); err != nil {
+		if err := validateBoundedRequestSchema(body.Schema, form, limits, 0); err != nil {
 			return sourceRequestDescriptor{}, fmt.Errorf("request body: %w", err)
 		}
 		mediaType, err := sourceSwaggerRequestMediaType(operation, doc)
@@ -2121,7 +2274,7 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 	if !ok {
 		return sourceRequestDescriptor{}, fmt.Errorf("request body is missing schema")
 	}
-	if err := validateBoundedRequestSchema(schema, limits, 0); err != nil {
+	if err := validateBoundedRequestSchema(schema, form, limits, 0); err != nil {
 		return sourceRequestDescriptor{}, err
 	}
 	request.Body = &sourceRequestBodyDescriptor{Required: sourceBool(body["required"]), Schema: schema}
@@ -2129,7 +2282,7 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 	return request, nil
 }
 
-func validateBoundedParameterContent(name string, content any, limits sourceImportLimits) error {
+func validateBoundedParameterContent(name string, content any, form sourceDocumentForm, limits sourceImportLimits) error {
 	media, ok := content.(map[string]any)
 	if !ok || len(media) == 0 {
 		return fmt.Errorf("parameter %q content must be a non-empty object", name)
@@ -2143,7 +2296,7 @@ func validateBoundedParameterContent(name string, content any, limits sourceImpo
 		if !exists {
 			return fmt.Errorf("parameter %q content media %q is missing schema", name, mediaType)
 		}
-		if err := validateBoundedRequestSchema(schema, limits, 0); err != nil {
+		if err := validateBoundedRequestSchema(schema, form, limits, 0); err != nil {
 			return fmt.Errorf("parameter %q content media %q: %w", name, mediaType, err)
 		}
 	}
@@ -2351,11 +2504,11 @@ func sourceSortedGaps(gaps []sourceContractGap) []sourceContractGap {
 	return out
 }
 
-func validateBoundedRequestSchema(schema any, limits sourceImportLimits, depth int) error {
-	return validateBoundedRequestSchemaWithinEnum(schema, limits, depth, false)
+func validateBoundedRequestSchema(schema any, form sourceDocumentForm, limits sourceImportLimits, depth int) error {
+	return validateBoundedRequestSchemaWithinEnum(schema, form, limits, depth, false)
 }
 
-func validateBoundedRequestSchemaWithinEnum(schema any, limits sourceImportLimits, depth int, boundedByEnum bool) error {
+func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm, limits sourceImportLimits, depth int, boundedByFiniteSet bool) error {
 	if depth > limits.MaxReferenceDepth {
 		return fmt.Errorf("schema depth limit exceeded")
 	}
@@ -2363,14 +2516,14 @@ func validateBoundedRequestSchemaWithinEnum(schema any, limits sourceImportLimit
 	if err != nil {
 		return fmt.Errorf("encode request schema: %w", err)
 	}
-	if int64(len(raw)) > limits.MaxSchemaBytes {
+	if int64(len(raw)) > sourceSchemaByteLimit(limits) {
 		return fmt.Errorf("schema byte limit exceeded")
 	}
 	if booleanSchema, ok := schema.(bool); ok {
 		if !booleanSchema {
 			return nil
 		}
-		if boundedByEnum {
+		if boundedByFiniteSet {
 			return nil
 		}
 		return fmt.Errorf("unbounded request schema boolean true accepts arbitrary values")
@@ -2387,7 +2540,7 @@ func validateBoundedRequestSchemaWithinEnum(schema any, limits sourceImportLimit
 			return fmt.Errorf("ambiguous request schema uses %s", composition)
 		}
 	}
-	for _, keyword := range []string{"contains", "if", "then", "else", "unevaluatedItems"} {
+	for _, keyword := range []string{"contains", "if", "then", "else", "unevaluatedItems", "contentSchema", "$defs", "definitions", "dependencies"} {
 		if _, exists := object[keyword]; exists {
 			return fmt.Errorf("unsupported request schema keyword %s", keyword)
 		}
@@ -2401,14 +2554,30 @@ func validateBoundedRequestSchemaWithinEnum(schema any, limits sourceImportLimit
 	if err != nil {
 		return err
 	}
-	bounded := boundedByEnum || finiteEnum
-	typeName, _ := object["type"].(string)
-	if typeName == "" {
+	finiteConst, err := sourceFiniteConst(object)
+	if err != nil {
+		return err
+	}
+	bounded := boundedByFiniteSet || finiteEnum || finiteConst
+	typeNames, err := sourceRequestSchemaTypes(object, form)
+	if err != nil {
+		return err
+	}
+	if len(typeNames) == 0 {
 		if bounded {
 			return nil
 		}
 		return fmt.Errorf("unbounded request schema has no type")
 	}
+	for _, typeName := range typeNames {
+		if err := validateBoundedRequestSchemaType(object, typeName, form, limits, depth, bounded); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func validateBoundedRequestSchemaType(object map[string]any, typeName string, form sourceDocumentForm, limits sourceImportLimits, depth int, bounded bool) error {
 	switch typeName {
 	case "boolean", "null":
 		return nil
@@ -2421,28 +2590,42 @@ func validateBoundedRequestSchemaWithinEnum(schema any, limits sourceImportLimit
 			return err
 		}
 	case "array":
-		if err := sourceValidateArrayBounds(object, bounded); err != nil {
-			return err
-		}
 		prefixCount := 0
 		if rawPrefix, exists := object["prefixItems"]; exists {
+			if !form.isOpenAPI31() {
+				return fmt.Errorf("unsupported request schema keyword prefixItems")
+			}
 			prefixItems, ok := rawPrefix.([]any)
 			if !ok {
 				return fmt.Errorf("request schema prefixItems must be an array")
 			}
 			prefixCount = len(prefixItems)
 			for index, item := range prefixItems {
-				if err := validateBoundedRequestSchemaWithinEnum(item, limits, depth+1, bounded); err != nil {
+				if err := validateBoundedRequestSchemaWithinEnum(item, form, limits, depth+1, bounded); err != nil {
 					return fmt.Errorf("prefix item %d: %w", index, err)
 				}
 			}
 		}
 		items, exists := object["items"]
+		itemsFalse := false
 		if exists {
-			if err := validateBoundedRequestSchemaWithinEnum(items, limits, depth+1, bounded); err != nil {
+			if booleanItems, isBoolean := items.(bool); isBoolean && !form.isOpenAPI31() {
+				return fmt.Errorf("request schema items must be an object")
+			} else if isBoolean && !booleanItems {
+				itemsFalse = true
+			} else if err := validateBoundedRequestSchemaWithinEnum(items, form, limits, depth+1, bounded); err != nil {
 				return err
 			}
-		} else if !bounded {
+		}
+		var closedTupleLimit *int64
+		if itemsFalse {
+			limit := int64(prefixCount)
+			closedTupleLimit = &limit
+		}
+		if err := sourceValidateArrayBounds(object, bounded, closedTupleLimit); err != nil {
+			return err
+		}
+		if !exists && !bounded && closedTupleLimit == nil {
 			maxItems, hasMaxItems, err := sourceOptionalNonNegativeInteger(object, "maxItems")
 			if err != nil {
 				return err
@@ -2450,7 +2633,6 @@ func validateBoundedRequestSchemaWithinEnum(schema any, limits sourceImportLimit
 			if !hasMaxItems || int64(prefixCount) < maxItems {
 				return fmt.Errorf("unbounded request schema array has no items")
 			}
-			break
 		}
 	case "object":
 		additional, exists := object["additionalProperties"]
@@ -2469,7 +2651,7 @@ func validateBoundedRequestSchemaWithinEnum(schema any, limits sourceImportLimit
 			return fmt.Errorf("unbounded request schema object properties are invalid")
 		}
 		for _, name := range sortedSourceMapKeys(propertyMap) {
-			if err := validateBoundedRequestSchemaWithinEnum(propertyMap[name], limits, depth+1, bounded); err != nil {
+			if err := validateBoundedRequestSchemaWithinEnum(propertyMap[name], form, limits, depth+1, bounded); err != nil {
 				return fmt.Errorf("property %q: %w", name, err)
 			}
 		}
@@ -2477,6 +2659,48 @@ func validateBoundedRequestSchemaWithinEnum(schema any, limits sourceImportLimit
 		return fmt.Errorf("unsupported request schema type %q", typeName)
 	}
 	return nil
+}
+
+func sourceRequestSchemaTypes(object map[string]any, form sourceDocumentForm) ([]string, error) {
+	raw, declared := object["type"]
+	if !declared {
+		return nil, nil
+	}
+	var values []string
+	switch typed := raw.(type) {
+	case string:
+		values = []string{typed}
+	case []any:
+		if !form.isOpenAPI31() {
+			return nil, fmt.Errorf("request schema type union requires OpenAPI 3.1")
+		}
+		values = make([]string, 0, len(typed))
+		for _, item := range typed {
+			value, ok := item.(string)
+			if !ok {
+				return nil, fmt.Errorf("request schema type union must contain strings")
+			}
+			values = append(values, value)
+		}
+	case []string:
+		if !form.isOpenAPI31() {
+			return nil, fmt.Errorf("request schema type union requires OpenAPI 3.1")
+		}
+		values = append([]string(nil), typed...)
+	default:
+		return nil, fmt.Errorf("request schema type must be a string or string array")
+	}
+	if len(values) == 0 {
+		return nil, fmt.Errorf("request schema type union must not be empty")
+	}
+	seen := make(map[string]bool, len(values))
+	for _, value := range values {
+		if value == "" || seen[value] {
+			return nil, fmt.Errorf("request schema type union must contain distinct non-empty strings")
+		}
+		seen[value] = true
+	}
+	return values, nil
 }
 
 func sourceRejectDynamicSchemaKeywords(object map[string]any) error {
@@ -2501,6 +2725,17 @@ func sourceFiniteEnum(object map[string]any) (bool, error) {
 		if !sourceFiniteSchemaLiteral(value) {
 			return false, fmt.Errorf("request schema enum contains a non-finite value")
 		}
+	}
+	return true, nil
+}
+
+func sourceFiniteConst(object map[string]any) (bool, error) {
+	raw, exists := object["const"]
+	if !exists {
+		return false, nil
+	}
+	if !sourceFiniteSchemaLiteral(raw) {
+		return false, fmt.Errorf("request schema const contains a non-finite value")
 	}
 	return true, nil
 }
@@ -2546,7 +2781,7 @@ func sourceValidateLengthBounds(object map[string]any, finiteEnum bool) error {
 	return nil
 }
 
-func sourceValidateArrayBounds(object map[string]any, finiteEnum bool) error {
+func sourceValidateArrayBounds(object map[string]any, finiteEnum bool, closedTupleLimit *int64) error {
 	minimum, hasMinimum, err := sourceOptionalNonNegativeInteger(object, "minItems")
 	if err != nil {
 		return err
@@ -2558,6 +2793,12 @@ func sourceValidateArrayBounds(object map[string]any, finiteEnum bool) error {
 	if hasMinimum && hasMaximum && minimum > maximum {
 		return fmt.Errorf("contradictory request schema array item bounds")
 	}
+	if closedTupleLimit != nil {
+		if hasMinimum && minimum > *closedTupleLimit {
+			return fmt.Errorf("contradictory request schema array item bounds")
+		}
+		return nil
+	}
 	if !finiteEnum && !hasMaximum {
 		return fmt.Errorf("unbounded request schema array has no maxItems")
 	}
@@ -2565,7 +2806,7 @@ func sourceValidateArrayBounds(object map[string]any, finiteEnum bool) error {
 }
 
 type sourceNumericBound struct {
-	value     float64
+	value     *big.Rat
 	inclusive bool
 	present   bool
 }
@@ -2585,7 +2826,7 @@ func sourceValidateNumericBounds(object map[string]any, requireBoth bool) error 
 	if requireBoth && !upper.present {
 		return fmt.Errorf("unbounded request schema number has no maximum")
 	}
-	if lower.present && upper.present && (lower.value > upper.value || (lower.value == upper.value && (!lower.inclusive || !upper.inclusive))) {
+	if lower.present && upper.present && (lower.value.Cmp(upper.value) > 0 || (lower.value.Cmp(upper.value) == 0 && (!lower.inclusive || !upper.inclusive))) {
 		return fmt.Errorf("contradictory request schema numeric bounds")
 	}
 	return nil
@@ -2617,10 +2858,10 @@ func sourceNumericBoundFor(object map[string]any, inclusiveKey, exclusiveKey str
 	if !ok {
 		return sourceNumericBound{}, fmt.Errorf("request schema %s must be a finite number or boolean", exclusiveKey)
 	}
-	if !bound.present || (lower && exclusive > bound.value) || (!lower && exclusive < bound.value) {
+	if !bound.present || (lower && exclusive.Cmp(bound.value) > 0) || (!lower && exclusive.Cmp(bound.value) < 0) {
 		return sourceNumericBound{value: exclusive, inclusive: false, present: true}, nil
 	}
-	if exclusive == bound.value {
+	if exclusive.Cmp(bound.value) == 0 {
 		bound.inclusive = false
 	}
 	return bound, nil
@@ -2667,31 +2908,102 @@ func sourceNonNegativeInteger(value any) (int64, bool) {
 	}
 }
 
-func sourceFiniteNumber(value any) (float64, bool) {
-	var number float64
+func sourceFiniteNumber(value any) (*big.Rat, bool) {
+	var encoded string
 	switch typed := value.(type) {
 	case json.Number:
-		parsed, err := strconv.ParseFloat(string(typed), 64)
-		if err != nil {
-			return 0, false
-		}
-		number = parsed
+		encoded = string(typed)
 	case float64:
-		number = typed
+		if math.IsNaN(typed) || math.IsInf(typed, 0) {
+			return nil, false
+		}
+		encoded = strconv.FormatFloat(typed, 'g', -1, 64)
 	case float32:
-		number = float64(typed)
+		if math.IsNaN(float64(typed)) || math.IsInf(float64(typed), 0) {
+			return nil, false
+		}
+		encoded = strconv.FormatFloat(float64(typed), 'g', -1, 32)
 	case int:
-		number = float64(typed)
+		encoded = strconv.Itoa(typed)
 	case int64:
-		number = float64(typed)
+		encoded = strconv.FormatInt(typed, 10)
 	case uint:
-		number = float64(typed)
+		encoded = strconv.FormatUint(uint64(typed), 10)
 	case uint64:
-		number = float64(typed)
+		encoded = strconv.FormatUint(typed, 10)
 	default:
-		return 0, false
+		return nil, false
 	}
-	return number, !math.IsNaN(number) && !math.IsInf(number, 0)
+	return sourceExactDecimal(encoded)
+}
+
+const sourceMaximumExactNumberScale = 100_000
+
+func sourceExactDecimal(value string) (*big.Rat, bool) {
+	if value == "" {
+		return nil, false
+	}
+	sign := 1
+	if value[0] == '-' {
+		sign = -1
+		value = value[1:]
+	}
+	if value == "" || value[0] == '+' {
+		return nil, false
+	}
+	mantissa, exponentText, hasExponent := value, "", false
+	if index := strings.IndexAny(value, "eE"); index >= 0 {
+		if strings.IndexAny(value[index+1:], "eE") >= 0 {
+			return nil, false
+		}
+		mantissa, exponentText, hasExponent = value[:index], value[index+1:], true
+	}
+	if mantissa == "" || (hasExponent && exponentText == "") {
+		return nil, false
+	}
+	whole, fraction := mantissa, ""
+	if index := strings.IndexByte(mantissa, '.'); index >= 0 {
+		if strings.IndexByte(mantissa[index+1:], '.') >= 0 {
+			return nil, false
+		}
+		whole, fraction = mantissa[:index], mantissa[index+1:]
+		if whole == "" || fraction == "" {
+			return nil, false
+		}
+	}
+	for _, part := range []string{whole, fraction} {
+		for _, character := range part {
+			if character < '0' || character > '9' {
+				return nil, false
+			}
+		}
+	}
+	exponent := int64(0)
+	if hasExponent {
+		parsed, err := strconv.ParseInt(exponentText, 10, 64)
+		if err != nil || parsed > sourceMaximumExactNumberScale || parsed < -sourceMaximumExactNumberScale {
+			return nil, false
+		}
+		exponent = parsed
+	}
+	scale := exponent - int64(len(fraction))
+	if scale > sourceMaximumExactNumberScale || scale < -sourceMaximumExactNumberScale {
+		return nil, false
+	}
+	numerator, ok := new(big.Int).SetString(whole+fraction, 10)
+	if !ok {
+		return nil, false
+	}
+	if sign < 0 {
+		numerator.Neg(numerator)
+	}
+	if scale >= 0 {
+		factor := new(big.Int).Exp(big.NewInt(10), big.NewInt(scale), nil)
+		numerator.Mul(numerator, factor)
+		return new(big.Rat).SetInt(numerator), true
+	}
+	denominator := new(big.Int).Exp(big.NewInt(10), big.NewInt(-scale), nil)
+	return new(big.Rat).SetFrac(numerator, denominator), true
 }
 
 func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, limits sourceImportLimits) ([]sourceResponseDescriptor, []string, error) {

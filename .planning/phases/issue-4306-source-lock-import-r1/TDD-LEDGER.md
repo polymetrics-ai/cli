@@ -42,3 +42,9 @@
 - **Red:** review follow-up found finite object/array enums rejected despite bounding the complete input space, and found non-OpenAPI fields plus Encoding Header references outside the grammar-scoped resolver boundary.
 - **Green:** finite composite enums now retain schema-shape validation while relaxing only inherited cardinality bounds; OpenAPI-only reference positions are form-scoped, and Encoding Header references fail closed before descriptor creation.
 - **Refactor:** bounded-schema validation now carries finite-enum context through child schemas, while resolver traversal follows the parsed document form rather than field names alone.
+
+## Cycle 8 — exact schema grammar and expansion closure
+
+- **Red:** review found non-string operation IDs silently converted to derived IDs, omitted OpenAPI 3.1 schema-bearing positions, descendant component references rejected by category shorthand, OpenAPI response-field loss, float-rounded contradictory bounds, and inline schema expansion bypassing depth/node budgets.
+- **Green:** focused source-import cases now cover typed operation IDs, literal OpenAPI response fields, nested component-schema pointers, `contentSchema`/`unevaluatedItems`, exact large-number bounds, OpenAPI 3.1 finite `const`/union/closed-tuple forms, and inline depth/node limits.
+- **Refactor:** a version-scoped schema grammar owns child traversal and pre-retention limits, while exact rationals own numeric-bound comparisons.

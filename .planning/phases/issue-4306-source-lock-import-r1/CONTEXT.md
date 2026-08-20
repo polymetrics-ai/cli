@@ -35,6 +35,6 @@ Resolved lifecycle: `scripts/gsd doctor`; `scripts/gsd sources discuss-phase`, `
 
 Inline/manual fallback: the direct implementation task has no compatible isolated Pi-role runtime, and the canonical delivery contract forbids role spawning. Discussion, planning, TDD execution, verification, and review will be recorded in this phase directory.
 
-Skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-cli`, `golang-documentation`, and `no-mistakes` (doctor only; the user prohibits starting its pipeline in this lane).
+Skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-cli`, `golang-documentation`, `golang-lint`, `golang-swagger`, and `no-mistakes` (doctor only; the user prohibits starting its pipeline in this lane).
 
 CLI/docs parity: `connectorgen source-import --help` changes developer-generator help only. No `pm` command, `docs/cli/**`, website page, generated `pm` manual, namespace behavior, completion, or credentialed connector behavior changes; each is intentionally not applicable and will be recorded in verification.
