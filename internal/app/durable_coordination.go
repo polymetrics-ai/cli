@@ -64,6 +64,15 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 	if err != nil {
 		return Run{}, true, err
 	}
+	planID, err := declarativeTypedDestinationRateParkingPlanID(request)
+	if err != nil {
+		return Run{}, true, err
+	}
+	if planID != "" {
+		if err := a.persistDeclarativeTypedDestinationRateParkingPlanID(request.runID, planID); err != nil {
+			return Run{}, true, err
+		}
+	}
 	if _, err := engine.ParkRateLimitedRun(ctx, a.rateParking, request.runID, scope, checkpoint, runErr); err != nil {
 		return Run{}, true, err
 	}
@@ -74,6 +83,9 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 			}
 			if current.Runs[index].Status != "running" && current.Runs[index].Status != string(coordination.RateParkingOutcomeParkedRateLimit) {
 				return current, fmt.Errorf("rate-limited run %q has terminal status %q", request.runID, current.Runs[index].Status)
+			}
+			if planID != "" && current.Runs[index].DeclarativeTypedDestinationPlanID != planID {
+				return current, fmt.Errorf("rate-limited run %q declarative typed destination plan changed", request.runID)
 			}
 			current.Runs[index].Status = string(coordination.RateParkingOutcomeParkedRateLimit)
 			current.Runs[index].RecordsRead = result.RecordsRead
@@ -101,6 +113,37 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 	return Run{}, true, fmt.Errorf("parked run %q was not stored", request.runID)
 }
 
+func declarativeTypedDestinationRateParkingPlanID(request etlModeDispatchRequest) (string, error) {
+	descriptor, declared := connectors.DestinationTransportDescriptorOf(request.destination)
+	if !declared || descriptor.Executor != declarativeTypedDestinationReference {
+		return "", nil
+	}
+	if request.destinationApproval.PlanID == "" {
+		return "", fmt.Errorf("declarative typed destination rate-limit parking requires an approval plan")
+	}
+	return request.destinationApproval.PlanID, nil
+}
+
+func (a *App) persistDeclarativeTypedDestinationRateParkingPlanID(runID, planID string) error {
+	_, err := a.updateState(func(current state) (state, error) {
+		for index := range current.Runs {
+			if current.Runs[index].ID != runID {
+				continue
+			}
+			if current.Runs[index].Status != "running" && current.Runs[index].Status != string(coordination.RateParkingOutcomeParkedRateLimit) {
+				return current, fmt.Errorf("rate-limited run %q has terminal status %q", runID, current.Runs[index].Status)
+			}
+			if existing := current.Runs[index].DeclarativeTypedDestinationPlanID; existing != "" && existing != planID {
+				return current, fmt.Errorf("rate-limited run %q declarative typed destination plan changed", runID)
+			}
+			current.Runs[index].DeclarativeTypedDestinationPlanID = planID
+			return current, nil
+		}
+		return current, fmt.Errorf("rate-limited run %q not found", runID)
+	})
+	return err
+}
+
 func (a *App) resumeParkedRateLimitRun(ctx context.Context, parked coordination.ParkedRateLimitRun) error {
 	loaded, err := a.store.Load()
 	if err != nil {
@@ -123,7 +166,7 @@ func (a *App) resumeParkedRateLimitRun(ctx context.Context, parked coordination.
 	}
 	if transportCheckpointEqual(&current, &parked.Checkpoint) {
 		resumeCtx := context.WithValue(ctx, rateParkingResumeContextKey{}, true)
-		if _, err := a.RunETL(resumeCtx, RunETLRequest{Connection: original.Connection, Stream: original.Stream}); err != nil {
+		if _, err := a.RunETL(resumeCtx, parkedRateLimitRunETLRequest(original)); err != nil {
 			return err
 		}
 	}
@@ -154,6 +197,14 @@ func (a *App) resumeParkedRateLimitRun(ctx context.Context, parked coordination.
 		a.state = updated
 	}
 	return err
+}
+
+func parkedRateLimitRunETLRequest(original Run) RunETLRequest {
+	request := RunETLRequest{Connection: original.Connection, Stream: original.Stream}
+	if original.DeclarativeTypedDestinationPlanID != "" {
+		request.DestinationApproval.PlanID = original.DeclarativeTypedDestinationPlanID
+	}
+	return request
 }
 
 func (a *App) runByID(id string) (Run, bool) {

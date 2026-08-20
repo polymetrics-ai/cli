@@ -245,17 +245,18 @@ type RunETLRequest struct {
 }
 
 type Run struct {
-	ID                 string            `json:"id"`
-	Type               string            `json:"type"`
-	Connection         string            `json:"connection,omitempty"`
-	Stream             string            `json:"stream,omitempty"`
-	Status             string            `json:"status"`
-	RecordsRead        int               `json:"records_read"`
-	RecordsTransformed int               `json:"records_transformed"`
-	RecordsLoaded      int               `json:"records_loaded"`
-	RecordsFailed      int               `json:"records_failed"`
-	BatchCount         int               `json:"batch_count,omitempty"`
-	Checkpoint         map[string]string `json:"checkpoint,omitempty"`
+	ID                                string            `json:"id"`
+	Type                              string            `json:"type"`
+	Connection                        string            `json:"connection,omitempty"`
+	Stream                            string            `json:"stream,omitempty"`
+	Status                            string            `json:"status"`
+	RecordsRead                       int               `json:"records_read"`
+	RecordsTransformed                int               `json:"records_transformed"`
+	RecordsLoaded                     int               `json:"records_loaded"`
+	RecordsFailed                     int               `json:"records_failed"`
+	BatchCount                        int               `json:"batch_count,omitempty"`
+	Checkpoint                        map[string]string `json:"checkpoint,omitempty"`
+	DeclarativeTypedDestinationPlanID string            `json:"declarative_typed_destination_plan_id,omitempty"`
 	// TransportPhaseMeasurement is emitted with the terminal run transition on
 	// closed source -> warehouse -> destination transports. It deliberately
 	// contains counts and elapsed times only, never records, paths, tokens, or

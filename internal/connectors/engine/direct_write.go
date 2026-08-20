@@ -160,7 +160,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if responseBodyErr != nil {
 			return &operationDirectWriteError{operation: prepared.op.ID, message: responseBodyErr.Error(), cause: responseBodyErr}
 		}
-		if prepared.op.Kind == "graphql_mutation" {
+		if prepared.op.Kind == "graphql_mutation" && operationDirectWriteResponseDeclaresJSON(prepared.policy, response.Header) {
 			envelope, envelopeErr := decodeDirectReadBody(response.Body, prepared.maxBytes)
 			if envelopeErr != nil {
 				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response is invalid", cause: envelopeErr}

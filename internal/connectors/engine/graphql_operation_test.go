@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"io"
@@ -566,6 +567,7 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 		if got, want := vars["id"], "widget-1"; got != want {
 			t.Fatalf("variables.id = %#v, want %q", got, want)
 		}
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"data":{"deleteWidget":{"deletedId":"widget-1"},"rateLimit":{"limit":4,"cost":4,"remaining":4,"resetAt":""}},"extensions":{"trace_id":"provider-trace"},"provider_fact":"retained"}`))
 	}))
 	defer server.Close()
@@ -660,10 +662,73 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 	}
 }
 
+func TestOperationDirectWritePreservesExplicitNonJSONGraphQLMutationResponse(t *testing.T) {
+	for _, testCase := range []struct {
+		name        string
+		contentType string
+		body        []byte
+		encoding    string
+		raw         string
+	}{
+		{
+			name:        "text",
+			contentType: "text/plain",
+			body:        []byte(`{"errors":[{"message":"provider text is not a GraphQL envelope"}]}`),
+			encoding:    "text",
+			raw:         `{"errors":[{"message":"provider text is not a GraphQL envelope"}]}`,
+		},
+		{
+			name:        "binary",
+			contentType: "application/octet-stream",
+			body:        []byte{0xff, 0x00, 0x01, 0x7f},
+			encoding:    "base64",
+			raw:         base64.StdEncoding.EncodeToString([]byte{0xff, 0x00, 0x01, 0x7f}),
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				calls++
+				w.Header().Set("Content-Type", testCase.contentType)
+				_, _ = w.Write(testCase.body)
+			}))
+			defer server.Close()
+
+			bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+			req := connectors.OperationDirectWriteRequest{
+				Operation: "acme.widgets.mutation",
+				Config: connectors.RuntimeConfig{
+					CredentialRevision:  "fixture-credential-revision",
+					ConfigurationDigest: "fixture-configuration-digest",
+					WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+				},
+				Body: map[string]any{"id": "widget-1"},
+			}
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			req.PreviewDigest = preview.Digest
+			req.Approval = approvedEvidenceForPreview(t, preview)
+			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("OperationDirectWrite() = %v", err)
+			}
+			if calls != 1 || !result.ResponseReceived || !result.BodyPresent || result.BodyBytes != len(testCase.body) || result.BodyRaw != testCase.raw || result.BodyRawEncoding != testCase.encoding {
+				t.Fatalf("non-JSON GraphQL mutation result = %#v calls=%d, want exact provider bytes", result, calls)
+			}
+			if result.Body != nil || result.GraphQL != nil {
+				t.Fatalf("non-JSON GraphQL mutation parsed a provider body: %#v", result)
+			}
+		})
+	}
+}
+
 func TestOperationDirectWriteFailsClosedOnGraphQLErrors(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calls++
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"data":{"deleteWidget":null},"errors":[{"message":"mutation denied"}]}`))
 	}))
 	defer server.Close()
@@ -765,6 +830,9 @@ func TestOperationDirectWriteSecretOperationRetainsProviderResponses(t *testing.
 			calls := 0
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 				calls++
+				if tt.name == "graphql errors" {
+					w.Header().Set("Content-Type", "application/json")
+				}
 				w.WriteHeader(tt.statusCode)
 				_, _ = w.Write([]byte(tt.body))
 			}))
@@ -807,6 +875,7 @@ func TestOperationDirectWriteFailsClosedOnMissingGraphQLData(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calls++
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"data":null}`))
 	}))
 	defer server.Close()

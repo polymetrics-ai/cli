@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -185,6 +186,76 @@ func TestRunETLTransportParksSourceRateLimitWithDestinationResults(t *testing.T)
 	persisted, err := fixture.app.GetRun(run.ID)
 	if err != nil || !reflect.DeepEqual(persisted.DestinationResults, []json.RawMessage{wantOutput}) {
 		t.Fatalf("persisted parked run = (%#v, %v), want destination output", persisted, err)
+	}
+}
+
+func TestParkRateLimitedRunPersistsOnlyDeclarativeTypedDestinationPlanID(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	t.Cleanup(fixture.app.rateParking.Close)
+	fixture.source.rateLimitScope = "transport-source-rate-limit"
+	if _, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	}); err != nil {
+		t.Fatalf("initial RunETL() = %v", err)
+	}
+	connection, found := fixture.app.findConnection(fixture.connection)
+	if !found {
+		t.Fatal("fixture connection is unavailable")
+	}
+	runID, err := prefixedID("run")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := fixture.app.beginRun(Run{
+		ID: runID, Type: "etl", Connection: connection.Name, Stream: "records", Status: "running", StartedAt: time.Now().UTC(),
+	}); err != nil {
+		t.Fatalf("begin parked run: %v", err)
+	}
+	const planID = "rplan_declarative_rate_limit"
+	const approvalToken = "must-never-persist"
+	typedDestination := &appTransportConnector{
+		meta: connectors.Metadata{Name: "typed_rate_limit_destination", DisplayName: "Typed Rate Limit Destination", IntegrationType: "api"},
+		descriptor: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
+			Executor: declarativeTypedDestinationReference,
+		}},
+	}
+	parked, handled, err := fixture.app.parkRateLimitedRun(context.Background(), etlModeDispatchRequest{
+		runID: runID, connection: connection, source: fixture.source, destination: typedDestination, streamName: "records",
+		destinationApproval: synctransport.DestinationApproval{PlanID: planID, ApprovalToken: approvalToken},
+	}, etlExecutionResult{}, &connsdk.RateLimitError{
+		HTTPError: &connsdk.HTTPError{Status: http.StatusTooManyRequests, URL: "https://provider.invalid/records"},
+		Source:    connsdk.RateLimitObservationSourceRetryAfter,
+		HasReset:  true,
+		ResetAt:   time.Now().UTC().Add(time.Hour),
+	})
+	if !handled || !errors.Is(err, coordination.ErrRateLimitParked) {
+		t.Fatalf("parkRateLimitedRun() = (%#v, %t, %v), want parked typed run", parked, handled, err)
+	}
+	if parked.DeclarativeTypedDestinationPlanID != planID {
+		t.Fatalf("parked plan ID = %q, want %q", parked.DeclarativeTypedDestinationPlanID, planID)
+	}
+	persisted, err := fixture.app.GetRun(runID)
+	if err != nil || persisted.DeclarativeTypedDestinationPlanID != planID {
+		t.Fatalf("persisted parked run = (%#v, %v), want plan ID %q", persisted, err, planID)
+	}
+	serialized, err := json.Marshal(persisted)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Contains(serialized, []byte(approvalToken)) {
+		t.Fatal("parked run persisted an approval token")
+	}
+}
+
+func TestParkedRateLimitRunETLRequestUsesOnlyDeclarativePlanID(t *testing.T) {
+	request := parkedRateLimitRunETLRequest(Run{
+		Connection: "typed_connection", Stream: "widgets", DeclarativeTypedDestinationPlanID: "rplan_typed_resume",
+	})
+	if request.Connection != "typed_connection" || request.Stream != "widgets" || request.DestinationApproval.PlanID != "rplan_typed_resume" {
+		t.Fatalf("parked resume request = %#v, want connection, stream, and plan ID", request)
+	}
+	if request.DestinationApproval.ApprovalToken != "" || request.DestinationApproval.Confirmation.Kind != "" || request.DestinationApproval.Evidence != nil {
+		t.Fatalf("parked resume request reconstructed approval material: %#v", request.DestinationApproval)
 	}
 }
 

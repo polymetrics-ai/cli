@@ -763,7 +763,11 @@ func TestWriteGraphQLBodyIgnoresRecordQueryField(t *testing.T) {
 }
 
 func TestWriteGraphQLErrorsFailClosed(t *testing.T) {
-	srv, _ := captureServer(t, http.StatusOK, `{"errors":[{"message":"cannot delete issue"}],"data":{"deleteIssue":null}}`)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"errors":[{"message":"cannot delete issue"}],"data":{"deleteIssue":null}}`))
+	}))
+	t.Cleanup(srv.Close)
 	b := newWriteTestBundle(srv, WriteAction{
 		Name:     "delete_issue",
 		Kind:     "delete",
@@ -791,8 +795,46 @@ func TestWriteGraphQLErrorsFailClosed(t *testing.T) {
 	if !strings.Contains(strings.ToLower(err.Error()), "graphql") || strings.Contains(err.Error(), "cannot delete issue") {
 		t.Fatalf("error = %q, want a generic GraphQL failure", err.Error())
 	}
-	if len(result.ProviderResponses) != 1 || result.ProviderResponses[0].Status != http.StatusOK || result.ProviderResponses[0].Body != `{"errors":[{"message":"cannot delete issue"}],"data":{"deleteIssue":null}}` {
+	if len(result.ProviderResponses) != 1 || result.ProviderResponses[0].Status != http.StatusOK || result.ProviderResponses[0].BodyRaw != `{"errors":[{"message":"cannot delete issue"}],"data":{"deleteIssue":null}}` || result.ProviderResponses[0].BodyRawEncoding != "text" {
 		t.Fatalf("GraphQL failed-write provider result = %#v, want complete response envelope", result.ProviderResponses)
+	}
+}
+
+func TestWriteGraphQLPreservesExplicitNonJSONResponse(t *testing.T) {
+	const providerResponse = `{"errors":[{"message":"provider text is not a GraphQL envelope"}]}`
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("Content-Type", "text/plain")
+		_, _ = w.Write([]byte(providerResponse))
+	}))
+	t.Cleanup(srv.Close)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "delete_issue",
+		Kind:     "delete",
+		Method:   http.MethodPost,
+		Path:     "/graphql",
+		BodyType: "graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "mutation DeleteIssue($issueId: ID!) { deleteIssue(input: {id: $issueId}) { clientMutationId } }",
+			OperationName: "DeleteIssue",
+			Variables: map[string]any{
+				"issueId": "{{ record.issue_id }}",
+			},
+		},
+		RecordSchema: json.RawMessage(`{"type":"object","required":["issue_id"],"properties":{"issue_id":{"type":"string"}}}`),
+	})
+	records := []connectors.Record{{"issue_id": "I_kwDO123"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_issue", records, nil), records, nil)
+	if err != nil {
+		t.Fatalf("Write() = %v", err)
+	}
+	if calls != 1 || result.RecordsWritten != 1 || len(result.ProviderResponses) != 1 {
+		t.Fatalf("GraphQL non-JSON write = %#v calls=%d, want successful provider result", result, calls)
+	}
+	response := result.ProviderResponses[0]
+	if !response.BodyPresent || response.BodyRaw != providerResponse || response.BodyRawEncoding != "text" || response.Body != providerResponse || response.BodyEncoding != "text" {
+		t.Fatalf("GraphQL non-JSON provider response = %#v, want exact text response", response)
 	}
 }
 

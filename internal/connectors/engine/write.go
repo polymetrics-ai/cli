@@ -456,8 +456,10 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 		if resp != nil && len(resp.Body) > connsdk.DefaultMaxResponseBody {
 			return resp, nil
 		}
-		if err := graphQLErrors(resp.Body); err != nil {
-			return resp, errors.New("provider GraphQL response contains errors")
+		if writeProviderResponseDeclaresJSON(resp.Header) {
+			if err := graphQLErrors(resp.Body); err != nil {
+				return resp, errors.New("provider GraphQL response contains errors")
+			}
 		}
 		return resp, nil
 	case "none":
