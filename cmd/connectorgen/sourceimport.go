@@ -1358,8 +1358,11 @@ func (r *sourceReferenceResolver) indexReachablePathItemOperations(value any, po
 		return err
 	}
 	if hasReference {
-		reference, _ := pathItem["$ref"].(string)
-		return r.indexReachablePathItemOperations(target, sourceReferenceIndexPointer(reference), next, depth+1)
+		reference, err := sourceReferenceStackAddition(stack, next)
+		if err != nil {
+			return err
+		}
+		return r.indexReachablePathItemOperations(target, reference, next, depth+1)
 	}
 	for _, method := range sourceHTTPMethods {
 		rawOperation, declared := pathItem[method]
@@ -3187,7 +3190,7 @@ func (r *sourceReferenceResolver) responseLinkExpansionBytes(value any, stack ma
 
 func sourceReferenceRequiresExpansionReservation(kind sourceReferenceKind) bool {
 	switch kind {
-	case sourceReferencePathItem, sourceReferenceHeader, sourceReferenceLink, sourceReferenceExample, sourceReferenceSecurity:
+	case sourceReferencePathItem, sourceReferenceHeader, sourceReferenceCallback, sourceReferenceLink, sourceReferenceExample, sourceReferenceSecurity:
 		return true
 	default:
 		return false
@@ -3206,6 +3209,8 @@ func (r *sourceReferenceResolver) referenceExpansionBytes(kind sourceReferenceKi
 	switch kind {
 	case sourceReferencePathItem:
 		return r.inboundPathItemExpansionBytes(value, stack, depth)
+	case sourceReferenceCallback:
+		return r.inboundCallbackExpansionBytes(value, stack, depth)
 	case sourceReferenceHeader:
 		return r.responseHeaderExpansionBytes(value, stack, depth)
 	case sourceReferenceLink:
@@ -4102,9 +4107,13 @@ func (r *sourceReferenceResolver) referenceTargetWithCount(object map[string]any
 			return nil, nil, nil, false, fmt.Errorf("ambiguous %s reference with sibling field %q", kind, key)
 		}
 	}
-	ref, ok := rawRef.(string)
-	if !ok || (ref != "#" && !strings.HasPrefix(ref, "#/")) {
+	rawReference, ok := rawRef.(string)
+	if !ok {
 		return nil, nil, nil, false, fmt.Errorf("external reference %q is unsupported", rawRef)
+	}
+	ref, err := sourceNormalizeLocalReference(rawReference)
+	if err != nil {
+		return nil, nil, nil, false, err
 	}
 	if countReference {
 		r.references++
@@ -4283,20 +4292,64 @@ func (r *sourceReferenceResolver) validateLinkTarget(object map[string]any) erro
 }
 
 func sourceLocalOperationReferencePointer(raw string) (string, error) {
+	pointer, err := sourceNormalizeLocalReference(raw)
+	if err != nil {
+		return "", err
+	}
+	if pointer == "#" {
+		return "", fmt.Errorf("link operationRef %q must be a local artifact JSON Pointer", raw)
+	}
+	return pointer, nil
+}
+
+func sourceNormalizeLocalReference(raw string) (string, error) {
 	if !strings.HasPrefix(raw, "#") {
 		return "", fmt.Errorf("external reference %q is unsupported", raw)
 	}
 	fragment, err := url.PathUnescape(raw[1:])
 	if err != nil {
-		return "", fmt.Errorf("link operationRef %q has an invalid percent escape: %w", raw, err)
+		return "", fmt.Errorf("local reference %q has an invalid percent escape: %w", raw, err)
 	}
-	if fragment == "" || !strings.HasPrefix(fragment, "/") {
-		return "", fmt.Errorf("link operationRef %q must be a local artifact JSON Pointer", raw)
+	if fragment != "" && !strings.HasPrefix(fragment, "/") {
+		return "", fmt.Errorf("local reference %q must be a local artifact JSON Pointer", raw)
+	}
+	if sourceContainsEncodedOctet(fragment) {
+		return "", fmt.Errorf("local reference %q contains a double-encoded percent escape", raw)
 	}
 	if err := sourceValidateJSONPointer(fragment); err != nil {
-		return "", fmt.Errorf("link operationRef %q has an invalid JSON Pointer: %w", raw, err)
+		return "", fmt.Errorf("local reference %q has an invalid JSON Pointer: %w", raw, err)
 	}
 	return "#" + fragment, nil
+}
+
+func sourceContainsEncodedOctet(value string) bool {
+	for index := 0; index+2 < len(value); index++ {
+		if value[index] == '%' && sourceHexDigit(value[index+1]) && sourceHexDigit(value[index+2]) {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceHexDigit(value byte) bool {
+	return value >= '0' && value <= '9' || value >= 'a' && value <= 'f' || value >= 'A' && value <= 'F'
+}
+
+func sourceReferenceStackAddition(stack, next map[string]bool) (string, error) {
+	var reference string
+	for candidate := range next {
+		if stack != nil && stack[candidate] {
+			continue
+		}
+		if reference != "" {
+			return "", fmt.Errorf("reference traversal has multiple canonical additions")
+		}
+		reference = candidate
+	}
+	if reference == "" {
+		return "", fmt.Errorf("reference traversal has no canonical addition")
+	}
+	return reference, nil
 }
 
 func sourceValidateJSONPointer(pointer string) error {

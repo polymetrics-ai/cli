@@ -1253,6 +1253,38 @@ func TestSourceImportNormalizesReachableLinkOperationReferences(t *testing.T) {
 	}
 }
 
+func TestSourceImportNormalizesDirectReferenceFragments(t *testing.T) {
+	t.Parallel()
+	encoded := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"pathItems":{"shared":{"get":{"responses":{"200":{"$ref":"#/paths/~1users~1%7Bid%7D/get/responses/200"}}}}}},"paths":{"/users/{id}":{"get":{"parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string","maxLength":8}}],"responses":{"200":{"description":"ok"}}}},"/alias":{"$ref":"#/components/pathItems/%73hared"}}}`)
+	if result := importInlineSourceResult(t, encoded, defaultSourceImportLimits()); len(result.Operations) != 2 {
+		t.Fatalf("percent-encoded direct references = %#v", result.Operations)
+	}
+	for _, tc := range []struct {
+		name string
+		ref  string
+		want string
+	}{
+		{name: "malformed percent escape", ref: "#/paths/%ZZ/get/responses/200", want: "invalid percent escape"},
+		{name: "double encoded fragment", ref: "#/paths/~1users~1%257Bid%257D/get/responses/200", want: "double-encoded percent escape"},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/users/{id}":{"get":{"responses":{"200":{"description":"ok"}}}},"/items":{"get":{"responses":{"200":{"$ref":"` + tc.ref + `"}}}}}}`)
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/direct-reference-normalization.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("%s direct reference error = %v, want %q", tc.name, err, tc.want)
+			}
+		})
+	}
+	cycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"A":{"$ref":"#/components/responses/B"},"B":{"$ref":"#/components/responses/%41"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/A"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/canonical-reference-cycle.json", cycle)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return cycle, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "reference cycle") {
+		t.Fatalf("canonical reference cycle error = %v", err)
+	}
+}
+
 func TestSourceImportPreservesFormDefaultsAndRejectsNonFormEncoding(t *testing.T) {
 	t.Parallel()
 	for _, mediaType := range []string{"multipart/form-data", "application/x-www-form-urlencoded", "Multipart/Related; boundary=source"} {
@@ -1377,6 +1409,16 @@ func TestSourceImportReservesInboundExpansionBeforeEventConstruction(t *testing.
 				t.Fatalf("inbound expansion error = %v", err)
 			}
 		})
+	}
+}
+
+func TestSourceImportReservesCallbackReferenceChainsBeforeCloning(t *testing.T) {
+	large := strings.Repeat("x", 4<<20)
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"callbacks":{"AOuter":{"$ref":"#/components/callbacks/ZOne"},"ZOne":{"$ref":"#/components/callbacks/ZTwo"},"ZTwo":{"$ref":"#/components/callbacks/ZThree"},"ZThree":{"$ref":"#/components/callbacks/ZZBase"},"ZZBase":{"x-large":"` + large + `","{$request.body#/hook}":{"post":{"responses":{"200":{"description":"ok"}}}}}}},"paths":{"/items":{"get":{"callbacks":{"notify":{"$ref":"#/components/callbacks/AOuter"}},"responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/callback-reference-chain.json", raw)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining reference target") {
+		t.Fatalf("callback reference chain error = %v", err)
 	}
 }
 

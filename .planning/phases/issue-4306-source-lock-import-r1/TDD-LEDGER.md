@@ -81,3 +81,10 @@
 - **Green:** the shared reference resolver reserves fully expanded non-response reference targets before cloning; focused aliases and ordinary reusable Path Item tests prove deterministic early rejection.
 - **Refactor:** existing schema, response, request-media, and inbound budgets remain their respective owners, while a single reference-target budget covers the previously unowned resolver kinds.
 - **Review fallback:** this assigned no-mistakes review phase applied `golang-how-to`, security, safety, error-handling, lint, and testing guidance inline; outer-pipeline commands remain intentionally uninvoked.
+
+## Cycle 14 — callback and canonical-fragment closure
+
+- **Red:** review found Callback aliases were not charged at the shared pre-clone boundary, and ordinary local `$ref` fragments bypassed URI-fragment normalization.
+- **Green:** callback chains now reserve every fully expanded hop before recursive merge cloning; direct references normalize once before cycle, pointer, and grammar-index handling, with encoded, malformed, double-encoded, and canonical-cycle cases covered.
+- **Refactor:** one canonical local-reference boundary now serves generic `$ref` and Link operation targets while reachability reuses its canonical stack identity.
+- **Review fallback:** this assigned no-mistakes review phase applied `golang-how-to`, security, safety, error-handling, lint, and testing guidance inline; outer-pipeline commands remain intentionally uninvoked.
