@@ -680,7 +680,7 @@ func TestOperationDirectWriteFailsClosedOnGraphQLErrors(t *testing.T) {
 	}
 	req.PreviewDigest = preview.Digest
 	req.Approval = approvedEvidenceForPreview(t, preview)
-	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), "graphql errors") {
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), "graphql errors") || !strings.Contains(err.Error(), "mutation denied") {
 		t.Fatalf("OperationDirectWrite error = %v, want GraphQL error rejection", err)
 	}
 	if calls != 1 {
@@ -733,6 +733,56 @@ func TestOperationDirectWriteRetainsGraphQLApplicationErrorResponse(t *testing.T
 	}
 	if calls != 1 {
 		t.Fatalf("GraphQL application error calls = %d, want exactly one approved request", calls)
+	}
+}
+
+func TestOperationDirectWriteCredentialBoundGraphQLApplicationErrorHidesEchoAndKeepsProviderResponse(t *testing.T) {
+	const credential = "graphql-credential-placeholder"
+	const responseBody = `{"data":{"deleteWidget":null},"errors":[{"message":"graphql-credential-placeholder"}]}`
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if got := r.Header.Get("Authorization"); got != "Bearer "+credential {
+			t.Fatalf("Authorization = %q, want bound credential", got)
+		}
+		w.Header().Set("X-Provider-Trace", "credential-bound")
+		_, _ = w.Write([]byte(responseBody))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "bearer", Token: credential}}
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want GraphQL application error")
+	}
+	if strings.Contains(err.Error(), credential) || !strings.Contains(err.Error(), "provider returned application errors") {
+		t.Fatalf("credential-bound GraphQL application error = %v, want generic taint-safe diagnostic", err)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatal("GraphQL application error did not retain a provider response cause")
+	}
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "credential-bound" || providerErr.Body != responseBody {
+		t.Fatal("GraphQL application provider response did not retain exact status, headers, and body")
+	}
+	if calls != 1 {
+		t.Fatalf("calls = %d, want one approved request", calls)
 	}
 }
 

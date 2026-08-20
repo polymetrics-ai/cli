@@ -134,7 +134,12 @@ type structuredRESTBodyCLIFieldMapping struct {
 
 type structuredRESTBodyCLIArrayProjection struct {
 	prefix  []operationDirectWriteBodyPathStep
-	indices map[int]string
+	indices map[int]structuredRESTBodyCLIArrayIndex
+}
+
+type structuredRESTBodyCLIArrayIndex struct {
+	field    string
+	required bool
 }
 
 func validateStructuredRESTBodyCLIArrayMappings(operation string, staticBody map[string]any, mappings []structuredRESTBodyCLIFieldMapping) error {
@@ -155,13 +160,16 @@ func validateStructuredRESTBodyCLIArrayMappings(operation string, staticBody map
 			if projectionIndex == -1 {
 				projections = append(projections, structuredRESTBodyCLIArrayProjection{
 					prefix:  append([]operationDirectWriteBodyPathStep(nil), prefix...),
-					indices: make(map[int]string),
+					indices: make(map[int]structuredRESTBodyCLIArrayIndex),
 				})
 				projectionIndex = len(projections) - 1
 			}
-			if previous, exists := projections[projectionIndex].indices[step.index]; !exists || mapping.path.raw < previous {
-				projections[projectionIndex].indices[step.index] = mapping.path.raw
+			previous, exists := projections[projectionIndex].indices[step.index]
+			if !exists || mapping.path.raw < previous.field {
+				previous.field = mapping.path.raw
 			}
+			previous.required = previous.required || mapping.flag.Required
+			projections[projectionIndex].indices[step.index] = previous
 		}
 	}
 
@@ -179,11 +187,14 @@ func validateStructuredRESTBodyCLIArrayMappings(operation string, staticBody map
 		sort.Ints(indices)
 		expected := structuredRESTBodyCLIStaticArrayPrefixLength(staticBody, projection.prefix)
 		for _, index := range indices {
+			if !projection.indices[index].required {
+				continue
+			}
 			if index < expected {
 				continue
 			}
 			if index != expected {
-				return fmt.Errorf("operation %q CLI body field %q uses sparse array index %d; rest.body or declared CLI mappings must provide every preceding array item", operation, projection.indices[index], index)
+				return fmt.Errorf("operation %q CLI body field %q uses sparse array index %d; rest.body or required CLI mappings must provide every preceding array item", operation, projection.indices[index].field, index)
 			}
 			expected++
 		}

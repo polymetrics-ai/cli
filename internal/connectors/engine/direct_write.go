@@ -182,7 +182,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
 				message := "graphql errors: provider returned application errors"
-				if !operationRetainsSecretRuntimeContent(prepared.op) {
+				if !operationRetainsSecretRuntimeContent(prepared.op) && !prepared.sensitiveHTTPBinding {
 					message = "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), true, prepared.redactionValues)
 				}
 				return operationDirectWritePostResponseErrorWithMessage(prepared.op.ID, message, nil, response, prepared.identity)
