@@ -1088,6 +1088,7 @@ func TestOperationDirectWriteRetainsGraphQLApplicationErrorResponse(t *testing.T
 
 	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
 	bundle.Operations[0].SecretSensitive = true
+	bundle.Operations[0].MutationClass = "secret"
 	req := connectors.OperationDirectWriteRequest{
 		Operation: "acme.widgets.mutation",
 		Config: connectors.RuntimeConfig{
@@ -1108,11 +1109,11 @@ func TestOperationDirectWriteRetainsGraphQLApplicationErrorResponse(t *testing.T
 		t.Fatal("OperationDirectWrite error = nil, want GraphQL application error")
 	}
 	if strings.Contains(err.Error(), secret) {
-		t.Fatalf("GraphQL application error leaked provider secret: %v", err)
+		t.Fatal("GraphQL application error leaked provider secret")
 	}
 	var providerErr *connsdk.HTTPError
 	if !errors.As(err, &providerErr) {
-		t.Fatalf("GraphQL application error cause = %T, want provider response error", err)
+		t.Fatal("GraphQL application error did not retain a provider response cause")
 	}
 	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "trace-123" || providerErr.Body != responseBody {
 		t.Fatal("GraphQL application provider response did not retain exact status, headers, and body")

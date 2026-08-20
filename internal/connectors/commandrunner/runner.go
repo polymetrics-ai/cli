@@ -1394,6 +1394,9 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 		if err != nil {
 			return nil, nil, err
 		}
+		if metadata.Operation != cmd.Operation {
+			return nil, nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector direct-write metadata did not match command operation"}
+		}
 		if metadata.StructuredBody {
 			return reconstituteStructuredDirectWriteFields(connector, cmd, byTarget, fields, flags)
 		}
@@ -1438,12 +1441,20 @@ func reconstituteStructuredDirectWriteFields(connector connectors.Connector, cmd
 	if !ok {
 		return nil, nil, fmt.Errorf("connector %q does not expose direct-write body plan transformation", connector.Name())
 	}
-	mappings := map[string]any{}
-	missing := make([]string, 0)
-	add := func(target string, flag connectors.CommandSurfaceFlag) error {
+	mappings := make(map[string]any)
+	missing := make([]string, 0, len(fields))
+	missingSet := make(map[string]struct{})
+	addMissing := func(value string) {
+		if _, exists := missingSet[value]; exists {
+			return
+		}
+		missingSet[value] = struct{}{}
+		missing = append(missing, value)
+	}
+	addMapping := func(target string, flag connectors.CommandSurfaceFlag) error {
 		values := flags[flag.Name]
 		if len(values) == 0 {
-			missing = append(missing, "--"+flag.Name)
+			addMissing("--" + flag.Name)
 			return nil
 		}
 		value, err := coerceRecordFlagValue(flag, values)
@@ -1453,34 +1464,82 @@ func reconstituteStructuredDirectWriteFields(connector connectors.Connector, cmd
 		mappings[target] = value
 		return nil
 	}
-	for _, raw := range fields {
-		target := strings.TrimPrefix(strings.TrimSpace(raw), "body.")
+	for _, rawField := range fields {
+		target := strings.TrimPrefix(strings.TrimSpace(rawField), "body.")
 		if target == "" {
 			continue
 		}
 		if flag, found := byTarget[target]; found {
-			if err := add(target, flag); err != nil {
+			if err := addMapping(target, flag); err != nil {
 				return nil, nil, err
 			}
 			continue
 		}
-		ancestor := ""
+		container := ""
 		for candidate := range byTarget {
 			contains, err := transformer.OperationDirectWriteBodyPathContains(cmd.Operation, candidate, target)
 			if err != nil {
 				return nil, nil, err
 			}
-			if contains && (ancestor == "" || len(candidate) > len(ancestor)) {
-				ancestor = candidate
+			if !contains {
+				continue
+			}
+			if container == "" {
+				container = candidate
+				continue
+			}
+			containsContainer, err := transformer.OperationDirectWriteBodyPathContains(cmd.Operation, container, candidate)
+			if err != nil {
+				return nil, nil, err
+			}
+			if containsContainer {
+				container = candidate
 			}
 		}
-		if ancestor != "" {
-			if err := add(ancestor, byTarget[ancestor]); err != nil {
+		if container != "" {
+			if err := addMapping(container, byTarget[container]); err != nil {
 				return nil, nil, err
 			}
 			continue
 		}
-		missing = append(missing, target)
+		descendants := make([]string, 0, len(byTarget))
+		for candidate := range byTarget {
+			contains, err := transformer.OperationDirectWriteBodyPathContains(cmd.Operation, target, candidate)
+			if err != nil {
+				return nil, nil, err
+			}
+			if contains {
+				descendants = append(descendants, candidate)
+			}
+		}
+		if len(descendants) == 0 {
+			addMissing(target)
+			continue
+		}
+		sort.Strings(descendants)
+		missingBefore := len(missing)
+		applied := 0
+		for _, descendant := range descendants {
+			flag := byTarget[descendant]
+			values := flags[flag.Name]
+			if len(values) == 0 {
+				if flag.Required {
+					addMissing("--" + flag.Name)
+				}
+				continue
+			}
+			value, err := coerceRecordFlagValue(flag, values)
+			if err != nil {
+				return nil, nil, err
+			}
+			mappings[descendant] = value
+			applied++
+		}
+		if applied == 0 && len(missing) == missingBefore {
+			for _, descendant := range descendants {
+				addMissing("--" + byTarget[descendant].Name)
+			}
+		}
 	}
 	if len(mappings) == 0 {
 		sort.Strings(missing)

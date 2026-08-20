@@ -432,6 +432,10 @@ func operationRetainsSecretRuntimeContent(op OperationSpec) bool {
 	return op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
 }
 
+func operationDirectWriteSecretGraphQLMutation(op OperationSpec) bool {
+	return op.Kind == "graphql_mutation" && strings.EqualFold(op.MutationClass, "secret")
+}
+
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
 // declared rest_write operation. It validates the operation's executable
 // shape, but deliberately does not resolve config, build auth, or touch the
@@ -1023,6 +1027,312 @@ func ResolveOperationDirectWriteBodyMappingValue(b Bundle, operation string, bod
 	}
 	value, found := operationDirectWriteBodyPathValue(body, resolved.steps)
 	return value, found, nil
+}
+
+func WithholdOperationDirectWriteBodyFields(b Bundle, operation string, body map[string]any, fields []string) (map[string]any, []string, error) {
+	_, root, out, err := operationDirectWriteCanonicalBodyPlanFragment(b, operation, body)
+	if err != nil {
+		return nil, nil, err
+	}
+	withheld := make([]string, 0, len(fields))
+	for _, rawField := range fields {
+		field := operationDirectWriteBodyRelativePath(rawField)
+		if field == "" {
+			continue
+		}
+		resolved, err := resolveOperationDirectWriteBodySchemaPath(root, field)
+		if err != nil {
+			return nil, nil, fmt.Errorf("operation %q sensitive body field %q: %w", operation, field, err)
+		}
+		_, removed, err := deleteOperationDirectWriteBodyPathValue(out, resolved.steps, field)
+		if err != nil {
+			return nil, nil, err
+		}
+		if removed {
+			withheld = append(withheld, field)
+		}
+	}
+	if len(withheld) == 0 {
+		return out, nil, nil
+	}
+	return out, withheld, nil
+}
+
+func RedactOperationDirectWriteBodyFields(b Bundle, operation string, body map[string]any, fields []string) (map[string]any, error) {
+	_, root, out, err := operationDirectWriteCanonicalBodyPlanFragment(b, operation, body)
+	if err != nil {
+		return nil, err
+	}
+	for _, rawField := range fields {
+		field := operationDirectWriteBodyRelativePath(rawField)
+		if field == "" {
+			continue
+		}
+		resolved, err := resolveOperationDirectWriteBodySchemaPath(root, field)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q sensitive body field %q: %w", operation, field, err)
+		}
+		if _, found := operationDirectWriteBodyPathValue(out, resolved.steps); !found {
+			continue
+		}
+		updated, err := setOperationDirectWriteBodyPathValue(out, resolved.steps, "redacted", field)
+		if err != nil {
+			return nil, err
+		}
+		bodyMap, ok := updated.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("operation %q redacted body must be an object", operation)
+		}
+		out = bodyMap
+	}
+	return out, nil
+}
+
+func MergeOperationDirectWriteBodyFragments(b Bundle, operation string, base, overlay map[string]any) (map[string]any, error) {
+	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return nil, err
+	}
+	merged, err := mergeOperationDirectWriteBodyFragmentValue(root, base, true, overlay, true, "body")
+	if err != nil {
+		return nil, err
+	}
+	body, ok := merged.(map[string]any)
+	if !ok || body == nil {
+		return nil, fmt.Errorf("operation %q merged body must be an object", operation)
+	}
+	return body, nil
+}
+
+func OperationDirectWriteBodyPathContains(b Bundle, operation, parent, child string) (bool, error) {
+	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return false, err
+	}
+	parentPath, err := resolveOperationDirectWriteBodySchemaPath(root, operationDirectWriteBodyRelativePath(parent))
+	if err != nil {
+		return false, fmt.Errorf("operation %q body field %q: %w", operation, parent, err)
+	}
+	childPath, err := resolveOperationDirectWriteBodySchemaPath(root, operationDirectWriteBodyRelativePath(child))
+	if err != nil {
+		return false, fmt.Errorf("operation %q body field %q: %w", operation, child, err)
+	}
+	if len(parentPath.steps) > len(childPath.steps) {
+		return false, nil
+	}
+	for index, step := range parentPath.steps {
+		other := childPath.steps[index]
+		if step.array != other.array || step.key != other.key || step.index != other.index {
+			return false, nil
+		}
+	}
+	return true, nil
+}
+
+func operationDirectWriteStructuredBodyPlanRoot(b Bundle, operation string) (OperationSpec, map[string]any, error) {
+	op, _, err := operationDirectWriteSpec(b, operation)
+	if err != nil {
+		return OperationSpec{}, nil, err
+	}
+	if op.Kind != "rest_write" || !OperationDirectWriteHasStructuredRESTBody(op) {
+		return OperationSpec{}, nil, fmt.Errorf("operation %q does not expose a structured REST body", operation)
+	}
+	root, err := operationDirectWriteBodySchemaRoot(op)
+	if err != nil {
+		return OperationSpec{}, nil, err
+	}
+	return op, root, nil
+}
+
+func operationDirectWriteCanonicalBodyPlanFragment(b Bundle, operation string, body map[string]any) (OperationSpec, map[string]any, map[string]any, error) {
+	op, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return OperationSpec{}, nil, nil, err
+	}
+	compiled, err := compileStructuredRESTBodySchema(op)
+	if err != nil {
+		return OperationSpec{}, nil, nil, err
+	}
+	canonical, err := canonicalizeStructuredRESTBodyFragment(compiled, op, body, "body")
+	if err != nil {
+		return OperationSpec{}, nil, nil, err
+	}
+	return op, root, canonical, nil
+}
+
+func operationDirectWriteBodyRelativePath(path string) string {
+	return strings.TrimPrefix(strings.TrimSpace(path), "body.")
+}
+
+func deleteOperationDirectWriteBodyPathValue(current any, steps []operationDirectWriteBodyPathStep, path string) (any, bool, error) {
+	if len(steps) == 0 {
+		return current, false, nil
+	}
+	step := steps[0]
+	if step.array {
+		items, ok := current.([]any)
+		if !ok {
+			if current == nil {
+				return current, false, nil
+			}
+			return nil, false, fmt.Errorf("body field %q conflicts with existing non-array value", path)
+		}
+		if step.index < 0 || step.index >= len(items) || items[step.index] == nil {
+			return items, false, nil
+		}
+		if len(steps) == 1 {
+			items[step.index] = nil
+			return items, true, nil
+		}
+		updated, removed, err := deleteOperationDirectWriteBodyPathValue(items[step.index], steps[1:], path)
+		if err != nil {
+			return nil, false, err
+		}
+		if removed {
+			items[step.index] = updated
+		}
+		return items, removed, nil
+	}
+	object, ok := current.(map[string]any)
+	if !ok {
+		if current == nil {
+			return current, false, nil
+		}
+		return nil, false, fmt.Errorf("body field %q conflicts with existing non-object value", path)
+	}
+	value, found := object[step.key]
+	if !found || value == nil {
+		return object, false, nil
+	}
+	if len(steps) == 1 {
+		delete(object, step.key)
+		return object, true, nil
+	}
+	updated, removed, err := deleteOperationDirectWriteBodyPathValue(value, steps[1:], path)
+	if err != nil {
+		return nil, false, err
+	}
+	if removed {
+		object[step.key] = updated
+	}
+	return object, removed, nil
+}
+
+func mergeOperationDirectWriteBodyFragmentValue(node map[string]any, base any, hasBase bool, overlay any, hasOverlay bool, path string) (any, error) {
+	if !hasOverlay {
+		return cloneOperationDirectWriteBodyValue(base), nil
+	}
+	if !hasBase {
+		return cloneOperationDirectWriteBodyValue(overlay), nil
+	}
+	object, array := operationDirectWriteBodyNodeKinds(node)
+	if object && array {
+		return nil, fmt.Errorf("%s has an ambiguous declared schema", path)
+	}
+	if object {
+		baseObject, ok := operationDirectWriteBodyObject(base)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with existing non-object value", path)
+		}
+		overlayObject, ok := operationDirectWriteBodyObject(overlay)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with a non-object replacement", path)
+		}
+		properties, ok := node["properties"].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("%s has no declared object properties", path)
+		}
+		merged := cloneOperationDirectWriteBodyMap(baseObject)
+		for _, name := range sortedMapKeys(overlayObject) {
+			child, ok := properties[name].(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("%s.%s is not declared", path, name)
+			}
+			baseValue, basePresent := merged[name]
+			value, err := mergeOperationDirectWriteBodyFragmentValue(child, baseValue, basePresent, overlayObject[name], true, path+"."+name)
+			if err != nil {
+				return nil, err
+			}
+			merged[name] = value
+		}
+		return merged, nil
+	}
+	if array {
+		baseItems, ok := arrayElements(base)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with existing non-array value", path)
+		}
+		overlayItems, ok := arrayElements(overlay)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with a non-array replacement", path)
+		}
+		length := len(baseItems)
+		if len(overlayItems) > length {
+			length = len(overlayItems)
+		}
+		merged := make([]any, length)
+		for index := 0; index < length; index++ {
+			basePresent := index < len(baseItems) && baseItems[index] != nil
+			overlayPresent := index < len(overlayItems)
+			if !overlayPresent {
+				if basePresent {
+					merged[index] = cloneOperationDirectWriteBodyValue(baseItems[index])
+				}
+				continue
+			}
+			item, err := operationDirectWriteBodyArrayItemSchema(node, index)
+			if err != nil {
+				return nil, err
+			}
+			var baseValue any
+			if basePresent {
+				baseValue = baseItems[index]
+			}
+			value, err := mergeOperationDirectWriteBodyFragmentValue(item, baseValue, basePresent, overlayItems[index], true, fmt.Sprintf("%s.%d", path, index))
+			if err != nil {
+				return nil, err
+			}
+			merged[index] = value
+		}
+		return merged, nil
+	}
+	return cloneOperationDirectWriteBodyValue(overlay), nil
+}
+
+func operationDirectWriteBodyObject(value any) (map[string]any, bool) {
+	switch typed := value.(type) {
+	case map[string]any:
+		return typed, true
+	case connectors.Record:
+		return map[string]any(typed), true
+	default:
+		return nil, false
+	}
+}
+
+func cloneOperationDirectWriteBodyMap(value map[string]any) map[string]any {
+	out := make(map[string]any, len(value))
+	for key, item := range value {
+		out[key] = cloneOperationDirectWriteBodyValue(item)
+	}
+	return out
+}
+
+func cloneOperationDirectWriteBodyValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		return cloneOperationDirectWriteBodyMap(typed)
+	case connectors.Record:
+		return cloneOperationDirectWriteBodyMap(map[string]any(typed))
+	case []any:
+		out := make([]any, len(typed))
+		for index, item := range typed {
+			out[index] = cloneOperationDirectWriteBodyValue(item)
+		}
+		return out
+	default:
+		return value
+	}
 }
 
 func operationDirectWriteBodyPathValue(body map[string]any, steps []operationDirectWriteBodyPathStep) (any, bool) {
