@@ -458,10 +458,15 @@ type OperationDirectReadRequest struct {
 
 type DirectReadResult struct {
 	Connector string `json:"connector"`
+	Operation string `json:"operation,omitempty"`
 	Method    string `json:"method"`
 	Path      string `json:"path"`
 	Status    int    `json:"status"`
 	Body      any    `json:"body"`
+	// Receipt is the complete bounded provider response. Body remains the
+	// declaration's convenience projection; Receipt retains the raw transport
+	// representation and every ordinary response header for audit/retry work.
+	Receipt *ProviderResponseReceipt `json:"receipt,omitempty"`
 	// Headers contains only response headers explicitly admitted by the exact
 	// operation response contract. A redacted header remains present with its
 	// explicit marker; arbitrary provider metadata is never an output channel.
@@ -476,6 +481,20 @@ type DirectReadResult struct {
 	// page 2..N, so before this field a truncated collection and a complete
 	// one were indistinguishable at status 200.
 	Page DirectReadPage `json:"page"`
+}
+
+// ProviderResponseReceipt is shared by direct reads and binary downloads.
+// Binary success never inlines file bytes: Body is confined-file metadata and
+// BodyRaw remains empty while BodyBytes reports the streamed byte count.
+type ProviderResponseReceipt struct {
+	ResponseReceived bool                               `json:"response_received"`
+	Status           int                                `json:"status"`
+	Headers          map[string]OperationResponseHeader `json:"headers,omitempty"`
+	BodyPresent      bool                               `json:"body_present"`
+	BodyBytes        int64                              `json:"body_bytes"`
+	BodyRaw          string                             `json:"body_raw,omitempty"`
+	BodyRawEncoding  string                             `json:"body_raw_encoding,omitempty"`
+	Body             any                                `json:"body,omitempty"`
 }
 
 // OperationResponseHeader is one declared provider response header. Values are
@@ -764,6 +783,7 @@ type OperationBinaryDownloadResult struct {
 	Record    Record                             `json:"record"`
 	Status    int                                `json:"status"`
 	Headers   map[string]OperationResponseHeader `json:"headers,omitempty"`
+	Receipt   *ProviderResponseReceipt           `json:"receipt,omitempty"`
 }
 
 // OperationBinaryDownloader is implemented by connectors that can execute a
@@ -1046,6 +1066,34 @@ func sanitizeProviderOutputValue(value any, secrets []string) any {
 // otherwise.
 func SanitizeProviderOutputForOutput(value any, secrets map[string]string) any {
 	return sanitizeProviderOutputValue(value, configuredWriteResultSecrets(secrets))
+}
+
+// SanitizeProviderResponseReceiptForOutput clones a complete response receipt
+// and removes only concrete configured credential values. Header locations
+// classified as credential material by the engine are already represented by
+// explicit Redacted/Masked markers before this value reaches the boundary.
+func SanitizeProviderResponseReceiptForOutput(receipt ProviderResponseReceipt, secrets map[string]string) ProviderResponseReceipt {
+	masked := configuredWriteResultSecrets(secrets)
+	out := receipt
+	out.Headers = sanitizeProviderHeaders(receipt.Headers, masked)
+	out.BodyRaw = sanitizeProviderResponseRaw(receipt.BodyRaw, receipt.BodyRawEncoding, masked)
+	out.Body = sanitizeProviderOutputValue(receipt.Body, masked)
+	if rawBody, ok := receipt.Body.(string); ok && receipt.BodyRawEncoding == "base64" && rawBody == receipt.BodyRaw {
+		out.Body = out.BodyRaw
+	}
+	return out
+}
+
+func sanitizeProviderResponseRaw(value, encoding string, secrets []string) string {
+	if encoding != "base64" {
+		return redactWriteResultString(value, secrets)
+	}
+	raw, err := base64.StdEncoding.DecodeString(value)
+	if err != nil {
+		return redactWriteResultString(value, secrets)
+	}
+	masked := redactWriteResultString(string(raw), secrets)
+	return base64.StdEncoding.EncodeToString([]byte(masked))
 }
 
 func providerOutputValueAtPath(value any, path string) (any, bool) {

@@ -342,10 +342,7 @@ func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.
 		}, c.hooks)
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
 	})
-	if err != nil {
-		return connectors.OperationBinaryDownloadResult{}, err
-	}
-	return connectors.OperationBinaryDownloadResult{
+	publicResult := connectors.OperationBinaryDownloadResult{
 		Connector: result.Connector,
 		Operation: result.Operation,
 		Method:    result.Method,
@@ -353,7 +350,9 @@ func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.
 		Record:    result.Record,
 		Status:    result.Status,
 		Headers:   result.Headers,
-	}, nil
+		Receipt:   result.Receipt,
+	}
+	return publicResult, err
 }
 
 func (c *Connector) PreflightOperationBinaryDownload(operation, method, path string) error {

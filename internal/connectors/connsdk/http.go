@@ -48,6 +48,18 @@ type UnexpectedStatusError struct {
 	Status int
 }
 
+// ProviderResponseError is the printable-safe typed identity of a non-success
+// provider response. The private HTTPError remains inside the engine for rate
+// and authentication classification; callers receive status without raw URL,
+// headers, or body.
+type ProviderResponseError struct {
+	Status int
+}
+
+func (e *ProviderResponseError) Error() string {
+	return fmt.Sprintf("provider response status %d", e.Status)
+}
+
 func (e *UnexpectedStatusError) Error() string {
 	return fmt.Sprintf("successful response status %d is not declared", e.Status)
 }
@@ -60,6 +72,9 @@ type HTTPError struct {
 	URL    string
 	Header http.Header
 	Body   string
+	// RawBody preserves captured response bytes for typed receipt consumers.
+	// Error() never renders it.
+	RawBody []byte
 }
 
 func (e *HTTPError) Error() string {
@@ -1239,7 +1254,7 @@ func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, q
 				// buy a second one.
 				reauthAttempted = true
 				if err := refresher.RefreshAuth(ctx, req); err == nil {
-					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Header: resp.Header.Clone(), Body: string(respBody)}
+					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Header: resp.Header.Clone(), Body: string(respBody), RawBody: append([]byte(nil), respBody...)}
 					// The reauth retry does not spend the transient-failure
 					// budget, so a MaxRetries:0 requester still gets its one
 					// post-refresh attempt. Bounded by reauthAttempted, which
@@ -1411,7 +1426,7 @@ func (r *Requester) fullJitter(cap time.Duration) time.Duration {
 }
 
 func responseHTTPError(status int, requestURL string, header http.Header, body []byte, observation RateLimitObservation) error {
-	httpErr := &HTTPError{Status: status, URL: requestURL, Header: header.Clone(), Body: string(body)}
+	httpErr := &HTTPError{Status: status, URL: requestURL, Header: header.Clone(), Body: string(body), RawBody: append([]byte(nil), body...)}
 	if status != http.StatusTooManyRequests {
 		return httpErr
 	}

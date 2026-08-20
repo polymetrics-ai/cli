@@ -168,8 +168,12 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			return nil, responseHTTPError(resp.StatusCode, fullURL, resp.Header, body, observation)
 		}
 		if !r.acceptsSuccessfulStatus(resp.StatusCode) {
-			_ = resp.Body.Close()
-			return nil, &UnexpectedStatusError{Status: resp.StatusCode}
+			return &StreamResponse{
+				Status: resp.StatusCode,
+				Header: resp.Header,
+				Body:   resp.Body,
+				URL:    resp.Request.URL.String(),
+			}, &UnexpectedStatusError{Status: resp.StatusCode}
 		}
 
 		return &StreamResponse{

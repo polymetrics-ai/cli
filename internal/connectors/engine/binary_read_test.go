@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -123,12 +124,15 @@ func TestBinaryDownloadRejectsOverflow(t *testing.T) {
 	dest := t.TempDir()
 	b := binaryBundle(srv, &BinaryOperationSpec{MaxBytes: 100})
 
-	_, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
+	result, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
 	if err == nil {
 		t.Fatal("want overflow rejection")
 	}
 	if !strings.Contains(err.Error(), "too large") {
 		t.Fatalf("error should name the size limit, got: %v", err)
+	}
+	if result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != http.StatusOK || !result.Receipt.BodyPresent || result.Receipt.BodyBytes != 101 {
+		t.Fatalf("overflow receipt = %#v", result.Receipt)
 	}
 	entries, _ := os.ReadDir(dest)
 	if len(entries) != 0 {
@@ -167,8 +171,12 @@ func TestBinaryDownloadRejectsUndeclaredSuccessfulStatusBeforeArtifact(t *testin
 	t.Cleanup(srv.Close)
 	b := binaryBundle(srv, &BinaryOperationSpec{ContentTypes: []string{"application/octet-stream"}, Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}})
 	dest := t.TempDir()
-	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil); err == nil || !strings.Contains(err.Error(), "not declared") {
+	result, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
+	if err == nil || !strings.Contains(err.Error(), "not declared") {
 		t.Fatalf("undeclared status error = %v", err)
+	}
+	if result.Receipt == nil || result.Receipt.Status != http.StatusPartialContent || !result.Receipt.BodyPresent || result.Receipt.BodyBytes != int64(len("partial")) {
+		t.Fatalf("undeclared status receipt = %#v", result.Receipt)
 	}
 	entries, err := os.ReadDir(dest)
 	if err != nil || len(entries) != 0 {
@@ -184,8 +192,12 @@ func TestBinaryDownloadRejectsUndeclaredContentTypeParametersBeforeArtifact(t *t
 	t.Cleanup(srv.Close)
 	b := binaryBundle(srv, &BinaryOperationSpec{ContentTypes: []string{"application/pdf; profile=approved"}})
 	dest := t.TempDir()
-	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil); err == nil || !strings.Contains(err.Error(), "parameters") {
+	result, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
+	if err == nil || !strings.Contains(err.Error(), "parameters") {
 		t.Fatalf("undeclared content-type parameter error = %v", err)
+	}
+	if result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != http.StatusOK || !result.Receipt.BodyPresent || result.Receipt.BodyBytes != int64(len("%PDF-1.4")) || result.Receipt.Headers["Content-Type"].Values[0] != "application/pdf; profile=unapproved" {
+		t.Fatalf("media mismatch receipt = %#v", result.Receipt)
 	}
 	entries, err := os.ReadDir(dest)
 	if err != nil || len(entries) != 0 {
@@ -561,6 +573,33 @@ func TestBinaryDownloadHTTPErrorKeepsProviderQueryAndBodyPrivateAndLeavesNoFile(
 	entries, _ := os.ReadDir(dest)
 	if len(entries) != 0 {
 		t.Fatalf("failed download must leave no file, found %d", len(entries))
+	}
+}
+
+func TestBinaryDownloadProviderErrorReturnsCompleteMetadataAndNoArtifact(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Add("X-Provider-Receipt", "first")
+		w.Header().Add("X-Provider-Receipt", "second")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		_, _ = w.Write([]byte(`{"id":"download-occurrence-9007199254740993"}`))
+	}))
+	t.Cleanup(srv.Close)
+	dest := t.TempDir()
+	b := binaryBundle(srv, &BinaryOperationSpec{})
+	result, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
+	if err == nil {
+		t.Fatal("download error = nil")
+	}
+	if result.Operation == "" || result.Receipt == nil || result.Receipt.Status != http.StatusNotFound || !strings.Contains(result.Receipt.BodyRaw, "download-occurrence-9007199254740993") {
+		t.Fatalf("binary error receipt = %#v", result)
+	}
+	if got := result.Receipt.Headers["X-Provider-Receipt"].Values; !reflect.DeepEqual(got, []string{"first", "second"}) {
+		t.Fatalf("duplicate receipt headers = %#v", got)
+	}
+	entries, readErr := os.ReadDir(dest)
+	if readErr != nil || len(entries) != 0 {
+		t.Fatalf("failed binary download left artifacts: entries=%v err=%v", entries, readErr)
 	}
 }
 

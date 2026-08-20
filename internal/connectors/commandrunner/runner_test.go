@@ -46,9 +46,12 @@ type fakeConnector struct {
 	statusCheckResult          connectors.OperationStatusCheckResult
 	statusCheckErr             error
 	directReadErr              error
+	directReadResult           *connectors.DirectReadResult
 	ignoresPageNavigation      bool
 	operationDirectReadErr     error
+	operationDirectReadResult  *connectors.DirectReadResult
 	binaryDownloadErr          error
+	binaryDownloadResult       *connectors.OperationBinaryDownloadResult
 	validateReq                connectors.WriteRequest
 	dryRunReq                  connectors.WriteRequest
 	writeReq                   connectors.WriteRequest
@@ -130,6 +133,9 @@ func (f *fakeConnector) Read(_ context.Context, req connectors.ReadRequest, emit
 func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
 	f.directReadReq = req
 	if f.directReadErr != nil {
+		if f.directReadResult != nil {
+			return *f.directReadResult, f.directReadErr
+		}
 		return connectors.DirectReadResult{}, f.directReadErr
 	}
 	return connectors.DirectReadResult{
@@ -158,6 +164,9 @@ func (f *fakeConnector) directReadPage() connectors.DirectReadPage {
 func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	f.operationDirectReadReq = req
 	if f.operationDirectReadErr != nil {
+		if f.operationDirectReadResult != nil {
+			return *f.operationDirectReadResult, f.operationDirectReadErr
+		}
 		return connectors.DirectReadResult{}, f.operationDirectReadErr
 	}
 	return connectors.DirectReadResult{
@@ -244,6 +253,9 @@ func (f *fakeConnector) OperationDirectWriteMetadata(operation string) (connecto
 func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
 	f.binaryDownloadReq = req
 	if f.binaryDownloadErr != nil {
+		if f.binaryDownloadResult != nil {
+			return *f.binaryDownloadResult, f.binaryDownloadErr
+		}
 		return connectors.OperationBinaryDownloadResult{}, f.binaryDownloadErr
 	}
 	return connectors.OperationBinaryDownloadResult{

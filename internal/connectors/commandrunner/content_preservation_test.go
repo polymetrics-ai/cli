@@ -178,6 +178,71 @@ func TestCommandRunnerReturnsOriginalExecutorErrorsAndOmitsRedactFields(t *testi
 	}
 }
 
+func TestCommandRunnerPreservesTerminalReadReceiptsWithExecutorErrors(t *testing.T) {
+	tests := []struct {
+		name string
+		run  func(*fakeConnector, error) (Result, error)
+		want func(Result) *connectors.ProviderResponseReceipt
+	}{
+		{
+			name: "operation direct read",
+			run: func(connector *fakeConnector, source error) (Result, error) {
+				connector.operationDirectReadErr = source
+				connector.operationDirectReadResult = &connectors.DirectReadResult{
+					Connector: "fixture", Operation: "fixture.records_lookup", Method: http.MethodGet, Path: "/records", Status: http.StatusBadGateway,
+					Receipt: &connectors.ProviderResponseReceipt{ResponseReceived: true, Status: http.StatusBadGateway, BodyPresent: true, BodyBytes: 34, Body: map[string]any{"occurrence_id": "read-occurrence-9007199254740993"}},
+				}
+				return Run(context.Background(), connector, Request{
+					Path:  []string{"records", "lookup"},
+					Flags: map[string][]string{"token": {"fixture-token"}, "content": {"fixture-content"}},
+				}, func(connectors.Record) error { return nil })
+			},
+			want: func(result Result) *connectors.ProviderResponseReceipt {
+				if result.DirectRead == nil {
+					return nil
+				}
+				return result.DirectRead.Receipt
+			},
+		},
+		{
+			name: "binary download",
+			run: func(connector *fakeConnector, source error) (Result, error) {
+				connector.binaryDownloadErr = source
+				connector.binaryDownloadResult = &connectors.OperationBinaryDownloadResult{
+					Connector: "fixture", Operation: "fixture.records_download", Method: http.MethodGet, Path: "/records/download", Status: http.StatusNotFound,
+					Receipt: &connectors.ProviderResponseReceipt{ResponseReceived: true, Status: http.StatusNotFound, BodyPresent: true, BodyBytes: 38, Body: map[string]any{"occurrence_id": "download-occurrence-9007199254740993"}},
+				}
+				return Run(context.Background(), connector, Request{
+					Path:     []string{"records", "download"},
+					Flags:    map[string][]string{"token": {"fixture-token"}, "content": {"fixture-content"}},
+					DestRoot: t.TempDir(),
+				}, func(connectors.Record) error { return nil })
+			},
+			want: func(result Result) *connectors.ProviderResponseReceipt {
+				if result.BinaryDownload == nil {
+					return nil
+				}
+				return result.BinaryDownload.Receipt
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			connector := contentErrorConnector(test.name)
+			source := errors.New("provider rejected request")
+			result, err := test.run(connector, source)
+			if err != source {
+				t.Fatalf("Run error = %v, want original %v", err, source)
+			}
+			receipt := test.want(result)
+			if receipt == nil || !receipt.ResponseReceived || receipt.Status == 0 {
+				t.Fatalf("Run terminal receipt = %#v", receipt)
+			}
+		})
+	}
+}
+
 func contentErrorConnector(name string) *fakeConnector {
 	flags := []connectors.CommandSurfaceFlag{
 		{Name: "token", Type: "string", MapsTo: "query.token", Required: true},

@@ -3,7 +3,9 @@ package cli
 import (
 	"bytes"
 	"encoding/json"
+	"net/http"
 	"strconv"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -171,6 +173,16 @@ func TestWriteConnectorCommandResultPreservesBinaryDownloadEnvelope(t *testing.T
 				"file_sha256":     "0845078a290b48e3149ab8639966824110a251db4e06fc144c06ebb534af23be",
 				"truncated":       false,
 			},
+			Receipt: &connectors.ProviderResponseReceipt{
+				ResponseReceived: true,
+				Status:           200,
+				BodyPresent:      true,
+				BodyBytes:        48219,
+				Body: connectors.Record{
+					"file_size_bytes": 48219,
+					"file_sha256":     "0845078a290b48e3149ab8639966824110a251db4e06fc144c06ebb534af23be",
+				},
+			},
 		},
 	}
 
@@ -193,11 +205,57 @@ func TestWriteConnectorCommandResultPreservesBinaryDownloadEnvelope(t *testing.T
 			FileSHA256    string `json:"file_sha256"`
 			Truncated     bool   `json:"truncated"`
 		} `json:"record"`
+		Receipt struct {
+			ResponseReceived bool `json:"response_received"`
+			Status           int  `json:"status"`
+			BodyPresent      bool `json:"body_present"`
+			BodyBytes        int  `json:"body_bytes"`
+			Body             struct {
+				FileSHA256 string `json:"file_sha256"`
+			} `json:"body"`
+		} `json:"receipt"`
 	}
 	if err := json.Unmarshal(stdout.Bytes(), &got); err != nil {
 		t.Fatalf("decode binary download JSON: %v\n%s", err, stdout.String())
 	}
 	if got.Kind != "ConnectorCommandBinaryDownload" || got.Connector != "github-live-qualification" || got.Command != "dataset export" || got.Operation != "github_live.dataset.export" || got.Record.FileName != "seattle-weather.csv" || got.Record.FileSizeBytes != 48219 || got.Record.FileSHA256 != "0845078a290b48e3149ab8639966824110a251db4e06fc144c06ebb534af23be" || got.Record.Truncated {
 		t.Fatalf("binary download envelope = %+v", got)
+	}
+	if !got.Receipt.ResponseReceived || got.Receipt.Status != 200 || !got.Receipt.BodyPresent || got.Receipt.BodyBytes != 48219 || got.Receipt.Body.FileSHA256 != got.Record.FileSHA256 {
+		t.Fatalf("binary download receipt = %+v", got.Receipt)
+	}
+}
+
+func TestWriteConnectorCommandResultPreservesDirectReadReceipt(t *testing.T) {
+	result := commandrunner.Result{
+		Connector: "github-live-qualification",
+		Command:   "records lookup",
+		DirectRead: &connectors.DirectReadResult{
+			Operation: "github_live.records.lookup", Method: "GET", Path: "/records/1", Status: http.StatusBadGateway,
+			Receipt: &connectors.ProviderResponseReceipt{
+				ResponseReceived: true, Status: http.StatusBadGateway, BodyPresent: true, BodyBytes: 62,
+				BodyRaw: `{"occurrence_id":"read-occurrence-9007199254740993"}`,
+				Body:    map[string]any{"occurrence_id": "read-occurrence-9007199254740993"},
+			},
+		},
+	}
+
+	var stdout, stderr bytes.Buffer
+	if err := writeConnectorCommandResult(&stdout, &stderr, true, result, nil); err != nil {
+		t.Fatalf("writeConnectorCommandResult: %v", err)
+	}
+	var got struct {
+		Kind      string `json:"kind"`
+		Operation string `json:"operation"`
+		Receipt   struct {
+			Status  int    `json:"status"`
+			BodyRaw string `json:"body_raw"`
+		} `json:"receipt"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &got); err != nil {
+		t.Fatalf("decode direct-read JSON: %v\n%s", err, stdout.String())
+	}
+	if got.Kind != "ConnectorCommandDirectRead" || got.Operation != "github_live.records.lookup" || got.Receipt.Status != http.StatusBadGateway || !strings.Contains(got.Receipt.BodyRaw, "9007199254740993") {
+		t.Fatalf("direct-read receipt envelope = %+v", got)
 	}
 }

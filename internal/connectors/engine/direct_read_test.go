@@ -1,15 +1,20 @@
 package engine
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
@@ -662,7 +667,7 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 
 	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
 		Operation:    "gong.meetings_integration_status",
-		Config:       connectors.RuntimeConfig{},
+		Config:       connectors.RuntimeConfig{Secrets: map[string]string{"api_token": "secret-token"}},
 		Body:         map[string]any{"emails": []any{"ada@example.com"}},
 		MaxBytes:     1024,
 		OutputPolicy: "json_redacted",
@@ -674,8 +679,8 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 		t.Fatalf("request body = %+v, want emails array", sawBody)
 	}
 	body := result.Body.(map[string]any)
-	if _, ok := body["apiToken"]; ok || body["apiToken_redacted"] != true {
-		t.Fatalf("response body = %+v, want apiToken redacted", body)
+	if body["apiToken"] != "[masked]" {
+		t.Fatalf("response body = %+v, want exact configured secret masked in place", body)
 	}
 }
 
@@ -1285,6 +1290,99 @@ func TestOperationDirectReadHTTPErrorKeepsProviderQueryAndBodyPrivate(t *testing
 	if !strings.Contains(err.Error(), "http 400") || !strings.Contains(err.Error(), "/items") {
 		t.Fatalf("OperationDirectRead error = %q, want safe status and declaration identity", err.Error())
 	}
+}
+
+func TestDirectReadCompleteReceiptOnSuccessAndProviderError(t *testing.T) {
+	for _, status := range []int{http.StatusOK, http.StatusBadRequest} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Add("X-Provider-Receipt", "first")
+				w.Header().Add("X-Provider-Receipt", "second")
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(status)
+				_, _ = w.Write([]byte(`{"id":"occurrence-9007199254740993","token":"ordinary-token"}`))
+			}))
+			t.Cleanup(srv.Close)
+			b := Bundle{
+				Name: "acme", HTTP: HTTPBase{URL: srv.URL},
+				Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024}}},
+				Surface:    &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+			}
+			result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "acme.lookup"}, nil)
+			if status >= 400 && err == nil {
+				t.Fatal("provider error = nil")
+			}
+			if status < 400 && err != nil {
+				t.Fatalf("success: %v", err)
+			}
+			if result.Operation != "acme.lookup" || result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != status || !result.Receipt.BodyPresent {
+				t.Fatalf("complete receipt = %#v", result)
+			}
+			if got := result.Receipt.Headers["X-Provider-Receipt"].Values; !reflect.DeepEqual(got, []string{"first", "second"}) {
+				t.Fatalf("duplicate receipt headers = %#v", got)
+			}
+			if !strings.Contains(result.Receipt.BodyRaw, "occurrence-9007199254740993") {
+				t.Fatalf("receipt lost provider occurrence ID: %#v", result.Receipt)
+			}
+			if status >= 400 {
+				var providerErr *connsdk.ProviderResponseError
+				if !errors.As(err, &providerErr) || providerErr.Status != status {
+					t.Fatalf("typed provider cause unavailable: %v", err)
+				}
+			}
+		})
+	}
+}
+
+func TestDirectReadReceiptPreservesAbsentAndInvalidBodiesAndMasksExactSecrets(t *testing.T) {
+	t.Run("absent body", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(http.StatusNoContent)
+		}))
+		t.Cleanup(srv.Close)
+		b := Bundle{
+			Name: "acme", HTTP: HTTPBase{URL: srv.URL},
+			Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024}}},
+			Surface:    &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+		}
+		result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "acme.lookup"}, nil)
+		if err == nil {
+			t.Fatal("empty JSON response error = nil")
+		}
+		if result.Receipt == nil || result.Receipt.BodyPresent || result.Receipt.BodyBytes != 0 || result.Receipt.BodyRaw != "" {
+			t.Fatalf("absent body receipt = %#v", result.Receipt)
+		}
+	})
+
+	t.Run("invalid UTF-8", func(t *testing.T) {
+		secret := "configured-secret-123"
+		raw := append([]byte{0xff}, []byte(secret)...)
+		raw = append(raw, 0xfe)
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			w.Header().Set("Content-Type", "application/octet-stream")
+			_, _ = w.Write(raw)
+		}))
+		t.Cleanup(srv.Close)
+		b := Bundle{
+			Name: "acme", HTTP: HTTPBase{URL: srv.URL},
+			Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024}}},
+			Surface:    &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+		}
+		result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+			Operation: "acme.lookup",
+			Config:    connectors.RuntimeConfig{Secrets: map[string]string{"api_token": secret}},
+		}, nil)
+		if err == nil {
+			t.Fatal("invalid UTF-8 response error = nil")
+		}
+		if result.Receipt == nil || result.Receipt.BodyRawEncoding != "base64" || result.Receipt.BodyBytes != int64(len(raw)) {
+			t.Fatalf("invalid UTF-8 receipt = %#v", result.Receipt)
+		}
+		decoded, decodeErr := base64.StdEncoding.DecodeString(result.Receipt.BodyRaw)
+		if decodeErr != nil || bytes.Contains(decoded, []byte(secret)) || !bytes.Contains(decoded, []byte("[masked]")) {
+			t.Fatalf("masked invalid UTF-8 receipt = %q, decode err %v", decoded, decodeErr)
+		}
+	})
 }
 
 // --- required_query any-of groups ------------------------------------------

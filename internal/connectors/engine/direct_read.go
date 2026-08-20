@@ -129,16 +129,24 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		pageCursor:      req.PageCursor,
 		pagination:      op.REST.Pagination,
 	})
+	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: method, Path: resolvedPath, Page: pageInfo}
+	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
+	if readResult.Receipt == nil && err != nil {
+		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
+	}
+	if readResult.Receipt != nil {
+		readResult.Status = readResult.Receipt.Status
+	}
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
 		if errors.As(err, &tooLarge) {
-			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read %s", tooLarge.Error())
+			return readResult, fmt.Errorf("operation direct read %s", tooLarge.Error())
 		}
 		// A pagination failure arrives with the response already fetched and
 		// decoded, so it must not fall through to the not-JSON branch below.
 		var pageErr errDirectReadPagination
 		if errors.As(err, &pageErr) {
-			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read pagination: %w", pageErr.err)
+			return readResult, fmt.Errorf("operation direct read pagination: %w", pageErr.err)
 		}
 		var providerHTTPError *connsdk.HTTPError
 		if resp == nil || errors.As(err, &providerHTTPError) {
@@ -150,13 +158,13 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 			if class != "" {
 				msg = class + ": " + msg
 			}
-			return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("operation direct read %s %s: %s", method, op.REST.Path, msg), err)
+			return readResult, formatResponseError(fmt.Sprintf("operation direct read %s %s: %s", method, op.REST.Path, msg), err)
 		}
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response is not JSON: %w", err)
+		return readResult, fmt.Errorf("operation direct read response is not JSON: %w", err)
 	}
 	decoded, err = applyDirectReadOutputPolicy(policy, decoded)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return readResult, err
 	}
 	redactFields := append([]string(nil), req.RedactFields...)
 	if op.SensitivePolicy != nil {
@@ -168,9 +176,11 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	decoded = connectors.SanitizeProviderOutputForOutput(decoded, req.Config.Secrets)
 	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return readResult, err
 	}
-	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded, Headers: responseHeaders, Page: pageInfo}, nil
+	readResult.Body = decoded
+	readResult.Headers = responseHeaders
+	return readResult, nil
 }
 
 // PreflightOperationDirectRead proves a command's named operation can reach
@@ -314,16 +324,24 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		page:         req.Page,
 		pageCursor:   req.PageCursor,
 	})
+	readResult := connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Page: pageInfo}
+	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
+	if readResult.Receipt == nil && err != nil {
+		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
+	}
+	if readResult.Receipt != nil {
+		readResult.Status = readResult.Receipt.Status
+	}
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
 		if errors.As(err, &tooLarge) {
-			return connectors.DirectReadResult{}, fmt.Errorf("direct read %s", tooLarge.Error())
+			return readResult, fmt.Errorf("direct read %s", tooLarge.Error())
 		}
 		// A pagination failure arrives with the response already fetched and
 		// decoded, so it must not fall through to the not-JSON branch below.
 		var pageErr errDirectReadPagination
 		if errors.As(err, &pageErr) {
-			return connectors.DirectReadResult{}, fmt.Errorf("direct read pagination: %w", pageErr.err)
+			return readResult, fmt.Errorf("direct read pagination: %w", pageErr.err)
 		}
 		var providerHTTPError *connsdk.HTTPError
 		if resp == nil || errors.As(err, &providerHTTPError) {
@@ -335,26 +353,20 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 			if class != "" {
 				msg = class + ": " + msg
 			}
-			return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("direct read %s %s: %s", method, req.Path, msg), err)
+			return readResult, formatResponseError(fmt.Sprintf("direct read %s %s: %s", method, req.Path, msg), err)
 		}
-		return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
+		return readResult, fmt.Errorf("direct read response is not JSON: %w", err)
 	}
 	body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return readResult, err
 	}
 	if len(req.RedactFields) > 0 {
 		body = redactNamedJSONFields(body, req.RedactFields)
 	}
 	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
-	return connectors.DirectReadResult{
-		Connector: b.Name,
-		Method:    method,
-		Path:      resolvedPath,
-		Status:    resp.Status,
-		Body:      body,
-		Page:      pageInfo,
-	}, nil
+	readResult.Body = body
+	return readResult, nil
 }
 
 func findOperation(b Bundle, id string) (OperationSpec, error) {

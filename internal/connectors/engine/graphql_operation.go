@@ -662,6 +662,14 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	}
 	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, directReadBaseURL(b, cfg))
 	response, err := requester.DoLimited(ctx, http.MethodPost, requestPath, nil, payload, maxBytes)
+	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: http.MethodPost, Path: op.GraphQL.Path}
+	readResult.Receipt = providerResponseReceiptFromResponse(b, response, cfg.Secrets)
+	if readResult.Receipt == nil && err != nil {
+		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
+	}
+	if readResult.Receipt != nil {
+		readResult.Status = readResult.Receipt.Status
+	}
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		// Fixed GraphQL calls expose only the bounded, sanitized GraphQL error
@@ -675,20 +683,20 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 		if class != "" {
 			message = class + ": " + message
 		}
-		return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("operation direct read POST %s: %s", op.GraphQL.Path, message), err)
+		return readResult, formatResponseError(fmt.Sprintf("operation direct read POST %s: %s", op.GraphQL.Path, message), err)
 	}
 	data, metadata, err := graphQLOperationResponse(response.Body, maxBytes)
 	if err != nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read GraphQL response: %w", err)
+		return readResult, fmt.Errorf("operation direct read GraphQL response: %w", err)
 	}
 	observeGraphQLRateLimit(ctx, requester, response, data)
 	page, err := graphQLOperationPage(data, op.GraphQL.Pagination, metadata.PartialData)
 	if err != nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read GraphQL pagination: %w", err)
+		return readResult, fmt.Errorf("operation direct read GraphQL pagination: %w", err)
 	}
 	body, err := applyDirectReadOutputPolicy(policy, data)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return readResult, err
 	}
 	redactFields := append([]string(nil), req.RedactFields...)
 	if op.SensitivePolicy != nil {
@@ -698,15 +706,10 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 		body = redactNamedJSONFields(body, redactFields)
 	}
 	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
-	return connectors.DirectReadResult{
-		Connector: b.Name,
-		Method:    http.MethodPost,
-		Path:      op.GraphQL.Path,
-		Status:    response.Status,
-		Body:      body,
-		GraphQL:   metadata,
-		Page:      page,
-	}, nil
+	readResult.Body = body
+	readResult.GraphQL = metadata
+	readResult.Page = page
+	return readResult, nil
 }
 
 func graphQLPositiveInt(value any) (int, bool) {

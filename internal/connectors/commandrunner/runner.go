@@ -677,6 +677,9 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		PageCursor:   req.PageCursor,
 	})
 	if err != nil {
+		if direct.Receipt != nil {
+			return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
+		}
 		return Result{}, err
 	}
 	if err := assertDirectReadNavigated(connector, cmd, req, direct); err != nil {
@@ -2263,6 +2266,9 @@ func runBinaryDownload(ctx context.Context, connector connectors.Connector, cmd 
 		FileName:     req.FileName,
 	})
 	if err != nil {
+		if download.Receipt != nil {
+			return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, err
+		}
 		return Result{}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, nil

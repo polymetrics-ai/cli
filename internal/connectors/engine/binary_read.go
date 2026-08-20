@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"mime"
@@ -82,6 +83,7 @@ type BinaryDownloadResult struct {
 	Record    connectors.Record
 	Status    int
 	Headers   map[string]connectors.OperationResponseHeader
+	Receipt   *connectors.ProviderResponseReceipt
 }
 
 // OperationBinaryDownload executes a declared binary_download or text_export
@@ -161,7 +163,12 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		Accept:         spec.Accept,
 		RedirectPolicy: redirect,
 	})
-	if err != nil {
+	if err != nil && resp == nil {
+		result := BinaryDownloadResult{Connector: b.Name, Operation: op.ID, Method: http.MethodGet, Path: resolvedPath}
+		result.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
+		if result.Receipt != nil {
+			result.Status = result.Receipt.Status
+		}
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := completeEngineErrorText(err)
 		if hint != "" {
@@ -170,55 +177,99 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		if class != "" {
 			msg = class + ": " + msg
 		}
-		return BinaryDownloadResult{}, formatResponseError(fmt.Sprintf("binary download GET %s: %s", spec.Path, msg), err)
+		return result, formatResponseError(fmt.Sprintf("binary download GET %s: %s", spec.Path, msg), err)
 	}
 	defer func() { _ = resp.Body.Close() }()
-	if err := validateOperationBinaryResponseMediaType(op, resp.Header); err != nil {
-		return BinaryDownloadResult{}, err
+	responseReceipt := connectors.ProviderResponseReceipt{
+		ResponseReceived: true,
+		Status:           resp.Status,
+		Headers:          completeProviderResponseHeaders(b, resp.Header),
 	}
-	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
-	if err != nil {
-		return BinaryDownloadResult{}, err
-	}
-
-	fileName, err := resolveBinaryDownloadFileName(req.FileName, resp.Header.Get("Content-Disposition"), op.ID)
-	if err != nil {
-		return BinaryDownloadResult{}, err
-	}
-
-	written, digest, sniffed, err := streamBinaryDownloadToRoot(resp.Body, req.DestRoot, fileName, maxBytes, spec.AllowOverwrite, stall, cancel)
-	if err != nil {
-		return BinaryDownloadResult{}, err
-	}
-
-	return BinaryDownloadResult{
+	responseReceipt = connectors.SanitizeProviderResponseReceiptForOutput(responseReceipt, cfg.Secrets)
+	result := BinaryDownloadResult{
 		Connector: b.Name,
 		Operation: op.ID,
 		Method:    http.MethodGet,
 		Path:      resolvedPath,
 		Status:    resp.Status,
-		Headers:   responseHeaders,
-		Record: redactBinaryDownloadRecord(connectors.Record{
-			"file_path":       filepath.Join(req.DestRoot, fileName),
-			"file_name":       fileName,
-			"file_size_bytes": written,
-			"file_sha256":     digest,
-			"content_type":    resp.Header.Get("Content-Type"),
-			// Sniffed independently: never trust Content-Type and never infer
-			// from the URL path. One provider serves CSV bytes from a path
-			// ending .json. The mismatch is surfaced, not rejected.
-			"content_type_sniffed": sniffed,
-			"source_operation":     op.ID,
-			// The connector-relative source reference carries no signed-URL
-			// credentials and remains stable across public receipt projection.
-			"source_ref":    resolvedPath,
-			"downloaded_at": time.Now().UTC().Format(time.RFC3339),
-			// Always false: overflow is a hard error rather than a silent
-			// truncation. The field exists so consumers can rely on it and so
-			// a future ranged/resumable mode has somewhere to report.
-			"truncated": false,
-		}, req.RedactFields),
-	}, nil
+		Receipt:   &responseReceipt,
+	}
+	if err != nil {
+		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
+		return result, errors.Join(err, captureErr)
+	}
+	if err := validateOperationBinaryResponseMediaType(op, resp.Header); err != nil {
+		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
+		return result, errors.Join(err, captureErr)
+	}
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
+	if err != nil {
+		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
+		return result, errors.Join(err, captureErr)
+	}
+	result.Headers = responseHeaders
+
+	fileName, err := resolveBinaryDownloadFileName(req.FileName, resp.Header.Get("Content-Disposition"), op.ID)
+	if err != nil {
+		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
+		return result, errors.Join(err, captureErr)
+	}
+
+	written, digest, sniffed, err := streamBinaryDownloadToRoot(resp.Body, req.DestRoot, fileName, maxBytes, spec.AllowOverwrite, stall, cancel)
+	if err != nil {
+		result.Receipt.BodyPresent = written != 0
+		result.Receipt.BodyBytes = written
+		return result, err
+	}
+
+	record := redactBinaryDownloadRecord(connectors.Record{
+		"file_path":       filepath.Join(req.DestRoot, fileName),
+		"file_name":       fileName,
+		"file_size_bytes": written,
+		"file_sha256":     digest,
+		"content_type":    resp.Header.Get("Content-Type"),
+		// Sniffed independently: never trust Content-Type and never infer
+		// from the URL path. One provider serves CSV bytes from a path
+		// ending .json. The mismatch is surfaced, not rejected.
+		"content_type_sniffed": sniffed,
+		"source_operation":     op.ID,
+		// The connector-relative source reference carries no signed-URL
+		// credentials and remains stable across public receipt projection.
+		"source_ref":    resolvedPath,
+		"downloaded_at": time.Now().UTC().Format(time.RFC3339),
+		// Always false: overflow is a hard error rather than a silent
+		// truncation. The field exists so consumers can rely on it and so
+		// a future ranged/resumable mode has somewhere to report.
+		"truncated": false,
+	}, req.RedactFields)
+	receipt := connectors.ProviderResponseReceipt{
+		ResponseReceived: true,
+		Status:           resp.Status,
+		Headers:          completeProviderResponseHeaders(b, resp.Header),
+		BodyPresent:      written != 0,
+		BodyBytes:        written,
+		Body:             map[string]any{"file_size_bytes": written, "file_sha256": digest},
+	}
+	receipt = connectors.SanitizeProviderResponseReceiptForOutput(receipt, cfg.Secrets)
+	result.Record = record
+	result.Receipt = &receipt
+	return result, nil
+}
+
+func captureBinaryResponseMetadata(body io.Reader, receipt *connectors.ProviderResponseReceipt, maxBytes int64, stall time.Duration, cancel context.CancelFunc) error {
+	if body == nil || receipt == nil {
+		return nil
+	}
+	written, err := io.Copy(io.Discard, io.LimitReader(newStallReader(body, stall, cancel), maxBytes+1))
+	receipt.BodyPresent = written != 0
+	receipt.BodyBytes = written
+	if err != nil {
+		return fmt.Errorf("capture binary response metadata: %w", err)
+	}
+	if written > maxBytes {
+		return fmt.Errorf("binary response metadata exceeds limit %d bytes", maxBytes)
+	}
+	return nil
 }
 
 func PreflightOperationBinaryDownload(b Bundle, operation, method, path string) error {
@@ -458,11 +509,11 @@ func streamBinaryDownloadToRoot(body io.Reader, destRoot, fileName string, maxBy
 	written, err := io.Copy(io.MultiWriter(temp, hash, sniff), limited)
 	if err != nil {
 		cleanup()
-		return 0, "", "", fmt.Errorf("binary download: %w", err)
+		return written, "", "", fmt.Errorf("binary download: %w", err)
 	}
 	if written > maxBytes {
 		cleanup()
-		return 0, "", "", fmt.Errorf("binary download response too large: exceeds limit %d bytes", maxBytes)
+		return written, "", "", fmt.Errorf("binary download response too large: exceeds limit %d bytes", maxBytes)
 	}
 	// fsync before rename, or the rename can yield a zero-length file.
 	if err := temp.Sync(); err != nil {

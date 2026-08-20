@@ -436,7 +436,7 @@ func TestOperationDirectReadExecutesFixedGraphQLQueryAndPreservesPartialData(t *
 				"widget": {"id":"widget-1","items":{"nodes":[{"id":"item-1","name":"visible","secret":"response-secret"}],"pageInfo":{"hasNextPage":true,"endCursor":"next-cursor"}}},
 				"rateLimit": {"limit":5000,"cost":1,"remaining":4999,"resetAt":"2026-08-09T00:00:00Z"}
 			},
-			"errors": [{"message":"field warning"}]
+			"errors": [{"message":"field warning","path":["widget","items",0],"locations":[{"line":3,"column":7}],"extensions":{"code":"PARTIAL","occurrence_id":"graphql-occurrence-9007199254740993"}}]
 		}`))
 	}))
 	defer server.Close()
@@ -462,6 +462,9 @@ func TestOperationDirectReadExecutesFixedGraphQLQueryAndPreservesPartialData(t *
 	if got, want := result.GraphQL.Errors[0].Message, "field warning"; got != want {
 		t.Fatalf("GraphQL error message = %q, want %q", got, want)
 	}
+	if result.Operation != "acme.widgets.query" || result.Receipt == nil || !strings.Contains(result.Receipt.BodyRaw, "graphql-occurrence-9007199254740993") {
+		t.Fatalf("GraphQL complete receipt = %#v, want full bounded envelope", result.Receipt)
+	}
 	if result.GraphQL.RateLimit == nil || result.GraphQL.RateLimit.Remaining != 4999 || result.GraphQL.RateLimit.Cost != 1 {
 		t.Fatalf("GraphQL rate limit = %+v, want reported bounded data", result.GraphQL.RateLimit)
 	}
@@ -479,8 +482,8 @@ func TestOperationDirectReadExecutesFixedGraphQLQueryAndPreservesPartialData(t *
 		t.Fatalf("nodes = %#v, want one fixed-selection item", nodes)
 	}
 	node, _ := nodes[0].(map[string]any)
-	if node["secret_redacted"] != true {
-		t.Fatalf("node = %#v, want response redaction", node)
+	if node["secret"] != "response-secret" {
+		t.Fatalf("node = %#v, want ordinary unclassified provider field preserved", node)
 	}
 }
 
@@ -565,8 +568,8 @@ func TestOperationDirectReadRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	if strings.Contains(err.Error(), "fake-test-value") {
 		t.Fatalf("GraphQL HTTP error leaked provider body value: %v", err)
 	}
-	if !strings.Contains(err.Error(), "[redacted]") {
-		t.Fatalf("GraphQL HTTP error = %v, want redaction marker", err)
+	if !strings.Contains(err.Error(), "http 400") {
+		t.Fatalf("GraphQL HTTP error = %v, want body-free status diagnostic", err)
 	}
 }
 

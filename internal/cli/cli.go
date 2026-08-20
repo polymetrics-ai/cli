@@ -1346,6 +1346,12 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		if errors.As(err, &blocked) {
 			return connectorCommandBlockedError(err)
 		}
+		if (result.DirectRead != nil && result.DirectRead.Receipt != nil) || (result.BinaryDownload != nil && result.BinaryDownload.Receipt != nil) {
+			if outputErr := writeConnectorCommandResult(stdout, stderr, jsonOut, result, rows); outputErr != nil {
+				return outputErr
+			}
+			return alreadyReportedExecutionError(err)
+		}
 		return err
 	}
 	return writeConnectorCommandResult(stdout, stderr, jsonOut, result, rows)
@@ -1363,6 +1369,7 @@ func writeConnectorCommandResult(stdout, stderr io.Writer, jsonOut bool, result 
 			"status":    result.BinaryDownload.Status,
 			"headers":   result.BinaryDownload.Headers,
 			"record":    result.BinaryDownload.Record,
+			"receipt":   result.BinaryDownload.Receipt,
 		}
 		if jsonOut {
 			return writeJSON(stdout, out)
@@ -1399,11 +1406,13 @@ func writeConnectorCommandResult(stdout, stderr io.Writer, jsonOut bool, result 
 			"kind":      "ConnectorCommandDirectRead",
 			"connector": result.Connector,
 			"command":   result.Command,
+			"operation": result.DirectRead.Operation,
 			"method":    result.DirectRead.Method,
 			"path":      result.DirectRead.Path,
 			"status":    result.DirectRead.Status,
 			"headers":   result.DirectRead.Headers,
 			"response":  result.DirectRead.Body,
+			"receipt":   result.DirectRead.Receipt,
 		}
 		if directReadPageIsReported(result.DirectRead.Page) {
 			out["page"] = result.DirectRead.Page

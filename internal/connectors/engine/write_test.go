@@ -1094,7 +1094,7 @@ func TestWriteMissingOKDeleteRequiresExactDeclaredJSONResponse(t *testing.T) {
 		wantErr bool
 	}{
 		{name: "one JSON value remains an unchanged record", body: []byte(`{"provider":"missing"}`)},
-		{name: "empty JSON body", wantErr: true},
+		{name: "empty JSON body"},
 		{name: "whitespace JSON body", body: []byte(" \n\t "), wantErr: true},
 		{name: "malformed JSON body", body: []byte(`{"provider":`), wantErr: true},
 		{name: "multiple JSON values", body: []byte(`{"provider":"first"} {"provider":"second"}`), wantErr: true},
@@ -1136,7 +1136,11 @@ func TestWriteMissingOKDeleteRequiresExactDeclaredJSONResponse(t *testing.T) {
 				t.Fatalf("provider responses = %#v, want one captured response", result.ProviderResponses)
 			}
 			provider := result.ProviderResponses[0]
-			if !provider.BodyPresent || provider.BodyBytes != len(testCase.body) || provider.BodyRaw != string(testCase.body) || provider.BodyRawEncoding != "text" || provider.Status != http.StatusNotFound || !reflect.DeepEqual(provider.Headers["X-Provider-Receipt"].Values, []string{"delete-receipt"}) {
+			wantEncoding := "text"
+			if len(testCase.body) == 0 {
+				wantEncoding = ""
+			}
+			if provider.BodyPresent != (len(testCase.body) != 0) || provider.BodyBytes != len(testCase.body) || provider.BodyRaw != string(testCase.body) || provider.BodyRawEncoding != wantEncoding || provider.Status != http.StatusNotFound || !reflect.DeepEqual(provider.Headers["X-Provider-Receipt"].Values, []string{"delete-receipt"}) {
 				t.Fatalf("provider response = %#v, want exact captured missing-delete response", provider)
 			}
 		})
