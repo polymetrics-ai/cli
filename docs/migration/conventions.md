@@ -1504,3 +1504,58 @@ wave-close after the path-guard (`git status --porcelain` limited to assigned di
    never inherit fixture conveniences. Fixture request values for templated config are the literal
    `"synthetic-conformance-value"`; page-1 fixtures are FULL pages when page_number/offset
    pagination is declared (token/cursor types stop on token absence instead).
+
+## §9 Source-lock declaration import
+
+Connector batches begin with the connector-owned
+`sources/<connector>-operation-source-lock.json`; never give the generator an
+alternate provider URL or a downloaded production artifact. Run:
+
+```sh
+go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path>
+go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path> --check
+```
+
+The first command retrieves only the lock's fixed public URL without credentials
+and verifies the exact locked byte count and SHA-256 before parsing. A mismatch
+is a **source-lock refresh** decision: do not infer a replacement schema or
+accept source drift. The generated descriptor is an intermediate provider
+contract for later fixed declaration materializers, never an execution command
+or a generic HTTP escape hatch.
+
+The lock must pin an OpenAPI 3.0/3.1 or Swagger 2.0 source document; JSON and
+YAML are accepted only in those forms. Each operation descriptor retains the
+provider `operation_id`, including an empty value, alongside its deterministic
+`source_id`. The source ID falls back to the connector, lower-case method, and
+connector-relative path only when the provider ID is empty. Resolve only
+bounded, unambiguous in-artifact references: external, cyclic, unresolved, or
+ambiguous references, oversized schemas, and unbounded or dynamic request
+contracts fail before descriptor output.
+
+Descriptors preserve fixed method/path and separated typed input schemas, plus
+the complete provider-declared response status shapes and ordinary output
+fields. Output classification is additive; it does not erase fields because
+they are unusual, privileged, paid-tier, destructive, or sensitive-looking.
+Any later runtime masking must leave field presence explicit. Batches may then
+materialize only contracts their closed runtime supports, preserving existing
+credential and write-plan/preview/approval policies.
+
+Source import retains provider `servers` layers, parameter wire serialization,
+and `x-` path metadata as canonical `merge_blocked` evidence when later
+declaration generators cannot yet execute them. Dynamic reference vocabularies
+remain rejected, while every response status and media pair stays present so a
+binary success and a JSON error can be materialized without collapsing either
+contract.
+
+A callback-only or webhook-only route is not a promotable operation: fail
+closed before descriptor generation with an actionable diagnostic that names its
+source location and the
+`cli-webhook-event-surface-foundation-r1` foundation gap. Never silently drop
+such a route or represent it as merge-ready. Bounded callback metadata and
+subgraphs attached to an otherwise accepted ordinary operation may be retained
+canonically as non-executable `merge_blocked` evidence; that retention does not
+make the callback executable. `cli-webhook-event-surface-foundation-r1` owns the
+later executable callback/webhook surface, and an affected connector remains
+merge-blocked until that foundation closes the gap. This preserves the captain's
+final-release invariant: no declared provider operation is omitted or left
+unreachable.

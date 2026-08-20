@@ -16,6 +16,10 @@
 //	                           (api_surface, output_policy, flag maps_to,
 //	                           rest.max_bytes) and the compact runtime
 //	                           direct-read endpoint ledger from bundle sources
+//	source-import <connector> --out <path> [--defs <dir>] [--check]
+//	                           verifies a connector-owned source lock and
+//	                           emits canonical provider contracts for later
+//	                           declaration materializers
 //	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
 //	                           derives direct-read api_surface coverage and
 //	                           blocked reasons from runtime preflight
@@ -67,6 +71,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runSurfaceSync(args, stdout, stderr)
 	case "params-import":
 		return runParamsImport(args, stdout, stderr)
+	case "source-import":
+		return runSourceImport(args, stdout, stderr)
 	case "surface-reconcile":
 		return runSurfaceReconcile(args, stdout, stderr)
 	case "certification-matrix":
@@ -111,6 +117,7 @@ func usage() string {
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
 	connectorgen gen
 	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
+	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
 	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
 	connectorgen certification-matrix [repo-root] (--connector <name> [--check] | --all | --check)
 	connectorgen certification-sweep [repo-root] --connector <name> [--check]
