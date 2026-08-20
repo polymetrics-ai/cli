@@ -2538,7 +2538,8 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 								"required": ["id"],
 								"properties": {"id": {"type": "string"}}
 							}
-						}
+						},
+						"price": {"type": "number"}
 					}
 				}`),
 			},
@@ -2567,6 +2568,7 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 				{Name: "label", Type: "string", MapsTo: "body.label", Required: true},
 				{Name: "attributes", Type: "json", MapsTo: "body.attributes", Required: true},
 				{Name: "targets", Type: "json", MapsTo: "body.targets", Required: true},
+				{Name: "price", Type: "number", MapsTo: "body.price"},
 			},
 		}}},
 	}
@@ -2580,6 +2582,7 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 			"label":        {"fixture widget"},
 			"attributes":   {`{"owner":"owner-1","active":true}`},
 			"targets":      {`[{"id":"target-1"}]`},
+			"price":        {"12.5"},
 		},
 	})
 	if err != nil {
@@ -2599,6 +2602,9 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 	if !ok || len(targets) != 1 {
 		t.Fatalf("targets = %#v, want one declared array entry", command.Record["targets"])
 	}
+	if got, ok := command.Record["price"].(float64); !ok || got != 12.5 {
+		t.Fatalf("price = %#v, want finite number", command.Record["price"])
+	}
 
 	baseFlags := map[string][]string{
 		"workspace-id": {"workspace-1"},
@@ -2606,6 +2612,7 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 		"label":        {"fixture widget"},
 		"attributes":   {`{"owner":"owner-1","active":true}`},
 		"targets":      {`[{"id":"target-1"}]`},
+		"price":        {"12.5"},
 	}
 	for _, tc := range []struct {
 		name      string
@@ -2643,6 +2650,30 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 			},
 			wantErr:   "structured JSON must be valid UTF-8",
 			forbidden: "invalid-utf8-canary",
+		},
+		{
+			name: "NaN number",
+			mutate: func(flags map[string][]string) {
+				flags["price"] = []string{"NaN"}
+			},
+			wantErr:   "want finite number",
+			forbidden: "NaN",
+		},
+		{
+			name: "positive infinity number",
+			mutate: func(flags map[string][]string) {
+				flags["price"] = []string{"+Inf"}
+			},
+			wantErr:   "want finite number",
+			forbidden: "+Inf",
+		},
+		{
+			name: "negative infinity number",
+			mutate: func(flags map[string][]string) {
+				flags["price"] = []string{"-Inf"}
+			},
+			wantErr:   "want finite number",
+			forbidden: "-Inf",
 		},
 		{
 			name: "structured body over flag limit",
