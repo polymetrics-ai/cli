@@ -16,8 +16,9 @@ const (
 )
 
 // OperationStatusCheck executes exactly one declared HEAD operation and
-// returns status metadata only. This intentionally does not share the JSON
-// direct-read executor: status operations cannot decode or print a body.
+// returns final status metadata only, including a non-2xx response after normal
+// retries. This intentionally does not share the JSON direct-read executor:
+// status operations cannot decode or print a body.
 //
 // pmcert:executes rest_status
 func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.OperationStatusCheckRequest, h Hooks) (connectors.OperationStatusCheckResult, error) {

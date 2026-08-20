@@ -678,7 +678,7 @@ type OperationDirectWriteMetadataProvider interface {
 }
 
 // OperationBinaryDownloadRequest is one bounded binary/file download driven by
-// a declared binary_download operation.
+// a declared binary_download or text_export operation.
 //
 // DestRoot is required and is the directory the download is confined beneath;
 // there is no implicit destination, because a CLI that guesses where to write
@@ -706,7 +706,7 @@ type OperationBinaryDownloadResult struct {
 }
 
 // OperationBinaryDownloader is implemented by connectors that can execute a
-// declared binary_download operation.
+// declared binary_download or text_export operation.
 type OperationBinaryDownloader interface {
 	OperationBinaryDownload(context.Context, OperationBinaryDownloadRequest) (OperationBinaryDownloadResult, error)
 }
@@ -722,7 +722,8 @@ type OperationStatusCheckRequest struct {
 }
 
 // OperationStatusCheckResult intentionally exposes only bounded response
-// metadata. HEAD response bodies are never decoded or surfaced.
+// metadata. A final non-2xx response remains metadata rather than an HTTP
+// error, and HEAD response bodies are never decoded or surfaced.
 type OperationStatusCheckResult struct {
 	Connector string `json:"connector"`
 	Operation string `json:"operation"`

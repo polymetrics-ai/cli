@@ -78,13 +78,14 @@ type BinaryDownloadResult struct {
 	Record    connectors.Record
 }
 
-// OperationBinaryDownload executes a declared binary_download operation,
-// streaming the response to a file confined beneath req.DestRoot.
+// OperationBinaryDownload executes a declared binary_download or text_export
+// operation, streaming the response to a file confined beneath req.DestRoot.
 //
-// This is the executor half of a capability whose declaration half already
-// exists: the kind is in the schema enum and the block map, BinaryOperationSpec
-// already carries method/path/max_bytes/allow_overwrite/extract_archives, and
-// GET-only + positive-max_bytes validation already runs at bundle load.
+// This is the executor half of declaration-owned file operations: both kinds
+// are in the schema enum and block map, BinaryOperationSpec already carries
+// method/path/max_bytes/allow_overwrite/extract_archives, and GET-only +
+// positive-max_bytes validation already runs at bundle load. text_export is the
+// closed CSV variant and still produces a destination manifest, never stdout.
 //
 // Bounded by construction:
 //   - the body is read one byte PAST the limit and rejected on overflow, so a
