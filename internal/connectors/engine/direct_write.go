@@ -425,15 +425,9 @@ func redactOperationDirectWriteErrorText(text string, redact bool, values []stri
 	return safety.RedactErrorText(redactWriteLiterals(text, values))
 }
 
-// operationRetainsSecretRuntimeContent identifies the closed secret-operation
-// path. Its diagnostic output is complete by policy; the declared secret store
-// protects the returned credential at rest rather than deleting runtime fields.
+// operationRetainsSecretRuntimeContent reports whether an operation handles secret-bearing runtime content.
 func operationRetainsSecretRuntimeContent(op OperationSpec) bool {
 	return op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
-}
-
-func operationDirectWriteSecretGraphQLMutation(op OperationSpec) bool {
-	return op.Kind == "graphql_mutation" && strings.EqualFold(op.MutationClass, "secret")
 }
 
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
@@ -1585,34 +1579,33 @@ func operationDirectWriteRedactFields(op OperationSpec) []string {
 	return append([]string(nil), op.SensitivePolicy.RedactFields...)
 }
 
-func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) []string {
+func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) ([]string, error) {
 	// A live secret operation retains complete runtime output for diagnosis;
 	// secrecy is provided by the encrypted credential store, not deletion from
 	// responses, errors, logs, previews, reports, or fixtures.
-	if op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret") {
-		return nil
+	if operationRetainsSecretRuntimeContent(op) {
+		return nil, nil
 	}
 	if op.SensitivePolicy == nil || len(op.SensitivePolicy.RedactFields) == 0 {
-		return nil
+		return nil, nil
 	}
-	// Structured declarations may classify a scalar inside an array/object
-	// path (for example body.targets.0.token).  The legacy write-action path
-	// walker intentionally accepts only object paths, so use the same schema
-	// resolver that materializes this closed body.  Without this, an echoed
-	// declared request secret survives a failed provider receipt.
-	if OperationDirectWriteHasStructuredRESTBody(op) {
+	if op.Kind == "rest_write" && OperationDirectWriteHasStructuredRESTBody(op) {
 		root, err := operationDirectWriteBodySchemaRoot(op)
 		if err != nil {
-			return nil
+			return nil, err
 		}
 		seen := make(map[string]bool)
-		for _, field := range op.SensitivePolicy.RedactFields {
-			path := strings.TrimPrefix(strings.TrimSpace(field), "body.")
-			resolved, err := resolveOperationDirectWriteBodySchemaPath(root, path)
-			if err != nil {
+		for _, rawField := range op.SensitivePolicy.RedactFields {
+			field := operationDirectWriteBodyRelativePath(rawField)
+			if field == "" {
 				continue
 			}
-			if value, found := operationDirectWriteBodyPathValue(body, resolved.steps); found {
+			resolved, err := resolveOperationDirectWriteBodySchemaPath(root, field)
+			if err != nil {
+				return nil, fmt.Errorf("operation %q sensitive body field %q: %w", op.ID, field, err)
+			}
+			value, found := operationDirectWriteBodyPathValue(body, resolved.steps)
+			if found {
 				collectWriteRedactionValues(value, seen)
 			}
 		}
@@ -1621,13 +1614,13 @@ func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) 
 			values = append(values, value)
 		}
 		sortWriteRedactionLiterals(values)
-		return values
+		return values, nil
 	}
 	fields := make([]string, 0, len(op.SensitivePolicy.RedactFields))
 	for _, field := range op.SensitivePolicy.RedactFields {
 		fields = append(fields, strings.TrimPrefix(strings.TrimSpace(field), "body."))
 	}
-	return writeActionRedactionValues(WriteAction{RedactFields: fields}, connectors.Record(body))
+	return writeActionRedactionValues(WriteAction{RedactFields: fields}, connectors.Record(body)), nil
 }
 
 // operationDirectWritePayloadFileFields keeps multipart file identity
@@ -1985,6 +1978,10 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			HeaderValues: preparedHeaderValues,
 		}},
 	}
+	redactionValues, err := operationDirectWriteRedactionValues(op, body)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	return preparedOperationDirectWrite{
 		op:               op,
 		cfg:              cfg,
@@ -2004,7 +2001,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		contentType:      contentType,
 		policy:           policy,
 		maxBytes:         maxBytes,
-		redactionValues:  operationDirectWriteRedactionValues(op, body),
+		redactionValues:  redactionValues,
 		prepared:         prepared,
 	}, nil
 }
@@ -2105,6 +2102,10 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 			Headers:     cloneResolvedHeaders(headers),
 		}},
 	}
+	redactionValues, err := operationDirectWriteRedactionValues(op, variables)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	return preparedOperationDirectWrite{
 		op:              op,
 		cfg:             cfg,
@@ -2122,7 +2123,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		contentType:     "application/json",
 		policy:          policy,
 		maxBytes:        maxBytes,
-		redactionValues: operationDirectWriteRedactionValues(op, variables),
+		redactionValues: redactionValues,
 		prepared:        prepared,
 	}, nil
 }
@@ -2757,7 +2758,7 @@ func operationDirectWriteResponseDeclaresJSON(policy string, headers map[string]
 // credential store-bound before runtime construction and I/O. The response is
 // deliberately still returned intact: the runtime does not redact content.
 func validateOperationResponseSecretContract(op OperationSpec) error {
-	if !op.SecretSensitive && !strings.EqualFold(op.MutationClass, "secret") {
+	if !operationRetainsSecretRuntimeContent(op) {
 		return nil
 	}
 	if op.SensitivePolicy == nil {

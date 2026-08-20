@@ -525,6 +525,11 @@ func TestPreflightOperationDirectWriteRejectsConditionalAPIKeyQueryOwnership(t *
 	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy, "api_key"); err == nil || !strings.Contains(err.Error(), "owned") {
 		t.Fatalf("caller API key collision error = %v, want declaration rejection", err)
 	}
+
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "key", When: "{{ config.auth_type == 'api' }}"}}
+	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy); err == nil || !strings.Contains(err.Error(), "conditionally supplied") {
+		t.Fatalf("no-match API key ownership error = %v, want declaration rejection", err)
+	}
 }
 
 func TestOperationDirectWriteRedactsNestedStructuredBodyValuesInSystemErrors(t *testing.T) {
