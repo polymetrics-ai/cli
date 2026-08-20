@@ -35,25 +35,26 @@ const (
 )
 
 type preparedOperationDirectWrite struct {
-	op              OperationSpec
-	cfg             connectors.RuntimeConfig
-	baseURL         string
-	headers         map[string]string
-	runtimeAuth     []AuthSpec
-	rateLimitAuth   []AuthSpec
-	identity        string
-	method          string
-	path            string
-	requestPath     string
-	query           url.Values
-	body            map[string]any
-	form            url.Values
-	format          string
-	contentType     string
-	policy          string
-	maxBytes        int
-	redactionValues []string
-	prepared        PreparedWrite
+	op                   OperationSpec
+	cfg                  connectors.RuntimeConfig
+	baseURL              string
+	headers              map[string]string
+	runtimeAuth          []AuthSpec
+	rateLimitAuth        []AuthSpec
+	identity             string
+	method               string
+	path                 string
+	requestPath          string
+	query                url.Values
+	body                 map[string]any
+	form                 url.Values
+	format               string
+	contentType          string
+	policy               string
+	maxBytes             int
+	redactionValues      []string
+	sensitiveHTTPBinding bool
+	prepared             PreparedWrite
 }
 
 type operationDirectWriteError struct {
@@ -159,7 +160,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			if prepared.op.Kind == "graphql_mutation" {
 				message = "provider returned a GraphQL HTTP error"
 			}
-			if !operationRetainsSecretRuntimeContent(prepared.op) {
+			if !operationRetainsSecretRuntimeContent(prepared.op) && !prepared.sensitiveHTTPBinding {
 				message = operationDirectWriteErrorText(err, prepared.identity, prepared.op.Kind == "graphql_mutation" && !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)
 			}
 			if hint != "" {
@@ -1507,6 +1508,45 @@ type operationDirectWriteAuthBinding struct {
 	found bool
 }
 
+func operationDirectWriteHasSensitiveHTTPBinding(headers map[string]string, binding operationDirectWriteAuthBinding) (bool, error) {
+	if binding.found && !strings.EqualFold(strings.TrimSpace(binding.spec.Mode), "none") {
+		return true, nil
+	}
+	return operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers)
+}
+
+func operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers map[string]string) (bool, error) {
+	names := make([]string, 0, len(headers))
+	for name := range headers {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		tokens, err := parseWriteQueryTemplate(headers[name])
+		if err != nil {
+			return false, err
+		}
+		for _, token := range tokens {
+			if token.expression == "" {
+				continue
+			}
+			if operationDirectWriteHeaderExpressionReferencesRuntimeValues(token.expression) {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
+}
+
+func operationDirectWriteHeaderExpressionReferencesRuntimeValues(expr string) bool {
+	if _, coalesced, err := coalesceRecordPathsExpression(expr); coalesced || err != nil {
+		return false
+	}
+	ref := strings.TrimSpace(strings.Split(expr, "|")[0])
+	parts := strings.Split(ref, ".")
+	return len(parts) == 2 && (parts[0] == "config" || parts[0] == "secrets")
+}
+
 func bindOperationDirectWriteQueryMutation(cfg connectors.RuntimeConfig, httpBase HTTPBase, query map[string]string) (map[string]string, operationDirectWriteAuthBinding, error) {
 	boundQuery := make(map[string]string, len(query)+1)
 	for name, value := range query {
@@ -1712,6 +1752,10 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP header mutations: %w", identity, err)
 	}
+	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(b.HTTP.Headers, authBinding)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: inspect declared HTTP bindings: %w", identity, err)
+	}
 	query, err := directReadQuery(queryMap)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -1808,25 +1852,26 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		return preparedOperationDirectWrite{}, err
 	}
 	return preparedOperationDirectWrite{
-		op:              op,
-		cfg:             cfg,
-		baseURL:         baseURL,
-		headers:         cloneResolvedHeaders(headers),
-		runtimeAuth:     runtimeAuth,
-		rateLimitAuth:   rateLimitAuth,
-		identity:        identity,
-		method:          method,
-		path:            resolvedPath,
-		requestPath:     requestPath,
-		query:           query,
-		body:            body,
-		form:            form,
-		format:          format,
-		contentType:     contentType,
-		policy:          policy,
-		maxBytes:        maxBytes,
-		redactionValues: redactionValues,
-		prepared:        prepared,
+		op:                   op,
+		cfg:                  cfg,
+		baseURL:              baseURL,
+		headers:              cloneResolvedHeaders(headers),
+		runtimeAuth:          runtimeAuth,
+		rateLimitAuth:        rateLimitAuth,
+		identity:             identity,
+		method:               method,
+		path:                 resolvedPath,
+		requestPath:          requestPath,
+		query:                query,
+		body:                 body,
+		form:                 form,
+		format:               format,
+		contentType:          contentType,
+		policy:               policy,
+		maxBytes:             maxBytes,
+		redactionValues:      redactionValues,
+		sensitiveHTTPBinding: sensitiveHTTPBinding,
+		prepared:             prepared,
 	}, nil
 }
 
@@ -1854,6 +1899,10 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	headers, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHeaderMutations(cfg, b.HTTP, headers, authBinding)
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP header mutations: %w", identity, err)
+	}
+	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(b.HTTP.Headers, authBinding)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: inspect declared HTTP bindings: %w", identity, err)
 	}
 	query, err := directReadQuery(queryMap)
 	if err != nil {
@@ -1924,24 +1973,25 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		return preparedOperationDirectWrite{}, err
 	}
 	return preparedOperationDirectWrite{
-		op:              op,
-		cfg:             cfg,
-		baseURL:         baseURL,
-		headers:         cloneResolvedHeaders(headers),
-		runtimeAuth:     runtimeAuth,
-		rateLimitAuth:   rateLimitAuth,
-		identity:        identity,
-		method:          method,
-		path:            op.GraphQL.Path,
-		requestPath:     requestPath,
-		query:           query,
-		body:            payload,
-		format:          "graphql",
-		contentType:     "application/json",
-		policy:          policy,
-		maxBytes:        maxBytes,
-		redactionValues: redactionValues,
-		prepared:        prepared,
+		op:                   op,
+		cfg:                  cfg,
+		baseURL:              baseURL,
+		headers:              cloneResolvedHeaders(headers),
+		runtimeAuth:          runtimeAuth,
+		rateLimitAuth:        rateLimitAuth,
+		identity:             identity,
+		method:               method,
+		path:                 op.GraphQL.Path,
+		requestPath:          requestPath,
+		query:                query,
+		body:                 payload,
+		format:               "graphql",
+		contentType:          "application/json",
+		policy:               policy,
+		maxBytes:             maxBytes,
+		redactionValues:      redactionValues,
+		sensitiveHTTPBinding: sensitiveHTTPBinding,
+		prepared:             prepared,
 	}, nil
 }
 
@@ -1975,6 +2025,9 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 			return OperationSpec{}, "", err
 		}
 		if _, err := operationDirectWriteQueryParameters(op); err != nil {
+			return OperationSpec{}, "", err
+		}
+		if _, err := OperationDirectWriteAuthOwnedQueryParameters(op, b.HTTP.Auth); err != nil {
 			return OperationSpec{}, "", err
 		}
 		if _, _, err := operationDirectWriteContentType(op, map[string]any{"declared": true}); err != nil {

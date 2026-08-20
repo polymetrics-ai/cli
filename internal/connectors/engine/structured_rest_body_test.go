@@ -464,6 +464,122 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	}
 }
 
+func TestOperationDirectWriteCredentialBoundHTTPErrorHidesEchoAndKeepsProviderResponse(t *testing.T) {
+	const credential = "credential-value-placeholder"
+	for _, test := range []struct {
+		name           string
+		configure      func(*Bundle)
+		configureInput func(*connectors.OperationDirectWriteRequest)
+		assertRequest  func(*testing.T, *http.Request)
+		hidesEcho      bool
+	}{
+		{
+			name: "declared secret header",
+			configure: func(bundle *Bundle) {
+				bundle.HTTP.Headers["X-API-Key"] = "{{ secrets.api_key }}"
+			},
+			configureInput: func(request *connectors.OperationDirectWriteRequest) {
+				request.Config.Secrets = map[string]string{"api_key": credential}
+			},
+			assertRequest: func(t *testing.T, request *http.Request) {
+				t.Helper()
+				if got := request.Header.Get("X-API-Key"); got != credential {
+					t.Fatalf("X-API-Key = %q, want exact bound credential", got)
+				}
+			},
+			hidesEcho: true,
+		},
+		{
+			name: "declared config header",
+			configure: func(bundle *Bundle) {
+				bundle.HTTP.Headers["X-API-Key"] = "{{ config.api_key }}"
+			},
+			configureInput: func(request *connectors.OperationDirectWriteRequest) {
+				request.Config.Config = map[string]string{"api_key": credential}
+			},
+			assertRequest: func(t *testing.T, request *http.Request) {
+				t.Helper()
+				if got := request.Header.Get("X-API-Key"); got != credential {
+					t.Fatalf("X-API-Key = %q, want exact bound credential", got)
+				}
+			},
+			hidesEcho: true,
+		},
+		{
+			name: "API key query authentication",
+			configure: func(bundle *Bundle) {
+				rest := *bundle.Operations[0].REST
+				rest.Parameters = append(rest.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string", Required: true})
+				bundle.Operations[0].REST = &rest
+				bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "{{ secrets.api_key }}"}}
+			},
+			configureInput: func(request *connectors.OperationDirectWriteRequest) {
+				request.Config.Secrets = map[string]string{"api_key": credential}
+			},
+			assertRequest: func(t *testing.T, request *http.Request) {
+				t.Helper()
+				if got := request.URL.Query().Get("api_key"); got != credential {
+					t.Fatalf("api_key = %q, want exact bound credential", got)
+				}
+			},
+			hidesEcho: true,
+		},
+		{
+			name:           "ordinary operation keeps provider diagnostic",
+			configure:      func(*Bundle) {},
+			configureInput: func(*connectors.OperationDirectWriteRequest) {},
+			assertRequest:  func(*testing.T, *http.Request) {},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			calls := 0
+			responseBody := "provider diagnostic " + credential
+			if !test.hidesEcho {
+				responseBody = "provider diagnostic safe-detail"
+			}
+			server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+				calls++
+				test.assertRequest(t, request)
+				writer.Header().Set("X-Provider-Trace", "credential-bound")
+				writer.WriteHeader(http.StatusBadRequest)
+				_, _ = writer.Write([]byte(responseBody))
+			}))
+			t.Cleanup(server.Close)
+			bundle := structuredRESTBodyBundle(server.URL)
+			test.configure(&bundle)
+			request := structuredRESTBodyRequest()
+			test.configureInput(&request)
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			request.Approval = approvedEvidenceForPreview(t, preview)
+			request.PreviewDigest = preview.Digest
+			_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+			if err == nil {
+				t.Fatal("OperationDirectWrite error = nil, want provider error")
+			}
+			if test.hidesEcho {
+				if strings.Contains(err.Error(), credential) || !strings.Contains(err.Error(), "provider returned an HTTP error") {
+					t.Fatalf("credential-bound HTTP error = %v, want generic taint-safe diagnostic", err)
+				}
+			} else if !strings.Contains(err.Error(), responseBody) {
+				t.Fatalf("ordinary HTTP error = %v, want provider diagnostic", err)
+			}
+			var httpErr *connsdk.HTTPError
+			if !errors.As(err, &httpErr) {
+				t.Fatalf("OperationDirectWrite error = %T %v, want retained HTTP error", err, err)
+			}
+			if httpErr.Status != http.StatusBadRequest || httpErr.Header.Get("X-Provider-Trace") != "credential-bound" || httpErr.Body != responseBody {
+				t.Fatalf("provider response cause = %#v, want exact status, headers, and body", httpErr)
+			}
+			if calls != 1 {
+				t.Fatalf("calls = %d, want one provider request", calls)
+			}
+		})
+	}
+}
+
 func TestOperationDirectWritePlanTransformsCanonicalizeTypedStringArrays(t *testing.T) {
 	bundle := structuredRESTBodyBundle("https://example.invalid")
 	rest := *bundle.Operations[0].REST
@@ -526,6 +642,56 @@ func TestPreflightOperationDirectWriteRejectsConditionalAPIKeyQueryOwnership(t *
 	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "key", When: "{{ config.auth_type == 'api' }}"}}
 	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy); err == nil || !strings.Contains(err.Error(), "conditionally supplied") {
 		t.Fatalf("no-match API key ownership error = %v, want declaration rejection", err)
+	}
+}
+
+func TestOperationDirectWriteTypedPreflightRejectsConditionalAPIKeyQueryOwnershipBeforeIO(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	t.Cleanup(server.Close)
+	bundle := structuredRESTBodyBundle(server.URL)
+	rest := *bundle.Operations[0].REST
+	rest.Parameters = append(rest.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string", Required: true})
+	bundle.Operations[0].REST = &rest
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "placeholder", When: "{{ config.auth_type == 'api' }}"}}
+	request := structuredRESTBodyRequest()
+
+	for _, test := range []struct {
+		name   string
+		invoke func() error
+	}{
+		{
+			name: "metadata",
+			invoke: func() error {
+				_, err := OperationDirectWriteMetadata(bundle, request.Operation)
+				return err
+			},
+		},
+		{
+			name: "preview",
+			invoke: func() error {
+				_, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+				return err
+			},
+		},
+		{
+			name: "execution",
+			invoke: func() error {
+				_, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+				return err
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if err := test.invoke(); err == nil || !strings.Contains(err.Error(), "conditionally supplied") {
+				t.Fatalf("typed direct-write preflight error = %v, want conditional ownership rejection", err)
+			}
+		})
+	}
+	if calls != 0 {
+		t.Fatalf("conditional typed direct-write declaration reached provider; calls = %d", calls)
 	}
 }
 
@@ -1533,6 +1699,66 @@ func TestValidateOperationDirectWriteCLIFlagsProjectsRequiredArraysAndDomains(t 
 				t.Fatalf("ValidateOperationDirectWriteCLIFlags error = %v, want declared-domain rejection", err)
 			}
 		})
+	}
+}
+
+func TestValidateOperationDirectWriteCLIFlagsRejectsSparseArrayProjection(t *testing.T) {
+	op := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	rest := *op.REST
+	rest.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{
+			"targets":{"type":"array","maxItems":3,"items":{"type":"object","additionalProperties":false,"properties":{"id":{"type":"string"}}}}
+		}
+	}`)
+	op.REST = &rest
+
+	sparse := []CLIFlag{{Name: "third-target", Type: "string", MapsTo: "body.targets.2.id", Required: true}}
+	if err := ValidateOperationDirectWriteCLIFlags(op, sparse); err == nil || !strings.Contains(err.Error(), "sparse array index 2") {
+		t.Fatalf("sparse array projection error = %v, want declaration rejection", err)
+	}
+
+	contiguous := []CLIFlag{
+		{Name: "first-target", Type: "string", MapsTo: "body.targets.0.id", Required: true},
+		{Name: "second-target", Type: "string", MapsTo: "body.targets.1.id", Required: true},
+		{Name: "third-target", Type: "string", MapsTo: "body.targets.2.id", Required: true},
+	}
+	if err := ValidateOperationDirectWriteCLIFlags(op, contiguous); err != nil {
+		t.Fatalf("contiguous array projection: %v", err)
+	}
+	contiguousBundle := structuredRESTBodyBundle("https://example.invalid")
+	contiguousBundle.Operations[0] = op
+	body, err := MaterializeOperationDirectWriteBodyMappings(contiguousBundle, op.ID, map[string]any{
+		"targets.0.id": "first",
+		"targets.1.id": "second",
+		"targets.2.id": "third",
+	})
+	if err != nil {
+		t.Fatalf("materialize contiguous array projection: %v", err)
+	}
+	targets, ok := body["targets"].([]any)
+	if !ok || len(targets) != 3 {
+		t.Fatalf("contiguous targets = %#v, want three items", body["targets"])
+	}
+
+	staticOp := op
+	staticREST := *op.REST
+	staticREST.Body = map[string]any{"targets": []any{map[string]any{}}}
+	staticOp.REST = &staticREST
+	static := []CLIFlag{{Name: "second-target", Type: "string", MapsTo: "body.targets.1.id", Required: true}}
+	if err := ValidateOperationDirectWriteCLIFlags(staticOp, static); err != nil {
+		t.Fatalf("static array projection: %v", err)
+	}
+	staticBundle := structuredRESTBodyBundle("https://example.invalid")
+	staticBundle.Operations[0] = staticOp
+	body, err = MaterializeOperationDirectWriteBodyMappings(staticBundle, staticOp.ID, map[string]any{"targets.1.id": "second"})
+	if err != nil {
+		t.Fatalf("materialize static array projection: %v", err)
+	}
+	targets, ok = body["targets"].([]any)
+	if !ok || len(targets) != 2 {
+		t.Fatalf("static targets = %#v, want fixed prefix and mapped item", body["targets"])
 	}
 }
 
