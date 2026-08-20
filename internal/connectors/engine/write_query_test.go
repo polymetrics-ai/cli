@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -170,7 +171,7 @@ func TestBuildWriteQueryOmitWhenAbsentScopesMissingRecordValuesToTheirDeclaredQu
 			name:    "wrong source remains a failure",
 			param:   QueryParam{Template: "{{ query.optional }}", OmitWhenAbsent: true},
 			vars:    Vars{},
-			wantErr: "unresolved key",
+			wantErr: "does not permit query references",
 		},
 		{
 			name:    "malformed explicit value remains a failure",
@@ -218,13 +219,13 @@ func TestBuildWriteQueryPreflightsEveryExpressionBeforeRecordOmission(t *testing
 			name:      "later query reference",
 			template:  "{{ record.optional }}{{ query.forbidden }}",
 			vars:      Vars{Record: map[string]any{"id": "w1"}},
-			wantError: `unresolved key "forbidden" in query`,
+			wantError: "does not permit query references",
 		},
 		{
 			name:      "reversed source order",
 			template:  "{{ query.forbidden }}{{ record.optional }}",
 			vars:      Vars{Record: map[string]any{"id": "w1"}},
-			wantError: `unresolved key "forbidden" in query`,
+			wantError: "does not permit query references",
 		},
 		{
 			name:      "later invalid config expression",
@@ -296,10 +297,160 @@ func TestBuildWriteQueryPreflightsEveryExpressionBeforeRecordOmission(t *testing
 	}
 }
 
+func TestBuildWriteQueryRejectsMalformedTemplatesAndReferenceTails(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		template string
+		wantErr  string
+	}{
+		{
+			name:     "nested delimiter cannot hide wrong source",
+			template: "{{ record.optional {{ query.forbidden }}",
+			wantErr:  "nested opening delimiter",
+		},
+		{
+			name:     "stray closing delimiter",
+			template: "{{ record.optional }} }}",
+			wantErr:  "stray closing delimiter",
+		},
+		{
+			name:     "unbalanced opening delimiter",
+			template: "{{ record.optional",
+			wantErr:  "unbalanced opening delimiter",
+		},
+		{
+			name:     "empty expression",
+			template: "{{ }}",
+			wantErr:  "empty expression",
+		},
+		{
+			name:     "empty filter stage",
+			template: "{{ record.optional | }}",
+			wantErr:  "malformed filter chain",
+		},
+		{
+			name:     "config tail",
+			template: "{{ config.mode.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "secret tail",
+			template: "{{ secrets.token.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "query tail",
+			template: "{{ query.value.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "incremental tail",
+			template: "{{ incremental.lower_bound.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "fanout tail",
+			template: "{{ fanout.id.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "cursor tail",
+			template: "{{ cursor.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": {Template: tc.template, OmitWhenAbsent: true}},
+			}, Vars{Record: map[string]any{"id": "w1"}})
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("buildWriteQuery error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+
+	query, err := buildWriteQuery(WriteAction{
+		Name:  "update_widget",
+		Query: map[string]QueryParam{"optional": {Template: "{{ record.settings.primary.id }}", OmitWhenAbsent: true}},
+	}, Vars{Record: map[string]any{"settings": map[string]any{"primary": map[string]any{"id": "nested-id"}}}})
+	if err != nil {
+		t.Fatalf("buildWriteQuery dotted record path: %v", err)
+	}
+	if got := query.Get("optional"); got != "nested-id" {
+		t.Fatalf("dotted record query = %q, want %q", got, "nested-id")
+	}
+}
+
+func TestBuildWriteQuerySecretFilterErrorsDoNotExposeValues(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		template  string
+		secret    string
+		forbidden []string
+	}{
+		{
+			name:      "unix seconds",
+			template:  "{{ record.optional }}{{ secrets.token | unix_seconds }}",
+			secret:    "secret-canary-unix",
+			forbidden: []string{"secret-canary-unix"},
+		},
+		{
+			name:      "base64 conversion",
+			template:  "{{ record.optional }}{{ secrets.token | base64 | unix_seconds }}",
+			secret:    "secret-canary-base64",
+			forbidden: []string{"secret-canary-base64", base64.StdEncoding.EncodeToString([]byte("secret-canary-base64"))},
+		},
+		{
+			name:      "urlencode conversion",
+			template:  "{{ record.optional }}{{ secrets.token | urlencode | unix_seconds }}",
+			secret:    "secret canary urlencode",
+			forbidden: []string{"secret canary urlencode", urlencodeSegment("secret canary urlencode")},
+		},
+		{
+			name:      "path segment conversion",
+			template:  "{{ record.optional }}{{ secrets.token | last_path_segment | unix_seconds }}",
+			secret:    "prefix/secret-canary-segment",
+			forbidden: []string{"prefix/secret-canary-segment", "secret-canary-segment"},
+		},
+		{
+			name:      "join type error",
+			template:  "{{ record.optional }}{{ secrets.token | join:, }}",
+			secret:    "secret-canary-join",
+			forbidden: []string{"secret-canary-join"},
+		},
+		{
+			name:      "raw value error",
+			template:  "{{ record.optional }}{{ secrets.token }}",
+			secret:    "secret-canary-crlf\r\n",
+			forbidden: []string{"secret-canary-crlf"},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": {Template: tc.template, OmitWhenAbsent: true}},
+			}, Vars{
+				Record:  map[string]any{"id": "w1"},
+				Secrets: map[string]string{"token": tc.secret},
+			})
+			if err == nil {
+				t.Fatal("buildWriteQuery error = nil, want secret-safe failure")
+			}
+			for _, value := range tc.forbidden {
+				if strings.Contains(err.Error(), value) {
+					t.Fatalf("buildWriteQuery error exposed secret value %q: %v", value, err)
+				}
+			}
+		})
+	}
+}
+
 func TestWriteActionRecordQueryRejectionsHappenBeforeProviderIO(t *testing.T) {
 	for _, tc := range []struct {
 		name    string
 		param   QueryParam
+		cfg     connectors.RuntimeConfig
 		record  connectors.Record
 		wantErr string
 	}{
@@ -319,13 +470,19 @@ func TestWriteActionRecordQueryRejectionsHappenBeforeProviderIO(t *testing.T) {
 			name:    "wrong source",
 			param:   QueryParam{Template: "{{ query.optional }}", OmitWhenAbsent: true},
 			record:  connectors.Record{"id": "w1"},
-			wantErr: "unresolved key",
+			wantErr: "does not permit query references",
 		},
 		{
 			name:    "missing record cannot hide later wrong source",
 			param:   QueryParam{Template: "{{ record.optional }}{{ query.forbidden }}", OmitWhenAbsent: true},
 			record:  connectors.Record{"id": "w1"},
-			wantErr: `unresolved key "forbidden" in query`,
+			wantErr: "does not permit query references",
+		},
+		{
+			name:    "nested delimiter cannot hide later wrong source",
+			param:   QueryParam{Template: "{{ record.optional {{ query.forbidden }}", OmitWhenAbsent: true},
+			record:  connectors.Record{"id": "w1"},
+			wantErr: "nested opening delimiter",
 		},
 		{
 			name:    "malformed explicit value",
@@ -340,7 +497,7 @@ func TestWriteActionRecordQueryRejectionsHappenBeforeProviderIO(t *testing.T) {
 				Name: "update_widget", Kind: "update", Method: http.MethodPost, Path: "/widgets",
 				Query: map[string]QueryParam{"optional": tc.param},
 			})
-			err := writeOneRecord(t, bundle, "update_widget", connectors.RuntimeConfig{}, tc.record)
+			err := writeOneRecord(t, bundle, "update_widget", tc.cfg, tc.record)
 			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
 				t.Fatalf("Write error = %v, want %q", err, tc.wantErr)
 			}
@@ -348,6 +505,27 @@ func TestWriteActionRecordQueryRejectionsHappenBeforeProviderIO(t *testing.T) {
 				t.Fatalf("rejected query reached provider; requests = %d", len(*seen))
 			}
 		})
+	}
+}
+
+func TestWriteActionSecretQueryErrorsDoNotReachProviderOrExposeValues(t *testing.T) {
+	const secret = "secret-canary-provider"
+	srv, seen := queryCaptureServer(t)
+	bundle := newWriteTestBundle(srv, WriteAction{
+		Name: "update_widget", Kind: "update", Method: http.MethodPost, Path: "/widgets",
+		Query: map[string]QueryParam{
+			"optional": {Template: "{{ record.optional }}{{ secrets.token | unix_seconds }}", OmitWhenAbsent: true},
+		},
+	})
+	err := writeOneRecord(t, bundle, "update_widget", connectors.RuntimeConfig{Secrets: map[string]string{"token": secret}}, connectors.Record{"id": "w1"})
+	if err == nil {
+		t.Fatal("Write error = nil, want secret-safe failure")
+	}
+	if strings.Contains(err.Error(), secret) {
+		t.Fatalf("Write error exposed secret value: %v", err)
+	}
+	if len(*seen) != 0 {
+		t.Fatalf("rejected query reached provider; requests = %d", len(*seen))
 	}
 }
 

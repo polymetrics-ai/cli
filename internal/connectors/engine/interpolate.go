@@ -144,6 +144,14 @@ func interpolate(template string, vars Vars, urlencodeDefault, allowControlChara
 // injection surfaces (THREAT-MODEL §2) and no filter in this dialect is
 // meant to legitimately produce or pass through newlines.
 func resolveExpr(expr string, vars Vars, urlencodeDefault, allowControlCharacters bool) (string, error) {
+	return resolveExprWithSecretSafety(expr, vars, urlencodeDefault, allowControlCharacters, false)
+}
+
+func resolveWriteQueryExpr(expr string, vars Vars) (string, error) {
+	return resolveExprWithSecretSafety(expr, vars, false, false, true)
+}
+
+func resolveExprWithSecretSafety(expr string, vars Vars, urlencodeDefault, allowControlCharacters, redactSecretFilterErrors bool) (string, error) {
 	if paths, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
 		if err != nil {
 			return "", err
@@ -167,6 +175,10 @@ func resolveExpr(expr string, vars Vars, urlencodeDefault, allowControlCharacter
 
 	parts := strings.Split(expr, "|")
 	ref := strings.TrimSpace(parts[0])
+	secretReference := ""
+	if redactSecretFilterErrors && strings.HasPrefix(ref, "secrets.") {
+		secretReference = ref
+	}
 
 	rawVal, err := resolveRefValue(ref, vars)
 	if err != nil {
@@ -189,7 +201,7 @@ func resolveExpr(expr string, vars Vars, urlencodeDefault, allowControlCharacter
 
 	cur := val
 	for _, filter := range filters {
-		next, err := applyFilterValue(filter, cur, rawVal)
+		next, err := applyFilterValueWithSecretReference(filter, cur, rawVal, secretReference)
 		if err != nil {
 			return "", err
 		}
@@ -464,6 +476,10 @@ func applyFilter(filter, val string) (string, error) {
 // therefore fine; a literal cannot itself contain "|", the outer chain-split
 // delimiter).
 func applyFilterValue(filter, val string, rawVal any) (string, error) {
+	return applyFilterValueWithSecretReference(filter, val, rawVal, "")
+}
+
+func applyFilterValueWithSecretReference(filter, val string, rawVal any, secretReference string) (string, error) {
 	switch {
 	case filter == "":
 		return val, nil
@@ -472,6 +488,9 @@ func applyFilterValue(filter, val string, rawVal any) (string, error) {
 	case filter == "unix_seconds":
 		t, err := time.Parse(time.RFC3339, val)
 		if err != nil {
+			if secretReference != "" {
+				return "", fmt.Errorf("interpolate: unix_seconds filter: invalid RFC3339 value for %q", secretReference)
+			}
 			return "", fmt.Errorf("interpolate: unix_seconds filter: invalid RFC3339 value %q: %w", val, err)
 		}
 		return strconv.FormatInt(t.Unix(), 10), nil

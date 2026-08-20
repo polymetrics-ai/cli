@@ -404,7 +404,12 @@ not a full override by default.
   Config, secret, and incremental references retain their established object-form omission/default
   behavior; they do not satisfy a missing `record.*` reference. Every template expression is
   validated before the record-absence decision, so an absent record value cannot hide a later invalid
-  or wrong-source reference. The caller cannot provide free-form
+  or wrong-source reference. Write-query templates use a deterministic delimiter parser: nested,
+  stray, or unbalanced delimiters, empty expressions, and empty filter stages are rejected before
+  resolution. `record.*` may use a dotted record path; every other permitted namespace uses its exact
+  declaration-owned reference shape, and `query.*`, `cursor`, and `fanout.*` are not valid write
+  sources. Filter errors from a `secrets.*` reference identify the reference and filter but never its
+  resolved value. The caller cannot provide free-form
   query values: an explicit record value is sent only through its exact declared query entry. Do not
   use this rule for operation direct writes or as a generic query escape hatch. A direct-write
   `query.<name>` flag may occur once; aliases count as the same source-declared query input.

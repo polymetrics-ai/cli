@@ -840,53 +840,83 @@ func resolveQueryParamsWithRecordOmission(params map[string]QueryParam, vars Var
 }
 
 func validateWriteQueryTemplate(template string, vars Vars) ([]error, error) {
-	matches := templatePattern.FindAllStringSubmatchIndex(template, -1)
-	expressions := make([]string, 0, len(matches))
-	last := 0
-	var syntaxErr error
-	for _, match := range matches {
-		if syntaxErr == nil && containsTemplateDelimiter(template[last:match[0]]) {
-			syntaxErr = fmt.Errorf("interpolate: malformed template delimiter")
-		}
-		expr := template[match[2]:match[3]]
-		if err := validateWriteQueryExpression(expr); err != nil && syntaxErr == nil {
-			syntaxErr = err
-		}
-		expressions = append(expressions, expr)
-		last = match[1]
+	expressions, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return nil, err
 	}
-	if syntaxErr == nil && containsTemplateDelimiter(template[last:]) {
-		syntaxErr = fmt.Errorf("interpolate: malformed template delimiter")
-	}
-	if syntaxErr != nil {
-		return nil, syntaxErr
+	for _, expr := range expressions {
+		if err := validateWriteQueryExpression(expr); err != nil {
+			return nil, err
+		}
 	}
 
 	resolutionErrors := make([]error, 0)
 	for _, expr := range expressions {
-		if _, err := resolveExpr(expr, vars, false); err != nil {
+		if _, err := resolveWriteQueryExpr(expr, vars); err != nil {
 			resolutionErrors = append(resolutionErrors, err)
 		}
 	}
 	return resolutionErrors, nil
 }
 
-func containsTemplateDelimiter(text string) bool {
-	return strings.Contains(text, "{{") || strings.Contains(text, "}}")
+func parseWriteQueryTemplate(template string) ([]string, error) {
+	expressions := make([]string, 0)
+	position := 0
+	for position < len(template) {
+		openOffset := strings.Index(template[position:], "{{")
+		closeOffset := strings.Index(template[position:], "}}")
+		if closeOffset >= 0 && (openOffset < 0 || closeOffset < openOffset) {
+			return nil, fmt.Errorf("interpolate: malformed template delimiter: stray closing delimiter")
+		}
+		if openOffset < 0 {
+			break
+		}
+
+		expressionStart := position + openOffset + len("{{")
+		expressionEndOffset := strings.Index(template[expressionStart:], "}}")
+		if expressionEndOffset < 0 {
+			return nil, fmt.Errorf("interpolate: malformed template delimiter: unbalanced opening delimiter")
+		}
+		expressionEnd := expressionStart + expressionEndOffset
+		if strings.Contains(template[expressionStart:expressionEnd], "{{") {
+			return nil, fmt.Errorf("interpolate: malformed template delimiter: nested opening delimiter")
+		}
+		expr := strings.TrimSpace(template[expressionStart:expressionEnd])
+		if expr == "" {
+			return nil, fmt.Errorf("interpolate: malformed template delimiter: empty expression")
+		}
+		expressions = append(expressions, expr)
+		position = expressionEnd + len("}}")
+	}
+	return expressions, nil
 }
 
 func validateWriteQueryExpression(expr string) error {
-	if _, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
-		return err
+	if paths, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
+		if err != nil {
+			return err
+		}
+		for _, path := range paths {
+			if err := validateWriteQueryReferenceSegments("record."+path, strings.Split(path, ".")); err != nil {
+				return err
+			}
+		}
+		return nil
 	}
 	parts := strings.Split(expr, "|")
 	ref := strings.TrimSpace(parts[0])
+	if ref == "" {
+		return fmt.Errorf("interpolate: malformed reference %q", ref)
+	}
 	if err := validateWriteQueryReference(ref); err != nil {
 		return err
 	}
 	for _, rawFilter := range parts[1:] {
 		filter := strings.TrimSpace(rawFilter)
-		if filter != "" && !isKnownFilter(filter) {
+		if filter == "" {
+			return fmt.Errorf("interpolate: malformed filter chain")
+		}
+		if !isKnownFilter(filter) {
 			return fmt.Errorf("interpolate: unknown filter %q", filter)
 		}
 	}
@@ -895,28 +925,58 @@ func validateWriteQueryExpression(expr string) error {
 
 func validateWriteQueryReference(ref string) error {
 	if ref == "cursor" {
-		return nil
+		return fmt.Errorf("interpolate: write query does not permit cursor references")
 	}
 	parts := strings.Split(ref, ".")
-	if len(parts) < 2 || strings.TrimSpace(parts[0]) == "" || strings.TrimSpace(parts[1]) == "" {
+	if len(parts) < 2 {
 		return fmt.Errorf("interpolate: malformed reference %q", ref)
 	}
+	if err := validateWriteQueryReferenceSegments(ref, parts); err != nil {
+		return err
+	}
 	switch parts[0] {
-	case "config", "secrets", "record", "query":
+	case "cursor":
+		return fmt.Errorf("interpolate: malformed reference %q", ref)
+	case "record":
 		return nil
+	case "config", "secrets":
+		if len(parts) != 2 {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		return nil
+	case "query":
+		if len(parts) != 2 {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		return fmt.Errorf("interpolate: write query does not permit query references")
 	case "incremental":
+		if len(parts) != 2 {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
 		if knownIncrementalKeys[parts[1]] {
 			return nil
 		}
 		return fmt.Errorf("interpolate: unknown incremental reference %q", ref)
 	case "fanout":
+		if len(parts) != 2 {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
 		if knownFanoutKeys[parts[1]] {
-			return nil
+			return fmt.Errorf("interpolate: write query does not permit fanout references")
 		}
 		return fmt.Errorf("interpolate: unknown fanout reference %q", ref)
 	default:
 		return fmt.Errorf("interpolate: unknown namespace %q in reference %q", parts[0], ref)
 	}
+}
+
+func validateWriteQueryReferenceSegments(ref string, parts []string) error {
+	for _, part := range parts {
+		if part == "" || part != strings.TrimSpace(part) {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+	}
+	return nil
 }
 
 // buildCheckQuery resolves check.query (RequestSpec.Query) against cfg using
