@@ -1265,7 +1265,7 @@ func TestSourceImportNormalizesDirectReferenceFragments(t *testing.T) {
 		want string
 	}{
 		{name: "malformed percent escape", ref: "#/paths/%ZZ/get/responses/200", want: "invalid percent escape"},
-		{name: "double encoded fragment", ref: "#/paths/~1users~1%257Bid%257D/get/responses/200", want: "double-encoded percent escape"},
+		{name: "second decode attempt", ref: "#/paths/~1users~1%257Bid%257D/get/responses/200", want: "unresolved reference"},
 	} {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
@@ -1277,11 +1277,30 @@ func TestSourceImportNormalizesDirectReferenceFragments(t *testing.T) {
 			}
 		})
 	}
+	canonical, err := sourceNormalizeLocalReference("#/components/schemas/Root/properties/percent%252F")
+	if err != nil || canonical != "#/components/schemas/Root/properties/percent%2F" {
+		t.Fatalf("literal percent canonical reference = %q, %v", canonical, err)
+	}
+	literalPercent := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Root":{"type":"object","additionalProperties":false,"properties":{"percent%2F":{"type":"string","maxLength":8}}}}},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","schema":{"$ref":"#/components/schemas/Root/properties/percent%252F"}}],"responses":{"200":{"description":"ok"}}}}}}`)
+	result := importInlineSourceResult(t, literalPercent, defaultSourceImportLimits())
+	if len(result.Operations) != 1 || len(result.Operations[0].Request.Query) != 1 {
+		t.Fatalf("literal percent source operation = %#v", result.Operations)
+	}
+	schema, ok := result.Operations[0].Request.Query[0].Schema.(map[string]any)
+	if !ok || schema["type"] != "string" || fmt.Sprint(schema["maxLength"]) != "8" {
+		t.Fatalf("literal percent resolved schema = %#v", result.Operations[0].Request.Query[0].Schema)
+	}
 	cycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"A":{"$ref":"#/components/responses/B"},"B":{"$ref":"#/components/responses/%41"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/A"}}}}}}`)
 	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/canonical-reference-cycle.json", cycle)
-	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return cycle, nil }), defaultSourceImportLimits())
+	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return cycle, nil }), defaultSourceImportLimits())
 	if err == nil || !strings.Contains(err.Error(), "reference cycle") {
 		t.Fatalf("canonical reference cycle error = %v", err)
+	}
+	literalPercentCycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Root":{"type":"object","additionalProperties":false,"properties":{"percent%2F":{"$ref":"#/components/schemas/Root/properties/percent%252F"}}}}},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","schema":{"$ref":"#/components/schemas/Root"}}],"responses":{"200":{"description":"ok"}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/literal-percent-reference-cycle.json", literalPercentCycle)
+	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return literalPercentCycle, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "reference cycle") {
+		t.Fatalf("literal percent reference cycle error = %v", err)
 	}
 }
 

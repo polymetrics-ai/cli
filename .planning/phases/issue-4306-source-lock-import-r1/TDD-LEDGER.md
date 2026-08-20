@@ -88,3 +88,10 @@
 - **Green:** callback chains now reserve every fully expanded hop before recursive merge cloning; direct references normalize once before cycle, pointer, and grammar-index handling, with encoded, malformed, double-encoded, and canonical-cycle cases covered.
 - **Refactor:** one canonical local-reference boundary now serves generic `$ref` and Link operation targets while reachability reuses its canonical stack identity.
 - **Review fallback:** this assigned no-mistakes review phase applied `golang-how-to`, security, safety, error-handling, lint, and testing guidance inline; outer-pipeline commands remain intentionally uninvoked.
+
+## Cycle 15 — literal-percent reference identity
+
+- **Red:** the canonical-fragment guard treated a once-decoded literal `%HH` segment as a second decode attempt, rejecting legal nested-schema references.
+- **Green:** local fragments decode once into canonical pointer identities; literal-percent targets resolve through grammar indexing while malformed escapes and unresolved second-decode attempts still fail, and canonical aliases retain cycle detection.
+- **Refactor:** the shared reference normalizer is the only URI-percent decoder; all downstream pointer, index, and cycle paths consume its canonical result unchanged.
+- **Review fallback:** this assigned no-mistakes review phase applied `golang-how-to`, security, safety, error-handling, lint, and testing guidance inline; outer-pipeline commands remain intentionally uninvoked.

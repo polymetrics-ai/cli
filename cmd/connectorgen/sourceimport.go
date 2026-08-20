@@ -4313,26 +4313,10 @@ func sourceNormalizeLocalReference(raw string) (string, error) {
 	if fragment != "" && !strings.HasPrefix(fragment, "/") {
 		return "", fmt.Errorf("local reference %q must be a local artifact JSON Pointer", raw)
 	}
-	if sourceContainsEncodedOctet(fragment) {
-		return "", fmt.Errorf("local reference %q contains a double-encoded percent escape", raw)
-	}
 	if err := sourceValidateJSONPointer(fragment); err != nil {
 		return "", fmt.Errorf("local reference %q has an invalid JSON Pointer: %w", raw, err)
 	}
 	return "#" + fragment, nil
-}
-
-func sourceContainsEncodedOctet(value string) bool {
-	for index := 0; index+2 < len(value); index++ {
-		if value[index] == '%' && sourceHexDigit(value[index+1]) && sourceHexDigit(value[index+2]) {
-			return true
-		}
-	}
-	return false
-}
-
-func sourceHexDigit(value byte) bool {
-	return value >= '0' && value <= '9' || value >= 'a' && value <= 'f' || value >= 'A' && value <= 'F'
 }
 
 func sourceReferenceStackAddition(stack, next map[string]bool) (string, error) {
