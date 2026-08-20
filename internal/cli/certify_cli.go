@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors/certify"
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -306,9 +307,9 @@ func prepareExternalCertifyCredentialInput(args []string, flags parsedFlags, opt
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("read stdin certification credential: %w", err)
 	}
-	value := strings.TrimRight(string(payload), "\r\n")
-	if value == "" {
-		return nil, nil, nil, errors.New("stdin certification credential is empty")
+	value := credential.NormalizeStdin(string(payload))
+	if err := credential.RequirePersistentValue(field, value); err != nil {
+		return nil, nil, nil, err
 	}
 	childArgs := replaceCertificationStdinArg(args, field)
 	prepared = append(prepared, value)

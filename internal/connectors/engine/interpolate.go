@@ -58,7 +58,7 @@ var templatePattern = regexp.MustCompile(`\{\{\s*(.*?)\s*\}\}`)
 // filter is applied to raw text; urlencode is opt-in via the explicit filter
 // syntax ({{ config.x | urlencode }}).
 func Interpolate(template string, vars Vars) (string, error) {
-	return interpolate(template, vars, false)
+	return interpolate(template, vars, false, false)
 }
 
 // InterpolatePath resolves every {{ }} expression in template against vars,
@@ -71,7 +71,7 @@ func Interpolate(template string, vars Vars) (string, error) {
 // safe insertion), which means a literal ".." value would otherwise survive
 // as an intact same-value path segment even though slashes are encoded.
 func InterpolatePath(template string, vars Vars) (string, error) {
-	out, err := interpolate(template, vars, true)
+	out, err := interpolate(template, vars, true, false)
 	if err != nil {
 		return "", err
 	}
@@ -101,7 +101,7 @@ func containsDotDotSegment(path string) bool {
 // and rejects any resolved value containing CR or LF (header injection guard,
 // THREAT-MODEL §2).
 func InterpolateHeader(template string, vars Vars) (string, error) {
-	out, err := interpolate(template, vars, false)
+	out, err := interpolate(template, vars, false, false)
 	if err != nil {
 		return "", err
 	}
@@ -111,14 +111,18 @@ func InterpolateHeader(template string, vars Vars) (string, error) {
 	return out, nil
 }
 
-func interpolate(template string, vars Vars, urlencodeDefault bool) (string, error) {
+func interpolateCredential(template string, vars Vars) (string, error) {
+	return interpolate(template, vars, false, true)
+}
+
+func interpolate(template string, vars Vars, urlencodeDefault, allowControlCharacters bool) (string, error) {
 	var firstErr error
 	out := templatePattern.ReplaceAllStringFunc(template, func(match string) string {
 		if firstErr != nil {
 			return ""
 		}
 		inner := templatePattern.FindStringSubmatch(match)[1]
-		val, err := resolveExpr(inner, vars, urlencodeDefault)
+		val, err := resolveExpr(inner, vars, urlencodeDefault, allowControlCharacters)
 		if err != nil {
 			firstErr = err
 			return ""
@@ -139,7 +143,7 @@ func interpolate(template string, vars Vars, urlencodeDefault bool) (string, err
 // outright if it carries CR/LF — header and path/query insertion are the
 // injection surfaces (THREAT-MODEL §2) and no filter in this dialect is
 // meant to legitimately produce or pass through newlines.
-func resolveExpr(expr string, vars Vars, urlencodeDefault bool) (string, error) {
+func resolveExpr(expr string, vars Vars, urlencodeDefault, allowControlCharacters bool) (string, error) {
 	if paths, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
 		if err != nil {
 			return "", err
@@ -152,7 +156,7 @@ func resolveExpr(expr string, vars Vars, urlencodeDefault bool) (string, error) 
 			return "", &unresolvedKeyError{Namespace: "record", Key: strings.Join(paths, " ")}
 		}
 		val := stringify(rawVal)
-		if strings.ContainsAny(val, "\r\n") {
+		if !allowControlCharacters && strings.ContainsAny(val, "\r\n") {
 			return "", fmt.Errorf("interpolate: resolved value for %q contains CR/LF", strings.TrimSpace(expr))
 		}
 		if urlencodeDefault {
@@ -169,7 +173,7 @@ func resolveExpr(expr string, vars Vars, urlencodeDefault bool) (string, error) 
 		return "", err
 	}
 	val := stringify(rawVal)
-	if strings.ContainsAny(val, "\r\n") {
+	if !allowControlCharacters && strings.ContainsAny(val, "\r\n") {
 		return "", fmt.Errorf("interpolate: resolved value for %q contains CR/LF", ref)
 	}
 

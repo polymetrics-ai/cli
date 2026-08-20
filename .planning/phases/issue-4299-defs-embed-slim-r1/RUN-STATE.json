@@ -1,0 +1,39 @@
+{
+  "phase": "issue-4299-defs-embed-slim-r1",
+  "issue": 4299,
+  "branch": "fm/cli-defs-embed-slim-r1",
+  "base": "origin/main",
+  "status": "verify_toolchain_remediation_locally_verified_pending_pr_checks",
+  "gsd": {
+    "doctor": "passed",
+    "mode": "manual_inline_fallback",
+    "commands": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "decisions": {
+    "sourceLocks": "github source lock explicit exception only",
+    "checkoutRoot": "deferred",
+    "compression": "deferred",
+    "lazyLoading": "deferred"
+  },
+  "verification": {
+    "release_size_guard": "passed: make release-workflow-check includes archive layout, budget, and extracted installed GitHub certification",
+    "verify_toolchain": "passed: Verify job provisions nfpm@v2.43.0 before make verify; workflow-contract red/green evidence recorded",
+    "full_test_suite": "passed after Verify toolchain remediation: go test -timeout 20m ./...",
+    "connector_boundary": "passed after Verify toolchain remediation: clean, 293 files, 552 connectors, 0 findings",
+    "generator_checks": "passed after Verify toolchain remediation",
+    "manual_review": "passed: inline GSD code review found no actionable issue; documented independent-review fallback required after checks"
+  },
+  "pull_request": {
+    "number": 4309,
+    "url": "https://github.com/polymetrics-ai/cli/pull/4309",
+    "base": "main",
+    "head_at_open": "d5721f66fe6b67dd64624c076379042f255dbc69",
+    "review_route": "claude_auto_pending"
+  }
+}

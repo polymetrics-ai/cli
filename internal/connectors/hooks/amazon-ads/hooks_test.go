@@ -2,13 +2,20 @@ package amazonads_test
 
 import (
 	"context"
+	"crypto/sha256"
+	"errors"
+	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
+	"strings"
+	"sync/atomic"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
 	amazonadshooks "polymetrics.ai/internal/connectors/hooks/amazon-ads"
+	"polymetrics.ai/internal/credential"
 )
 
 func newRuntimeConfig(tokenURL, profileID string, secrets map[string]string) connectors.RuntimeConfig {
@@ -214,6 +221,155 @@ func TestAuthenticator_HonorsContextCancellation(t *testing.T) {
 	cancel()
 	if _, err := h.Authenticator(ctx, cfg, engine.AuthSpec{}); err == nil {
 		t.Fatal("Authenticator() with a cancelled context should error")
+	}
+}
+
+func TestAuthenticatorPreservesCredentialFormBytes(t *testing.T) {
+	base := " " + strings.Repeat("r", 8192) + " "
+	clientID := " " + strings.Repeat("i", 1024) + " "
+	clientSecret := " " + strings.Repeat("s", 1024) + " "
+	tests := []struct {
+		name      string
+		delimiter string
+		retained  string
+		escaped   string
+	}{
+		{name: "two terminal LFs", delimiter: "\n\n", retained: "\n", escaped: "%0A"},
+		{name: "two terminal CRLFs", delimiter: "\r\n\r\n", retained: "\r\n", escaped: "%0D%0A"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			refreshToken := credential.NormalizeStdin(base + tt.delimiter)
+			wantRefreshToken := base + tt.retained
+			assertAmazonFingerprint(t, "normalized refresh token", refreshToken, wantRefreshToken)
+
+			var calls atomic.Int32
+			var body string
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				calls.Add(1)
+				payload, err := io.ReadAll(r.Body)
+				if err != nil {
+					t.Errorf("ReadAll() error = %v", err)
+					w.WriteHeader(http.StatusInternalServerError)
+					return
+				}
+				body = string(payload)
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{"access_token":"returned-access-token"}`))
+			}))
+			defer srv.Close()
+
+			h := amazonadshooks.New()
+			h.Client = srv.Client()
+			_, err := h.Authenticator(context.Background(), newRuntimeConfig(srv.URL, "1", map[string]string{
+				"client_id":     clientID,
+				"client_secret": clientSecret,
+				"refresh_token": refreshToken,
+			}), engine.AuthSpec{})
+			if err != nil {
+				t.Fatalf("Authenticator() error = %v", err)
+			}
+			if calls.Load() != 1 {
+				t.Fatalf("provider calls = %d, want 1", calls.Load())
+			}
+			wantBody := url.Values{
+				"client_id":     []string{clientID},
+				"client_secret": []string{clientSecret},
+				"grant_type":    []string{"refresh_token"},
+				"refresh_token": []string{wantRefreshToken},
+			}.Encode()
+			assertAmazonFingerprint(t, "form body", body, wantBody)
+			if !strings.Contains(body, tt.escaped) || !strings.Contains(body, "+") {
+				t.Fatal("form body did not percent-encode retained delimiter and spaces")
+			}
+		})
+	}
+}
+
+func TestAuthenticatorRejectsTransportOnlyCredentialsBeforeProvider(t *testing.T) {
+	for _, field := range []string{"client_id", "client_secret", "refresh_token"} {
+		for _, tt := range []struct {
+			name  string
+			value string
+		}{
+			{name: "empty", value: ""},
+			{name: "LF only", value: "\n"},
+			{name: "CRLF only", value: "\r\n"},
+		} {
+			t.Run(field+"/"+tt.name, func(t *testing.T) {
+				var calls atomic.Int32
+				srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+					calls.Add(1)
+				}))
+				defer srv.Close()
+
+				secrets := map[string]string{
+					"client_id":     "client-id",
+					"client_secret": "client-secret",
+					"refresh_token": "refresh-token",
+				}
+				secrets[field] = tt.value
+				h := amazonadshooks.New()
+				h.Client = srv.Client()
+				_, err := h.Authenticator(context.Background(), newRuntimeConfig(srv.URL, "1", secrets), engine.AuthSpec{})
+				var empty *credential.EmptySecretError
+				if !errors.As(err, &empty) {
+					t.Fatalf("error type = %T, want EmptySecretError", err)
+				}
+				if calls.Load() != 0 {
+					t.Fatalf("provider calls = %d, want 0", calls.Load())
+				}
+			})
+		}
+	}
+}
+
+func TestAuthenticatorRejectsHeaderControlAccessTokenWithoutLeakingIt(t *testing.T) {
+	marker := "amazon-ads-" + strings.Repeat("a", 256)
+	var calls atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"access_token":"` + marker + `\n"}`))
+	}))
+	defer srv.Close()
+
+	h := amazonadshooks.New()
+	h.Client = srv.Client()
+	authenticator, err := h.Authenticator(context.Background(), newRuntimeConfig(srv.URL, "1", map[string]string{
+		"client_id":     "client-id",
+		"client_secret": "client-secret",
+		"refresh_token": "refresh-token",
+	}), engine.AuthSpec{})
+	if err != nil {
+		t.Fatalf("Authenticator() error = %v", err)
+	}
+	req, err := http.NewRequest(http.MethodGet, "https://advertising-api.amazon.com/v2/profiles", nil)
+	if err != nil {
+		t.Fatalf("NewRequest() error = %v", err)
+	}
+	err = authenticator.Apply(context.Background(), req)
+	var invalid *credential.InvalidSecretValueError
+	if !errors.As(err, &invalid) {
+		t.Fatalf("Apply() error type = %T, want InvalidSecretValueError", err)
+	}
+	if req.Header.Get("Authorization") != "" {
+		t.Fatal("Apply() emitted an invalid authorization header")
+	}
+	if calls.Load() != 1 {
+		t.Fatalf("token endpoint calls = %d, want 1", calls.Load())
+	}
+	if strings.Contains(err.Error(), marker) {
+		t.Fatal("credential diagnostic exposed the canary")
+	}
+}
+
+func assertAmazonFingerprint(t *testing.T, label, got, want string) {
+	t.Helper()
+	gotHash := sha256.Sum256([]byte(got))
+	wantHash := sha256.Sum256([]byte(want))
+	if len(got) != len(want) || gotHash != wantHash {
+		t.Fatalf("%s length/hash = %d/%x, want %d/%x", label, len(got), gotHash, len(want), wantHash)
 	}
 }
 
