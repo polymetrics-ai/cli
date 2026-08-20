@@ -12,6 +12,7 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/coordination"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/synctransport"
 )
 
 type rateParkingResumeContextKey struct{}
@@ -31,8 +32,11 @@ func isAuthRepair(ctx context.Context) bool {
 // declaration-resolved opaque scope, a typed reset, and an already committed
 // checkpoint. Every refusal returns before the parking store or run status is
 // mutated.
-func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchRequest, runErr error) (Run, bool, error) {
+func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchRequest, result etlExecutionResult, runErr error) (Run, bool, error) {
 	if a == nil || a.rateParking == nil || isRateParkingResume(ctx) {
+		return Run{}, false, nil
+	}
+	if origin, tagged := synctransport.TransportExecutionOriginOf(runErr); tagged && origin != synctransport.TransportExecutionOriginSource {
 		return Run{}, false, nil
 	}
 	var rateErr *connsdk.RateLimitError
@@ -72,6 +76,14 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 				return current, fmt.Errorf("rate-limited run %q has terminal status %q", request.runID, current.Runs[index].Status)
 			}
 			current.Runs[index].Status = string(coordination.RateParkingOutcomeParkedRateLimit)
+			current.Runs[index].RecordsRead = result.RecordsRead
+			current.Runs[index].RecordsTransformed = result.RecordsTransformed
+			current.Runs[index].RecordsLoaded = result.RecordsLoaded
+			current.Runs[index].RecordsFailed = result.RecordsFailed
+			current.Runs[index].BatchCount = result.BatchCount
+			current.Runs[index].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[index].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
+			current.Runs[index].DestinationResults = cloneDestinationResults(result.DestinationResults)
 			current.Runs[index].Error = ""
 			current.Runs[index].CompletedAt = time.Time{}
 			return current, nil

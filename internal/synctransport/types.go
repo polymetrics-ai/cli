@@ -65,6 +65,51 @@ type DestinationExecutor interface {
 	ReadBackDestination(context.Context, DestinationReadBackRequest) error
 }
 
+type TransportExecutionOrigin string
+
+const (
+	TransportExecutionOriginSource      TransportExecutionOrigin = "source"
+	TransportExecutionOriginDestination TransportExecutionOrigin = "destination"
+	TransportExecutionOriginInternal    TransportExecutionOrigin = "internal"
+)
+
+type transportExecutionOriginError struct {
+	origin TransportExecutionOrigin
+	err    error
+}
+
+func (e *transportExecutionOriginError) Error() string {
+	if e == nil || e.err == nil {
+		return "transport execution failed"
+	}
+	return e.err.Error()
+}
+
+func (e *transportExecutionOriginError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.err
+}
+
+func TransportExecutionOriginOf(err error) (TransportExecutionOrigin, bool) {
+	var tagged *transportExecutionOriginError
+	if !errors.As(err, &tagged) || tagged == nil {
+		return "", false
+	}
+	return tagged.origin, true
+}
+
+func tagTransportExecutionError(origin TransportExecutionOrigin, err error) error {
+	if err == nil {
+		return nil
+	}
+	if _, tagged := TransportExecutionOriginOf(err); tagged {
+		return err
+	}
+	return &transportExecutionOriginError{origin: origin, err: err}
+}
+
 type DestinationApplyOutputError struct {
 	err    error
 	output json.RawMessage

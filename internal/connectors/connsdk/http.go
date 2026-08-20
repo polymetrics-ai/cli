@@ -27,7 +27,7 @@ import (
 
 // maxErrorBody bounds how much of an error response body is captured in HTTPError.
 const maxErrorBody = 8 << 10 // 8 KiB
-const defaultMaxResponseBody = 64 << 20
+const DefaultMaxResponseBody = 64 << 20
 const maxRedirects = 10
 
 // Response is a captured HTTP response with its body already read.
@@ -560,7 +560,7 @@ func (r *Requester) Do(ctx context.Context, method, path string, query url.Value
 			return nil, fmt.Errorf("encode request body: %w", err)
 		}
 	}
-	return r.do(ctx, method, path, query, payload, "application/json", defaultMaxResponseBody)
+	return r.do(ctx, method, path, query, payload, "application/json", DefaultMaxResponseBody)
 }
 
 // DoLimited performs Do while bounding the captured successful response body to
@@ -605,7 +605,7 @@ func (r *Requester) DoForm(ctx context.Context, method, path string, query, form
 		payload = []byte(form.Encode())
 		contentType = "application/x-www-form-urlencoded"
 	}
-	return r.do(ctx, method, path, query, payload, contentType, defaultMaxResponseBody)
+	return r.do(ctx, method, path, query, payload, contentType, DefaultMaxResponseBody)
 }
 
 // DoFormLimited performs DoForm while bounding the captured successful
@@ -626,7 +626,7 @@ func (r *Requester) DoFormLimited(ctx context.Context, method, path string, quer
 // parts are opened for each retry attempt, so callers may use it with the same
 // retry policy as JSON/form requests without reusing a consumed reader.
 func (r *Requester) DoMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm) (*Response, error) {
-	return r.doMultipart(ctx, method, path, query, form, defaultMaxResponseBody)
+	return r.doMultipart(ctx, method, path, query, form, DefaultMaxResponseBody)
 }
 
 // DoMultipartLimited performs DoMultipart while bounding a successful response
@@ -1002,7 +1002,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		return nil, err
 	}
 	if maxBodyBytes <= 0 {
-		maxBodyBytes = defaultMaxResponseBody
+		maxBodyBytes = DefaultMaxResponseBody
 	}
 
 	attempts := r.maxRetries() + 1

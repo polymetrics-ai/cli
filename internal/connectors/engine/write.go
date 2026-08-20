@@ -443,15 +443,18 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	switch bodyTypeOf(action) {
 	case "form":
 		form := buildForm(rec, action.PathFields)
-		return requester.DoForm(ctx, method, path, query, form)
+		return requester.DoFormLimited(ctx, method, path, query, form, connsdk.DefaultMaxResponseBody)
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
 			return nil, err
 		}
-		resp, err := requester.Do(ctx, method, path, query, payload)
+		resp, err := requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 		if err != nil {
 			return resp, err
+		}
+		if resp != nil && len(resp.Body) > connsdk.DefaultMaxResponseBody {
+			return resp, nil
 		}
 		if err := graphQLErrors(resp.Body); err != nil {
 			return resp, errors.New("provider GraphQL response contains errors")
@@ -460,15 +463,15 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			return requester.Do(ctx, method, path, query, nil)
+			return requester.DoLimited(ctx, method, path, query, nil, connsdk.DefaultMaxResponseBody)
 		}
-		return requester.Do(ctx, method, path, query, body)
+		return requester.DoLimited(ctx, method, path, query, body, connsdk.DefaultMaxResponseBody)
 	case "json_array":
 		payload, err := buildJSONArrayPayload(action, rec)
 		if err != nil {
 			return nil, err
 		}
-		return requester.Do(ctx, method, path, query, payload)
+		return requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 	case "multipart":
 		root, err := openMultipartRoot(cfg.ProjectDir)
 		if err != nil {
@@ -479,13 +482,13 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 		if err != nil {
 			return nil, err
 		}
-		return requester.DoMultipart(ctx, method, path, query, form)
+		return requester.DoMultipartLimited(ctx, method, path, query, form, connsdk.DefaultMaxResponseBody)
 	case "base64_upload":
 		payload, err := buildBase64UploadPayload(action, rec, recordIndex, cfg)
 		if err != nil {
 			return nil, err
 		}
-		return requester.Do(ctx, method, path, query, payload)
+		return requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 	default: // "json" (default)
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
@@ -504,11 +507,15 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 			}
 			payload = body
 		}
-		return requester.Do(ctx, method, path, query, payload)
+		return requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 	}
 }
 
 func writeProviderResponse(response *connsdk.Response, recordIndex int) (connectors.WriteProviderResponse, error) {
+	return writeProviderResponseWithLimit(response, recordIndex, connsdk.DefaultMaxResponseBody)
+}
+
+func writeProviderResponseWithLimit(response *connsdk.Response, recordIndex, maxBodyBytes int) (connectors.WriteProviderResponse, error) {
 	result := connectors.WriteProviderResponse{
 		RecordIndex: recordIndex,
 		Status:      response.Status,
@@ -523,12 +530,19 @@ func writeProviderResponse(response *connsdk.Response, recordIndex int) (connect
 			result.BodyRawEncoding = rawEncoding
 		}
 		result.Body, result.BodyEncoding = rawBody, rawEncoding
+		if len(response.Body) > maxBodyBytes {
+			return result, fmt.Errorf("provider response too large: %d bytes exceeds limit %d", len(response.Body), maxBodyBytes)
+		}
 		return result, nil
 	}
 	result.BodyPresent = true
 	result.BodyBytes = len(response.Body)
 	result.BodyRaw = rawBody
 	result.BodyRawEncoding = rawEncoding
+	if len(response.Body) > maxBodyBytes {
+		result.Body, result.BodyEncoding = rawBody, rawEncoding
+		return result, fmt.Errorf("provider response too large: %d bytes exceeds limit %d", len(response.Body), maxBodyBytes)
+	}
 	body, err := decodeDirectReadBody(response.Body, -1)
 	if err != nil {
 		result.Body, result.BodyEncoding = rawBody, rawEncoding

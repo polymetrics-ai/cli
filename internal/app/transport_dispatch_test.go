@@ -3,6 +3,7 @@ package app
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -13,6 +14,8 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/coordination"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/synctransport"
@@ -154,6 +157,63 @@ func TestRunETLTransportPersistsPartialPhaseMeasurementBeforeFailureCleanup(t *t
 	persisted, persistedErr := reopened.GetRun(run.ID)
 	if persistedErr != nil || !reflect.DeepEqual(persisted.TransportPhaseMeasurement, measurement) {
 		t.Fatalf("persisted failed run measurement = (%#v, %v), want %#v before project cleanup", persisted.TransportPhaseMeasurement, persistedErr, measurement)
+	}
+}
+
+func TestRunETLTransportParksSourceRateLimitWithDestinationResults(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	t.Cleanup(fixture.app.rateParking.Close)
+	fixture.source.rateLimitScope = "transport-source-rate-limit"
+	wantOutput := json.RawMessage(`{"provider_receipt":"first"}`)
+	fixture.destinationExecutor.output = wantOutput
+	fixture.sourceExecutor.errAfterPage = &connsdk.RateLimitError{
+		HTTPError: &connsdk.HTTPError{Status: 429, URL: "https://provider.invalid/records"},
+		Source:    connsdk.RateLimitObservationSourceRetryAfter,
+		HasReset:  true,
+		ResetAt:   time.Now().UTC().Add(time.Hour),
+	}
+
+	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	})
+	if !errors.Is(err, coordination.ErrRateLimitParked) {
+		t.Fatalf("RunETL() error = %v, want rate-limit parking", err)
+	}
+	if run.Status != string(coordination.RateParkingOutcomeParkedRateLimit) || !reflect.DeepEqual(run.DestinationResults, []json.RawMessage{wantOutput}) {
+		t.Fatalf("parked run = %#v, want persisted destination output", run)
+	}
+	persisted, err := fixture.app.GetRun(run.ID)
+	if err != nil || !reflect.DeepEqual(persisted.DestinationResults, []json.RawMessage{wantOutput}) {
+		t.Fatalf("persisted parked run = (%#v, %v), want destination output", persisted, err)
+	}
+}
+
+func TestRunETLTransportDoesNotParkDestinationRateLimit(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	t.Cleanup(fixture.app.rateParking.Close)
+	fixture.source.rateLimitScope = "transport-source-rate-limit"
+	if _, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	}); err != nil {
+		t.Fatalf("initial RunETL(): %v", err)
+	}
+	wantOutput := json.RawMessage(`{"provider_status":429}`)
+	fixture.destinationExecutor.failApplyAt = fixture.destinationExecutor.applyCalls + 1
+	fixture.destinationExecutor.applyErr = synctransport.NewDestinationApplyOutputError(&connsdk.RateLimitError{
+		HTTPError: &connsdk.HTTPError{Status: 429, URL: "https://provider.invalid/records"},
+		Source:    connsdk.RateLimitObservationSourceRetryAfter,
+		HasReset:  true,
+		ResetAt:   time.Now().UTC().Add(time.Hour),
+	}, wantOutput)
+
+	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	})
+	if errors.Is(err, coordination.ErrRateLimitParked) {
+		t.Fatalf("RunETL() error = %v, destination rate limit must not park", err)
+	}
+	if err == nil || run.Status != "failed" || !reflect.DeepEqual(run.DestinationResults, []json.RawMessage{wantOutput}) {
+		t.Fatalf("destination rate-limit run = (%#v, %v), want failed run with provider output", run, err)
 	}
 }
 
@@ -2656,6 +2716,7 @@ func TestAppTransportFullOverwriteRunLifecycleHooks(t *testing.T) {
 type appTransportConnector struct {
 	meta             connectors.Metadata
 	descriptor       *connectors.SyncTransportDescriptor
+	rateLimitScope   connectors.RateLimitScopeKey
 	legacyReadCalls  int
 	legacyWriteCalls int
 }
@@ -2676,6 +2737,12 @@ func (c *appTransportConnector) Read(context.Context, connectors.ReadRequest, fu
 func (c *appTransportConnector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
 	c.legacyWriteCalls++
 	return connectors.WriteResult{}, errors.New("legacy Write must not be called by closed transport dispatch")
+}
+func (c *appTransportConnector) RateLimitParkingScope(context.Context, connectors.RuntimeConfig, string, error) (connectors.RateLimitScopeKey, error) {
+	if c.rateLimitScope == "" {
+		return "", errors.New("test transport rate-limit scope is not configured")
+	}
+	return c.rateLimitScope, nil
 }
 
 type appTransportSourceExecutor struct {
@@ -2732,6 +2799,7 @@ type appTransportDestinationExecutor struct {
 	afterReadBack        func()
 	failApplyAt          int
 	applyErr             error
+	output               json.RawMessage
 }
 
 func (e *appTransportDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -2760,6 +2828,12 @@ func (e *appTransportDestinationExecutor) ApplyDestination(_ context.Context, _ 
 	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(e.sink, time.Now().UTC())
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	if len(e.output) != 0 {
+		acknowledgement, err = acknowledgement.WithOutput(e.output)
+		if err != nil {
+			return synccontract.DownstreamAcknowledgement{}, err
+		}
 	}
 	e.acknowledgementCalls++
 	if e.afterApply != nil {

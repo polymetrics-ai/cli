@@ -1312,6 +1312,31 @@ func TestWriteRetainsRawDeclaredJSONAlongsideParsedBody(t *testing.T) {
 	}
 }
 
+func TestWriteProviderResponseRejectsBodiesBeyondCaptureLimit(t *testing.T) {
+	for _, testCase := range []struct {
+		name   string
+		header http.Header
+		body   []byte
+	}{
+		{name: "declared JSON", header: http.Header{"Content-Type": []string{"application/json"}, "X-Provider-Receipt": []string{"receipt-one", "receipt-two"}}, body: []byte(`{"id":1}`)},
+		{name: "explicit text", header: http.Header{"Content-Type": []string{"text/plain"}, "X-Provider-Receipt": []string{"receipt-one", "receipt-two"}}, body: []byte("abcde")},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			response := &connsdk.Response{Status: http.StatusOK, Header: testCase.header, Body: testCase.body}
+			result, err := writeProviderResponseWithLimit(response, 3, 4)
+			if err == nil || !strings.Contains(err.Error(), "too large") {
+				t.Fatalf("writeProviderResponseWithLimit() error = %v, want capture-limit failure", err)
+			}
+			if result.RecordIndex != 3 || result.Status != http.StatusOK || !result.BodyPresent || result.BodyBytes != len(testCase.body) || result.BodyRaw != string(testCase.body) || result.BodyRawEncoding != "text" || result.Body != string(testCase.body) || result.BodyEncoding != "text" {
+				t.Fatalf("provider response = %#v, want bounded raw response facts", result)
+			}
+			if !reflect.DeepEqual(result.Headers["Content-Type"].Values, testCase.header.Values("Content-Type")) || !reflect.DeepEqual(result.Headers["X-Provider-Receipt"].Values, []string{"receipt-one", "receipt-two"}) {
+				t.Fatalf("provider response headers = %#v, want preserved headers", result.Headers)
+			}
+		})
+	}
+}
+
 func TestWriteRequiresOneJSONValueForDeclaredResponses(t *testing.T) {
 	for _, testCase := range []struct {
 		name         string

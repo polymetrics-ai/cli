@@ -83,7 +83,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		Approval:          request.Approval,
 	}))
 	if err != nil {
-		return Result{}, fmt.Errorf("plan destination transport: %w", err)
+		return Result{}, fmt.Errorf("plan destination transport: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 	}
 	if plan.ApplyStrategy != resolved.ApplyStrategy {
 		return Result{}, fmt.Errorf("destination transport plan did not preserve the descriptor-resolved apply strategy")
@@ -135,7 +135,10 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		RecordExtraction: func(elapsed time.Duration) {
 			result.ExtractElapsed += elapsed
 		},
-	}), func(page SourcePage) error {
+	}), func(page SourcePage) (callbackErr error) {
+		defer func() {
+			callbackErr = tagTransportExecutionError(TransportExecutionOriginInternal, callbackErr)
+		}()
 		if err := ctx.Err(); err != nil {
 			return err
 		}
@@ -234,7 +237,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 				if output, ok := DestinationApplyOutput(err); ok {
 					result.DestinationResults = append(result.DestinationResults, output)
 				}
-				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply destination transport: %w", err)
+				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply destination transport: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 			}
 			if len(acknowledgement.Output) != 0 {
 				result.DestinationResults = append(result.DestinationResults, append([]byte(nil), acknowledgement.Output...))
@@ -260,7 +263,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			readBackStarted := time.Now()
 			if err := resolved.Destination.ReadBackDestination(applyCtx, readBackRequest); err != nil {
 				result.ApplyElapsed += time.Since(readBackStarted)
-				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("read back destination transport receipt: %w", err)
+				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("read back destination transport receipt: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 			}
 			result.ApplyElapsed += time.Since(readBackStarted)
 			return acknowledgement, nil
@@ -296,7 +299,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		return nil
 	})
 	if err != nil {
-		return result, err
+		return result, tagTransportExecutionError(TransportExecutionOriginSource, err)
 	}
 	if result.CommittedCheckpoint == nil {
 		if result.Pages == 0 {
@@ -337,7 +340,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 	}
 	session, err := destination.BeginFullOverwrite(ctx, fullRequest)
 	if err != nil {
-		return Result{}, fmt.Errorf("begin destination full-overwrite run: %w", err)
+		return Result{}, fmt.Errorf("begin destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 	}
 	if isNilInterface(session) {
 		return Result{}, fmt.Errorf("destination transport returned an empty full-overwrite run")
@@ -350,7 +353,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), request.unitDeadline())
 		defer cancel()
 		if abortErr := session.AbortFullOverwrite(cleanupCtx); abortErr != nil && err == nil {
-			err = fmt.Errorf("abort destination full-overwrite run: %w", abortErr)
+			err = fmt.Errorf("abort destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, abortErr))
 		}
 	}()
 
@@ -370,7 +373,10 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		RecordExtraction: func(elapsed time.Duration) {
 			result.ExtractElapsed += elapsed
 		},
-	}), func(page SourcePage) error {
+	}), func(page SourcePage) (callbackErr error) {
+		defer func() {
+			callbackErr = tagTransportExecutionError(TransportExecutionOriginInternal, callbackErr)
+		}()
 		if err := ctx.Err(); err != nil {
 			return err
 		}
@@ -438,7 +444,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		result.ApplyElapsed += time.Since(applyStarted)
 		cancelApply()
 		if applyErr != nil {
-			return fmt.Errorf("apply destination full-overwrite workset: %w", applyErr)
+			return fmt.Errorf("apply destination full-overwrite workset: %w", tagTransportExecutionError(TransportExecutionOriginDestination, applyErr))
 		}
 		result.RecordsApplied += len(staged.Records)
 		result.Pages++
@@ -447,7 +453,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		return nil
 	})
 	if err != nil {
-		return result, err
+		return result, tagTransportExecutionError(TransportExecutionOriginSource, err)
 	}
 	if result.Pages == 0 {
 		if _, allowed := resolved.Source.(EmptyResultSource); !allowed {
@@ -470,7 +476,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 	}
 	cancelPublish()
 	if publishErr != nil {
-		return result, fmt.Errorf("publish destination full-overwrite run: %w", publishErr)
+		return result, fmt.Errorf("publish destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}
 	published = true
 	if lastCandidate == nil {

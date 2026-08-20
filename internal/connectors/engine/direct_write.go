@@ -161,10 +161,15 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			return &operationDirectWriteError{operation: prepared.op.ID, message: responseBodyErr.Error(), cause: responseBodyErr}
 		}
 		if prepared.op.Kind == "graphql_mutation" {
+			envelope, envelopeErr := decodeDirectReadBody(response.Body, prepared.maxBytes)
+			if envelopeErr != nil {
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response is invalid", cause: envelopeErr}
+			}
 			data, metadata, parseErr := graphQLOperationResponseWithRuntimeErrorPolicy(response.Body, prepared.maxBytes, true)
 			if parseErr != nil {
 				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response is invalid", cause: parseErr}
 			}
+			result.Body = envelope
 			result.GraphQL = metadata
 			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
