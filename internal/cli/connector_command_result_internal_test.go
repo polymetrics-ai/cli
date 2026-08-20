@@ -1,0 +1,165 @@
+package cli
+
+import (
+	"bytes"
+	"encoding/json"
+	"strconv"
+	"testing"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/commandrunner"
+)
+
+func TestWriteConnectorCommandResultPreservesStatusCheckJSON(t *testing.T) {
+	result := commandrunner.Result{
+		Connector: "github-live-qualification",
+		Command:   "dataset status",
+		Stream:    "must-not-be-rendered",
+		Count:     99,
+		StatusCheck: &connectors.OperationStatusCheckResult{
+			Connector: "github-live-qualification",
+			Operation: "github_live.dataset.status",
+			Method:    "HEAD",
+			Path:      "/vega-datasets/data/seattle-weather.csv",
+			Status:    200,
+			BodyBytes: 0,
+		},
+	}
+	rows := []connectors.Record{{"must_not": "be rendered as an ETL record"}}
+
+	var stdout, stderr bytes.Buffer
+	if err := writeConnectorCommandResult(&stdout, &stderr, true, result, rows); err != nil {
+		t.Fatalf("writeConnectorCommandResult: %v", err)
+	}
+	if got := stderr.String(); got != "" {
+		t.Fatalf("status JSON stderr = %q, want empty", got)
+	}
+
+	var got struct {
+		APIVersion string `json:"api_version"`
+		Kind       string `json:"kind"`
+		Connector  string `json:"connector"`
+		Command    string `json:"command"`
+		Operation  string `json:"operation"`
+		Method     string `json:"method"`
+		Path       string `json:"path"`
+		Status     int    `json:"status"`
+		BodyBytes  int    `json:"body_bytes"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &got); err != nil {
+		t.Fatalf("decode status JSON: %v\n%s", err, stdout.String())
+	}
+	if want := (struct {
+		APIVersion string
+		Kind       string
+		Connector  string
+		Command    string
+		Operation  string
+		Method     string
+		Path       string
+		Status     int
+		BodyBytes  int
+	}{
+		APIVersion: apiVersion,
+		Kind:       "ConnectorCommandStatusCheck",
+		Connector:  "github-live-qualification",
+		Command:    "dataset status",
+		Operation:  "github_live.dataset.status",
+		Method:     "HEAD",
+		Path:       "/vega-datasets/data/seattle-weather.csv",
+		Status:     200,
+		BodyBytes:  0,
+	}); got.APIVersion != want.APIVersion || got.Kind != want.Kind || got.Connector != want.Connector || got.Command != want.Command || got.Operation != want.Operation || got.Method != want.Method || got.Path != want.Path || got.Status != want.Status || got.BodyBytes != want.BodyBytes {
+		t.Fatalf("status JSON envelope = %+v, want %+v", got, want)
+	}
+
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(stdout.Bytes(), &raw); err != nil {
+		t.Fatalf("decode raw status JSON: %v", err)
+	}
+	for _, forbidden := range []string{"stream", "count", "records"} {
+		if _, ok := raw[forbidden]; ok {
+			t.Fatalf("status JSON retained ETL fallback field %q: %s", forbidden, stdout.String())
+		}
+	}
+}
+
+func TestWriteConnectorCommandResultPreservesStatusCheckHumanOutput(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		status int
+	}{
+		{name: "successful zero-byte HEAD", status: 200},
+		{name: "non-200 status metadata remains visible", status: 503},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			result := commandrunner.Result{
+				Connector: "github-live-qualification",
+				Command:   "dataset status",
+				StatusCheck: &connectors.OperationStatusCheckResult{
+					Connector: "github-live-qualification",
+					Operation: "github_live.dataset.status",
+					Method:    "HEAD",
+					Path:      "/vega-datasets/data/seattle-weather.csv",
+					Status:    tt.status,
+					BodyBytes: 0,
+				},
+			}
+
+			var stdout, stderr bytes.Buffer
+			if err := writeConnectorCommandResult(&stdout, &stderr, false, result, nil); err != nil {
+				t.Fatalf("writeConnectorCommandResult: %v", err)
+			}
+			want := "connector=github-live-qualification command=\"dataset status\" operation=github_live.dataset.status method=HEAD path=/vega-datasets/data/seattle-weather.csv status=" + strconv.Itoa(tt.status) + " body_bytes=0\n"
+			if got := stdout.String(); got != want {
+				t.Fatalf("status human output = %q, want %q", got, want)
+			}
+			if got := stderr.String(); got != "" {
+				t.Fatalf("status human stderr = %q, want empty", got)
+			}
+		})
+	}
+}
+
+func TestWriteConnectorCommandResultPreservesBinaryDownloadEnvelope(t *testing.T) {
+	result := commandrunner.Result{
+		Connector: "github-live-qualification",
+		Command:   "dataset export",
+		BinaryDownload: &connectors.OperationBinaryDownloadResult{
+			Operation: "github_live.dataset.export",
+			Record: connectors.Record{
+				"file_name":       "seattle-weather.csv",
+				"file_size_bytes": 48219,
+				"file_sha256":     "0845078a290b48e3149ab8639966824110a251db4e06fc144c06ebb534af23be",
+				"truncated":       false,
+			},
+		},
+	}
+
+	var stdout, stderr bytes.Buffer
+	if err := writeConnectorCommandResult(&stdout, &stderr, true, result, nil); err != nil {
+		t.Fatalf("writeConnectorCommandResult: %v", err)
+	}
+	if got := stderr.String(); got != "" {
+		t.Fatalf("binary download stderr = %q, want empty", got)
+	}
+
+	var got struct {
+		Kind      string `json:"kind"`
+		Connector string `json:"connector"`
+		Command   string `json:"command"`
+		Operation string `json:"operation"`
+		Record    struct {
+			FileName      string `json:"file_name"`
+			FileSizeBytes int    `json:"file_size_bytes"`
+			FileSHA256    string `json:"file_sha256"`
+			Truncated     bool   `json:"truncated"`
+		} `json:"record"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &got); err != nil {
+		t.Fatalf("decode binary download JSON: %v\n%s", err, stdout.String())
+	}
+	if got.Kind != "ConnectorCommandBinaryDownload" || got.Connector != "github-live-qualification" || got.Command != "dataset export" || got.Operation != "github_live.dataset.export" || got.Record.FileName != "seattle-weather.csv" || got.Record.FileSizeBytes != 48219 || got.Record.FileSHA256 != "0845078a290b48e3149ab8639966824110a251db4e06fc144c06ebb534af23be" || got.Record.Truncated {
+		t.Fatalf("binary download envelope = %+v", got)
+	}
+}

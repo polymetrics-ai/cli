@@ -1332,6 +1332,10 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		}
 		return err
 	}
+	return writeConnectorCommandResult(stdout, stderr, jsonOut, result, rows)
+}
+
+func writeConnectorCommandResult(stdout, stderr io.Writer, jsonOut bool, result commandrunner.Result, rows []connectors.Record) error {
 	if result.BinaryDownload != nil {
 		if jsonOut {
 			return writeJSON(stdout, envelope{
@@ -1370,6 +1374,22 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		// count. The notice goes to stderr so piping the body stays lossless.
 		writeDirectReadPageNotice(stderr, result.DirectRead.Page)
 		return nil
+	}
+	if result.StatusCheck != nil {
+		if jsonOut {
+			return writeJSON(stdout, envelope{
+				"kind":       "ConnectorCommandStatusCheck",
+				"connector":  result.Connector,
+				"command":    result.Command,
+				"operation":  result.StatusCheck.Operation,
+				"method":     result.StatusCheck.Method,
+				"path":       result.StatusCheck.Path,
+				"status":     result.StatusCheck.Status,
+				"body_bytes": result.StatusCheck.BodyBytes,
+			})
+		}
+		_, err := fmt.Fprintf(stdout, "connector=%s command=%q operation=%s method=%s path=%s status=%d body_bytes=%d\n", result.Connector, result.Command, result.StatusCheck.Operation, result.StatusCheck.Method, result.StatusCheck.Path, result.StatusCheck.Status, result.StatusCheck.BodyBytes)
+		return err
 	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{
