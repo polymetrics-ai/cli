@@ -34,6 +34,16 @@ jobs:
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
           "$(go env GOPATH)/bin/golangci-lint" --version
 
+      # `make verify` exercises the real Linux archive and extracted installed
+      # binary proof. Its host target must assemble Linux packages too, so this
+      # job owns the same pinned nfpm prerequisite as the package/release jobs;
+      # do not depend on a globally installed runner tool.
+      - name: Install nfpm for release workflow checks
+        run: |
+          go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+          "$(go env GOPATH)/bin/nfpm" --version
+
       # The certify budget measures wall time INCLUDING compilation, and this job
       # runs with the Go build cache disabled. Embedding DuckDB turned that
       # compilation into a cold cgo link of two large test binaries, which is
