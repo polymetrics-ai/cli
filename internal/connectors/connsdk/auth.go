@@ -90,6 +90,9 @@ func Basic(username, password string) Authenticator {
 	return BasicWithRequirements(username, password, true, true)
 }
 
+// BasicWithRequirements authenticates with HTTP Basic auth while enforcing
+// only the credential parts declared by the caller. It preserves intentionally
+// empty username or password fields for provider contracts that omit them.
 func BasicWithRequirements(username, password string, requireUsername, requirePassword bool) Authenticator {
 	creds := base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
 	auth := staticHeader{

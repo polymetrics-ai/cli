@@ -20,6 +20,10 @@ func authVars(cfg connectors.RuntimeConfig) Vars {
 	return Vars{Config: cfg.Config, Secrets: cfg.Secrets}
 }
 
+// ValidateExplicitEmptyRequiredSecretFields rejects an explicitly supplied
+// required secret when its value is empty, a single LF, or a single CRLF. It
+// leaves absent fields to normal route selection so optional no-auth routes
+// keep their declared behavior.
 func ValidateExplicitEmptyRequiredSecretFields(b Bundle, secrets map[string]string) error {
 	if b.Spec == nil {
 		return nil

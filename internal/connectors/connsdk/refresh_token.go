@@ -105,9 +105,11 @@ type OAuth2RefreshToken struct {
 	// TokenURL is the provider's token endpoint. Required.
 	TokenURL string
 	// ClientID and ClientSecret identify the OAuth2 client. Some providers
-	// (public clients) omit the secret.
-	ClientID             string
-	ClientSecret         string
+	// (public clients) omit ClientSecret.
+	ClientID     string
+	ClientSecret string
+	// ClientSecretRequired distinguishes an absent public-client secret from a
+	// declared but empty secret, which must be rejected before token emission.
 	ClientSecretRequired bool
 	// RefreshToken is the initial refresh token. Required. On a provider that
 	// rotates, the value actually presented is the most recent one, not this.

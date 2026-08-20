@@ -48,9 +48,9 @@ func NormalizeStdin(value string) string {
 	}
 }
 
-// RequirePersistentValue rejects a value that has no credential bytes. It is
-// intentionally byte-exact: whitespace is not trimmed or rewritten before
-// encrypted persistence.
+// RequirePersistentValue rejects values with no credential material: empty, a
+// single LF, or a single CRLF. It is intentionally byte-exact: whitespace is
+// not trimmed or rewritten before encrypted persistence.
 func RequirePersistentValue(field, value string) error {
 	if transportOnlyCredentialValue(value) {
 		return &EmptySecretError{Field: field}
@@ -75,8 +75,8 @@ func RequirePersistentValues(values map[string]string) error {
 	return nil
 }
 
-// RequireAuthenticationValue rejects a blank value before a shared auth helper
-// can produce an empty request credential.
+// RequireAuthenticationValue rejects an empty, single-LF, or single-CRLF value
+// before a shared auth helper can produce an empty request credential.
 func RequireAuthenticationValue(field, value string) error {
 	if transportOnlyCredentialValue(value) {
 		return &EmptySecretError{Field: field}
