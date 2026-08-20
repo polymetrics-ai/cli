@@ -847,6 +847,38 @@ func TestPreflightOperationDirectWriteRequiresExactFixedGraphQLBinding(t *testin
 	}
 }
 
+func TestValidateOperationDirectWriteMappingsAcceptsDeclaredGraphQLVariables(t *testing.T) {
+	bundle := graphQLOperationBundle("https://example.invalid", "graphql_mutation")
+	op, err := findOperation(bundle, "acme.widgets.mutation")
+	if err != nil {
+		t.Fatalf("findOperation: %v", err)
+	}
+	for _, tc := range []struct {
+		name       string
+		pathFields []string
+		bodyFields []string
+		wantErr    string
+	}{
+		{name: "declared variable", bodyFields: []string{"id"}},
+		{name: "undeclared variable", bodyFields: []string{"override"}, wantErr: "is not declared"},
+		{name: "nested variable path", bodyFields: []string{"id.owner"}, wantErr: "top-level GraphQL variable"},
+		{name: "path override", pathFields: []string{"owner"}, wantErr: "does not accept path fields"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := ValidateOperationDirectWriteMappings(op, tc.pathFields, tc.bodyFields)
+			if tc.wantErr == "" {
+				if err != nil {
+					t.Fatalf("ValidateOperationDirectWriteMappings: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("ValidateOperationDirectWriteMappings error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+}
+
 func TestPreflightOperationDirectWriteRequiresNamedGraphQLTransportCoverage(t *testing.T) {
 	bundle := graphQLOperationBundle("http://127.0.0.1", "graphql_mutation")
 	bundle.Surface.Endpoints[0].CoveredBy.Operations = nil

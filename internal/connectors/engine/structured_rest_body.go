@@ -7,6 +7,7 @@ import (
 	"math"
 	"mime"
 	"reflect"
+	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/safety"
@@ -215,6 +216,88 @@ func materializeStructuredRESTBody(op OperationSpec, body map[string]any) (map[s
 		return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
 	}
 	return canonical, nil
+}
+
+func normalizeStructuredRESTBodyValue(value any, path string) (any, error) {
+	if number, ok := value.(json.Number); ok {
+		return number, nil
+	}
+	return normalizeStructuredRESTBodyReflectValue(reflect.ValueOf(value), path, 0)
+}
+
+func normalizeStructuredRESTBodyReflectValue(value reflect.Value, path string, depth int) (any, error) {
+	if depth > maxStructuredRESTBodyDepth {
+		return nil, fmt.Errorf("%s exceeds structured body depth limit %d", path, maxStructuredRESTBodyDepth)
+	}
+	if !value.IsValid() {
+		return nil, nil
+	}
+	if value.CanInterface() {
+		if _, ok := value.Interface().(json.Marshaler); ok {
+			return nil, fmt.Errorf("%s does not permit custom JSON marshalers", path)
+		}
+	}
+	switch value.Kind() {
+	case reflect.Interface, reflect.Pointer:
+		if value.IsNil() {
+			return nil, nil
+		}
+		return normalizeStructuredRESTBodyReflectValue(value.Elem(), path, depth+1)
+	case reflect.Map:
+		if value.IsNil() {
+			return nil, nil
+		}
+		if value.Type().Key().Kind() != reflect.String {
+			return nil, fmt.Errorf("%s does not permit non-string map keys", path)
+		}
+		out := make(map[string]any, value.Len())
+		iter := value.MapRange()
+		for iter.Next() {
+			key := iter.Key().String()
+			normalized, err := normalizeStructuredRESTBodyReflectValue(iter.Value(), path+"."+key, depth+1)
+			if err != nil {
+				return nil, err
+			}
+			out[key] = normalized
+		}
+		return out, nil
+	case reflect.Slice:
+		if value.IsNil() {
+			return nil, nil
+		}
+		if value.Type().Elem().Kind() == reflect.Uint8 {
+			out := make([]byte, value.Len())
+			for index := 0; index < value.Len(); index++ {
+				out[index] = byte(value.Index(index).Uint())
+			}
+			return out, nil
+		}
+		fallthrough
+	case reflect.Array:
+		out := make([]any, value.Len())
+		for index := 0; index < value.Len(); index++ {
+			normalized, err := normalizeStructuredRESTBodyReflectValue(value.Index(index), fmt.Sprintf("%s.%d", path, index), depth+1)
+			if err != nil {
+				return nil, err
+			}
+			out[index] = normalized
+		}
+		return out, nil
+	case reflect.Bool:
+		return value.Bool(), nil
+	case reflect.String:
+		return value.String(), nil
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return json.Number(strconv.FormatInt(value.Int(), 10)), nil
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return json.Number(strconv.FormatUint(value.Uint(), 10)), nil
+	case reflect.Float32, reflect.Float64:
+		return value.Float(), nil
+	case reflect.Struct:
+		return nil, fmt.Errorf("%s does not permit struct values", path)
+	default:
+		return nil, fmt.Errorf("%s does not permit values of type %s", path, value.Type())
+	}
 }
 
 type structuredRESTBodySchemaState struct {

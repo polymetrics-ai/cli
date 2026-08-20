@@ -829,3 +829,86 @@ func TestOperationStructuredJSONBodyPreflightRejectsSchemaAndActionMismatches(t 
 		})
 	}
 }
+
+type structuredRESTBodyMarshaler struct{}
+
+func (structuredRESTBodyMarshaler) MarshalJSON() ([]byte, error) {
+	return []byte(`{"unknown":"value"}`), nil
+}
+
+func TestOperationDirectWriteStructuredRESTBodyRejectsUnsupportedTypedContainersBeforeIO(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		value   func() any
+		wantErr string
+	}{
+		{
+			name: "pointer map",
+			value: func() any {
+				value := map[string]any{"owner": "owner-1", "active": true, "undeclared": "value"}
+				return &value
+			},
+			wantErr: "additional property",
+		},
+		{name: "record map alias", value: func() any { return connectors.Record{"owner": "owner-1", "active": true, "undeclared": "value"} }, wantErr: "additional property"},
+		{name: "custom marshaler", value: func() any { return structuredRESTBodyMarshaler{} }, wantErr: "custom JSON marshalers"},
+		{name: "struct", value: func() any { return struct{ Value string }{Value: "value"} }, wantErr: "struct values"},
+		{
+			name: "cyclic map",
+			value: func() any {
+				value := map[string]any{}
+				value["self"] = value
+				return value
+			},
+			wantErr: "depth limit",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				calls++
+			}))
+			t.Cleanup(server.Close)
+
+			request := structuredRESTBodyRequest()
+			request.Body = cloneAnyMap(request.Body)
+			request.Body["attributes"] = tc.value()
+			_, err := OperationDirectWrite(context.Background(), structuredRESTBodyBundle(server.URL), request, nil)
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("OperationDirectWrite error = %v, want %q", err, tc.wantErr)
+			}
+			if calls != 0 {
+				t.Fatalf("rejected typed container reached provider; calls = %d", calls)
+			}
+		})
+	}
+}
+
+func TestOperationDirectWriteValidatesPathAndBodyBindingsAgainstDeclaration(t *testing.T) {
+	op := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	for _, tc := range []struct {
+		name       string
+		pathFields []string
+		bodyFields []string
+		wantErr    string
+	}{
+		{name: "declared path and nested body", pathFields: []string{"workspace_id"}, bodyFields: []string{"attributes.owner", "targets.0.id"}},
+		{name: "undeclared path", pathFields: []string{"override"}, wantErr: "not declared by rest.path"},
+		{name: "undeclared body", bodyFields: []string{"undeclared"}, wantErr: "additional property"},
+		{name: "scalar descent", bodyFields: []string{"label.value"}, wantErr: "descends into scalar"},
+		{name: "array index exceeds declared bound", bodyFields: []string{"targets.2.id"}, wantErr: "exceeds declared maxItems"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := ValidateOperationDirectWriteMappings(op, tc.pathFields, tc.bodyFields)
+			if tc.wantErr == "" {
+				if err != nil {
+					t.Fatalf("ValidateOperationDirectWriteMappings: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("ValidateOperationDirectWriteMappings error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+}

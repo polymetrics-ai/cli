@@ -35,6 +35,8 @@ type fakeConnector struct {
 	operationDirectWriteReq    connectors.OperationDirectWriteRequest
 	operationWritePreflight    operationDirectWritePreflightCall
 	operationWritePreflightErr error
+	operationWriteBindings     operationDirectWriteBindingPreflightCall
+	operationWriteBindingsErr  error
 	directWriteMetadata        connectors.OperationDirectWriteMetadata
 	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
 	directReadErr              error
@@ -72,6 +74,12 @@ type operationDirectWritePreflightCall struct {
 	method       string
 	path         string
 	outputPolicy string
+}
+
+type operationDirectWriteBindingPreflightCall struct {
+	operation  string
+	pathFields []string
+	bodyFields []string
 }
 
 type preflightFakeConnector struct {
@@ -170,6 +178,14 @@ func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, o
 		outputPolicy: outputPolicy,
 	}
 	return f.operationWritePreflightErr
+}
+func (f *fakeConnector) PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error {
+	f.operationWriteBindings = operationDirectWriteBindingPreflightCall{
+		operation:  operation,
+		pathFields: append([]string(nil), pathFields...),
+		bodyFields: append([]string(nil), bodyFields...),
+	}
+	return f.operationWriteBindingsErr
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -2551,6 +2567,40 @@ func TestPreflightOperationDirectWriteRequiresRuntimeBinding(t *testing.T) {
 		outputPolicy: "json_redacted",
 	}); got != want {
 		t.Fatalf("operation write preflight = %#v, want %#v", got, want)
+	}
+}
+
+func TestPreflightOperationDirectWriteRequiresDeclaredPathAndBodyBindings(t *testing.T) {
+	connector := &fakeConnector{
+		operationWriteBindingsErr: errors.New("body field \"undeclared\" is not declared"),
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:    "acme.vote",
+			OutputPolicy: "json_redacted",
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "vote",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.vote",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote/{id}"}},
+			OutputPolicy: "json_redacted",
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "id", Type: "string", MapsTo: "path.id"},
+				{Name: "payload", Type: "string", MapsTo: "body.payload"},
+			},
+		}}},
+	}
+
+	err := Preflight(connector, []string{"vote"})
+	if err == nil || !strings.Contains(err.Error(), "operation direct write bindings are not executable") {
+		t.Fatalf("Preflight(direct_write) error = %v, want binding rejection", err)
+	}
+	if got, want := connector.operationWriteBindings, (operationDirectWriteBindingPreflightCall{
+		operation:  "acme.vote",
+		pathFields: []string{"id"},
+		bodyFields: []string{"payload"},
+	}); !reflect.DeepEqual(got, want) {
+		t.Fatalf("operation write bindings = %#v, want %#v", got, want)
 	}
 }
 

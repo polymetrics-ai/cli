@@ -670,6 +670,10 @@ type OperationDirectWritePreflighter interface {
 	PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error
 }
 
+type OperationDirectWriteBindingPreflighter interface {
+	PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error
+}
+
 // OperationStructuredJSONBodyPreflighter proves that one named top-level
 // operation body field is a closed, bounded object or array in the operation
 // declaration. It deliberately accepts neither a raw body nor a dotted path:

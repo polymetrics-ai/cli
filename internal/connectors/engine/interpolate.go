@@ -144,14 +144,14 @@ func interpolate(template string, vars Vars, urlencodeDefault, allowControlChara
 // injection surfaces (THREAT-MODEL §2) and no filter in this dialect is
 // meant to legitimately produce or pass through newlines.
 func resolveExpr(expr string, vars Vars, urlencodeDefault, allowControlCharacters bool) (string, error) {
-	return resolveExprWithSecretSafety(expr, vars, urlencodeDefault, allowControlCharacters, false)
+	return resolveExprWithSecretSafety(expr, vars, urlencodeDefault, allowControlCharacters)
 }
 
 func resolveWriteQueryExpr(expr string, vars Vars) (string, error) {
-	return resolveExprWithSecretSafety(expr, vars, false, false, true)
+	return resolveExprWithSecretSafety(expr, vars, false, false)
 }
 
-func resolveExprWithSecretSafety(expr string, vars Vars, urlencodeDefault, allowControlCharacters, redactSecretFilterErrors bool) (string, error) {
+func resolveExprWithSecretSafety(expr string, vars Vars, urlencodeDefault, allowControlCharacters bool) (string, error) {
 	if paths, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
 		if err != nil {
 			return "", err
@@ -167,6 +167,11 @@ func resolveExprWithSecretSafety(expr string, vars Vars, urlencodeDefault, allow
 		if !allowControlCharacters && strings.ContainsAny(val, "\r\n") {
 			return "", fmt.Errorf("interpolate: resolved value for %q contains CR/LF", strings.TrimSpace(expr))
 		}
+		if !allowControlCharacters {
+			if err := safety.RejectDangerousChars(val, "interpolate resolved value for "+strings.TrimSpace(expr)); err != nil {
+				return "", err
+			}
+		}
 		if urlencodeDefault {
 			return applyFilterValue("urlencode", val, val)
 		}
@@ -176,7 +181,7 @@ func resolveExprWithSecretSafety(expr string, vars Vars, urlencodeDefault, allow
 	parts := strings.Split(expr, "|")
 	ref := strings.TrimSpace(parts[0])
 	secretReference := ""
-	if redactSecretFilterErrors && strings.HasPrefix(ref, "secrets.") {
+	if strings.HasPrefix(ref, "secrets.") {
 		secretReference = ref
 	}
 
@@ -187,6 +192,11 @@ func resolveExprWithSecretSafety(expr string, vars Vars, urlencodeDefault, allow
 	val := stringify(rawVal)
 	if !allowControlCharacters && strings.ContainsAny(val, "\r\n") {
 		return "", fmt.Errorf("interpolate: resolved value for %q contains CR/LF", ref)
+	}
+	if !allowControlCharacters {
+		if err := safety.RejectDangerousChars(val, "interpolate resolved value for "+ref); err != nil {
+			return "", err
+		}
 	}
 
 	filters := make([]string, 0, len(parts)-1)

@@ -16,6 +16,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/coordination"
+	"polymetrics.ai/internal/safety"
 )
 
 // defaultPageSize is used when neither the stream's nor the base pagination
@@ -792,7 +793,7 @@ func resolveQueryParamsWithRecordOmission(params map[string]QueryParam, vars Var
 	for _, k := range names {
 		param := params[k]
 		if allowOmitRecord {
-			resolutionErrors, err := validateWriteQueryTemplate(param.Template, vars)
+			val, resolutionErrors, err := materializeWriteQueryTemplate(param.Template, vars)
 			if err != nil {
 				return nil, fmt.Errorf("engine: resolve query %q: %w", k, err)
 			}
@@ -814,9 +815,15 @@ func resolveQueryParamsWithRecordOmission(params map[string]QueryParam, vars Var
 				if isUnresolvedRecordPath(firstResolutionErr) || param.OmitWhenAbsent {
 					continue
 				}
-				q.Set(k, param.Default)
+				if err := setResolvedQueryValue(q, k, param.Default); err != nil {
+					return nil, err
+				}
 				continue
 			}
+			if err := setResolvedQueryValue(q, k, val); err != nil {
+				return nil, err
+			}
+			continue
 		}
 		val, err := Interpolate(param.Template, vars)
 		if err != nil {
@@ -828,39 +835,67 @@ func resolveQueryParamsWithRecordOmission(params map[string]QueryParam, vars Var
 				case param.OmitWhenAbsent:
 					continue
 				case param.Default != "":
-					q.Set(k, param.Default)
+					if err := setResolvedQueryValue(q, k, param.Default); err != nil {
+						return nil, err
+					}
 					continue
 				}
 			}
 			return nil, fmt.Errorf("engine: resolve query %q: %w", k, err)
 		}
-		q.Set(k, val)
+		if err := setResolvedQueryValue(q, k, val); err != nil {
+			return nil, err
+		}
 	}
 	return q, nil
 }
 
-func validateWriteQueryTemplate(template string, vars Vars) ([]error, error) {
-	expressions, err := parseWriteQueryTemplate(template)
-	if err != nil {
-		return nil, err
+func setResolvedQueryValue(q url.Values, name, value string) error {
+	if err := safety.RejectDangerousChars(value, "query parameter "+name); err != nil {
+		return err
 	}
-	for _, expr := range expressions {
-		if err := validateWriteQueryExpression(expr); err != nil {
-			return nil, err
+	q.Set(name, value)
+	return nil
+}
+
+type writeQueryTemplateToken struct {
+	literal    string
+	expression string
+}
+
+func materializeWriteQueryTemplate(template string, vars Vars) (string, []error, error) {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return "", nil, err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		if err := validateWriteQueryExpression(token.expression); err != nil {
+			return "", nil, err
 		}
 	}
 
 	resolutionErrors := make([]error, 0)
-	for _, expr := range expressions {
-		if _, err := resolveWriteQueryExpr(expr, vars); err != nil {
-			resolutionErrors = append(resolutionErrors, err)
+	var out strings.Builder
+	for _, token := range tokens {
+		if token.expression == "" {
+			out.WriteString(token.literal)
+			continue
 		}
+		value, err := resolveWriteQueryExpr(token.expression, vars)
+		if err != nil {
+			resolutionErrors = append(resolutionErrors, err)
+			continue
+		}
+		out.WriteString(value)
 	}
-	return resolutionErrors, nil
+	return out.String(), resolutionErrors, nil
 }
 
-func parseWriteQueryTemplate(template string) ([]string, error) {
-	expressions := make([]string, 0)
+func parseWriteQueryTemplate(template string) ([]writeQueryTemplateToken, error) {
+	tokens := make([]writeQueryTemplateToken, 0)
 	position := 0
 	for position < len(template) {
 		openOffset := strings.Index(template[position:], "{{")
@@ -869,7 +904,22 @@ func parseWriteQueryTemplate(template string) ([]string, error) {
 			return nil, fmt.Errorf("interpolate: malformed template delimiter: stray closing delimiter")
 		}
 		if openOffset < 0 {
+			literal := template[position:]
+			if err := safety.RejectDangerousChars(literal, "write query template literal"); err != nil {
+				return nil, fmt.Errorf("interpolate: malformed template literal: %w", err)
+			}
+			if literal != "" {
+				tokens = append(tokens, writeQueryTemplateToken{literal: literal})
+			}
 			break
+		}
+		literalEnd := position + openOffset
+		literal := template[position:literalEnd]
+		if err := safety.RejectDangerousChars(literal, "write query template literal"); err != nil {
+			return nil, fmt.Errorf("interpolate: malformed template literal: %w", err)
+		}
+		if literal != "" {
+			tokens = append(tokens, writeQueryTemplateToken{literal: literal})
 		}
 
 		expressionStart := position + openOffset + len("{{")
@@ -881,14 +931,18 @@ func parseWriteQueryTemplate(template string) ([]string, error) {
 		if strings.Contains(template[expressionStart:expressionEnd], "{{") {
 			return nil, fmt.Errorf("interpolate: malformed template delimiter: nested opening delimiter")
 		}
-		expr := strings.TrimSpace(template[expressionStart:expressionEnd])
+		rawExpr := template[expressionStart:expressionEnd]
+		if err := safety.RejectDangerousChars(rawExpr, "write query template expression"); err != nil {
+			return nil, fmt.Errorf("interpolate: malformed template expression: %w", err)
+		}
+		expr := strings.TrimSpace(rawExpr)
 		if expr == "" {
 			return nil, fmt.Errorf("interpolate: malformed template delimiter: empty expression")
 		}
-		expressions = append(expressions, expr)
+		tokens = append(tokens, writeQueryTemplateToken{expression: expr})
 		position = expressionEnd + len("}}")
 	}
-	return expressions, nil
+	return tokens, nil
 }
 
 func validateWriteQueryExpression(expr string) error {
@@ -974,6 +1028,9 @@ func validateWriteQueryReferenceSegments(ref string, parts []string) error {
 	for _, part := range parts {
 		if part == "" || part != strings.TrimSpace(part) {
 			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		if err := safety.ValidateIdentifier(part, "write query reference segment"); err != nil {
+			return fmt.Errorf("interpolate: malformed reference %q: %w", ref, err)
 		}
 	}
 	return nil

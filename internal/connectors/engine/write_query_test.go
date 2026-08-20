@@ -810,3 +810,91 @@ func TestBundleLoadRejectsInvalidDynamicFields(t *testing.T) {
 		t.Fatal("dynamic_fields on an unsupported body_type must be rejected at load")
 	}
 }
+
+func TestBuildWriteQueryRejectsUnsafeTemplateSyntaxAndValues(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		param   QueryParam
+		vars    Vars
+		wantErr string
+	}{
+		{
+			name:    "multiline expression",
+			param:   QueryParam{Template: "{{ record.id |\n urlencode }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"id": "value"}},
+			wantErr: "invalid control characters",
+		},
+		{
+			name:    "nul identifier",
+			param:   QueryParam{Template: "{{ config.mode\x00 }}", OmitWhenAbsent: true},
+			wantErr: "invalid control characters",
+		},
+		{
+			name:    "bidi identifier",
+			param:   QueryParam{Template: "{{ record.option\u202eal }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"optional": "value"}},
+			wantErr: "invalid unicode characters",
+		},
+		{
+			name:    "nul resolved record value",
+			param:   QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"optional": "value\x00"}},
+			wantErr: "invalid control characters",
+		},
+		{
+			name:    "nul encoded record value",
+			param:   QueryParam{Template: "{{ record.optional | urlencode }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"optional": "value\x00"}},
+			wantErr: "invalid control characters",
+		},
+		{
+			name:    "bidi default value",
+			param:   QueryParam{Template: "{{ config.optional }}", Default: "value\u202e"},
+			wantErr: "invalid unicode characters",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": tc.param},
+			}, tc.vars)
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("buildWriteQuery error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+}
+
+func TestWriteActionUnsafeQueryValuesDoNotReachProvider(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		param  QueryParam
+		record connectors.Record
+		cfg    connectors.RuntimeConfig
+	}{
+		{
+			name:   "resolved record value",
+			param:  QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			record: connectors.Record{"id": "w1", "optional": "value\x00"},
+		},
+		{
+			name:   "default value",
+			param:  QueryParam{Template: "{{ config.optional }}", Default: "value\u202e"},
+			record: connectors.Record{"id": "w1"},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			srv, seen := queryCaptureServer(t)
+			bundle := newWriteTestBundle(srv, WriteAction{
+				Name: "update_widget", Kind: "update", Method: http.MethodPost, Path: "/widgets",
+				Query: map[string]QueryParam{"optional": tc.param},
+			})
+			if err := writeOneRecord(t, bundle, "update_widget", tc.cfg, tc.record); err == nil {
+				t.Fatal("Write error = nil, want unsafe query value rejection")
+			}
+			if len(*seen) != 0 {
+				t.Fatalf("unsafe query value reached provider; requests = %d", len(*seen))
+			}
+		})
+	}
+}

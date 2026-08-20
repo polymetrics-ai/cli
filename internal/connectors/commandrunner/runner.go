@@ -767,6 +767,10 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	if !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write metadata"}
 	}
+	bindingPreflighter, ok := connector.(connectors.OperationDirectWriteBindingPreflighter)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write binding metadata"}
+	}
 	metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write metadata"}
@@ -798,14 +802,29 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write command output_policy does not match declared operation"}
 	}
 	queryFields := make([]string, 0, len(cmd.Flags))
+	pathFields := make([]string, 0, len(cmd.Flags))
+	bodyFields := make([]string, 0, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
-		if field, ok := strings.CutPrefix(mapsTo, "query."); ok {
+		switch {
+		case strings.HasPrefix(mapsTo, "query."):
+			field, _ := strings.CutPrefix(mapsTo, "query.")
 			queryFields = append(queryFields, field)
+		case strings.HasPrefix(mapsTo, "path."):
+			field, _ := strings.CutPrefix(mapsTo, "path.")
+			pathFields = append(pathFields, field)
+		case strings.HasPrefix(mapsTo, "body."):
+			field, _ := strings.CutPrefix(mapsTo, "body.")
+			bodyFields = append(bodyFields, field)
+		default:
+			return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("direct_write flag --%s maps to unsupported target %q", flag.Name, flag.MapsTo)}
 		}
 	}
 	if err := preflighter.PreflightOperationDirectWrite(cmd.Operation, method, cmd.APISurface[0].Path, cmd.OutputPolicy, queryFields...); err != nil {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct write metadata is not executable: %v", err)}
+	}
+	if err := bindingPreflighter.PreflightOperationDirectWriteBindings(cmd.Operation, pathFields, bodyFields); err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct write bindings are not executable: %v", err)}
 	}
 	return nil
 }

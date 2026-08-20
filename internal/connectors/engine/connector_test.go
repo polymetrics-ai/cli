@@ -57,6 +57,7 @@ var (
 	_ connectors.DefinitionProvider                     = Base{}
 	_ connectors.OperationDirectReadPreflighter         = Base{}
 	_ connectors.OperationDirectWritePreflighter        = Base{}
+	_ connectors.OperationDirectWriteBindingPreflighter = Base{}
 	_ connectors.OperationStructuredJSONBodyPreflighter = Base{}
 )
 

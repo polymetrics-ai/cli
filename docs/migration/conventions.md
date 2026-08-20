@@ -389,7 +389,10 @@ not a full override by default.
   required schema branch. `connectorgen validate`, runtime preflight, and the shared engine
   materializer verify the same declaration before I/O, and preview/approval binds the resulting
   canonical payload. This is also the canonical materializer used by typed-action/reverse-ETL
-  execution; do not add a second request builder. Each adoption must still run `surface-sync`, add
+  execution; do not add a second request builder. A `path.<name>` mapping must match an exact
+  `{name}` route placeholder, while every scalar or nested `body.<path>` mapping must resolve
+  through declared object properties or array item schemas (including any declared bounds); a caller cannot introduce an
+  open scalar/object branch or replace route metadata. Each adoption must still run `surface-sync`, add
   provider-source evidence, update its generated help/manual/website surfaces, and prove its own
   exact request and rejected-input cases. A direct-write `query.<name>` binding must match one
   exact source-imported `rest.parameters` query row; a provider-fixed `rest.query` value cannot be
@@ -408,8 +411,10 @@ not a full override by default.
   stray, or unbalanced delimiters, empty expressions, and empty filter stages are rejected before
   resolution. `record.*` may use a dotted record path; every other permitted namespace uses its exact
   declaration-owned reference shape, and `query.*`, `cursor`, and `fanout.*` are not valid write
-  sources. Filter errors from a `secrets.*` reference identify the reference and filter but never its
-  resolved value. The caller cannot provide free-form
+  sources. The validated token stream is also the rendered value, so no accepted delimiter or
+  multiline form can be sent literally; identifiers and resolved/default values reject controls,
+  bidi characters, and other unsafe transport bytes. Filter errors from a `secrets.*` reference
+  identify the reference and filter but never its resolved value. The caller cannot provide free-form
   query values: an explicit record value is sent only through its exact declared query entry. Do not
   use this rule for operation direct writes or as a generic query escape hatch. A direct-write
   `query.<name>` flag may occur once; aliases count as the same source-declared query input.

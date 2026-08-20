@@ -969,3 +969,29 @@ func TestResolveCheckAuthFieldsValidatesAllTemplatedFields(t *testing.T) {
 		}
 	})
 }
+
+func TestSecretFilterErrorsNeverExposeResolvedValues(t *testing.T) {
+	const secret = "secret-canary-header"
+	vars := Vars{Secrets: map[string]string{"token": secret}}
+	for _, tc := range []struct {
+		name    string
+		resolve func(string, Vars) (string, error)
+	}{
+		{name: "interpolate", resolve: Interpolate},
+		{name: "header", resolve: InterpolateHeader},
+		{name: "path", resolve: InterpolatePath},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := tc.resolve("{{ secrets.token | unix_seconds }}", vars)
+			if err == nil {
+				t.Fatal("secret filter error = nil, want rejection")
+			}
+			if strings.Contains(err.Error(), secret) {
+				t.Fatalf("secret filter error exposed value: %v", err)
+			}
+			if !strings.Contains(err.Error(), "secrets.token") {
+				t.Fatalf("secret filter error = %v, want reference metadata", err)
+			}
+		})
+	}
+}
