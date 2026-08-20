@@ -638,6 +638,14 @@ func NewRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 //   - any other interpolation failure (CRLF injection, unknown
 //     namespace/filter) still propagates unchanged.
 func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema) (map[string]string, error) {
+	return resolveHeadersWithInterpolator(headers, cfg, spec, InterpolateHeader)
+}
+
+func resolveDirectWriteHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema) (map[string]string, error) {
+	return resolveHeadersWithInterpolator(headers, cfg, spec, interpolateDeclaredHeader)
+}
+
+func resolveHeadersWithInterpolator(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema, interpolate func(string, Vars) (string, error)) (map[string]string, error) {
 	if len(headers) == 0 {
 		return nil, nil
 	}
@@ -657,8 +665,14 @@ func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spe
 	}
 
 	out := make(map[string]string, len(headers))
-	for k, tmpl := range headers {
-		val, err := InterpolateHeader(tmpl, requestVars(cfg, nil, ""))
+	names := make([]string, 0, len(headers))
+	for name := range headers {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, k := range names {
+		tmpl := headers[k]
+		val, err := interpolate(tmpl, requestVars(cfg, nil, ""))
 		if err != nil {
 			omit, hardErr := classifyHeaderResolutionError(err, spec, optionalConfigKeys)
 			if hardErr != nil {
@@ -674,7 +688,11 @@ func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spe
 		}
 		out[k] = val
 	}
-	return out, nil
+	canonical, err := canonicalPreparedRequestHeaders(out)
+	if err != nil {
+		return nil, fmt.Errorf("engine: resolve declared headers: %w", err)
+	}
+	return canonical, nil
 }
 
 // classifyHeaderResolutionError decides, for a single header's interpolation
@@ -907,6 +925,123 @@ func materializeWriteQueryTemplate(template string, vars Vars) (string, []error,
 		out.WriteString(value)
 	}
 	return out.String(), resolutionErrors, nil
+}
+
+func interpolateDeclaredHeader(template string, vars Vars) (string, error) {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return "", err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		if err := validateDeclaredHeaderExpression(token.expression); err != nil {
+			return "", err
+		}
+	}
+	var out strings.Builder
+	for _, token := range tokens {
+		if token.expression == "" {
+			out.WriteString(token.literal)
+			continue
+		}
+		value, err := resolveExpr(token.expression, vars, false)
+		if err != nil {
+			return "", err
+		}
+		out.WriteString(value)
+	}
+	value := out.String()
+	if strings.ContainsAny(value, "\r\n") {
+		return "", fmt.Errorf("interpolate header: resolved value contains CR/LF")
+	}
+	if err := safety.RejectDangerousChars(value, "interpolate header value"); err != nil {
+		return "", err
+	}
+	return value, nil
+}
+
+func validateDeclaredHeaderTemplate(template string) error {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		if err := validateDeclaredHeaderExpression(token.expression); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func validateDeclaredHeaderExpression(expr string) error {
+	if paths, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
+		if err != nil {
+			return err
+		}
+		for _, path := range paths {
+			if err := validateDeclaredHeaderReference("record." + path); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	parts := strings.Split(expr, "|")
+	ref := strings.TrimSpace(parts[0])
+	if err := validateDeclaredHeaderReference(ref); err != nil {
+		return err
+	}
+	for _, rawFilter := range parts[1:] {
+		filter := strings.TrimSpace(rawFilter)
+		if filter == "" {
+			return fmt.Errorf("interpolate: malformed filter chain")
+		}
+		if !isKnownFilter(filter) {
+			return fmt.Errorf("interpolate: unknown filter %q", filter)
+		}
+	}
+	return nil
+}
+
+func validateDeclaredHeaderReference(ref string) error {
+	if ref == "cursor" {
+		return nil
+	}
+	parts := strings.Split(ref, ".")
+	if len(parts) < 2 {
+		return fmt.Errorf("interpolate: malformed reference %q", ref)
+	}
+	for _, part := range parts {
+		if part == "" || part != strings.TrimSpace(part) {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		if err := safety.ValidateIdentifier(part, "header reference segment"); err != nil {
+			return fmt.Errorf("interpolate: malformed reference %q: %w", ref, err)
+		}
+	}
+	switch parts[0] {
+	case "record":
+		return nil
+	case "config", "secrets", "query":
+		if len(parts) == 2 {
+			return nil
+		}
+	case "incremental":
+		if len(parts) == 2 && knownIncrementalKeys[parts[1]] {
+			return nil
+		}
+	case "fanout":
+		if len(parts) == 2 && knownFanoutKeys[parts[1]] {
+			return nil
+		}
+	default:
+		return fmt.Errorf("interpolate: unknown namespace %q in reference %q", parts[0], ref)
+	}
+	return fmt.Errorf("interpolate: malformed reference %q", ref)
 }
 
 func parseWriteQueryTemplate(template string) ([]writeQueryTemplateToken, error) {

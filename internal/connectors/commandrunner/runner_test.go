@@ -37,6 +37,7 @@ type fakeConnector struct {
 	operationWritePreflightErr error
 	operationWriteBindings     operationDirectWriteBindingPreflightCall
 	operationWriteBindingsErr  error
+	operationWriteMaterialize  func(string, map[string]any) (map[string]any, error)
 	directWriteMetadata        connectors.OperationDirectWriteMetadata
 	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
 	directReadErr              error
@@ -186,6 +187,25 @@ func (f *fakeConnector) PreflightOperationDirectWriteBindings(operation string, 
 		bodyFields: append([]string(nil), bodyFields...),
 	}
 	return f.operationWriteBindingsErr
+}
+func (f *fakeConnector) MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error) {
+	if f.operationWriteMaterialize != nil {
+		return f.operationWriteMaterialize(operation, mappings)
+	}
+	body := make(map[string]any, len(mappings))
+	paths := make([]string, 0, len(mappings))
+	for path := range mappings {
+		paths = append(paths, path)
+	}
+	sort.SliceStable(paths, func(left, right int) bool {
+		return bodyMappingPathLess(paths[left], paths[right])
+	})
+	for _, path := range paths {
+		if err := setOperationBodyValue(body, path, mappings[path], false); err != nil {
+			return nil, err
+		}
+	}
+	return body, nil
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -2349,7 +2369,71 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 	}
 }
 
-func TestOperationDirectReadOverridesOrdersDirectWriteArrayMappingsNumerically(t *testing.T) {
+func TestBuildOperationDirectWriteCommandSupportsDottedStructuredBodyField(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.widgets.configure",
+			Kind:          "rest_write",
+			Summary:       "Configure one widget",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "update",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPatch,
+				Path:        "/widgets/{widget_id}",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"required":["settings.v1"],
+					"properties":{"settings.v1":{"type":"object","additionalProperties":false,"required":["enabled"],"properties":{"enabled":{"type":"boolean"}}}}
+				}`),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: http.MethodPatch,
+			Path:   "/widgets/{widget_id}",
+			Operation: &engine.SurfaceOperation{
+				Model: "write",
+			},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets configure",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.widgets.configure",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPatch, Path: "/widgets/{widget_id}"}},
+			OutputPolicy: "json",
+			Flags: []engine.CLIFlag{
+				{Name: "widget-id", Type: "string", MapsTo: "path.widget_id", Required: true},
+				{Name: "settings", Type: "json", MapsTo: "body.settings.v1", Required: true},
+			},
+		}}},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+		Path: []string{"widgets", "configure"},
+		Flags: map[string][]string{
+			"widget-id": {"widget-1"},
+			"settings":  {`{"enabled":true}`},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	settings, ok := command.Record["settings.v1"].(map[string]any)
+	if !ok || settings["enabled"] != true {
+		t.Fatalf("dotted structured body = %#v, want declared provider field", command.Record)
+	}
+}
+
+func TestOperationDirectWriteOverridesDelegatesIndexedMappings(t *testing.T) {
 	cmd := connectors.CommandSurfaceCommand{Intent: "direct_write", Availability: "implemented", Path: "widgets create"}
 	flags := make(map[string][]string, 130)
 	for index := 0; index < 130; index++ {
@@ -2358,9 +2442,20 @@ func TestOperationDirectReadOverridesOrdersDirectWriteArrayMappingsNumerically(t
 		flags[name] = []string{fmt.Sprintf("id-%d", index)}
 	}
 
-	_, _, body, raw, err := operationDirectReadOverrides(cmd, flags)
+	var received map[string]any
+	_, _, body, raw, err := operationDirectWriteOverrides(cmd, flags, func(_ string, mappings map[string]any) (map[string]any, error) {
+		received = make(map[string]any, len(mappings))
+		for path, value := range mappings {
+			received[path] = value
+		}
+		targets := make([]any, 130)
+		for index := range targets {
+			targets[index] = map[string]any{"id": fmt.Sprintf("id-%d", index)}
+		}
+		return map[string]any{"targets": targets}, nil
+	})
 	if err != nil {
-		t.Fatalf("operationDirectReadOverrides: %v", err)
+		t.Fatalf("operationDirectWriteOverrides: %v", err)
 	}
 	if raw != nil {
 		t.Fatal("array mappings produced an unexpected raw body")
@@ -2374,6 +2469,29 @@ func TestOperationDirectReadOverridesOrdersDirectWriteArrayMappingsNumerically(t
 		if !ok || entry["id"] != fmt.Sprintf("id-%d", index) {
 			t.Fatalf("targets[%d] = %#v, want declared index value", index, targets[index])
 		}
+	}
+	if got, want := len(received), 130; got != want {
+		t.Fatalf("materializer mappings = %d, want %d declared indexed inputs", got, want)
+	}
+}
+
+func TestValidateCommandInputsTraversesDirectWriteArrayFields(t *testing.T) {
+	cmd := connectors.CommandSurfaceCommand{Constraints: []connectors.CommandSurfaceConstraint{{
+		Kind:      "order",
+		Left:      "body.targets.0.start",
+		Right:     "body.targets.0.end",
+		Op:        "lt",
+		ValueType: "date-time",
+		Message:   "target start must be before end",
+	}}}
+	err := validateCommandInputs(cmd, connectors.RuntimeConfig{}, mappedCommandInputs{Body: map[string]any{
+		"targets": []any{map[string]any{
+			"start": "2026-08-21T00:00:00Z",
+			"end":   "2026-08-20T00:00:00Z",
+		}},
+	}})
+	if err == nil || !strings.Contains(err.Error(), "target start must be before end") {
+		t.Fatalf("validateCommandInputs error = %v, want nested-array constraint rejection", err)
 	}
 }
 

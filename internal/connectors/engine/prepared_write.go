@@ -8,11 +8,13 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"net/textproto"
 	"net/url"
 	"sort"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/safety"
 )
 
 type PreparedRequest struct {
@@ -88,6 +90,10 @@ func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, erro
 	if prepared.Target.RequiresApproval() {
 		approvalTarget.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
 	}
+	requests, err := projectPreparedRequests(prepared.Requests)
+	if err != nil {
+		return connectors.WritePreview{}, err
+	}
 	payload := struct {
 		Version          int                               `json:"version"`
 		ApprovalTarget   connectors.WriteApprovalTarget    `json:"approval_target"`
@@ -103,7 +109,7 @@ func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, erro
 		Action:           prepared.Action,
 		Definition:       prepared.Definition,
 		HookIdentity:     prepared.HookIdentity,
-		PreparedRequests: projectPreparedRequests(prepared.Requests),
+		PreparedRequests: requests,
 	}
 	raw, err := json.Marshal(payload)
 	if err != nil {
@@ -131,10 +137,13 @@ type preparedRequestDigestProjection struct {
 	HeadersSHA256 string   `json:"headers_sha256,omitempty"`
 }
 
-func projectPreparedRequests(requests []PreparedRequest) []preparedRequestDigestProjection {
+func projectPreparedRequests(requests []PreparedRequest) ([]preparedRequestDigestProjection, error) {
 	projected := make([]preparedRequestDigestProjection, len(requests))
 	for index, request := range requests {
-		headerNames, headersSHA256 := preparedRequestHeaderDigest(request.Headers)
+		headerNames, headersSHA256, err := preparedRequestHeaderDigest(request.Headers)
+		if err != nil {
+			return nil, fmt.Errorf("engine: prepared request %d headers: %w", index, err)
+		}
 		projected[index] = preparedRequestDigestProjection{
 			Method:        request.Method,
 			URL:           request.URL,
@@ -147,15 +156,19 @@ func projectPreparedRequests(requests []PreparedRequest) []preparedRequestDigest
 			HeadersSHA256: headersSHA256,
 		}
 	}
-	return projected
+	return projected, nil
 }
 
-func preparedRequestHeaderDigest(headers map[string]string) ([]string, string) {
-	if len(headers) == 0 {
-		return nil, ""
+func preparedRequestHeaderDigest(headers map[string]string) ([]string, string, error) {
+	canonical, err := canonicalPreparedRequestHeaders(headers)
+	if err != nil {
+		return nil, "", err
 	}
-	names := make([]string, 0, len(headers))
-	for name := range headers {
+	if len(canonical) == 0 {
+		return nil, "", nil
+	}
+	names := make([]string, 0, len(canonical))
+	for name := range canonical {
 		names = append(names, name)
 	}
 	sort.Strings(names)
@@ -165,11 +178,64 @@ func preparedRequestHeaderDigest(headers map[string]string) ([]string, string) {
 	}, len(names))
 	for index, name := range names {
 		payload[index].Name = name
-		payload[index].Value = headers[name]
+		payload[index].Value = canonical[name]
 	}
 	raw, _ := json.Marshal(payload)
 	digest := sha256.Sum256(raw)
-	return names, hex.EncodeToString(digest[:])
+	return names, hex.EncodeToString(digest[:]), nil
+}
+
+func canonicalPreparedRequestHeaders(headers map[string]string) (map[string]string, error) {
+	if len(headers) == 0 {
+		return nil, nil
+	}
+	names := make([]string, 0, len(headers))
+	for name := range headers {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	canonical := make(map[string]string, len(headers))
+	for _, name := range names {
+		canonicalName, err := canonicalPreparedRequestHeaderName(name)
+		if err != nil {
+			return nil, err
+		}
+		if _, exists := canonical[canonicalName]; exists {
+			return nil, fmt.Errorf("duplicate header name %q", canonicalName)
+		}
+		value := headers[name]
+		if strings.ContainsAny(value, "\r\n") {
+			return nil, fmt.Errorf("header %q contains CR/LF", canonicalName)
+		}
+		if err := safety.RejectDangerousChars(value, "header "+canonicalName); err != nil {
+			return nil, err
+		}
+		canonical[canonicalName] = value
+	}
+	return canonical, nil
+}
+
+func canonicalPreparedRequestHeaderName(name string) (string, error) {
+	if name == "" || name != strings.TrimSpace(name) {
+		return "", fmt.Errorf("invalid header name")
+	}
+	for index := 0; index < len(name); index++ {
+		if !isPreparedRequestHeaderToken(name[index]) {
+			return "", fmt.Errorf("invalid header name %q", name)
+		}
+	}
+	canonical := textproto.CanonicalMIMEHeaderKey(name)
+	if canonical == "" {
+		return "", fmt.Errorf("invalid header name %q", name)
+	}
+	return canonical, nil
+}
+
+func isPreparedRequestHeaderToken(value byte) bool {
+	return value >= 'a' && value <= 'z' ||
+		value >= 'A' && value <= 'Z' ||
+		value >= '0' && value <= '9' ||
+		strings.ContainsRune("!#$%&'*+-.^_`|~", rune(value))
 }
 
 func validateFixturePreparedRequests(requests []PreparedRequest, recordsStaged int) error {
@@ -219,7 +285,10 @@ func digestPreparedTargets(prepared PreparedWrite) (string, error) {
 		HeadersSHA256 string   `json:"headers_sha256,omitempty"`
 	}, len(prepared.Requests))
 	for i, request := range prepared.Requests {
-		headerNames, headersSHA256 := preparedRequestHeaderDigest(request.Headers)
+		headerNames, headersSHA256, err := preparedRequestHeaderDigest(request.Headers)
+		if err != nil {
+			return "", fmt.Errorf("engine: prepared request %d headers: %w", i, err)
+		}
 		targets[i].Method = request.Method
 		targets[i].URL = request.URL
 		targets[i].Target = request.Target
@@ -257,6 +326,9 @@ func validatePreparedRequests(prepared PreparedWrite) error {
 		}
 		if !strings.EqualFold(request.Method, targetMethod) {
 			return fmt.Errorf("engine: prepared request %d method %q does not match target method %q", index, request.Method, targetMethod)
+		}
+		if _, err := canonicalPreparedRequestHeaders(request.Headers); err != nil {
+			return fmt.Errorf("engine: prepared request %d headers: %w", index, err)
 		}
 	}
 	return nil
