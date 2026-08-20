@@ -7,9 +7,11 @@ import (
 	"math"
 	"mime"
 	"reflect"
+	"regexp/syntax"
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
 	"unicode/utf8"
 
 	"polymetrics.ai/internal/safety"
@@ -704,8 +706,9 @@ func compileStructuredRESTBodySchema(op OperationSpec) (*structuredRESTBodySchem
 		return nil, fmt.Errorf("operation %q body_schema: compile fragment schema: %w", op.ID, err)
 	}
 	compiled := &structuredRESTBodySchemaCompilation{root: root, schema: sch, fragmentSchema: fragmentSchema}
+	staticBody := map[string]any{}
 	if len(op.REST.Body) != 0 {
-		staticBody, err := canonicalizeStructuredRESTBodyFragment(compiled, op, op.REST.Body, "rest.body")
+		staticBody, err = canonicalizeStructuredRESTBodyFragment(compiled, op, op.REST.Body, "rest.body")
 		if err != nil {
 			if strings.Contains(err.Error(), "request body too large") {
 				return nil, structuredRESTBodyFoundationGap(op.ID, "rest.body", fmt.Sprintf("minimum fixed body exceeds limit %d", maxBytes))
@@ -719,6 +722,13 @@ func compileStructuredRESTBodySchema(op OperationSpec) (*structuredRESTBodySchem
 		if len(encoded) > maxBytes {
 			return nil, structuredRESTBodyFoundationGap(op.ID, "rest.body", fmt.Sprintf("minimum fixed body requires %d bytes, exceeding limit %d", len(encoded), maxBytes))
 		}
+	}
+	minimumCompletionBytes, err := structuredRESTBodyMinimumJSONBytesWithStatic(root, staticBody)
+	if err != nil {
+		return nil, fmt.Errorf("operation %q rest.body: %w", op.ID, err)
+	}
+	if minimumCompletionBytes > maxBytes {
+		return nil, structuredRESTBodyFoundationGap(op.ID, "rest.body", fmt.Sprintf("minimum valid body completion requires %d bytes, exceeding limit %d", minimumCompletionBytes, maxBytes))
 	}
 	return compiled, nil
 }
@@ -813,19 +823,59 @@ func mergeStructuredRESTBodyObject(node map[string]any, staticBody, overrideBody
 		if !ok {
 			return nil, fmt.Errorf("%s.%s has an invalid declared schema", path, name)
 		}
-		if isObjectType(child) {
-			staticObject, staticObjectOK := staticValue.(map[string]any)
-			overrideObject, overrideObjectOK := overrideValue.(map[string]any)
-			if staticObjectOK && overrideObjectOK {
-				value, err := mergeStructuredRESTBodyObject(child, staticObject, overrideObject, path+"."+name)
-				if err != nil {
-					return nil, err
-				}
-				merged[name] = value
-				continue
-			}
+		value, err := mergeStructuredRESTBodyValue(child, staticValue, overrideValue, path+"."+name)
+		if err == nil {
+			merged[name] = value
+			continue
 		}
 		return nil, fmt.Errorf("%s.%s is fixed by rest.body and cannot be caller-overridden", path, name)
+	}
+	return merged, nil
+}
+
+func mergeStructuredRESTBodyValue(node map[string]any, staticValue, overrideValue any, path string) (any, error) {
+	if isObjectType(node) {
+		staticObject, staticObjectOK := staticValue.(map[string]any)
+		overrideObject, overrideObjectOK := overrideValue.(map[string]any)
+		if staticObjectOK && overrideObjectOK {
+			return mergeStructuredRESTBodyObject(node, staticObject, overrideObject, path)
+		}
+	}
+	if isArrayType(node) {
+		staticArray, staticArrayOK := staticValue.([]any)
+		overrideArray, overrideArrayOK := overrideValue.([]any)
+		if staticArrayOK && overrideArrayOK {
+			return mergeStructuredRESTBodyArray(node, staticArray, overrideArray, path)
+		}
+	}
+	return nil, fmt.Errorf("%s is fixed by rest.body and cannot be caller-overridden", path)
+}
+
+func mergeStructuredRESTBodyArray(node map[string]any, staticBody, overrideBody []any, path string) ([]any, error) {
+	length := len(staticBody)
+	if len(overrideBody) > length {
+		length = len(overrideBody)
+	}
+	merged := make([]any, length)
+	for index := 0; index < length; index++ {
+		hasStatic := index < len(staticBody)
+		hasOverride := index < len(overrideBody)
+		switch {
+		case !hasStatic:
+			merged[index] = overrideBody[index]
+		case !hasOverride:
+			merged[index] = staticBody[index]
+		default:
+			item, err := operationDirectWriteBodyArrayItemSchema(node, index)
+			if err != nil {
+				return nil, err
+			}
+			value, err := mergeStructuredRESTBodyValue(item, staticBody[index], overrideBody[index], fmt.Sprintf("%s.%d", path, index))
+			if err != nil {
+				return nil, err
+			}
+			merged[index] = value
+		}
 	}
 	return merged, nil
 }
@@ -1550,6 +1600,34 @@ func structuredRESTBodyCostAdd(left, right int) int {
 }
 
 func structuredRESTBodyMinimumJSONBytes(node map[string]any) (int, error) {
+	return structuredRESTBodyMinimumJSONBytesForStatic(node, nil, false)
+}
+
+func structuredRESTBodyMinimumJSONBytesWithStatic(node map[string]any, static any) (int, error) {
+	return structuredRESTBodyMinimumJSONBytesForStatic(node, static, true)
+}
+
+func structuredRESTBodyMinimumJSONBytesForStatic(node map[string]any, static any, hasStatic bool) (int, error) {
+	if hasStatic {
+		switch value := static.(type) {
+		case map[string]any:
+			if !isObjectType(node) {
+				return 0, fmt.Errorf("static value does not match an object schema")
+			}
+			return structuredRESTBodyMinimumJSONObjectBytesWithStatic(node, value)
+		case []any:
+			if !isArrayType(node) {
+				return 0, fmt.Errorf("static value does not match an array schema")
+			}
+			return structuredRESTBodyMinimumJSONArrayBytesWithStatic(node, value)
+		default:
+			encoded, err := json.Marshal(static)
+			if err != nil {
+				return 0, err
+			}
+			return structuredRESTBodyByteCost(len(encoded)), nil
+		}
+	}
 	if rawValues, exists := node["enum"]; exists {
 		values, ok := rawValues.([]any)
 		if !ok || len(values) == 0 {
@@ -1604,17 +1682,21 @@ func structuredRESTBodyMinimumJSONBytes(node map[string]any) (int, error) {
 		consider(1)
 	}
 	if structuredRESTBodyNodeAllowsType(node, "string") {
-		consider(2)
+		value, err := structuredRESTBodyMinimumJSONStringBytes(node)
+		if err != nil {
+			return 0, err
+		}
+		consider(value)
 	}
 	if isObjectType(node) {
-		value, err := structuredRESTBodyMinimumJSONObjectBytes(node)
+		value, err := structuredRESTBodyMinimumJSONObjectBytesWithStatic(node, nil)
 		if err != nil {
 			return 0, err
 		}
 		consider(value)
 	}
 	if isArrayType(node) {
-		value, err := structuredRESTBodyMinimumJSONArrayBytes(node)
+		value, err := structuredRESTBodyMinimumJSONArrayBytesWithStatic(node, nil)
 		if err != nil {
 			return 0, err
 		}
@@ -1626,7 +1708,154 @@ func structuredRESTBodyMinimumJSONBytes(node map[string]any) (int, error) {
 	return minimum, nil
 }
 
+func structuredRESTBodyMinimumJSONStringBytes(node map[string]any) (int, error) {
+	minimum := 0
+	if rawPattern, exists := node["pattern"]; exists {
+		pattern, ok := rawPattern.(string)
+		if !ok {
+			return 0, fmt.Errorf("pattern must be a string")
+		}
+		value, err := structuredRESTBodyPatternMinimumUTF8Bytes(pattern)
+		if err != nil {
+			return 0, err
+		}
+		minimum = value
+	}
+	if format, _ := node["format"].(string); format == "uri" && minimum < 2 {
+		minimum = 2
+	}
+	return structuredRESTBodyByteCostAdd(2, minimum), nil
+}
+
+func structuredRESTBodyPatternMinimumUTF8Bytes(pattern string) (int, error) {
+	re, err := syntax.Parse(pattern, syntax.Perl)
+	if err != nil {
+		return 0, err
+	}
+	return structuredRESTBodyRegexpMinimumUTF8Bytes(re)
+}
+
+func structuredRESTBodyRegexpMinimumUTF8Bytes(re *syntax.Regexp) (int, error) {
+	if re == nil {
+		return 0, fmt.Errorf("pattern is empty")
+	}
+	switch re.Op {
+	case syntax.OpNoMatch:
+		return 0, fmt.Errorf("pattern has no matching value")
+	case syntax.OpEmptyMatch, syntax.OpBeginLine, syntax.OpEndLine, syntax.OpBeginText, syntax.OpEndText, syntax.OpWordBoundary, syntax.OpNoWordBoundary:
+		return 0, nil
+	case syntax.OpLiteral:
+		minimum := 0
+		for _, value := range re.Rune {
+			cost := structuredRESTBodyMinimumRuneJSONBytes(value, re.Flags&syntax.FoldCase != 0)
+			minimum = structuredRESTBodyByteCostAdd(minimum, cost)
+		}
+		return minimum, nil
+	case syntax.OpCharClass:
+		if len(re.Rune) == 0 || len(re.Rune)%2 != 0 {
+			return 0, fmt.Errorf("pattern has an invalid character class")
+		}
+		minimum := maxOperationDirectWriteBytes + 1
+		for index := 0; index < len(re.Rune); index += 2 {
+			cost := structuredRESTBodyMinimumRuneRangeJSONBytes(re.Rune[index], re.Rune[index+1], re.Flags&syntax.FoldCase != 0)
+			if cost < minimum {
+				minimum = cost
+			}
+		}
+		return minimum, nil
+	case syntax.OpAnyCharNotNL, syntax.OpAnyChar:
+		return 1, nil
+	case syntax.OpCapture, syntax.OpPlus:
+		if len(re.Sub) != 1 {
+			return 0, fmt.Errorf("pattern has an invalid unary expression")
+		}
+		return structuredRESTBodyRegexpMinimumUTF8Bytes(re.Sub[0])
+	case syntax.OpStar, syntax.OpQuest:
+		return 0, nil
+	case syntax.OpRepeat:
+		if len(re.Sub) != 1 {
+			return 0, fmt.Errorf("pattern has an invalid repetition")
+		}
+		value, err := structuredRESTBodyRegexpMinimumUTF8Bytes(re.Sub[0])
+		if err != nil {
+			return 0, err
+		}
+		return structuredRESTBodyByteCostMultiply(value, re.Min), nil
+	case syntax.OpConcat:
+		minimum := 0
+		for _, child := range re.Sub {
+			value, err := structuredRESTBodyRegexpMinimumUTF8Bytes(child)
+			if err != nil {
+				return 0, err
+			}
+			minimum = structuredRESTBodyByteCostAdd(minimum, value)
+		}
+		return minimum, nil
+	case syntax.OpAlternate:
+		if len(re.Sub) == 0 {
+			return 0, fmt.Errorf("pattern has no alternatives")
+		}
+		minimum := maxOperationDirectWriteBytes + 1
+		for _, child := range re.Sub {
+			value, err := structuredRESTBodyRegexpMinimumUTF8Bytes(child)
+			if err != nil {
+				return 0, err
+			}
+			if value < minimum {
+				minimum = value
+			}
+		}
+		return minimum, nil
+	default:
+		return 0, fmt.Errorf("pattern has unsupported expression")
+	}
+}
+
+func structuredRESTBodyMinimumRuneJSONBytes(value rune, foldCase bool) int {
+	minimum := structuredRESTBodyRuneJSONBytes(value)
+	if !foldCase {
+		return minimum
+	}
+	for candidate := unicode.SimpleFold(value); candidate != value; candidate = unicode.SimpleFold(candidate) {
+		if cost := structuredRESTBodyRuneJSONBytes(candidate); cost < minimum {
+			minimum = cost
+		}
+	}
+	return minimum
+}
+
+func structuredRESTBodyMinimumRuneRangeJSONBytes(first, last rune, foldCase bool) int {
+	minimum := maxOperationDirectWriteBytes + 1
+	consider := func(candidate rune) {
+		if candidate < first || candidate > last {
+			return
+		}
+		if cost := structuredRESTBodyMinimumRuneJSONBytes(candidate, foldCase); cost < minimum {
+			minimum = cost
+		}
+	}
+	for candidate := rune(0); candidate <= 0x7f; candidate++ {
+		consider(candidate)
+	}
+	for _, candidate := range []rune{first, last, 0x80, 0x800, 0x2028, 0x2029, 0x202a, 0x10000} {
+		consider(candidate)
+	}
+	return minimum
+}
+
+func structuredRESTBodyRuneJSONBytes(value rune) int {
+	encoded, err := json.Marshal(string(value))
+	if err != nil {
+		return maxOperationDirectWriteBytes + 1
+	}
+	return len(encoded) - 2
+}
+
 func structuredRESTBodyMinimumJSONObjectBytes(node map[string]any) (int, error) {
+	return structuredRESTBodyMinimumJSONObjectBytesWithStatic(node, nil)
+}
+
+func structuredRESTBodyMinimumJSONObjectBytesWithStatic(node map[string]any, staticBody map[string]any) (int, error) {
 	properties, ok := node["properties"].(map[string]any)
 	if !ok {
 		return 0, fmt.Errorf("object has no properties")
@@ -1645,24 +1874,35 @@ func structuredRESTBodyMinimumJSONObjectBytes(node map[string]any) (int, error) 
 	if err != nil {
 		return 0, err
 	}
-	requiredCosts := make([]int, 0, len(required))
+	minimum := 2
+	fields := 0
 	optionalCosts := make([]int, 0, len(properties))
 	for _, name := range sortedMapKeys(properties) {
 		child, ok := properties[name].(map[string]any)
 		if !ok {
 			return 0, fmt.Errorf("properties.%s must be a schema object", name)
 		}
-		childCost, err := structuredRESTBodyMinimumJSONBytes(child)
+		encodedName, err := json.Marshal(name)
 		if err != nil {
 			return 0, err
 		}
-		encodedName, err := json.Marshal(name)
+		if staticValue, hasStatic := staticBody[name]; hasStatic {
+			childCost, err := structuredRESTBodyMinimumJSONBytesForStatic(child, staticValue, true)
+			if err != nil {
+				return 0, err
+			}
+			minimum = structuredRESTBodyByteCostAdd(minimum, structuredRESTBodyByteCostAdd(len(encodedName)+1, childCost))
+			fields++
+			continue
+		}
+		childCost, err := structuredRESTBodyMinimumJSONBytes(child)
 		if err != nil {
 			return 0, err
 		}
 		cost := structuredRESTBodyByteCostAdd(len(encodedName)+1, childCost)
 		if _, isRequired := required[name]; isRequired {
-			requiredCosts = append(requiredCosts, cost)
+			minimum = structuredRESTBodyByteCostAdd(minimum, cost)
+			fields++
 		} else {
 			optionalCosts = append(optionalCosts, cost)
 		}
@@ -1670,18 +1910,11 @@ func structuredRESTBodyMinimumJSONObjectBytes(node map[string]any) (int, error) 
 	if minimumProperties > len(properties) {
 		return 0, fmt.Errorf("minProperties %d exceeds declared properties %d", minimumProperties, len(properties))
 	}
-	minimum := 2
-	for _, cost := range requiredCosts {
-		minimum = structuredRESTBodyByteCostAdd(minimum, cost)
-	}
-	if minimumProperties > len(requiredCosts) {
+	if minimumProperties > fields {
 		sort.Ints(optionalCosts)
-		for _, cost := range optionalCosts[:minimumProperties-len(requiredCosts)] {
+		for _, cost := range optionalCosts[:minimumProperties-fields] {
 			minimum = structuredRESTBodyByteCostAdd(minimum, cost)
 		}
-	}
-	fields := len(requiredCosts)
-	if minimumProperties > fields {
 		fields = minimumProperties
 	}
 	if fields > 1 {
@@ -1691,17 +1924,30 @@ func structuredRESTBodyMinimumJSONObjectBytes(node map[string]any) (int, error) 
 }
 
 func structuredRESTBodyMinimumJSONArrayBytes(node map[string]any) (int, error) {
+	return structuredRESTBodyMinimumJSONArrayBytesWithStatic(node, nil)
+}
+
+func structuredRESTBodyMinimumJSONArrayBytesWithStatic(node map[string]any, staticBody []any) (int, error) {
 	minimumItems, err := structuredRESTBodyArrayMinItems(node)
 	if err != nil {
 		return 0, err
 	}
 	minimum := 2
-	for index := 0; index < minimumItems; index++ {
+	items := len(staticBody)
+	if minimumItems > items {
+		items = minimumItems
+	}
+	for index := 0; index < items; index++ {
 		item, err := operationDirectWriteBodyArrayItemSchema(node, index)
 		if err != nil {
 			return 0, err
 		}
-		cost, err := structuredRESTBodyMinimumJSONBytes(item)
+		var cost int
+		if index < len(staticBody) {
+			cost, err = structuredRESTBodyMinimumJSONBytesForStatic(item, staticBody[index], true)
+		} else {
+			cost, err = structuredRESTBodyMinimumJSONBytes(item)
+		}
 		if err != nil {
 			return 0, err
 		}
@@ -1719,6 +1965,24 @@ func structuredRESTBodyByteCostAdd(left, right int) int {
 		return limit
 	}
 	return left + right
+}
+
+func structuredRESTBodyByteCostMultiply(value, count int) int {
+	limit := maxOperationDirectWriteBytes + 1
+	if value == 0 || count == 0 {
+		return 0
+	}
+	if value >= limit || count >= limit || value > limit/count {
+		return limit
+	}
+	return value * count
+}
+
+func structuredRESTBodyByteCost(value int) int {
+	if value > maxOperationDirectWriteBytes {
+		return maxOperationDirectWriteBytes + 1
+	}
+	return value
 }
 
 func normalizeStructuredRESTBodySchemaNode(operation string, node map[string]any, path string) error {

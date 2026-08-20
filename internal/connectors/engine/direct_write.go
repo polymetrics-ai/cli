@@ -170,14 +170,18 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if prepared.op.Kind == "graphql_mutation" {
 			data, metadata, parseErr := graphQLOperationResponseWithRuntimeErrorPolicy(response.Body, prepared.maxBytes, operationRetainsSecretRuntimeContent(prepared.op))
 			if parseErr != nil {
-				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response: " + parseErr.Error(), cause: parseErr}
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response: " + parseErr.Error(), cause: errors.Join(parseErr, operationDirectWriteProviderResponseCause(response, prepared.identity))}
 			}
 			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
-				return &operationDirectWriteError{operation: prepared.op.ID, message: "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)}
+				message := "graphql errors: provider returned application errors"
+				if !operationRetainsSecretRuntimeContent(prepared.op) {
+					message = "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), true, prepared.redactionValues)
+				}
+				return &operationDirectWriteError{operation: prepared.op.ID, message: message, cause: operationDirectWriteProviderResponseCause(response, prepared.identity)}
 			}
 			if data == nil {
-				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response has no data"}
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response has no data", cause: operationDirectWriteProviderResponseCause(response, prepared.identity)}
 			}
 			rawData, marshalErr := json.Marshal(data)
 			if marshalErr != nil {
@@ -268,6 +272,13 @@ func operationDirectWriteOversizeHTTPErrorCause(err error, identity string) erro
 		return nil
 	}
 	return &connsdk.HTTPError{Status: httpErr.Status, URL: identity, Header: httpErr.Header.Clone()}
+}
+
+func operationDirectWriteProviderResponseCause(response *connsdk.Response, identity string) error {
+	if response == nil {
+		return nil
+	}
+	return &connsdk.HTTPError{Status: response.Status, URL: identity, Header: response.Header.Clone(), Body: string(response.Body)}
 }
 
 func cloneOperationDirectWriteHeaders(headers http.Header) map[string][]string {
@@ -551,22 +562,30 @@ func validateOperationDirectWriteStaticBodyMapping(staticBody map[string]any, pa
 	}
 	var current any = staticBody
 	for index, step := range path.steps {
-		object, ok := current.(map[string]any)
-		if !ok {
-			return fmt.Errorf("overlaps a fixed rest.body value")
-		}
+		var next any
+		var exists bool
 		if step.array {
-			return fmt.Errorf("does not match its fixed rest.body structure")
+			values, ok := current.([]any)
+			if !ok {
+				return fmt.Errorf("does not match its fixed rest.body structure")
+			}
+			if step.index >= len(values) {
+				return nil
+			}
+			next = values[step.index]
+			exists = true
+		} else {
+			object, ok := current.(map[string]any)
+			if !ok {
+				return fmt.Errorf("overlaps a fixed rest.body value")
+			}
+			next, exists = object[step.key]
 		}
-		next, exists := object[step.key]
 		if !exists {
 			return nil
 		}
 		if index == len(path.steps)-1 {
 			return fmt.Errorf("overlaps a fixed rest.body value")
-		}
-		if _, isArray := next.([]any); isArray {
-			return fmt.Errorf("descends into a fixed rest.body array")
 		}
 		current = next
 	}
@@ -770,7 +789,8 @@ func ResolveOperationDirectWriteBodyMappingValue(b Bundle, operation string, bod
 		return nil, false, err
 	}
 	if op.Kind != "rest_write" || len(op.REST.BodySchema) == 0 {
-		return operationDirectWriteLiteralBodyValue(body, path), nil
+		value, found := operationDirectWriteLiteralBodyValue(body, path)
+		return value, found, nil
 	}
 	root, err := operationDirectWriteBodySchemaRoot(op)
 	if err != nil {
@@ -780,7 +800,8 @@ func ResolveOperationDirectWriteBodyMappingValue(b Bundle, operation string, bod
 	if err != nil {
 		return nil, false, fmt.Errorf("operation %q body field %q: %w", op.ID, path, err)
 	}
-	return operationDirectWriteBodyPathValue(body, resolved.steps), nil
+	value, found := operationDirectWriteBodyPathValue(body, resolved.steps)
+	return value, found, nil
 }
 
 func operationDirectWriteBodyPathValue(body map[string]any, steps []operationDirectWriteBodyPathStep) (any, bool) {
@@ -1398,9 +1419,13 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
 	}
-	headers, _, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, nil)
+	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, nil)
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP mutations: %w", identity, err)
+	}
+	query, err := directReadQuery(queryMap)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
 	}
 	policy := strings.TrimSpace(op.OutputPolicy)
 	if requested := strings.TrimSpace(req.OutputPolicy); requested != "" {
@@ -1426,7 +1451,11 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		return preparedOperationDirectWrite{}, err
 	}
 	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, baseURL)
-	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, nil, identity)
+	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, query, identity)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	targetURLWithoutQuery, err := operationDirectWriteRequestURL(baseURL, requestPath, nil, identity)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -1450,7 +1479,8 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		Requests: []PreparedRequest{{
 			Method:      method,
 			URL:         targetURL,
-			Target:      targetURL,
+			Target:      targetURLWithoutQuery,
+			Query:       query.Encode(),
 			ContentType: "application/json",
 			BodyFormat:  "json",
 			Body:        encodedBody,
@@ -1468,6 +1498,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		method:          method,
 		path:            op.GraphQL.Path,
 		requestPath:     requestPath,
+		query:           query,
 		body:            payload,
 		format:          "graphql",
 		contentType:     "application/json",
