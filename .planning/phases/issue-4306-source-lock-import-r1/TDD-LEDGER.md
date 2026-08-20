@@ -74,3 +74,10 @@
 - **Green:** local Link fragments now decode exactly once before JSON Pointer resolution and require one reachable operation occurrence; form request media retains implicit or explicit encoding semantics behind a named merge block; request media and inbound event expansions reserve resolved children before cloning.
 - **Refactor:** reachability is indexed separately from grammar positions, while shared retained-expansion budgets protect request media and inbound declarations without changing response preservation.
 - **Review fallback:** this assigned no-mistakes review phase applied `golang-how-to`, security, safety, error-handling, lint, and testing guidance inline; outer-pipeline commands remain intentionally uninvoked.
+
+## Cycle 13 — non-response reference retention closure
+
+- **Red:** review found that Path Item, Example, Header, Link, and Security Scheme aliases could clone large resolved targets repeatedly before any aggregate budget ran.
+- **Green:** the shared reference resolver reserves fully expanded non-response reference targets before cloning; focused aliases and ordinary reusable Path Item tests prove deterministic early rejection.
+- **Refactor:** existing schema, response, request-media, and inbound budgets remain their respective owners, while a single reference-target budget covers the previously unowned resolver kinds.
+- **Review fallback:** this assigned no-mistakes review phase applied `golang-how-to`, security, safety, error-handling, lint, and testing guidance inline; outer-pipeline commands remain intentionally uninvoked.

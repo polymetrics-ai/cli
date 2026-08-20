@@ -1009,16 +1009,17 @@ func normalizeSourceYAML(value any) any {
 }
 
 type sourceReferenceResolver struct {
-	root              map[string]any
-	limits            sourceImportLimits
-	form              sourceDocumentForm
-	referenceIndex    *sourceReferenceIndex
-	references        int
-	expansion         sourceSchemaExpansionBudget
-	responseExpansion sourceResponseExpansionBudget
-	responseScope     *sourceResponseExpansionBudget
-	mediaExpansion    sourceRetainedExpansionBudget
-	inboundExpansion  sourceRetainedExpansionBudget
+	root               map[string]any
+	limits             sourceImportLimits
+	form               sourceDocumentForm
+	referenceIndex     *sourceReferenceIndex
+	references         int
+	expansion          sourceSchemaExpansionBudget
+	responseExpansion  sourceResponseExpansionBudget
+	responseScope      *sourceResponseExpansionBudget
+	mediaExpansion     sourceRetainedExpansionBudget
+	inboundExpansion   sourceRetainedExpansionBudget
+	referenceExpansion sourceRetainedExpansionBudget
 }
 
 type sourceReferenceKind string
@@ -1979,13 +1980,14 @@ func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, li
 		return fmt.Errorf("index source grammar positions: %w", err)
 	}
 	preflight := sourceReferenceResolver{
-		root:              doc,
-		limits:            limits,
-		form:              form,
-		referenceIndex:    index,
-		responseExpansion: sourceResponseExpansionBudget{limit: sourceResolvedDescriptorLimit(limits)},
-		mediaExpansion:    sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "request media"},
-		inboundExpansion:  sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "inbound event"},
+		root:               doc,
+		limits:             limits,
+		form:               form,
+		referenceIndex:     index,
+		responseExpansion:  sourceResponseExpansionBudget{limit: sourceResolvedDescriptorLimit(limits)},
+		mediaExpansion:     sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "request media"},
+		inboundExpansion:   sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "inbound event"},
+		referenceExpansion: sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "reference target"},
 	}
 	if err := preflight.reserveDiscoveredCounts(countBudget); err != nil {
 		return fmt.Errorf("reserve source discovery counts: %w", err)
@@ -2003,6 +2005,7 @@ func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, li
 	resolver.responseScope = nil
 	resolver.mediaExpansion = sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "request media"}
 	resolver.inboundExpansion = sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "inbound event"}
+	resolver.referenceExpansion = sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "reference target"}
 	return nil
 }
 
@@ -3182,6 +3185,63 @@ func (r *sourceReferenceResolver) responseLinkExpansionBytes(value any, stack ma
 	return sourceResponseStructuralBytes(object, r.limits)
 }
 
+func sourceReferenceRequiresExpansionReservation(kind sourceReferenceKind) bool {
+	switch kind {
+	case sourceReferencePathItem, sourceReferenceHeader, sourceReferenceLink, sourceReferenceExample, sourceReferenceSecurity:
+		return true
+	default:
+		return false
+	}
+}
+
+func (r *sourceReferenceResolver) reserveReferenceExpansion(kind sourceReferenceKind, value any, stack map[string]bool, depth int) error {
+	bytes, err := r.referenceExpansionBytes(kind, value, stack, depth)
+	if err != nil {
+		return err
+	}
+	return r.referenceExpansion.reserve(bytes)
+}
+
+func (r *sourceReferenceResolver) referenceExpansionBytes(kind sourceReferenceKind, value any, stack map[string]bool, depth int) (int64, error) {
+	switch kind {
+	case sourceReferencePathItem:
+		return r.inboundPathItemExpansionBytes(value, stack, depth)
+	case sourceReferenceHeader:
+		return r.responseHeaderExpansionBytes(value, stack, depth)
+	case sourceReferenceLink:
+		return r.responseLinkExpansionBytes(value, stack, depth)
+	case sourceReferenceExample:
+		return r.responseExampleExpansionBytes(value, stack, depth)
+	case sourceReferenceSecurity:
+		return r.securitySchemeExpansionBytes(value, stack, depth)
+	default:
+		return 0, fmt.Errorf("unsupported reference expansion kind %q", kind)
+	}
+}
+
+func (r *sourceReferenceResolver) securitySchemeExpansionBytes(value any, stack map[string]bool, depth int) (int64, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return 0, fmt.Errorf("security scheme must be an object")
+	}
+	target, reference, next, hasReference, err := r.referenceTargetWithCount(object, sourceReferenceSecurity, stack, depth, false)
+	if err != nil {
+		return 0, err
+	}
+	if !hasReference {
+		return sourceResponseStructuralBytes(object, r.limits)
+	}
+	targetBytes, err := r.securitySchemeExpansionBytes(target, next, depth+1)
+	if err != nil {
+		return 0, err
+	}
+	referenceBytes, err := sourceResponseStructuralBytes(reference, r.limits)
+	if err != nil {
+		return 0, err
+	}
+	return sourceStructuralAdd(targetBytes, referenceBytes)
+}
+
 func (r *sourceReferenceResolver) responseEncodingExpansionBytes(value any, stack map[string]bool, depth int) (int64, error) {
 	encodings, ok := value.(map[string]any)
 	if !ok {
@@ -4067,6 +4127,11 @@ func (r *sourceReferenceResolver) referenceTargetWithCount(object map[string]any
 		next[item] = true
 	}
 	next[ref] = true
+	if countReference && sourceReferenceRequiresExpansionReservation(kind) {
+		if err := r.reserveReferenceExpansion(kind, target, next, depth+1); err != nil {
+			return nil, nil, nil, false, err
+		}
+	}
 	return target, object, next, true, nil
 }
 

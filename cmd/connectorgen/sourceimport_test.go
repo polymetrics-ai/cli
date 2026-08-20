@@ -1380,6 +1380,78 @@ func TestSourceImportReservesInboundExpansionBeforeEventConstruction(t *testing.
 	}
 }
 
+func TestSourceImportReservesNonResponseReferenceExpansionBeforeCloning(t *testing.T) {
+	t.Parallel()
+	const aliasCount = 16
+	large := strings.Repeat("x", 900<<10)
+	limits := defaultSourceImportLimits()
+	limits.MaxArtifactBytes = 4 << 20
+	limits.MaxResolvedDescriptorBytes = 8 << 20
+	aliases := func(reference string) string {
+		var entries strings.Builder
+		for index := 0; index < aliasCount; index++ {
+			if index > 0 {
+				entries.WriteByte(',')
+			}
+			entries.WriteString(fmt.Sprintf(`"Alias%02d":{"$ref":"%s"}`, index, reference))
+		}
+		return entries.String()
+	}
+	cases := []struct {
+		name string
+		raw  func() []byte
+	}{
+		{
+			name: "ordinary path item references",
+			raw: func() []byte {
+				var paths strings.Builder
+				for index := 0; index < aliasCount; index++ {
+					if index > 0 {
+						paths.WriteByte(',')
+					}
+					paths.WriteString(fmt.Sprintf(`"/items/%d":{"$ref":"#/components/pathItems/Shared"}`, index))
+				}
+				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"pathItems":{"Shared":{"x-large":"` + large + `","get":{"responses":{"200":{"description":"ok"}}}}}},"paths":{` + paths.String() + `}}`)
+			},
+		},
+		{
+			name: "example aliases",
+			raw: func() []byte {
+				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"examples":{"Large":{"value":"` + large + `"},` + aliases("#/components/examples/Large") + `}},"paths":{"/items":{"get":{"operationId":"items","responses":{"200":{"description":"ok"}}}}}}`)
+			},
+		},
+		{
+			name: "header aliases",
+			raw: func() []byte {
+				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"headers":{"Large":{"description":"` + large + `","schema":{"type":"string","maxLength":1}},` + aliases("#/components/headers/Large") + `}},"paths":{"/items":{"get":{"operationId":"items","responses":{"200":{"description":"ok"}}}}}}`)
+			},
+		},
+		{
+			name: "link aliases",
+			raw: func() []byte {
+				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"links":{"Large":{"operationId":"items","description":"` + large + `"},` + aliases("#/components/links/Large") + `}},"paths":{"/items":{"get":{"operationId":"items","responses":{"200":{"description":"ok"}}}}}}`)
+			},
+		},
+		{
+			name: "security aliases",
+			raw: func() []byte {
+				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"securitySchemes":{"Large":{"type":"http","description":"` + large + `"},` + aliases("#/components/securitySchemes/Large") + `}},"paths":{"/items":{"get":{"operationId":"items","responses":{"200":{"description":"ok"}}}}}}`)
+			},
+		},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := tc.raw()
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/non-response-reference-expansion.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+			if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining reference target") {
+				t.Fatalf("non-response reference expansion error = %v", err)
+			}
+		})
+	}
+}
+
 func TestSourceImportBoundsExtensionKeysBeforeSorting(t *testing.T) {
 	t.Parallel()
 	for _, tc := range []struct {
