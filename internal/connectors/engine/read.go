@@ -778,10 +778,18 @@ func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spe
 }
 
 func resolveDirectWriteHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema) (map[string]string, error) {
-	return resolveHeadersWithInterpolator(headers, cfg, spec, interpolateDeclaredHeader)
+	return resolveDirectWriteHeadersWithVars(headers, spec, requestVars(cfg, nil, ""))
+}
+
+func resolveDirectWriteHeadersWithVars(headers map[string]string, spec *Schema, vars Vars) (map[string]string, error) {
+	return resolveHeadersWithVars(headers, spec, vars, interpolateDeclaredHeader)
 }
 
 func resolveHeadersWithInterpolator(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema, interpolate func(string, Vars) (string, error)) (map[string]string, error) {
+	return resolveHeadersWithVars(headers, spec, requestVars(cfg, nil, ""), interpolate)
+}
+
+func resolveHeadersWithVars(headers map[string]string, spec *Schema, vars Vars, interpolate func(string, Vars) (string, error)) (map[string]string, error) {
 	if len(headers) == 0 {
 		return nil, nil
 	}
@@ -808,7 +816,7 @@ func resolveHeadersWithInterpolator(headers map[string]string, cfg connectors.Ru
 	sort.Strings(names)
 	for _, k := range names {
 		tmpl := headers[k]
-		val, err := interpolate(tmpl, requestVars(cfg, nil, ""))
+		val, err := interpolate(tmpl, vars)
 		if err != nil {
 			omit, hardErr := classifyHeaderResolutionError(err, spec, optionalConfigKeys)
 			if hardErr != nil {

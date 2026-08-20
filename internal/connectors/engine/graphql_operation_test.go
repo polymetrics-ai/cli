@@ -1122,6 +1122,50 @@ func TestOperationDirectWriteRetainsGraphQLApplicationErrorResponse(t *testing.T
 	}
 }
 
+func TestOperationDirectWriteRetainsGraphQLResponseOnRemarshalFailure(t *testing.T) {
+	providerValue := strings.Repeat("<", 80)
+	responseBody := `{"data":{"deleteWidget":{"value":"` + providerValue + `"}}}`
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("X-Provider-Trace", "remarshal-failure")
+		_, _ = w.Write([]byte(responseBody))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+	bundle.Operations[0].GraphQL.MaxBytes = 256
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite accepted expanded GraphQL response")
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatalf("error = %T %v, want retained provider response", err, err)
+	}
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "remarshal-failure" || providerErr.Body != responseBody {
+		t.Fatal("GraphQL remarshal failure did not retain exact provider response")
+	}
+	if calls != 1 {
+		t.Fatalf("GraphQL remarshal failure calls = %d, want 1", calls)
+	}
+}
+
 func TestOperationDirectWriteBindsGraphQLQueryAuth(t *testing.T) {
 	const token = "graphql-query-key"
 	calls := 0
