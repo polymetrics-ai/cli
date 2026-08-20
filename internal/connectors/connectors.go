@@ -839,11 +839,15 @@ type WriteResult struct {
 // WriteProviderResponse is the verbatim provider result captured for one named
 // typed write action. System-generated diagnostics are carried separately.
 type WriteProviderResponse struct {
-	RecordIndex  int                            `json:"record_index"`
-	Status       int                            `json:"status"`
-	Headers      map[string]WriteProviderHeader `json:"headers"`
-	Body         any                            `json:"body"`
-	BodyEncoding string                         `json:"body_encoding,omitempty"`
+	RecordIndex     int                            `json:"record_index"`
+	Status          int                            `json:"status"`
+	Headers         map[string]WriteProviderHeader `json:"headers"`
+	BodyPresent     bool                           `json:"body_present"`
+	BodyBytes       int                            `json:"body_bytes"`
+	BodyRaw         string                         `json:"body_raw,omitempty"`
+	BodyRawEncoding string                         `json:"body_raw_encoding,omitempty"`
+	Body            any                            `json:"body"`
+	BodyEncoding    string                         `json:"body_encoding,omitempty"`
 }
 
 // WriteProviderHeader preserves an ordinary provider response header.

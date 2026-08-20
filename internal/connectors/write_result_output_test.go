@@ -15,7 +15,11 @@ func TestSanitizeWriteResultForOutputPreservesProviderResponseExactly(t *testing
 	result := WriteResult{
 		RecordsWritten: 1,
 		ProviderResponses: []WriteProviderResponse{{
-			Status: 201,
+			Status:          201,
+			BodyPresent:     true,
+			BodyBytes:       len(`{"credential":"client-secret","numeric":12345678901234567890}`),
+			BodyRaw:         `{"credential":"client-secret","numeric":12345678901234567890}`,
+			BodyRawEncoding: "text",
 			Headers: map[string]WriteProviderHeader{
 				"X-Provider-Echo": {Values: []string{credential, "ordinary"}},
 			},

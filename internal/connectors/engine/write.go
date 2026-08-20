@@ -385,6 +385,10 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			result.ProviderResponses = append(result.ProviderResponses, providerResponse)
 			responseErr = providerResponseErr
 		}
+		if responseErr != nil {
+			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(responseErr, action, rec)}
+		}
 		if err != nil {
 			if isMissingOkDelete(action, err) {
 				result.RecordsUnchanged++
@@ -393,10 +397,6 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: redactWriteActionError(err, action, rec)}
-		}
-		if responseErr != nil {
-			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
-			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(responseErr, action, rec)}
 		}
 		result.RecordsWritten++
 	}
@@ -514,20 +514,31 @@ func writeProviderResponse(response *connsdk.Response, recordIndex int) (connect
 		Status:      response.Status,
 		Headers:     writeProviderHeaders(response.Header),
 	}
+	rawBody, rawEncoding := writeProviderRawBody(response.Body)
 	if !writeProviderResponseDeclaresJSON(response.Header) {
-		result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
+		result.BodyPresent = len(response.Body) > 0
+		result.BodyBytes = len(response.Body)
+		if result.BodyPresent {
+			result.BodyRaw = rawBody
+			result.BodyRawEncoding = rawEncoding
+		}
+		result.Body, result.BodyEncoding = rawBody, rawEncoding
 		return result, nil
 	}
+	result.BodyPresent = true
+	result.BodyBytes = len(response.Body)
+	result.BodyRaw = rawBody
+	result.BodyRawEncoding = rawEncoding
 	body, err := decodeDirectReadBody(response.Body, -1)
 	if err != nil {
-		result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
+		result.Body, result.BodyEncoding = rawBody, rawEncoding
 		return result, errors.New("provider response is not valid JSON")
 	}
 	result.Body = body
 	return result, nil
 }
 
-func writeProviderRawBody(body []byte) (any, string) {
+func writeProviderRawBody(body []byte) (string, string) {
 	if utf8.Valid(body) {
 		return string(body), "text"
 	}

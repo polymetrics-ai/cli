@@ -495,6 +495,7 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 		t.Fatal(err)
 	}
 
+	const appendProviderResponse = "{\n  \"id\": \"provider-append-1\",\n  \"large_provider_id\": 9007199254740993,\n  \"rare_field\": {\"enabled\": true},\n  \"paid_tier\": \"enterprise\",\n  \"echoed_secret\": \"destination-secret\",\n  \"duplicate\": \"first\",\n  \"duplicate\": \"second\"\n}\n"
 	var reads, appendWrites, replaceWrites, otherWrites int
 	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		switch {
@@ -508,7 +509,7 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			writer.Header().Set("Authorization", "provider-response-secret")
 			writer.Header().Set("X-Echoed-Credential", "destination-secret")
 			writer.WriteHeader(http.StatusCreated)
-			_, _ = writer.Write([]byte(`{"id":"provider-append-1","large_provider_id":9007199254740993,"rare_field":{"enabled":true},"paid_tier":"enterprise","echoed_secret":"destination-secret"}`))
+			_, _ = writer.Write([]byte(appendProviderResponse))
 		case request.Method == http.MethodPost && request.URL.Path == "/widgets/replace":
 			replaceWrites++
 			writer.WriteHeader(http.StatusNoContent)
@@ -613,9 +614,13 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			var output struct {
 				RecordsWritten    int `json:"records_written"`
 				ProviderResponses []struct {
-					RecordIndex int `json:"record_index"`
-					Status      int `json:"status"`
-					Headers     map[string]struct {
+					RecordIndex     int    `json:"record_index"`
+					Status          int    `json:"status"`
+					BodyPresent     bool   `json:"body_present"`
+					BodyBytes       int    `json:"body_bytes"`
+					BodyRaw         string `json:"body_raw"`
+					BodyRawEncoding string `json:"body_raw_encoding"`
+					Headers         map[string]struct {
 						Values []string `json:"values,omitempty"`
 						Masked bool     `json:"masked,omitempty"`
 					} `json:"headers"`
@@ -639,6 +644,9 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			}
 			if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || got["echoed_secret"] != "destination-secret" {
 				t.Fatal("ordinary provider body fields were not preserved")
+			}
+			if provider := output.ProviderResponses[0]; !provider.BodyPresent || provider.BodyBytes != len(appendProviderResponse) || provider.BodyRaw != appendProviderResponse || provider.BodyRawEncoding != "text" {
+				t.Fatal("ordinary provider raw body was not preserved")
 			}
 			var rawOutput struct {
 				ProviderResponses []struct {
@@ -669,7 +677,7 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			cliEnvelope, err := json.Marshal(struct {
 				Run Run `json:"run"`
 			}{Run: persisted})
-			if err != nil || !bytes.Contains(cliEnvelope, []byte(`"destination_results"`)) || !bytes.Contains(cliEnvelope, []byte(`"paid_tier":"enterprise"`)) || !bytes.Contains(cliEnvelope, []byte("destination-secret")) {
+			if err != nil || !bytes.Contains(cliEnvelope, []byte(`"destination_results"`)) || !bytes.Contains(cliEnvelope, []byte(`"body_raw"`)) || !bytes.Contains(cliEnvelope, []byte(`"paid_tier":"enterprise"`)) || !bytes.Contains(cliEnvelope, []byte("destination-secret")) {
 				t.Fatal("CLI-shaped persisted ETL JSON did not retain complete provider output")
 			}
 		})

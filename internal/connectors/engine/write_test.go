@@ -1045,6 +1045,62 @@ func TestWriteDeleteMissingOkStatusDoesNotCountAsWritten(t *testing.T) {
 	}
 }
 
+func TestWriteMissingOKDeleteRequiresExactDeclaredJSONResponse(t *testing.T) {
+	for _, testCase := range []struct {
+		name    string
+		body    []byte
+		wantErr bool
+	}{
+		{name: "one JSON value remains an unchanged record", body: []byte(`{"provider":"missing"}`)},
+		{name: "empty JSON body", wantErr: true},
+		{name: "whitespace JSON body", body: []byte(" \n\t "), wantErr: true},
+		{name: "malformed JSON body", body: []byte(`{"provider":`), wantErr: true},
+		{name: "multiple JSON values", body: []byte(`{"provider":"first"} {"provider":"second"}`), wantErr: true},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				w.Header().Set("X-Provider-Receipt", "delete-receipt")
+				w.WriteHeader(http.StatusNotFound)
+				_, _ = w.Write(testCase.body)
+			}))
+			t.Cleanup(srv.Close)
+			bundle := newWriteTestBundle(srv, WriteAction{
+				Name:       "delete_widget",
+				Kind:       "delete",
+				Method:     http.MethodDelete,
+				Path:       "/widgets/{{ record.id }}",
+				PathFields: []string{"id"},
+				Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{http.StatusNotFound}},
+			})
+			records := []connectors.Record{{"id": "widget-1"}}
+			result, err := Write(context.Background(), bundle, approvedWriteRequest(t, bundle, "delete_widget", records, nil), records, nil)
+			if testCase.wantErr {
+				if err == nil || !strings.Contains(err.Error(), "provider response") {
+					t.Fatalf("Write() error = %v, want declared JSON response failure", err)
+				}
+				if result.RecordsWritten != 0 || result.RecordsUnchanged != 0 || result.RecordsFailed != 1 {
+					t.Fatalf("failed missing delete result = %#v, want one failed record", result)
+				}
+			} else {
+				if err != nil {
+					t.Fatalf("Write(): %v", err)
+				}
+				if result.RecordsWritten != 0 || result.RecordsUnchanged != 1 || result.RecordsFailed != 0 {
+					t.Fatalf("unchanged missing delete result = %#v, want one unchanged record", result)
+				}
+			}
+			if len(result.ProviderResponses) != 1 {
+				t.Fatalf("provider responses = %#v, want one captured response", result.ProviderResponses)
+			}
+			provider := result.ProviderResponses[0]
+			if !provider.BodyPresent || provider.BodyBytes != len(testCase.body) || provider.BodyRaw != string(testCase.body) || provider.BodyRawEncoding != "text" || provider.Status != http.StatusNotFound || !reflect.DeepEqual(provider.Headers["X-Provider-Receipt"].Values, []string{"delete-receipt"}) {
+				t.Fatalf("provider response = %#v, want exact captured missing-delete response", provider)
+			}
+		})
+	}
+}
+
 func TestWriteDeleteFailureAccountingExcludesPriorUnchangedRecords(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasSuffix(r.URL.Path, "/absent") {
@@ -1228,6 +1284,31 @@ func TestWriteRetainsOrderedProviderResponsesBeforeTrailingJSONFailure(t *testin
 	}
 	if second := result.ProviderResponses[1]; second.RecordIndex != 1 || second.BodyEncoding != "text" || second.Body != `{"provider_id":"second"} trailing` {
 		t.Fatalf("second provider response = %#v, want complete raw trailing response", second)
+	}
+}
+
+func TestWriteRetainsRawDeclaredJSONAlongsideParsedBody(t *testing.T) {
+	const providerBody = "{\n  \"provider_id\": \"first\",\n  \"duplicate\": \"first\",\n  \"duplicate\": \"second\"\n}\n"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(providerBody))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := newWriteTestBundle(srv, WriteAction{Kind: "update", Method: http.MethodPost, Path: "/widgets/{{ record.id }}", PathFields: []string{"id"}})
+	result, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{{"id": "widget-1"}}, nil)
+	if err != nil {
+		t.Fatalf("Write(): %v", err)
+	}
+	if result.RecordsWritten != 1 || len(result.ProviderResponses) != 1 {
+		t.Fatalf("Write() result = %#v, want one written record with one provider response", result)
+	}
+	provider := result.ProviderResponses[0]
+	if !provider.BodyPresent || provider.BodyBytes != len(providerBody) || provider.BodyRaw != providerBody || provider.BodyRawEncoding != "text" {
+		t.Fatalf("provider response = %#v, want exact raw JSON body", provider)
+	}
+	body, ok := provider.Body.(map[string]any)
+	if !ok || body["provider_id"] != "first" || body["duplicate"] != "second" {
+		t.Fatalf("parsed provider body = %#v, want parsed JSON view alongside raw body", provider.Body)
 	}
 }
 
