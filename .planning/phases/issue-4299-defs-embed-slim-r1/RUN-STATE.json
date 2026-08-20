@@ -3,7 +3,7 @@
   "issue": 4299,
   "branch": "fm/cli-defs-embed-slim-r1",
   "base": "origin/main",
-  "status": "locally_verified_pending_pr",
+  "status": "pr_open_pending_automatic_review",
   "gsd": {
     "doctor": "passed",
     "mode": "manual_inline_fallback",
@@ -26,6 +26,13 @@
     "connector_boundary": "passed: clean, 552 connectors, 0 findings",
     "generator_checks": "passed",
     "release_size_guard": "passed",
-    "manual_review": "clean; claude_auto pending PR open"
+    "manual_review": "clean; claude_auto pending for PR #4309"
+  },
+  "pull_request": {
+    "number": 4309,
+    "url": "https://github.com/polymetrics-ai/cli/pull/4309",
+    "base": "main",
+    "head_at_open": "d5721f66fe6b67dd64624c076379042f255dbc69",
+    "review_route": "claude_auto_pending"
   }
 }

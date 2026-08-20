@@ -58,7 +58,7 @@ is appropriate before the automatic trigger is observed.
 ## Delivery
 
 - [x] Commit messages include `Refs #4299`.
-- [ ] PR body includes `Refs #4299`.
-- [ ] Rebase immediately before push; never force-push or merge.
-- [ ] Open/update a Conventional Commit PR to `main` with measurement, inventory, TDD/GSD/skill, exception, and exclusion evidence.
-- [ ] Read the PR base back through the GitHub API and record `main`.
+- [x] PR body includes `Refs #4299`.
+- [x] Rebased against `origin/main` immediately before the branch push; no force-push or merge.
+- [x] Opened [PR #4309](https://github.com/polymetrics-ai/cli/pull/4309), Conventional Commit title, targeting `main`, with measurement, inventory, TDD/GSD/skill, exception, and exclusion evidence.
+- [x] Verified the GitHub API-reported base: `gh-axi pr list --state open --head fm/cli-defs-embed-slim-r1 --base main` returned exactly PR #4309. Head at PR open: `d5721f66fe6b67dd64624c076379042f255dbc69`.
