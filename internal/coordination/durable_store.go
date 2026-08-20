@@ -216,7 +216,7 @@ func (s *FileRateParkingStore) Create(run ParkedRateLimitRun) (ParkedRateLimitRu
 	return result, created, err
 }
 
-func (s *FileRateParkingStore) Rearm(run ParkedRateLimitRun, owner string) (ParkedRateLimitRun, error) {
+func (s *FileRateParkingStore) Rearm(run ParkedRateLimitRun, owner string, until time.Time) (ParkedRateLimitRun, error) {
 	var result ParkedRateLimitRun
 	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
 		if err := validateRateParkingFileState(state); err != nil {
@@ -225,6 +225,9 @@ func (s *FileRateParkingStore) Rearm(run ParkedRateLimitRun, owner string) (Park
 		if err := validateParkedRateLimitRun(run); err != nil {
 			return state, err
 		}
+		if until.IsZero() {
+			return state, errors.New("rate parking claim deadline is required")
+		}
 		record, found := state.Records[run.RunID]
 		if !found || record.ClaimOwner != owner {
 			return state, ErrRateParkingClaimLost
@@ -232,7 +235,9 @@ func (s *FileRateParkingStore) Rearm(run ParkedRateLimitRun, owner string) (Park
 		if record.Run.Scope != run.Scope {
 			return state, ErrRateParkingConflict
 		}
-		state.Records[run.RunID] = rateParkingFileRecord{Run: run.Clone()}
+		record.Run = run.Clone()
+		record.ClaimUntil = until.UTC()
+		state.Records[run.RunID] = record
 		result = run.Clone()
 		return state, nil
 	})

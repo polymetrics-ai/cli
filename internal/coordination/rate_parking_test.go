@@ -263,6 +263,152 @@ func TestRateParkingCoordinator_DefersImmediateRearmUntilResumerReturns(t *testi
 	}
 }
 
+func TestRateParkingCoordinator_RetainsImmediateRearmClaimAcrossCoordinators(t *testing.T) {
+	now := time.Date(2026, time.August, 20, 13, 0, 0, 0, time.UTC)
+	firstReset := now.Add(time.Minute)
+	scope := connectors.RateLimitScopeKey("scope-shared-immediate-rearm")
+	checkpoint := testParkedCheckpoint(now)
+	rearmedCheckpoint := checkpoint.Clone()
+	rearmedCheckpoint.Position.Primary = synccontract.OpaqueToken("rearmed")
+	rearmedCheckpoint.Position.TieBreaker = synccontract.OpaqueToken("rearmed-tiebreaker")
+	committedAt := now.Add(30 * time.Second)
+	rearmedCheckpoint.CommittedAt = &committedAt
+
+	path := filepath.Join(t.TempDir(), "rate-parking.json")
+	firstStore, err := OpenFileRateParkingStore(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	secondStore, err := OpenFileRateParkingStore(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	firstScheduler := newRateParkingTestScheduler()
+	secondScheduler := newRateParkingTestScheduler()
+	firstRearmed := make(chan struct{})
+	firstRearmErr := make(chan error, 1)
+	allowFirstExit := make(chan struct{})
+	firstDone := make(chan struct{})
+	var first *RateParkingCoordinator
+	firstResumes := 0
+	secondResumes := 0
+	providerWrites := 0
+	first = NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store:     firstStore,
+		Scheduler: firstScheduler,
+		Now:       func() time.Time { return now },
+		ClaimTTL:  time.Minute,
+		Resume: func(ctx context.Context, parked ParkedRateLimitRun) error {
+			firstResumes++
+			if firstResumes == 1 {
+				if _, err := first.Rearm(ctx, RateParkingRequest{
+					RunID:      parked.RunID,
+					Scope:      parked.Scope,
+					Checkpoint: rearmedCheckpoint,
+					ResetAt:    now,
+					Reason:     connsdk.RateLimitObservationSourceHeaders,
+				}); err != nil {
+					firstRearmErr <- err
+					return err
+				}
+				close(firstRearmed)
+				<-allowFirstExit
+				return ErrRateLimitRearmed
+			}
+			if !bytes.Equal(parked.Checkpoint.Position.Primary, rearmedCheckpoint.Position.Primary) || !bytes.Equal(parked.Checkpoint.Position.TieBreaker, rearmedCheckpoint.Position.TieBreaker) {
+				return errors.New("rearmed checkpoint was not retained")
+			}
+			providerWrites++
+			return nil
+		},
+	})
+	second := NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store:     secondStore,
+		Scheduler: secondScheduler,
+		Now:       func() time.Time { return now },
+		ClaimTTL:  time.Minute,
+		Resume: func(context.Context, ParkedRateLimitRun) error {
+			secondResumes++
+			providerWrites++
+			return nil
+		},
+	})
+	defer first.Close()
+	defer second.Close()
+
+	if err := first.Start(context.Background()); err != nil {
+		t.Fatalf("first Start() error = %v", err)
+	}
+	if _, err := first.Park(context.Background(), RateParkingRequest{
+		RunID:      "run-shared-immediate-rearm",
+		Scope:      scope,
+		Checkpoint: checkpoint,
+		ResetAt:    firstReset,
+		Reason:     connsdk.RateLimitObservationSourceRetryAfter,
+	}); err != nil {
+		t.Fatalf("Park() error = %v", err)
+	}
+	if err := second.Start(context.Background()); err != nil {
+		t.Fatalf("second Start() error = %v", err)
+	}
+
+	now = firstReset
+	go func() {
+		firstScheduler.RunThrough(now)
+		close(firstDone)
+	}()
+	select {
+	case <-firstRearmed:
+	case err := <-firstRearmErr:
+		<-firstDone
+		t.Fatalf("Rearm() error = %v", err)
+	case <-time.After(time.Second):
+		close(allowFirstExit)
+		<-firstDone
+		t.Fatal("first resumer did not rearm")
+	}
+
+	secondScheduler.RunThrough(now)
+	if secondResumes != 0 {
+		close(allowFirstExit)
+		<-firstDone
+		t.Fatalf("second coordinator resumes while first claim is live = %d, want 0", secondResumes)
+	}
+	records, err := firstStore.List()
+	if err != nil || len(records) != 1 {
+		close(allowFirstExit)
+		<-firstDone
+		t.Fatalf("records while first claim is live = %#v, %v; want one rearmed record", records, err)
+	}
+	if !records[0].ResetAt.Equal(now) || !bytes.Equal(records[0].Checkpoint.Position.Primary, rearmedCheckpoint.Position.Primary) || !bytes.Equal(records[0].Checkpoint.Position.TieBreaker, rearmedCheckpoint.Position.TieBreaker) {
+		close(allowFirstExit)
+		<-firstDone
+		t.Fatalf("rearmed record while first claim is live = %#v", records[0])
+	}
+
+	close(allowFirstExit)
+	<-firstDone
+	firstScheduler.RunThrough(now)
+	if firstResumes != 2 {
+		t.Fatalf("first coordinator resumes = %d, want 2", firstResumes)
+	}
+	if secondResumes != 0 {
+		t.Fatalf("second coordinator resumes = %d, want 0", secondResumes)
+	}
+	if providerWrites != 1 {
+		t.Fatalf("provider writes = %d, want 1", providerWrites)
+	}
+	if records, err := firstStore.List(); err != nil || len(records) != 0 {
+		t.Fatalf("records after rearmed resume = %#v, %v; want none", records, err)
+	}
+	if err := first.Admit(scope); err != nil {
+		t.Fatalf("first Admit() after rearmed resume = %v", err)
+	}
+	if err := second.Admit(scope); err != nil {
+		t.Fatalf("second Admit() after rearmed resume = %v", err)
+	}
+}
+
 func TestRateParkingCoordinator_IsolatesScopesAndMakesDuplicateCancellationAndFailureObservable(t *testing.T) {
 	now := time.Date(2026, time.August, 15, 11, 0, 0, 0, time.UTC)
 	resetAt := now.Add(time.Minute)

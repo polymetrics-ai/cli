@@ -70,7 +70,7 @@ type RateParkingRequest struct {
 type RateParkingStore interface {
 	List() ([]ParkedRateLimitRun, error)
 	Create(ParkedRateLimitRun) (ParkedRateLimitRun, bool, error)
-	Rearm(ParkedRateLimitRun, string) (ParkedRateLimitRun, error)
+	Rearm(ParkedRateLimitRun, string, time.Time) (ParkedRateLimitRun, error)
 	HasScope(connectors.RateLimitScopeKey) (bool, error)
 	Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error)
 	RenewClaim(runID, owner string, until time.Time) (bool, error)
@@ -126,12 +126,15 @@ func (s *MemoryRateParkingStore) Create(run ParkedRateLimitRun) (ParkedRateLimit
 	return run.Clone(), true, nil
 }
 
-func (s *MemoryRateParkingStore) Rearm(run ParkedRateLimitRun, owner string) (ParkedRateLimitRun, error) {
+func (s *MemoryRateParkingStore) Rearm(run ParkedRateLimitRun, owner string, until time.Time) (ParkedRateLimitRun, error) {
 	if s == nil {
 		return ParkedRateLimitRun{}, errRateParkingUnavailable
 	}
 	if err := validateParkedRateLimitRun(run); err != nil {
 		return ParkedRateLimitRun{}, err
+	}
+	if until.IsZero() {
+		return ParkedRateLimitRun{}, errors.New("rate parking claim deadline is required")
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -142,7 +145,9 @@ func (s *MemoryRateParkingStore) Rearm(run ParkedRateLimitRun, owner string) (Pa
 	if record.Run.Scope != run.Scope {
 		return ParkedRateLimitRun{}, ErrRateParkingConflict
 	}
-	s.runs[run.RunID] = rateParkingFileRecord{Run: run.Clone()}
+	record.Run = run.Clone()
+	record.ClaimUntil = until.UTC()
+	s.runs[run.RunID] = record
 	return run.Clone(), nil
 }
 
@@ -492,7 +497,7 @@ func (c *RateParkingCoordinator) Rearm(ctx context.Context, request RateParkingR
 		c.mu.Unlock()
 		return ParkedRateLimitRun{}, ErrRateParkingConflict
 	}
-	persisted, err := c.store.Rearm(run, c.owner)
+	persisted, err := c.store.Rearm(run, c.owner, c.now().Add(c.claimTTL))
 	if err != nil {
 		c.mu.Unlock()
 		return ParkedRateLimitRun{}, err
