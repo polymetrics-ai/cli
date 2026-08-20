@@ -512,10 +512,6 @@ func isPayloadPathField(name string) bool {
 	return strings.Contains(normalized, "file_path")
 }
 
-func payloadIdentityForPath(projectDir string, recordIndex int, field, raw string) (PayloadIdentity, error) {
-	return payloadIdentityForPathWithCap(projectDir, recordIndex, field, raw, 0)
-}
-
 func payloadIdentityForPathWithCap(projectDir string, recordIndex int, field, raw string, maxBytes int64) (PayloadIdentity, error) {
 	resolved, err := resolvePayloadPath(projectDir, raw)
 	if err != nil {

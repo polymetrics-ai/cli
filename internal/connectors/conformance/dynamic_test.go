@@ -332,7 +332,9 @@ func multipartFixtureBundle(t *testing.T, includePayload bool) engine.Bundle {
 		Path:     "/uploads",
 		BodyType: "multipart",
 		Multipart: &engine.MultipartSpec{
-			MaxBytes: 128,
+			// The aggregate bound includes multipart framing; keep the file
+			// part's 128-byte cap below as the explicit payload-size boundary.
+			MaxBytes: 1024,
 			Parts: []engine.MultipartPartSpec{{
 				Name:        "media",
 				Type:        "file",
@@ -373,7 +375,9 @@ func operationMultipartFixtureBundle(t *testing.T, includePayload bool) engine.B
 			ContentType: "multipart/form-data",
 			MaxBytes:    1024,
 			BodySchema:  []byte(`{"type":"object","properties":{"label":{"type":"string"},"media_file_path":{"type":"string"}},"required":["label","media_file_path"],"additionalProperties":false}`),
-			Multipart: &engine.MultipartSpec{MaxBytes: 128, Parts: []engine.MultipartPartSpec{
+			// The aggregate bound includes multipart framing; the file part
+			// remains independently capped at 128 bytes.
+			Multipart: &engine.MultipartSpec{MaxBytes: 1024, Parts: []engine.MultipartPartSpec{
 				{Name: "label", Type: "field", Field: "label", Required: true},
 				{Name: "media", Type: "file", Field: "media_file_path", Required: true, ContentType: "application/octet-stream", MaxBytes: 128},
 			}},

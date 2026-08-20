@@ -361,8 +361,8 @@ not a full override by default.
   `internal/connectors/direct_read_page_flags.json` and answered from the connector's own declared
   pagination spec, so no bundle declares them (see AGENTS.md, "Direct Reads Return One Page, And
   Say So"). The command fields that are derivable from `operations.json` — `api_surface`, flag
-  `maps_to`, requiredness for a mapped required REST path parameter, `output_policy`, and
-  `rest.max_bytes` — are not hand-authored:
+  `maps_to`, requiredness for mapped required path or header parameters, repeatability for
+  mapped repeatable headers, `output_policy`, and `rest.max_bytes` — are not hand-authored:
   `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
   "Command Surface Must Stay Executable"). The same command generates the embedded
   `operation_endpoint_ledger.json` runtime projection from `api_surface.json` and
@@ -408,11 +408,14 @@ not a full override by default.
   plus same-origin permission and/or exact cross-origin hosts.
 - **Operation-only capability contracts stay typed and bounded**: use `rest_status` with
   `intent:"status_check"`, a single HEAD endpoint, and `output_policy:"status"` for a
-  response-less status probe; it cannot be declared as `direct_read`, and its `rest.response`
-  must declare accepted successful statuses. Use `text_export` only for a declared
+  response-less status probe; it cannot be declared as `direct_read`, its `rest.max_bytes` must
+  be between 1 and 1024, and its `rest.response` must declare accepted successful statuses. Use
+  `text_export` only for a declared
   `binary.accept:"text/csv"` GET with positive `binary.max_bytes`, a non-empty CSV-compatible
-  `binary.content_types` declaration, exact `binary.charset`, and declared success statuses; it writes the
-  same explicit destination manifest as a binary download and never streams text to stdout. A
+  `binary.content_types` declaration, exact `binary.charset`, declared success statuses, and
+  operation `output_policy:"file_manifest"`; its command leaves `output_policy` unset because it
+  writes the same explicit destination manifest as a binary download and never streams text to
+  stdout. A
   `rest_read.rest.pagination` may override connector-level pagination for one endpoint; its
   `pagination_parameters` are source-imported evidence only, not command flags, and every
   declared query mechanic must match them. For a secret-returning `rest_write`, declare the
@@ -439,8 +442,10 @@ not a full override by default.
 
 ## 2.9 Command parameters and paging are DERIVED — never hand-author them
 
-Two parts of a `direct_read` command's surface are generated from declarations
-you already own. Hand-writing either one is a bug, not a shortcut.
+Paging and operation parameters are generated from declarations you already
+own. Paging applies only to `direct_read`; the parameter-import contract applies
+to registered REST and binary operation kinds. Hand-writing derived surface is a
+bug, not a shortcut.
 
 ### Paging
 
@@ -487,8 +492,9 @@ A fixed REST or binary operation may declare a non-auth request parameter with
 string `schema`, and a positive `max_bytes` no greater than the shared 16 KiB
 ceiling. The declaration, not the command, owns the header name. `params-import`
 accepts only OpenAPI string headers it can bound; `surface-sync` derives a
-string/enum flag named `header-<provider-name>` with an exact
-`maps_to:"header.<provider-name>"` mapping. Generated command help therefore
+string/enum flag with a `header-` prefix (lowercasing the declared name and
+changing `_` to `-` for the CLI spelling) while retaining the exact declared
+name in `maps_to:"header.<provider-name>"`. Generated command help therefore
 lists only the operation's declared header flags; authors must not add a header
 map, a generic `--header`, or a hand-authored mapping.
 
@@ -498,10 +504,11 @@ in order.
 The engine validates requiredness, enum/pattern/length and byte bounds before
 credential setup or I/O. It refuses unknown names, duplicate case variants,
 CR/LF/control characters, cross-operation mappings, and every runtime-owned
-field, including authorization, proxy authorization, cookies, host/routing,
-connection/proxy, forwarding, transport metadata, API-key/token aliases, and
-every case or underscore normalization variant. An operation may never declare
-a runtime-owned field to make it caller-selectable.
+field, including authorization, proxy authorization, cookies (including
+`Set-Cookie`), host/routing, content metadata, connection/proxy, forwarding,
+transport metadata, and credential/API-key/token aliases, as well as every case
+or underscore normalization variant. An operation may never declare a
+runtime-owned field to make it caller-selectable.
 
 An operation may also declare only the response headers it needs to expose:
 
@@ -545,9 +552,10 @@ The import deliberately drops two classes of parameter:
 
 A flag the derivation cannot know about, and a better summary or narrower type
 than the specification carries. `surface-sync` adds missing derived flags and
-synchronizes only the operation-owned fields it can prove: `maps_to` and
-requiredness for a flag mapped to a required REST path parameter. A declared
-summary, type, and supported optional query/body behavior remain author-owned.
+synchronizes only the operation-owned fields it can prove: `maps_to`, requiredness
+for a flag mapped to a required path or header parameter, and repeatability
+for a mapped header. A declared summary, type, and supported optional query/body
+behavior remain author-owned.
 
 ### Verifying
 
