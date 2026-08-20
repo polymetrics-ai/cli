@@ -67,3 +67,10 @@
 - **Green:** source-import coverage now reserves resolved response-child expansion before cloning, reserves outbound and inbound count slots at discovery, validates unique in-artifact Link targets, retains request encoding with a merge-blocking foundation gap, and charges extension positions before sorting.
 - **Refactor:** the response estimator follows reference-bearing response grammar children without materializing them; one shared import count budget and grammar-position ledger bound all discovery paths.
 - **Review fallback:** this was an assigned active no-mistakes review phase, so the outer executor retains pipeline control; required `golang-how-to`, security, safety, error-handling, lint, and testing guidance was applied inline.
+
+## Cycle 12 — local-link, form-media, and inbound-retention closure
+
+- **Red:** review findings r50–r53 identified percent-encoded local Link targets being misresolved, form-media defaults being rejected or non-form encodings accepted, and request/inbound expansion being retained before aggregate limits applied.
+- **Green:** local Link fragments now decode exactly once before JSON Pointer resolution and require one reachable operation occurrence; form request media retains implicit or explicit encoding semantics behind a named merge block; request media and inbound event expansions reserve resolved children before cloning.
+- **Refactor:** reachability is indexed separately from grammar positions, while shared retained-expansion budgets protect request media and inbound declarations without changing response preservation.
+- **Review fallback:** this assigned no-mistakes review phase applied `golang-how-to`, security, safety, error-handling, lint, and testing guidance inline; outer-pipeline commands remain intentionally uninvoked.

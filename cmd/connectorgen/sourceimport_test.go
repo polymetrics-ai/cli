@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -664,8 +663,7 @@ func TestSourceImportReservesSchemaExpansionBeforeRetainingReferences(t *testing
 	limits.MaxResolvedDescriptorBytes = 9000
 	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/schema-amplification.json", raw)
 	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
-	var limitErr *sourceSchemaExpansionLimitError
-	if !errors.As(err, &limitErr) || limitErr.Scope != "document" {
+	if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining request media") {
 		t.Fatalf("schema expansion error = %v", err)
 	}
 }
@@ -694,7 +692,7 @@ func TestSourceImportScopesReferenceResolutionToOpenAPIGrammar(t *testing.T) {
 		t.Fatalf("literal Swagger response field changed: %#v", links)
 	}
 
-	openAPI := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{}},"encoding":{"payload":{"headers":{"X-Trace":{"$ref":"https://example.invalid/header"}}}}}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	openAPI := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"multipart/form-data":{"schema":{"type":"object","additionalProperties":false,"properties":{}},"encoding":{"payload":{"headers":{"X-Trace":{"$ref":"https://example.invalid/header"}}}}}}},"responses":{"200":{"description":"ok"}}}}}}`)
 	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/encoding-header.json", openAPI)
 	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return openAPI, nil }), defaultSourceImportLimits())
 	if err == nil || !strings.Contains(err.Error(), "external reference") {
@@ -1046,7 +1044,7 @@ func TestSourceImportReservesInboundResponseExpansionBeforeResolution(t *testing
 			limits.MaxResolvedDescriptorBytes = 1 << 20
 			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inbound-response-amplification.json", tc.raw)
 			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return tc.raw, nil }), limits)
-			if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining response") {
+			if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining inbound event") {
 				t.Fatalf("%s inbound response expansion error = %v", tc.name, err)
 			}
 		})
@@ -1216,6 +1214,169 @@ func TestSourceImportPreservesRequestMediaEncodingAsMergeBlocked(t *testing.T) {
 	encoded, err := marshalSourceImportResult(result)
 	if err != nil || !strings.Contains(string(encoded), `"allowReserved": false`) || !strings.Contains(string(encoded), `"merge_blocked": true`) {
 		t.Fatalf("request encoding output = %s, %v", encoded, err)
+	}
+}
+
+func TestSourceImportNormalizesReachableLinkOperationReferences(t *testing.T) {
+	t.Parallel()
+	encoded := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/users/{id}":{"get":{"operationId":"getUser","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string","maxLength":8}}],"responses":{"200":{"description":"ok"}}}},"/links":{"get":{"responses":{"200":{"description":"ok","links":{"user":{"operationRef":"#/paths/~1users~1%7Bid%7D/get"}}}}}}}}`)
+	if result := importInlineSourceResult(t, encoded, defaultSourceImportLimits()); len(result.Operations) != 2 {
+		t.Fatalf("percent-encoded link operations = %#v", result.Operations)
+	}
+	for _, tc := range []struct {
+		name string
+		ref  string
+		want string
+	}{
+		{name: "malformed percent escape", ref: "#/paths/%ZZ/get", want: "invalid percent escape"},
+		{name: "double encoded fragment", ref: "#%252Fpaths~1items/get", want: "must be a local artifact JSON Pointer"},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}},"/links":{"get":{"responses":{"200":{"description":"ok","links":{"next":{"operationRef":"` + tc.ref + `"}}}}}}}}`)
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/link-normalization.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("%s link error = %v, want %q", tc.name, err, tc.want)
+			}
+		})
+	}
+	shared := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"pathItems":{"shared":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}},"paths":{"/a":{"$ref":"#/components/pathItems/shared"},"/links":{"get":{"responses":{"200":{"description":"ok","links":{"shared":{"operationRef":"#/components/pathItems/shared/get"}}}}}}}}`)
+	if result := importInlineSourceResult(t, shared, defaultSourceImportLimits()); len(result.Operations) != 2 {
+		t.Fatalf("single reachable component operation = %#v", result.Operations)
+	}
+	ambiguous := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"pathItems":{"shared":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}},"paths":{"/a":{"$ref":"#/components/pathItems/shared"},"/b":{"$ref":"#/components/pathItems/shared"},"/links":{"get":{"responses":{"200":{"description":"ok","links":{"shared":{"operationRef":"#/components/pathItems/shared/get"}}}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/ambiguous-component-operation-ref.json", ambiguous)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return ambiguous, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "ambiguous across reachable operations") {
+		t.Fatalf("ambiguous reachable component operation error = %v", err)
+	}
+}
+
+func TestSourceImportPreservesFormDefaultsAndRejectsNonFormEncoding(t *testing.T) {
+	t.Parallel()
+	for _, mediaType := range []string{"multipart/form-data", "application/x-www-form-urlencoded", "Multipart/Related; boundary=source"} {
+		mediaType := mediaType
+		t.Run(mediaType, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/upload":{"post":{"operationId":"upload","requestBody":{"content":{"` + mediaType + `":{"schema":{"type":"object","additionalProperties":false,"properties":{"payload":{"type":"string","maxLength":8}}}}}},"responses":{"201":{"description":"created"}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			operation := result.Operations[0]
+			if operation.Request.MediaType != mediaType || operation.Request.Body == nil || operation.Request.Body.Encoding != nil {
+				t.Fatalf("form default request = %#v", operation.Request)
+			}
+			if !operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 1 || operation.Runtime.Gaps[0].Foundation != "cli-request-encoding-foundation-r1" {
+				t.Fatalf("form default runtime = %#v", operation.Runtime)
+			}
+		})
+	}
+	for _, mediaType := range []string{"application/json", "image/png", "application/octet-stream"} {
+		mediaType := mediaType
+		t.Run("reject encoding "+mediaType, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/upload":{"post":{"requestBody":{"content":{"` + mediaType + `":{"schema":{"type":"object","additionalProperties":false,"properties":{"payload":{"type":"string","maxLength":8}}},"encoding":{"payload":{}}}}},"responses":{"201":{"description":"created"}}}}}}`)
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/non-form-encoding.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), "unsupported encoding on request content media") {
+				t.Fatalf("non-form encoding error = %v", err)
+			}
+		})
+	}
+}
+
+func TestSourceImportReservesRequestMediaExpansionBeforeCloning(t *testing.T) {
+	large := strings.Repeat("x", 900<<10)
+	limits := defaultSourceImportLimits()
+	limits.MaxArtifactBytes = 4 << 20
+	limits.MaxResolvedDescriptorBytes = 8 << 20
+	cases := []struct {
+		name string
+		raw  func() []byte
+	}{
+		{
+			name: "parameter content examples",
+			raw: func() []byte {
+				var parameters strings.Builder
+				for index := 0; index < 16; index++ {
+					if index > 0 {
+						parameters.WriteByte(',')
+					}
+					parameters.WriteString(fmt.Sprintf(`{"name":"p%d","in":"query","content":{"application/json":{"schema":{"type":"string","maxLength":1},"examples":{"large":{"$ref":"#/components/examples/Large"}}}}}`, index))
+				}
+				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"examples":{"Large":{"value":"` + large + `"}}},"paths":{"/items":{"get":{"parameters":[` + parameters.String() + `],"responses":{"200":{"description":"ok"}}}}}}`)
+			},
+		},
+		{
+			name: "request encoding headers",
+			raw: func() []byte {
+				var encodings strings.Builder
+				for index := 0; index < 16; index++ {
+					if index > 0 {
+						encodings.WriteByte(',')
+					}
+					encodings.WriteString(fmt.Sprintf(`"part%d":{"headers":{"X-Large":{"$ref":"#/components/headers/Large"}}}`, index))
+				}
+				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"examples":{"Large":{"value":"` + large + `"}},"headers":{"Large":{"content":{"application/json":{"schema":{"type":"string","maxLength":1},"examples":{"large":{"$ref":"#/components/examples/Large"}}}}}}},"paths":{"/upload":{"post":{"requestBody":{"content":{"multipart/form-data":{"schema":{"type":"object","additionalProperties":false,"properties":{"part":{"type":"string","maxLength":1}}},"encoding":{` + encodings.String() + `}}}},"responses":{"201":{"description":"created"}}}}}}`)
+			},
+		},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := tc.raw()
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/request-media-expansion.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+			if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining request media") {
+				t.Fatalf("request media expansion error = %v", err)
+			}
+		})
+	}
+}
+
+func TestSourceImportReservesInboundExpansionBeforeEventConstruction(t *testing.T) {
+	large := strings.Repeat("x", 900<<10)
+	limits := defaultSourceImportLimits()
+	limits.MaxArtifactBytes = 4 << 20
+	limits.MaxResolvedDescriptorBytes = 8 << 20
+	cases := []struct {
+		name string
+		raw  func() []byte
+	}{
+		{
+			name: "webhook path item",
+			raw: func() []byte {
+				var webhooks strings.Builder
+				for index := 0; index < 16; index++ {
+					if index > 0 {
+						webhooks.WriteByte(',')
+					}
+					webhooks.WriteString(fmt.Sprintf(`"event-%d":{"$ref":"#/components/pathItems/Shared"}`, index))
+				}
+				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"pathItems":{"Shared":{"x-large":"` + large + `","post":{"responses":{"200":{"description":"ok"}}}}}},"webhooks":{` + webhooks.String() + `},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+			},
+		},
+		{
+			name: "callback extension",
+			raw: func() []byte {
+				var callbacks strings.Builder
+				for index := 0; index < 16; index++ {
+					if index > 0 {
+						callbacks.WriteByte(',')
+					}
+					callbacks.WriteString(fmt.Sprintf(`"callback-%d":{"$ref":"#/components/callbacks/Shared"}`, index))
+				}
+				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"callbacks":{"Shared":{"x-large":"` + large + `","{$request.body#/hook}":{"post":{"responses":{"200":{"description":"ok"}}}}}}},"paths":{"/items":{"get":{"callbacks":{` + callbacks.String() + `},"responses":{"200":{"description":"ok"}}}}}}`)
+			},
+		},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := tc.raw()
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inbound-expansion.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+			if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining inbound event") {
+				t.Fatalf("inbound expansion error = %v", err)
+			}
+		})
 	}
 }
 
