@@ -940,7 +940,7 @@ func TestSourceImportReservesResponseExpansionBeforeAppend(t *testing.T) {
 		if index > 0 {
 			responses.WriteByte(',')
 		}
-		responses.WriteString(fmt.Sprintf(`"%d":{"$ref":"#/components/responses/Large"}`, 200+index))
+		fmt.Fprintf(&responses, `"%d":{"$ref":"#/components/responses/Large"}`, 200+index)
 	}
 	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"Large":{"description":"` + largeDescription + `"}}},"paths":{"/items":{"get":{"responses":{` + responses.String() + `}}}}}`)
 	limits := defaultSourceImportLimits()
@@ -1022,7 +1022,7 @@ func TestSourceImportReservesInboundResponseExpansionBeforeResolution(t *testing
 		if index > 0 {
 			responses.WriteByte(',')
 		}
-		responses.WriteString(fmt.Sprintf(`"%d":{"$ref":"#/components/responses/Large"}`, 200+index))
+		fmt.Fprintf(&responses, `"%d":{"$ref":"#/components/responses/Large"}`, 200+index)
 	}
 	cases := []struct {
 		name string
@@ -1058,7 +1058,7 @@ func TestSourceImportBoundsGrammarIndexBeforeSortingComponents(t *testing.T) {
 		if index > 0 {
 			schemas.WriteByte(',')
 		}
-		schemas.WriteString(fmt.Sprintf(`"S%d":{"type":"string","maxLength":1}`, index))
+		fmt.Fprintf(&schemas, `"S%d":{"type":"string","maxLength":1}`, index)
 	}
 	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{` + schemas.String() + `}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
 	limits := defaultSourceImportLimits()
@@ -1079,7 +1079,7 @@ func TestSourceImportReservesResolvedResponseChildrenBeforeCloning(t *testing.T)
 		if index > 0 {
 			responses.WriteByte(',')
 		}
-		responses.WriteString(fmt.Sprintf(`"%d":{"description":"ok","content":{"application/json":{"examples":{"provider":{"$ref":"#/components/examples/Large"}}}}}`, 200+index))
+		fmt.Fprintf(&responses, `"%d":{"description":"ok","content":{"application/json":{"examples":{"provider":{"$ref":"#/components/examples/Large"}}}}}`, 200+index)
 	}
 	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"examples":{"Large":{"value":{"payload":"` + largeExample + `"}},"UnusedExternal":{"$ref":"https://provider.invalid/example"}}},"paths":{"/items":{"get":{"responses":{` + responses.String() + `}}}}}`)
 	limits := defaultSourceImportLimits()
@@ -1106,7 +1106,7 @@ func TestSourceImportReservesOperationAndInboundCountsAtDiscovery(t *testing.T) 
 					if index > 0 {
 						paths.WriteByte(',')
 					}
-					paths.WriteString(fmt.Sprintf(`"/items/%d":{"get":{"responses":{"200":{"description":"ok"}}}}`, index))
+					fmt.Fprintf(&paths, `"/items/%d":{"get":{"responses":{"200":{"description":"ok"}}}}`, index)
 				}
 				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{` + paths.String() + `}}`)
 			},
@@ -1120,7 +1120,7 @@ func TestSourceImportReservesOperationAndInboundCountsAtDiscovery(t *testing.T) 
 					if index > 0 {
 						webhooks.WriteByte(',')
 					}
-					webhooks.WriteString(fmt.Sprintf(`"event-%d":{"post":{"responses":{"200":{"description":"ok"}}}}`, index))
+					fmt.Fprintf(&webhooks, `"event-%d":{"post":{"responses":{"200":{"description":"ok"}}}}`, index)
 				}
 				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{` + webhooks.String() + `},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
 			},
@@ -1134,7 +1134,7 @@ func TestSourceImportReservesOperationAndInboundCountsAtDiscovery(t *testing.T) 
 					if index > 0 {
 						callbacks.WriteByte(',')
 					}
-					callbacks.WriteString(fmt.Sprintf(`"callback-%d":{"{$request.body#/url}":{"post":{"responses":{"200":{"description":"ok"}}}}}`, index))
+					fmt.Fprintf(&callbacks, `"callback-%d":{"{$request.body#/url}":{"post":{"responses":{"200":{"description":"ok"}}}}}`, index)
 				}
 				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}},"callbacks":{` + callbacks.String() + `}}}}}`)
 			},
@@ -1350,7 +1350,7 @@ func TestSourceImportReservesRequestMediaExpansionBeforeCloning(t *testing.T) {
 					if index > 0 {
 						parameters.WriteByte(',')
 					}
-					parameters.WriteString(fmt.Sprintf(`{"name":"p%d","in":"query","content":{"application/json":{"schema":{"type":"string","maxLength":1},"examples":{"large":{"$ref":"#/components/examples/Large"}}}}}`, index))
+					fmt.Fprintf(&parameters, `{"name":"p%d","in":"query","content":{"application/json":{"schema":{"type":"string","maxLength":1},"examples":{"large":{"$ref":"#/components/examples/Large"}}}}}`, index)
 				}
 				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"examples":{"Large":{"value":"` + large + `"}}},"paths":{"/items":{"get":{"parameters":[` + parameters.String() + `],"responses":{"200":{"description":"ok"}}}}}}`)
 			},
@@ -1363,7 +1363,7 @@ func TestSourceImportReservesRequestMediaExpansionBeforeCloning(t *testing.T) {
 					if index > 0 {
 						encodings.WriteByte(',')
 					}
-					encodings.WriteString(fmt.Sprintf(`"part%d":{"headers":{"X-Large":{"$ref":"#/components/headers/Large"}}}`, index))
+					fmt.Fprintf(&encodings, `"part%d":{"headers":{"X-Large":{"$ref":"#/components/headers/Large"}}}`, index)
 				}
 				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"examples":{"Large":{"value":"` + large + `"}},"headers":{"Large":{"content":{"application/json":{"schema":{"type":"string","maxLength":1},"examples":{"large":{"$ref":"#/components/examples/Large"}}}}}}},"paths":{"/upload":{"post":{"requestBody":{"content":{"multipart/form-data":{"schema":{"type":"object","additionalProperties":false,"properties":{"part":{"type":"string","maxLength":1}}},"encoding":{` + encodings.String() + `}}}},"responses":{"201":{"description":"created"}}}}}}`)
 			},
@@ -1399,7 +1399,7 @@ func TestSourceImportReservesInboundExpansionBeforeEventConstruction(t *testing.
 					if index > 0 {
 						webhooks.WriteByte(',')
 					}
-					webhooks.WriteString(fmt.Sprintf(`"event-%d":{"$ref":"#/components/pathItems/Shared"}`, index))
+					fmt.Fprintf(&webhooks, `"event-%d":{"$ref":"#/components/pathItems/Shared"}`, index)
 				}
 				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"pathItems":{"Shared":{"x-large":"` + large + `","post":{"responses":{"200":{"description":"ok"}}}}}},"webhooks":{` + webhooks.String() + `},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
 			},
@@ -1412,7 +1412,7 @@ func TestSourceImportReservesInboundExpansionBeforeEventConstruction(t *testing.
 					if index > 0 {
 						callbacks.WriteByte(',')
 					}
-					callbacks.WriteString(fmt.Sprintf(`"callback-%d":{"$ref":"#/components/callbacks/Shared"}`, index))
+					fmt.Fprintf(&callbacks, `"callback-%d":{"$ref":"#/components/callbacks/Shared"}`, index)
 				}
 				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"callbacks":{"Shared":{"x-large":"` + large + `","{$request.body#/hook}":{"post":{"responses":{"200":{"description":"ok"}}}}}}},"paths":{"/items":{"get":{"callbacks":{` + callbacks.String() + `},"responses":{"200":{"description":"ok"}}}}}}`)
 			},
@@ -1454,7 +1454,7 @@ func TestSourceImportReservesNonResponseReferenceExpansionBeforeCloning(t *testi
 			if index > 0 {
 				entries.WriteByte(',')
 			}
-			entries.WriteString(fmt.Sprintf(`"Alias%02d":{"$ref":"%s"}`, index, reference))
+			fmt.Fprintf(&entries, `"Alias%02d":{"$ref":"%s"}`, index, reference)
 		}
 		return entries.String()
 	}
@@ -1470,7 +1470,7 @@ func TestSourceImportReservesNonResponseReferenceExpansionBeforeCloning(t *testi
 					if index > 0 {
 						paths.WriteByte(',')
 					}
-					paths.WriteString(fmt.Sprintf(`"/items/%d":{"$ref":"#/components/pathItems/Shared"}`, index))
+					fmt.Fprintf(&paths, `"/items/%d":{"$ref":"#/components/pathItems/Shared"}`, index)
 				}
 				return []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"pathItems":{"Shared":{"x-large":"` + large + `","get":{"responses":{"200":{"description":"ok"}}}}}},"paths":{` + paths.String() + `}}`)
 			},

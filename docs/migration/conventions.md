@@ -1540,12 +1540,22 @@ Any later runtime masking must leave field presence explicit. Batches may then
 materialize only contracts their closed runtime supports, preserving existing
 credential and write-plan/preview/approval policies.
 
-Source import also retains OpenAPI route metadata that later declaration
-generators do not yet execute: provider `servers` layers, parameter wire
-serialization, callbacks, webhooks, and `x-` path metadata. Those records are
-emitted canonically with a named `merge_blocked` foundation gap rather than
-being dropped, rewritten, or made executable. A descriptor with such a gap is
-source evidence only; adopt it after the named runtime foundation is available.
-Dynamic reference vocabularies remain rejected, while every response status and
-media pair stays present so a binary success and a JSON error can be materialized
-without collapsing either contract.
+Source import retains provider `servers` layers, parameter wire serialization,
+and `x-` path metadata as canonical `merge_blocked` evidence when later
+declaration generators cannot yet execute them. Dynamic reference vocabularies
+remain rejected, while every response status and media pair stays present so a
+binary success and a JSON error can be materialized without collapsing either
+contract.
+
+A callback-only or webhook-only route is not a promotable operation: fail
+closed before descriptor generation with an actionable diagnostic that names its
+source location and the
+`cli-webhook-event-surface-foundation-r1` foundation gap. Never silently drop
+such a route or represent it as merge-ready. Bounded callback metadata and
+subgraphs attached to an otherwise accepted ordinary operation may be retained
+canonically as non-executable `merge_blocked` evidence; that retention does not
+make the callback executable. `cli-webhook-event-surface-foundation-r1` owns the
+later executable callback/webhook surface, and an affected connector remains
+merge-blocked until that foundation closes the gap. This preserves the captain's
+final-release invariant: no declared provider operation is omitted or left
+unreachable.
