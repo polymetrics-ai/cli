@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -155,7 +156,7 @@ func appendDefinitionTransportEvidence(values []connectors.ConformanceEvidenceRe
 type declarativeTypedDestinationExecutor struct{}
 
 type declarativeTypedDestinationContract struct {
-	connector  *engine.Connector
+	connector  connectors.DeclarativeTypedDestination
 	descriptor connectors.DestinationTransportDescriptor
 	actions    map[string]connectors.WriteActionInfo
 }
@@ -180,7 +181,14 @@ func (e *declarativeTypedDestinationExecutor) PlanDestination(_ context.Context,
 	if _, err := contract.plan(request.Source, request.Stream, request.Mode, request.ApplyStrategy); err != nil {
 		return synctransport.DestinationPlan{}, err
 	}
-	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
+	actionDefinitionSHA256, err := contract.actionDefinitionDigest(request.ApplyStrategy.Action)
+	if err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(request.Approval, actionDefinitionSHA256); err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy, ActionDefinitionSHA256: actionDefinitionSHA256}, nil
 }
 
 func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Context, request synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
@@ -196,6 +204,16 @@ func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Conte
 	}
 	binding, err := contract.plan(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy)
 	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	actionDefinitionSHA256, err := contract.actionDefinitionDigest(request.Plan.ApplyStrategy.Action)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	if request.Plan.ActionDefinitionSHA256 != actionDefinitionSHA256 {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination action %q definition changed; replan and reapprove", request.Plan.ApplyStrategy.Action)
+	}
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(request.Approval, actionDefinitionSHA256); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
 	if err := validateDeclarativeTypedDestinationWorkset(request); err != nil {
@@ -226,15 +244,15 @@ func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Conte
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("validate declarative typed destination action %q: %w", writeRequest.Action, err)
 	}
 	result, err := contract.connector.Write(ctx, writeRequest, records)
+	output, outputErr := json.Marshal(connectors.SanitizeWriteResultForOutput(result, request.Runtime.Secrets))
+	if outputErr != nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("encode declarative typed destination action %q output: %w", writeRequest.Action, outputErr)
+	}
 	if err != nil {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply declarative typed destination action %q: %w", writeRequest.Action, err)
+		return synccontract.DownstreamAcknowledgement{}, synctransport.NewDestinationApplyOutputError(fmt.Errorf("apply declarative typed destination action %q: %w", writeRequest.Action, err), output)
 	}
 	if result.RecordsWritten != len(records) || result.RecordsFailed != 0 {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination action %q wrote=%d failed=%d, want %d durable writes", writeRequest.Action, result.RecordsWritten, result.RecordsFailed, len(records))
-	}
-	output, err := json.Marshal(connectors.SanitizeWriteResultForOutput(result, request.Runtime.Secrets))
-	if err != nil {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("encode declarative typed destination action %q output: %w", writeRequest.Action, err)
+		return synccontract.DownstreamAcknowledgement{}, synctransport.NewDestinationApplyOutputError(fmt.Errorf("declarative typed destination action %q wrote=%d failed=%d, want %d durable writes", writeRequest.Action, result.RecordsWritten, result.RecordsFailed, len(records)), output)
 	}
 	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(contract.connector.Name(), time.Now().UTC())
 	if err != nil {
@@ -265,6 +283,16 @@ func validateDeclarativeTypedDestinationApproval(approval synctransport.Destinat
 	return nil
 }
 
+func validateDeclarativeTypedDestinationApprovalDefinition(approval synctransport.DestinationApproval, actionDefinitionSHA256 string) error {
+	if approval.Target.Scope == connectors.WriteApprovalScopeFixture {
+		return nil
+	}
+	if !constantTimeStringEqual(approval.ActionDefinitionSHA256, actionDefinitionSHA256) {
+		return fmt.Errorf("declarative typed destination approval does not bind action definition; replan and reapprove")
+	}
+	return nil
+}
+
 func (e *declarativeTypedDestinationExecutor) ReadBackDestination(_ context.Context, request synctransport.DestinationReadBackRequest) error {
 	if e == nil {
 		return fmt.Errorf("declarative typed destination is unavailable")
@@ -276,6 +304,13 @@ func (e *declarativeTypedDestinationExecutor) ReadBackDestination(_ context.Cont
 	if _, err := contract.plan(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy); err != nil {
 		return err
 	}
+	actionDefinitionSHA256, err := contract.actionDefinitionDigest(request.Plan.ApplyStrategy.Action)
+	if err != nil {
+		return err
+	}
+	if request.Plan.ActionDefinitionSHA256 != actionDefinitionSHA256 {
+		return fmt.Errorf("declarative typed destination action %q definition changed; replan and reapprove", request.Plan.ApplyStrategy.Action)
+	}
 	if request.Workset.ID == "" {
 		return fmt.Errorf("declarative typed destination read-back requires a reopened workset")
 	}
@@ -286,11 +321,14 @@ func (e *declarativeTypedDestinationExecutor) ReadBackDestination(_ context.Cont
 }
 
 func declarativeTypedDestinationContractFor(connector connectors.Connector) (declarativeTypedDestinationContract, error) {
-	candidate, ok := connector.(*engine.Connector)
-	if !ok || candidate == nil {
-		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires an engine connector")
+	candidate, ok := connector.(connectors.DeclarativeTypedDestination)
+	if !ok || declarativeTypedDestinationIsNil(candidate) {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires a registered typed write capability")
 	}
-	definition := candidate.Definition()
+	definition, defined := connectors.DefinitionOf(candidate)
+	if !defined {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires a definition")
+	}
 	if definition.SyncTransport == nil || definition.SyncTransport.Destination == nil {
 		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires a destination declaration")
 	}
@@ -334,6 +372,19 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 	return declarativeTypedDestinationContract{connector: candidate, descriptor: descriptor, actions: actions}, nil
 }
 
+func declarativeTypedDestinationIsNil(candidate connectors.DeclarativeTypedDestination) bool {
+	if candidate == nil {
+		return true
+	}
+	value := reflect.ValueOf(candidate)
+	switch value.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice:
+		return value.IsNil()
+	default:
+		return false
+	}
+}
+
 func (c declarativeTypedDestinationContract) plan(source connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy) (connectors.DestinationSourceBinding, error) {
 	if mode == synccontract.ModeFullOverwrite {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination does not implement full_overwrite")
@@ -367,6 +418,17 @@ func (c declarativeTypedDestinationContract) plan(source connectors.Connector, s
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q source inputs are not an exact complete record schema mapping: %w", strategy.Action, err)
 	}
 	return binding, nil
+}
+
+func (c declarativeTypedDestinationContract) actionDefinitionDigest(action string) (string, error) {
+	digest, err := c.connector.DeclarativeTypedDestinationActionDigest(action)
+	if err != nil {
+		return "", fmt.Errorf("hash declarative typed destination action %q: %w", action, err)
+	}
+	if strings.TrimSpace(digest) == "" {
+		return "", fmt.Errorf("declarative typed destination action %q has no definition digest", action)
+	}
+	return digest, nil
 }
 
 // validateDeclarativeTypedDestinationSelection binds a registry-selected
@@ -408,7 +470,7 @@ func declarativeTypedDestinationRecords(source []connectors.Record, binding conn
 		record := make(connectors.Record, len(binding.RecordMapping.Inputs))
 		for _, input := range binding.RecordMapping.Inputs {
 			value, found := row[input.Field]
-			if !found || value == nil {
+			if !found {
 				return nil, fmt.Errorf("declarative typed destination source row %d has no value for action input %q", index, input.Input)
 			}
 			record[input.Input] = value

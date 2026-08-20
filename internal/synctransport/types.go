@@ -65,6 +65,40 @@ type DestinationExecutor interface {
 	ReadBackDestination(context.Context, DestinationReadBackRequest) error
 }
 
+type DestinationApplyOutputError struct {
+	err    error
+	output json.RawMessage
+}
+
+func NewDestinationApplyOutputError(err error, output json.RawMessage) error {
+	if err == nil {
+		return nil
+	}
+	return &DestinationApplyOutputError{err: err, output: append(json.RawMessage(nil), output...)}
+}
+
+func (e *DestinationApplyOutputError) Error() string {
+	if e == nil || e.err == nil {
+		return "destination apply failed"
+	}
+	return e.err.Error()
+}
+
+func (e *DestinationApplyOutputError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.err
+}
+
+func DestinationApplyOutput(err error) (json.RawMessage, bool) {
+	var outputErr *DestinationApplyOutputError
+	if !errors.As(err, &outputErr) || outputErr == nil || len(outputErr.output) == 0 {
+		return nil, false
+	}
+	return append(json.RawMessage(nil), outputErr.output...), true
+}
+
 // FullOverwriteDestination is the optional run-scoped destination protocol for
 // the canonical replace mode. It keeps the whole replacement lifecycle behind
 // a destination-neutral port: the orchestrator stages and admits each bounded
@@ -309,8 +343,9 @@ type DestinationPlanRequest struct {
 }
 
 type DestinationPlan struct {
-	ApplyStrategy     connectors.DestinationApplyStrategy
-	TransformPlanHash string
+	ApplyStrategy          connectors.DestinationApplyStrategy
+	TransformPlanHash      string
+	ActionDefinitionSHA256 string
 }
 
 // DestinationApproval carries only the ephemeral result of a separately
@@ -318,12 +353,13 @@ type DestinationPlan struct {
 // non-serializable: warehouse receipts, runtime configuration, destination
 // plans, and evidence artifacts never retain the operator token.
 type DestinationApproval struct {
-	PlanID        string                            `json:"-"`
-	ApprovalToken string                            `json:"-"`
-	Confirmation  connectors.WriteConfirmation      `json:"-"`
-	Evidence      *connectors.WriteApprovalEvidence `json:"-"`
-	Target        connectors.WriteApprovalTarget    `json:"-"`
-	PreviewDigest string                            `json:"-"`
+	PlanID                 string                            `json:"-"`
+	ApprovalToken          string                            `json:"-"`
+	Confirmation           connectors.WriteConfirmation      `json:"-"`
+	Evidence               *connectors.WriteApprovalEvidence `json:"-"`
+	Target                 connectors.WriteApprovalTarget    `json:"-"`
+	PreviewDigest          string                            `json:"-"`
+	ActionDefinitionSHA256 string                            `json:"-"`
 	// AuthorizeNextUnit rechecks a standing authorization immediately before a
 	// staged batch can cause a destination side effect. It is in-memory only:
 	// receipts and checkpoints retain no token or authorization callback.

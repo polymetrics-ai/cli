@@ -578,7 +578,7 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			if err != nil {
 				t.Fatalf("plan persisted typed destination: %v", err)
 			}
-			if plan.Action != testCase.action || plan.TransportConnectionID != testCase.connection.ID || plan.TransportStream != "widgets" {
+			if plan.Action != testCase.action || plan.TransportConnectionID != testCase.connection.ID || plan.TransportStream != "widgets" || plan.TransportActionDefinitionSHA256 == "" {
 				t.Fatalf("typed destination plan = %#v, want persisted action %q and exact connection stream", plan, testCase.action)
 			}
 			previewed, preview, err := a.PreviewDeclarativeTypedDestinationTransport(ctx, plan.ID)
@@ -612,8 +612,9 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			var output struct {
 				RecordsWritten    int `json:"records_written"`
 				ProviderResponses []struct {
-					Status  int `json:"status"`
-					Headers map[string]struct {
+					RecordIndex int `json:"record_index"`
+					Status      int `json:"status"`
+					Headers     map[string]struct {
 						Values []string `json:"values,omitempty"`
 						Masked bool     `json:"masked,omitempty"`
 					} `json:"headers"`
@@ -623,19 +624,19 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			if err := json.Unmarshal(run.DestinationResults[0], &output); err != nil {
 				t.Fatalf("decode persisted typed destination output: %v", err)
 			}
-			if output.RecordsWritten != 1 || len(output.ProviderResponses) != 1 || output.ProviderResponses[0].Status != http.StatusCreated {
+			if output.RecordsWritten != 1 || len(output.ProviderResponses) != 1 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[0].Status != http.StatusCreated {
 				t.Fatalf("persisted typed destination output = %#v, want full successful provider result", output)
 			}
 			if got := output.ProviderResponses[0].Headers["X-Provider-Request-Id"].Values; !reflect.DeepEqual(got, []string{"append-request-1"}) {
 				t.Fatalf("ordinary provider header = %#v, want preserved request ID", got)
 			}
-			if got := output.ProviderResponses[0].Headers["Authorization"]; !got.Masked || len(got.Values) != 0 {
-				t.Fatalf("credential-bearing provider header = %#v, want explicit masked marker", got)
+			if got := output.ProviderResponses[0].Headers["Authorization"]; got.Masked || !reflect.DeepEqual(got.Values, []string{"provider-response-secret"}) {
+				t.Fatalf("unconfigured provider header = %#v, want preserved", got)
 			}
-			if got := output.ProviderResponses[0].Headers["X-Echoed-Credential"]; !got.Masked || len(got.Values) != 0 {
-				t.Fatalf("configured credential header = %#v, want explicit masked marker", got)
+			if got := output.ProviderResponses[0].Headers["X-Echoed-Credential"]; !got.Masked || !reflect.DeepEqual(got.Values, []string{"[masked]"}) {
+				t.Fatalf("configured credential header = %#v, want exact credential replacement", got)
 			}
-			if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || !reflect.DeepEqual(got["echoed_secret"], map[string]any{"masked": true}) {
+			if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || got["echoed_secret"] != "[masked]" {
 				t.Fatalf("ordinary provider body fields = %#v, want preserved complete response", got)
 			}
 			var rawOutput struct {
@@ -720,6 +721,292 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 	}
 	if reads != 3 || appendWrites != 1 || replaceWrites != 1 || otherWrites != 1 {
 		t.Fatalf("persisted missing action reached I/O reads/append/replace/other=%d/%d/%d/%d, want 3/1/1/1", reads, appendWrites, replaceWrites, otherWrites)
+	}
+}
+
+func TestDeclarativeTypedDestinationMappedNullDefersToSelectedActionSchema(t *testing.T) {
+	name := "typed-nullable-mapping"
+	files := declarativeTypedDestinationBundleFS(name, "nullable_source", "nullable_destination")
+	writes := string(files[name+"/writes.json"].Data)
+	writes = strings.Replace(writes, `"value":{"type":"string"}`, `"value":{"type":["string","null"]}`, 1)
+	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(writes)}
+	bundle, err := engine.Load(files, name)
+	if err != nil {
+		t.Fatalf("load nullable typed destination: %v", err)
+	}
+	connector := engine.New(bundle, nil)
+	contract, err := declarativeTypedDestinationContractFor(connector)
+	if err != nil {
+		t.Fatalf("typed destination contract: %v", err)
+	}
+	strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+	binding, err := contract.plan(connector, "widgets", synccontract.ModeFullAppend, strategy)
+	if err != nil {
+		t.Fatalf("plan nullable typed destination: %v", err)
+	}
+	records, err := declarativeTypedDestinationRecords([]connectors.Record{{"id": "widget-1", "value": nil}}, binding)
+	if err != nil {
+		t.Fatalf("map present null source field: %v", err)
+	}
+	if value, found := records[0]["value"]; !found || value != nil {
+		t.Fatalf("mapped nullable record = %#v, want present nil value", records[0])
+	}
+	if err := connector.ValidateWrite(context.Background(), connectors.WriteRequest{Action: strategy.Action}, records); err != nil {
+		t.Fatalf("selected nullable schema rejected present null: %v", err)
+	}
+	if _, err := declarativeTypedDestinationRecords([]connectors.Record{{"id": "widget-1"}}, binding); err == nil {
+		t.Fatal("mapping accepted an absent selected action field")
+	}
+}
+
+func TestRunETLRejectsPersistedDestinationActionOnLegacyDestinationBeforeRead(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := &streamingSource{total: 1}
+	destination := &batchDestination{}
+	application.registry = connectors.NewEmptyRegistry()
+	application.registry.Register(source)
+	application.registry.Register(destination)
+	if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: "legacy-action-source", Connector: source.Name()}); err != nil {
+		t.Fatalf("add source credential: %v", err)
+	}
+	if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: "legacy-action-destination", Connector: destination.Name()}); err != nil {
+		t.Fatalf("add destination credential: %v", err)
+	}
+	connection, err := application.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "persisted_legacy_destination_action",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "legacy-action-source"},
+		Destination: EndpointConfig{Connector: destination.Name(), Credential: "legacy-action-destination"},
+		Streams: map[string]StreamConfig{"records": {
+			SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"},
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create legacy destination connection: %v", err)
+	}
+	for index := range application.state.Connections {
+		if application.state.Connections[index].ID == connection.ID {
+			stream := application.state.Connections[index].Streams["records"]
+			stream.DestinationAction = "legacy_manual_action"
+			application.state.Connections[index].Streams["records"] = stream
+		}
+	}
+	if _, err := application.RunETL(ctx, RunETLRequest{Connection: connection.Name, Stream: "records", BatchSize: 1}); err == nil || !strings.Contains(err.Error(), "not a declarative typed destination") {
+		t.Fatalf("RunETL legacy persisted destination action error = %v, want pre-read refusal", err)
+	}
+	if len(destination.batches) != 0 {
+		t.Fatalf("legacy persisted destination action reached write path: batches=%v", destination.batches)
+	}
+}
+
+func TestDeclarativeTypedDestinationRejectsActionDefinitionDriftBeforePreviewAndApply(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		requests++
+	}))
+	t.Cleanup(server.Close)
+	name := "typed-definition-drift"
+	initialBundle, err := engine.Load(declarativeTypedDestinationBundleFS(name, "drift_source", "drift_destination"), name)
+	if err != nil {
+		t.Fatalf("load initial typed destination: %v", err)
+	}
+	initial := engine.New(initialBundle, nil)
+	application.registry.Register(initial)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose initial typed destination: %v", err)
+	}
+	for _, endpoint := range []string{"source", "destination"} {
+		if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-" + endpoint, Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+			t.Fatalf("add %s credential: %v", endpoint, err)
+		}
+	}
+	connection, err := application.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "typed_definition_drift",
+		Source:      EndpointConfig{Connector: name, Credential: name + "-source"},
+		Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+		Streams: map[string]StreamConfig{"widgets": {
+			SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"}, DestinationAction: "apply_widget",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create typed destination connection: %v", err)
+	}
+	persistedPlan, err := application.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
+	if err != nil {
+		t.Fatalf("plan typed destination: %v", err)
+	}
+	if persistedPlan.TransportActionDefinitionSHA256 == "" {
+		t.Fatal("persisted typed destination plan has no action definition digest")
+	}
+
+	approval := syntheticTypedDestinationApproval(t, name, "apply_widget")
+	resolved, err := application.transports.Preflight(synctransport.PreflightRequest{Source: initial, Destination: initial, Stream: "widgets", Mode: synccontract.ModeFullAppend, DestinationAction: "apply_widget"})
+	if err != nil {
+		t.Fatalf("preflight initial typed destination: %v", err)
+	}
+	transportPlan, err := resolved.Destination.PlanDestination(ctx, synctransport.DestinationPlanRequest{
+		Connector: initial, Source: initial, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+		ApplyStrategy: resolved.ApplyStrategy, Approval: approval,
+	})
+	if err != nil || transportPlan.ActionDefinitionSHA256 == "" {
+		t.Fatalf("plan typed destination apply contract = %#v err=%v", transportPlan, err)
+	}
+
+	driftFiles := declarativeTypedDestinationActionBundleFS(name, "drift_source", "drift_destination", "apply_widget", "/widgets/drift")
+	driftBundle, err := engine.Load(driftFiles, name)
+	if err != nil {
+		t.Fatalf("load drifted typed destination: %v", err)
+	}
+	drifted := engine.New(driftBundle, nil)
+	_, err = resolved.Destination.ApplyDestination(ctx, synctransport.DestinationApplyRequest{
+		ConnectionID: "typed-definition-drift", Plan: transportPlan,
+		Destination: drifted, Source: initial, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+		Approval: approval,
+	})
+	if err == nil || !strings.Contains(err.Error(), "definition changed") {
+		t.Fatalf("apply drift error = %v, want pre-I/O definition drift refusal", err)
+	}
+
+	application.registry.Register(drifted)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose drifted typed destination: %v", err)
+	}
+	if _, _, err := application.PreviewDeclarativeTypedDestinationTransport(ctx, persistedPlan.ID); err == nil || !strings.Contains(err.Error(), "does not bind") {
+		t.Fatalf("preview drift error = %v, want plan binding refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("definition drift reached provider I/O; requests=%d, want 0", requests)
+	}
+}
+
+func TestDeclarativeTypedDestinationApprovalBindsActionDefinition(t *testing.T) {
+	digest := strings.Repeat("a", 64)
+	approval := synctransport.DestinationApproval{Target: connectors.WriteApprovalTarget{Scope: connectors.WriteApprovalScopeProject}}
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(approval, digest); err == nil || !strings.Contains(err.Error(), "does not bind") {
+		t.Fatalf("missing action digest approval error = %v, want binding refusal", err)
+	}
+	approval.ActionDefinitionSHA256 = digest
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(approval, digest); err != nil {
+		t.Fatalf("matching action digest approval: %v", err)
+	}
+	approval.Target.Scope = connectors.WriteApprovalScopeFixture
+	approval.ActionDefinitionSHA256 = ""
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(approval, digest); err != nil {
+		t.Fatalf("fixture action digest approval: %v", err)
+	}
+}
+
+func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	posts := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/widgets":
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"data":[{"id":"widget-1","value":"first"},{"id":"widget-2","value":"second"}]}`))
+		case r.Method == http.MethodPost && r.URL.Path == "/widgets/target":
+			posts++
+			w.Header().Set("Content-Type", "application/json")
+			w.Header().Set("X-Credential-Echo", "destination-secret")
+			if posts == 1 {
+				_, _ = w.Write([]byte(`{"provider_id":"first","echo":"destination-secret"}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"provider_id":"second","echo":"destination-secret"} trailing`))
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	}))
+	t.Cleanup(server.Close)
+	name := "typed-partial-results"
+	bundle, err := engine.Load(declarativeTypedDestinationBundleFS(name, "partial_source", "partial_destination"), name)
+	if err != nil {
+		t.Fatalf("load partial-result typed destination: %v", err)
+	}
+	application.registry.Register(engine.New(bundle, nil))
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose partial-result typed destination: %v", err)
+	}
+	if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-source", Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+		t.Fatalf("add source credential: %v", err)
+	}
+	if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-destination", Connector: name, Config: map[string]string{"base_url": server.URL}, Secrets: map[string]string{"token": "destination-secret"}}); err != nil {
+		t.Fatalf("add destination credential: %v", err)
+	}
+	connection, err := application.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "typed_partial_results",
+		Source:      EndpointConfig{Connector: name, Credential: name + "-source"},
+		Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+		Streams: map[string]StreamConfig{"widgets": {
+			SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"}, DestinationAction: "apply_widget",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create partial-result connection: %v", err)
+	}
+	plan, err := application.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
+	if err != nil {
+		t.Fatalf("plan partial-result connection: %v", err)
+	}
+	previewed, _, err := application.PreviewDeclarativeTypedDestinationTransport(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("preview partial-result connection: %v", err)
+	}
+	run, err := application.RunETL(ctx, RunETLRequest{
+		Connection: connection.Name, Stream: "widgets", BatchSize: 2,
+		DestinationApproval: synctransport.DestinationApproval{
+			PlanID: plan.ID, ApprovalToken: previewed.ApprovalToken,
+			Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "trailing") {
+		t.Fatalf("RunETL error = %v, want failed trailing provider response", err)
+	}
+	if run.Status != "failed" || run.RecordsLoaded != 0 || posts != 2 || len(run.DestinationResults) != 1 {
+		t.Fatalf("failed partial-result run = %#v posts=%d, want no acknowledgement and one persisted output", run, posts)
+	}
+	var output struct {
+		RecordsWritten    int `json:"records_written"`
+		RecordsFailed     int `json:"records_failed"`
+		ProviderResponses []struct {
+			RecordIndex  int    `json:"record_index"`
+			Body         any    `json:"body"`
+			BodyEncoding string `json:"body_encoding"`
+		} `json:"provider_responses"`
+	}
+	if err := json.Unmarshal(run.DestinationResults[0], &output); err != nil {
+		t.Fatalf("decode failed partial provider result: %v", err)
+	}
+	if output.RecordsWritten != 1 || output.RecordsFailed != 1 || len(output.ProviderResponses) != 2 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[1].RecordIndex != 1 || output.ProviderResponses[1].BodyEncoding != "text" {
+		t.Fatalf("failed partial provider output = %#v, want ordered first success and second raw failure", output)
+	}
+	serialized, err := json.Marshal(run)
+	if err != nil || bytes.Contains(serialized, []byte("destination-secret")) {
+		t.Fatalf("failed partial provider run leaked configured credential: %s err=%v", serialized, err)
 	}
 }
 
@@ -942,6 +1229,55 @@ func TestDeclarativeTypedDestinationPreflightRejectsIncompleteMappingAndFullOver
 	}
 }
 
+func TestDeclarativeTypedDestinationRejectsPersistedFullOverwriteDuringPreparation(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	name := "persisted-full-overwrite"
+	files := declarativeTypedDestinationBundleFS(name, "overwrite_source", "overwrite_destination")
+	transportPath := name + "/sync_transport.json"
+	transport := strings.ReplaceAll(string(files[transportPath].Data), `"full_append"`, `"full_overwrite"`)
+	files[transportPath] = &fstest.MapFile{Data: []byte(strings.ReplaceAll(transport, `"strategy": "append"`, `"strategy": "replace"`))}
+	bundle, err := engine.Load(files, name)
+	if err != nil {
+		t.Fatalf("load full-overwrite typed destination: %v", err)
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		requests++
+	}))
+	t.Cleanup(server.Close)
+	application.registry.Register(engine.New(bundle, nil))
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose full-overwrite typed destination: %v", err)
+	}
+	for _, endpoint := range []string{"source", "destination"} {
+		if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-" + endpoint, Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+			t.Fatalf("add %s credential: %v", endpoint, err)
+		}
+	}
+	application.state.Connections = append(application.state.Connections, Connection{
+		ID: "connection_persisted_full_overwrite", Name: "persisted_full_overwrite",
+		Source: EndpointConfig{Connector: name, Credential: name + "-source"}, Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+		Streams: map[string]StreamConfig{"widgets": {SyncMode: string(synccontract.ModeFullOverwrite), PrimaryKey: []string{"id"}, DestinationAction: "apply_widget"}},
+	})
+	if _, err := application.prepareDeclarativeTypedDestinationTransport(ctx, "persisted_full_overwrite", "widgets"); err == nil || !strings.Contains(err.Error(), "does not implement full_overwrite") {
+		t.Fatalf("prepare persisted full-overwrite error = %v, want pre-I/O refusal", err)
+	}
+	if _, err := application.PlanDeclarativeTypedDestinationTransport(ctx, "persisted_full_overwrite", "widgets"); err == nil || !strings.Contains(err.Error(), "does not implement full_overwrite") {
+		t.Fatalf("plan persisted full-overwrite error = %v, want pre-I/O refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("persisted full-overwrite preparation reached provider I/O; requests=%d, want 0", requests)
+	}
+}
+
 // TestDefinitionTransportFactoriesSelectDistinctTypedDestinationEvidence proves
 // a factory accepts exactly the evidence selected by each declaring bundle,
 // rather than silently admitting the first destination that happened to load.
@@ -1087,12 +1423,52 @@ func TestDefinitionTransportFactoriesRefuseTypedDestinationDeclarationsBeforeIO(
 	}
 }
 
+func TestDeclarativeTypedDestinationAcceptsDefinitionOwningNativeConnector(t *testing.T) {
+	name := "native-typed-destination"
+	files := declarativeTypedDestinationBundleFS(name, "native_source", "native_destination")
+	transport := string(files[name+"/sync_transport.json"].Data)
+	sourceStart := strings.Index(transport, `  "source_transport":`)
+	destinationStart := strings.Index(transport, `  "destination_transport":`)
+	if sourceStart < 0 || destinationStart < 0 {
+		t.Fatal("native typed destination fixture has no removable source declaration")
+	}
+	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(transport[:sourceStart] + transport[destinationStart:])}
+	bundle, err := engine.Load(files, name)
+	if err != nil {
+		t.Fatalf("load native typed destination bundle: %v", err)
+	}
+	sourceBundle, err := engine.Load(declarativeTypedDestinationBundleFS("native-typed-source", "native_source", "native_destination"), "native-typed-source")
+	if err != nil {
+		t.Fatalf("load native typed destination source: %v", err)
+	}
+	source := engine.New(sourceBundle, nil)
+	native := &nativeTypedDestinationTestConnector{Base: engine.NewBase(bundle)}
+	contract, err := declarativeTypedDestinationContractFor(native)
+	if err != nil {
+		t.Fatalf("native typed destination contract: %v", err)
+	}
+	strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+	if _, err := contract.plan(source, "widgets", synccontract.ModeFullAppend, strategy); err != nil {
+		t.Fatalf("native typed destination plan: %v", err)
+	}
+	application := &App{registry: connectors.NewEmptyRegistry()}
+	application.registry.Register(source)
+	application.registry.Register(native)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose native typed destination: %v", err)
+	}
+	if _, err := application.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: native, Stream: "widgets", Mode: synccontract.ModeFullAppend, DestinationAction: strategy.Action}); err != nil {
+		t.Fatalf("preflight native typed destination: %v", err)
+	}
+}
+
 func TestDeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite(t *testing.T) {
 	for _, testCase := range []struct {
-		name   string
-		mutate func(fstest.MapFS, string)
-		record connectors.Record
-		tombs  []synccontract.Tombstone
+		name    string
+		mutate  func(fstest.MapFS, string)
+		record  connectors.Record
+		tombs   []synccontract.Tombstone
+		planErr bool
 	}{
 		{
 			name: "mapped record misses required action field",
@@ -1100,7 +1476,8 @@ func TestDeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite(t 
 				path := name + "/sync_transport.json"
 				files[path] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[path].Data), `"inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]`, `"inputs": [{"input": "target_id", "field": "id"}]`, 1))}
 			},
-			record: connectors.Record{"id": "widget-1", "value": "not-mapped"},
+			record:  connectors.Record{"id": "widget-1", "value": "not-mapped"},
+			planErr: true,
 		},
 		{
 			name:   "tombstone delete",
@@ -1152,7 +1529,16 @@ func TestDeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite(t 
 				ApplyStrategy: resolved.ApplyStrategy, Approval: approval,
 			})
 			if err != nil {
+				if testCase.planErr {
+					if writes != 0 {
+						t.Fatalf("provider write calls = %d, want 0 after pre-I/O plan refusal", writes)
+					}
+					return
+				}
 				t.Fatalf("plan typed destination: %v", err)
+			}
+			if testCase.planErr {
+				t.Fatal("invalid typed destination mapping was planned")
 			}
 			receipt := synctransport.WarehouseReceipt{
 				ID: "typed-destination-workset", Owner: "typed-destination-workset", Generation: 1, Stream: "widgets", Mode: synccontract.ModeFullAppend,
@@ -1314,6 +1700,26 @@ func syntheticTypedDestinationApproval(t *testing.T, connector, action string) s
 type syntheticDefinitionConnector struct {
 	*engine.Connector
 	factories []synctransport.DefinitionFactory
+}
+
+type nativeTypedDestinationTestConnector struct {
+	engine.Base
+}
+
+func (*nativeTypedDestinationTestConnector) Check(context.Context, connectors.RuntimeConfig) error {
+	return nil
+}
+
+func (*nativeTypedDestinationTestConnector) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return connectors.Catalog{}, nil
+}
+
+func (*nativeTypedDestinationTestConnector) Read(context.Context, connectors.ReadRequest, func(connectors.Record) error) error {
+	return nil
+}
+
+func (*nativeTypedDestinationTestConnector) Write(_ context.Context, _ connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{RecordsWritten: len(records)}, nil
 }
 
 func (c *syntheticDefinitionConnector) SyncTransportDefinitionFactories() []synctransport.DefinitionFactory {

@@ -1192,6 +1192,41 @@ func TestWriteErrorRedactsOverlappingConfiguredRecordFields(t *testing.T) {
 	}
 }
 
+func TestWriteRetainsOrderedProviderResponsesBeforeTrailingJSONFailure(t *testing.T) {
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("Content-Type", "application/json")
+		if calls == 1 {
+			_, _ = w.Write([]byte(`{"provider_id":"first"}`))
+			return
+		}
+		_, _ = w.Write([]byte(`{"provider_id":"second"} trailing`))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := newWriteTestBundle(srv, WriteAction{
+		Kind:       "update",
+		Method:     http.MethodPost,
+		Path:       "/widgets/{{ record.id }}",
+		PathFields: []string{"id"},
+		Confirm:    "destructive",
+	})
+	records := []connectors.Record{{"id": "first"}, {"id": "second"}}
+	result, err := Write(context.Background(), bundle, approvedWriteRequest(t, bundle, "update_widget", records, nil), records, nil)
+	if err == nil || !strings.Contains(err.Error(), "trailing") {
+		t.Fatalf("Write() error = %v, want trailing JSON failure", err)
+	}
+	if calls != 2 || result.RecordsWritten != 1 || result.RecordsFailed != 1 || len(result.ProviderResponses) != 2 {
+		t.Fatalf("Write() result = %#v calls=%d, want first success and two correlated responses", result, calls)
+	}
+	if first := result.ProviderResponses[0]; first.RecordIndex != 0 || first.Body.(map[string]any)["provider_id"] != "first" {
+		t.Fatalf("first provider response = %#v, want record zero success", first)
+	}
+	if second := result.ProviderResponses[1]; second.RecordIndex != 1 || second.BodyEncoding != "text" || second.Body != `{"provider_id":"second"} trailing` {
+		t.Fatalf("second provider response = %#v, want complete raw trailing response", second)
+	}
+}
+
 // --- accounting parity with legacy semantics (stripe/write.go:66) ---
 
 func TestWriteAccountingFailFastRemainderCountsAsFailed(t *testing.T) {

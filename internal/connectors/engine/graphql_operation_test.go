@@ -566,7 +566,7 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 		if got, want := vars["id"], "widget-1"; got != want {
 			t.Fatalf("variables.id = %#v, want %q", got, want)
 		}
-		_, _ = w.Write([]byte(`{"data":{"deleteWidget":{"deletedId":"widget-1"},"rateLimit":{"limit":4,"cost":4,"remaining":4,"resetAt":""}}}`))
+		_, _ = w.Write([]byte(`{"data":{"deleteWidget":{"deletedId":"widget-1"},"rateLimit":{"limit":4,"cost":4,"remaining":4,"resetAt":""}},"extensions":{"trace_id":"provider-trace"},"provider_fact":"retained"}`))
 	}))
 	defer server.Close()
 
@@ -625,10 +625,14 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 	}
 	body, ok := result.Body.(map[string]any)
 	if !ok {
-		t.Fatalf("mutation body type = %T, want data object", result.Body)
+		t.Fatalf("mutation body type = %T, want GraphQL envelope", result.Body)
 	}
-	if _, ok := body["deleteWidget"]; !ok {
-		t.Fatalf("mutation body = %#v, want GraphQL data only", body)
+	data, ok := body["data"].(map[string]any)
+	if !ok || data["deleteWidget"] == nil {
+		t.Fatalf("mutation body = %#v, want GraphQL data envelope", body)
+	}
+	if extensions, ok := body["extensions"].(map[string]any); !ok || extensions["trace_id"] != "provider-trace" || body["provider_fact"] != "retained" {
+		t.Fatalf("mutation body = %#v, want complete provider envelope", body)
 	}
 
 	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
@@ -680,8 +684,13 @@ func TestOperationDirectWriteFailsClosedOnGraphQLErrors(t *testing.T) {
 	}
 	req.PreviewDigest = preview.Digest
 	req.Approval = approvedEvidenceForPreview(t, preview)
-	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), "graphql errors") {
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil || !strings.Contains(err.Error(), "graphql errors") {
 		t.Fatalf("OperationDirectWrite error = %v, want GraphQL error rejection", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !result.ResponseReceived || !result.BodyPresent || !ok || body["errors"] == nil || result.GraphQL == nil || len(result.GraphQL.Errors) != 1 {
+		t.Fatalf("GraphQL failed-write result = %#v, want complete received envelope and metadata", result)
 	}
 	if calls != 1 {
 		t.Fatalf("GraphQL error test calls = %d, want exactly one approved request", calls)

@@ -39,13 +39,45 @@ func TestCatalogStaticSchemaMatchesDiscoveredSchemaProjection(t *testing.T) {
 }
 
 var (
-	_ connectors.Connector          = (*Connector)(nil)
-	_ connectors.WriteValidator     = (*Connector)(nil)
-	_ connectors.DryRunWriter       = (*Connector)(nil)
-	_ connectors.StatefulReader     = (*Connector)(nil)
-	_ connectors.ManifestProvider   = (*Connector)(nil)
-	_ connectors.DefinitionProvider = (*Connector)(nil)
+	_ connectors.Connector                   = (*Connector)(nil)
+	_ connectors.WriteValidator              = (*Connector)(nil)
+	_ connectors.DeclarativeTypedDestination = (*Connector)(nil)
+	_ connectors.DryRunWriter                = (*Connector)(nil)
+	_ connectors.StatefulReader              = (*Connector)(nil)
+	_ connectors.ManifestProvider            = (*Connector)(nil)
+	_ connectors.DefinitionProvider          = (*Connector)(nil)
 )
+
+func TestDeclarativeTypedDestinationActionDigestIsCanonicalAndDefinitionBound(t *testing.T) {
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: "https://api.example.test", Headers: map[string]string{"X-Provider": "acme"}},
+		Writes: []WriteAction{{
+			Name: "apply_widget", Method: http.MethodPost, Path: "/widgets", BodyType: "json",
+			RecordSchema: json.RawMessage(`{"type":"object","properties":{"id":{"type":"string"},"value":{"type":"string"}}}`),
+		}},
+	}
+	first, err := declarativeTypedDestinationActionDigest(bundle, "apply_widget")
+	if err != nil {
+		t.Fatalf("first action digest: %v", err)
+	}
+	bundle.Writes[0].RecordSchema = json.RawMessage(`{ "properties": { "value": { "type": "string" }, "id": { "type": "string" } }, "type": "object" }`)
+	second, err := declarativeTypedDestinationActionDigest(bundle, "apply_widget")
+	if err != nil {
+		t.Fatalf("canonical action digest: %v", err)
+	}
+	if first != second {
+		t.Fatalf("equivalent action definitions changed digest: first=%q second=%q", first, second)
+	}
+	bundle.Writes[0].Path = "/widgets/changed"
+	third, err := declarativeTypedDestinationActionDigest(bundle, "apply_widget")
+	if err != nil {
+		t.Fatalf("changed action digest: %v", err)
+	}
+	if third == second {
+		t.Fatal("changed action definition preserved digest")
+	}
+}
 
 // Base itself is NOT asserted against connectors.Connector or
 // connectors.ManifestProvider: per API-CONTRACT.md §2, Tier-3 natives that

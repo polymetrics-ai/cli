@@ -21,23 +21,24 @@ const (
 // It intentionally carries no URL, request body, arbitrary action, or source
 // record. Those stay in the bundle and the reopened warehouse workset.
 type declarativeTypedDestinationBinding struct {
-	Domain              string                                  `json:"domain"`
-	ConnectionID        string                                  `json:"connection_id"`
-	Stream              string                                  `json:"stream"`
-	StreamID            string                                  `json:"stream_id"`
-	Mode                synccontract.Mode                       `json:"mode"`
-	Source              string                                  `json:"source"`
-	SourceExecutor      connectors.TransportExecutorReference   `json:"source_executor"`
-	SourceEvidence      connectors.ConformanceEvidenceReference `json:"source_evidence"`
-	Destination         string                                  `json:"destination"`
-	DestinationExecutor connectors.TransportExecutorReference   `json:"destination_executor"`
-	DestinationEvidence connectors.ConformanceEvidenceReference `json:"destination_evidence"`
-	Action              string                                  `json:"action"`
-	Strategy            connectors.ApplyStrategy                `json:"strategy"`
-	SourceMapping       connectors.SourceRecordMapping          `json:"source_mapping"`
-	CredentialRevision  string                                  `json:"credential_revision"`
-	ConfigurationDigest string                                  `json:"configuration_digest"`
-	ApprovalScope       string                                  `json:"approval_scope"`
+	Domain                 string                                  `json:"domain"`
+	ConnectionID           string                                  `json:"connection_id"`
+	Stream                 string                                  `json:"stream"`
+	StreamID               string                                  `json:"stream_id"`
+	Mode                   synccontract.Mode                       `json:"mode"`
+	Source                 string                                  `json:"source"`
+	SourceExecutor         connectors.TransportExecutorReference   `json:"source_executor"`
+	SourceEvidence         connectors.ConformanceEvidenceReference `json:"source_evidence"`
+	Destination            string                                  `json:"destination"`
+	DestinationExecutor    connectors.TransportExecutorReference   `json:"destination_executor"`
+	DestinationEvidence    connectors.ConformanceEvidenceReference `json:"destination_evidence"`
+	Action                 string                                  `json:"action"`
+	ActionDefinitionSHA256 string                                  `json:"action_definition_sha256"`
+	Strategy               connectors.ApplyStrategy                `json:"strategy"`
+	SourceMapping          connectors.SourceRecordMapping          `json:"source_mapping"`
+	CredentialRevision     string                                  `json:"credential_revision"`
+	ConfigurationDigest    string                                  `json:"configuration_digest"`
+	ApprovalScope          string                                  `json:"approval_scope"`
 }
 
 type preparedDeclarativeTypedDestinationTransport struct {
@@ -96,7 +97,7 @@ func (a *App) PlanDeclarativeTypedDestinationTransport(ctx context.Context, conn
 		DestinationConfig: cloneStringMap(prepared.connection.Destination.Config), Action: prepared.resolved.ApplyStrategy.Action,
 		Mappings: map[string]string{}, ConfirmationChallenge: string(confirmation.Kind), ConfirmationPolicy: confirmation,
 		RecordCount: 0, PlanHash: planHash, PlanSeal: &seal, TransportConnectionID: prepared.connection.ID,
-		TransportStream: streamName, TransportBindingSHA256: bindingSHA256, CreatedAt: seal.IssuedAt, ExpiresAt: seal.ExpiresAt,
+		TransportStream: streamName, TransportBindingSHA256: bindingSHA256, TransportActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256, CreatedAt: seal.IssuedAt, ExpiresAt: seal.ExpiresAt,
 	}
 	a.state.ReversePlans = append(a.state.ReversePlans, plan)
 	if err := a.save(); err != nil {
@@ -189,7 +190,7 @@ func (a *App) authorizeDeclarativeTypedDestinationTransport(ctx context.Context,
 		return synctransport.DestinationApproval{}, err
 	}
 	return synctransport.DestinationApproval{
-		PlanID: plan.ID, Evidence: evidence, Target: prepared.target, PreviewDigest: preview.Digest,
+		PlanID: plan.ID, Evidence: evidence, Target: prepared.target, PreviewDigest: preview.Digest, ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
 		AuthorizeNextUnit: func(unitCtx context.Context) error {
 			if unitCtx == nil {
 				return fmt.Errorf("declarative typed destination authorization context is required")
@@ -223,6 +224,7 @@ func (a *App) authorizeDeclarativeTypedDestinationTransport(ctx context.Context,
 func (a *App) declarativeTypedDestinationAuthorizationScope(prepared preparedDeclarativeTypedDestinationTransport, plan ReversePlan) AuthorizationScope {
 	fieldMappings := map[string]string{
 		"transport_binding_sha256": plan.TransportBindingSHA256,
+		"action_definition_sha256": prepared.binding.ActionDefinitionSHA256,
 		"source_connector":         prepared.binding.Source,
 		"source_executor":          string(prepared.binding.SourceExecutor.Family) + ":" + prepared.binding.SourceExecutor.ID,
 		"destination_executor":     string(prepared.binding.DestinationExecutor.Family) + ":" + prepared.binding.DestinationExecutor.ID,
@@ -282,19 +284,23 @@ func (a *App) prepareDeclarativeTypedDestinationTransport(ctx context.Context, c
 	if err != nil {
 		return preparedDeclarativeTypedDestinationTransport{}, err
 	}
-	binding, admitted := contract.descriptor.SourceBindingFor(resolved.SourceDescriptor.Executor, streamName)
-	if !admitted || binding.RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields {
-		return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("declarative typed destination has no admitted input_fields mapping for the persisted source stream")
+	binding, err := contract.plan(source, streamName, mode.ContractMode, resolved.ApplyStrategy)
+	if err != nil {
+		return preparedDeclarativeTypedDestinationTransport{}, err
 	}
 	action, found := contract.actions[resolved.ApplyStrategy.Action]
 	if !found {
 		return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("declarative typed destination action %q is unavailable", resolved.ApplyStrategy.Action)
 	}
+	actionDefinitionSHA256, err := contract.actionDefinitionDigest(action.Name)
+	if err != nil {
+		return preparedDeclarativeTypedDestinationTransport{}, err
+	}
 	declaration := declarativeTypedDestinationBinding{
 		Domain: declarativeTypedDestinationBindingDomain, ConnectionID: conn.ID, Stream: streamName, StreamID: stream.StreamID, Mode: mode.ContractMode,
 		Source: source.Name(), SourceExecutor: resolved.SourceDescriptor.Executor, SourceEvidence: resolved.SourceDescriptor.Conformance,
 		Destination: destination.Name(), DestinationExecutor: resolved.DestinationDescriptor.Executor, DestinationEvidence: resolved.DestinationDescriptor.Conformance,
-		Action: resolved.ApplyStrategy.Action, Strategy: resolved.ApplyStrategy.Strategy, SourceMapping: binding.RecordMapping.Clone(),
+		Action: resolved.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, Strategy: resolved.ApplyStrategy.Strategy, SourceMapping: binding.RecordMapping.Clone(),
 		CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest, ApprovalScope: runtime.WriteApprovalScope,
 	}
 	bindingSHA256, err := hashJSON(declaration)
@@ -317,7 +323,7 @@ func (a *App) validateDeclarativeTypedDestinationPlan(plan ReversePlan, prepared
 	if err != nil {
 		return err
 	}
-	if plan.Mode != reversePlanModeDeclarativeTypedDestinationTransport || plan.TransportConnectionID != prepared.connection.ID || plan.TransportStream != prepared.binding.Stream || plan.SourceConnection != prepared.connection.Name || plan.DestinationConnector != prepared.destination.Name() || plan.DestinationCredential != prepared.connection.Destination.Credential || plan.Action != prepared.resolved.ApplyStrategy.Action || plan.RecordCount != 0 || len(plan.Mappings) != 0 || !constantTimeStringEqual(plan.TransportBindingSHA256, bindingSHA256) || !constantTimeStringEqual(plan.PlanHash, planHash) {
+	if plan.Mode != reversePlanModeDeclarativeTypedDestinationTransport || plan.TransportConnectionID != prepared.connection.ID || plan.TransportStream != prepared.binding.Stream || plan.SourceConnection != prepared.connection.Name || plan.DestinationConnector != prepared.destination.Name() || plan.DestinationCredential != prepared.connection.Destination.Credential || plan.Action != prepared.resolved.ApplyStrategy.Action || plan.RecordCount != 0 || len(plan.Mappings) != 0 || !constantTimeStringEqual(plan.TransportBindingSHA256, bindingSHA256) || !constantTimeStringEqual(plan.TransportActionDefinitionSHA256, prepared.binding.ActionDefinitionSHA256) || !constantTimeStringEqual(plan.PlanHash, planHash) {
 		return fmt.Errorf("declarative typed destination approval plan does not bind the exact persisted connection action")
 	}
 	if plan.ConfirmationPolicy.Kind != connectors.ConfirmationKindDestructive || a.confirmationPolicyForPlan(plan).Kind != connectors.ConfirmationKindDestructive {

@@ -557,10 +557,19 @@ func clampOperationDirectReadMaxBytes(requested, operationMax int) int {
 }
 
 func decodeDirectReadBody(raw []byte, maxBytes int) (any, error) {
+	if maxBytes >= 0 && len(raw) > maxBytes {
+		return nil, fmt.Errorf("response body exceeds limit %d", maxBytes)
+	}
 	var body any
-	dec := json.NewDecoder(io.LimitReader(bytes.NewReader(raw), int64(maxBytes)+1))
+	dec := json.NewDecoder(bytes.NewReader(raw))
 	dec.UseNumber()
 	if err := dec.Decode(&body); err != nil {
+		return nil, err
+	}
+	var extra any
+	if err := dec.Decode(&extra); err == nil {
+		return nil, fmt.Errorf("response contains multiple JSON values")
+	} else if err != io.EOF {
 		return nil, err
 	}
 	return body, nil

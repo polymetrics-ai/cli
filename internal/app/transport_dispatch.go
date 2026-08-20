@@ -279,6 +279,9 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			return nil
 		},
 	})
+	if err != nil {
+		err = sanitizeRuntimeError(err, sourceRuntime, destRuntime)
+	}
 	transportMeasurement := transportPhaseMeasurement(transportResult)
 	if committed == nil || committed.CommittedAt == nil {
 		if err != nil {

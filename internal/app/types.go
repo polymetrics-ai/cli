@@ -262,8 +262,7 @@ type Run struct {
 	// connector configuration.
 	TransportPhaseMeasurement *TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
 	// DestinationResults retains each completed declarative typed destination
-	// action's full provider result. Secret-bearing values have an explicit
-	// masked marker; ordinary provider fields are not filtered by scope or tier.
+	// action's full provider result.
 	DestinationResults []json.RawMessage `json:"destination_results,omitempty"`
 	Error              string            `json:"error,omitempty"`
 	StartedAt          time.Time         `json:"started_at"`
@@ -429,10 +428,11 @@ type ReversePlan struct {
 	// definition-selected transport writes. They bind a pre-run approval to
 	// one connection configuration; neither field is caller-selectable write
 	// input and neither contains an approval token or credential material.
-	TransportConnectionID  string `json:"transport_connection_id,omitempty"`
-	TransportStream        string `json:"transport_stream,omitempty"`
-	TransportBindingSHA256 string `json:"transport_binding_sha256,omitempty"`
-	TransportForwardPlanID string `json:"transport_forward_plan_id,omitempty"`
+	TransportConnectionID           string `json:"transport_connection_id,omitempty"`
+	TransportStream                 string `json:"transport_stream,omitempty"`
+	TransportBindingSHA256          string `json:"transport_binding_sha256,omitempty"`
+	TransportActionDefinitionSHA256 string `json:"transport_action_definition_sha256,omitempty"`
+	TransportForwardPlanID          string `json:"transport_forward_plan_id,omitempty"`
 	// AuthorizationLifetime is a bounded day-scale lifetime requested when a
 	// PostgreSQL managed-target transport plan is created. It is included in
 	// the sealed plan hash before its single-use approval token is issued.
@@ -530,11 +530,8 @@ type ReverseRun struct {
 	RecordsFailed    int    `json:"records_failed"`
 	Error            string `json:"error,omitempty"`
 	// DestinationResult retains the complete typed write result for regular
-	// reverse ETL. Credential material is represented as an explicit masked
-	// marker; normal provider fields are retained unchanged.
-	DestinationResult json.RawMessage `json:"destination_result,omitempty"`
-	// OperationDirectWrite is populated only for a successful direct_write
-	// command. Its body is decoded according to the operation output policy.
+	// reverse ETL.
+	DestinationResult    json.RawMessage                        `json:"destination_result,omitempty"`
 	OperationDirectWrite *connectors.OperationDirectWriteResult `json:"operation_direct_write,omitempty"`
 	StartedAt            time.Time                              `json:"started_at"`
 	CompletedAt          time.Time                              `json:"completed_at,omitempty"`

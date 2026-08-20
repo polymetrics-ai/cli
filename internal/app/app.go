@@ -1049,7 +1049,7 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 			return Connection{}, modeErr
 		}
 		destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
-		if strings.TrimSpace(stream.DestinationAction) != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
+		if stream.DestinationAction != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
 			return Connection{}, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", name, destination.Name())
 		}
 		if declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
@@ -1370,7 +1370,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err != nil {
 		return a.failRun(runID, err)
 	}
-	if destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination); declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
+	destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
+	if stream.DestinationAction != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
+		return a.failRun(runID, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", req.Stream, destination.Name()))
+	}
+	if declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
 		if a.transports == nil {
 			return a.failRun(runID, fmt.Errorf("declarative typed destination transport registry is unavailable"))
 		}
@@ -2883,11 +2887,12 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 	operationRequest.PreviewDigest = preview.Digest
 	operationResult, writeErr := directWriter.OperationDirectWrite(ctx, operationRequest)
 	writeResult := connectors.WriteResult{RecordsWritten: 1}
-	if writeErr != nil {
-		writeResult = connectors.WriteResult{RecordsFailed: 1}
-	} else {
+	if operationResult.ResponseReceived {
 		safeOperationResult := connectors.SanitizeOperationDirectWriteResultForOutput(operationResult, runtime.Secrets)
 		run.OperationDirectWrite = &safeOperationResult
+	}
+	if writeErr != nil {
+		writeResult = connectors.WriteResult{RecordsFailed: 1}
 	}
 	return a.finishOperationDirectWrite(plan.ID, run, writeResult, runtime, 1, writeErr)
 }
@@ -3092,7 +3097,7 @@ func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
 
 func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error) (ReverseRun, error) {
 	return a.finishReverseWriteWithErrorText(planID, run, result, runtime, staged, writeErr, func(err error) string {
-		return safety.RedactErrorText(err.Error())
+		return connectors.SanitizeWriteErrorForOutput(err, runtime.Secrets)
 	})
 }
 
@@ -3102,7 +3107,7 @@ func (a *App) finishReverseWrite(planID string, run ReverseRun, result connector
 // output transformation is explicit credential masking.
 func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error) (ReverseRun, error) {
 	return a.finishReverseWriteWithErrorText(planID, run, result, runtime, staged, writeErr, func(err error) string {
-		return err.Error()
+		return connectors.SanitizeWriteErrorForOutput(err, runtime.Secrets)
 	})
 }
 
@@ -3149,6 +3154,38 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 		return ReverseRun{}, persistErr
 	}
 	return run, nil
+}
+
+type runtimeSecretSanitizedError struct {
+	cause   error
+	message string
+}
+
+func (e *runtimeSecretSanitizedError) Error() string {
+	if e == nil {
+		return ""
+	}
+	return e.message
+}
+
+func (e *runtimeSecretSanitizedError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.cause
+}
+
+func sanitizeRuntimeError(err error, runtimes ...connectors.RuntimeConfig) error {
+	if err == nil {
+		return nil
+	}
+	secrets := make(map[string]string)
+	for _, runtime := range runtimes {
+		for name, value := range runtime.Secrets {
+			secrets[name] = value
+		}
+	}
+	return &runtimeSecretSanitizedError{cause: err, message: connectors.SanitizeWriteErrorForOutput(err, secrets)}
 }
 
 func (a *App) invalidateReversePlan(expected ReversePlan) error {

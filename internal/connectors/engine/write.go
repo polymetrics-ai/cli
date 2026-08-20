@@ -377,7 +377,14 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: redactWriteActionError(err, action, rec)}
 		}
 		if response != nil {
-			result.ProviderResponses = append(result.ProviderResponses, writeProviderResponse(response))
+			providerResponse, responseErr := writeProviderResponse(response, i)
+			result.ProviderResponses = append(result.ProviderResponses, providerResponse)
+			if responseErr != nil {
+				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+				return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(responseErr, action, rec)}
+			}
+			result.RecordsWritten++
+			continue
 		}
 		result.RecordsWritten++
 	}
@@ -489,24 +496,65 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	}
 }
 
-func writeProviderResponse(response *connsdk.Response) connectors.WriteProviderResponse {
+func writeProviderResponse(response *connsdk.Response, recordIndex int) (connectors.WriteProviderResponse, error) {
 	result := connectors.WriteProviderResponse{
-		Status:  response.Status,
-		Headers: writeProviderHeaders(response.Header),
+		RecordIndex: recordIndex,
+		Status:      response.Status,
+		Headers:     writeProviderHeaders(response.Header),
 	}
 	decoder := json.NewDecoder(bytes.NewReader(response.Body))
 	decoder.UseNumber()
-	if decoder.Decode(&result.Body) == nil {
-		return result
+	if err := decoder.Decode(&result.Body); err == nil {
+		var extra any
+		if err := decoder.Decode(&extra); err == io.EOF {
+			return result, nil
+		} else if err == nil {
+			result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
+			return result, fmt.Errorf("provider response contains multiple JSON values")
+		} else {
+			result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
+			return result, fmt.Errorf("provider response has trailing data: %w", err)
+		}
+	} else if writeProviderResponseDeclaresJSON(response.Header) || writeProviderResponseLooksJSON(response.Body) {
+		result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
+		return result, fmt.Errorf("provider response is not valid JSON: %w", err)
 	}
-	if utf8.Valid(response.Body) {
-		result.Body = string(response.Body)
-		result.BodyEncoding = "text"
-		return result
+	result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
+	return result, nil
+}
+
+func writeProviderResponseLooksJSON(body []byte) bool {
+	trimmed := bytes.TrimSpace(body)
+	if len(trimmed) == 0 {
+		return false
 	}
-	result.Body = base64.StdEncoding.EncodeToString(response.Body)
-	result.BodyEncoding = "base64"
-	return result
+	switch trimmed[0] {
+	case '{', '[', '"', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 't', 'f', 'n':
+		return true
+	default:
+		return false
+	}
+}
+
+func writeProviderRawBody(body []byte) (any, string) {
+	if utf8.Valid(body) {
+		return string(body), "text"
+	}
+	return base64.StdEncoding.EncodeToString(body), "base64"
+}
+
+func writeProviderResponseDeclaresJSON(headers map[string][]string) bool {
+	for name, values := range headers {
+		if !strings.EqualFold(name, "Content-Type") {
+			continue
+		}
+		for _, value := range values {
+			if strings.Contains(strings.ToLower(value), "json") {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func writeProviderHeaders(headers map[string][]string) map[string]connectors.WriteProviderHeader {

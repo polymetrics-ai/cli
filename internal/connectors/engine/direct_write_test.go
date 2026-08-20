@@ -239,13 +239,13 @@ func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
 		directWritePolicyGongBoundedInputRedacted,
 	} {
 		t.Run(policy, func(t *testing.T) {
-			body, err := operationDirectWriteResponseBody(policy, raw, 1024)
+			response, err := operationDirectWriteResponseBody(policy, raw, 1024)
 			if err != nil {
 				t.Fatalf("operationDirectWriteResponseBody: %v", err)
 			}
-			decoded, ok := body.(map[string]any)
+			decoded, ok := response.body.(map[string]any)
 			if !ok {
-				t.Fatalf("body type = %T, want map", body)
+				t.Fatalf("body type = %T, want map", response.body)
 			}
 			if got := decoded["token"]; got != "server-token" {
 				t.Fatalf("token = %#v, want complete response value", got)
@@ -267,10 +267,15 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 		policy   string
 		wantBody bool
 		bodyless bool
+		response string
+		wantErr  string
+		wantNull bool
 	}{
 		{name: "json returns complete decoded body", policy: directWritePolicyJSON, wantBody: true},
 		{name: "none retains complete response body", policy: directWritePolicyNone, wantBody: true},
 		{name: "none accepts bodyless response", policy: directWritePolicyNone, bodyless: true},
+		{name: "none preserves literal JSON null", policy: directWritePolicyNone, response: `null`, wantNull: true},
+		{name: "json rejects trailing response content", policy: directWritePolicyJSON, response: `{"created":true} trailing`, wantErr: "not JSON"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			calls := 0
@@ -288,7 +293,11 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 					return
 				}
 				w.Header().Set("Content-Type", "application/json")
-				_, _ = w.Write([]byte(`{"created":true,"id":"widget-42","nested":{"state":"complete"}}`))
+				response := tt.response
+				if response == "" {
+					response = `{"created":true,"id":"widget-42","nested":{"state":"complete"}}`
+				}
+				_, _ = w.Write([]byte(response))
 			}))
 			defer srv.Close()
 
@@ -334,11 +343,23 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 			req.PreviewDigest = preview.Digest
 
 			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("OperationDirectWrite error = %v, want %q", err, tt.wantErr)
+				}
+				if !result.ResponseReceived || !result.BodyPresent || result.BodyRaw != tt.response {
+					t.Fatalf("trailing response result = %#v, want complete received raw response", result)
+				}
+				return
+			}
 			if err != nil {
 				t.Fatalf("OperationDirectWrite: %v", err)
 			}
 			if calls != 1 {
 				t.Fatalf("request calls = %d, want 1", calls)
+			}
+			if !result.ResponseReceived {
+				t.Fatal("result did not retain the successful provider response")
 			}
 			if tt.bodyless {
 				if result.Status != http.StatusNoContent {
@@ -347,13 +368,19 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 				if receipt := result.Headers["X-Provider-Receipt"].Values; len(receipt) != 1 || receipt[0] != "receipt-204" {
 					t.Fatalf("bodyless response receipt header = %#v, want receipt-204", receipt)
 				}
-			}
-			if !tt.wantBody {
-				if result.Body != nil {
-					t.Fatalf("none policy body = %#v, want nil", result.Body)
+				if result.BodyPresent || result.BodyBytes != 0 || result.BodyRaw != "" || result.Body != nil {
+					t.Fatalf("bodyless none result = %#v, want a distinct empty-body response", result)
 				}
-				t.Logf("direct-write policy=%q status=%d response=<none>", tt.policy, result.Status)
 				return
+			}
+			if tt.wantNull {
+				if !result.BodyPresent || result.BodyRaw != "null" || result.BodyBytes != len("null") || result.Body != nil {
+					t.Fatalf("literal JSON null result = %#v, want a present null body", result)
+				}
+				return
+			}
+			if !tt.wantBody || !result.BodyPresent || result.BodyRaw == "" {
+				t.Fatalf("direct-write result = %#v, want a present provider body", result)
 			}
 			body, ok := result.Body.(map[string]any)
 			if !ok {

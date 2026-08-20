@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -729,6 +730,12 @@ func graphQLOperationResponseWithRuntimeErrorPolicy(raw []byte, maxBytes int, re
 	decoder.UseNumber()
 	if err := decoder.Decode(&envelope); err != nil {
 		return nil, nil, fmt.Errorf("GraphQL response is not JSON: %w", err)
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err == nil {
+		return nil, nil, fmt.Errorf("GraphQL response contains multiple JSON values")
+	} else if err != io.EOF {
+		return nil, nil, fmt.Errorf("GraphQL response has trailing data: %w", err)
 	}
 
 	metadata := &connectors.GraphQLResponseMetadata{Errors: boundedGraphQLErrorMetadata(envelope.Errors, retainRuntimeErrors)}

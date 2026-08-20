@@ -231,6 +231,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			acknowledgement, err := resolved.Destination.ApplyDestination(applyCtx, destinationApplyRequest)
 			result.ApplyElapsed += time.Since(applyStarted)
 			if err != nil {
+				if output, ok := DestinationApplyOutput(err); ok {
+					result.DestinationResults = append(result.DestinationResults, output)
+				}
 				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply destination transport: %w", err)
 			}
 			if len(acknowledgement.Output) != 0 {
