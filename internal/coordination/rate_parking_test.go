@@ -206,6 +206,63 @@ func TestRateParkingCoordinator_RearmsClaimedRunWithLatestCheckpoint(t *testing.
 	}
 }
 
+func TestRateParkingCoordinator_DefersImmediateRearmUntilResumerReturns(t *testing.T) {
+	now := time.Date(2026, time.August, 20, 12, 0, 0, 0, time.UTC)
+	checkpoint := testParkedCheckpoint(now)
+	scheduler := newRateParkingTestScheduler()
+	var coordinator *RateParkingCoordinator
+	resumes := 0
+	firstResumerReturned := false
+	coordinator = NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store:     NewMemoryRateParkingStore(),
+		Scheduler: scheduler,
+		Now:       func() time.Time { return now },
+		Resume: func(ctx context.Context, parked ParkedRateLimitRun) error {
+			resumes++
+			if resumes == 1 {
+				if _, err := coordinator.Rearm(ctx, RateParkingRequest{
+					RunID:      parked.RunID,
+					Scope:      parked.Scope,
+					Checkpoint: checkpoint,
+					ResetAt:    now,
+					Reason:     connsdk.RateLimitObservationSourceHeaders,
+				}); err != nil {
+					return err
+				}
+				if got := scheduler.Scheduled(); got != 0 {
+					t.Fatalf("immediate rearm callbacks before resumer returns = %d, want 0", got)
+				}
+				firstResumerReturned = true
+				return ErrRateLimitRearmed
+			}
+			if !firstResumerReturned {
+				t.Fatal("rearmed callback entered before the original resumer returned")
+			}
+			return nil
+		},
+	})
+	if err := coordinator.Start(context.Background()); err != nil {
+		t.Fatalf("Start() error = %v", err)
+	}
+	if _, err := coordinator.Park(context.Background(), RateParkingRequest{
+		RunID:      "run-immediate-rearm",
+		Scope:      connectors.RateLimitScopeKey("scope-immediate-rearm"),
+		Checkpoint: checkpoint,
+		ResetAt:    now,
+		Reason:     connsdk.RateLimitObservationSourceRetryAfter,
+	}); err != nil {
+		t.Fatalf("Park() error = %v", err)
+	}
+
+	scheduler.RunThrough(now)
+	if resumes != 2 {
+		t.Fatalf("resume attempts = %d, want 2", resumes)
+	}
+	if records, err := coordinator.store.List(); err != nil || len(records) != 0 {
+		t.Fatalf("records after immediate rearm = %#v, %v; want none", records, err)
+	}
+}
+
 func TestRateParkingCoordinator_IsolatesScopesAndMakesDuplicateCancellationAndFailureObservable(t *testing.T) {
 	now := time.Date(2026, time.August, 15, 11, 0, 0, 0, time.UTC)
 	resetAt := now.Add(time.Minute)

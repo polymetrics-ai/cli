@@ -309,11 +309,14 @@ type RateParkingCoordinator struct {
 	owner     string
 	claimTTL  time.Duration
 
-	ctx     context.Context
-	cancel  context.CancelFunc
-	started bool
-	runs    map[string]ParkedRateLimitRun
-	timers  map[string]RateParkingTimer
+	ctx          context.Context
+	cancel       context.CancelFunc
+	started      bool
+	runs         map[string]ParkedRateLimitRun
+	timers       map[string]RateParkingTimer
+	resuming     map[string]uint64
+	rearmPending map[string]uint64
+	nextLease    uint64
 }
 
 // NewRateParkingCoordinator constructs a coordinator. A nil store/scheduler
@@ -333,15 +336,17 @@ func NewRateParkingCoordinator(options RateParkingCoordinatorOptions) *RateParki
 		options.ClaimTTL = 30 * time.Second
 	}
 	return &RateParkingCoordinator{
-		store:     options.Store,
-		scheduler: options.Scheduler,
-		now:       options.Now,
-		resume:    options.Resume,
-		events:    options.Events,
-		owner:     newRateParkingOwner(),
-		claimTTL:  options.ClaimTTL,
-		runs:      make(map[string]ParkedRateLimitRun),
-		timers:    make(map[string]RateParkingTimer),
+		store:        options.Store,
+		scheduler:    options.Scheduler,
+		now:          options.Now,
+		resume:       options.Resume,
+		events:       options.Events,
+		owner:        newRateParkingOwner(),
+		claimTTL:     options.ClaimTTL,
+		runs:         make(map[string]ParkedRateLimitRun),
+		timers:       make(map[string]RateParkingTimer),
+		resuming:     make(map[string]uint64),
+		rearmPending: make(map[string]uint64),
 	}
 }
 
@@ -368,6 +373,8 @@ func (c *RateParkingCoordinator) Start(ctx context.Context) error {
 	c.started = true
 	c.runs = make(map[string]ParkedRateLimitRun)
 	c.timers = make(map[string]RateParkingTimer)
+	c.resuming = make(map[string]uint64)
+	c.rearmPending = make(map[string]uint64)
 	for _, run := range runs {
 		if err := validateParkedRateLimitRun(run); err != nil {
 			c.cancel()
@@ -409,6 +416,8 @@ func (c *RateParkingCoordinator) Close() {
 		}
 	}
 	c.timers = make(map[string]RateParkingTimer)
+	c.resuming = make(map[string]uint64)
+	c.rearmPending = make(map[string]uint64)
 	if c.cancel != nil {
 		c.cancel()
 	}
@@ -493,7 +502,11 @@ func (c *RateParkingCoordinator) Rearm(ctx context.Context, request RateParkingR
 	}
 	delete(c.timers, run.RunID)
 	c.runs[run.RunID] = persisted.Clone()
-	c.scheduleLocked(run.RunID)
+	if lease, resuming := c.resuming[run.RunID]; resuming {
+		c.rearmPending[run.RunID] = lease
+	} else {
+		c.scheduleLocked(run.RunID)
+	}
 	c.mu.Unlock()
 	c.recordEvent(RateParkingEvent{Type: RateLimitEventParked, ResetAt: persisted.ResetAt, Reason: string(persisted.Reason)})
 	return persisted.Clone(), nil
@@ -543,6 +556,8 @@ func (c *RateParkingCoordinator) Cancel(runID string) error {
 		return errRateParkingUnavailable
 	}
 	delete(c.runs, runID)
+	delete(c.resuming, runID)
+	delete(c.rearmPending, runID)
 	c.mu.Unlock()
 	return nil
 }
@@ -572,22 +587,34 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 		c.mu.Unlock()
 		return
 	}
+	if _, resuming := c.resuming[runID]; resuming {
+		c.mu.Unlock()
+		return
+	}
 	delete(c.timers, runID)
 	if c.now().Before(run.ResetAt) {
 		c.scheduleLocked(runID)
 		c.mu.Unlock()
 		return
 	}
+	c.nextLease++
+	if c.nextLease == 0 {
+		c.nextLease++
+	}
+	lease := c.nextLease
+	c.resuming[runID] = lease
 	resumeCtx := c.ctx
 	c.mu.Unlock()
 
 	claimedRun, claimed, retryAt, err := c.store.Claim(runID, c.owner, c.now(), c.now().Add(c.claimTTL))
 	if err != nil {
+		c.finishResumeLease(runID, lease)
 		return
 	}
 	if !claimed {
 		c.mu.Lock()
-		if c.started {
+		owned, rearmed := c.finishResumeLeaseLocked(runID, lease)
+		if owned && c.started && !rearmed {
 			c.timers[runID] = c.scheduler.Schedule(retryAt, func() { c.resumeDue(runID) })
 		}
 		c.mu.Unlock()
@@ -603,29 +630,54 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 	claimLost := <-renewResult
 	cancelOperation()
 	if errors.Is(resumeErr, ErrRateLimitRearmed) {
+		c.finishResumeLease(runID, lease)
 		return
 	}
 	if claimLost {
+		c.finishResumeLease(runID, lease)
 		return
 	}
 	if resumeErr != nil {
 		_ = c.store.ReleaseClaim(runID, c.owner)
+		c.finishResumeLease(runID, lease)
 		return
 	}
 
 	c.mu.Lock()
 	current, exists := c.runs[runID]
 	if !exists || !parkedRateLimitRunEqual(current, run) {
+		c.finishResumeLeaseLocked(runID, lease)
 		c.mu.Unlock()
 		return
 	}
 	if err := c.store.Complete(runID, c.owner); err != nil {
+		c.finishResumeLeaseLocked(runID, lease)
 		c.mu.Unlock()
 		return
 	}
 	delete(c.runs, runID)
+	c.finishResumeLeaseLocked(runID, lease)
 	c.mu.Unlock()
 	c.recordEvent(RateParkingEvent{Type: RateLimitEventResumed, ResetAt: run.ResetAt, Reason: string(run.Reason)})
+}
+
+func (c *RateParkingCoordinator) finishResumeLease(runID string, lease uint64) {
+	c.mu.Lock()
+	c.finishResumeLeaseLocked(runID, lease)
+	c.mu.Unlock()
+}
+
+func (c *RateParkingCoordinator) finishResumeLeaseLocked(runID string, lease uint64) (bool, bool) {
+	if c.resuming[runID] != lease {
+		return false, false
+	}
+	delete(c.resuming, runID)
+	if c.rearmPending[runID] != lease {
+		return true, false
+	}
+	delete(c.rearmPending, runID)
+	c.scheduleLocked(runID)
+	return true, true
 }
 
 func (c *RateParkingCoordinator) renewClaim(ctx context.Context, runID string, done <-chan struct{}, result chan<- bool, cancel context.CancelFunc) {
