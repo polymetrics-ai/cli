@@ -17,6 +17,10 @@ The post-review findings were legitimate and repaired in the shared importer rat
 - Deferred metadata: webhooks, callbacks, route-server layers, path extensions, and unsupported parameter serializations are retained as canonical merge-blocked foundation gaps rather than silently removed.
 - Bounds and amplification: dynamic-reference vocabularies fail with named provenance, semantic finite bounds reject null/non-finite or contradictory limits, and an aggregate compact descriptor budget blocks reference amplification before retention.
 - Regression coverage: checked-in synthetic fixtures and focused source-import tests cover the added ambiguity, metadata, mixed-media, and amplification contracts alongside public-destination, redirect, and symlink containment guards.
+- Grammar completeness: Link and Example references resolve only in their defined positions and type-check their targets; content parameters have exactly one validated representation; `prefixItems` and unsupported JSON Schema applicators fail closed.
+- Form and identity integrity: exact OpenAPI/Swagger versions are retained and validated, Swagger host/basePath/root-and-operation schemes remain merge-blocked route evidence, source identities are connector-global across outbound and inbound descriptors, and YAML keys must remain strings before normalization.
+- Expansion safety: schema children reserve deterministic object/document capacity before cloning or retention, with typed limit errors for reference amplification.
+- Semantic closure: finite composite enums are recognized as bounded contracts without permitting dynamic children, while OpenAPI-only reference positions remain form-scoped and Encoding Header references are resolved before retention.
 
 ## Automated review route
 

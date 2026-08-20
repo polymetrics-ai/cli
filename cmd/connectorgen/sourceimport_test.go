@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"net"
 	"net/http"
 	"net/url"
@@ -488,6 +489,215 @@ func TestSourceImportBoundsAggregateResolvedDescriptorsAndKeepsMixedResponseMedi
 	response403 := descriptorResponse(t, operation, "403")
 	if len(response403.Media) != 1 || response403.Media[0].MediaType != "application/json" || response403.Media[0].Class != sourceOutputJSON {
 		t.Fatalf("error response media = %#v", response403)
+	}
+}
+
+func TestSourceImportResolvesGrammarScopedLinkAndExampleReferences(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"links":{"next":{"operationId":"listNext"}},"examples":{"provider":{"summary":"provider example","value":{"$ref":"literal provider field"}}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","links":{"next":{"$ref":"#/components/links/next"}},"content":{"application/json":{"examples":{"provider":{"$ref":"#/components/examples/provider"}}}}}}}}}}`)
+	result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+	response := descriptorResponse(t, result.Operations[0], "200")
+	declaration := response.Declaration.(map[string]any)
+	link := declaration["links"].(map[string]any)["next"].(map[string]any)
+	if link["operationId"] != "listNext" {
+		t.Fatalf("resolved link = %#v", link)
+	}
+	example := declaration["content"].(map[string]any)["application/json"].(map[string]any)["examples"].(map[string]any)["provider"].(map[string]any)
+	if example["value"].(map[string]any)["$ref"] != "literal provider field" {
+		t.Fatalf("resolved example lost literal field = %#v", example)
+	}
+
+	for _, tc := range []struct {
+		name string
+		raw  []byte
+		want string
+	}{
+		{
+			name: "external link reference",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","links":{"next":{"$ref":"https://example.invalid/link.json"}}}}}}}}`),
+			want: "external reference",
+		},
+		{
+			name: "wrong response target kind",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"notResponse":{"type":"string"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/schemas/notResponse"}}}}}}`),
+			want: "expected kind",
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/reference-kind.json", tc.raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return tc.raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("import error = %v, want %q", err, tc.want)
+			}
+		})
+	}
+}
+
+func TestSourceImportValidatesParameterRepresentationsAndContentSchemas(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name string
+		raw  []byte
+		want string
+	}{
+		{
+			name: "schema and content",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","schema":{"type":"string","maxLength":8},"content":{"application/json":{"schema":{"type":"string","maxLength":8}}}}],"responses":{"200":{"description":"ok"}}}}}}`),
+			want: "exactly one of schema or content",
+		},
+		{
+			name: "unbounded content schema",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","content":{"application/json":{"schema":{"type":"object","properties":{"tag":{"type":"string","maxLength":8}}}}}}],"responses":{"200":{"description":"ok"}}}}}}`),
+			want: "dynamic additionalProperties",
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/parameter-content.json", tc.raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return tc.raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("import error = %v, want %q", err, tc.want)
+			}
+		})
+	}
+	valid := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","content":{"application/json":{"schema":{"type":"string","maxLength":8}}}}],"responses":{"200":{"description":"ok"}}}}}}`)
+	result := importInlineSourceResult(t, valid, defaultSourceImportLimits())
+	if len(result.Operations[0].Request.Query) != 1 || result.Operations[0].Request.Query[0].Content == nil || result.Operations[0].Request.Query[0].Schema != nil {
+		t.Fatalf("content parameter descriptor = %#v", result.Operations[0].Request.Query)
+	}
+}
+
+func TestSourceImportValidatesPrefixItemsAndUnsupportedApplicators(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name   string
+		schema string
+		want   string
+	}{
+		{
+			name:   "unbounded prefix item",
+			schema: `{"type":"array","maxItems":1,"items":{"type":"string","maxLength":8},"prefixItems":[{"type":"object","additionalProperties":true,"properties":{}}]}`,
+			want:   "dynamic additionalProperties",
+		},
+		{
+			name:   "unsupported contains",
+			schema: `{"type":"array","maxItems":1,"items":{"type":"string","maxLength":8},"contains":{"type":"string","maxLength":8}}`,
+			want:   "unsupported request schema keyword contains",
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":` + tc.schema + `}}},"responses":{"200":{"description":"ok"}}}}}}`)
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/prefix-items.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("import error = %v, want %q", err, tc.want)
+			}
+		})
+	}
+	valid := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"array","maxItems":1,"prefixItems":[{"type":"string","maxLength":8}]}}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	if result := importInlineSourceResult(t, valid, defaultSourceImportLimits()); result.Operations[0].Request.Body == nil {
+		t.Fatal("bounded prefixItems request body was not imported")
+	}
+}
+
+func TestSourceImportPreservesExactFormAndSwaggerRouteBinding(t *testing.T) {
+	t.Parallel()
+	for _, raw := range [][]byte{
+		[]byte(`{"openapi":"3.1.0","swagger":"2.0","info":{"title":"x","version":"1"},"paths":{}}`),
+		[]byte(`{"openapi":"3.2.0","info":{"title":"x","version":"1"},"paths":{}}`),
+		[]byte(`{"openapi":"3.1.0.1","info":{"title":"x","version":"1"},"paths":{}}`),
+	} {
+		if _, _, err := parseSourceImportDocument(raw); err == nil {
+			t.Fatalf("unsupported document form was accepted: %s", raw)
+		}
+	}
+	openAPI30Sibling := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"ok"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","description":"override"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-sibling.json", openAPI30Sibling)
+	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return openAPI30Sibling, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "ambiguous response reference") {
+		t.Fatalf("OpenAPI 3.0 reference sibling error = %v", err)
+	}
+	swagger := []byte(`{"swagger":"2.0","info":{"title":"x","version":"1"},"host":"api.example.invalid","basePath":"/v1","schemes":["https","http"],"paths":{"/items":{"get":{"schemes":["http"],"responses":{"200":{"description":"ok"}}}}}}`)
+	result := importInlineSourceResult(t, swagger, defaultSourceImportLimits())
+	descriptor := result.Operations[0]
+	if descriptor.Source.Form != "swagger" || descriptor.Source.Version != "2.0" || descriptor.Path != "/items" || descriptor.Servers.Swagger == nil || !descriptor.Servers.Swagger.Declared || descriptor.Servers.Swagger.Host != "api.example.invalid" || descriptor.Servers.Swagger.BasePath != "/v1" || descriptor.Servers.Swagger.EffectivePath != "/v1/items" || !descriptor.Runtime.MergeBlocked {
+		t.Fatalf("Swagger route binding = %#v", descriptor)
+	}
+	if got := descriptor.Servers.Swagger.RootSchemes; len(got) != 2 || got[0] != "https" || got[1] != "http" {
+		t.Fatalf("Swagger root schemes = %#v", got)
+	}
+	if got := descriptor.Servers.Swagger.OperationSchemes; len(got) != 1 || got[0] != "http" {
+		t.Fatalf("Swagger operation schemes = %#v", got)
+	}
+	if got := descriptor.Servers.Swagger.Schemes; len(got) != 1 || got[0] != "http" {
+		t.Fatalf("Swagger effective schemes = %#v", got)
+	}
+}
+
+func TestSourceImportRejectsCrossKindIdentitiesAndNonStringYAMLKeys(t *testing.T) {
+	t.Parallel()
+	collision := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{"invoice.created":{"post":{"responses":{"200":{"description":"ok"}}}}},"paths":{"/items":{"get":{"operationId":"alpha.inbound.webhook.invoice.created","responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/collision.json", collision)
+	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return collision, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "duplicate source identity") {
+		t.Fatalf("cross-kind identity error = %v", err)
+	}
+	yaml := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  !!int \"01\": {}\n")
+	if _, _, err := parseSourceImportDocument(yaml); err == nil || !strings.Contains(err.Error(), "must be a string") {
+		t.Fatalf("non-string YAML key error = %v", err)
+	}
+}
+
+func TestSourceImportReservesSchemaExpansionBeforeRetainingReferences(t *testing.T) {
+	t.Parallel()
+	var properties strings.Builder
+	for index, name := range []string{"alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta"} {
+		if index > 0 {
+			properties.WriteByte(',')
+		}
+		properties.WriteString(`"` + name + `":{"$ref":"#/components/schemas/Large"}`)
+	}
+	largeDescription := strings.Repeat("x", 2400)
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Large":{"type":"object","additionalProperties":false,"description":"` + largeDescription + `","properties":{"value":{"type":"string","maxLength":8}}}}},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{` + properties.String() + `}}}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	limits := defaultSourceImportLimits()
+	limits.MaxResolvedDescriptorBytes = 9000
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/schema-amplification.json", raw)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	var limitErr *sourceSchemaExpansionLimitError
+	if !errors.As(err, &limitErr) || limitErr.Scope != "document" {
+		t.Fatalf("schema expansion error = %v", err)
+	}
+}
+
+func TestSourceImportTreatsFiniteCompositeEnumsAsBounded(t *testing.T) {
+	t.Parallel()
+	for _, schema := range []string{
+		`{"type":"object","enum":[{"mode":"fixed"}],"additionalProperties":true,"properties":{"mode":{"type":"string"}}}`,
+		`{"type":"array","enum":[["fixed"]],"items":{"type":"string"}}`,
+	} {
+		raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":` + schema + `}}},"responses":{"200":{"description":"ok"}}}}}}`)
+		result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+		if result.Operations[0].Request.Body == nil {
+			t.Fatalf("finite enum request body was not imported: %#v", result.Operations[0].Request)
+		}
+	}
+}
+
+func TestSourceImportScopesReferenceResolutionToOpenAPIGrammar(t *testing.T) {
+	t.Parallel()
+	swagger := []byte(`{"swagger":"2.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","links":{"next":{"$ref":"https://example.invalid/literal"}}}}}}}}`)
+	result := importInlineSourceResult(t, swagger, defaultSourceImportLimits())
+	response := descriptorResponse(t, result.Operations[0], "200")
+	links := response.Declaration.(map[string]any)["links"].(map[string]any)
+	if links["next"].(map[string]any)["$ref"] != "https://example.invalid/literal" {
+		t.Fatalf("literal Swagger response field changed: %#v", links)
+	}
+
+	openAPI := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{}},"encoding":{"payload":{"headers":{"X-Trace":{"$ref":"https://example.invalid/header"}}}}}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/encoding-header.json", openAPI)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return openAPI, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "external reference") {
+		t.Fatalf("encoding header reference error = %v", err)
 	}
 }
 

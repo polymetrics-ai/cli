@@ -30,3 +30,15 @@
 - **Red:** review cases exposed duplicate JSON/YAML object members, grammar-blind `$ref` resolution, silently dropped inbound route metadata, lossy parameter serialization, dynamic references, semantic bound errors, reference amplification, and mixed success/error media collapse.
 - **Green:** the parser now reports duplicate-member JSON Pointers; scoped OpenAPI resolvers preserve literal `$ref` fields and legal 3.1 siblings; inbound events, route servers, extensions, and parameter wire metadata are canonical merge-blocked evidence; dynamic references fail with a named foundation; finite enums and actual finite bounds are evaluated semantically; aggregate descriptor bytes are bounded; response status/media variants remain independent.
 - **Refactor:** document-level source-import results keep operation descriptors compatible while making inbound events and extensions explicit, and a shared compact-size budget bounds every retained result before append.
+
+## Cycle 6 — grammar-complete source form hardening
+
+- **Red:** follow-up review cases exposed unresolved Link/Example references, lossy content-only parameter contracts, unvalidated JSON Schema `prefixItems`, version-form collapse, missing Swagger route binding, cross-kind source-ID collisions, non-string YAML keys, and pre-budget schema reference amplification.
+- **Green:** focused source-import coverage now resolves and type-checks Link/Example references, rejects malformed parameter/schema/version/YAML forms, preserves exact source form plus Swagger root/operation route evidence, rejects cross-kind identities, and returns typed schema-expansion limits before retaining amplified children.
+- **Refactor:** the importer now carries one exact document-form model through parsing, reference rules, provenance, parameter handling, and route binding; the resolver owns grammar-specific target checks and incremental per-object/document expansion charging.
+
+## Cycle 7 — semantic enum and grammar-position closure
+
+- **Red:** review follow-up found finite object/array enums rejected despite bounding the complete input space, and found non-OpenAPI fields plus Encoding Header references outside the grammar-scoped resolver boundary.
+- **Green:** finite composite enums now retain schema-shape validation while relaxing only inherited cardinality bounds; OpenAPI-only reference positions are form-scoped, and Encoding Header references fail closed before descriptor creation.
+- **Refactor:** bounded-schema validation now carries finite-enum context through child schemas, while resolver traversal follows the parsed document form rather than field names alone.

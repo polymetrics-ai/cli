@@ -10,7 +10,7 @@ Execution and inline verification complete, including the review-hardening follo
 | --- | --- |
 | GSD command resolution and `agentcontractgen check` | pass: `scripts/gsd doctor`, all five `sources` lookups, generated discuss/plan/execute/verify/review prompts, and `go run ./cmd/agentcontractgen check` |
 | Focused source-import red/green tests | pass: initial Red compile failure recorded in TDD ledger; Green passes after closed importer implementation |
-| Focused review-hardening regression tests | pass: `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImport'` on 2026-08-20 validates duplicate-pointer parsing, grammar-scoped references, inbound-event gaps, route/parameter preservation, dynamic/bound rejection, amplification limits, and mixed response media |
+| Focused review-hardening regression tests | pass: `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImport'` on 2026-08-20 validates duplicate-pointer parsing, grammar-scoped Link/Example/Encoding references, finite composite bounds, inbound-event gaps, exact source forms, Swagger route evidence, parameter/content contracts, prefix-item bounds, cross-kind identities, YAML key safety, expansion limits, and mixed response media |
 | `go test -timeout 20m ./cmd/connectorgen` | pass: 156.575s before final hardening; 192.229s after lint cleanup; 103.624s in the final `make verify` rerun |
 | Generator validation, source-import help, and `surface-sync --check` | pass: `go run ./cmd/connectorgen source-import --help`; `validate internal/connectors/defs` reports 552 connectors/0 findings; surface-sync reports 0 drift |
 | `go vet ./...`; `go build ./cmd/pm`; `git diff --check` | pass |
