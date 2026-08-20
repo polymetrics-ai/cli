@@ -60,3 +60,10 @@
 - **Red:** review cases exposed legal x-prefixed reusable-component names being skipped as extensions, non-request Media Type encodings surviving resolution, inbound response amplification, and unbounded grammar-index position staging.
 - **Green:** focused source-import cases cover x-prefixed reusable component references and unused external refs, non-request encoding rejection, webhook/callback response expansion limits, and grammar-position caps before component ordering.
 - **Refactor:** extension handling is now explicit per grammar owner, while response and grammar-index accounting are shared pre-retention boundaries.
+
+## Cycle 11 — response-child, target, and discovery closure
+
+- **Red:** review follow-up found nested referenced response children escaping aggregate reservation, operation and inbound-event limits checked after construction, unvalidated Link operation targets, dropped request Media Type encoding metadata, and extension keys bypassing grammar-index capacity before ordering.
+- **Green:** source-import coverage now reserves resolved response-child expansion before cloning, reserves outbound and inbound count slots at discovery, validates unique in-artifact Link targets, retains request encoding with a merge-blocking foundation gap, and charges extension positions before sorting.
+- **Refactor:** the response estimator follows reference-bearing response grammar children without materializing them; one shared import count budget and grammar-position ledger bound all discovery paths.
+- **Review fallback:** this was an assigned active no-mistakes review phase, so the outer executor retains pipeline control; required `golang-how-to`, security, safety, error-handling, lint, and testing guidance was applied inline.
