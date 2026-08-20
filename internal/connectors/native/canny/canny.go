@@ -23,6 +23,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/credential"
 )
 
 const (
@@ -68,9 +69,6 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	}
 	if _, err := cannyBaseURL(cfg); err != nil {
 		return err
-	}
-	if strings.TrimSpace(cannySecret(cfg)) == "" {
-		return errors.New("canny connector requires secret api_key")
 	}
 	r, base, err := c.requester(cfg)
 	if err != nil {
@@ -241,9 +239,9 @@ func (c Connector) requester(cfg connectors.RuntimeConfig) (*connsdk.Requester, 
 	if err != nil {
 		return nil, requestBase{}, err
 	}
-	secret := strings.TrimSpace(cannySecret(cfg))
-	if secret == "" {
-		return nil, requestBase{}, errors.New("canny connector requires secret api_key")
+	secret, err := cannyCredential(cfg)
+	if err != nil {
+		return nil, requestBase{}, err
 	}
 	r := &connsdk.Requester{
 		Client:    c.Client,
@@ -258,6 +256,14 @@ func cannySecret(cfg connectors.RuntimeConfig) string {
 		return ""
 	}
 	return cfg.Secrets["api_key"]
+}
+
+func cannyCredential(cfg connectors.RuntimeConfig) (string, error) {
+	secret := cannySecret(cfg)
+	if err := credential.RequireAuthenticationValue("api_key", secret); err != nil {
+		return "", fmt.Errorf("canny connector: %w", err)
+	}
+	return secret, nil
 }
 
 // cannyBaseURL resolves and validates the base URL. The default is canny.io; any
