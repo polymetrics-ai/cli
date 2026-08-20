@@ -1,72 +1,74 @@
 package connectors
 
 import (
+	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"reflect"
+	"strings"
 	"testing"
 )
 
-func TestSanitizeWriteResultForOutputPreservesOrdinaryFieldsAndMasksOnlyCredentials(t *testing.T) {
+func TestSanitizeWriteResultForOutputPreservesProviderResponseExactly(t *testing.T) {
+	credential := "client-secret"
+	numericCredential := "12345678901234567890"
 	result := WriteResult{
 		RecordsWritten: 1,
 		ProviderResponses: []WriteProviderResponse{{
-			Status: 201,
+			Status:          201,
+			BodyPresent:     true,
+			BodyBytes:       len(`{"credential":"client-secret","numeric":12345678901234567890}`),
+			BodyRaw:         `{"credential":"client-secret","numeric":12345678901234567890}`,
+			BodyRawEncoding: "text",
 			Headers: map[string]WriteProviderHeader{
-				"X-Request-ID":          {Values: []string{"provider-1"}},
-				"Authorization":         {Values: []string{"provider-secret"}},
-				"X-Configured-Echo":     {Values: []string{"client-secret"}},
-				"X-Paid-Tier-Indicator": {Values: []string{"enterprise"}},
+				"X-Provider-Echo": {Values: []string{credential, "ordinary"}},
 			},
 			Body: map[string]any{
-				"id":             "provider-1",
-				"paid_tier":      "enterprise",
-				"rare":           map[string]any{"nested": true},
-				"credentialEcho": "client-secret",
+				credential:          "provider-key-preserved",
+				"credential_echo":   credential,
+				"numeric_echo":      json.Number(numericCredential),
+				"base64_echo":       base64.StdEncoding.EncodeToString([]byte(credential)),
+				"nested":            map[string]any{"value": credential},
+				"ordinary_provider": true,
 			},
 		}},
 	}
 
-	safe := SanitizeWriteResultForOutput(result, map[string]string{"token": "client-secret"})
-	response := safe.ProviderResponses[0]
-	if got := response.Headers["X-Request-ID"]; !reflect.DeepEqual(got.Values, []string{"provider-1"}) || got.Masked {
-		t.Fatalf("ordinary response header = %#v, want preserved", got)
-	}
-	if got := response.Headers["X-Paid-Tier-Indicator"]; !reflect.DeepEqual(got.Values, []string{"enterprise"}) || got.Masked {
-		t.Fatalf("paid-tier response header = %#v, want preserved", got)
-	}
-	for _, name := range []string{"Authorization", "X-Configured-Echo"} {
-		if got := response.Headers[name]; !got.Masked || len(got.Values) != 0 {
-			t.Fatalf("credential response header %q = %#v, want explicit marker", name, got)
-		}
-	}
-	body := response.Body.(map[string]any)
-	if body["id"] != "provider-1" || body["paid_tier"] != "enterprise" || !reflect.DeepEqual(body["rare"], map[string]any{"nested": true}) || !reflect.DeepEqual(body["credentialEcho"], map[string]bool{"masked": true}) {
-		t.Fatalf("sanitized provider body = %#v, want ordinary fields plus explicit credential marker", body)
-	}
-	if result.ProviderResponses[0].Headers["Authorization"].Masked || result.ProviderResponses[0].Body.(map[string]any)["credentialEcho"] != "client-secret" {
-		t.Fatal("sanitizing output mutated the in-memory provider result")
+	got := SanitizeWriteResultForOutput(result, map[string]string{"token": credential, "numeric": numericCredential})
+	if !reflect.DeepEqual(got, result) {
+		t.Fatal("provider result changed during output serialization")
 	}
 }
 
-func TestSanitizeOperationDirectWriteResultForOutputMasksDeclaredResponseSecretInPlace(t *testing.T) {
+func TestSanitizeOperationDirectWriteResultForOutputPreservesProviderResponseExactly(t *testing.T) {
+	credential := "client-secret"
+	numericCredential := "12345678901234567890"
 	result := OperationDirectWriteResult{
-		Connector: "fixture", Operation: "fixture.create", Method: "POST", Path: "/fixed", Status: 201,
-		Headers: map[string]WriteProviderHeader{"X-Request-ID": {Values: []string{"provider-1"}}, "Set-Cookie": {Values: []string{"session=secret"}}},
+		Connector: "fixture", Operation: "fixture.create", Method: "POST", Path: "/fixed", ResponseReceived: true, Status: 201,
+		Headers:         map[string]WriteProviderHeader{"X-Echo": {Values: []string{credential, "ordinary"}}},
+		BodyPresent:     true,
+		BodyRaw:         `{"credential":"client-secret","numeric":12345678901234567890}`,
+		BodyRawEncoding: "text",
 		Body: map[string]any{
-			"credential": "new-provider-credential",
-			"account":    map[string]any{"tier": "enterprise", "region": "eu"},
+			credential: "provider-key-preserved",
+			"echo":     credential,
+			"numeric":  json.Number(numericCredential),
+			"base64":   base64.StdEncoding.EncodeToString([]byte(credential)),
 		},
+		GraphQL:            &GraphQLResponseMetadata{Errors: []GraphQLResultError{{Message: credential}}},
 		OutputSecretFields: []string{"credential"},
 	}
 
-	safe := SanitizeOperationDirectWriteResultForOutput(result, nil)
-	if got := safe.Headers["X-Request-ID"]; got.Masked || !reflect.DeepEqual(got.Values, []string{"provider-1"}) {
-		t.Fatalf("ordinary direct-write header = %#v, want preserved", got)
+	got := SanitizeOperationDirectWriteResultForOutput(result, map[string]string{"token": credential, "numeric": numericCredential})
+	if !reflect.DeepEqual(got, result) {
+		t.Fatal("provider direct-write result changed during output serialization")
 	}
-	if got := safe.Headers["Set-Cookie"]; !got.Masked || len(got.Values) != 0 {
-		t.Fatalf("credential direct-write header = %#v, want explicit marker", got)
-	}
-	body := safe.Body.(map[string]any)
-	if !reflect.DeepEqual(body["credential"], map[string]bool{"masked": true}) || !reflect.DeepEqual(body["account"], map[string]any{"tier": "enterprise", "region": "eu"}) {
-		t.Fatalf("sanitized direct-write body = %#v, want preserved account and masked credential", body)
+}
+
+func TestSanitizeWriteErrorForOutputKeepsSystemDiagnosticsSecretFree(t *testing.T) {
+	credential := "client-secret"
+	output := SanitizeWriteErrorForOutput(errors.New("system diagnostic "+credential), map[string]string{"token": credential})
+	if strings.Contains(output, credential) {
+		t.Fatal("system diagnostic leaked a configured credential")
 	}
 }

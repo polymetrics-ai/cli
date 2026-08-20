@@ -182,8 +182,8 @@ func (m SourceRecordMapping) Validate() error {
 		seenInputs := make(map[string]struct{}, len(m.Inputs))
 		seenFields := make(map[string]struct{}, len(m.Inputs))
 		for _, input := range m.Inputs {
-			if !isConcreteTransportFieldName(input.Input) || !isConcreteTransportFieldName(input.Field) {
-				return fmt.Errorf("input_fields source record mapping requires concrete input and field names")
+			if input.Input == "" || input.Field == "" {
+				return fmt.Errorf("input_fields source record mapping requires non-empty input and field names")
 			}
 			if _, duplicate := seenInputs[input.Input]; duplicate {
 				return fmt.Errorf("input_fields source record mapping duplicates input %q", input.Input)
@@ -712,32 +712,6 @@ func isConcreteTransportIdentifier(value string) bool {
 	}
 	for _, character := range value {
 		if unicode.IsLower(character) || unicode.IsDigit(character) || character == '_' || character == '-' {
-			continue
-		}
-		return false
-	}
-	return true
-}
-
-// isConcreteTransportFieldName accepts a closed action/source record field
-// name. Unlike executor, action, and stream identifiers, JSON Schema property
-// names may use exact camelCase spelling; normalising one would silently map a
-// declaration to a different provider field. Keep the character set narrow
-// and reserve generic writer vocabulary so a field declaration cannot become
-// an escape hatch for an arbitrary transport.
-func isConcreteTransportFieldName(value string) bool {
-	value = strings.TrimSpace(value)
-	if value == "" {
-		return false
-	}
-	compact := strings.NewReplacer("-", "", "_", "").Replace(strings.ToLower(value))
-	for _, forbidden := range []string{"generic", "sql", "http", "shell", "genericsql", "generichttp", "genericshell"} {
-		if compact == forbidden {
-			return false
-		}
-	}
-	for _, character := range value {
-		if unicode.IsLower(character) || unicode.IsUpper(character) || unicode.IsDigit(character) || character == '_' || character == '-' {
 			continue
 		}
 		return false

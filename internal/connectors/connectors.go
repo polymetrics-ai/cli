@@ -478,9 +478,7 @@ type GraphQLResponseMetadata struct {
 	RateLimit   *GraphQLRateLimit    `json:"rate_limit,omitempty"`
 }
 
-// GraphQLResultError intentionally carries only a sanitized, bounded message.
-// Provider extensions and paths may echo caller inputs or internal identifiers,
-// so neither is a CLI response contract.
+// GraphQLResultError reports one provider GraphQL error.
 type GraphQLResultError struct {
 	Message string `json:"message"`
 }
@@ -616,17 +614,22 @@ type OperationDirectWriteRequest struct {
 }
 
 // OperationDirectWriteResult is the typed result of one declared REST or
-// fixed-document GraphQL mutation. Successful output retains the complete
-// decoded provider response; a declared output_policy shapes parsing only and
-// does not silently suppress ordinary result fields.
+// fixed-document GraphQL mutation. Provider-returned output is retained
+// verbatim; output_policy shapes parsing only. System-generated diagnostics,
+// plans, and logs remain separate secret-safe surfaces.
 type OperationDirectWriteResult struct {
 	Connector          string                         `json:"connector"`
 	Operation          string                         `json:"operation"`
 	Method             string                         `json:"method"`
 	Path               string                         `json:"path"`
+	ResponseReceived   bool                           `json:"response_received"`
 	Status             int                            `json:"status"`
 	Headers            map[string]WriteProviderHeader `json:"headers,omitempty"`
-	Body               any                            `json:"body,omitempty"`
+	BodyPresent        bool                           `json:"body_present"`
+	BodyBytes          int                            `json:"body_bytes"`
+	BodyRaw            string                         `json:"body_raw,omitempty"`
+	BodyRawEncoding    string                         `json:"body_raw_encoding,omitempty"`
+	Body               any                            `json:"body"`
 	GraphQL            *GraphQLResponseMetadata       `json:"graphql,omitempty"`
 	OutputSecretFields []string                       `json:"-"`
 }
@@ -826,6 +829,9 @@ func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
 	}
 }
 
+// WriteResult reports record accounting and the complete ordinary provider
+// responses for one named typed write action. System-generated diagnostics use
+// separate secret-taint-safe surfaces.
 type WriteResult struct {
 	RecordsWritten    int                     `json:"records_written"`
 	RecordsFailed     int                     `json:"records_failed"`
@@ -833,171 +839,73 @@ type WriteResult struct {
 	ProviderResponses []WriteProviderResponse `json:"provider_responses,omitempty"`
 }
 
-// WriteProviderResponse is the provider result captured for one named typed
-// write action. It contains the complete successful response observable by the
-// closed connector action; only credential-bearing headers and exact known
-// credential values are represented by a Masked marker at the output boundary.
-// It never carries request paths, request bodies, or caller-selected transport
-// details.
+// WriteProviderResponse is the verbatim provider result captured for one named
+// typed write action. System-generated diagnostics are carried separately.
 type WriteProviderResponse struct {
-	Status       int                            `json:"status"`
-	Headers      map[string]WriteProviderHeader `json:"headers"`
-	Body         any                            `json:"body"`
-	BodyEncoding string                         `json:"body_encoding,omitempty"`
+	RecordIndex     int                            `json:"record_index"`
+	Status          int                            `json:"status"`
+	Headers         map[string]WriteProviderHeader `json:"headers"`
+	BodyPresent     bool                           `json:"body_present"`
+	BodyBytes       int                            `json:"body_bytes"`
+	BodyRaw         string                         `json:"body_raw,omitempty"`
+	BodyRawEncoding string                         `json:"body_raw_encoding,omitempty"`
+	Body            any                            `json:"body"`
+	BodyEncoding    string                         `json:"body_encoding,omitempty"`
 }
 
-// WriteProviderHeader preserves an ordinary provider response header. A
-// credential-bearing value remains present as an explicit masked marker rather
-// than being silently removed from persisted App/CLI output.
+// WriteProviderHeader preserves an ordinary provider response header.
 type WriteProviderHeader struct {
 	Values []string `json:"values,omitempty"`
 	Masked bool     `json:"masked,omitempty"`
 }
 
-// SanitizeWriteResultForOutput retains every normal provider result field for
-// persisted App/CLI output. It applies only the transport credential boundary:
-// standard credential headers and values equal to (or containing) a configured
-// secret become an explicit masked marker. No scope, plan, action, tier, or
-// field-name heuristic is used to suppress ordinary provider output.
-func SanitizeWriteResultForOutput(result WriteResult, secrets map[string]string) WriteResult {
-	clone := result
-	if len(result.ProviderResponses) == 0 {
-		return clone
-	}
-	secretValues := make([]string, 0, len(secrets))
-	for _, value := range secrets {
-		if value = strings.TrimSpace(value); value != "" {
-			secretValues = append(secretValues, value)
-		}
-	}
-	clone.ProviderResponses = make([]WriteProviderResponse, len(result.ProviderResponses))
-	for index, response := range result.ProviderResponses {
-		copy := response
-		copy.Headers = sanitizeWriteProviderHeaders(response.Headers, secretValues)
-		copy.Body = redactWriteResultValue(response.Body, secretValues)
-		clone.ProviderResponses[index] = copy
-	}
-	return clone
+// SanitizeWriteResultForOutput preserves provider responses exactly for
+// persisted App/CLI output; only separately generated diagnostics are
+// secret-safe.
+func SanitizeWriteResultForOutput(result WriteResult, _ map[string]string) WriteResult {
+	return result
 }
 
-// SanitizeOperationDirectWriteResultForOutput applies the same explicit
-// credential boundary to an already named operation result. The operation's
-// declared response secret fields remain present as masked markers; all other
-// provider output stays intact for persisted App/CLI result consumers.
-func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, secrets map[string]string) OperationDirectWriteResult {
-	clone := result
-	secretValues := make([]string, 0, len(secrets))
-	for _, value := range secrets {
-		if value = strings.TrimSpace(value); value != "" {
-			secretValues = append(secretValues, value)
-		}
-	}
-	clone.Headers = sanitizeWriteProviderHeaders(result.Headers, secretValues)
-	clone.Body = redactDeclaredWriteResultFields(redactWriteResultValue(result.Body, secretValues), result.OutputSecretFields)
-	clone.OutputSecretFields = nil
-	return clone
+// SanitizeOperationDirectWriteResultForOutput preserves an already named
+// provider operation result exactly; generated diagnostics remain separate.
+func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, _ map[string]string) OperationDirectWriteResult {
+	return result
 }
 
-func sanitizeWriteProviderHeaders(headers map[string]WriteProviderHeader, secretValues []string) map[string]WriteProviderHeader {
-	if len(headers) == 0 {
-		return nil
+func SanitizeWriteErrorForOutput(err error, secrets map[string]string) string {
+	if err == nil {
+		return ""
 	}
-	clone := make(map[string]WriteProviderHeader, len(headers))
-	for name, header := range headers {
-		if responseHeaderIsCredential(name) || containsConfiguredSecret(header.Values, secretValues) {
-			clone[name] = WriteProviderHeader{Masked: true}
+	return redactWriteResultString(err.Error(), configuredWriteResultSecrets(secrets))
+}
+
+func configuredWriteResultSecrets(secrets map[string]string) []string {
+	values := make([]string, 0, len(secrets))
+	seen := make(map[string]struct{}, len(secrets))
+	for _, value := range secrets {
+		if value == "" {
 			continue
 		}
-		clone[name] = WriteProviderHeader{Values: append([]string(nil), header.Values...), Masked: header.Masked}
+		if _, found := seen[value]; found {
+			continue
+		}
+		seen[value] = struct{}{}
+		values = append(values, value)
 	}
-	return clone
+	sort.Slice(values, func(i, j int) bool {
+		if len(values[i]) == len(values[j]) {
+			return values[i] < values[j]
+		}
+		return len(values[i]) > len(values[j])
+	})
+	return values
 }
 
-func responseHeaderIsCredential(name string) bool {
-	switch strings.ToLower(strings.TrimSpace(name)) {
-	case "authorization", "proxy-authorization", "cookie", "set-cookie", "x-api-key", "x-auth-token":
-		return true
-	default:
-		return false
+func redactWriteResultString(value string, secrets []string) string {
+	for _, secret := range secrets {
+		value = strings.ReplaceAll(value, secret, "[masked]")
 	}
-}
-
-func containsConfiguredSecret(values, secrets []string) bool {
-	for _, value := range values {
-		for _, secret := range secrets {
-			if strings.Contains(value, secret) {
-				return true
-			}
-		}
-	}
-	return false
-}
-
-func redactWriteResultValue(value any, secrets []string) any {
-	switch typed := value.(type) {
-	case string:
-		if containsConfiguredSecret([]string{typed}, secrets) {
-			return map[string]bool{"masked": true}
-		}
-		return typed
-	case map[string]any:
-		clone := make(map[string]any, len(typed))
-		for key, child := range typed {
-			clone[key] = redactWriteResultValue(child, secrets)
-		}
-		return clone
-	case []any:
-		clone := make([]any, len(typed))
-		for index, child := range typed {
-			clone[index] = redactWriteResultValue(child, secrets)
-		}
-		return clone
-	case []string:
-		clone := make([]string, len(typed))
-		copy(clone, typed)
-		if containsConfiguredSecret(clone, secrets) {
-			return map[string]bool{"masked": true}
-		}
-		return clone
-	default:
-		return value
-	}
-}
-
-func redactDeclaredWriteResultFields(value any, fields []string) any {
-	if len(fields) == 0 {
-		return value
-	}
-	declared := make(map[string]struct{}, len(fields))
-	for _, field := range fields {
-		if field = strings.TrimSpace(field); field != "" {
-			declared[field] = struct{}{}
-		}
-	}
-	return redactDeclaredWriteResultFieldsValue(value, declared)
-}
-
-func redactDeclaredWriteResultFieldsValue(value any, fields map[string]struct{}) any {
-	switch typed := value.(type) {
-	case map[string]any:
-		clone := make(map[string]any, len(typed))
-		for key, child := range typed {
-			if _, declared := fields[key]; declared {
-				clone[key] = map[string]bool{"masked": true}
-				continue
-			}
-			clone[key] = redactDeclaredWriteResultFieldsValue(child, fields)
-		}
-		return clone
-	case []any:
-		clone := make([]any, len(typed))
-		for index, child := range typed {
-			clone[index] = redactDeclaredWriteResultFieldsValue(child, fields)
-		}
-		return clone
-	default:
-		return value
-	}
+	return value
 }
 
 type QueryRequest struct {
@@ -1137,6 +1045,17 @@ type CDCTransactionReceiptRestorer interface {
 
 type WriteValidator interface {
 	ValidateWrite(ctx context.Context, req WriteRequest, records []Record) error
+}
+
+// DeclarativeTypedDestination is the closed capability required to execute a
+// definition-selected typed destination action. It proves the mapping against
+// the exact action schema and binds plans to that action's definition.
+type DeclarativeTypedDestination interface {
+	Connector
+	DefinitionProvider
+	WriteValidator
+	PreflightWriteRecordFieldMapping(actionName string, fields []string) error
+	DeclarativeTypedDestinationActionDigest(actionName string) (string, error)
 }
 
 type DryRunWriter interface {

@@ -39,13 +39,105 @@ func TestCatalogStaticSchemaMatchesDiscoveredSchemaProjection(t *testing.T) {
 }
 
 var (
-	_ connectors.Connector          = (*Connector)(nil)
-	_ connectors.WriteValidator     = (*Connector)(nil)
-	_ connectors.DryRunWriter       = (*Connector)(nil)
-	_ connectors.StatefulReader     = (*Connector)(nil)
-	_ connectors.ManifestProvider   = (*Connector)(nil)
-	_ connectors.DefinitionProvider = (*Connector)(nil)
+	_ connectors.Connector                   = (*Connector)(nil)
+	_ connectors.WriteValidator              = (*Connector)(nil)
+	_ connectors.DeclarativeTypedDestination = (*Connector)(nil)
+	_ connectors.DryRunWriter                = (*Connector)(nil)
+	_ connectors.StatefulReader              = (*Connector)(nil)
+	_ connectors.ManifestProvider            = (*Connector)(nil)
+	_ connectors.DefinitionProvider          = (*Connector)(nil)
 )
+
+func TestDeclarativeTypedDestinationActionDigestIsCanonicalAndDefinitionBound(t *testing.T) {
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: "https://api.example.test", Headers: map[string]string{"X-Provider": "acme"}},
+		Writes: []WriteAction{{
+			Name: "apply_widget", Method: http.MethodPost, Path: "/widgets", BodyType: "json",
+			RecordSchema: json.RawMessage(`{"type":"object","properties":{"id":{"type":"string"},"value":{"type":"string"}}}`),
+		}},
+	}
+	first, err := declarativeTypedDestinationActionDigest(bundle, "apply_widget")
+	if err != nil {
+		t.Fatalf("first action digest: %v", err)
+	}
+	bundle.Writes[0].RecordSchema = json.RawMessage(`{ "properties": { "value": { "type": "string" }, "id": { "type": "string" } }, "type": "object" }`)
+	second, err := declarativeTypedDestinationActionDigest(bundle, "apply_widget")
+	if err != nil {
+		t.Fatalf("canonical action digest: %v", err)
+	}
+	if first != second {
+		t.Fatalf("equivalent action definitions changed digest: first=%q second=%q", first, second)
+	}
+	bundle.Writes[0].Path = "/widgets/changed"
+	third, err := declarativeTypedDestinationActionDigest(bundle, "apply_widget")
+	if err != nil {
+		t.Fatalf("changed action digest: %v", err)
+	}
+	if third == second {
+		t.Fatal("changed action definition preserved digest")
+	}
+}
+
+func TestDeclarativeTypedDestinationActionDigestIncludesEffectiveHTTPDefaults(t *testing.T) {
+	compile := func(t *testing.T, baseURL, header string) *Schema {
+		t.Helper()
+		spec, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"properties":{
+				"base_url":{"type":"string","default":` + mustJSONLiteral(t, baseURL) + `},
+				"provider_header":{"type":"string","default":` + mustJSONLiteral(t, header) + `}
+			}
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		return spec
+	}
+	bundle := Bundle{
+		Name: "acme",
+		Spec: compile(t, "https://api-one.example.test", "one"),
+		HTTP: HTTPBase{
+			URL: "{{ config.base_url }}", UserAgent: "acme-agent-one",
+			Headers: map[string]string{"X-Provider": "{{ config.provider_header }}"},
+		},
+		Writes: []WriteAction{{
+			Name: "apply_widget", Method: http.MethodPost, Path: "/widgets", BodyType: "json",
+			RecordSchema: json.RawMessage(`{"type":"object","properties":{"id":{"type":"string"}}}`),
+		}},
+	}
+	baseline, err := declarativeTypedDestinationActionDigest(bundle, "apply_widget")
+	if err != nil {
+		t.Fatalf("baseline action digest: %v", err)
+	}
+	changedAgent := bundle
+	changedAgent.HTTP.UserAgent = "acme-agent-two"
+	agentDigest, err := declarativeTypedDestinationActionDigest(changedAgent, "apply_widget")
+	if err != nil {
+		t.Fatalf("user-agent action digest: %v", err)
+	}
+	if agentDigest == baseline {
+		t.Fatal("changed HTTP user agent preserved action digest")
+	}
+	changedDefaults := bundle
+	changedDefaults.Spec = compile(t, "https://api-two.example.test", "two")
+	defaultDigest, err := declarativeTypedDestinationActionDigest(changedDefaults, "apply_widget")
+	if err != nil {
+		t.Fatalf("default action digest: %v", err)
+	}
+	if defaultDigest == baseline {
+		t.Fatal("changed request defaults preserved action digest")
+	}
+}
+
+func mustJSONLiteral(t *testing.T, value string) string {
+	t.Helper()
+	raw, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("json.Marshal: %v", err)
+	}
+	return string(raw)
+}
 
 // Base itself is NOT asserted against connectors.Connector or
 // connectors.ManifestProvider: per API-CONTRACT.md §2, Tier-3 natives that

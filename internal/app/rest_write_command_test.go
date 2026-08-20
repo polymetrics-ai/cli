@@ -294,9 +294,11 @@ func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.
 		name     string
 		policy   string
 		wantBody bool
+		bodyless bool
 	}{
 		{name: "json returns complete decoded body", policy: "json", wantBody: true},
 		{name: "none retains complete response body", policy: "none", wantBody: true},
+		{name: "none accepts bodyless response", policy: "none", bodyless: true},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			calls := 0
@@ -311,6 +313,11 @@ func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.
 				}
 				if body["name"] != "Ada" {
 					t.Fatalf("request body = %#v, want typed name Ada", body)
+				}
+				if tt.bodyless {
+					w.Header().Set("X-Provider-Receipt", "receipt-204")
+					w.WriteHeader(http.StatusNoContent)
+					return
 				}
 				w.Header().Set("Content-Type", "application/json")
 				_, _ = w.Write([]byte(`{"updated":true,"id":"w_1","nested":{"state":"complete"}}`))
@@ -352,6 +359,14 @@ func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.
 			}
 			if calls != 1 || run.Status != "completed" || run.OperationDirectWrite == nil {
 				t.Fatalf("run/calls = %#v/%d, want one completed direct write", run, calls)
+			}
+			if tt.bodyless {
+				if run.OperationDirectWrite.Status != http.StatusNoContent {
+					t.Fatalf("bodyless response status = %d, want %d", run.OperationDirectWrite.Status, http.StatusNoContent)
+				}
+				if receipt := run.OperationDirectWrite.Headers["X-Provider-Receipt"].Values; len(receipt) != 1 || receipt[0] != "receipt-204" {
+					t.Fatalf("bodyless response receipt header = %#v, want receipt-204", receipt)
+				}
 			}
 			if !tt.wantBody {
 				if run.OperationDirectWrite.Body != nil {
@@ -617,11 +632,13 @@ func TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload(
 	})
 }
 
-func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
+func TestDirectWriteCommandFailurePersistsProviderResponse(t *testing.T) {
 	ctx := context.Background()
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls++
+		w.Header().Add("X-Provider-Receipt", "receipt-one")
+		w.Header().Add("X-Provider-Receipt", "receipt-two")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(`{"error":"fixture failure","token":"server-token"}`))
@@ -649,13 +666,19 @@ func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
 		t.Fatal("RunReverseETL error = nil, want HTTP 500")
 	}
 	if calls != 1 || run.Status != "failed" {
-		t.Fatalf("failed run/calls = %+v/%d, want one failed direct write", run, calls)
+		t.Fatal("failed run did not record one failed direct write")
 	}
-	if !strings.Contains(err.Error(), "server-token") {
-		t.Fatalf("RunReverseETL error = %q, want complete provider error content", err)
+	if strings.Contains(err.Error(), "server-token") {
+		t.Fatal("RunReverseETL error leaked a provider response")
 	}
-	if !strings.Contains(run.Error, "server-token") {
-		t.Fatalf("persisted direct-write error = %q, want complete provider error content", run.Error)
+	if strings.Contains(run.Error, "server-token") {
+		t.Fatal("persisted direct-write error leaked a provider response")
+	}
+	if run.OperationDirectWrite == nil || !run.OperationDirectWrite.ResponseReceived || run.OperationDirectWrite.Status != http.StatusInternalServerError || run.OperationDirectWrite.BodyRaw != `{"error":"fixture failure","token":"server-token"}` {
+		t.Fatal("failed direct write did not retain the complete provider response")
+	}
+	if receipt := run.OperationDirectWrite.Headers["X-Provider-Receipt"].Values; len(receipt) != 2 || receipt[0] != "receipt-one" || receipt[1] != "receipt-two" {
+		t.Fatal("failed direct write did not retain the provider receipt")
 	}
 }
 

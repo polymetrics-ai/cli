@@ -1,9 +1,14 @@
 package engine
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -433,6 +438,22 @@ func (c *Connector) PreflightWriteRecordField(actionName, field string) error {
 	return ValidateRecordSchemaField(action.RecordSchema, field)
 }
 
+// PreflightWriteRecordFieldMapping validates a declaration-owned mapping
+// against the exact write action's top-level schema.
+func (c *Connector) PreflightWriteRecordFieldMapping(actionName string, fields []string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateRecordSchemaFieldMapping(action.RecordSchema, fields)
+}
+
+// DeclarativeTypedDestinationActionDigest returns the canonical digest of one
+// declaration-selected typed action, including its effective HTTP defaults.
+func (c *Connector) DeclarativeTypedDestinationActionDigest(actionName string) (string, error) {
+	return declarativeTypedDestinationActionDigest(c.bundle, actionName)
+}
+
 // PreflightStructuredJSONRecordField makes the concrete write schema the
 // authority for a commandrunner `json` flag. It intentionally accepts a field
 // name rather than a raw body or arbitrary path, so the runner cannot grow a
@@ -500,6 +521,75 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 // operation direct-write binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
 	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
+}
+
+// PreflightWriteRecordFieldMapping proves a declaration-owned mapping covers
+// the required top-level fields of one exact write action.
+func (b Base) PreflightWriteRecordFieldMapping(actionName string, fields []string) error {
+	action, err := findWriteAction(b.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateRecordSchemaFieldMapping(action.RecordSchema, fields)
+}
+
+// DeclarativeTypedDestinationActionDigest returns the canonical digest of one
+// declaration-selected typed action, including its effective HTTP defaults.
+func (b Base) DeclarativeTypedDestinationActionDigest(actionName string) (string, error) {
+	return declarativeTypedDestinationActionDigest(b.bundle, actionName)
+}
+
+func (b Base) ValidateWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) error {
+	if len(b.bundle.Writes) == 0 {
+		return connectors.ErrUnsupportedOperation
+	}
+	return ValidateWrite(ctx, b.bundle, req, records)
+}
+
+func declarativeTypedDestinationActionDigest(b Bundle, actionName string) (string, error) {
+	action, err := findWriteAction(b, actionName)
+	if err != nil {
+		return "", err
+	}
+	actionJSON, err := json.Marshal(action)
+	if err != nil {
+		return "", err
+	}
+	decoder := json.NewDecoder(bytes.NewReader(actionJSON))
+	decoder.UseNumber()
+	var canonicalAction any
+	if err := decoder.Decode(&canonicalAction); err != nil {
+		return "", err
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return "", fmt.Errorf("action definition contains multiple JSON values")
+		}
+		return "", err
+	}
+	canonical, err := json.Marshal(struct {
+		Connector     string            `json:"connector"`
+		BaseURL       string            `json:"base_url"`
+		UserAgent     string            `json:"user_agent"`
+		Headers       map[string]string `json:"headers"`
+		Auth          []AuthSpec        `json:"auth"`
+		DefaultConfig map[string]string `json:"default_config"`
+		Action        any               `json:"action"`
+	}{
+		Connector:     b.Name,
+		BaseURL:       b.HTTP.URL,
+		UserAgent:     b.HTTP.UserAgent,
+		Headers:       b.HTTP.Headers,
+		Auth:          b.HTTP.Auth,
+		DefaultConfig: materializeConfigDefaults(b, connectors.RuntimeConfig{}).Config,
+		Action:        canonicalAction,
+	})
+	if err != nil {
+		return "", err
+	}
+	sum := sha256.Sum256(canonical)
+	return hex.EncodeToString(sum[:]), nil
 }
 
 // OperationDirectReadMaxBytes returns the bounded response limit for a

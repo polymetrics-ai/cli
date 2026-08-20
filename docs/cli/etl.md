@@ -155,10 +155,10 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   JSON run and status output retains each acknowledged typed action result in
   run.destination_results: record accounting plus every ordinary successful
   provider response field (status, headers, and body). Fields are not removed
-  because they are rare, destructive, paid-tier-specific, or unfamiliar. The
-  credential boundary is the only exception: credential-bearing headers and
-  values appear in place as {"masked":true}, so field presence remains visible
-  without exposing a secret.
+  because they are rare, destructive, paid-tier-specific, or unfamiliar.
+  Provider-returned fields, keys, and values are preserved verbatim, even when
+  they equal configured credential bytes. System-generated plans, logs,
+  request diagnostics, and synthetic errors remain secret-taint-safe.
 
 DIRECT CONNECTOR COMMANDS
   check

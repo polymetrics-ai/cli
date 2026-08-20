@@ -585,11 +585,22 @@ func hasTransportApprovalInput(args []string) bool {
 		}
 		key, _, _ := strings.Cut(strings.TrimPrefix(raw, "--"), "=")
 		switch key {
-		case "approval-plan", "approval-token-stdin", "confirm", "approval-token", "approve", "method", "path", "url", "action", "record", "issue", "label", "destination-config":
+		case "approval-plan", "approval-token-stdin", "confirm", "approval-token", "approve", "connector", "action", "destination-action", "destination_action", "method", "path", "url", "route", "verb", "body", "payload", "query", "headers", "header", "mapping", "map", "input-fields", "input_fields", "record", "issue", "label", "evidence", "destination-config", "destination_config", "destination", "credential", "source-config", "source_config", "sql", "shell", "http":
 			return true
 		}
 	}
 	return false
+}
+
+func validateLegacyETLRunFlags(args []string) error {
+	_, err := parseStrictTransportFlags(args, map[string]strictTransportFlagSpec{
+		"connection":            {},
+		"stream":                {},
+		"batch-size":            {},
+		"max-in-flight-batches": {},
+		"runtime":               {allowBare: true},
+	})
+	return err
 }
 
 func readApprovalTokenFromStdin(stdin io.Reader) (string, error) {

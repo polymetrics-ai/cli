@@ -60,7 +60,7 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 		if err == nil {
 			err = ErrArrowFastPathInvalid
 		}
-		return result, fmt.Errorf("begin Arrow full-overwrite run: %w", err)
+		return result, fmt.Errorf("begin Arrow full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 	}
 	published := false
 	defer func() {
@@ -70,7 +70,7 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 		cleanupCtx, cancel := context.WithTimeout(context.Background(), request.unitDeadline())
 		defer cancel()
 		if abortErr := session.AbortArrowFullOverwrite(cleanupCtx); abortErr != nil && err == nil {
-			err = fmt.Errorf("abort Arrow full-overwrite run: %w", abortErr)
+			err = fmt.Errorf("abort Arrow full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, abortErr))
 		}
 	}()
 
@@ -137,7 +137,7 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 	}
 	cancelPublish()
 	if publishErr != nil {
-		return result, fmt.Errorf("publish Arrow full-overwrite run: %w", publishErr)
+		return result, fmt.Errorf("publish Arrow full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}
 	if reporter, ok := session.(ArrowBulkPhaseReporter); ok {
 		result.IndexConstraintElapsed = reporter.ArrowBulkPhaseMeasurement().IndexConstraintBuildElapsed
@@ -189,9 +189,12 @@ type arrowPipelineProducerResult struct {
 func produceArrowPipeline(ctx context.Context, request RunRequest, source ArrowRangeExtractor, credits *ByteCreditController, work chan<- arrowPipelineBatch) (result arrowPipelineProducerResult) {
 	result.err = source.ExtractArrowRanges(ctx, cloneArrowExtractRequest(ArrowExtractRequest{
 		Connector: request.Source, Runtime: request.SourceRuntime, Stream: request.Stream, CursorField: request.CursorField,
-		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint),
+		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint, request.RateLimitResumeCheckpoint),
 		BatchSize: request.BatchSize, UnitDeadline: request.unitDeadline(), TransformPlanJSON: request.TransformPlanJSON, TransformHash: request.TransformPlanHash,
-	}), func(batch ArrowSourceBatch) error {
+	}), func(batch ArrowSourceBatch) (callbackErr error) {
+		defer func() {
+			callbackErr = tagTransportExecutionError(TransportExecutionOriginInternal, callbackErr)
+		}()
 		if err := validateArrowSourceBatch(batch, request.BatchSize); err != nil {
 			return err
 		}
@@ -226,13 +229,19 @@ func produceArrowPipeline(ctx context.Context, request RunRequest, source ArrowR
 			return ctx.Err()
 		}
 	})
+	if result.err != nil {
+		result.err = tagTransportExecutionError(TransportExecutionOriginSource, result.err)
+	}
 	if result.err != nil && ctx.Err() != nil {
 		return result
 	}
 	return result
 }
 
-func consumeArrowPipeline(ctx context.Context, request RunRequest, plan DestinationPlan, session ArrowFullOverwriteRun, transformer *database.ArrowTransformer, work <-chan arrowPipelineBatch, result *Result, segments *[]FastSegmentReceipt, lastCandidate **synccontract.CheckpointEnvelope) error {
+func consumeArrowPipeline(ctx context.Context, request RunRequest, plan DestinationPlan, session ArrowFullOverwriteRun, transformer *database.ArrowTransformer, work <-chan arrowPipelineBatch, result *Result, segments *[]FastSegmentReceipt, lastCandidate **synccontract.CheckpointEnvelope) (err error) {
+	defer func() {
+		err = tagTransportExecutionError(TransportExecutionOriginInternal, err)
+	}()
 	for admitted := range work {
 		err := func() error {
 			defer admitted.release()
@@ -274,7 +283,7 @@ func consumeArrowPipeline(ctx context.Context, request RunRequest, plan Destinat
 				result.ApplyElapsed += time.Since(applyStarted)
 				cancelApply()
 				if applyErr != nil {
-					return fmt.Errorf("bulk apply Arrow segment: %w", applyErr)
+					return fmt.Errorf("bulk apply Arrow segment: %w", tagTransportExecutionError(TransportExecutionOriginDestination, applyErr))
 				}
 				if reporter, ok := session.(ArrowBulkPhaseReporter); ok {
 					result.IndexConstraintElapsed = reporter.ArrowBulkPhaseMeasurement().IndexConstraintBuildElapsed

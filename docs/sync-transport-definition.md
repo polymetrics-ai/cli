@@ -2,10 +2,10 @@
 
 `sync_transport.json` is an optional, versioned claim that a connector can
 participate in the closed warehouse-mediated sync path. It is not a way to
-turn an arbitrary provider endpoint, SQL statement, or HTTP request into a
-transport. The engine loads it strictly; runtime preflight additionally
-requires a registered exact executor and accepted conformance evidence before
-any source or destination I/O.
+turn an arbitrary provider endpoint, SQL statement, shell command, or HTTP
+request into a transport. The engine loads it strictly; runtime preflight
+additionally requires a registered exact executor and accepted conformance
+evidence before any source or destination I/O.
 
 Place the file only at `internal/connectors/defs/<connector>/sync_transport.json`.
 Use `schema_version: 1`. The complete structural schema is
@@ -67,7 +67,7 @@ source I/O.
 
 `declarative_api/declarative_typed_destination` is the reusable destination
 adapter for a declarative API connector. It is intentionally narrower than a
-generic HTTP writer:
+generic HTTP, shell, SQL, or arbitrary-action writer:
 
 - Declare only action names that already exist in that connector's
   `writes.json`; every declared record-driven action needs an explicit
@@ -82,15 +82,21 @@ generic HTTP writer:
   issue-label destination.
 - Supply at least one `source_bindings` entry, all with `input_fields`. Its
   `input` is an action record field and its `field` is a source record field.
-  The input name is matched case-sensitively against the selected action's
-  top-level `record_schema.properties`: both `target_id` and a provider's
-  `targetId` are valid only when that exact property exists. The runtime never
-  rewrites snake case, camel case, or action names. Empty, malformed, unknown,
-  cross-action, `generic`/`shell`/`http`, and undeclared names fail before
-  source or provider I/O.
+  The input name is matched byte-for-byte against the selected action's
+  top-level `record_schema.properties`: both `target_id`, a provider's
+  `targetId`, and any other provider-owned property spelling are valid only
+  when that exact property exists. The runtime never trims, rewrites, or
+  normalizes property or action names. Every required top-level selected-action
+  property needs exactly one mapping. Empty, duplicate, unknown, cross-action,
+  and undeclared names fail before source or provider I/O. A provider property
+  that the declaration model cannot represent is a foundation gap, never a
+  silently renamed field.
   The adapter copies only those declared values and validates every result
   against the selected action's `record_schema` before it constructs a
   provider request.
+- The declarative typed destination has no run-scoped full-overwrite protocol.
+  A `full_overwrite` destination declaration is therefore rejected during
+  preflight before any source, stage, or provider I/O.
 - Declare `acknowledgement: "durable_warehouse"`,
   `delivery.idempotency: "keyed"`, and
   `delivery.deletes: "not_available"`. This adapter does not accept
@@ -105,8 +111,8 @@ generic HTTP writer:
 `destination_action` lives on the saved connection stream, not in
 `sync_transport.json` and not on `pm etl run`. It is the stable,
 definition-owned identity that selects one eligible action when a connector
-declares more than one typed destination action for a mode. A connection create
-or update validates the exact descriptor, source allowlist, `input_fields`
+declares more than one typed destination action for a mode. Connection creation
+validates the exact descriptor, source allowlist, `input_fields`
 mapping, mode/strategy, action, acknowledgement, and conformance evidence
 before catalog, source, warehouse, or provider I/O.
 
@@ -139,15 +145,14 @@ never omitted because they are rare, destructive, paid-tier-specific,
 unfamiliar, or outside a summary list. JSON bodies retain their original
 structure; text and binary bodies retain an explicit encoding.
 
-The sole exception is the existing credential boundary. Credential-bearing
-response headers and a response value equal to or containing a configured
-credential are represented in place as `{ "masked": true }`; the field/header
-name remains present. No route, request body, action selector, or credential is
-accepted from a runtime caller to influence this output. The regular persisted
-reverse-ETL run uses the same `destination_result` contract, and an
-operation-direct-write run applies the same masking to its declared response
-secret fields. Its declared `output_policy` may select a parsing form, but it
-does not suppress a successful ordinary provider response.
+Provider-returned fields, keys, and values are preserved verbatim, even when
+they equal configured credential bytes. System-generated plans, logs, request
+diagnostics, and synthetic errors remain secret-taint-safe. No route, request
+body, action selector, or credential is accepted from a runtime caller to
+influence this output. The regular persisted reverse-ETL run uses the same
+`destination_result` contract, and an operation-direct-write run preserves the
+same provider response facts. Its declared `output_policy` may select a parsing
+form, but it does not suppress a successful ordinary provider response.
 
 At plan time the adapter verifies the declared mode, persisted selected action,
 and source binding, then requires the existing reverse-ETL plan, preview,
@@ -162,10 +167,11 @@ executor.
 
 ## Typed action contract
 
-A destination action is a connector-owned, named action, not a generic HTTP
-or SQL writer. For the action to be executable, its `writes.json` entry must
-be present in `eligible_actions` and satisfy the exact closed adapter's
-contract. The `source_bindings` mapping supplies only the upstream values; it
+A destination action is a connector-owned, named action, not a generic HTTP,
+shell, SQL, or arbitrary-action writer. For the action to be executable, its
+`writes.json` entry must be present in `eligible_actions` and satisfy the
+exact closed adapter's contract. The `source_bindings` mapping supplies only
+the upstream values; it
 cannot add action fields, an operation name, an endpoint, or a body template.
 
 The adapter must validate the declaration-selected strategy and source binding

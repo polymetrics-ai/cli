@@ -15,6 +15,10 @@ second full `make verify` run exited `0`.
 - `go test -count=1 -timeout 20m ./internal/app -run '^Test(DefinitionTransportFactories(RunTypedDestinationFromDefinition|SelectDistinctTypedDestinationEvidence|RefuseTypedDestinationDeclarationsBeforeIO)|DeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite)$'` — passed.
 - `go test -count=1 -timeout 20m ./internal/app -run '^Test(OpenRegistersDefinitionOwnedProductionTransports|DefinitionTransportFactories(SelectDeclaredEvidence|RegisterSharedSourceOnce|RunTypedDestinationFromDefinition|SelectDistinctTypedDestinationEvidence|RefuseTypedDestinationDeclarationsBeforeIO))$'` — passed.
 
+## Review remediation check
+
+- `go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/app -run '^(TestBundleLoadRejectsDuplicateWriteActionNames|TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies|TestValidateRecordSchemaFieldMappingRequiresExactCompleteFields|TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields|TestDeclarativeTypedDestinationPreflightRejectsIncompleteMappingAndFullOverwriteBeforeIO|TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies)$'` — passed. It covers exact raw selected-action property names, required mapping coverage before I/O, default full-overwrite refusal, duplicate definition names, and bodyless `none` responses retaining status and provider receipt headers.
+
 ## Affected-package and binary checks
 
 - `go test -count=1 -timeout 20m ./internal/app` — passed (249.108s).
@@ -27,10 +31,10 @@ second full `make verify` run exited `0`.
 
 ## Application dispatch and result-output checks
 
-- `go test -count=1 -timeout 20m ./internal/app -run '^TestPersistedConnectionSelectsDeclarativeTypedDestinationAction$'` — passed. The production-shaped synthetic bundles prove two named actions in one connector and one in another are selected only by the persisted `destination_action`; missing, foreign, unlisted, and stale selections refuse before I/O. The same test proves persisted `Run.destination_results` preserves ordinary response status, headers, nested fields, large numeric values, and tier-specific fields, while credential material remains present as an explicit mask marker.
-- `go test -count=1 -timeout 20m ./internal/app -run '^TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields$'` — passed. Exact schema-valid snake_case and camelCase names are admitted only for the selected action; malformed, unknown, cross-action, runtime-selected, generic/shell/http, and undeclared names refuse before I/O.
-- `go test -count=1 -timeout 20m ./internal/connectors -run 'TestSanitize.*Output'` — passed. Complete output retains ordinary provider results and masks only credential-bearing values in place.
-- `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies$'` — passed. `output_policy: none` controls parsing only and cannot suppress successful ordinary provider output.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestPersistedConnectionSelectsDeclarativeTypedDestinationAction$'` — passed. The production-shaped synthetic bundles prove two named actions in one connector and one in another are selected only by the persisted `destination_action`; missing, foreign, unlisted, and stale selections refuse before I/O. The same test proves persisted `Run.destination_results` preserves ordinary response status, headers, nested fields, large numeric values, tier-specific fields, and credential-equal provider bytes verbatim; separately generated diagnostics remain secret-taint-safe.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields$'` — passed. Exact schema-valid provider-owned names, including snake_case, camelCase, and `http`, are admitted only when the selected action declares them; whitespace, malformed, unknown, cross-action, runtime-selected, and undeclared names refuse before I/O.
+- `go test -count=1 -timeout 20m ./internal/connectors -run 'TestSanitize.*Output'` — passed. Complete output retains provider-returned fields, keys, and values verbatim; separately generated diagnostics remain secret-taint-safe.
+- `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies$'` — passed. `output_policy: none` retains complete non-empty output and accepts an intentional bodyless success without losing status or headers.
 - `go test -count=1 -timeout 20m ./internal/app -run '^TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies$'` — passed.
 - `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -count=1 -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$'` regenerated the tracked CLI snapshots; the same command without the update variable then passed.
 

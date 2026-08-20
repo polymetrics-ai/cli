@@ -296,11 +296,11 @@ the selected named action's record accounting and complete successful provider
 response: status, headers, and body. The CLI does not discard ordinary response
 fields because they are rare, destructive, paid-tier-specific, or unfamiliar.
 
-The credential boundary remains strict. Credential-bearing response headers and
-response values that contain a configured credential stay present as
-`{ "masked": true }`, never their literal secret. The same preserved-result
-contract is used by persisted regular reverse-ETL runs (`destination_result`)
-and direct-write run output, including declared response-secret masking.
+Provider-returned fields, keys, and values are preserved verbatim, even when
+they equal configured credential bytes. System-generated plans, logs, request
+diagnostics, and synthetic errors remain secret-taint-safe. The same
+preserved-result contract is used by persisted regular reverse-ETL runs
+(`destination_result`) and direct-write run output.
 
 ## Closed PostgreSQL managed-target transport
 

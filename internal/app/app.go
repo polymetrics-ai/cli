@@ -1049,7 +1049,7 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 			return Connection{}, modeErr
 		}
 		destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
-		if strings.TrimSpace(stream.DestinationAction) != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
+		if stream.DestinationAction != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
 			return Connection{}, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", name, destination.Name())
 		}
 		if declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
@@ -1345,11 +1345,36 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 			return Run{}, err
 		}
 	}
-	runID, err := prefixedID("run")
-	if err != nil {
-		return Run{}, err
+	batchSize := req.BatchSize
+	if batchSize <= 0 {
+		batchSize = 1000
 	}
-	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
+	var rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope
+	if req.rateParkingResumeCheckpoint != nil {
+		checkpoint := req.rateParkingResumeCheckpoint.Clone()
+		rateParkingResumeCheckpoint = &checkpoint
+	}
+	runID := req.rateParkingRearmAttemptRunID
+	if runID == "" {
+		var err error
+		runID, err = prefixedID("run")
+		if err != nil {
+			return Run{}, err
+		}
+	} else {
+		parkedRunID, resuming := rateParkingResumeRunID(ctx)
+		if !resuming || parkedRunID == runID {
+			return Run{}, errors.New("rate-limit rearm attempt is not linked to a parked run")
+		}
+		parkedRun, found := a.runByID(parkedRunID)
+		if !found || parkedRun.RateParkingRearmAttemptRunID != runID {
+			return Run{}, errors.New("rate-limit rearm attempt link is unavailable")
+		}
+		if _, found := a.runByID(runID); found {
+			return Run{}, errors.New("rate-limit rearm attempt run already exists")
+		}
+	}
+	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", BatchSize: batchSize, StartedAt: time.Now().UTC()}
 	if _, err := a.beginRun(run); err != nil {
 		return Run{}, fmt.Errorf("start ETL run: %w", err)
 	}
@@ -1370,7 +1395,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err != nil {
 		return a.failRun(runID, err)
 	}
-	if destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination); declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
+	destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
+	if stream.DestinationAction != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
+		return a.failRun(runID, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", req.Stream, destination.Name()))
+	}
+	if declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
 		if a.transports == nil {
 			return a.failRun(runID, fmt.Errorf("declarative typed destination transport registry is unavailable"))
 		}
@@ -1384,25 +1413,22 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 			return a.failRun(runID, fmt.Errorf("validate persisted destination mapping for stream %q: %w", req.Stream, err))
 		}
 	}
-	batchSize := req.BatchSize
-	if batchSize <= 0 {
-		batchSize = 1000
-	}
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	dispatchRequest := etlModeDispatchRequest{
-		runID:               runID,
-		connection:          conn,
-		source:              source,
-		sourceRuntime:       sourceRuntime,
-		destination:         destination,
-		destinationRuntime:  destRuntime,
-		sourceExpectation:   sourceExpectation,
-		streamName:          req.Stream,
-		stream:              stream,
-		mode:                mode,
-		batchSize:           batchSize,
-		maxInFlightBatches:  req.MaxInFlightBatches,
-		destinationApproval: req.DestinationApproval,
+		runID:                       runID,
+		connection:                  conn,
+		source:                      source,
+		sourceRuntime:               sourceRuntime,
+		destination:                 destination,
+		destinationRuntime:          destRuntime,
+		sourceExpectation:           sourceExpectation,
+		streamName:                  req.Stream,
+		stream:                      stream,
+		mode:                        mode,
+		batchSize:                   batchSize,
+		maxInFlightBatches:          req.MaxInFlightBatches,
+		destinationApproval:         req.DestinationApproval,
+		rateParkingResumeCheckpoint: rateParkingResumeCheckpoint,
 	}
 	return a.dispatchETLMode(ctx, dispatchRequest)
 }
@@ -2883,11 +2909,12 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 	operationRequest.PreviewDigest = preview.Digest
 	operationResult, writeErr := directWriter.OperationDirectWrite(ctx, operationRequest)
 	writeResult := connectors.WriteResult{RecordsWritten: 1}
-	if writeErr != nil {
-		writeResult = connectors.WriteResult{RecordsFailed: 1}
-	} else {
+	if operationResult.ResponseReceived {
 		safeOperationResult := connectors.SanitizeOperationDirectWriteResultForOutput(operationResult, runtime.Secrets)
 		run.OperationDirectWrite = &safeOperationResult
+	}
+	if writeErr != nil {
+		writeResult = connectors.WriteResult{RecordsFailed: 1}
 	}
 	return a.finishOperationDirectWrite(plan.ID, run, writeResult, runtime, 1, writeErr)
 }
@@ -3092,17 +3119,16 @@ func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
 
 func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error) (ReverseRun, error) {
 	return a.finishReverseWriteWithErrorText(planID, run, result, runtime, staged, writeErr, func(err error) string {
-		return safety.RedactErrorText(err.Error())
+		return connectors.SanitizeWriteErrorForOutput(err, runtime.Secrets)
 	})
 }
 
 // finishOperationDirectWrite preserves the direct-write error text in its
 // persisted report. Both direct and ordinary typed reverse-ETL results retain
-// complete provider output through their closed result contracts; the only
-// output transformation is explicit credential masking.
+// complete provider output through their closed result contracts.
 func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error) (ReverseRun, error) {
 	return a.finishReverseWriteWithErrorText(planID, run, result, runtime, staged, writeErr, func(err error) string {
-		return err.Error()
+		return connectors.SanitizeWriteErrorForOutput(err, runtime.Secrets)
 	})
 }
 
@@ -3149,6 +3175,38 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 		return ReverseRun{}, persistErr
 	}
 	return run, nil
+}
+
+type runtimeSecretSanitizedError struct {
+	cause   error
+	message string
+}
+
+func (e *runtimeSecretSanitizedError) Error() string {
+	if e == nil {
+		return ""
+	}
+	return e.message
+}
+
+func (e *runtimeSecretSanitizedError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.cause
+}
+
+func sanitizeRuntimeError(err error, runtimes ...connectors.RuntimeConfig) error {
+	if err == nil {
+		return nil
+	}
+	secrets := make(map[string]string)
+	for _, runtime := range runtimes {
+		for name, value := range runtime.Secrets {
+			secrets[name] = value
+		}
+	}
+	return &runtimeSecretSanitizedError{cause: err, message: connectors.SanitizeWriteErrorForOutput(err, secrets)}
 }
 
 func (a *App) invalidateReversePlan(expected ReversePlan) error {

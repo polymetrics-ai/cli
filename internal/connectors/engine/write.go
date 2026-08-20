@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"bytes"
 	"context"
 	"crypto/rand"
 	"crypto/sha256"
@@ -12,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"mime"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -21,6 +21,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/transportpolicy"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -145,7 +146,17 @@ type writeActionRedactedError struct {
 }
 
 func (e *writeActionRedactedError) Error() string {
-	return safety.RedactErrorText(redactWriteLiterals(e.err.Error(), e.values))
+	message := e.err.Error()
+	var httpErr *connsdk.HTTPError
+	if errors.Is(e.err, transportpolicy.ErrRedirectRefused) {
+		message = transportpolicy.ErrRedirectRefused.Error()
+	} else if errors.As(e.err, &httpErr) {
+		message = fmt.Sprintf("provider returned HTTP status %d", httpErr.Status)
+	}
+	if len(e.values) != 0 {
+		message += ": protected request values redacted"
+	}
+	return safety.RedactErrorText(redactWriteLiterals(message, e.values))
 }
 
 func (e *writeActionRedactedError) Unwrap() error {
@@ -153,11 +164,12 @@ func (e *writeActionRedactedError) Unwrap() error {
 }
 
 func redactWriteActionError(err error, action WriteAction, rec connectors.Record) error {
-	if err == nil || len(action.RedactFields) == 0 {
+	if err == nil {
 		return err
 	}
 	values := writeActionRedactionValues(action, rec)
-	if len(values) == 0 {
+	var httpErr *connsdk.HTTPError
+	if len(values) == 0 && !errors.As(err, &httpErr) {
 		return err
 	}
 	return &writeActionRedactedError{err: err, values: values}
@@ -367,6 +379,16 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
 		}
 		response, err := executeWriteRecordWithResponse(ctx, b, action, pinned[0], i, cfg, rt)
+		var responseErr error
+		if response != nil {
+			providerResponse, providerResponseErr := writeProviderResponse(response, i)
+			result.ProviderResponses = append(result.ProviderResponses, providerResponse)
+			responseErr = providerResponseErr
+		}
+		if responseErr != nil {
+			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(responseErr, action, rec)}
+		}
 		if err != nil {
 			if isMissingOkDelete(action, err) {
 				result.RecordsUnchanged++
@@ -375,9 +397,6 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: redactWriteActionError(err, action, rec)}
-		}
-		if response != nil {
-			result.ProviderResponses = append(result.ProviderResponses, writeProviderResponse(response))
 		}
 		result.RecordsWritten++
 	}
@@ -424,32 +443,37 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	switch bodyTypeOf(action) {
 	case "form":
 		form := buildForm(rec, action.PathFields)
-		return requester.DoForm(ctx, method, path, query, form)
+		return requester.DoFormLimited(ctx, method, path, query, form, connsdk.DefaultMaxResponseBody)
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
 			return nil, err
 		}
-		resp, err := requester.Do(ctx, method, path, query, payload)
+		resp, err := requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 		if err != nil {
-			return nil, err
-		}
-		if err := graphQLErrors(resp.Body); err != nil {
 			return resp, err
+		}
+		if resp != nil && len(resp.Body) > connsdk.DefaultMaxResponseBody {
+			return resp, nil
+		}
+		if writeProviderResponseDeclaresJSON(resp.Header) {
+			if err := graphQLErrors(resp.Body); err != nil {
+				return resp, errors.New("provider GraphQL response contains errors")
+			}
 		}
 		return resp, nil
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			return requester.Do(ctx, method, path, query, nil)
+			return requester.DoLimited(ctx, method, path, query, nil, connsdk.DefaultMaxResponseBody)
 		}
-		return requester.Do(ctx, method, path, query, body)
+		return requester.DoLimited(ctx, method, path, query, body, connsdk.DefaultMaxResponseBody)
 	case "json_array":
 		payload, err := buildJSONArrayPayload(action, rec)
 		if err != nil {
 			return nil, err
 		}
-		return requester.Do(ctx, method, path, query, payload)
+		return requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 	case "multipart":
 		root, err := openMultipartRoot(cfg.ProjectDir)
 		if err != nil {
@@ -460,13 +484,13 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 		if err != nil {
 			return nil, err
 		}
-		return requester.DoMultipart(ctx, method, path, query, form)
+		return requester.DoMultipartLimited(ctx, method, path, query, form, connsdk.DefaultMaxResponseBody)
 	case "base64_upload":
 		payload, err := buildBase64UploadPayload(action, rec, recordIndex, cfg)
 		if err != nil {
 			return nil, err
 		}
-		return requester.Do(ctx, method, path, query, payload)
+		return requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 	default: // "json" (default)
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
@@ -485,28 +509,86 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 			}
 			payload = body
 		}
-		return requester.Do(ctx, method, path, query, payload)
+		return requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 	}
 }
 
-func writeProviderResponse(response *connsdk.Response) connectors.WriteProviderResponse {
+func writeProviderResponse(response *connsdk.Response, recordIndex int) (connectors.WriteProviderResponse, error) {
+	return writeProviderResponseWithLimit(response, recordIndex, connsdk.DefaultMaxResponseBody)
+}
+
+func writeProviderResponseWithLimit(response *connsdk.Response, recordIndex, maxBodyBytes int) (connectors.WriteProviderResponse, error) {
 	result := connectors.WriteProviderResponse{
-		Status:  response.Status,
-		Headers: writeProviderHeaders(response.Header),
+		RecordIndex: recordIndex,
+		Status:      response.Status,
+		Headers:     writeProviderHeaders(response.Header),
 	}
-	decoder := json.NewDecoder(bytes.NewReader(response.Body))
-	decoder.UseNumber()
-	if decoder.Decode(&result.Body) == nil {
-		return result
+	rawBody, rawEncoding := writeProviderRawBody(response.Body)
+	if !writeProviderResponseDeclaresJSON(response.Header) {
+		result.BodyPresent = len(response.Body) > 0
+		result.BodyBytes = len(response.Body)
+		if result.BodyPresent {
+			result.BodyRaw = rawBody
+			result.BodyRawEncoding = rawEncoding
+		}
+		result.Body, result.BodyEncoding = rawBody, rawEncoding
+		if len(response.Body) > maxBodyBytes {
+			return result, fmt.Errorf("provider response too large: %d bytes exceeds limit %d", len(response.Body), maxBodyBytes)
+		}
+		return result, nil
 	}
-	if utf8.Valid(response.Body) {
-		result.Body = string(response.Body)
-		result.BodyEncoding = "text"
-		return result
+	result.BodyPresent = true
+	result.BodyBytes = len(response.Body)
+	result.BodyRaw = rawBody
+	result.BodyRawEncoding = rawEncoding
+	if len(response.Body) > maxBodyBytes {
+		result.Body, result.BodyEncoding = rawBody, rawEncoding
+		return result, fmt.Errorf("provider response too large: %d bytes exceeds limit %d", len(response.Body), maxBodyBytes)
 	}
-	result.Body = base64.StdEncoding.EncodeToString(response.Body)
-	result.BodyEncoding = "base64"
-	return result
+	body, err := decodeDirectReadBody(response.Body, -1)
+	if err != nil {
+		result.Body, result.BodyEncoding = rawBody, rawEncoding
+		return result, errors.New("provider response is not valid JSON")
+	}
+	result.Body = body
+	return result, nil
+}
+
+func writeProviderRawBody(body []byte) (string, string) {
+	if utf8.Valid(body) {
+		return string(body), "text"
+	}
+	return base64.StdEncoding.EncodeToString(body), "base64"
+}
+
+func writeProviderResponseDeclaresJSON(headers map[string][]string) bool {
+	_, declared := writeProviderResponseContentType(headers)
+	return declared
+}
+
+func writeProviderResponseContentType(headers map[string][]string) (present, json bool) {
+	for name, values := range headers {
+		if !strings.EqualFold(name, "Content-Type") {
+			continue
+		}
+		for _, value := range values {
+			value = strings.TrimSpace(value)
+			if value == "" {
+				continue
+			}
+			present = true
+			mediaType, _, err := mime.ParseMediaType(value)
+			if err != nil {
+				return present, false
+			}
+			mediaType = strings.ToLower(mediaType)
+			if mediaType != "application/json" && !strings.HasSuffix(mediaType, "+json") {
+				return present, false
+			}
+			json = true
+		}
+	}
+	return present, json
 }
 
 func writeProviderHeaders(headers map[string][]string) map[string]connectors.WriteProviderHeader {
