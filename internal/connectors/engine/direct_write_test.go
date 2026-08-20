@@ -265,17 +265,19 @@ func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
 
 func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.T) {
 	for _, tt := range []struct {
-		name     string
-		policy   string
-		wantBody bool
-		bodyless bool
-		response string
-		wantErr  string
-		wantNull bool
+		name      string
+		policy    string
+		wantBody  bool
+		bodyless  bool
+		response  string
+		wantErr   string
+		wantNull  bool
+		emptyJSON bool
 	}{
 		{name: "json returns complete decoded body", policy: directWritePolicyJSON, wantBody: true},
 		{name: "none retains complete response body", policy: directWritePolicyNone, wantBody: true},
 		{name: "none accepts bodyless response", policy: directWritePolicyNone, bodyless: true},
+		{name: "none rejects empty declared JSON", policy: directWritePolicyNone, emptyJSON: true, wantErr: "not JSON"},
 		{name: "none preserves literal JSON null", policy: directWritePolicyNone, response: `null`, wantNull: true},
 		{name: "json rejects trailing response content", policy: directWritePolicyJSON, response: `{"created":true} trailing`, wantErr: "not JSON"},
 	} {
@@ -292,6 +294,12 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 				if tt.bodyless {
 					w.Header().Set("X-Provider-Receipt", "receipt-204")
 					w.WriteHeader(http.StatusNoContent)
+					return
+				}
+				if tt.emptyJSON {
+					w.Header().Set("Content-Type", "application/json")
+					w.Header().Set("X-Provider-Receipt", "receipt-empty-json")
+					w.WriteHeader(http.StatusOK)
 					return
 				}
 				w.Header().Set("Content-Type", "application/json")
@@ -351,6 +359,14 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 				}
 				if !result.ResponseReceived || !result.BodyPresent || result.BodyRaw != tt.response {
 					t.Fatalf("trailing response result = %#v, want complete received raw response", result)
+				}
+				if tt.emptyJSON {
+					if result.Status != http.StatusOK || result.BodyBytes != 0 || result.BodyRawEncoding != "text" {
+						t.Fatalf("empty declared JSON result = %#v, want complete zero-value provider response", result)
+					}
+					if receipt := result.Headers["X-Provider-Receipt"].Values; len(receipt) != 1 || receipt[0] != "receipt-empty-json" {
+						t.Fatalf("empty declared JSON receipt = %#v, want preserved provider receipt", receipt)
+					}
 				}
 				return
 			}

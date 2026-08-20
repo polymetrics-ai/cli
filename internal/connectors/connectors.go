@@ -614,9 +614,9 @@ type OperationDirectWriteRequest struct {
 }
 
 // OperationDirectWriteResult is the typed result of one declared REST or
-// fixed-document GraphQL mutation. Successful output retains the complete
-// decoded provider response; a declared output_policy shapes parsing only and
-// does not silently suppress ordinary result fields.
+// fixed-document GraphQL mutation. Provider-returned output is retained
+// verbatim; output_policy shapes parsing only. System-generated diagnostics,
+// plans, and logs remain separate secret-safe surfaces.
 type OperationDirectWriteResult struct {
 	Connector          string                         `json:"connector"`
 	Operation          string                         `json:"operation"`
@@ -836,8 +836,8 @@ type WriteResult struct {
 	ProviderResponses []WriteProviderResponse `json:"provider_responses,omitempty"`
 }
 
-// WriteProviderResponse is the provider result captured for one named typed
-// write action.
+// WriteProviderResponse is the verbatim provider result captured for one named
+// typed write action. System-generated diagnostics are carried separately.
 type WriteProviderResponse struct {
 	RecordIndex  int                            `json:"record_index"`
 	Status       int                            `json:"status"`
@@ -853,13 +853,14 @@ type WriteProviderHeader struct {
 }
 
 // SanitizeWriteResultForOutput preserves provider responses exactly for
-// persisted App/CLI output.
+// persisted App/CLI output; only separately generated diagnostics are
+// secret-safe.
 func SanitizeWriteResultForOutput(result WriteResult, _ map[string]string) WriteResult {
 	return result
 }
 
 // SanitizeOperationDirectWriteResultForOutput preserves an already named
-// operation result exactly.
+// provider operation result exactly; generated diagnostics remain separate.
 func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, _ map[string]string) OperationDirectWriteResult {
 	return result
 }

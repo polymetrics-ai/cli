@@ -799,7 +799,8 @@ func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int, h
 	if err := validateOperationDirectWriteOutputPolicy(policy); err != nil {
 		return operationDirectWriteResponseBodyResult{}, err
 	}
-	if policy == directWritePolicyNone && len(raw) == 0 {
+	declaresJSON := operationDirectWriteResponseDeclaresJSON(policy, headers)
+	if policy == directWritePolicyNone && len(raw) == 0 && !declaresJSON {
 		return operationDirectWriteResponseBodyResult{}, nil
 	}
 	result := operationDirectWriteResponseBodyResult{present: true, bytes: len(raw)}
@@ -813,7 +814,7 @@ func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int, h
 	if len(raw) > maxBytes {
 		return result, fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(raw), maxBytes)
 	}
-	if !operationDirectWriteResponseDeclaresJSON(policy, headers) {
+	if !declaresJSON {
 		return result, nil
 	}
 	decoded, err := decodeDirectReadBody(raw, maxBytes)

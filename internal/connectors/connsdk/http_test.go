@@ -1280,6 +1280,58 @@ func TestRequesterDoMultipartPreservesEarlyTerminalResponse(t *testing.T) {
 	}
 }
 
+func TestRequesterDoMultipartRetainsTerminalResponseOnProducerCleanupError(t *testing.T) {
+	dir := t.TempDir()
+	filePath := dir + "/payload.txt"
+	if err := os.WriteFile(filePath, []byte("payload"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	providerBody := `{"accepted":true,"credential":"provider-returned-token"}`
+	r := &Requester{
+		BaseURL:        "https://example.invalid",
+		DisableRetries: true,
+		Sleep:          noSleep,
+		Auth: AuthFunc(func(context.Context, *http.Request) error {
+			return os.Remove(filePath)
+		}),
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			_, readErr := io.Copy(io.Discard, req.Body)
+			if closeErr := req.Body.Close(); readErr == nil && closeErr != nil {
+				readErr = closeErr
+			}
+			if readErr == nil {
+				t.Fatal("multipart producer unexpectedly completed")
+			}
+			return &http.Response{
+				StatusCode: http.StatusAccepted,
+				Header:     http.Header{"X-Provider-Receipt": {"receipt-one", "receipt-two"}},
+				Body:       io.NopCloser(strings.NewReader(providerBody)),
+				Request:    req,
+			}, nil
+		})},
+	}
+
+	response, err := r.DoMultipartLimited(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Fields: map[string]string{"hold": strings.Repeat("x", 1<<20)},
+		Files:  []MultipartFile{{FieldName: "media", Path: filePath, MaxBytes: 1024}},
+	}, 1024)
+	if err == nil || !strings.Contains(err.Error(), "send request body") {
+		t.Fatalf("DoMultipartLimited error = %v, want producer cleanup diagnostic", err)
+	}
+	if strings.Contains(err.Error(), providerBody) {
+		t.Fatalf("cleanup diagnostic leaked provider body: %q", err)
+	}
+	if response == nil {
+		t.Fatal("DoMultipartLimited dropped terminal provider response")
+	}
+	if response.Status != http.StatusAccepted || string(response.Body) != providerBody {
+		t.Fatalf("terminal response = %#v, want accepted provider response", response)
+	}
+	if got := response.Header.Values("X-Provider-Receipt"); !slices.Equal(got, []string{"receipt-one", "receipt-two"}) {
+		t.Fatalf("terminal receipt = %#v, want both provider values", got)
+	}
+}
+
 func TestRequesterDoMultipartRetriesWithReopenedFile(t *testing.T) {
 	dir := t.TempDir()
 	filePath := dir + "/payload.txt"

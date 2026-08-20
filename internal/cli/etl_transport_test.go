@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"io"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
 )
 
@@ -252,6 +254,58 @@ func TestETLRunTransportApprovalLeavesLegacyRuntimeAlone(t *testing.T) {
 	}, strings.NewReader(""))
 	if err != nil || present || approval.PlanID != "" || approval.ApprovalToken != "" || approval.Evidence != nil || approval.AuthorizeNextUnit != nil {
 		t.Fatalf("legacy --runtime carrier = %#v present=%t err=%v, want untouched legacy ETL arguments", approval, present, err)
+	}
+}
+
+func TestETLRunRejectsRuntimeWriteShapingFlagsBeforeLegacyDispatch(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		value string
+	}{
+		{name: "destination-action", value: "arbitrary"},
+		{name: "destination_action", value: "arbitrary"},
+		{name: "connector", value: "foreign"},
+		{name: "action", value: "replace"},
+		{name: "route", value: "/foreign"},
+		{name: "verb", value: "PATCH"},
+		{name: "method", value: "POST"},
+		{name: "path", value: "/foreign"},
+		{name: "url", value: "https://foreign.example.test"},
+		{name: "body", value: `{"override":true}`},
+		{name: "payload", value: "override"},
+		{name: "query", value: "override=true"},
+		{name: "headers", value: "X-Override=true"},
+		{name: "mapping", value: "source:target"},
+		{name: "map", value: "source:target"},
+		{name: "input-fields", value: "source=target"},
+		{name: "evidence", value: "caller-evidence"},
+		{name: "destination-config", value: "target=override"},
+		{name: "destination", value: "foreign:credential"},
+		{name: "credential", value: "foreign"},
+		{name: "source-config", value: "source=override"},
+		{name: "sql", value: "UPDATE records"},
+		{name: "shell", value: "touch ignored"},
+		{name: "http", value: "request"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			err := runETL(context.Background(), nil, []string{
+				"run",
+				"--connection", "ordinary-connection",
+				"--stream", "widgets",
+				"--batch-size", "1",
+				"--" + tt.name, tt.value,
+			}, io.Discard, false, config.Config{})
+			if err == nil {
+				t.Fatalf("runtime --%s selection was accepted", tt.name)
+			}
+			var refusal *cliError
+			if !errors.As(err, &refusal) || refusal.category != categoryUsage {
+				t.Fatalf("runtime --%s refusal = %T %v, want usage error", tt.name, err, err)
+			}
+			if strings.Contains(err.Error(), tt.value) {
+				t.Fatalf("runtime --%s refusal leaked caller value %q", tt.name, tt.value)
+			}
+		})
 	}
 }
 

@@ -23,7 +23,7 @@ Required skills: `golang-how-to`, `golang-cli`, `golang-design-patterns`, `golan
 5. **Documentation/review:** Update the declaration guide with exact typed action and acknowledgement requirements, no-generic-writer boundary, mode/action strategies, source binding constraints, and evidence admission. Run full local verification and record review disposition.
 6. **Red/Green — persisted multi-action dispatch:** Add a production-shaped synthetic connector with two declared actions in one mode and another connector with one. Show the persisted `StreamConfig.destination_action` selects the exact descriptor action through `App.RunETL`; no runtime request selects an action. Reject omitted, foreign, malformed, and cross-connector selections before source or provider I/O. Extend the application command manual to name the `pm etl transport declarative-typed-destination` plan/preview path and `pm etl run --approval-plan …` execute path.
 7. **Red/Green — exact action-schema source fields:** Add cross-connector synthetic snake_case and camelCase actions. Accept an `input_fields` name only when the exact selected action's top-level `record_schema` property exists; reject empty, malformed, unknown/cross-action, runtime-selected, generic/shell/http, and undeclared names before I/O, with no provider-specific branch.
-8. **Red/Green — complete persisted reverse result:** Add a provider-shaped synthetic typed-action response and show the persisted App run and CLI JSON projection retain ordinary response status, headers, nested fields, and tier-specific fields. Preserve only the credential boundary with an in-place `{ "masked": true }` marker for credential headers, configured secret echoes, and declared direct-write response secrets.
+8. **Red/Green — complete persisted reverse result:** Add a provider-shaped synthetic typed-action response and show the persisted App run and CLI JSON projection retain ordinary response status, headers, nested fields, and tier-specific fields. Provider-returned fields, keys, and values remain verbatim even when equal to configured credential bytes; system-generated plans, logs, request diagnostics, and synthetic errors remain secret-taint-safe.
 
 ## Commit checkpoints
 
@@ -46,7 +46,7 @@ Required skills: `golang-how-to`, `golang-cli`, `golang-design-patterns`, `golan
 
 The earlier generic-adapter evidence remains valid. The application-dispatch
 reconciliation is complete: its red/green evidence includes persisted exact
-multi-action selection, selected-action schema spelling, complete masked output,
+multi-action selection, selected-action schema spelling, complete verbatim provider output and secret-safe system diagnostics,
 generated CLI documents and transcripts, a clean full `make verify`, and fresh
 inline review. The prior real-provider GitHub proof remains the compatibility
 evidence: this reconciliation keeps its specialized adapter and read-back

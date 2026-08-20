@@ -60,11 +60,10 @@ The reconciliation review additionally confirmed that `destination_action` is
 an exact persisted stream identity, never an invocation argument; multiple
 connector-owned actions cannot cross-select. Schema field admission is checked
 against the exact selected action, including schema-valid camelCase spelling.
-The result path captures only successful responses from already-named typed
-actions, persists acknowledgements before later read-back, and carries every
-ordinary response field through App and CLI output. Standard credential headers,
-configured secret echoes, and declaration-owned direct-write response secrets
-are represented in place by an explicit mask marker; no field is removed for
-scope, rarity, destructiveness, paid tier, or unfamiliarity. Focused,
+The result path captures terminal and successful responses from already-named
+typed actions, persists acknowledgements before later read-back, and carries
+every provider-returned response field, key, and value verbatim through App and
+CLI output, including credential-equal bytes. System-generated plans, logs,
+request diagnostics, and synthetic errors remain secret-taint-safe. Focused,
 affected-package, real-provider, and full repository verification are recorded
 in `VERIFICATION.md`.

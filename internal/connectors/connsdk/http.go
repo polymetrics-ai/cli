@@ -1061,15 +1061,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		resp, err := client.Do(req)
 		if err != nil {
 			bodyErr := cleanupRequestBody(body)
-			var terminal *Response
-			if resp != nil {
-				var respBody []byte
-				if resp.Body != nil {
-					respBody, _ = io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
-					_ = resp.Body.Close()
-				}
-				terminal = &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}
-			}
+			terminal := captureTerminalResponse(resp, maxBodyBytes, fullURL, route)
 			lastErr = fmt.Errorf("send request: %w", err)
 			if bodyErr != nil {
 				lastErr = fmt.Errorf("send request: %w", bodyErr)
@@ -1091,8 +1083,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		observation := r.observeRateLimit(ctx, route, resp.StatusCode, resp.Header, costHeader)
 		bodyErr := cleanupRequestBody(body)
 		if bodyErr != nil {
-			_ = resp.Body.Close()
-			return nil, fmt.Errorf("send request body: %w", bodyErr)
+			return captureTerminalResponse(resp, maxBodyBytes, fullURL, route), fmt.Errorf("send request body: %w", bodyErr)
 		}
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
@@ -1148,6 +1139,18 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)
 	}
 	return nil, lastErr
+}
+
+func captureTerminalResponse(resp *http.Response, maxBodyBytes int, fullURL string, route RateLimitRoute) *Response {
+	if resp == nil {
+		return nil
+	}
+	var body []byte
+	if resp.Body != nil {
+		body, _ = io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
+		_ = resp.Body.Close()
+	}
+	return &Response{Status: resp.StatusCode, Header: resp.Header, Body: body, requestURL: fullURL, rateLimitRoute: route}
 }
 
 func cleanupRequestBody(body *requestBody) error {

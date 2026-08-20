@@ -727,6 +727,9 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		} else if transportApproval {
 			return runApprovedTransportETL(ctx, a, strictFlags, approval, stdout, jsonOut)
 		}
+		if err := validateLegacyETLRunFlags(args[1:]); err != nil {
+			return err
+		}
 		flags := parseFlags(args[1:])
 		batchSize, err := parseIntFlag("batch-size", flags.first("batch-size"), 0)
 		if err != nil {
