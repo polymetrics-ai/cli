@@ -646,51 +646,30 @@ type structuredRESTBodySchemaCompilation struct {
 	fragmentSchema *Schema
 }
 
-type operationDirectWriteStaticBodyPlaceholder struct{}
-
-func isOperationDirectWriteStaticBodyPlaceholder(value any) bool {
-	_, ok := value.(operationDirectWriteStaticBodyPlaceholder)
-	return ok
-}
-
-func operationDirectWriteStaticBodyShape(value any) any {
+func operationDirectWriteStaticBodyScaffold(value any) (any, bool) {
 	switch value := value.(type) {
 	case map[string]any:
 		shape := make(map[string]any, len(value))
 		for _, name := range sortedMapKeys(value) {
-			shape[name] = operationDirectWriteStaticBodyShape(value[name])
+			child, ok := operationDirectWriteStaticBodyScaffold(value[name])
+			if ok {
+				shape[name] = child
+			}
 		}
-		return shape
+		return shape, true
 	case []any:
 		shape := make([]any, len(value))
 		for index := range value {
-			shape[index] = operationDirectWriteStaticBodyShape(value[index])
+			child, ok := operationDirectWriteStaticBodyScaffold(value[index])
+			if !ok {
+				return nil, false
+			}
+			shape[index] = child
 		}
-		return shape
+		return shape, true
 	default:
-		return operationDirectWriteStaticBodyPlaceholder{}
+		return nil, false
 	}
-}
-
-func structuredRESTBodyContainsStaticBodyPlaceholder(value any) bool {
-	if isOperationDirectWriteStaticBodyPlaceholder(value) {
-		return true
-	}
-	switch value := value.(type) {
-	case map[string]any:
-		for _, child := range value {
-			if structuredRESTBodyContainsStaticBodyPlaceholder(child) {
-				return true
-			}
-		}
-	case []any:
-		for _, child := range value {
-			if structuredRESTBodyContainsStaticBodyPlaceholder(child) {
-				return true
-			}
-		}
-	}
-	return false
 }
 
 func compileStructuredRESTBodySchema(op OperationSpec) (*structuredRESTBodySchemaCompilation, error) {
@@ -800,9 +779,6 @@ func materializeStructuredRESTBody(op OperationSpec, staticBody, overrides map[s
 	if err != nil {
 		return nil, fmt.Errorf("operation %q: %w", op.ID, err)
 	}
-	if structuredRESTBodyContainsStaticBodyPlaceholder(body) {
-		return nil, fmt.Errorf("operation %q: body has an unresolved rest.body shape", op.ID)
-	}
 	state := structuredRESTBodyValueState{maxBytes: clampOperationDirectWriteMaxBytes(op.REST.MaxBytes)}
 	canonicalValue, err := canonicalizeStructuredRESTBodyValue(compiled.root, reflect.ValueOf(body), "body", 0, &state)
 	if err != nil {
@@ -834,10 +810,8 @@ func canonicalizeStructuredRESTBodyFragment(compiled *structuredRESTBodySchemaCo
 	if !ok || canonical == nil {
 		return nil, fmt.Errorf("operation %q: %s must be an object", op.ID, path)
 	}
-	if !structuredRESTBodyContainsStaticBodyPlaceholder(canonical) {
-		if err := compiled.fragmentSchema.Validate(canonical); err != nil {
-			return nil, fmt.Errorf("operation %q: body_schema fragment: %w", op.ID, err)
-		}
+	if err := compiled.fragmentSchema.Validate(canonical); err != nil {
+		return nil, fmt.Errorf("operation %q: body_schema fragment: %w", op.ID, err)
 	}
 	return canonical, nil
 }
@@ -886,9 +860,6 @@ func mergeStructuredRESTBodyObject(node map[string]any, staticBody, overrideBody
 }
 
 func mergeStructuredRESTBodyValue(node map[string]any, staticValue, overrideValue any, path string) (any, error) {
-	if isOperationDirectWriteStaticBodyPlaceholder(overrideValue) {
-		return staticValue, nil
-	}
 	if isObjectType(node) {
 		staticObject, staticObjectOK := staticValue.(map[string]any)
 		overrideObject, overrideObjectOK := overrideValue.(map[string]any)
@@ -1095,9 +1066,6 @@ func canonicalizeStructuredRESTBodyValue(node map[string]any, value reflect.Valu
 			return nil, err
 		}
 		return nil, nil
-	}
-	if value.CanInterface() && isOperationDirectWriteStaticBodyPlaceholder(value.Interface()) {
-		return value.Interface(), nil
 	}
 	if value.CanInterface() {
 		if _, ok := value.Interface().(json.Marshaler); ok {

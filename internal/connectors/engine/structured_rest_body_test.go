@@ -1485,6 +1485,48 @@ func TestStructuredRESTBodyDeclarationSatisfiabilityAndStaticCoverage(t *testing
 	if !ok || payload["fixed"] != "provider" || payload["name"] != "caller" {
 		t.Fatalf("nested static merge = %#v, want fixed provider data and caller field", materialized)
 	}
+	persisted, err := json.Marshal(dynamic)
+	if err != nil {
+		t.Fatalf("marshal dynamic body: %v", err)
+	}
+	var reopened map[string]any
+	if err := json.Unmarshal(persisted, &reopened); err != nil {
+		t.Fatalf("unmarshal dynamic body: %v", err)
+	}
+	reopenedPayload, ok := reopened["payload"].(map[string]any)
+	if !ok {
+		t.Fatalf("reopened dynamic body = %#v, want payload object", reopened)
+	}
+	if _, present := reopenedPayload["fixed"]; present {
+		t.Fatalf("reopened dynamic body = %#v, must not persist static-body placeholders", reopened)
+	}
+	materialized, err = materializeStructuredRESTBody(merge, merge.REST.Body, reopened)
+	if err != nil {
+		t.Fatalf("materializeStructuredRESTBody persisted nested merge: %v", err)
+	}
+	payload, ok = materialized["payload"].(map[string]any)
+	if !ok || payload["fixed"] != "provider" || payload["name"] != "caller" {
+		t.Fatalf("persisted nested static merge = %#v, want fixed provider data and caller field", materialized)
+	}
+	if err := ValidateOperationDirectWriteCLIFlags(merge, []CLIFlag{{Name: "payload", Type: "json", MapsTo: "body.payload", Required: true}}); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteCLIFlags static container: %v", err)
+	}
+	containerDynamic, err := MaterializeOperationDirectWriteBodyMappings(bundle, merge.ID, map[string]any{"payload": map[string]any{"name": "caller"}})
+	if err != nil {
+		t.Fatalf("MaterializeOperationDirectWriteBodyMappings static container: %v", err)
+	}
+	materialized, err = materializeStructuredRESTBody(merge, merge.REST.Body, containerDynamic)
+	if err != nil {
+		t.Fatalf("materializeStructuredRESTBody static container: %v", err)
+	}
+	payload, ok = materialized["payload"].(map[string]any)
+	if !ok || payload["fixed"] != "provider" || payload["name"] != "caller" {
+		t.Fatalf("container static merge = %#v, want fixed provider data and caller field", materialized)
+	}
+	_, err = materializeStructuredRESTBody(merge, merge.REST.Body, map[string]any{"payload": map[string]any{"fixed": "caller", "name": "caller"}})
+	if err == nil || !strings.Contains(err.Error(), "cannot be caller-overridden") {
+		t.Fatalf("container static leaf collision = %v, want fixed-field rejection", err)
+	}
 	if err := ValidateOperationDirectWriteMappings(merge, nil, []string{"payload.fixed"}); err == nil || !strings.Contains(err.Error(), "fixed rest.body") {
 		t.Fatalf("static overlap error = %v, want declared fixed-field rejection", err)
 	}

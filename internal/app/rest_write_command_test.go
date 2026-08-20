@@ -717,3 +717,98 @@ func TestNonDestructiveDirectWriteStillRequiresPreviewAndSingleUseApproval(t *te
 		t.Fatalf("replayed safe approval reached the network; calls = %d", calls)
 	}
 }
+
+func TestStructuredRESTStaticBodyPlanSurvivesReload(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPatch || r.URL.Path != "/api/widgets/w_1" {
+			t.Fatalf("request = %s %s, want PATCH /api/widgets/w_1", r.Method, r.URL.Path)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		payload, ok := body["payload"].(map[string]any)
+		if !ok || payload["fixed"] != "provider" || payload["name"] != "Ada" {
+			t.Fatalf("body = %#v, want merged static and caller payload", body)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"updated":true}`))
+	}))
+	defer server.Close()
+
+	configure := func(bundle *engine.Bundle) {
+		for index := range bundle.Operations {
+			if bundle.Operations[index].ID != "restwrite-demo.widget-update" {
+				continue
+			}
+			rest := *bundle.Operations[index].REST
+			rest.BodySchema = json.RawMessage(`{
+				"type":"object",
+				"additionalProperties":false,
+				"required":["payload"],
+				"properties":{"payload":{"type":"object","additionalProperties":false,"required":["fixed","name"],"properties":{"fixed":{"type":"string"},"name":{"type":"string"}}}}
+			}`)
+			rest.Body = map[string]any{"payload": map[string]any{"fixed": "provider"}}
+			bundle.Operations[index].REST = &rest
+		}
+		for index := range bundle.CLISurface.Commands {
+			if bundle.CLISurface.Commands[index].Path != "widget update" {
+				continue
+			}
+			bundle.CLISurface.Commands[index].Flags = []engine.CLIFlag{
+				{Name: "id", Type: "string", Summary: "Target id.", MapsTo: "path.id", Required: true},
+				{Name: "name", Type: "string", Summary: "New widget name.", MapsTo: "body.payload.name", Required: true},
+			}
+		}
+	}
+
+	a, root := operationWithholdingApp(t, ctx, server.URL, configure)
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  restWriteDemoConnector,
+		Credential: "restwrite-local",
+		Path:       []string{"widget", "update"},
+		Flags:      map[string][]string{"id": {"w_1"}, "name": {"Ada"}},
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	payload, ok := plan.ConnectorCommandRecord["payload"].(map[string]any)
+	if !ok {
+		t.Fatalf("ConnectorCommandRecord = %#v, want caller payload", plan.ConnectorCommandRecord)
+	}
+	if _, present := payload["fixed"]; present {
+		t.Fatalf("ConnectorCommandRecord = %#v, must not persist a static-body sentinel", plan.ConnectorCommandRecord)
+	}
+	if strings.Contains(stateBytes(t, root), `"fixed":{}`) {
+		t.Fatal("state.json persisted a static-body sentinel")
+	}
+
+	reopened, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	bundle, err := engine.Load(os.DirFS("testdata/bundles"), restWriteDemoConnector)
+	if err != nil {
+		t.Fatalf("engine.Load(%s): %v", restWriteDemoConnector, err)
+	}
+	configure(&bundle)
+	reopened.Registry().Register(engine.New(bundle, nil))
+
+	previewed, preview, err := reopened.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan: %v", err)
+	}
+	if preview.Digest == "" || previewed.ApprovalToken == "" || calls != 0 {
+		t.Fatalf("preview = %#v token %q calls %d, want digest/token/no network", preview, previewed.ApprovalToken, calls)
+	}
+	run, err := reopened.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: previewed.ID, ApprovalToken: previewed.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL: %v", err)
+	}
+	if run.Status != "completed" || run.OperationDirectWrite == nil || calls != 1 {
+		t.Fatalf("run/calls = %#v/%d, want one completed direct write", run, calls)
+	}
+}
