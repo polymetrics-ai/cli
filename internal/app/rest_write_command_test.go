@@ -880,6 +880,88 @@ func TestGraphQLBaseURLSecretApplicationErrorDoesNotPersistEcho(t *testing.T) {
 	}
 }
 
+func TestGraphQLBaseURLConfigApplicationErrorDoesNotPersistEcho(t *testing.T) {
+	const baseURLConfig = "graphql-app-base-url-config-placeholder"
+	const responseBody = `{"data":{"updateWidget":null},"errors":[{"message":"graphql-app-base-url-config-placeholder"}]}`
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if got := r.URL.Path; got != "/"+baseURLConfig+"/graphql" {
+			t.Fatalf("path = %q, want declared base URL segment", got)
+		}
+		w.Header().Set("X-Provider-Trace", "app-base-url-config")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(responseBody))
+	}))
+	defer server.Close()
+
+	a, _ := operationWithholdingApp(t, ctx, server.URL+"/"+baseURLConfig, func(bundle *engine.Bundle) {
+		bundle.HTTP.URL = "{{ config.base_url }}"
+		for index := range bundle.Operations {
+			if bundle.Operations[index].ID != "restwrite-demo.widget-update" {
+				continue
+			}
+			bundle.Operations[index].Kind = "graphql_mutation"
+			bundle.Operations[index].REST = nil
+			bundle.Operations[index].GraphQL = &engine.GraphQLOperationSpec{
+				Document:      "mutation UpdateWidget($id: ID!) { updateWidget(id: $id) { id } }",
+				OperationName: "UpdateWidget",
+				Path:          "/graphql",
+				MaxBytes:      1024,
+				VariablesSchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"required":["id"],
+					"properties":{"id":{"type":"string"}}
+				}`),
+			}
+		}
+		for index := range bundle.CLISurface.Commands {
+			if bundle.CLISurface.Commands[index].Path != "widget update" {
+				continue
+			}
+			bundle.CLISurface.Commands[index].APISurface = []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/graphql"}}
+			bundle.CLISurface.Commands[index].Flags = []engine.CLIFlag{{Name: "id", Type: "string", Summary: "Widget id.", MapsTo: "body.id", Required: true}}
+		}
+		for index := range bundle.Surface.Endpoints {
+			if bundle.Surface.Endpoints[index].Path != "/api/widgets/{id}" {
+				continue
+			}
+			bundle.Surface.Endpoints[index].Method = http.MethodPost
+			bundle.Surface.Endpoints[index].Path = "/graphql"
+			bundle.Surface.Endpoints[index].CoveredBy = &engine.SurfaceCoverage{Operations: []string{"restwrite-demo.widget-update"}}
+		}
+	})
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  restWriteDemoConnector,
+		Credential: "restwrite-local",
+		Path:       []string{"widget", "update"},
+		Flags:      map[string][]string{"id": {"w_1"}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err == nil {
+		t.Fatal("RunReverseETL error = nil, want GraphQL application error")
+	}
+	if strings.Contains(err.Error(), baseURLConfig) || strings.Contains(run.Error, baseURLConfig) {
+		t.Fatalf("GraphQL application error leaked base URL config: error=%q persisted=%q", err, run.Error)
+	}
+	if calls != 1 || run.Status != "failed" {
+		t.Fatalf("failed run/calls = %+v/%d, want one failed direct write", run, calls)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatal("RunReverseETL error did not retain a provider response cause")
+	}
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "app-base-url-config" || providerErr.Body != responseBody {
+		t.Fatal("RunReverseETL provider response did not retain exact status, headers, and body")
+	}
+}
+
 func TestNonDestructiveDirectWriteStillRequiresPreviewAndSingleUseApproval(t *testing.T) {
 	ctx := context.Background()
 	calls := 0

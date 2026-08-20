@@ -1687,17 +1687,17 @@ func operationDirectWriteHasSensitiveHTTPBinding(cfg connectors.RuntimeConfig, h
 	if found && !strings.EqualFold(strings.TrimSpace(spec.Mode), "none") {
 		return true, nil
 	}
-	baseURLReferencesSecrets, err := operationDirectWriteBaseURLTemplateReferencesSecrets(httpBase.URL)
+	baseURLReferencesRuntimeValues, err := operationDirectWriteBaseURLTemplateReferencesRuntimeValues(httpBase.URL)
 	if err != nil {
 		return false, err
 	}
-	if baseURLReferencesSecrets {
+	if baseURLReferencesRuntimeValues {
 		return true, nil
 	}
 	return operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers)
 }
 
-func operationDirectWriteBaseURLTemplateReferencesSecrets(template string) (bool, error) {
+func operationDirectWriteBaseURLTemplateReferencesRuntimeValues(template string) (bool, error) {
 	tokens, err := parseWriteQueryTemplate(template)
 	if err != nil {
 		return false, err
@@ -1707,8 +1707,7 @@ func operationDirectWriteBaseURLTemplateReferencesSecrets(template string) (bool
 			continue
 		}
 		ref := strings.TrimSpace(strings.Split(token.expression, "|")[0])
-		segments := strings.Split(ref, ".")
-		if len(segments) == 2 && segments[0] == "secrets" {
+		if operationDirectWriteReferenceIsRuntimeSensitive(ref) {
 			return true, nil
 		}
 	}
@@ -1743,7 +1742,11 @@ func operationDirectWriteHeaderExpressionReferencesRuntimeValues(expr string) bo
 		return false
 	}
 	ref := strings.TrimSpace(strings.Split(expr, "|")[0])
-	parts := strings.Split(ref, ".")
+	return operationDirectWriteReferenceIsRuntimeSensitive(ref)
+}
+
+func operationDirectWriteReferenceIsRuntimeSensitive(ref string) bool {
+	parts := strings.Split(strings.TrimSpace(ref), ".")
 	return len(parts) == 2 && (parts[0] == "config" || parts[0] == "secrets")
 }
 
