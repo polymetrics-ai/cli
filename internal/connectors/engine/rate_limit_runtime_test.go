@@ -409,6 +409,7 @@ func TestRateLimitAdmissionCoversFanOutIDRequests(t *testing.T) {
 func TestRateLimitAdmissionCoversDirectReadsAndBinaryDownload(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/file" {
+			w.Header().Set("Content-Type", "application/octet-stream")
 			_, _ = w.Write([]byte("binary fixture"))
 			return
 		}
@@ -443,7 +444,7 @@ func TestRateLimitAdmissionCoversDirectReadsAndBinaryDownload(t *testing.T) {
 		{
 			name: "binary download",
 			make: func() Bundle {
-				return withAllRateLimit(Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{ID: "acme.file", Kind: "binary_download", Summary: "file", Risk: "low", Approval: "none", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/file", MaxBytes: 1024}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/file", Operation: &SurfaceOperation{}}}}})
+				return withAllRateLimit(Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{ID: "acme.file", Kind: "binary_download", Summary: "file", Risk: "low", Approval: "none", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/file", MaxBytes: 1024, ContentTypes: []string{"application/octet-stream"}, Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/file", Operation: &SurfaceOperation{}}}}})
 			},
 			run: func(bundle Bundle) error {
 				_, err := OperationBinaryDownload(context.Background(), bundle, BinaryDownloadRequest{Operation: "acme.file", Config: config, DestRoot: t.TempDir()}, nil)

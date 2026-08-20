@@ -439,8 +439,9 @@ type OperationDirectReadRequest struct {
 	// Headers contains only values for exact, provider-declared non-auth
 	// header parameters. The operation engine validates the declaration and
 	// values before constructing a runtime or issuing I/O.
-	Headers map[string]string
-	Body    map[string]any
+	Headers      map[string]string
+	HeaderValues map[string][]string
+	Body         map[string]any
 	// RawBody is available only to an operation that explicitly declares a
 	// text/plain POST with a root string body schema. It is a pointer so an
 	// absent body is distinct from an intentionally empty one; the operation
@@ -625,6 +626,7 @@ type OperationDirectWriteRequest struct {
 	// Headers contains only exact declaration-owned non-auth header values.
 	// They are included in the preview digest that authorizes execution.
 	Headers      map[string]string
+	HeaderValues map[string][]string
 	Body         map[string]any
 	OutputPolicy string
 	// RedactFields remains part of the request contract for compatibility, but
@@ -709,7 +711,8 @@ type OperationBinaryDownloadRequest struct {
 	PathParams map[string]string
 	Query      map[string]string
 	// Headers contains only exact declaration-owned non-auth header values.
-	Headers map[string]string
+	Headers      map[string]string
+	HeaderValues map[string][]string
 	// MaxBytes may only lower the operation's declared cap, never raise it.
 	MaxBytes int64
 	DestRoot string
@@ -724,6 +727,8 @@ type OperationBinaryDownloadRequest struct {
 type OperationBinaryDownloadResult struct {
 	Connector string                             `json:"connector"`
 	Operation string                             `json:"operation"`
+	Method    string                             `json:"method"`
+	Path      string                             `json:"path"`
 	Record    Record                             `json:"record"`
 	Status    int                                `json:"status"`
 	Headers   map[string]OperationResponseHeader `json:"headers,omitempty"`
@@ -735,6 +740,10 @@ type OperationBinaryDownloader interface {
 	OperationBinaryDownload(context.Context, OperationBinaryDownloadRequest) (OperationBinaryDownloadResult, error)
 }
 
+type OperationBinaryDownloadPreflighter interface {
+	PreflightOperationBinaryDownload(operation, method, path string) error
+}
+
 // OperationStatusCheckRequest selects one declared response-less HEAD
 // operation. It has no body, output policy, or pagination channel, so it
 // cannot become a JSON direct-read escape hatch.
@@ -744,7 +753,8 @@ type OperationStatusCheckRequest struct {
 	PathParams map[string]string
 	Query      map[string]string
 	// Headers contains only exact declaration-owned non-auth header values.
-	Headers map[string]string
+	Headers      map[string]string
+	HeaderValues map[string][]string
 }
 
 // OperationStatusCheckResult intentionally exposes only bounded response

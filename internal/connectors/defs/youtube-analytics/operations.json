@@ -47,6 +47,14 @@
         "method": "GET",
         "path": "/v1/media/{path}?alt=media",
         "max_bytes": 104857600,
+        "content_types": [
+          "text/csv"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }

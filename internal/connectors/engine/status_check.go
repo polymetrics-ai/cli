@@ -15,6 +15,8 @@ const (
 	defaultOperationStatusTimeout  = 15 * time.Second
 )
 
+// pmcert:executes rest_status
+//
 // OperationStatusCheck executes exactly one declared HEAD operation and
 // returns status metadata only. This intentionally does not share the JSON
 // direct-read executor: status operations cannot decode or print a body.
@@ -26,6 +28,12 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
+	if _, err := requireOperationSuccessStatusPolicy(op); err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	if _, err := operationRedirectPolicy(op); err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
 	cfg := materializeConfigDefaults(b, req.Config)
 	path, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
 	if err != nil {
@@ -35,7 +43,7 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
-	headers, err := operationRequestHeaders(b, op, req.Headers)
+	headers, err := operationRequestHeaders(b, op, req.Headers, req.HeaderValues)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
@@ -49,7 +57,10 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
-	requester = requesterWithOperationHeaders(requester, headers)
+	requester, err = requesterWithOperationHeaders(requester, op, headers)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
 	cap := op.REST.MaxBytes
 	if cap == 0 {
 		cap = defaultOperationStatusMaxBytes
@@ -97,6 +108,12 @@ func operationStatusCheckSpec(b Bundle, operation string) (OperationSpec, error)
 		return OperationSpec{}, fmt.Errorf("operation %q status check must not declare a request body", operation)
 	}
 	if err := requireOperationSurfaceEndpoint(b, http.MethodHead, op.REST.Path); err != nil {
+		return OperationSpec{}, err
+	}
+	if _, err := requireOperationSuccessStatusPolicy(op); err != nil {
+		return OperationSpec{}, err
+	}
+	if _, err := operationRedirectPolicy(op); err != nil {
 		return OperationSpec{}, err
 	}
 	return op, nil

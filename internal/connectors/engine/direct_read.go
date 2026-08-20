@@ -67,7 +67,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		return connectors.DirectReadResult{}, err
 	}
 	if op.Kind == "graphql_query" {
-		if len(req.Headers) != 0 {
+		if len(req.Headers) != 0 || len(req.HeaderValues) != 0 {
 			return connectors.DirectReadResult{}, fmt.Errorf("operation %q fixed GraphQL query does not accept request header overrides", op.ID)
 		}
 		return operationGraphQLDirectRead(ctx, b, op, req, h)
@@ -104,7 +104,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	headers, err := operationRequestHeaders(b, op, req.Headers)
+	headers, err := operationRequestHeaders(b, op, req.Headers, req.HeaderValues)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -124,6 +124,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		body:            body,
 		bodyContentType: operationDirectReadContentType(op),
 		headers:         headers,
+		operation:       &op,
 		outputPolicy:    policy,
 		maxBytes:        maxBytes,
 		page:            req.Page,

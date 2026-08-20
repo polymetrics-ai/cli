@@ -785,12 +785,13 @@ func (o OperationSpec) IsBatchable() bool {
 // OperationParameter is one parameter a REST operation accepts, as its
 // provider specification declares it.
 type OperationParameter struct {
-	Name     string   `json:"name"`
-	In       string   `json:"in"`
-	Type     string   `json:"type,omitempty"`
-	Required bool     `json:"required,omitempty"`
-	Values   []string `json:"values,omitempty"`
-	Summary  string   `json:"summary,omitempty"`
+	Name       string   `json:"name"`
+	In         string   `json:"in"`
+	Type       string   `json:"type,omitempty"`
+	Required   bool     `json:"required,omitempty"`
+	Repeatable bool     `json:"repeatable,omitempty"`
+	Values     []string `json:"values,omitempty"`
+	Summary    string   `json:"summary,omitempty"`
 	// Schema and MaxBytes are required for a caller-provided header. Headers
 	// are strings on the wire, so their schema is deliberately a bounded
 	// string schema rather than a second generic request-body dialect.
@@ -840,18 +841,26 @@ type RESTOperationSpec struct {
 	// it. Empty (the default) imposes nothing.
 	RequiredQuery []RequiredQueryGroup   `json:"required_query,omitempty"`
 	Response      *OperationResponseSpec `json:"response,omitempty"`
+	Redirect      *OperationRedirectSpec `json:"redirect,omitempty"`
 }
 
 // OperationResponseSpec is a narrow result metadata contract. Body bytes and
 // media remain governed by the operation's existing output policy/max_bytes;
 // only these named, bounded headers may appear in fixed-operation results.
 type OperationResponseSpec struct {
-	Headers []OperationResponseHeaderSpec `json:"headers,omitempty"`
+	Headers         []OperationResponseHeaderSpec `json:"headers,omitempty"`
+	SuccessStatuses []string                      `json:"success_statuses,omitempty"`
 }
 
 type OperationResponseHeaderSpec struct {
 	Name     string `json:"name"`
 	MaxBytes int    `json:"max_bytes"`
+}
+
+type OperationRedirectSpec struct {
+	MaxHops         int      `json:"max_hops"`
+	AllowSameOrigin bool     `json:"allow_same_origin,omitempty"`
+	AllowedHosts    []string `json:"allowed_hosts,omitempty"`
 }
 
 // RequiredQueryGroup is one "at least one of these" constraint. Several groups
@@ -933,6 +942,7 @@ type BinaryOperationSpec struct {
 	// metadata or request header map exists.
 	Parameters []OperationParameter   `json:"parameters,omitempty"`
 	Response   *OperationResponseSpec `json:"response,omitempty"`
+	Redirect   *OperationRedirectSpec `json:"redirect,omitempty"`
 	// Accept selects one fixed provider-documented response representation.
 	// It is declaration-owned and cannot be overridden by command callers.
 	Accept string `json:"accept,omitempty"`
@@ -1031,6 +1041,7 @@ type CLIFlag struct {
 	AllowEmpty *bool    `json:"allow_empty,omitempty"`
 	Minimum    *float64 `json:"minimum,omitempty"`
 	Required   bool     `json:"required,omitempty"`
+	Repeatable bool     `json:"repeatable,omitempty"`
 	EnvOnly    bool     `json:"env_only,omitempty"`
 	// MaxItems/MinItems bound a string_array flag's item count so a bounded
 	// provider-search list can be enforced against the flag the user typed, not
@@ -1600,6 +1611,9 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	operations, rawOperations, err := loadOperations(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
+	}
+	if err := validateOperationRuntimeHeaderIsolation(httpBase, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
 	}
 	directWriteSurface := deriveDirectWriteSurface(operations)
 
@@ -2490,31 +2504,6 @@ func operationExecutionBlock(op OperationSpec) (string, int) {
 	add("browser", op.Browser != nil)
 	add("composite", op.Composite != nil)
 	return block, count
-}
-
-func expectedOperationBlock(kind string) string {
-	switch kind {
-	case "rest_read", "rest_write", "provider_search":
-		return "rest"
-	case "graphql_query", "graphql_mutation":
-		return "graphql"
-	case "xml_export", "xml_import":
-		return "xml"
-	case "binary_download":
-		return "binary"
-	case "file_upload":
-		return "file"
-	case "local_git":
-		return "local_git"
-	case "local_file":
-		return "local_file"
-	case "browser_open":
-		return "browser"
-	case "stream_etl", "composite":
-		return "composite"
-	default:
-		return ""
-	}
 }
 
 // validateRequiredQuery rejects a required_query group that could never be

@@ -1850,6 +1850,43 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunOperationDirectReadRejectsRepeatedHeaderFlagsBeforeDispatch(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets list", Intent: "direct_read", Availability: "implemented", Operation: "acme.widgets.list", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/widgets"}},
+		Flags:      []connectors.CommandSurfaceFlag{{Name: "header-x-mode", Type: "enum", Values: []string{"safe", "full"}, MapsTo: "header.X-Mode"}},
+	}}}}
+	_, err := Run(context.Background(), connector, Request{Path: []string{"widgets", "list"}, Flags: map[string][]string{"header-x-mode": {"invalid", "safe"}}}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "accept exactly one value") {
+		t.Fatalf("Run error = %v, want repeated header refusal", err)
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("duplicate header reached operation dispatch: %#v", connector.operationDirectReadReq)
+	}
+}
+
+func TestRunOperationDirectReadPreservesDeclaredRepeatableHeaderValues(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets list", Intent: "direct_read", Availability: "implemented", Operation: "acme.widgets.list", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/widgets"}},
+		Flags:      []connectors.CommandSurfaceFlag{{Name: "header-x-mode", Type: "enum", Values: []string{"safe", "full"}, Repeatable: true, MapsTo: "header.X-Mode"}},
+	}}}}
+	_, err := Run(context.Background(), connector, Request{Path: []string{"widgets", "list"}, Flags: map[string][]string{"header-x-mode": {"invalid", "safe"}}}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "want one of") {
+		t.Fatalf("Run error = %v, want every repeated value validated", err)
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("invalid repeated header reached operation dispatch: %#v", connector.operationDirectReadReq)
+	}
+	_, err = Run(context.Background(), connector, Request{Path: []string{"widgets", "list"}, Flags: map[string][]string{"header-x-mode": {"safe", "full"}}}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Run repeatable header: %v", err)
+	}
+	if got := connector.operationDirectReadReq.HeaderValues["X-Mode"]; len(got) != 2 || got[0] != "safe" || got[1] != "full" {
+		t.Fatalf("repeatable header values = %#v, want ordered values", connector.operationDirectReadReq.HeaderValues)
+	}
+}
+
 func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 		Path:         "graphql query widgets",

@@ -25,6 +25,14 @@ func binaryBundle(srv *httptest.Server, spec *BinaryOperationSpec) Bundle {
 	if spec.MaxBytes == 0 {
 		spec.MaxBytes = 1 << 20
 	}
+	if len(spec.ContentTypes) == 0 {
+		spec.ContentTypes = []string{"application/*"}
+	}
+	if spec.Response == nil {
+		spec.Response = &OperationResponseSpec{SuccessStatuses: []string{"200-299"}}
+	} else if len(spec.Response.SuccessStatuses) == 0 {
+		spec.Response.SuccessStatuses = []string{"200-299"}
+	}
 	return Bundle{
 		Name: "acme",
 		HTTP: HTTPBase{URL: srv.URL},
@@ -48,6 +56,9 @@ func binaryBundle(srv *httptest.Server, spec *BinaryOperationSpec) Bundle {
 func binaryServer(t *testing.T, body []byte, headers map[string]string) *httptest.Server {
 	t.Helper()
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if headers == nil || headers["Content-Type"] == "" {
+			w.Header().Set("Content-Type", "application/octet-stream")
+		}
 		for k, v := range headers {
 			w.Header().Set(k, v)
 		}
@@ -122,6 +133,46 @@ func TestBinaryDownloadRejectsOverflow(t *testing.T) {
 	entries, _ := os.ReadDir(dest)
 	if len(entries) != 0 {
 		t.Fatalf("rejected download must leave no file behind, found %d", len(entries))
+	}
+}
+
+func TestBinaryDownloadRequiresDeclaredMediaAndSuccessfulStatusBeforeIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
+	t.Cleanup(srv.Close)
+	b := binaryBundle(srv, &BinaryOperationSpec{})
+	b.Operations[0].Binary.ContentTypes = nil
+	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil); err == nil || !strings.Contains(err.Error(), "content_types") {
+		t.Fatalf("missing media contract error = %v", err)
+	}
+	if requests != 0 {
+		t.Fatalf("missing media contract reached provider %d times", requests)
+	}
+	b = binaryBundle(srv, &BinaryOperationSpec{})
+	b.Operations[0].Binary.Response.SuccessStatuses = nil
+	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil); err == nil || !strings.Contains(err.Error(), "success_statuses") {
+		t.Fatalf("missing status contract error = %v", err)
+	}
+	if requests != 0 {
+		t.Fatalf("missing status contract reached provider %d times", requests)
+	}
+}
+
+func TestBinaryDownloadRejectsUndeclaredSuccessfulStatusBeforeArtifact(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.WriteHeader(http.StatusPartialContent)
+		_, _ = w.Write([]byte("partial"))
+	}))
+	t.Cleanup(srv.Close)
+	b := binaryBundle(srv, &BinaryOperationSpec{ContentTypes: []string{"application/octet-stream"}, Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}})
+	dest := t.TempDir()
+	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil); err == nil || !strings.Contains(err.Error(), "not declared") {
+		t.Fatalf("undeclared status error = %v", err)
+	}
+	entries, err := os.ReadDir(dest)
+	if err != nil || len(entries) != 0 {
+		t.Fatalf("undeclared status left artifacts: %v / %v", entries, err)
 	}
 }
 
@@ -545,6 +596,7 @@ func redirectingBinaryServers(t *testing.T) (origin *httptest.Server, cdnHost *s
 	host := ""
 	cdn := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		sawAuth = r.Header.Get("X-API-Key")
+		w.Header().Set("Content-Type", "application/octet-stream")
 		_, _ = w.Write([]byte("cdn-bytes"))
 	}))
 	t.Cleanup(cdn.Close)
@@ -581,9 +633,9 @@ func TestBinaryDownloadRefusesCrossHostRedirectByDefault(t *testing.T) {
 // TestBinaryDownloadAllowCrossHostIsEnforced: declaring allow_cross_host
 // actually changes behaviour, and the credential still does not travel.
 func TestBinaryDownloadAllowCrossHostIsEnforced(t *testing.T) {
-	origin, _, cdnSawAuth := redirectingBinaryServers(t)
+	origin, cdnHost, cdnSawAuth := redirectingBinaryServers(t)
 	dest := t.TempDir()
-	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowCrossHost: true})
+	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{Redirect: &OperationRedirectSpec{MaxHops: 1, AllowedHosts: []string{*cdnHost}}})
 	res, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
 	if err != nil {
 		t.Fatalf("declared allow_cross_host must permit the hop: %v", err)
@@ -602,7 +654,7 @@ func TestBinaryDownloadAllowCrossHostIsEnforced(t *testing.T) {
 func TestBinaryDownloadAllowedHostsIsEnforced(t *testing.T) {
 	origin, cdnHost, cdnSawAuth := redirectingBinaryServers(t)
 
-	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowedHosts: []string{*cdnHost}})
+	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{Redirect: &OperationRedirectSpec{MaxHops: 1, AllowedHosts: []string{*cdnHost}}})
 	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil); err != nil {
 		t.Fatalf("allowlisted host must be permitted: %v", err)
 	}
@@ -610,7 +662,7 @@ func TestBinaryDownloadAllowedHostsIsEnforced(t *testing.T) {
 		t.Fatalf("credential leaked to an allowlisted host: %q", *cdnSawAuth)
 	}
 
-	other := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowedHosts: []string{"somewhere.invalid:443"}})
+	other := binaryBundleWithAuth(origin, &BinaryOperationSpec{Redirect: &OperationRedirectSpec{MaxHops: 1, AllowedHosts: []string{"somewhere.invalid:443"}}})
 	if _, err := OperationBinaryDownload(context.Background(), other, downloadReq(t.TempDir()), nil); err == nil {
 		t.Fatal("a host outside allowed_hosts must stay refused")
 	}

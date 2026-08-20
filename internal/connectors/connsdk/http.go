@@ -39,6 +39,19 @@ type Response struct {
 	rateLimitRoute RateLimitRoute
 }
 
+type StatusRange struct {
+	Min int
+	Max int
+}
+
+type UnexpectedStatusError struct {
+	Status int
+}
+
+func (e *UnexpectedStatusError) Error() string {
+	return fmt.Sprintf("successful response status %d is not declared", e.Status)
+}
+
 // HTTPError is returned when a request completes with a 4xx/5xx status after
 // exhausting retries. The body is truncated and never assumed to be secret-free
 // by callers, but connsdk itself never logs it.
@@ -154,10 +167,13 @@ type Requester struct {
 	// Auth, when set, is applied to every request before it is sent.
 	Auth Authenticator
 	// UserAgent and DefaultHeaders are applied to every request.
-	UserAgent      string
-	DefaultHeaders map[string]string
+	UserAgent           string
+	DefaultHeaders      map[string]string
+	DefaultHeaderValues http.Header
 	// Accept overrides the Accept header (defaults to application/json).
-	Accept string
+	Accept           string
+	AcceptedStatuses []StatusRange
+	RedirectPolicy   *RedirectPolicy
 
 	// MaxRetries is the number of additional attempts after the first (default 4).
 	MaxRetries int
@@ -996,6 +1012,10 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	if maxBodyBytes <= 0 {
 		maxBodyBytes = defaultMaxResponseBody
 	}
+	baseURL, err := url.Parse(fullURL)
+	if err != nil {
+		return nil, fmt.Errorf("parse url %q: %w", fullURL, err)
+	}
 
 	attempts := r.maxRetries() + 1
 	if r.DisableRetries {
@@ -1010,7 +1030,8 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	route := RateLimitRoute{}
 	costHeader := ""
 	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
-	baseClient := r.clientFor(ctx)
+	var credKeys []string
+	baseClient := r.redirectClient(ctx, baseURL, r.RedirectPolicy, &credKeys)
 	if strictWrite {
 		baseClient = noReplayClient(baseClient)
 	}
@@ -1036,12 +1057,14 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			return nil, fmt.Errorf("build request: %w", err)
 		}
 		r.applyHeaders(req, body != nil, contentType)
+		before := headerKeySet(req.Header)
 		if r.Auth != nil {
 			if err := r.Auth.Apply(ctx, req); err != nil {
 				_ = cleanupRequestBody(body)
 				return nil, fmt.Errorf("apply auth: %w", err)
 			}
 		}
+		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders, r.DefaultHeaderValues)
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
@@ -1076,6 +1099,11 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		if bodyErr != nil {
 			_ = resp.Body.Close()
 			return nil, fmt.Errorf("send request body: %w", bodyErr)
+		}
+
+		if resp.StatusCode >= 200 && resp.StatusCode < 300 && !r.acceptsSuccessfulStatus(resp.StatusCode) {
+			_ = resp.Body.Close()
+			return nil, &UnexpectedStatusError{Status: resp.StatusCode}
 		}
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
@@ -1128,6 +1156,18 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	return nil, lastErr
 }
 
+func (r *Requester) acceptsSuccessfulStatus(status int) bool {
+	if len(r.AcceptedStatuses) == 0 {
+		return true
+	}
+	for _, allowed := range r.AcceptedStatuses {
+		if status >= allowed.Min && status <= allowed.Max {
+			return true
+		}
+	}
+	return false
+}
+
 func cleanupRequestBody(body *requestBody) error {
 	if body == nil || body.Cleanup == nil {
 		return nil
@@ -1171,6 +1211,11 @@ func (r *Requester) applyHeaders(req *http.Request, hasBody bool, contentType st
 	}
 	for k, v := range r.DefaultHeaders {
 		req.Header.Set(k, v)
+	}
+	for k, values := range r.DefaultHeaderValues {
+		for _, value := range values {
+			req.Header.Add(k, value)
+		}
 	}
 }
 

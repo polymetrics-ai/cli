@@ -402,11 +402,16 @@ not a full override by default.
   `internal/connectors/binary_download_flags.json` by runtime help, the generated `MANUAL.md`/
   `SKILL.md`, and the website generator, so one declaration keeps all three documenting the same
   flag surface. `--max-bytes` may only lower the operation's declared `binary.max_bytes`, never
-  raise it.
+  raise it. An executable binary operation must declare non-empty `binary.content_types` (exact
+  media types or bounded media ranges) and `binary.response.success_statuses` (exact 2xx statuses
+  or inclusive 2xx ranges). A redirect is disabled unless `binary.redirect` declares its hop bound
+  plus same-origin permission and/or exact cross-origin hosts.
 - **Operation-only capability contracts stay typed and bounded**: use `rest_status` with
   `intent:"status_check"`, a single HEAD endpoint, and `output_policy:"status"` for a
-  response-less status probe; it cannot be declared as `direct_read`. Use `text_export` only
-  for a declared `binary.accept:"text/csv"` GET with positive `binary.max_bytes`; it writes the
+  response-less status probe; it cannot be declared as `direct_read`, and its `rest.response`
+  must declare accepted successful statuses. Use `text_export` only for a declared
+  `binary.accept:"text/csv"` GET with positive `binary.max_bytes`, a non-empty CSV-compatible
+  `binary.content_types` declaration, exact `binary.charset`, and declared success statuses; it writes the
   same explicit destination manifest as a binary download and never streams text to stdout. A
   `rest_read.rest.pagination` may override connector-level pagination for one endpoint; its
   `pagination_parameters` are source-imported evidence only, not command flags, and every
@@ -466,10 +471,11 @@ go run ./cmd/connectorgen params-import <connector> --artifact <spec.json>
 go run ./cmd/connectorgen surface-sync internal/connectors/defs
 ```
 
-`params-import` writes the accepted parameter set into `operations.json` under
-`rest.parameters` (name, location, type, requiredness, enum values, summary). When an operation
-declares `rest.pagination`, it additionally writes the pager's source-only query set under
-`rest.pagination_parameters`; these values remain excluded from generated flags.
+`params-import` writes the accepted parameter set into `operations.json` under the registered
+operation block's `parameters` field (`rest.parameters` or `binary.parameters`; name, location,
+type, requiredness, enum values, summary). When an operation declares `rest.pagination`, it
+additionally writes the pager's source-only query set under `rest.pagination_parameters`; these
+values remain excluded from generated flags.
 `surface-sync` then derives the command flags from it. The split exists so CI
 stays hermetic: `surface-sync --check` verifies drift with no artifact and no
 network.
@@ -486,18 +492,22 @@ string/enum flag named `header-<provider-name>` with an exact
 lists only the operation's declared header flags; authors must not add a header
 map, a generic `--header`, or a hand-authored mapping.
 
-Request headers are a separate namespace from path, query, and body fields.
+Request headers are a separate namespace from path, query, and body fields. They are single-value
+by default; an exact `repeatable:true` header declaration validates and sends every supplied value
+in order.
 The engine validates requiredness, enum/pattern/length and byte bounds before
 credential setup or I/O. It refuses unknown names, duplicate case variants,
 CR/LF/control characters, cross-operation mappings, and every runtime-owned
-field, including authorization, cookies, host/routing, connection/proxy, and
-transport metadata. An operation may never declare a runtime-owned field to
-make it caller-selectable.
+field, including authorization, proxy authorization, cookies, host/routing,
+connection/proxy, forwarding, transport metadata, API-key/token aliases, and
+every case or underscore normalization variant. An operation may never declare
+a runtime-owned field to make it caller-selectable.
 
 An operation may also declare only the response headers it needs to expose:
 
 ```json
 "response": {
+  "success_statuses": ["200", "202-204"],
   "headers": [
     { "name": "X-Request-ID", "max_bytes": 128 },
     { "name": "ETag", "max_bytes": 256 }
@@ -547,8 +557,8 @@ go run ./cmd/connectorgen surface-sync --check internal/connectors/defs
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-`validate` rejects a malformed `rest.parameters` entry at build time — an `in`
-outside `query|path` fails with the exact JSON pointer — so a declaration that
+`validate` rejects a malformed operation `parameters` entry at build time — an `in`
+outside `query|path|header` fails with the exact JSON pointer — so a declaration that
 could not produce a valid command never reaches the runtime.
 
 ## 3. The engine dialect reference

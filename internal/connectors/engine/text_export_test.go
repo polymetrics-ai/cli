@@ -12,7 +12,7 @@ import (
 func textExportBundle(baseURL string, maxBytes int) Bundle {
 	return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{
 		ID: "acme.audit.export", Kind: "text_export", Summary: "Export audit CSV", Risk: "medium", Approval: "explicit destination", OutputPolicy: "file_manifest",
-		Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/v2/audit.csv", MaxBytes: maxBytes, Accept: "text/csv", ContentTypes: []string{"text/csv"}, Charset: "utf-8", Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{{Name: "X-Export-ID", MaxBytes: 64}}}},
+		Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/v2/audit.csv", MaxBytes: maxBytes, Accept: "text/csv", ContentTypes: []string{"text/csv"}, Charset: "utf-8", Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}, Headers: []OperationResponseHeaderSpec{{Name: "X-Export-ID", MaxBytes: 64}}}},
 	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v2/audit.csv", Operation: &SurfaceOperation{Model: "text_export"}}}}}
 }
 
@@ -39,6 +39,21 @@ func TestOperationTextExportRejectsUnboundedBeforeIO(t *testing.T) {
 	_, err := OperationBinaryDownload(context.Background(), textExportBundle(srv.URL, 0), BinaryDownloadRequest{Operation: "acme.audit.export", DestRoot: t.TempDir()}, nil)
 	if err == nil || !strings.Contains(err.Error(), "positive max_bytes") {
 		t.Fatalf("OperationBinaryDownload error = %v, want bounded-export refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("requests = %d, want pre-I/O refusal", requests)
+	}
+}
+
+func TestOperationTextExportRequiresDeclaredCharsetBeforeIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
+	t.Cleanup(srv.Close)
+	bundle := textExportBundle(srv.URL, 1024)
+	bundle.Operations[0].Binary.Charset = ""
+	_, err := OperationBinaryDownload(context.Background(), bundle, BinaryDownloadRequest{Operation: "acme.audit.export", DestRoot: t.TempDir()}, nil)
+	if err == nil || !strings.Contains(err.Error(), "charset") {
+		t.Fatalf("OperationBinaryDownload error = %v, want charset contract refusal", err)
 	}
 	if requests != 0 {
 		t.Fatalf("requests = %d, want pre-I/O refusal", requests)

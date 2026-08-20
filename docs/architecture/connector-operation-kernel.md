@@ -102,12 +102,14 @@ decides before any network or filesystem access:
   with `engine.OperationBinaryDownload`. The endpoint must be a single
   connector-relative GET, the caller must supply a destination root, and the
   byte cap is the request value clamped by the operation's declared maximum and
-  then by the engine's own ceiling.
+  then by the engine's own ceiling. The operation declares its accepted success
+  statuses, response media types, optional bounded response headers, and any
+  bounded redirect policy before a file can be created.
 - `intent:"status_check"` with `availability:"implemented"` executes one
   declared connector-relative HEAD operation and returns its fixed status plus
   only declared bounded response metadata, never a body.
 - A `text_export` operation uses the bounded download executor with a declared
-  CSV media type (and optional exact charset), explicit destination, atomic
+  CSV media type and exact charset, declared successful statuses, explicit destination, atomic
   file completion, and the same response-metadata projection. A failed
   media/charset or byte check leaves no output file.
 - `intent:"direct_write"` with `availability:"implemented"` can enter the

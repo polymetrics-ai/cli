@@ -26,7 +26,14 @@ type StreamOptions struct {
 	AllowCrossHost bool
 	// AllowedHosts permits hops to exactly these hosts (host or host:port).
 	// Credentials are stripped on such a hop regardless.
-	AllowedHosts []string
+	AllowedHosts   []string
+	RedirectPolicy *RedirectPolicy
+}
+
+type RedirectPolicy struct {
+	MaxHops         int
+	AllowSameOrigin bool
+	AllowedHosts    []string
 }
 
 // StreamResponse is a response whose body is still OPEN. The caller owns it
@@ -119,7 +126,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 				return nil, fmt.Errorf("apply auth: %w", err)
 			}
 		}
-		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders)
+		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders, r.DefaultHeaderValues)
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
@@ -160,6 +167,10 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			_ = resp.Body.Close()
 			return nil, responseHTTPError(resp.StatusCode, fullURL, body, observation)
 		}
+		if !r.acceptsSuccessfulStatus(resp.StatusCode) {
+			_ = resp.Body.Close()
+			return nil, &UnexpectedStatusError{Status: resp.StatusCode}
+		}
 
 		return &StreamResponse{
 			Status: resp.StatusCode,
@@ -180,6 +191,9 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 	clone := *r.client()
 	clone.Timeout = 0
 	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if opts.RedirectPolicy != nil {
+			return checkRedirectPolicy(req, via, base, *opts.RedirectPolicy, credKeys)
+		}
 		if len(via) >= maxRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxRedirects)
 		}
@@ -195,6 +209,45 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 		return nil
 	}
 	return &clone
+}
+
+func (r *Requester) redirectClient(ctx context.Context, base *url.URL, policy *RedirectPolicy, credKeys *[]string) *http.Client {
+	if policy == nil {
+		return r.clientFor(ctx)
+	}
+	clone := *r.clientFor(ctx)
+	prior := clone.CheckRedirect
+	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if err := checkRedirectPolicy(req, via, base, *policy, credKeys); err != nil {
+			return err
+		}
+		if prior != nil {
+			return prior(req, via)
+		}
+		return nil
+	}
+	return &clone
+}
+
+func checkRedirectPolicy(req *http.Request, via []*http.Request, base *url.URL, policy RedirectPolicy, credKeys *[]string) error {
+	if policy.MaxHops <= 0 || len(via) > policy.MaxHops {
+		return fmt.Errorf("redirect refused by declared policy")
+	}
+	if strings.EqualFold(base.Scheme, "https") && !strings.EqualFold(req.URL.Scheme, "https") {
+		return fmt.Errorf("scheme downgrade to %q blocked (base origin %s://%s)", req.URL.Redacted(), base.Scheme, base.Host)
+	}
+	sameOrigin := req.URL.Host == base.Host && req.URL.Scheme == base.Scheme
+	if sameOrigin {
+		if !policy.AllowSameOrigin {
+			return fmt.Errorf("redirect refused by declared policy")
+		}
+		return nil
+	}
+	if err := allowCrossOrigin(req.URL, base, StreamOptions{AllowedHosts: policy.AllowedHosts}); err != nil {
+		return err
+	}
+	stripCredentialHeaders(req, *credKeys)
+	return nil
 }
 
 // allowCrossOrigin fails closed: an unparseable or host-less target, a
@@ -236,7 +289,7 @@ func headerKeySet(h http.Header) map[string]bool {
 // boundary: those the Authenticator added, plus every configured default
 // header (a connector may carry its API key there), plus the always-sensitive
 // set.
-func credentialHeaderKeys(before map[string]bool, after http.Header, defaults map[string]string) []string {
+func credentialHeaderKeys(before map[string]bool, after http.Header, defaults map[string]string, defaultValues http.Header) []string {
 	seen := map[string]bool{}
 	add := func(k string) {
 		canonical := http.CanonicalHeaderKey(k)
@@ -250,6 +303,9 @@ func credentialHeaderKeys(before map[string]bool, after http.Header, defaults ma
 		}
 	}
 	for k := range defaults {
+		add(k)
+	}
+	for k := range defaultValues {
 		add(k)
 	}
 	for _, k := range alwaysSensitiveHeaders {
@@ -284,5 +340,6 @@ func isRedirectPolicyError(err error) bool {
 	msg := err.Error()
 	return strings.Contains(msg, "cross-host redirect") ||
 		strings.Contains(msg, "scheme downgrade") ||
-		strings.Contains(msg, "stopped after")
+		strings.Contains(msg, "stopped after") ||
+		strings.Contains(msg, "redirect refused")
 }

@@ -36,6 +36,7 @@ type CommandSurfaceFlag struct {
 	AllowEmpty *bool
 	Minimum    *float64
 	Required   bool
+	Repeatable bool
 	// EnvOnly requires the CLI to receive this command value through the
 	// declared --from-env field=ENV channel. The resolved value is still
 	// validated by the ordinary typed flag path, but it never appears in argv.

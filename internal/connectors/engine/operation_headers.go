@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
@@ -17,39 +18,47 @@ import (
 // otherwise bounded fixed operation into an oversized-header transport path.
 const maxOperationHeaderBytes = 16 << 10
 
-// protectedOperationHeaderNames are credential- or transport-owned fields.
-// This is deliberately lower case: HTTP field names are case-insensitive, and
-// callers must not get around the boundary through a normalization variant.
-var protectedOperationHeaderNames = map[string]struct{}{
-	"accept": {}, "accept-charset": {}, "accept-encoding": {}, "accept-language": {},
-	"authorization": {}, "connection": {}, "content-length": {}, "content-type": {},
-	"cookie": {}, "expect": {}, "forwarded": {}, "host": {}, "keep-alive": {},
-	"max-forwards": {}, "proxy-authorization": {}, "proxy-connection": {}, "set-cookie": {},
-	"te": {}, "trailer": {}, "transfer-encoding": {}, "upgrade": {}, "user-agent": {}, "via": {},
-	"x-forwarded-for": {}, "x-forwarded-host": {}, "x-forwarded-proto": {},
-}
-
 // maskedOperationResponseHeaderNames mirrors the established fixed
 // credential/transport header masking used by certification capture. A value
 // is never silently omitted: a declared header remains observable as
 // {"redacted":true}. Ordinary provider headers, including unusual or
 // paid-tier metadata, are preserved without a scope-based filter.
 var maskedOperationResponseHeaderNames = map[string]struct{}{
-	"authorization":       {},
-	"cookie":              {},
-	"proxy-authorization": {},
-	"set-cookie":          {},
-	"www-authenticate":    {},
-	"x-api-key":           {},
-	"x-auth-token":        {},
+	"api-key":                {},
+	"api-token":              {},
+	"authorization":          {},
+	"cookie":                 {},
+	"proxy-authorization":    {},
+	"set-cookie":             {},
+	"www-authenticate":       {},
+	"x-access-token":         {},
+	"x-api-key":              {},
+	"x-api-token":            {},
+	"x-auth-token":           {},
+	"x-authentication-token": {},
+	"x-authorization":        {},
+	"x-client-secret":        {},
+	"x-secret-key":           {},
+	"x-session-token":        {},
+	"x-token":                {},
 }
 
 // validateOperationHeaderParameters admits the closed declaration shape. Only
 // REST-like operation blocks have parameters; GraphQL variables remain the
 // existing fixed-document contract and cannot gain a header escape hatch.
 func validateOperationHeaderParameters(op OperationSpec) error {
+	if op.REST != nil {
+		for _, parameter := range op.REST.PaginationParameters {
+			if parameter.Repeatable {
+				return fmt.Errorf("pagination parameter %q cannot be repeatable", parameter.Name)
+			}
+		}
+	}
 	seen := make(map[string]struct{})
 	for _, parameter := range operationParameters(op) {
+		if parameter.Repeatable && parameter.In != "header" {
+			return fmt.Errorf("parameter %q repeatable is supported only for request headers", parameter.Name)
+		}
 		if parameter.In != "header" {
 			continue
 		}
@@ -57,8 +66,11 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 		if name == "" || name != parameter.Name || !httpHeaderNamePattern.MatchString(name) {
 			return fmt.Errorf("header parameter name %q is not a valid HTTP field name", parameter.Name)
 		}
-		canonical := strings.ToLower(name)
-		if _, protected := protectedOperationHeaderNames[canonical]; protected {
+		canonical, err := connectors.CanonicalOperationHeaderName(name)
+		if err != nil {
+			return fmt.Errorf("header parameter name %q is not a valid HTTP field name", parameter.Name)
+		}
+		if connectors.IsProtectedOperationHeaderName(canonical) {
 			return fmt.Errorf("header parameter %q is protected and runtime-owned", parameter.Name)
 		}
 		if _, duplicate := seen[canonical]; duplicate {
@@ -89,13 +101,21 @@ func validateOperationResponseContract(op OperationSpec) error {
 	if response == nil {
 		return nil
 	}
+	for _, declared := range response.SuccessStatuses {
+		if _, err := parseOperationSuccessStatus(declared); err != nil {
+			return fmt.Errorf("response success status %q: %w", declared, err)
+		}
+	}
 	seen := make(map[string]struct{}, len(response.Headers))
 	for _, header := range response.Headers {
 		name := strings.TrimSpace(header.Name)
 		if name == "" || name != header.Name || !httpHeaderNamePattern.MatchString(name) {
 			return fmt.Errorf("response header name %q is not a valid HTTP field name", header.Name)
 		}
-		canonical := strings.ToLower(name)
+		canonical, err := connectors.CanonicalOperationHeaderName(name)
+		if err != nil {
+			return fmt.Errorf("response header name %q is not a valid HTTP field name", header.Name)
+		}
 		if _, duplicate := seen[canonical]; duplicate {
 			return fmt.Errorf("response header %q duplicates another header ignoring case", header.Name)
 		}
@@ -105,6 +125,54 @@ func validateOperationResponseContract(op OperationSpec) error {
 		}
 	}
 	return nil
+}
+
+func requireOperationSuccessStatusPolicy(op OperationSpec) ([]connsdk.StatusRange, error) {
+	response := operationResponseSpec(op)
+	if response == nil || len(response.SuccessStatuses) == 0 {
+		return nil, fmt.Errorf("operation %q requires declared response success_statuses", op.ID)
+	}
+	ranges := make([]connsdk.StatusRange, 0, len(response.SuccessStatuses))
+	for _, declared := range response.SuccessStatuses {
+		status, err := parseOperationSuccessStatus(declared)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q response success status %q: %w", op.ID, declared, err)
+		}
+		ranges = append(ranges, status)
+	}
+	return ranges, nil
+}
+
+func operationSuccessStatusRanges(op OperationSpec) ([]connsdk.StatusRange, error) {
+	response := operationResponseSpec(op)
+	if response == nil || len(response.SuccessStatuses) == 0 {
+		return nil, nil
+	}
+	return requireOperationSuccessStatusPolicy(op)
+}
+
+func parseOperationSuccessStatus(raw string) (connsdk.StatusRange, error) {
+	text := strings.TrimSpace(raw)
+	if text != raw || text == "" {
+		return connsdk.StatusRange{}, fmt.Errorf("must be an exact 2xx status or inclusive 2xx range")
+	}
+	if len(text) == 3 {
+		status, err := strconv.Atoi(text)
+		if err != nil || status < 200 || status > 299 {
+			return connsdk.StatusRange{}, fmt.Errorf("must be an exact 2xx status or inclusive 2xx range")
+		}
+		return connsdk.StatusRange{Min: status, Max: status}, nil
+	}
+	start, end, ok := strings.Cut(text, "-")
+	if !ok || len(start) != 3 || len(end) != 3 {
+		return connsdk.StatusRange{}, fmt.Errorf("must be an exact 2xx status or inclusive 2xx range")
+	}
+	min, minErr := strconv.Atoi(start)
+	max, maxErr := strconv.Atoi(end)
+	if minErr != nil || maxErr != nil || min < 200 || max > 299 || min > max {
+		return connsdk.StatusRange{}, fmt.Errorf("must be an exact 2xx status or inclusive 2xx range")
+	}
+	return connsdk.StatusRange{Min: min, Max: max}, nil
 }
 
 func operationHeaderSchemaIsString(raw json.RawMessage) bool {
@@ -121,67 +189,102 @@ func operationHeaderSchemaIsString(raw json.RawMessage) bool {
 // before credentials/runtime construction. It returns canonical declaration
 // names only, which prevents unknown, duplicate, cross-operation, and
 // normalization variants from ever reaching connsdk.
-func operationRequestHeaders(b Bundle, op OperationSpec, values map[string]string) (map[string]string, error) {
+func operationRequestHeaders(b Bundle, op OperationSpec, values map[string]string, repeated map[string][]string) (http.Header, error) {
 	if err := validateOperationHeaderParameters(op); err != nil {
 		return nil, fmt.Errorf("operation %q request headers: %w", op.ID, err)
 	}
 	declared := make(map[string]OperationParameter)
 	for _, parameter := range operationParameters(op) {
 		if parameter.In == "header" {
-			declared[strings.ToLower(parameter.Name)] = parameter
+			canonical, err := connectors.CanonicalOperationHeaderName(parameter.Name)
+			if err != nil {
+				return nil, fmt.Errorf("operation %q request header %q declaration: %w", op.ID, parameter.Name, err)
+			}
+			declared[canonical] = parameter
 		}
 	}
 	protected := operationRuntimeHeaderNames(b)
-	provided := make(map[string]struct{}, len(values))
-	resolved := make(map[string]string, len(values))
+	provided := make(map[string]struct{}, len(values)+len(repeated))
+	resolved := make(http.Header, len(values)+len(repeated))
+	resolve := func(suppliedName string, suppliedValues []string) error {
+		if strings.TrimSpace(suppliedName) != suppliedName || !httpHeaderNamePattern.MatchString(suppliedName) {
+			return fmt.Errorf("operation %q request header %q is malformed", op.ID, suppliedName)
+		}
+		name, err := connectors.CanonicalOperationHeaderName(suppliedName)
+		if err != nil {
+			return fmt.Errorf("operation %q request header %q is malformed", op.ID, suppliedName)
+		}
+		if connectors.IsProtectedOperationHeaderName(name) {
+			return fmt.Errorf("operation %q request header %q is protected and runtime-owned", op.ID, suppliedName)
+		}
+		if _, blocked := protected[name]; blocked {
+			return fmt.Errorf("operation %q request header %q is protected and runtime-owned", op.ID, suppliedName)
+		}
+		parameter, ok := declared[name]
+		if !ok {
+			return fmt.Errorf("operation %q has unknown declared request header %q", op.ID, suppliedName)
+		}
+		if _, duplicate := provided[name]; duplicate {
+			return fmt.Errorf("operation %q supplied duplicate request header %q", op.ID, suppliedName)
+		}
+		if len(suppliedValues) == 0 {
+			return fmt.Errorf("operation %q request header %q has no values", op.ID, suppliedName)
+		}
+		if len(suppliedValues) > 1 && !parameter.Repeatable {
+			return fmt.Errorf("operation %q request header %q accepts exactly one value", op.ID, suppliedName)
+		}
+		schema, err := CompileSchema(parameter.Schema)
+		if err != nil {
+			return fmt.Errorf("operation %q request header %q declaration: %w", op.ID, suppliedName, err)
+		}
+		totalBytes := 0
+		for _, value := range suppliedValues {
+			if err := safety.RejectDangerousChars(value, fmt.Sprintf("operation %q request header %q", op.ID, suppliedName)); err != nil {
+				return err
+			}
+			totalBytes += len(value)
+			if totalBytes > parameter.MaxBytes {
+				return fmt.Errorf("operation %q request header %q exceeds declared byte cap %d", op.ID, suppliedName, parameter.MaxBytes)
+			}
+			if err := schema.Validate(value); err != nil {
+				return fmt.Errorf("operation %q request header %q does not satisfy declared schema: %w", op.ID, suppliedName, err)
+			}
+			if len(parameter.Values) > 0 {
+				matched := false
+				for _, allowed := range parameter.Values {
+					if value == allowed {
+						matched = true
+						break
+					}
+				}
+				if !matched {
+					return fmt.Errorf("operation %q request header %q is not one of the declared values", op.ID, suppliedName)
+				}
+			}
+		}
+		provided[name] = struct{}{}
+		resolved[http.CanonicalHeaderKey(parameter.Name)] = append([]string(nil), suppliedValues...)
+		return nil
+	}
 	keys := make([]string, 0, len(values))
 	for key := range values {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
 	for _, suppliedName := range keys {
-		value := values[suppliedName]
-		if strings.TrimSpace(suppliedName) != suppliedName || !httpHeaderNamePattern.MatchString(suppliedName) {
-			return nil, fmt.Errorf("operation %q request header %q is malformed", op.ID, suppliedName)
-		}
-		name := strings.ToLower(suppliedName)
-		if _, blocked := protected[name]; blocked {
-			return nil, fmt.Errorf("operation %q request header %q is protected and runtime-owned", op.ID, suppliedName)
-		}
-		parameter, ok := declared[name]
-		if !ok {
-			return nil, fmt.Errorf("operation %q has unknown declared request header %q", op.ID, suppliedName)
-		}
-		if _, duplicate := provided[name]; duplicate {
-			return nil, fmt.Errorf("operation %q supplied duplicate request header %q", op.ID, suppliedName)
-		}
-		if err := safety.RejectDangerousChars(value, fmt.Sprintf("operation %q request header %q", op.ID, suppliedName)); err != nil {
+		if err := resolve(suppliedName, []string{values[suppliedName]}); err != nil {
 			return nil, err
 		}
-		if len(value) > parameter.MaxBytes {
-			return nil, fmt.Errorf("operation %q request header %q exceeds declared byte cap %d", op.ID, suppliedName, parameter.MaxBytes)
+	}
+	repeatedKeys := make([]string, 0, len(repeated))
+	for key := range repeated {
+		repeatedKeys = append(repeatedKeys, key)
+	}
+	sort.Strings(repeatedKeys)
+	for _, suppliedName := range repeatedKeys {
+		if err := resolve(suppliedName, repeated[suppliedName]); err != nil {
+			return nil, err
 		}
-		schema, err := CompileSchema(parameter.Schema)
-		if err != nil {
-			return nil, fmt.Errorf("operation %q request header %q declaration: %w", op.ID, suppliedName, err)
-		}
-		if err := schema.Validate(value); err != nil {
-			return nil, fmt.Errorf("operation %q request header %q does not satisfy declared schema: %w", op.ID, suppliedName, err)
-		}
-		if len(parameter.Values) > 0 {
-			matched := false
-			for _, allowed := range parameter.Values {
-				if value == allowed {
-					matched = true
-					break
-				}
-			}
-			if !matched {
-				return nil, fmt.Errorf("operation %q request header %q is not one of the declared values", op.ID, suppliedName)
-			}
-		}
-		provided[name] = struct{}{}
-		resolved[parameter.Name] = value
 	}
 	for name, parameter := range declared {
 		if parameter.Required {
@@ -249,7 +352,11 @@ func operationResponseHeaders(op OperationSpec, headers http.Header) (map[string
 		if total > declared.MaxBytes {
 			return nil, fmt.Errorf("operation %q response header %q exceeds declared byte cap %d", op.ID, declared.Name, declared.MaxBytes)
 		}
-		if _, masked := maskedOperationResponseHeaderNames[strings.ToLower(declared.Name)]; masked {
+		canonical, err := connectors.CanonicalOperationHeaderName(declared.Name)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q response header %q: %w", op.ID, declared.Name, err)
+		}
+		if _, masked := maskedOperationResponseHeaderNames[canonical]; masked {
 			result[declared.Name] = connectors.OperationResponseHeader{Redacted: true}
 			continue
 		}
@@ -259,47 +366,154 @@ func operationResponseHeaders(op OperationSpec, headers http.Header) (map[string
 }
 
 func operationRuntimeHeaderNames(b Bundle) map[string]struct{} {
-	protected := make(map[string]struct{}, len(protectedOperationHeaderNames)+len(b.HTTP.Headers)+len(b.HTTP.Auth))
-	for name := range protectedOperationHeaderNames {
-		protected[name] = struct{}{}
+	return operationRuntimeHeaderNamesForBase(b.HTTP)
+}
+
+func operationRuntimeHeaderNamesForBase(base HTTPBase) map[string]struct{} {
+	protected := make(map[string]struct{}, len(base.Headers)+len(base.Auth))
+	for name := range base.Headers {
+		if canonical, err := connectors.CanonicalOperationHeaderName(name); err == nil {
+			protected[canonical] = struct{}{}
+		}
 	}
-	for name := range b.HTTP.Headers {
-		protected[strings.ToLower(name)] = struct{}{}
-	}
-	for _, auth := range b.HTTP.Auth {
+	for _, auth := range base.Auth {
 		if name := strings.TrimSpace(auth.Header); name != "" {
-			protected[strings.ToLower(name)] = struct{}{}
+			if canonical, err := connectors.CanonicalOperationHeaderName(name); err == nil {
+				protected[canonical] = struct{}{}
+			}
 		}
 	}
 	return protected
+}
+
+func validateOperationRuntimeHeaderIsolation(base HTTPBase, operations []OperationSpec) error {
+	runtimeHeaders := operationRuntimeHeaderNamesForBase(base)
+	if len(runtimeHeaders) == 0 {
+		return nil
+	}
+	for _, operation := range operations {
+		for _, parameter := range operationParameters(operation) {
+			if parameter.In != "header" {
+				continue
+			}
+			canonical, err := connectors.CanonicalOperationHeaderName(parameter.Name)
+			if err != nil {
+				continue
+			}
+			if _, protected := runtimeHeaders[canonical]; protected {
+				return fmt.Errorf("operation %q header parameter %q is protected and runtime-owned", operation.ID, parameter.Name)
+			}
+		}
+	}
+	return nil
 }
 
 // requesterWithOperationHeaders returns a shallow Requester clone with the
 // already-admitted declaration-owned header values. The original rate-limited
 // requester is never mutated, so retries, redirects, sibling operations, and
 // later calls cannot inherit a caller value.
-func requesterWithOperationHeaders(requester *connsdk.Requester, headers map[string]string) *connsdk.Requester {
-	if len(headers) == 0 {
-		return requester
+func requesterWithOperationHeaders(requester *connsdk.Requester, op OperationSpec, headers http.Header) (*connsdk.Requester, error) {
+	statuses, err := operationSuccessStatusRanges(op)
+	if err != nil {
+		return nil, err
+	}
+	redirect, err := operationRedirectPolicy(op)
+	if err != nil {
+		return nil, err
 	}
 	clone := *requester
-	clone.DefaultHeaders = make(map[string]string, len(requester.DefaultHeaders)+len(headers))
+	clone.DefaultHeaders = make(map[string]string, len(requester.DefaultHeaders))
 	for key, value := range requester.DefaultHeaders {
 		clone.DefaultHeaders[key] = value
 	}
-	for key, value := range headers {
-		clone.DefaultHeaders[key] = value
+	clone.DefaultHeaderValues = cloneOperationHeaders(requester.DefaultHeaderValues)
+	if clone.DefaultHeaderValues == nil {
+		clone.DefaultHeaderValues = make(http.Header, len(headers))
 	}
-	return &clone
+	for key, values := range headers {
+		clone.DefaultHeaderValues[key] = append([]string(nil), values...)
+	}
+	clone.AcceptedStatuses = statuses
+	clone.RedirectPolicy = redirect
+	return &clone, nil
 }
 
-func cloneOperationHeaders(headers map[string]string) map[string]string {
+func operationRedirectPolicy(op OperationSpec) (*connsdk.RedirectPolicy, error) {
+	var declared *OperationRedirectSpec
+	if op.REST != nil {
+		declared = op.REST.Redirect
+	}
+	if op.Binary != nil {
+		if op.Binary.AllowCrossHost {
+			return nil, fmt.Errorf("operation %q uses unbounded legacy cross-host redirect metadata", op.ID)
+		}
+		declared = op.Binary.Redirect
+		if declared == nil && len(op.Binary.AllowedHosts) != 0 {
+			declared = &OperationRedirectSpec{MaxHops: 1, AllowedHosts: append([]string(nil), op.Binary.AllowedHosts...)}
+		}
+	}
+	if declared == nil {
+		return &connsdk.RedirectPolicy{}, nil
+	}
+	if declared.MaxHops < 1 || declared.MaxHops > 10 {
+		return nil, fmt.Errorf("operation %q redirect max_hops must be between 1 and 10", op.ID)
+	}
+	allowed := make([]string, 0, len(declared.AllowedHosts))
+	seen := map[string]struct{}{}
+	for _, raw := range declared.AllowedHosts {
+		host := strings.ToLower(strings.TrimSpace(raw))
+		if host == "" || strings.ContainsAny(host, "/?#@") {
+			return nil, fmt.Errorf("operation %q redirect allowed host %q is invalid", op.ID, raw)
+		}
+		if _, duplicate := seen[host]; duplicate {
+			return nil, fmt.Errorf("operation %q redirect allowed host %q is duplicated", op.ID, raw)
+		}
+		seen[host] = struct{}{}
+		allowed = append(allowed, host)
+	}
+	if !declared.AllowSameOrigin && len(allowed) == 0 {
+		return nil, fmt.Errorf("operation %q redirect policy permits no redirect target", op.ID)
+	}
+	return &connsdk.RedirectPolicy{MaxHops: declared.MaxHops, AllowSameOrigin: declared.AllowSameOrigin, AllowedHosts: allowed}, nil
+}
+
+func cloneOperationHeaders(headers http.Header) http.Header {
 	if len(headers) == 0 {
 		return nil
 	}
-	clone := make(map[string]string, len(headers))
-	for key, value := range headers {
-		clone[key] = value
+	clone := make(http.Header, len(headers))
+	for key, values := range headers {
+		clone[key] = append([]string(nil), values...)
 	}
 	return clone
+}
+
+func operationSingleHeaders(headers http.Header) map[string]string {
+	if len(headers) == 0 {
+		return nil
+	}
+	result := make(map[string]string, len(headers))
+	for key, values := range headers {
+		if len(values) == 1 {
+			result[key] = values[0]
+		}
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func operationRepeatedHeaders(headers http.Header) map[string][]string {
+	var result map[string][]string
+	for key, values := range headers {
+		if len(values) <= 1 {
+			continue
+		}
+		if result == nil {
+			result = make(map[string][]string)
+		}
+		result[key] = append([]string(nil), values...)
+	}
+	return result
 }

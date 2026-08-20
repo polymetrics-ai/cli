@@ -1444,7 +1444,7 @@
       "path": "files download",
       "summary": "Download a file",
       "intent": "binary_download",
-      "availability": "implemented",
+      "availability": "partial",
       "operation": "gorgias.download_file",
       "flags": [
         {
@@ -1476,7 +1476,7 @@
           "path": "/api/{file_type}/download/{domain_hash}/{resource_name}"
         }
       ],
-      "notes": "Bounded Gorgias download; the provider responds with a 307 redirect to signed cross-host file storage, which this operation follows (allow_cross_host) without forwarding the Gorgias credential. The provider response is written only beneath an explicit --dest-root.",
+      "notes": "Blocked: the provider documents a signed cross-host redirect without a stable exact host allowlist or a bounded final media contract.",
       "examples": [
         "pm gorgias files download --file-type \"<value>\" --domain-hash \"<value>\" --resource-name \"<value>\" --dest-root ./downloads"
       ]

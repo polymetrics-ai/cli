@@ -44,7 +44,7 @@ type preparedOperationDirectWrite struct {
 	contentType     string
 	policy          string
 	maxBytes        int
-	headers         map[string]string
+	headers         http.Header
 	redactionValues []string
 	prepared        PreparedWrite
 }
@@ -104,7 +104,10 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if err != nil {
 			return err
 		}
-		resolvedRequester = requesterWithOperationHeaders(resolvedRequester, prepared.headers)
+		resolvedRequester, err = requesterWithOperationHeaders(resolvedRequester, prepared.op, prepared.headers)
+		if err != nil {
+			return err
+		}
 		requester := *resolvedRequester
 		requester.DisableRetries = true
 
@@ -281,6 +284,61 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 	}, nil
 }
 
+func ApprovedMultipartPayloadSHA256ForOperation(ctx context.Context, b Bundle, req connectors.OperationDirectWriteRequest, _ Hooks) (map[string]string, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	op, _, err := operationDirectWriteSpec(b, req.Operation)
+	if err != nil {
+		return nil, err
+	}
+	if op.Kind != "rest_write" || op.REST == nil || op.REST.Multipart == nil {
+		return nil, nil
+	}
+	cfg := materializeConfigDefaults(b, req.Config)
+	body, err := operationWriteBody(op, req.Body)
+	if err != nil {
+		return nil, err
+	}
+	root, err := openMultipartRoot(cfg.ProjectDir)
+	if err != nil {
+		return nil, fmt.Errorf("operation %q open multipart project root: %w", op.ID, err)
+	}
+	defer func() { _ = root.Close() }()
+	action := WriteAction{Name: op.ID, Multipart: op.REST.Multipart}
+	form, err := buildMultipartPayload(action, connectors.Record(body), 0, cfg, root)
+	if err != nil {
+		return nil, err
+	}
+	partFields := make(map[string]string, len(op.REST.Multipart.Parts))
+	for _, part := range op.REST.Multipart.Parts {
+		if part.Type == "file" {
+			partFields[part.Name] = part.Field
+		}
+	}
+	approved := make(map[string]string, len(form.Files))
+	var total int64
+	for _, file := range form.Files {
+		field, ok := partFields[file.FieldName]
+		if !ok {
+			return nil, fmt.Errorf("operation %q multipart file part %q is not declared", op.ID, file.FieldName)
+		}
+		digest, size, err := digestMultipartPayloadForApproval(file)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q multipart file part %q: %w", op.ID, file.FieldName, err)
+		}
+		total += size
+		if form.MaxBytes > 0 && total > form.MaxBytes {
+			return nil, fmt.Errorf("operation %q multipart payload too large: %d bytes exceeds limit %d", op.ID, total, form.MaxBytes)
+		}
+		approved[connectors.PayloadApprovalKey(0, field)] = digest
+	}
+	if len(approved) == 0 {
+		return nil, nil
+	}
+	return approved, nil
+}
+
 // PreflightOperationDirectWrite proves an implemented command's exact binding
 // can reach the closed REST or fixed-document GraphQL write executor. It is
 // deliberately no-network and shares operationDirectWriteSpec with execution,
@@ -392,7 +450,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	headers, err := operationRequestHeaders(b, op, req.Headers)
+	headers, err := operationRequestHeaders(b, op, req.Headers, req.HeaderValues)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -456,8 +514,11 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		"content_type":  contentType,
 		"output_policy": policy,
 	}
-	if len(headers) > 0 {
-		definition["headers"] = headers
+	if singles := operationSingleHeaders(headers); len(singles) > 0 {
+		definition["headers"] = singles
+	}
+	if repeated := operationRepeatedHeaders(headers); len(repeated) > 0 {
+		definition["header_values"] = repeated
 	}
 	if format == "multipart" {
 		// Bind the whole fixed upload declaration, including absent optional
@@ -476,14 +537,15 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		Warnings:            []string{fmt.Sprintf("prepared rest_write operation %q (%s)", op.ID, method)},
 		Definition:          definition,
 		Requests: []PreparedRequest{{
-			Method:      method,
-			URL:         targetURL,
-			Target:      targetURLWithoutQuery,
-			Query:       query.Encode(),
-			ContentType: contentType,
-			BodyFormat:  format,
-			Body:        encodedBody,
-			Headers:     cloneOperationHeaders(headers),
+			Method:       method,
+			URL:          targetURL,
+			Target:       targetURLWithoutQuery,
+			Query:        query.Encode(),
+			ContentType:  contentType,
+			BodyFormat:   format,
+			Body:         encodedBody,
+			Headers:      operationSingleHeaders(headers),
+			HeaderValues: operationRepeatedHeaders(headers),
 		}},
 	}
 	return preparedOperationDirectWrite{
@@ -516,7 +578,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if len(req.Query) != 0 {
 		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q fixed GraphQL mutation does not accept query overrides", op.ID)
 	}
-	if len(req.Headers) != 0 {
+	if len(req.Headers) != 0 || len(req.HeaderValues) != 0 {
 		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q fixed GraphQL mutation does not accept request header overrides", op.ID)
 	}
 	cfg := materializeConfigDefaults(b, req.Config)

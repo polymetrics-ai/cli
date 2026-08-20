@@ -13,6 +13,8 @@ import (
 	"io"
 	"io/fs"
 	"math/big"
+	"mime"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -88,6 +90,11 @@ func runDynamicChecks(b engine.Bundle) []CheckResult {
 		for _, a := range b.Writes {
 			checks = append(checks, CheckResult{Name: "write_request_shape:" + a.Name, Skipped: true, Error: reason})
 		}
+		for _, operation := range b.Operations {
+			if operation.Kind == "rest_write" && operation.REST != nil && operation.REST.Multipart != nil {
+				checks = append(checks, CheckResult{Name: "operation_multipart_request_shape:" + operation.ID, Skipped: true, Error: reason})
+			}
+		}
 		checks = append(checks, CheckResult{Name: "delete_semantics", Skipped: true, Error: reason})
 		return checks
 	}
@@ -110,6 +117,7 @@ func runDynamicChecks(b engine.Bundle) []CheckResult {
 	checks = append(checks, checkRecordsMatchSchemaWithReplay(b, readReplay))
 	checks = append(checks, checkCursorAdvancesWithReplay(b, readReplay))
 	checks = append(checks, checkWriteRequestShape(b)...)
+	checks = append(checks, checkOperationMultipartRequestShape(b)...)
 	checks = append(checks, checkDeleteSemantics(b))
 
 	return checks
@@ -323,6 +331,68 @@ func stageFixtureMultipartPayloads(b engine.Bundle, action engine.WriteAction, r
 			return fail(fmt.Errorf("fixture multipart part %q has an unsafe declared record field %q", part.Name, part.Field))
 		}
 		assetPath := path.Join("writes", action.Name+".payloads", part.Field)
+		if !fs.ValidPath(assetPath) {
+			return fail(fmt.Errorf("fixture multipart part %q has invalid payload asset path", part.Name))
+		}
+		payload, err := readBoundedFixturePayload(b.Fixtures, assetPath, part.MaxBytes)
+		if err != nil {
+			return fail(fmt.Errorf("fixture multipart part %q: %w", part.Name, err))
+		}
+		rel := filepath.Clean(filepath.FromSlash(raw))
+		if filepath.IsAbs(rel) || !filepath.IsLocal(rel) {
+			return fail(fmt.Errorf("fixture multipart part %q destination must be project-relative", part.Name))
+		}
+		if _, duplicate := seenPaths[rel]; duplicate {
+			return fail(fmt.Errorf("fixture multipart parts reuse source path %q", rel))
+		}
+		seenPaths[rel] = struct{}{}
+		destination := filepath.Join(root, rel)
+		if err := os.MkdirAll(filepath.Dir(destination), 0o700); err != nil {
+			return fail(fmt.Errorf("fixture multipart part %q create destination: %w", part.Name, err))
+		}
+		if err := os.WriteFile(destination, payload, 0o600); err != nil {
+			return fail(fmt.Errorf("fixture multipart part %q stage payload: %w", part.Name, err))
+		}
+	}
+	return staged, nil
+}
+
+func stageFixtureOperationMultipartPayloads(b engine.Bundle, operation engine.OperationSpec, record connectors.Record) (*stagedFixtureMultipartPayloads, error) {
+	if operation.REST == nil || operation.REST.Multipart == nil {
+		return nil, nil
+	}
+	if b.Fixtures == nil {
+		return nil, fmt.Errorf("fixture payload staging requires a fixture filesystem")
+	}
+	root, err := os.MkdirTemp("", "polymetrics-conformance-operation-multipart-")
+	if err != nil {
+		return nil, fmt.Errorf("create fixture multipart project root: %w", err)
+	}
+	staged := &stagedFixtureMultipartPayloads{root: root}
+	fail := func(err error) (*stagedFixtureMultipartPayloads, error) {
+		staged.Close()
+		return nil, err
+	}
+	seenPaths := make(map[string]struct{})
+	for _, part := range operation.REST.Multipart.Parts {
+		if part.Type != "file" {
+			continue
+		}
+		value, present := fixtureRecordPathValue(record, part.Field)
+		if !present || value == nil {
+			if part.Required {
+				return fail(fmt.Errorf("fixture multipart part %q is missing declared record field %q", part.Name, part.Field))
+			}
+			continue
+		}
+		raw, ok := value.(string)
+		if !ok || strings.TrimSpace(raw) == "" {
+			return fail(fmt.Errorf("fixture multipart part %q declared record field %q must be a non-empty file path", part.Name, part.Field))
+		}
+		if strings.TrimSpace(part.Field) == "" || strings.ContainsAny(part.Field, "/\\") {
+			return fail(fmt.Errorf("fixture multipart part %q has an unsafe declared record field %q", part.Name, part.Field))
+		}
+		assetPath := path.Join("operations", operation.ID+".payloads", part.Field)
 		if !fs.ValidPath(assetPath) {
 			return fail(fmt.Errorf("fixture multipart part %q has invalid payload asset path", part.Name))
 		}
@@ -736,6 +806,121 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 	return out
 }
 
+func checkOperationMultipartRequestShape(b engine.Bundle) []CheckResult {
+	var out []CheckResult
+	capture := newCaptureServer(nil)
+	defer capture.Close()
+	for _, operation := range b.Operations {
+		if operation.Kind != "rest_write" || operation.REST == nil || operation.REST.Multipart == nil {
+			continue
+		}
+		name := "operation_multipart_request_shape:" + operation.ID
+		fx, err := loadOperationFixture(b.Fixtures, operation.ID)
+		if err != nil {
+			out = append(out, CheckResult{Name: name, Skipped: true})
+			continue
+		}
+		func() {
+			record := connectors.Record(fx.Record)
+			staged, stageErr := stageFixtureOperationMultipartPayloads(b, operation, record)
+			if stageErr != nil {
+				out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("fixture multipart payload: %v", stageErr)})
+				return
+			}
+			if staged != nil {
+				defer staged.Close()
+			}
+			rb := withReplayURL(b, capture.URL)
+			cfg := runtimeConfigForEngine(rb)
+			if staged != nil {
+				cfg.ProjectDir = staged.root
+			}
+			capture.ResetMultipart(fx.Response, operation.REST.Multipart.MaxBytes)
+			req, requestErr := approvedFixtureOperationRequest(context.Background(), rb, operation, cfg, record, engine.HooksFor(rb.Name))
+			if requestErr != nil {
+				out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("operation preview: %v", requestErr)})
+				return
+			}
+			if _, err := engine.OperationDirectWrite(context.Background(), rb, req, engine.HooksFor(rb.Name)); err != nil {
+				out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("operation execution: %v", err)})
+				return
+			}
+			got := capture.LastRequest()
+			if got == nil {
+				out = append(out, CheckResult{Name: name, Error: "operation execution sent no HTTP request"})
+				return
+			}
+			if mismatch := compareWriteExpectation(*got, fx.Expect); mismatch != "" {
+				out = append(out, CheckResult{Name: name, Error: mismatch})
+				return
+			}
+			if mismatch := compareOperationMultipartCapture(*got, operation, record, req); mismatch != "" {
+				out = append(out, CheckResult{Name: name, Error: mismatch})
+				return
+			}
+			out = append(out, CheckResult{Name: name, Passed: true})
+		}()
+	}
+	return out
+}
+
+func approvedFixtureOperationRequest(ctx context.Context, b engine.Bundle, operation engine.OperationSpec, cfg connectors.RuntimeConfig, record connectors.Record, hooks engine.Hooks) (connectors.OperationDirectWriteRequest, error) {
+	req := connectors.OperationDirectWriteRequest{Operation: operation.ID, Config: cfg, Body: map[string]any(record), OutputPolicy: operation.OutputPolicy}
+	digests, err := engine.ApprovedMultipartPayloadSHA256ForOperation(ctx, b, req, hooks)
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, fmt.Errorf("bind conformance fixture multipart payloads: %w", err)
+	}
+	req.Config.ApprovedPayloadSHA256 = digests
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	req.Config.CredentialRevision, err = authority.CredentialRevision("conformance:"+b.Name, req.Config.Secrets)
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	req.Config.ConfigurationDigest, err = authority.ConfigurationDigest("conformance:"+b.Name, req.Config.Config)
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	req.Config.WriteApprovalScope = connectors.WriteApprovalScopeFixture
+	preview, err := engine.PreviewOperationDirectWrite(ctx, b, req, hooks)
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	if preview.ApprovalTarget.Confirmation.Kind == "" {
+		return req, nil
+	}
+	planPayload, err := json.Marshal(struct {
+		Connector string                   `json:"connector"`
+		Operation string                   `json:"operation"`
+		Config    connectors.RuntimeConfig `json:"config"`
+		Body      map[string]any           `json:"body"`
+	}{Connector: b.Name, Operation: operation.ID, Config: req.Config, Body: req.Body})
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, fmt.Errorf("marshal conformance operation plan: %w", err)
+	}
+	planHash := sha256.Sum256(planPayload)
+	token := "conformance-fixture-operation-approval"
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID: "rplan_conformance_operation_fixture", PlanHash: fmt.Sprintf("%x", planHash), PreviewDigest: preview.Digest,
+		ApprovalToken: token, Target: preview.ApprovalTarget,
+		Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	req.Approval, err = authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID: grant.PlanID, PlanHash: grant.PlanHash, PreviewDigest: grant.PreviewDigest, ApprovalToken: token,
+		Target: grant.Target, Confirmation: grant.Confirmation,
+	})
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	req.PreviewDigest = preview.Digest
+	return req, nil
+}
+
 // checkDeleteSemantics exercises every kind:delete write action's
 // missing_ok_status handling: a status in that allow-list must be treated
 // as an expected no-op, not a completed write or a failure. The real engine.Write is run against a server
@@ -1045,13 +1230,45 @@ func loadWriteFixture(fixtures fs.FS, action string) (writeFixture, error) {
 	return fx, nil
 }
 
+func loadOperationFixture(fixtures fs.FS, operation string) (writeFixture, error) {
+	if fixtures == nil {
+		return writeFixture{}, fmt.Errorf("bundle has no fixtures/ directory")
+	}
+	p := path.Join("operations", operation+".json")
+	if !fs.ValidPath(p) {
+		return writeFixture{}, fmt.Errorf("operation fixture path is invalid")
+	}
+	raw, err := fs.ReadFile(fixtures, p)
+	if err != nil {
+		return writeFixture{}, fmt.Errorf("read fixture %s: %w", p, err)
+	}
+	var fx writeFixture
+	dec := json.NewDecoder(bytes.NewReader(raw))
+	dec.UseNumber()
+	if err := dec.Decode(&fx); err != nil {
+		return writeFixture{}, fmt.Errorf("parse fixture %s: %w", p, err)
+	}
+	return fx, nil
+}
+
 // capturedRequest is what a captureServer observed for the single write
 // request it received.
 type capturedRequest struct {
-	Method string
-	Path   string
-	Query  url.Values
-	Body   map[string]any
+	Method         string
+	Path           string
+	Query          url.Values
+	Body           map[string]any
+	Multipart      bool
+	MultipartParts []capturedMultipartPart
+	MultipartError string
+}
+
+type capturedMultipartPart struct {
+	Name        string
+	FileName    string
+	ContentType string
+	SHA256      string
+	Bytes       int64
 }
 
 // compareWriteExpectation compares a capturedRequest against the fixture's
@@ -1084,6 +1301,123 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 	return ""
 }
 
+func compareOperationMultipartCapture(got capturedRequest, operation engine.OperationSpec, record connectors.Record, req connectors.OperationDirectWriteRequest) string {
+	if !got.Multipart {
+		return "operation execution did not send multipart/form-data"
+	}
+	if got.MultipartError != "" {
+		return "operation multipart capture: " + got.MultipartError
+	}
+	if operation.REST == nil || operation.REST.Multipart == nil {
+		return "operation has no multipart declaration"
+	}
+	type expectedPart struct {
+		file         bool
+		fileName     string
+		contentType  string
+		allowedTypes []string
+		digest       string
+	}
+	expected := make(map[string]expectedPart, len(operation.REST.Multipart.Parts))
+	for _, part := range operation.REST.Multipart.Parts {
+		value, present := fixtureRecordPathValue(record, part.Field)
+		if !present || value == nil {
+			if part.Required {
+				return fmt.Sprintf("operation multipart required part %q is absent from fixture record", part.Name)
+			}
+			continue
+		}
+		if _, duplicate := expected[part.Name]; duplicate {
+			return fmt.Sprintf("operation multipart declaration duplicates part %q", part.Name)
+		}
+		switch part.Type {
+		case "field":
+			expected[part.Name] = expectedPart{digest: conformanceMultipartValueSHA256(value)}
+		case "file":
+			filePath, ok := value.(string)
+			if !ok || strings.TrimSpace(filePath) == "" {
+				return fmt.Sprintf("operation multipart file part %q does not have a fixture path", part.Name)
+			}
+			digest := req.Config.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(0, part.Field)]
+			if digest == "" {
+				return fmt.Sprintf("operation multipart file part %q has no approved digest", part.Name)
+			}
+			expected[part.Name] = expectedPart{file: true, fileName: filepath.Base(filePath), contentType: part.ContentType, allowedTypes: part.AllowedMediaTypes, digest: digest}
+		default:
+			return fmt.Sprintf("operation multipart part %q has unsupported type %q", part.Name, part.Type)
+		}
+	}
+	if len(got.MultipartParts) != len(expected) {
+		return fmt.Sprintf("operation multipart part count = %d, want %d", len(got.MultipartParts), len(expected))
+	}
+	seen := make(map[string]struct{}, len(got.MultipartParts))
+	for _, actual := range got.MultipartParts {
+		want, ok := expected[actual.Name]
+		if !ok {
+			return fmt.Sprintf("operation multipart sent undeclared part %q", actual.Name)
+		}
+		if _, duplicate := seen[actual.Name]; duplicate {
+			return fmt.Sprintf("operation multipart sent duplicate part %q", actual.Name)
+		}
+		seen[actual.Name] = struct{}{}
+		if actual.SHA256 != want.digest {
+			return fmt.Sprintf("operation multipart part %q did not preserve approved payload digest", actual.Name)
+		}
+		if want.file {
+			if actual.FileName != want.fileName {
+				return fmt.Sprintf("operation multipart file part %q filename = %q, want %q", actual.Name, actual.FileName, want.fileName)
+			}
+			if len(want.allowedTypes) == 0 {
+				if !strings.EqualFold(strings.TrimSpace(actual.ContentType), strings.TrimSpace(want.contentType)) {
+					return fmt.Sprintf("operation multipart file part %q content type does not match declaration", actual.Name)
+				}
+			} else if !capturedMultipartContentTypeAllowed(actual.ContentType, want.allowedTypes) {
+				return fmt.Sprintf("operation multipart file part %q content type is not declared", actual.Name)
+			}
+			continue
+		}
+		if actual.FileName != "" {
+			return fmt.Sprintf("operation multipart field part %q unexpectedly has a filename", actual.Name)
+		}
+	}
+	return ""
+}
+
+func conformanceMultipartValueSHA256(value any) string {
+	raw, err := json.Marshal(value)
+	if err != nil {
+		raw = []byte(fmt.Sprint(value))
+	}
+	var text string
+	if json.Unmarshal(raw, &text) == nil {
+		raw = []byte(text)
+	}
+	digest := sha256.Sum256(raw)
+	return fmt.Sprintf("%x", digest[:])
+}
+
+func capturedMultipartContentTypeAllowed(raw string, declared []string) bool {
+	actual, _, err := mime.ParseMediaType(strings.TrimSpace(raw))
+	if err != nil || actual == "" {
+		return false
+	}
+	actualParts := strings.Split(actual, "/")
+	if len(actualParts) != 2 {
+		return false
+	}
+	for _, value := range declared {
+		allowed, _, err := mime.ParseMediaType(strings.TrimSpace(value))
+		if err != nil {
+			continue
+		}
+		allowedParts := strings.Split(allowed, "/")
+		if len(allowedParts) == 2 && strings.EqualFold(actualParts[0], allowedParts[0]) && (allowedParts[1] == "*" || strings.EqualFold(actualParts[1], allowedParts[1])) {
+			return true
+		}
+	}
+	return false
+}
+
 // --- capture / synthetic replay servers ------------------------------------
 
 // captureServer is an httptest.Server that answers every request with a
@@ -1092,9 +1426,10 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 // query/decoded JSON body) for write_request_shape's assertions.
 type captureServer struct {
 	*httptest.Server
-	mu   sync.Mutex
-	resp *fixtureResponse
-	last *capturedRequest
+	mu                sync.Mutex
+	resp              *fixtureResponse
+	multipartMaxBytes int64
+	last              *capturedRequest
 }
 
 // newCaptureServer builds a captureServer. When resp is non-nil, every
@@ -1110,14 +1445,14 @@ type captureServer struct {
 func newCaptureServer(resp *fixtureResponse) *captureServer {
 	cs := &captureServer{resp: resp}
 	cs.Server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var body map[string]any
-		dec := json.NewDecoder(r.Body)
-		dec.UseNumber()
-		_ = dec.Decode(&body) // a body-less request (e.g. DELETE) decodes to nil, not an error worth surfacing
+		cs.mu.Lock()
+		resp := cs.resp
+		multipartMaxBytes := cs.multipartMaxBytes
+		cs.mu.Unlock()
+		body, multipartParts, multipartRequest, multipartErr := captureRequestBody(r, multipartMaxBytes)
 
 		cs.mu.Lock()
-		cs.last = &capturedRequest{Method: r.Method, Path: r.URL.Path, Query: r.URL.Query(), Body: body}
-		resp := cs.resp
+		cs.last = &capturedRequest{Method: r.Method, Path: r.URL.Path, Query: r.URL.Query(), Body: body, Multipart: multipartRequest, MultipartParts: multipartParts, MultipartError: multipartErr}
 		cs.mu.Unlock()
 
 		status := http.StatusOK
@@ -1141,7 +1476,75 @@ func (cs *captureServer) Reset(resp *fixtureResponse) {
 	cs.mu.Lock()
 	defer cs.mu.Unlock()
 	cs.resp = resp
+	cs.multipartMaxBytes = 0
 	cs.last = nil
+}
+
+func (cs *captureServer) ResetMultipart(resp *fixtureResponse, maxBytes int64) {
+	cs.mu.Lock()
+	defer cs.mu.Unlock()
+	cs.resp = resp
+	cs.multipartMaxBytes = maxBytes
+	cs.last = nil
+}
+
+func captureRequestBody(r *http.Request, multipartMaxBytes int64) (map[string]any, []capturedMultipartPart, bool, string) {
+	mediaType, params, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if multipartMaxBytes > 0 && err == nil && strings.EqualFold(mediaType, "multipart/form-data") {
+		parts, captureErr := captureMultipartParts(r.Body, params["boundary"], multipartMaxBytes)
+		if captureErr != nil {
+			return nil, nil, true, captureErr.Error()
+		}
+		return nil, parts, true, ""
+	}
+	var body map[string]any
+	dec := json.NewDecoder(r.Body)
+	dec.UseNumber()
+	_ = dec.Decode(&body)
+	return body, nil, false, ""
+}
+
+func captureMultipartParts(body io.Reader, boundary string, maxBytes int64) ([]capturedMultipartPart, error) {
+	if boundary == "" || maxBytes <= 0 {
+		return nil, fmt.Errorf("invalid multipart capture bounds")
+	}
+	reader := multipart.NewReader(body, boundary)
+	parts := make([]capturedMultipartPart, 0)
+	var total int64
+	for {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		name := part.FormName()
+		if name == "" {
+			_ = part.Close()
+			return nil, fmt.Errorf("multipart part has no field name")
+		}
+		remaining := maxBytes - total
+		if remaining < 0 {
+			_ = part.Close()
+			return nil, fmt.Errorf("multipart payload exceeds declared byte cap")
+		}
+		digest := sha256.New()
+		written, readErr := io.Copy(digest, io.LimitReader(part, remaining+1))
+		closeErr := part.Close()
+		if readErr != nil {
+			return nil, readErr
+		}
+		if closeErr != nil {
+			return nil, closeErr
+		}
+		total += written
+		if total > maxBytes {
+			return nil, fmt.Errorf("multipart payload exceeds declared byte cap")
+		}
+		parts = append(parts, capturedMultipartPart{Name: name, FileName: part.FileName(), ContentType: part.Header.Get("Content-Type"), SHA256: fmt.Sprintf("%x", digest.Sum(nil)), Bytes: written})
+	}
+	return parts, nil
 }
 
 func (cs *captureServer) LastRequest() *capturedRequest {

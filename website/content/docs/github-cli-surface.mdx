@@ -59,7 +59,7 @@ wrong branch; see the [connector delivery canon](connector-delivery).
 | `etl` | 15 | Reads map to existing streams or planned stream/direct-read coverage. |
 | `reverse_etl` | 582 | Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval. |
 | `direct_read` | 654 | Constrained read commands that do not naturally fit streams. |
-| `binary_download` | 14 | Bounded GET downloads that write a file to a caller-supplied `--dest-root`; no response body is rendered. |
+| `binary_download` | 14 | Bounded GET downloads that require declared response status, media, and redirect policy before writing a file beneath a caller-supplied `--dest-root`; no response body is rendered. |
 | `direct_write` | 287 | Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation. |
 | `local_workflow` | 12 | Browser, git, shell, extension, completion, or local config behavior. |
 | `auth` | 3 | Credential lifecycle commands; never print token material. |

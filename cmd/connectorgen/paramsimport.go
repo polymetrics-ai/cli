@@ -10,6 +10,9 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // params-import carries a connector's accepted parameters from its own provider
@@ -43,8 +46,9 @@ import (
 // hermetic so CI can verify drift without fetching anything.
 const paramsImportUsage = `connectorgen params-import <connector> --artifact <path> [--defs <dir>] [--check]
 
-Imports the accepted parameter set for a connector's rest_read operations from
-its provider specification (OpenAPI 3 or Swagger 2) into operations.json.
+Imports the accepted parameter set for a connector's executable REST and
+binary operations from its provider specification (OpenAPI 3 or Swagger 2)
+into operations.json.
 
   --artifact <path>  provider specification file (.json)
   --defs <dir>       connector defs root (default internal/connectors/defs)
@@ -171,7 +175,7 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		return 0, 0, fmt.Errorf("parse operations.json: %w", err)
 	}
 
-	declaredPaging, configProps, err := paramsImportSkipSets(bundleDir)
+	declaredPaging, configProps, runtimeHeaders, err := paramsImportSkipSets(bundleDir)
 	if err != nil {
 		return 0, 0, err
 	}
@@ -181,20 +185,28 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		if !ok {
 			continue
 		}
-		if stringField(op, "kind") != "rest_read" {
+		kind := stringField(op, "kind")
+		blockName, executable := engine.OperationRequestParameterBlock(kind)
+		if !executable {
+			if _, hasREST := op.get("rest"); hasREST {
+				return 0, 0, fmt.Errorf("operation %q kind %q has REST metadata but no registered parameter import contract", stringField(op, "id"), kind)
+			}
+			if _, hasBinary := op.get("binary"); hasBinary {
+				return 0, 0, fmt.Errorf("operation %q kind %q has binary metadata but no registered parameter import contract", stringField(op, "id"), kind)
+			}
 			continue
 		}
-		restRaw, ok := op.get("rest")
+		blockRaw, ok := op.get(blockName)
 		if !ok {
-			continue
+			return 0, 0, fmt.Errorf("operation %q kind %q requires %s metadata for parameter import", stringField(op, "id"), kind, blockName)
 		}
-		rest, ok := restRaw.(*orderedObject)
+		block, ok := blockRaw.(*orderedObject)
 		if !ok {
-			continue
+			return 0, 0, fmt.Errorf("operation %q %s metadata is not an object", stringField(op, "id"), blockName)
 		}
 		total++
-		method := strings.ToLower(strings.TrimSpace(stringField(rest, "method")))
-		path := stringField(rest, "path")
+		method := strings.ToLower(strings.TrimSpace(stringField(block, "method")))
+		path := stringField(block, "path")
 		item, ok := doc.Paths[path]
 		if !ok {
 			continue
@@ -207,6 +219,13 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		if err := json.Unmarshal(rawOp, &parsed); err != nil {
 			return 0, 0, fmt.Errorf("parse operation %s %s: %w", method, path, err)
 		}
+		var pathParameters []openAPIParameter
+		if rawParameters, present := item["parameters"]; present {
+			if err := json.Unmarshal(rawParameters, &pathParameters); err != nil {
+				return 0, 0, fmt.Errorf("parse path parameters %s: %w", path, err)
+			}
+		}
+		parameters := mergedOpenAPIParameters(doc, pathParameters, parsed.Parameters)
 		skip := map[string]bool{}
 		for name := range declaredPaging {
 			skip[name] = true
@@ -220,17 +239,22 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 				skip[name] = true
 			}
 		}
-		want := importedParameters(doc, parsed.Parameters, skip)
-		if !sameImportedParameters(rest, want) {
-			changed++
-			setImportedParameters(rest, want)
+		want := importedParameters(doc, parameters, skip)
+		if err := validateImportedOperationHeaders(want, runtimeHeaders); err != nil {
+			return 0, 0, fmt.Errorf("operation %q: %w", stringField(op, "id"), err)
 		}
-		if paginationRaw, ok := rest.get("pagination"); ok {
-			if pagination, ok := paginationRaw.(*orderedObject); ok {
-				wantPaging := importedOperationPaginationParameters(doc, parsed.Parameters, operationPaginationParameterNames(pagination))
-				if !sameImportedField(rest, "pagination_parameters", wantPaging) {
-					changed++
-					setImportedField(rest, "pagination_parameters", wantPaging)
+		if !sameImportedParameters(block, want) {
+			changed++
+			setImportedParameters(block, want)
+		}
+		if kind == "rest_read" {
+			if paginationRaw, present := block.get("pagination"); present {
+				if pagination, ok := paginationRaw.(*orderedObject); ok {
+					wantPaging := importedOperationPaginationParameters(doc, parameters, operationPaginationParameterNames(pagination))
+					if !sameImportedField(block, "pagination_parameters", wantPaging) {
+						changed++
+						setImportedField(block, "pagination_parameters", wantPaging)
+					}
 				}
 			}
 		}
@@ -245,6 +269,61 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 	return changed, total, nil
 }
 
+func mergedOpenAPIParameters(doc openAPIDoc, pathParameters, operationParameters []openAPIParameter) []openAPIParameter {
+	merged := make([]openAPIParameter, 0, len(pathParameters)+len(operationParameters))
+	indices := map[string]int{}
+	add := func(raw openAPIParameter) {
+		parameter, ok := resolveOpenAPIParameter(doc, raw)
+		if !ok || strings.TrimSpace(parameter.Name) == "" || strings.TrimSpace(parameter.In) == "" {
+			merged = append(merged, raw)
+			return
+		}
+		name := strings.TrimSpace(parameter.Name)
+		if parameter.In == "header" {
+			canonical, err := connectors.CanonicalOperationHeaderName(name)
+			if err != nil {
+				merged = append(merged, raw)
+				return
+			}
+			name = canonical
+		}
+		key := parameter.In + "\x00" + name
+		if index, exists := indices[key]; exists {
+			merged[index] = raw
+			return
+		}
+		indices[key] = len(merged)
+		merged = append(merged, raw)
+	}
+	for _, parameter := range pathParameters {
+		add(parameter)
+	}
+	for _, parameter := range operationParameters {
+		add(parameter)
+	}
+	return merged
+}
+
+func validateImportedOperationHeaders(parameters []map[string]any, runtimeHeaders map[string]bool) error {
+	for _, parameter := range parameters {
+		if parameter["in"] != "header" {
+			continue
+		}
+		name, _ := parameter["name"].(string)
+		canonical, err := connectors.CanonicalOperationHeaderName(name)
+		if err != nil {
+			return fmt.Errorf("imported header %q is malformed", name)
+		}
+		if connectors.IsProtectedOperationHeaderName(canonical) {
+			return fmt.Errorf("imported header %q is protected and runtime-owned", name)
+		}
+		if runtimeHeaders[canonical] {
+			return fmt.Errorf("imported header %q is protected and runtime-owned", name)
+		}
+	}
+	return nil
+}
+
 // paramsImportSkipSets reads the two bundle-declared name sets the import
 // consults: the paging parameters this connector's own pagination spec names,
 // and its config schema's property names.
@@ -252,27 +331,49 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 // They are returned apart because they are applied differently. A declared
 // paging parameter is excluded everywhere; a config property is excluded only
 // where the operation's own path template actually interpolates it.
-func paramsImportSkipSets(bundleDir string) (paging, configProps map[string]bool, err error) {
+func paramsImportSkipSets(bundleDir string) (paging, configProps, runtimeHeaders map[string]bool, err error) {
 	paging = map[string]bool{}
 	configProps = map[string]bool{}
+	runtimeHeaders = map[string]bool{}
 
 	streamsRaw, err := os.ReadFile(filepath.Join(bundleDir, "streams.json"))
 	if err == nil {
 		var streams struct {
 			Base struct {
-				Pagination map[string]any `json:"pagination"`
+				Pagination map[string]any    `json:"pagination"`
+				Headers    map[string]string `json:"headers"`
+				Auth       []struct {
+					Header string `json:"header"`
+				} `json:"auth"`
 			} `json:"base"`
 		}
 		if err := json.Unmarshal(streamsRaw, &streams); err != nil {
-			return nil, nil, fmt.Errorf("parse streams.json: %w", err)
+			return nil, nil, nil, fmt.Errorf("parse streams.json: %w", err)
 		}
 		for _, key := range []string{"page_param", "size_param", "cursor_param", "limit_param", "offset_param", "count_param", "start_index_param"} {
 			if value, ok := streams.Base.Pagination[key].(string); ok && strings.TrimSpace(value) != "" {
 				paging[value] = true
 			}
 		}
+		for name := range streams.Base.Headers {
+			canonical, err := connectors.CanonicalOperationHeaderName(name)
+			if err != nil {
+				return nil, nil, nil, fmt.Errorf("streams.json runtime header %q: %w", name, err)
+			}
+			runtimeHeaders[canonical] = true
+		}
+		for _, auth := range streams.Base.Auth {
+			if strings.TrimSpace(auth.Header) == "" {
+				continue
+			}
+			canonical, err := connectors.CanonicalOperationHeaderName(auth.Header)
+			if err != nil {
+				return nil, nil, nil, fmt.Errorf("streams.json runtime auth header %q: %w", auth.Header, err)
+			}
+			runtimeHeaders[canonical] = true
+		}
 	} else if !os.IsNotExist(err) {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	specRaw, err := os.ReadFile(filepath.Join(bundleDir, "spec.json"))
@@ -281,15 +382,15 @@ func paramsImportSkipSets(bundleDir string) (paging, configProps map[string]bool
 			Properties map[string]json.RawMessage `json:"properties"`
 		}
 		if err := json.Unmarshal(specRaw, &spec); err != nil {
-			return nil, nil, fmt.Errorf("parse spec.json: %w", err)
+			return nil, nil, nil, fmt.Errorf("parse spec.json: %w", err)
 		}
 		for name := range spec.Properties {
 			configProps[name] = true
 		}
 	} else if !os.IsNotExist(err) {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
-	return paging, configProps, nil
+	return paging, configProps, runtimeHeaders, nil
 }
 
 // pathTemplateVariables lists the {name} placeholders an operation's REST path
@@ -386,6 +487,11 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 		}
 		name := strings.TrimSpace(p.Name)
 		parameterKey := p.In + "\x00" + name
+		if p.In == "header" {
+			if canonical, err := connectors.CanonicalOperationHeaderName(name); err == nil {
+				parameterKey = p.In + "\x00" + canonical
+			}
+		}
 		if name == "" || seen[parameterKey] || skip[name] {
 			continue
 		}

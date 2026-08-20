@@ -394,12 +394,13 @@ type ReversePlan struct {
 	// ConnectorCommandHeaders is the closed, declaration-owned request-header
 	// input for a direct_write plan. It participates in the plan hash and the
 	// engine preview digest; CLI presentation clears it like the body record.
-	ConnectorCommandHeaders map[string]string            `json:"connector_command_headers,omitempty"`
-	ConnectorCommandRecord  connectors.Record            `json:"connector_command_record,omitempty"`
-	PayloadIdentity         []PayloadIdentity            `json:"payload_identity,omitempty"`
-	ConfirmationChallenge   string                       `json:"confirmation_challenge,omitempty"`
-	ConfirmationPolicy      connectors.WriteConfirmation `json:"confirmation,omitempty"`
-	RedactFields            []string                     `json:"redact_fields,omitempty"`
+	ConnectorCommandHeaders      map[string]string            `json:"connector_command_headers,omitempty"`
+	ConnectorCommandHeaderValues map[string][]string          `json:"connector_command_header_values,omitempty"`
+	ConnectorCommandRecord       connectors.Record            `json:"connector_command_record,omitempty"`
+	PayloadIdentity              []PayloadIdentity            `json:"payload_identity,omitempty"`
+	ConfirmationChallenge        string                       `json:"confirmation_challenge,omitempty"`
+	ConfirmationPolicy           connectors.WriteConfirmation `json:"confirmation,omitempty"`
+	RedactFields                 []string                     `json:"redact_fields,omitempty"`
 	// WithheldFields names the record fields this plan actually removed before
 	// persisting, which is a subset of RedactFields: a declared field the
 	// operator never supplied was never present and is never owed back. Only

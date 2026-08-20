@@ -635,8 +635,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 			// binary_download commands consume an api_surface endpoint the same
 			// way a direct read does and are tracked by the same covered_by
 			// bookkeeping, so they satisfy that coverage too.
-			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download" || cmd.Intent == "text_export" || cmd.Intent == "status_check") &&
-				cmd.Availability == "implemented" {
+			if engine.IsReadSurfaceIntent(cmd.Intent) && cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
 			}
 		}
@@ -714,10 +713,10 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					})
 				}
 				method := strings.ToUpper(strings.TrimSpace(ep.Method))
-				if method != "GET" && method != "POST" {
+				if !engine.IsReadSurfaceMethod(method) {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path),
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET, HEAD, or POST", i, ep.Method, ep.Path),
 					})
 				}
 			}
@@ -751,6 +750,9 @@ func checkAPISurface(b engine.Bundle) []Finding {
 				case "graphql_mutation":
 					hasNonExcludedMutation = true
 				}
+			}
+			if len(coveredDirectReadTargets(ep.CoveredBy)) > 0 && engine.IsReadSurfaceMethod(ep.Method) {
+				hasNonExcludedGET = true
 			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
@@ -1253,6 +1255,9 @@ func checkCLISurfaceOperationHeaderMappings(b engine.Bundle, i int, cmd engine.C
 		}
 		if parameter.Required && !flag.Required {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented command %d (%q) required header %q must use a required flag", i, cmd.Path, target)})
+		}
+		if parameter.Repeatable != flag.Repeatable {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented command %d (%q) header flag --%s repeatable must match declared header %q", i, cmd.Path, flag.Name, target)})
 		}
 	}
 	for name, parameter := range declared {
@@ -2572,8 +2577,27 @@ func checkCLISurfaceBinaryOperationSafety(b engine.Bundle, i int, cmd engine.CLI
 			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must declare positive binary.max_bytes", label, i, cmd.Path, cmd.Operation),
 		})
 	}
+	if len(op.Binary.ContentTypes) == 0 {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must declare response content_types", label, i, cmd.Path, cmd.Operation),
+		})
+	}
+	if op.Binary.Response == nil || len(op.Binary.Response.SuccessStatuses) == 0 {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must declare response success_statuses", label, i, cmd.Path, cmd.Operation),
+		})
+	}
 	if cmd.Intent == "text_export" && !strings.EqualFold(strings.TrimSpace(op.Binary.Accept), "text/csv") {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented text export command %d (%q) operation %q must accept text/csv", i, cmd.Path, cmd.Operation)})
+	}
+	if cmd.Intent == "text_export" && strings.TrimSpace(op.Binary.Charset) == "" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented text export command %d (%q) operation %q must declare response charset", i, cmd.Path, cmd.Operation)})
 	}
 	if op.Binary.ExtractArchives {
 		findings = append(findings, Finding{
@@ -2611,6 +2635,9 @@ func checkCLISurfaceStatusCheckOperationSafety(b engine.Bundle, i int, cmd engin
 	}
 	if op.REST.MaxBytes < 0 || op.REST.MaxBytes > 1024 {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) operation %q must bound rest.max_bytes to 1024", i, cmd.Path, cmd.Operation)})
+	}
+	if op.REST.Response == nil || len(op.REST.Response.SuccessStatuses) == 0 {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) operation %q must declare response success_statuses", i, cmd.Path, cmd.Operation)})
 	}
 	if op.OutputPolicy != "status" || cmd.OutputPolicy != op.OutputPolicy {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) output_policy must match status operation", i, cmd.Path)})

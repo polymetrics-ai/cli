@@ -460,6 +460,9 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		filled, corrected = deriveRequiredHeaderFlagRequiredness(cmd, block)
 		stats.Filled.FlagRequired += filled
 		stats.Corrected.FlagRequired += corrected
+		filled, corrected = deriveHeaderFlagRepeatability(cmd, block)
+		stats.Filled.FlagDerived += filled
+		stats.Corrected.FlagDerived += corrected
 
 		// DEFAULTED for REST direct operations: a binary_download operation
 		// must declare its own positive max_bytes at bundle load, and a
@@ -700,7 +703,7 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 	declared := map[string]bool{}
 	for _, raw := range arrayField(cmd, "flags") {
 		if flag, ok := raw.(*orderedObject); ok {
-			declared[strings.ReplaceAll(stringField(flag, "name"), "-", "_")] = true
+			declared[normalizedDerivedFlagName(stringField(flag, "name"))] = true
 		}
 	}
 	flags := append([]any(nil), arrayField(cmd, "flags")...)
@@ -722,7 +725,7 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 			// while maps_to remains the exact provider header name.
 			flagName = "header-" + strings.ToLower(strings.ReplaceAll(name, "_", "-"))
 		}
-		if name == "" || declared[strings.ReplaceAll(flagName, "-", "_")] {
+		if name == "" || declared[normalizedDerivedFlagName(flagName)] {
 			continue
 		}
 		flag := newOrderedObject()
@@ -737,15 +740,22 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 		if required, _ := param.get("required"); required == true {
 			flag.set("required", true)
 		}
+		if repeatable, _ := param.get("repeatable"); location == "header" && repeatable == true {
+			flag.set("repeatable", true)
+		}
 		flag.set("maps_to", location+"."+name)
 		flags = append(flags, flag)
-		declared[strings.ReplaceAll(flagName, "-", "_")] = true
+		declared[normalizedDerivedFlagName(flagName)] = true
 		added++
 	}
 	if added > 0 {
 		cmd.set("flags", flags)
 	}
 	return added
+}
+
+func normalizedDerivedFlagName(name string) string {
+	return strings.ToLower(strings.ReplaceAll(strings.TrimSpace(name), "-", "_"))
 }
 
 // deriveRequiredHeaderFlagRequiredness mirrors the path rule for the other
@@ -784,6 +794,48 @@ func deriveRequiredHeaderFlagRequiredness(cmd, block *orderedObject) (filled, co
 			corrected++
 		} else {
 			filled++
+		}
+	}
+	return filled, corrected
+}
+
+func deriveHeaderFlagRepeatability(cmd, block *orderedObject) (filled, corrected int) {
+	repeatable := map[string]bool{}
+	for _, raw := range arrayField(block, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "header" {
+			continue
+		}
+		if declared, _ := parameter.get("repeatable"); declared == true {
+			repeatable[strings.ToLower(strings.ReplaceAll(stringField(parameter, "name"), "_", "-"))] = true
+		}
+	}
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		target, mapped := strings.CutPrefix(strings.TrimSpace(stringField(flag, "maps_to")), "header.")
+		if !mapped {
+			continue
+		}
+		want := repeatable[strings.ToLower(strings.ReplaceAll(target, "_", "-"))]
+		got, present := flag.get("repeatable")
+		if want {
+			if got == true {
+				continue
+			}
+			flag.set("repeatable", true)
+			if present {
+				corrected++
+			} else {
+				filled++
+			}
+			continue
+		}
+		if present {
+			flag.remove("repeatable")
+			corrected++
 		}
 	}
 	return filled, corrected

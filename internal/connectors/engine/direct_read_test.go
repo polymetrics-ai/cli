@@ -912,6 +912,9 @@ func TestOperationDirectReadRejectsHeaderEscapeHatchesBeforeNetwork(t *testing.T
 		{name: "protected host case variant", headers: map[string]string{"hOsT": "forbidden.test"}, want: "protected"},
 		{name: "protected connection case variant", headers: map[string]string{"cOnNeCtIoN": "close"}, want: "protected"},
 		{name: "protected forwarding case variant", headers: map[string]string{"X-FoRwArDeD-FoR": "203.0.113.1"}, want: "protected"},
+		{name: "protected API key underscore variant", headers: map[string]string{"X_Api_Key": "forbidden"}, want: "protected"},
+		{name: "protected auth token underscore variant", headers: map[string]string{"x_auth_token": "forbidden"}, want: "protected"},
+		{name: "protected forwarding underscore variant", headers: map[string]string{"x_forwarded_host": "forbidden.test"}, want: "protected"},
 		{name: "runtime configured header", headers: map[string]string{"x-runtime-header": "caller-override"}, want: "protected"},
 		{name: "CRLF injection", headers: map[string]string{"X-Declared-Tenant": "alpha\r\nX-Escaped: true"}, want: "control character"},
 		{name: "over declared byte cap", headers: map[string]string{"X-Declared-Tenant": "abcdefghx"}, want: "exceeds declared byte cap"},
@@ -931,6 +934,42 @@ func TestOperationDirectReadRejectsHeaderEscapeHatchesBeforeNetwork(t *testing.T
 	}
 	if issued != 0 {
 		t.Fatalf("requests = %d, want header rejections before I/O", issued)
+	}
+}
+
+func TestOperationDirectReadSendsOnlyDeclaredRepeatableHeaderValues(t *testing.T) {
+	var issued int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		issued++
+		if got := r.Header.Values("X-Mode"); len(got) != 2 || got[0] != "safe" || got[1] != "full" {
+			t.Fatalf("X-Mode values = %#v, want ordered declared values", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"items":[]}`))
+	}))
+	defer srv.Close()
+	b := statusTextReadBundle(srv.URL, "synthetic.repeatable_header", http.MethodGet, "/v1/resource", "json_redacted", "", 1024)
+	b.Operations[0].REST.Parameters = []OperationParameter{{
+		Name: "X-Mode", In: "header", Type: "string", Repeatable: true, Values: []string{"safe", "full"}, Schema: json.RawMessage(`{"type":"string","enum":["safe","full"]}`), MaxBytes: 8,
+	}}
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "synthetic.repeatable_header", HeaderValues: map[string][]string{"X-Mode": {"invalid", "safe"}}, MaxBytes: 1024}, nil); err == nil || !strings.Contains(err.Error(), "does not satisfy declared schema") {
+		t.Fatalf("invalid repeatable header error = %v", err)
+	}
+	if issued != 0 {
+		t.Fatalf("invalid repeatable header reached provider %d times", issued)
+	}
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "synthetic.repeatable_header", HeaderValues: map[string][]string{"X-Mode": {"safe", "full"}}, MaxBytes: 1024}, nil); err != nil {
+		t.Fatalf("OperationDirectRead repeatable header: %v", err)
+	}
+	if issued != 1 {
+		t.Fatalf("requests = %d, want 1", issued)
+	}
+	b.Operations[0].REST.Parameters[0].Repeatable = false
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "synthetic.repeatable_header", HeaderValues: map[string][]string{"X-Mode": {"safe", "full"}}, MaxBytes: 1024}, nil); err == nil || !strings.Contains(err.Error(), "exactly one value") {
+		t.Fatalf("singleton repeated header error = %v", err)
+	}
+	if issued != 1 {
+		t.Fatalf("singleton rejection reached provider %d times", issued)
 	}
 }
 

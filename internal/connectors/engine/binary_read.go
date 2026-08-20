@@ -50,11 +50,12 @@ const (
 // seam between them, so the executor's own shape can change without moving the
 // connectors package.
 type BinaryDownloadRequest struct {
-	Operation  string
-	Config     connectors.RuntimeConfig
-	PathParams map[string]string
-	Query      map[string]string
-	Headers    map[string]string
+	Operation    string
+	Config       connectors.RuntimeConfig
+	PathParams   map[string]string
+	Query        map[string]string
+	Headers      map[string]string
+	HeaderValues map[string][]string
 	// MaxBytes optionally lowers the operation's declared cap. It can never
 	// raise it.
 	MaxBytes int64
@@ -76,6 +77,8 @@ type BinaryDownloadRequest struct {
 type BinaryDownloadResult struct {
 	Connector string
 	Operation string
+	Method    string
+	Path      string
 	Record    connectors.Record
 	Status    int
 	Headers   map[string]connectors.OperationResponseHeader
@@ -99,42 +102,18 @@ type BinaryDownloadResult struct {
 //     (safety.ValidateLocalWritePath) cannot;
 //   - extract_archives is refused outright.
 //
-// pmcert:executes binary_download
+// pmcert:executes binary_download,text_export
 func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRequest, h Hooks) (BinaryDownloadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	op, err := findOperation(b, req.Operation)
+	op, err := operationBinaryDownloadSpec(b, req.Operation)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	if (op.Kind != "binary_download" && op.Kind != "text_export") || op.Binary == nil {
-		return BinaryDownloadResult{}, fmt.Errorf("file download requires binary_download or text_export operation, got %q", op.Kind)
-	}
 	spec := op.Binary
-	if op.Kind == "text_export" {
-		if spec.MaxBytes <= 0 {
-			return BinaryDownloadResult{}, fmt.Errorf("text export requires positive max_bytes")
-		}
-		if !strings.EqualFold(strings.TrimSpace(spec.Accept), "text/csv") {
-			return BinaryDownloadResult{}, fmt.Errorf("text export requires the closed text/csv accept contract")
-		}
-	}
-	// Refused at EXECUTION time rather than at bundle validation: two github
-	// operations already declare extract_archives true, and a foundation
-	// change must not invalidate an existing connector bundle. Extraction is
-	// zip-slip and decompression-bomb territory and is a separate capability,
-	// never a flag.
-	if spec.ExtractArchives {
-		return BinaryDownloadResult{}, fmt.Errorf("operation %q declares extract_archives, which is not supported: archive extraction is a separate capability", op.ID)
-	}
-	if method := strings.ToUpper(strings.TrimSpace(spec.Method)); method != http.MethodGet {
-		return BinaryDownloadResult{}, fmt.Errorf("binary download requires GET, got %s", method)
-	}
-	if isAbsoluteHTTPURL(spec.Path) {
-		return BinaryDownloadResult{}, fmt.Errorf("binary download endpoint must be connector-relative, got absolute URL")
-	}
-	if err := requireOperationSurfaceEndpoint(b, http.MethodGet, spec.Path); err != nil {
+	redirect, err := operationRedirectPolicy(op)
+	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
 	if strings.TrimSpace(req.DestRoot) == "" {
@@ -150,7 +129,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	headers, err := operationRequestHeaders(b, op, req.Headers)
+	headers, err := operationRequestHeaders(b, op, req.Headers, req.HeaderValues)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
@@ -173,11 +152,13 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	requester = requesterWithOperationHeaders(requester, headers)
+	requester, err = requesterWithOperationHeaders(requester, op, headers)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
 	resp, err := requester.DoStream(ctx, http.MethodGet, requestPath, query, connsdk.StreamOptions{
 		Accept:         spec.Accept,
-		AllowCrossHost: spec.AllowCrossHost,
-		AllowedHosts:   spec.AllowedHosts,
+		RedirectPolicy: redirect,
 	})
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
@@ -212,6 +193,8 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	return BinaryDownloadResult{
 		Connector: b.Name,
 		Operation: op.ID,
+		Method:    http.MethodGet,
+		Path:      resolvedPath,
 		Status:    resp.Status,
 		Headers:   responseHeaders,
 		Record: redactBinaryDownloadRecord(connectors.Record{
@@ -239,13 +222,68 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	}, nil
 }
 
+func PreflightOperationBinaryDownload(b Bundle, operation, method, path string) error {
+	op, err := operationBinaryDownloadSpec(b, operation)
+	if err != nil {
+		return err
+	}
+	if !strings.EqualFold(strings.TrimSpace(method), http.MethodGet) {
+		return fmt.Errorf("binary download command requires GET")
+	}
+	if path != op.Binary.Path {
+		return fmt.Errorf("binary download command path %q does not match declared operation path %q", path, op.Binary.Path)
+	}
+	return nil
+}
+
+func operationBinaryDownloadSpec(b Bundle, operation string) (OperationSpec, error) {
+	op, err := findOperation(b, operation)
+	if err != nil {
+		return OperationSpec{}, err
+	}
+	if (op.Kind != "binary_download" && op.Kind != "text_export") || op.Binary == nil {
+		return OperationSpec{}, fmt.Errorf("file download requires binary_download or text_export operation, got %q", op.Kind)
+	}
+	spec := op.Binary
+	if err := requireOperationBinaryResponseContract(op); err != nil {
+		return OperationSpec{}, err
+	}
+	if _, err := requireOperationSuccessStatusPolicy(op); err != nil {
+		return OperationSpec{}, err
+	}
+	if _, err := operationRedirectPolicy(op); err != nil {
+		return OperationSpec{}, err
+	}
+	if op.Kind == "text_export" {
+		if spec.MaxBytes <= 0 {
+			return OperationSpec{}, fmt.Errorf("text export requires positive max_bytes")
+		}
+		if !strings.EqualFold(strings.TrimSpace(spec.Accept), "text/csv") {
+			return OperationSpec{}, fmt.Errorf("text export requires the closed text/csv accept contract")
+		}
+	}
+	if spec.ExtractArchives {
+		return OperationSpec{}, fmt.Errorf("operation %q declares extract_archives, which is not supported: archive extraction is a separate capability", op.ID)
+	}
+	if method := strings.ToUpper(strings.TrimSpace(spec.Method)); method != http.MethodGet {
+		return OperationSpec{}, fmt.Errorf("binary download requires GET, got %s", method)
+	}
+	if isAbsoluteHTTPURL(spec.Path) {
+		return OperationSpec{}, fmt.Errorf("binary download endpoint must be connector-relative, got absolute URL")
+	}
+	if err := requireOperationSurfaceEndpoint(b, http.MethodGet, spec.Path); err != nil {
+		return OperationSpec{}, err
+	}
+	return op, nil
+}
+
 func validateOperationBinaryContentTypes(op OperationSpec) error {
 	if op.Binary == nil {
 		return fmt.Errorf("operation has no binary declaration")
 	}
 	for _, declared := range op.Binary.ContentTypes {
 		mediaType, _, err := mime.ParseMediaType(strings.TrimSpace(declared))
-		if err != nil || mediaType == "" || strings.Contains(mediaType, "*") {
+		if err != nil || !validOperationMediaRange(mediaType) {
 			return fmt.Errorf("content type %q is not a valid media type", declared)
 		}
 	}
@@ -257,11 +295,29 @@ func validateOperationBinaryContentTypes(op OperationSpec) error {
 	return nil
 }
 
+func requireOperationBinaryResponseContract(op OperationSpec) error {
+	if op.Binary == nil || len(op.Binary.ContentTypes) == 0 {
+		return fmt.Errorf("operation %q requires non-empty declared response content_types", op.ID)
+	}
+	if op.Kind == "text_export" && strings.TrimSpace(op.Binary.Charset) == "" {
+		return fmt.Errorf("operation %q requires declared response charset", op.ID)
+	}
+	return validateOperationBinaryContentTypes(op)
+}
+
+func validOperationMediaRange(mediaType string) bool {
+	parts := strings.Split(mediaType, "/")
+	if len(parts) != 2 || parts[0] == "" || parts[1] == "" || parts[0] == "*" {
+		return false
+	}
+	return !strings.Contains(parts[0], "*") && (parts[1] == "*" || !strings.Contains(parts[1], "*"))
+}
+
 // validateOperationBinaryResponseMediaType rejects an undeclared response
 // before a destination file is created. This keeps media policy bounded while
 // preserving every ordinary field of a response the declaration admits.
 func validateOperationBinaryResponseMediaType(op OperationSpec, headers http.Header) error {
-	if err := validateOperationBinaryContentTypes(op); err != nil {
+	if err := requireOperationBinaryResponseContract(op); err != nil {
 		return fmt.Errorf("operation %q response media declaration: %w", op.ID, err)
 	}
 	mediaType, params, err := mime.ParseMediaType(headers.Get("Content-Type"))
@@ -271,18 +327,18 @@ func validateOperationBinaryResponseMediaType(op OperationSpec, headers http.Hea
 	if op.Kind == "text_export" && !strings.EqualFold(mediaType, "text/csv") {
 		return fmt.Errorf("text export response is not text/csv")
 	}
-	if len(op.Binary.ContentTypes) != 0 {
-		matched := false
-		for _, declared := range op.Binary.ContentTypes {
-			allowed, _, _ := mime.ParseMediaType(strings.TrimSpace(declared))
-			if strings.EqualFold(mediaType, allowed) {
-				matched = true
-				break
-			}
+	matched := false
+	for _, declared := range op.Binary.ContentTypes {
+		allowed, _, _ := mime.ParseMediaType(strings.TrimSpace(declared))
+		allowedParts := strings.Split(allowed, "/")
+		actualParts := strings.Split(mediaType, "/")
+		if len(allowedParts) == 2 && len(actualParts) == 2 && strings.EqualFold(actualParts[0], allowedParts[0]) && (allowedParts[1] == "*" || strings.EqualFold(actualParts[1], allowedParts[1])) {
+			matched = true
+			break
 		}
-		if !matched {
-			return fmt.Errorf("operation %q response media type %q is not declared", op.ID, mediaType)
-		}
+	}
+	if !matched {
+		return fmt.Errorf("operation %q response media type %q is not declared", op.ID, mediaType)
 	}
 	if charset := strings.TrimSpace(op.Binary.Charset); charset != "" && !strings.EqualFold(params["charset"], charset) {
 		return fmt.Errorf("operation %q response charset %q does not match declared charset %q", op.ID, params["charset"], charset)

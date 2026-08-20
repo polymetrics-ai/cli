@@ -174,6 +174,86 @@ func TestWriteRequestShape_MultipartFixtureRejectsOversizedPayloadBeforeProvider
 	}
 }
 
+func TestOperationMultipartRequestShape_BindsDeclaredFixturePayload(t *testing.T) {
+	b := operationMultipartFixtureBundle(t, true)
+	result := mustFindCheck(t, checkOperationMultipartRequestShape(b), "operation_multipart_request_shape:acme.upload")
+	if !result.Passed {
+		t.Fatalf("operation multipart fixture replay = %+v, want passed", result)
+	}
+}
+
+func TestOperationMultipartRequestShape_RejectsMissingAndOversizedPayloadBeforeProviderIO(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		bundle func(t *testing.T) engine.Bundle
+		want   string
+	}{
+		{name: "missing", bundle: func(t *testing.T) engine.Bundle { return operationMultipartFixtureBundle(t, false) }, want: "declared payload asset"},
+		{name: "oversized", bundle: func(t *testing.T) engine.Bundle {
+			b := operationMultipartFixtureBundle(t, true)
+			b.Fixtures.(fstest.MapFS)["operations/acme.upload.payloads/media_file_path"] = &fstest.MapFile{Data: []byte(strings.Repeat("x", 129))}
+			return b
+		}, want: "exceeds declared byte cap"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			result := mustFindCheck(t, checkOperationMultipartRequestShape(tt.bundle(t)), "operation_multipart_request_shape:acme.upload")
+			if result.Passed || !strings.Contains(result.Error, tt.want) {
+				t.Fatalf("operation multipart fixture result = %+v, want %q", result, tt.want)
+			}
+		})
+	}
+}
+
+func TestApprovedFixtureOperationRequestMultipartRejectsTamperAndStaleApprovalBeforeProviderIO(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		mutate func(t *testing.T, req *connectors.OperationDirectWriteRequest, payloadPath string)
+		want   string
+	}{
+		{name: "tamper", mutate: func(t *testing.T, _ *connectors.OperationDirectWriteRequest, payloadPath string) {
+			t.Helper()
+			if err := os.WriteFile(payloadPath, []byte("fixture-payload-tampered"), 0o600); err != nil {
+				t.Fatalf("tamper staged payload: %v", err)
+			}
+		}, want: "changed since approval"},
+		{name: "stale approval", mutate: func(t *testing.T, req *connectors.OperationDirectWriteRequest, _ string) {
+			t.Helper()
+			req.Config.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(0, "media_file_path")] = strings.Repeat("0", sha256.Size*2)
+		}, want: "preview"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			b := operationMultipartFixtureBundle(t, true)
+			fixture, err := loadOperationFixture(b.Fixtures, "acme.upload")
+			if err != nil {
+				t.Fatalf("load operation fixture: %v", err)
+			}
+			record := connectors.Record(fixture.Record)
+			staged, err := stageFixtureOperationMultipartPayloads(b, b.Operations[0], record)
+			if err != nil {
+				t.Fatalf("stage operation fixture: %v", err)
+			}
+			defer staged.Close()
+
+			capture := newCaptureServer(nil)
+			defer capture.Close()
+			rb := withReplayURL(b, capture.URL)
+			cfg := runtimeConfigForEngine(rb)
+			cfg.ProjectDir = staged.root
+			req, err := approvedFixtureOperationRequest(context.Background(), rb, rb.Operations[0], cfg, record, engine.HooksFor(rb.Name))
+			if err != nil {
+				t.Fatalf("approved operation fixture request: %v", err)
+			}
+			tt.mutate(t, &req, filepath.Join(staged.root, "fixture-media.bin"))
+			if _, err := engine.OperationDirectWrite(context.Background(), rb, req, engine.HooksFor(rb.Name)); err == nil || !strings.Contains(strings.ToLower(err.Error()), tt.want) {
+				t.Fatalf("mutated operation fixture write error = %v, want %q", err, tt.want)
+			}
+			if got := capture.LastRequest(); got != nil {
+				t.Fatalf("mutated operation fixture reached provider capture: %+v", got)
+			}
+		})
+	}
+}
+
 func TestApprovedFixtureWriteRequestMultipartPayloadDigestRejectsTamperAndStaleApproval(t *testing.T) {
 	for _, tt := range []struct {
 		name   string
@@ -272,6 +352,42 @@ func multipartFixtureBundle(t *testing.T, includePayload bool) engine.Bundle {
 	}
 	if includePayload {
 		b.Fixtures.(fstest.MapFS)["writes/upload_fixture.payloads/media_file_path"] = &fstest.MapFile{Data: []byte("fixture-payload-v1")}
+	}
+	return b
+}
+
+func operationMultipartFixtureBundle(t *testing.T, includePayload bool) engine.Bundle {
+	t.Helper()
+	b := loadTestBundle(t, "testdata/good", "acme")
+	b.Operations = []engine.OperationSpec{{
+		ID:            "acme.upload",
+		Kind:          "rest_write",
+		Summary:       "upload",
+		Risk:          "high",
+		Approval:      "plan",
+		OutputPolicy:  "none",
+		MutationClass: "destructive",
+		REST: &engine.RESTOperationSpec{
+			Method:      http.MethodPost,
+			Path:        "/uploads",
+			ContentType: "multipart/form-data",
+			MaxBytes:    1024,
+			BodySchema:  []byte(`{"type":"object","properties":{"label":{"type":"string"},"media_file_path":{"type":"string"}},"required":["label","media_file_path"],"additionalProperties":false}`),
+			Multipart: &engine.MultipartSpec{MaxBytes: 128, Parts: []engine.MultipartPartSpec{
+				{Name: "label", Type: "field", Field: "label", Required: true},
+				{Name: "media", Type: "file", Field: "media_file_path", Required: true, ContentType: "application/octet-stream", MaxBytes: 128},
+			}},
+		},
+	}}
+	b.Surface.Endpoints = append(b.Surface.Endpoints, engine.SurfaceEndpoint{Method: http.MethodPost, Path: "/uploads", Operation: &engine.SurfaceOperation{}})
+	b.Fixtures = fstest.MapFS{
+		"operations/acme.upload.json": &fstest.MapFile{Data: []byte(`{
+  "record": {"label": "fixture-label", "media_file_path": "fixture-media.bin"},
+  "expect": {"method": "POST", "path": "/uploads"}
+}`)},
+	}
+	if includePayload {
+		b.Fixtures.(fstest.MapFS)["operations/acme.upload.payloads/media_file_path"] = &fstest.MapFile{Data: []byte("fixture-payload-v1")}
 	}
 	return b
 }

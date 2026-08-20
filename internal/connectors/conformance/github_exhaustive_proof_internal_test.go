@@ -961,7 +961,8 @@ func runGitHubBinaryProviderDouble(t *testing.T, b engine.Bundle, operation engi
 		return row
 	}
 	body := []byte("provider-double-binary")
-	capture := newGitHubProviderCapture(func(_ *http.Request) (int, string, []byte) { return http.StatusOK, "application/octet-stream", body })
+	contentType := githubBinaryProviderContentType(operation.Binary.ContentTypes)
+	capture := newGitHubProviderCapture(func(_ *http.Request) (int, string, []byte) { return http.StatusOK, contentType, body })
 	defer capture.Close()
 	doubleBundle := githubProviderDoubleBundle(b, capture.URL)
 	temp := t.TempDir()
@@ -986,4 +987,26 @@ func runGitHubBinaryProviderDouble(t *testing.T, b engine.Bundle, operation engi
 	row.Requests = githubProviderRequestProofs(capture.captured())
 	row.Response = &githubProviderDoubleResponseProof{Status: http.StatusOK, Bytes: len(body), BodySHA256: hashBytes(body)}
 	return row
+}
+
+func githubBinaryProviderContentType(contentTypes []string) string {
+	for _, declared := range contentTypes {
+		mediaType := strings.TrimSpace(strings.SplitN(declared, ";", 2)[0])
+		parts := strings.Split(mediaType, "/")
+		if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+			continue
+		}
+		if parts[1] == "*" {
+			switch parts[0] {
+			case "text":
+				return "text/plain"
+			case "image":
+				return "image/png"
+			default:
+				return parts[0] + "/octet-stream"
+			}
+		}
+		return mediaType
+	}
+	return "application/octet-stream"
 }

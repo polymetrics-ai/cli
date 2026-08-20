@@ -217,6 +217,7 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
+				  "success_statuses": { "type": "array", "items": { "type": "string" } },
                   "headers": {
                     "type": "array",
                     "items": {
@@ -230,7 +231,17 @@
                     }
                   }
                 }
-              }
+			  },
+			  "redirect": {
+				"type": "object",
+				"required": ["max_hops"],
+				"additionalProperties": false,
+				"properties": {
+			  "max_hops": { "type": "integer" },
+				  "allow_same_origin": { "type": "boolean" },
+				  "allowed_hosts": { "type": "array", "items": { "type": "string" } }
+				}
+			  }
             }
           },
           "graphql": {
@@ -288,6 +299,7 @@
 					"in": { "type": "string", "enum": ["query", "path", "header"] },
 					"type": { "type": "string" },
 					"required": { "type": "boolean" },
+					"repeatable": { "type": "boolean" },
 					"values": { "type": "array", "items": { "type": "string" } },
 					"summary": { "type": "string" },
 					"schema": { "type": "object" },
@@ -299,6 +311,7 @@
 				"type": "object",
 				"additionalProperties": false,
 				"properties": {
+				  "success_statuses": { "type": "array", "items": { "type": "string" } },
 				  "headers": {
 					"type": "array",
 					"items": {
@@ -311,6 +324,16 @@
 					  }
 					}
 				  }
+				}
+			  },
+			  "redirect": {
+				"type": "object",
+				"required": ["max_hops"],
+				"additionalProperties": false,
+				"properties": {
+			  "max_hops": { "type": "integer" },
+				  "allow_same_origin": { "type": "boolean" },
+				  "allowed_hosts": { "type": "array", "items": { "type": "string" } }
 				}
 			  },
 			  "accept": { "type": "string" },

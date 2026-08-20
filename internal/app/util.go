@@ -23,6 +23,17 @@ func cloneStringMap(in map[string]string) map[string]string {
 	return out
 }
 
+func cloneStringSliceMap(in map[string][]string) map[string][]string {
+	if len(in) == 0 {
+		return nil
+	}
+	out := make(map[string][]string, len(in))
+	for key, values := range in {
+		out[key] = append([]string(nil), values...)
+	}
+	return out
+}
+
 func cloneRecord(in connectors.Record) connectors.Record {
 	out := make(connectors.Record, len(in))
 	for k, v := range in {
@@ -341,7 +352,7 @@ func connectorCommandPlanHash(planName, connector, credential string, config map
 // connector-command plan hash. The path/query/body fields are all part of the
 // approved request, so they must be bound before a preview can mint a
 // single-use approval token.
-func operationConnectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, operation string, pathParams, query, headers map[string]string, body connectors.Record, payloadIdentity []PayloadIdentity) (string, error) {
+func operationConnectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, operation string, pathParams, query, headers map[string]string, headerValues map[string][]string, body connectors.Record, payloadIdentity []PayloadIdentity) (string, error) {
 	payload := map[string]any{
 		"name":         planName,
 		"connector":    connector,
@@ -355,6 +366,9 @@ func operationConnectorCommandPlanHash(planName, connector, credential string, c
 		"headers":      cloneStringMap(headers),
 		"record_count": 1,
 		"body":         cloneRecord(body),
+	}
+	if len(headerValues) > 0 {
+		payload["header_values"] = cloneStringSliceMap(headerValues)
 	}
 	if len(payloadIdentity) > 0 {
 		payload["payload_identity"] = append([]PayloadIdentity(nil), payloadIdentity...)
