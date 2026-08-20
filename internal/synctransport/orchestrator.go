@@ -237,14 +237,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			applyStarted := time.Now()
 			acknowledgement, err := resolved.Destination.ApplyDestination(applyCtx, destinationApplyRequest)
 			result.ApplyElapsed += time.Since(applyStarted)
+			collectDestinationResult(&result, acknowledgement, err)
 			if err != nil {
-				if output, ok := DestinationApplyOutput(err); ok {
-					result.DestinationResults = append(result.DestinationResults, output)
-				}
 				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply destination transport: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
-			}
-			if len(acknowledgement.Output) != 0 {
-				result.DestinationResults = append(result.DestinationResults, append([]byte(nil), acknowledgement.Output...))
 			}
 			// Apply acknowledged the bounded workset. Retain this count even if the
 			// subsequent independent read-back refuses to advance its checkpoint.
@@ -474,15 +469,19 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 	acknowledgement, publishErr := session.PublishFullOverwrite(publishCtx, FullOverwritePublicationRequest{
 		LastCheckpoint: lastCandidate, Pages: result.Pages, Records: result.RecordsApplied,
 	})
+	collectDestinationResult(&result, acknowledgement, publishErr)
 	result.ApplyElapsed += time.Since(publishStarted)
 	if publishErr == nil {
+		// Publication is already externally visible. Disarm pre-publication
+		// abort before read-back so an ambiguous verification failure cannot
+		// delete or roll back a successfully published destination.
+		published = true
 		publishErr = session.ReadBackFullOverwrite(publishCtx, acknowledgement)
 	}
 	cancelPublish()
 	if publishErr != nil {
 		return result, fmt.Errorf("publish destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}
-	published = true
 	if lastCandidate == nil {
 		return result, nil
 	}
@@ -502,6 +501,21 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 	committed.CommittedAt = &committedAt
 	result.CommittedCheckpoint = &committed
 	return result, nil
+}
+
+// collectDestinationResult is the single defensive-copy boundary for every
+// ordinary, full-overwrite, and Arrow publication path. A typed failure output
+// is used only when no acknowledgement output was returned, avoiding duplicate
+// terminal receipts while preserving one provider result before read-back or
+// checkpoint work can fail.
+func collectDestinationResult(result *Result, acknowledgement synccontract.DownstreamAcknowledgement, err error) {
+	if len(acknowledgement.Output) != 0 {
+		result.DestinationResults = append(result.DestinationResults, append([]byte(nil), acknowledgement.Output...))
+		return
+	}
+	if output, ok := DestinationApplyOutput(err); ok {
+		result.DestinationResults = append(result.DestinationResults, append([]byte(nil), output...))
+	}
 }
 
 func retireCommittedReceipts(ctx context.Context, request RunRequest, receipts []WarehouseReceipt) error {

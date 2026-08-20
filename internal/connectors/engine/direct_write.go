@@ -123,6 +123,18 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		requester := *resolvedRequester
 		requester.DisableRetries = true
 
+		// Crossing this point means the sealed request is about to be submitted.
+		// Record its declaration-owned identity before transport I/O so timeout,
+		// cancellation, DNS, TLS, and connection failures retain an attempt
+		// receipt without fabricating response fields.
+		result = connectors.OperationDirectWriteResult{
+			Connector:          b.Name,
+			Operation:          prepared.op.ID,
+			Method:             prepared.method,
+			Path:               prepared.path,
+			OutputSecretFields: operationDirectWriteOutputSecretFields(prepared.op),
+		}
+
 		var response *connsdk.Response
 		switch prepared.format {
 		case "form":
@@ -2249,10 +2261,12 @@ func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int, h
 	if policy == directWritePolicyNone && len(raw) == 0 && !declaresJSON {
 		return operationDirectWriteResponseBodyResult{}, nil
 	}
-	result := operationDirectWriteResponseBodyResult{present: true, bytes: len(raw)}
+	result := operationDirectWriteResponseBodyResult{present: len(raw) > 0, bytes: len(raw)}
 	if utf8.Valid(raw) {
-		result.raw = string(raw)
-		result.encoding = "text"
+		if result.present {
+			result.raw = string(raw)
+			result.encoding = "text"
+		}
 	} else {
 		result.raw = base64.StdEncoding.EncodeToString(raw)
 		result.encoding = "base64"
@@ -2261,6 +2275,9 @@ func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int, h
 		return result, fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(raw), maxBytes)
 	}
 	if !declaresJSON {
+		return result, nil
+	}
+	if !result.present {
 		return result, nil
 	}
 	decoded, err := decodeDirectReadBody(raw, maxBytes)

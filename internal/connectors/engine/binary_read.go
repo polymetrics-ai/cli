@@ -209,10 +209,8 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 			// ending .json. The mismatch is surfaced, not rejected.
 			"content_type_sniffed": sniffed,
 			"source_operation":     op.ID,
-			// source_ref, NOT download_url: shouldRedactJSONField auto-redacts
-			// any field containing both "download" and "url", so a field named
-			// download_url would silently become download_url_redacted:true.
-			// The connector-relative path also carries no signed-URL secrets.
+			// The connector-relative source reference carries no signed-URL
+			// credentials and remains stable across public receipt projection.
 			"source_ref":    resolvedPath,
 			"downloaded_at": time.Now().UTC().Format(time.RFC3339),
 			// Always false: overflow is a hard error rather than a silent

@@ -1393,9 +1393,8 @@ func TestWriteRequiresOneJSONValueForDeclaredResponses(t *testing.T) {
 			name:         "empty declared JSON",
 			status:       http.StatusOK,
 			contentType:  "application/json",
-			wantErr:      true,
-			wantBody:     "",
-			wantEncoding: "text",
+			wantBody:     nil,
+			wantEncoding: "",
 		},
 		{
 			name:         "whitespace declared JSON",
@@ -1434,8 +1433,8 @@ func TestWriteRequiresOneJSONValueForDeclaredResponses(t *testing.T) {
 		{
 			name:         "bodyless status",
 			status:       http.StatusNoContent,
-			wantBody:     "",
-			wantEncoding: "text",
+			wantBody:     nil,
+			wantEncoding: "",
 		},
 	} {
 		t.Run(testCase.name, func(t *testing.T) {
@@ -1472,6 +1471,9 @@ func TestWriteRequiresOneJSONValueForDeclaredResponses(t *testing.T) {
 			}
 			if provider.BodyEncoding != testCase.wantEncoding || !reflect.DeepEqual(provider.Body, testCase.wantBody) {
 				t.Fatalf("provider response body = %#v encoding=%q, want %#v encoding=%q", provider.Body, provider.BodyEncoding, testCase.wantBody, testCase.wantEncoding)
+			}
+			if provider.BodyPresent != (len(testCase.response) > 0) {
+				t.Fatalf("provider BodyPresent = %v, want transport-byte presence %v", provider.BodyPresent, len(testCase.response) > 0)
 			}
 			if testCase.wantErr {
 				if result.RecordsWritten != 0 || result.RecordsFailed != 1 {

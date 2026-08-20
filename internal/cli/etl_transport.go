@@ -499,11 +499,21 @@ func runApprovedTransportETL(ctx context.Context, a *app.App, flags strictTransp
 		MaxInFlightBatches:  maxInFlightBatches,
 		DestinationApproval: approval,
 	})
-	if err != nil {
+	if err != nil && run.ID == "" {
 		return err
 	}
 	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": false})
+		if outputErr := writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": false}); outputErr != nil {
+			return outputErr
+		}
+		if err != nil {
+			return alreadyReportedExecutionError(err)
+		}
+		return nil
+	}
+	if err != nil {
+		_, _ = fmt.Fprintf(stdout, "ETL run %s ended with status %s; inspect it with pm etl status %s\n", run.ID, run.Status, run.ID)
+		return alreadyReportedExecutionError(err)
 	}
 	_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
 	return nil

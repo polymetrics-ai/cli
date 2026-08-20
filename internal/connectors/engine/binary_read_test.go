@@ -494,9 +494,7 @@ func TestBinaryDownloadSniffsContentType(t *testing.T) {
 
 // TestBinaryDownloadRecordIsFlatAndSurvivesRedaction: records are flat
 // map[string]any and pass through schema projection, so a nested object would
-// not survive. And shouldRedactJSONField silently redacts anything containing
-// both "download" and "url" — a field named download_url would become
-// download_url_redacted:true, so the reference field must be source_ref.
+// not survive. Provider metadata names are not sensitivity classifications.
 func TestBinaryDownloadRecordIsFlatAndSurvivesRedaction(t *testing.T) {
 	srv := binaryServer(t, []byte("data"), nil)
 	dest := t.TempDir()
@@ -509,9 +507,6 @@ func TestBinaryDownloadRecordIsFlatAndSurvivesRedaction(t *testing.T) {
 		switch v.(type) {
 		case map[string]any, []any, connectors.Record:
 			t.Fatalf("record field %q is not a flat scalar: %T", k, v)
-		}
-		if shouldRedactJSONField(k) {
-			t.Fatalf("record field %q would be silently redacted by shouldRedactJSONField", k)
 		}
 	}
 	for _, want := range []string{
@@ -538,8 +533,7 @@ func TestBinaryDownloadRequiresDestRoot(t *testing.T) {
 	}
 }
 
-// TestBinaryDownloadPreservesHTTPErrorTextAndLeavesNoFile.
-func TestBinaryDownloadPreservesHTTPErrorTextAndLeavesNoFile(t *testing.T) {
+func TestBinaryDownloadHTTPErrorKeepsProviderQueryAndBodyPrivateAndLeavesNoFile(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got, want := r.URL.Query().Get("trace"), "binary-download-fixture"; got != want {
 			t.Fatalf("trace = %q, want %q", got, want)
@@ -556,10 +550,13 @@ func TestBinaryDownloadPreservesHTTPErrorTextAndLeavesNoFile(t *testing.T) {
 	if err == nil {
 		t.Fatal("want error for 403")
 	}
-	for _, want := range []string{"trace=binary-download-fixture", `{"diagnostic":"binary-download-fixture-body"}`} {
-		if !strings.Contains(err.Error(), want) {
-			t.Fatalf("OperationBinaryDownload error = %q, want complete diagnostic %q", err.Error(), want)
+	for _, secret := range []string{"trace=binary-download-fixture", "binary-download-fixture-body"} {
+		if strings.Contains(err.Error(), secret) {
+			t.Fatalf("OperationBinaryDownload error leaked %q: %q", secret, err.Error())
 		}
+	}
+	if !strings.Contains(err.Error(), "http 403") || !strings.Contains(err.Error(), "/files/{id}") {
+		t.Fatalf("OperationBinaryDownload error = %q, want safe status and declaration identity", err.Error())
 	}
 	entries, _ := os.ReadDir(dest)
 	if len(entries) != 0 {

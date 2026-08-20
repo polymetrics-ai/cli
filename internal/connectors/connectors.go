@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/csv"
 	"encoding/json"
 	"errors"
@@ -918,17 +919,175 @@ type WriteProviderResponse struct {
 // result path from narrowing a declaration-owned operation result.
 type WriteProviderHeader = OperationResponseHeader
 
-// SanitizeWriteResultForOutput preserves provider responses exactly for
-// persisted App/CLI output; only separately generated diagnostics are
-// secret-safe.
-func SanitizeWriteResultForOutput(result WriteResult, _ map[string]string) WriteResult {
-	return result
+// SanitizeWriteResultForOutput returns a public clone of the complete internal
+// receipt. Ordinary provider truth is retained; only concrete configured
+// credential material (including common transport encodings) is masked.
+func SanitizeWriteResultForOutput(result WriteResult, secrets map[string]string) WriteResult {
+	masked := configuredWriteResultSecrets(secrets)
+	out := result
+	out.ProviderResponses = make([]WriteProviderResponse, len(result.ProviderResponses))
+	for i, response := range result.ProviderResponses {
+		out.ProviderResponses[i] = sanitizeWriteProviderResponse(response, masked)
+	}
+	return out
 }
 
-// SanitizeOperationDirectWriteResultForOutput preserves an already named
-// provider operation result exactly; generated diagnostics remain separate.
-func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, _ map[string]string) OperationDirectWriteResult {
-	return result
+// SanitizeOperationDirectWriteResultForOutput applies the same public-boundary
+// clone and also masks declaration-classified response secret locations.
+func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, secrets map[string]string) OperationDirectWriteResult {
+	masked := configuredWriteResultSecrets(secrets)
+	body := cloneProviderOutputValue(result.Body)
+	for _, path := range result.OutputSecretFields {
+		if value, ok := providerOutputValueAtPath(body, path); ok {
+			if scalar, ok := providerOutputSecretScalar(value); ok {
+				masked = append(masked, configuredSecretVariants(scalar)...)
+			}
+			maskProviderOutputPath(body, path)
+		}
+	}
+	out := result
+	out.Headers = sanitizeProviderHeaders(result.Headers, masked)
+	out.BodyRaw = redactWriteResultString(result.BodyRaw, masked)
+	out.Body = sanitizeProviderOutputValue(body, masked)
+	out.OutputSecretFields = append([]string(nil), result.OutputSecretFields...)
+	if result.GraphQL != nil {
+		graphql := *result.GraphQL
+		graphql.Errors = append([]GraphQLResultError(nil), result.GraphQL.Errors...)
+		for i := range graphql.Errors {
+			graphql.Errors[i].Message = redactWriteResultString(graphql.Errors[i].Message, masked)
+		}
+		if result.GraphQL.RateLimit != nil {
+			rateLimit := *result.GraphQL.RateLimit
+			graphql.RateLimit = &rateLimit
+		}
+		out.GraphQL = &graphql
+	}
+	return out
+}
+
+func sanitizeWriteProviderResponse(response WriteProviderResponse, secrets []string) WriteProviderResponse {
+	out := response
+	out.Headers = sanitizeProviderHeaders(response.Headers, secrets)
+	out.BodyRaw = redactWriteResultString(response.BodyRaw, secrets)
+	out.Body = sanitizeProviderOutputValue(response.Body, secrets)
+	return out
+}
+
+func sanitizeProviderHeaders(headers map[string]OperationResponseHeader, secrets []string) map[string]OperationResponseHeader {
+	if headers == nil {
+		return nil
+	}
+	out := make(map[string]OperationResponseHeader, len(headers))
+	for name, header := range headers {
+		clone := header
+		clone.Values = make([]string, len(header.Values))
+		for i, value := range header.Values {
+			clone.Values[i] = redactWriteResultString(value, secrets)
+		}
+		out[redactWriteResultString(name, secrets)] = clone
+	}
+	return out
+}
+
+func cloneProviderOutputValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			out[key] = cloneProviderOutputValue(item)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = cloneProviderOutputValue(item)
+		}
+		return out
+	case []string:
+		return append([]string(nil), typed...)
+	case []byte:
+		return append([]byte(nil), typed...)
+	default:
+		return value
+	}
+}
+
+func sanitizeProviderOutputValue(value any, secrets []string) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			out[redactWriteResultString(key, secrets)] = sanitizeProviderOutputValue(item, secrets)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = sanitizeProviderOutputValue(item, secrets)
+		}
+		return out
+	case string:
+		return redactWriteResultString(typed, secrets)
+	case json.Number:
+		masked := redactWriteResultString(typed.String(), secrets)
+		if masked != typed.String() {
+			return masked
+		}
+		return typed
+	default:
+		return cloneProviderOutputValue(value)
+	}
+}
+
+// SanitizeProviderOutputForOutput deep-clones an arbitrary decoded provider
+// value and masks only configured credential material. It intentionally does
+// not infer sensitivity from field names: identifiers such as token and
+// trained_tokens are ordinary provider truth unless a declaration says
+// otherwise.
+func SanitizeProviderOutputForOutput(value any, secrets map[string]string) any {
+	return sanitizeProviderOutputValue(value, configuredWriteResultSecrets(secrets))
+}
+
+func providerOutputValueAtPath(value any, path string) (any, bool) {
+	current := value
+	for _, segment := range strings.Split(strings.TrimPrefix(path, "body."), ".") {
+		object, ok := current.(map[string]any)
+		if !ok {
+			return nil, false
+		}
+		current, ok = object[segment]
+		if !ok {
+			return nil, false
+		}
+	}
+	return current, true
+}
+
+func maskProviderOutputPath(value any, path string) {
+	segments := strings.Split(strings.TrimPrefix(path, "body."), ".")
+	current, ok := value.(map[string]any)
+	if !ok {
+		return
+	}
+	for _, segment := range segments[:len(segments)-1] {
+		next, ok := current[segment].(map[string]any)
+		if !ok {
+			return
+		}
+		current = next
+	}
+	current[segments[len(segments)-1]] = "[masked]"
+}
+
+func providerOutputSecretScalar(value any) (string, bool) {
+	switch typed := value.(type) {
+	case string:
+		return typed, typed != ""
+	case json.Number:
+		return typed.String(), typed.String() != ""
+	default:
+		return "", false
+	}
 }
 
 func SanitizeWriteErrorForOutput(err error, secrets map[string]string) string {
@@ -939,17 +1098,16 @@ func SanitizeWriteErrorForOutput(err error, secrets map[string]string) string {
 }
 
 func configuredWriteResultSecrets(secrets map[string]string) []string {
-	values := make([]string, 0, len(secrets))
-	seen := make(map[string]struct{}, len(secrets))
+	values := make([]string, 0, len(secrets)*7)
+	seen := make(map[string]struct{}, len(secrets)*7)
 	for _, value := range secrets {
-		if value == "" {
-			continue
+		for _, variant := range configuredSecretVariants(value) {
+			if _, found := seen[variant]; found {
+				continue
+			}
+			seen[variant] = struct{}{}
+			values = append(values, variant)
 		}
-		if _, found := seen[value]; found {
-			continue
-		}
-		seen[value] = struct{}{}
-		values = append(values, value)
 	}
 	sort.Slice(values, func(i, j int) bool {
 		if len(values[i]) == len(values[j]) {
@@ -958,6 +1116,22 @@ func configuredWriteResultSecrets(secrets map[string]string) []string {
 		return len(values[i]) > len(values[j])
 	})
 	return values
+}
+
+func configuredSecretVariants(value string) []string {
+	if value == "" {
+		return nil
+	}
+	bytes := []byte(value)
+	return []string{
+		value,
+		url.QueryEscape(value),
+		url.PathEscape(value),
+		base64.StdEncoding.EncodeToString(bytes),
+		base64.RawStdEncoding.EncodeToString(bytes),
+		base64.URLEncoding.EncodeToString(bytes),
+		base64.RawURLEncoding.EncodeToString(bytes),
+	}
 }
 
 func redactWriteResultString(value string, secrets []string) string {

@@ -1207,14 +1207,16 @@ func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, q
 			return captureTerminalResponse(resp, maxBodyBytes, fullURL, route), fmt.Errorf("send request body: %w", bodyErr)
 		}
 
-		if resp.StatusCode >= 200 && resp.StatusCode < 300 && !r.acceptsSuccessfulStatus(resp.StatusCode) {
-			_ = resp.Body.Close()
-			return nil, &UnexpectedStatusError{Status: resp.StatusCode}
-		}
-
 		respBody, readErr := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		_ = resp.Body.Close()
-		terminal := &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}
+		terminal := &Response{Status: resp.StatusCode, Header: resp.Header.Clone(), Body: respBody, requestURL: fullURL, rateLimitRoute: route}
+		if resp.StatusCode >= 200 && resp.StatusCode < 300 && !r.acceptsSuccessfulStatus(resp.StatusCode) {
+			statusErr := &UnexpectedStatusError{Status: resp.StatusCode}
+			if readErr != nil {
+				return terminal, errors.Join(statusErr, fmt.Errorf("read response body: %w", readErr))
+			}
+			return terminal, statusErr
+		}
 		if readErr != nil {
 			readBodyErr := fmt.Errorf("read response body: %w", readErr)
 			if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {

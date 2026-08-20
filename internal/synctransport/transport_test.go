@@ -389,7 +389,8 @@ func TestOrchestratorFullOverwritePublishesAllBoundedPagesBeforeOneCheckpoint(t 
 		{Records: []connectors.Record{{"id": "one"}}, CandidateCheckpoint: first},
 		{Records: []connectors.Record{{"id": "two"}}, CandidateCheckpoint: second},
 	}
-	fullOverwrite := &testFullOverwriteRun{sink: pair.destination.Name()}
+	publishOutput := json.RawMessage(`{"provider_id":"occurrence-9007199254740993"}`)
+	fullOverwrite := &testFullOverwriteRun{sink: pair.destination.Name(), publishOutput: publishOutput}
 	pair.destinationExecutor.fullOverwrite = fullOverwrite
 	registry := NewRegistry(pair.verifier)
 	registerTransportPair(t, registry, pair)
@@ -415,6 +416,9 @@ func TestOrchestratorFullOverwritePublishesAllBoundedPagesBeforeOneCheckpoint(t 
 	}
 	if pair.destinationExecutor.applyCalls != 0 || commits != 1 || result.Pages != 2 || result.CommittedCheckpoint == nil || string(checkpoint.Position.Primary) != "2" {
 		t.Fatalf("legacy applies/checkpoints/result = %d/%d/%+v checkpoint=%+v, want no legacy apply and one final checkpoint", pair.destinationExecutor.applyCalls, commits, result, checkpoint)
+	}
+	if !reflect.DeepEqual(result.DestinationResults, []json.RawMessage{publishOutput}) {
+		t.Fatalf("full-overwrite destination results = %s, want publication output", result.DestinationResults)
 	}
 }
 
@@ -480,7 +484,8 @@ func TestOrchestratorArrowFullOverwriteTransformsDurablyBulkAppliesThenCheckpoin
 	checkpoint := testCheckpoint(pair.source.Name())
 	record := testArrowRecord(t, []int64{1, 2}, []string{"open", "ignored"})
 	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}, batches: []ArrowSourceBatch{{Record: record, SourceLogicalBytes: 64, SourceRows: 2, CandidateCheckpoint: checkpoint}}}
-	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name()}}
+	publishOutput := json.RawMessage(`{"provider_id":"arrow-occurrence-9007199254740993"}`)
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name(), publishOutput: publishOutput}}
 	registry := NewRegistry(pair.verifier)
 	if err := registry.RegisterSource(source); err != nil {
 		t.Fatal(err)
@@ -512,6 +517,9 @@ func TestOrchestratorArrowFullOverwriteTransformsDurablyBulkAppliesThenCheckpoin
 	}
 	if result.RecordsRead != 2 || result.RecordsApplied != 1 || result.SourceLogicalBytes != 64 || result.ParquetBytes == 0 || result.PeakCreditBytes != 64 || result.CommittedCheckpoint == nil {
 		t.Fatalf("Arrow result = %#v, want source/transform/Parquet/COPY/checkpoint counters", result)
+	}
+	if !reflect.DeepEqual(result.DestinationResults, []json.RawMessage{publishOutput}) {
+		t.Fatalf("Arrow destination results = %s, want publication output", result.DestinationResults)
 	}
 }
 
@@ -1575,6 +1583,7 @@ type testFullOverwriteRun struct {
 	publishCalls  int
 	readBackCalls int
 	abortCalls    int
+	publishOutput json.RawMessage
 }
 
 func (r *testFullOverwriteRun) ApplyFullOverwrite(_ context.Context, request DestinationApplyRequest) error {
@@ -1593,7 +1602,9 @@ func (r *testFullOverwriteRun) PublishFullOverwrite(_ context.Context, request F
 	if request.Pages != len(r.ids) || request.Records != len(r.ids) || request.LastCheckpoint == nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("test full-overwrite publication is incomplete")
 	}
-	return synccontract.NewDurableDownstreamAcknowledgement(r.sink, time.Now().UTC())
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(r.sink, time.Now().UTC())
+	acknowledgement.Output = append(json.RawMessage(nil), r.publishOutput...)
+	return acknowledgement, err
 }
 
 func (r *testFullOverwriteRun) ReadBackFullOverwrite(_ context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
@@ -1666,6 +1677,7 @@ type testArrowFullOverwriteRun struct {
 	applyCalls    int
 	failApplyAt   int
 	applyErr      error
+	publishOutput json.RawMessage
 }
 
 func (r *testArrowFullOverwriteRun) ApplyArrowSegment(_ context.Context, request ArrowBulkApplyRequest) error {
@@ -1694,7 +1706,9 @@ func (r *testArrowFullOverwriteRun) PublishArrowFullOverwrite(_ context.Context,
 	if request.TransformedRows != int64(len(r.ids)) || request.SourceRows < request.TransformedRows {
 		return synccontract.DownstreamAcknowledgement{}, ErrArrowFastPathInvalid
 	}
-	return synccontract.NewDurableDownstreamAcknowledgement(r.sink, time.Now().UTC())
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(r.sink, time.Now().UTC())
+	acknowledgement.Output = append(json.RawMessage(nil), r.publishOutput...)
+	return acknowledgement, err
 }
 
 func (r *testArrowFullOverwriteRun) ReadBackArrowFullOverwrite(_ context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {

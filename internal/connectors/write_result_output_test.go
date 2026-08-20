@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestSanitizeWriteResultForOutputPreservesProviderResponseExactly(t *testing.T) {
+func TestWriteResultOutputMasksConfiguredSecretsAndPreservesOrdinaryProviderTruth(t *testing.T) {
 	credential := "client-secret"
 	numericCredential := "12345678901234567890"
 	result := WriteResult{
@@ -24,7 +24,7 @@ func TestSanitizeWriteResultForOutputPreservesProviderResponseExactly(t *testing
 				"X-Provider-Echo": {Values: []string{credential, "ordinary"}},
 			},
 			Body: map[string]any{
-				credential:          "provider-key-preserved",
+				"token":             "ordinary-occurrence-id",
 				"credential_echo":   credential,
 				"numeric_echo":      json.Number(numericCredential),
 				"base64_echo":       base64.StdEncoding.EncodeToString([]byte(credential)),
@@ -35,12 +35,25 @@ func TestSanitizeWriteResultForOutputPreservesProviderResponseExactly(t *testing
 	}
 
 	got := SanitizeWriteResultForOutput(result, map[string]string{"token": credential, "numeric": numericCredential})
-	if !reflect.DeepEqual(got, result) {
-		t.Fatal("provider result changed during output serialization")
+	if reflect.DeepEqual(got, result) {
+		t.Fatal("public provider result retained configured credentials")
+	}
+	if got.ProviderResponses[0].Body.(map[string]any)["token"] != "ordinary-occurrence-id" {
+		t.Fatal("ordinary token-named provider identifier was changed")
+	}
+	encoded, err := json.Marshal(got)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(encoded), credential) || strings.Contains(string(encoded), numericCredential) || strings.Contains(string(encoded), base64.StdEncoding.EncodeToString([]byte(credential))) {
+		t.Fatalf("public result leaked a configured secret: %s", encoded)
+	}
+	if result.ProviderResponses[0].Body.(map[string]any)["credential_echo"] != credential {
+		t.Fatal("sanitizer mutated the complete internal receipt")
 	}
 }
 
-func TestSanitizeOperationDirectWriteResultForOutputPreservesProviderResponseExactly(t *testing.T) {
+func TestOperationDirectWriteResultOutputMasksConfiguredAndDeclaredSecrets(t *testing.T) {
 	credential := "client-secret"
 	numericCredential := "12345678901234567890"
 	result := OperationDirectWriteResult{
@@ -50,18 +63,34 @@ func TestSanitizeOperationDirectWriteResultForOutputPreservesProviderResponseExa
 		BodyRaw:         `{"credential":"client-secret","numeric":12345678901234567890}`,
 		BodyRawEncoding: "text",
 		Body: map[string]any{
-			credential: "provider-key-preserved",
-			"echo":     credential,
-			"numeric":  json.Number(numericCredential),
-			"base64":   base64.StdEncoding.EncodeToString([]byte(credential)),
+			"credential": "provider-issued-secret",
+			"token":      "ordinary-occurrence-id",
+			"echo":       credential,
+			"numeric":    json.Number(numericCredential),
+			"base64":     base64.StdEncoding.EncodeToString([]byte(credential)),
 		},
 		GraphQL:            &GraphQLResponseMetadata{Errors: []GraphQLResultError{{Message: credential}}},
 		OutputSecretFields: []string{"credential"},
 	}
 
 	got := SanitizeOperationDirectWriteResultForOutput(result, map[string]string{"token": credential, "numeric": numericCredential})
-	if !reflect.DeepEqual(got, result) {
-		t.Fatal("provider direct-write result changed during output serialization")
+	if reflect.DeepEqual(got, result) {
+		t.Fatal("public direct-write result retained secret material")
+	}
+	if got.Body.(map[string]any)["token"] != "ordinary-occurrence-id" {
+		t.Fatal("ordinary token-named provider identifier was changed")
+	}
+	encoded, err := json.Marshal(got)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, secret := range []string{credential, numericCredential, "provider-issued-secret", base64.StdEncoding.EncodeToString([]byte(credential))} {
+		if strings.Contains(string(encoded), secret) {
+			t.Fatalf("public result leaked %q: %s", secret, encoded)
+		}
+	}
+	if result.Body.(map[string]any)["credential"] != "provider-issued-secret" {
+		t.Fatal("sanitizer mutated the complete internal receipt")
 	}
 }
 

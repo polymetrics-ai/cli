@@ -15,6 +15,39 @@ import (
 	"polymetrics.ai/internal/connectors/connsdk"
 )
 
+func TestOperationDirectWriteNoResponseRetainsAttemptIdentity(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1:1", "graphql_mutation")
+	request := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	request.PreviewDigest = preview.Digest
+	request.Approval = approvedEvidenceForPreview(t, preview)
+
+	result, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite() error = nil, want transport failure")
+	}
+	if result.Connector != "acme" || result.Operation != request.Operation || result.Method != http.MethodPost || result.Path != "/graphql" || result.ResponseReceived {
+		t.Fatalf("attempt receipt = %#v, want sealed identity without a response", result)
+	}
+
+	invalid := request
+	invalid.Body = map[string]any{}
+	if preflight, preflightErr := OperationDirectWrite(context.Background(), bundle, invalid, nil); preflightErr == nil || preflight.Operation != "" {
+		t.Fatalf("preflight result = %#v error = %v, want no attempt receipt", preflight, preflightErr)
+	}
+}
+
 func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *testing.T) {
 	calls := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -316,7 +349,7 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 		{name: "json returns complete decoded body", policy: directWritePolicyJSON, wantBody: true},
 		{name: "none retains complete response body", policy: directWritePolicyNone, wantBody: true},
 		{name: "none accepts bodyless response", policy: directWritePolicyNone, bodyless: true},
-		{name: "none rejects empty declared JSON", policy: directWritePolicyNone, emptyJSON: true, wantErr: "not JSON"},
+		{name: "none accepts empty declared JSON as absent body", policy: directWritePolicyNone, emptyJSON: true},
 		{name: "none preserves literal JSON null", policy: directWritePolicyNone, response: `null`, wantNull: true},
 		{name: "json rejects trailing response content", policy: directWritePolicyJSON, response: `{"created":true} trailing`, wantErr: "not JSON"},
 	} {
@@ -396,11 +429,11 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
 					t.Fatalf("OperationDirectWrite error = %v, want %q", err, tt.wantErr)
 				}
-				if !result.ResponseReceived || !result.BodyPresent || result.BodyRaw != tt.response {
+				if !result.ResponseReceived || result.BodyPresent != (len(tt.response) > 0) || result.BodyRaw != tt.response {
 					t.Fatalf("trailing response result = %#v, want complete received raw response", result)
 				}
 				if tt.emptyJSON {
-					if result.Status != http.StatusOK || result.BodyBytes != 0 || result.BodyRawEncoding != "text" {
+					if result.Status != http.StatusOK || result.BodyBytes != 0 || result.BodyRawEncoding != "" {
 						t.Fatalf("empty declared JSON result = %#v, want complete zero-value provider response", result)
 					}
 					if receipt := result.Headers["X-Provider-Receipt"].Values; len(receipt) != 1 || receipt[0] != "receipt-empty-json" {
@@ -427,6 +460,12 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 				}
 				if result.BodyPresent || result.BodyBytes != 0 || result.BodyRaw != "" || result.Body != nil {
 					t.Fatalf("bodyless none result = %#v, want a distinct empty-body response", result)
+				}
+				return
+			}
+			if tt.emptyJSON {
+				if result.Status != http.StatusOK || result.BodyPresent || result.BodyBytes != 0 || result.BodyRaw != "" || result.Body != nil {
+					t.Fatalf("empty declared JSON result = %#v, want an absent transport body", result)
 				}
 				return
 			}

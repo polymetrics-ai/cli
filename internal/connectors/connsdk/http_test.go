@@ -1125,6 +1125,33 @@ func TestRequesterDoLimitedCapsCapturedBody(t *testing.T) {
 	}
 }
 
+func TestRequesterAcceptedStatusMismatchReturnsReceiptAndTypedError(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Add("X-Provider-Receipt", "first")
+		w.Header().Add("X-Provider-Receipt", "second")
+		w.WriteHeader(http.StatusAccepted)
+		_, _ = w.Write([]byte(`{"id":"occurrence-9007199254740993"}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	requester := &Requester{
+		BaseURL:          srv.URL,
+		Sleep:            noSleep,
+		AcceptedStatuses: []StatusRange{{Min: http.StatusOK, Max: http.StatusCreated}},
+	}
+	response, err := requester.DoLimited(context.Background(), http.MethodPost, "/widgets", nil, map[string]any{"name": "widget"}, 1024)
+	var statusErr *UnexpectedStatusError
+	if !errors.As(err, &statusErr) || statusErr.Status != http.StatusAccepted {
+		t.Fatalf("DoLimited() error = %v, want typed status 202", err)
+	}
+	if response == nil || response.Status != http.StatusAccepted || string(response.Body) != `{"id":"occurrence-9007199254740993"}` {
+		t.Fatalf("DoLimited() response = %#v, want complete terminal receipt", response)
+	}
+	if got := response.Header.Values("X-Provider-Receipt"); !slices.Equal(got, []string{"first", "second"}) {
+		t.Fatalf("receipt headers = %#v", got)
+	}
+}
+
 func TestRequesterDoStatusCheckPreservesFinalNon2xxResponse(t *testing.T) {
 	requests := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -697,6 +697,7 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	if len(redactFields) != 0 {
 		body = redactNamedJSONFields(body, redactFields)
 	}
+	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
 	return connectors.DirectReadResult{
 		Connector: b.Name,
 		Method:    http.MethodPost,

@@ -1806,11 +1806,21 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 			return validationErrorf("invalid --confirm: %v", err)
 		}
 		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approval.token, Confirmation: confirmation, WithheldFlags: resolvedFlags})
-		if err != nil {
+		if err != nil && run.ID == "" {
 			return err
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
+			if outputErr := writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run}); outputErr != nil {
+				return outputErr
+			}
+			if err != nil {
+				return alreadyReportedExecutionError(err)
+			}
+			return nil
+		}
+		if err != nil {
+			_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s ended with status %s; inspect it with pm reverse status %s\n", run.ID, run.Status, run.ID)
+			return alreadyReportedExecutionError(err)
 		}
 		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
 		return nil
@@ -2144,11 +2154,21 @@ func runReverse(ctx context.Context, a *app.App, args []string, approval reverse
 			return validationErrorf("invalid --confirm: %v", err)
 		}
 		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: approval.token, Confirmation: confirmation, WithheldFlags: resolvedFlags})
-		if err != nil {
+		if err != nil && run.ID == "" {
 			return err
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
+			if outputErr := writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run}); outputErr != nil {
+				return outputErr
+			}
+			if err != nil {
+				return alreadyReportedExecutionError(err)
+			}
+			return nil
+		}
+		if err != nil {
+			_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s ended with status %s; inspect it with pm reverse status %s\n", run.ID, run.Status, run.ID)
+			return alreadyReportedExecutionError(err)
 		}
 		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
 		return nil

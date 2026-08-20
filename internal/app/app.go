@@ -2923,7 +2923,7 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 	operationRequest.PreviewDigest = preview.Digest
 	operationResult, writeErr := directWriter.OperationDirectWrite(ctx, operationRequest)
 	writeResult := connectors.WriteResult{RecordsWritten: 1}
-	if operationResult.ResponseReceived {
+	if operationResult.Operation != "" {
 		safeOperationResult := connectors.SanitizeOperationDirectWriteResultForOutput(operationResult, runtime.Secrets)
 		run.OperationDirectWrite = &safeOperationResult
 	}

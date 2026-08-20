@@ -41,21 +41,19 @@ const (
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
 
-// completeEngineErrorText preserves the bounded diagnostic content captured by
-// connsdk for direct-read callers. HTTPError.Error deliberately applies its
-// own presentation policy, so the engine reads the typed fields here to retain
-// the request URL and provider body that the operator needs to diagnose a
-// declared connector action.
+// completeEngineErrorText renders only safe transport facts. The typed cause
+// remains available through errors.As for classification and rate parking, but
+// provider URLs, queries, headers, and bodies never cross the printable error
+// boundary.
 func completeEngineErrorText(err error) string {
 	var httpErr *connsdk.HTTPError
 	if !errors.As(err, &httpErr) {
-		return err.Error()
+		return safety.RedactErrorText(err.Error())
 	}
-	message := strings.TrimSpace(httpErr.Body)
-	if message == "" {
-		message = http.StatusText(httpErr.Status)
+	if statusText := http.StatusText(httpErr.Status); statusText != "" {
+		return fmt.Sprintf("http %d (%s)", httpErr.Status, statusText)
 	}
-	return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+	return fmt.Sprintf("http %d", httpErr.Status)
 }
 
 func OperationDirectRead(ctx context.Context, b Bundle, req connectors.OperationDirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
@@ -167,6 +165,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if len(redactFields) > 0 {
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
+	decoded = connectors.SanitizeProviderOutputForOutput(decoded, req.Config.Secrets)
 	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
@@ -347,6 +346,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	if len(req.RedactFields) > 0 {
 		body = redactNamedJSONFields(body, req.RedactFields)
 	}
+	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
 	return connectors.DirectReadResult{
 		Connector: b.Name,
 		Method:    method,
@@ -694,7 +694,7 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 		}
 		return out, nil
 	case directReadPolicyJSONRedacted, directReadPolicyClinicalJSONRedacted:
-		return redactJSONValue(body), nil
+		return cloneJSONValue(body), nil
 	case directReadPolicyNone:
 		if body != nil {
 			return nil, fmt.Errorf("direct read output policy %q received a response body", policy)
@@ -741,22 +741,18 @@ func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
 	return resolvedPath
 }
 
-func redactJSONValue(value any) any {
+func cloneJSONValue(value any) any {
 	switch v := value.(type) {
 	case map[string]any:
 		out := make(map[string]any, len(v))
 		for key, item := range v {
-			if item != nil && shouldRedactJSONField(key) {
-				out[key+"_redacted"] = true
-				continue
-			}
-			out[key] = redactJSONValue(item)
+			out[key] = cloneJSONValue(item)
 		}
 		return out
 	case []any:
 		out := make([]any, len(v))
 		for i, item := range v {
-			out[i] = redactJSONValue(item)
+			out[i] = cloneJSONValue(item)
 		}
 		return out
 	default:
@@ -800,26 +796,6 @@ func redactJSONFieldsByPredicate(value any, shouldRedact func(string) bool) any 
 	default:
 		return value
 	}
-}
-
-func shouldRedactJSONField(name string) bool {
-	normalized := normalizeJSONFieldName(name)
-	switch normalized {
-	case "content", "body", "payload", "raw", "download_url", "download_media_url", "clone_url", "api_key", "apikey", "access_key", "private_key", "authorization", "credential", "credentials":
-		return true
-	}
-	if strings.Contains(normalized, "download") && strings.Contains(normalized, "url") {
-		return true
-	}
-	if strings.Contains(normalized, "clone") && strings.Contains(normalized, "url") {
-		return true
-	}
-	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "apikey", "access_key", "authorization", "credential"} {
-		if strings.Contains(normalized, marker) {
-			return true
-		}
-	}
-	return false
 }
 
 func normalizeJSONFieldName(name string) string {

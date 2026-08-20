@@ -79,7 +79,7 @@ func TestDirectReadAllowsSlashBearingRefPathVariables(t *testing.T) {
 	}
 }
 
-func TestDirectReadPreservesHTTPErrorText(t *testing.T) {
+func TestDirectReadHTTPErrorKeepsProviderQueryAndBodyPrivate(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got, want := r.URL.Query().Get("trace"), "direct-read-fixture"; got != want {
 			t.Fatalf("trace = %q, want %q", got, want)
@@ -99,10 +99,13 @@ func TestDirectReadPreservesHTTPErrorText(t *testing.T) {
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want HTTP failure")
 	}
-	for _, want := range []string{"trace=direct-read-fixture", `{"diagnostic":"direct-read-fixture-body"}`} {
-		if !strings.Contains(err.Error(), want) {
-			t.Fatalf("DirectRead error = %q, want complete diagnostic %q", err.Error(), want)
+	for _, secret := range []string{"trace=direct-read-fixture", "direct-read-fixture-body"} {
+		if strings.Contains(err.Error(), secret) {
+			t.Fatalf("DirectRead error leaked %q: %q", secret, err.Error())
 		}
+	}
+	if !strings.Contains(err.Error(), "http 400") || !strings.Contains(err.Error(), "/items/{id}") {
+		t.Fatalf("DirectRead error = %q, want safe status and declaration identity", err.Error())
 	}
 }
 
@@ -443,14 +446,14 @@ func TestDirectReadDirectoryPolicyRejectsFileResponse(t *testing.T) {
 	}
 }
 
-func TestDirectReadJSONRedactedPolicyRedactsSensitiveFieldsRecursively(t *testing.T) {
+func TestJSONOutputRedactionPreservesOrdinaryCredentialNamedFieldsAndMasksConcreteSecrets(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{
 			"id":"call-1",
 			"downloadMediaUrl":"https://media.example.test/download/call-1",
 			"content":"raw sensitive content",
-			"nested":{"apiToken":"secret-token","safe":"ok"},
+			"nested":{"apiToken":"ordinary-occurrence-token","echo":"secret-token","safe":"ok"},
 			"items":[{"password":"secret","name":"visible"}]
 		}`))
 	}))
@@ -460,6 +463,7 @@ func TestDirectReadJSONRedactedPolicyRedactsSensitiveFieldsRecursively(t *testin
 		Method:       http.MethodGet,
 		Path:         "/calls/{id}",
 		PathParams:   map[string]string{"id": "call-1"},
+		Config:       connectors.RuntimeConfig{Secrets: map[string]string{"api_token": "secret-token"}},
 		OutputPolicy: "json_redacted",
 	}, nil)
 	if err != nil {
@@ -469,22 +473,17 @@ func TestDirectReadJSONRedactedPolicyRedactsSensitiveFieldsRecursively(t *testin
 	if !ok {
 		t.Fatalf("body type = %T, want object", result.Body)
 	}
-	for _, key := range []string{"downloadMediaUrl", "content"} {
-		if _, ok := body[key]; ok {
-			t.Fatalf("%s was not redacted: %+v", key, body)
-		}
-	}
-	if body["downloadMediaUrl_redacted"] != true || body["content_redacted"] != true {
-		t.Fatalf("top-level redaction markers missing: %+v", body)
+	if body["downloadMediaUrl"] == nil || body["content"] != "raw sensitive content" {
+		t.Fatalf("ordinary provider fields were removed: %+v", body)
 	}
 	nested := body["nested"].(map[string]any)
-	if _, ok := nested["apiToken"]; ok || nested["apiToken_redacted"] != true || nested["safe"] != "ok" {
-		t.Fatalf("nested redaction = %+v, want apiToken redacted and safe preserved", nested)
+	if nested["apiToken"] != "ordinary-occurrence-token" || nested["echo"] != "[masked]" || nested["safe"] != "ok" {
+		t.Fatalf("nested redaction = %+v, want names preserved and exact credential masked", nested)
 	}
 	items := body["items"].([]any)
 	item := items[0].(map[string]any)
-	if _, ok := item["password"]; ok || item["password_redacted"] != true || item["name"] != "visible" {
-		t.Fatalf("array redaction = %+v, want password redacted and name preserved", item)
+	if item["password"] != "secret" || item["name"] != "visible" {
+		t.Fatalf("array provider truth changed: %+v", item)
 	}
 }
 
@@ -511,8 +510,8 @@ func TestDirectReadClinicalJSONRedactedRequiresExplicitFields(t *testing.T) {
 	if _, ok := body["patient"].(map[string]any); !ok {
 		t.Fatalf("patient = %#v, want unchanged object without explicit policy", body["patient"])
 	}
-	if _, ok := body["apiToken"]; ok || body["apiToken_redacted"] != true {
-		t.Fatalf("apiToken redaction = %+v, want generic secret redaction preserved", body)
+	if body["apiToken"] != "secret-token" {
+		t.Fatalf("apiToken = %+v, want ordinary unclassified provider value preserved", body)
 	}
 
 	result, err = DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/records/{id}"), connectors.DirectReadRequest{
@@ -1252,7 +1251,7 @@ func TestOperationDirectReadBodySchemaMinItems(t *testing.T) {
 	}
 }
 
-func TestOperationDirectReadPreservesHTTPErrorText(t *testing.T) {
+func TestOperationDirectReadHTTPErrorKeepsProviderQueryAndBodyPrivate(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got, want := r.URL.Query().Get("trace"), "operation-read-fixture"; got != want {
 			t.Fatalf("trace = %q, want %q", got, want)
@@ -1278,10 +1277,13 @@ func TestOperationDirectReadPreservesHTTPErrorText(t *testing.T) {
 	if err == nil {
 		t.Fatal("OperationDirectRead error = nil, want HTTP failure")
 	}
-	for _, want := range []string{"trace=operation-read-fixture", `{"diagnostic":"operation-read-fixture-body"}`} {
-		if !strings.Contains(err.Error(), want) {
-			t.Fatalf("OperationDirectRead error = %q, want complete diagnostic %q", err.Error(), want)
+	for _, secret := range []string{"trace=operation-read-fixture", "operation-read-fixture-body"} {
+		if strings.Contains(err.Error(), secret) {
+			t.Fatalf("OperationDirectRead error leaked %q: %q", secret, err.Error())
 		}
+	}
+	if !strings.Contains(err.Error(), "http 400") || !strings.Contains(err.Error(), "/items") {
+		t.Fatalf("OperationDirectRead error = %q, want safe status and declaration identity", err.Error())
 	}
 }
 

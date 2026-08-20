@@ -129,8 +129,10 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 		SourceLogicalBytes: result.SourceLogicalBytes, SourceRows: int64(result.RecordsRead),
 		TransformedRows: int64(result.RecordsApplied), TransformedBytes: result.TransformedBytes,
 	})
+	collectDestinationResult(&result, acknowledgement, publishErr)
 	result.PublishElapsed += time.Since(publishStarted)
 	if publishErr == nil {
+		published = true
 		readBackStarted := time.Now()
 		publishErr = session.ReadBackArrowFullOverwrite(publishCtx, acknowledgement)
 		result.PublishElapsed += time.Since(readBackStarted)
@@ -142,7 +144,6 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 	if reporter, ok := session.(ArrowBulkPhaseReporter); ok {
 		result.IndexConstraintElapsed = reporter.ArrowBulkPhaseMeasurement().IndexConstraintBuildElapsed
 	}
-	published = true
 	if lastCandidate == nil {
 		return result, nil
 	}

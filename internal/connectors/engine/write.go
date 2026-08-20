@@ -530,24 +530,31 @@ func writeProviderResponseWithLimit(response *connsdk.Response, recordIndex, max
 		if result.BodyPresent {
 			result.BodyRaw = rawBody
 			result.BodyRawEncoding = rawEncoding
+			result.Body, result.BodyEncoding = rawBody, rawEncoding
 		}
-		result.Body, result.BodyEncoding = rawBody, rawEncoding
 		if len(response.Body) > maxBodyBytes {
 			return result, fmt.Errorf("provider response too large: %d bytes exceeds limit %d", len(response.Body), maxBodyBytes)
 		}
 		return result, nil
 	}
-	result.BodyPresent = true
+	result.BodyPresent = len(response.Body) > 0
 	result.BodyBytes = len(response.Body)
-	result.BodyRaw = rawBody
-	result.BodyRawEncoding = rawEncoding
+	if result.BodyPresent {
+		result.BodyRaw = rawBody
+		result.BodyRawEncoding = rawEncoding
+	}
 	if len(response.Body) > maxBodyBytes {
 		result.Body, result.BodyEncoding = rawBody, rawEncoding
 		return result, fmt.Errorf("provider response too large: %d bytes exceeds limit %d", len(response.Body), maxBodyBytes)
 	}
+	if !result.BodyPresent {
+		return result, nil
+	}
 	body, err := decodeDirectReadBody(response.Body, -1)
 	if err != nil {
-		result.Body, result.BodyEncoding = rawBody, rawEncoding
+		if result.BodyPresent {
+			result.Body, result.BodyEncoding = rawBody, rawEncoding
+		}
 		return result, errors.New("provider response is not valid JSON")
 	}
 	result.Body = body

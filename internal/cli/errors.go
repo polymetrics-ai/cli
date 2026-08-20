@@ -97,6 +97,17 @@ func certifyExitErrorf(code int, format string, args ...any) error {
 	}
 }
 
+// alreadyReportedExecutionError preserves the original categorized exit while
+// preventing writeError from replacing a terminal run envelope with a second
+// Error envelope. Callers use it only after stdout has accepted the persisted
+// non-success run.
+func alreadyReportedExecutionError(err error) error {
+	classified := classifyError(err)
+	clone := *classified
+	clone.alreadyReported = true
+	return &clone
+}
+
 func classifyError(err error) *cliError {
 	if err == nil {
 		return nil

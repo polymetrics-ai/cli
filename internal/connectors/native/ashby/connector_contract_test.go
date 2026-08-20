@@ -252,8 +252,8 @@ func TestSemanticDirectReadsReturnAshbyResults(t *testing.T) {
 				t.Fatalf("results = %+v, want %s=%v", body["results"], tt.wantField, tt.wantValue)
 			}
 			if tt.operation == "ashby.direct.user.interviewer.settings" {
-				if _, ok := results["apiToken"]; ok || results["apiToken_redacted"] != true {
-					t.Fatalf("results = %+v, want credential field redacted", results)
+				if results["apiToken"] != "synthetic-response-token" {
+					t.Fatalf("results = %+v, want ordinary unclassified field preserved", results)
 				}
 			}
 		})
@@ -1256,7 +1256,7 @@ func TestOperationDirectReadPreservesNonCredentialIdentityFields(t *testing.T) {
 		body      map[string]any
 		want      map[string]any
 	}{
-		{name: "candidate", operation: "ashby.direct.candidate.search", body: map[string]any{"email": "candidate@example.invalid"}, want: map[string]any{"email": "candidate@example.invalid", "name": "Ada Candidate", "apiToken_redacted": true}},
+		{name: "candidate", operation: "ashby.direct.candidate.search", body: map[string]any{"email": "candidate@example.invalid"}, want: map[string]any{"email": "candidate@example.invalid", "name": "Ada Candidate", "apiToken": "synthetic-response-token"}},
 		{name: "job", operation: "ashby.direct.job.search", body: map[string]any{"title": "Fixture Job"}, want: map[string]any{"requisitionId": "REQ-123"}},
 		{name: "user", operation: "ashby.direct.user.search", body: map[string]any{"email": "user@example.invalid"}, want: map[string]any{"email": "user@example.invalid", "name": "Ada User"}},
 	}
@@ -1462,8 +1462,8 @@ func TestOperationDirectReadPreservesAshbySignedURLs(t *testing.T) {
 			if got := results[tt.field]; got != tt.wantURL {
 				t.Fatalf("results[%s] = %v, want %s", tt.field, got, tt.wantURL)
 			}
-			if _, ok := results["apiToken"]; ok || results["apiToken_redacted"] != true {
-				t.Fatalf("apiToken redaction = %+v, want credential field redacted", results)
+			if results["apiToken"] != "synthetic-response-token" {
+				t.Fatalf("apiToken = %+v, want ordinary unclassified field preserved", results)
 			}
 		})
 	}
