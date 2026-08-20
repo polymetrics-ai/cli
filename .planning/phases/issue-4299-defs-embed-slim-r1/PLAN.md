@@ -20,13 +20,39 @@
 | Package/binary guardrails are deterministic and attributable | live | The guardrail emits a sorted report with embedded files attributed by class and rejects an oversized binary/archive or forbidden inventory before release packaging. |
 | An installed archive stays self-contained | live | A release-like archive is extracted outside the checkout; its `pm` executes the GitHub full-certification preflight/schema path without reading repository files. |
 
+## Review remediation Task Delivery Header — 2026-08-20
+
+- Issue: Refs #4299 — perf(defs): stop embedding connector source locks in the shipped binary; PR #4309 independent-review remediation.
+- Base branch: main (GitHub PR #4309 API listing confirmed `main`; immutable `origin/main` is `51dd6d468e4a40ece70c36efb81df4fdede8a8b6`).
+- Merges into: main.
+- Delivery: Update existing PR #4309 from `fm/cli-defs-embed-slim-r1`, without a force push, only after the remote reviewed head `e039514d53493be7bc75e0b8792b51d16e710b47` was verified and the post-fix checks are terminal and green.
+- Working branch: fm/cli-defs-embed-slim-r1.
+- Task: Repair the archive producer/verifier layout mismatch, make the release-size guard an enforced gate, prove the real assembly-to-verifier path (including adversarial archive cases), and replace broad installed/archive claims with an actual extracted-binary offline certification assertion.
+- Verification: Red tests first; `scripts/tests/release-size-budget.sh`; a real assembler → `verify-release-assets.sh` production-layout test; targeted release workflow checks; extracted archive `pm connectors certify github --full --json` in an initialized temp project; affected Go, workflow, package, and full repository gates.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Canonical root archive layout is shared | live | The real assembler writes exactly `LICENSE`, `NOTICE`, `README.md`, and `pm`; the real release verifier accepts that archive and the size guard streams its sole `pm` entry. |
+| Unsafe or ambiguous archives fail closed | live | Missing/duplicate `pm`, nested/traversal impostors, and both archive/install budget overages produce nonzero exit status; `--quiet` suppresses only success reports, never errors. |
+| A PR cannot miss producer/verifier disagreement | live | `make release-workflow-check` runs the production-layout script and the PR Linux package job runs `verify-release-assets.sh` against its assembled assets. |
+| Installed GitHub certification is actually executable outside checkout | live | The extracted assembled `pm`, running from an initialized temporary project, reports the embedded GraphQL boundary counts `29/2/274` without an adjacent checkout or credentials. |
+
+### Remediation TDD plan
+
+| Order | Slice | Red evidence first | Green implementation | Guard |
+| --- | --- | --- | --- | --- |
+| 1 | Archive spelling | Run the current assembler form (`-cf - .`) against the exact-name size guard and observe zero `pm` entries | Archive explicit top-level names in deterministic order | Keep exact path, duplicate, and traversal refusal. |
+| 2 | Production layout | A real assembly cannot be verified by the scoped production verifier | Add an archive-only target selection to the real verifier and exercise assembler → verifier → size guard | Full release continues to require all four targets and Linux packages. |
+| 3 | Negative size/archive cases | Existing synthetic test omits archive size, missing/duplicate/impostor, and quiet failures | Cover every reported malformed and over-budget shape | Assertions test exit and diagnostic contract, not merely command completion. |
+| 4 | Installed binary proof | Internal function test can pass without executing an installed binary | Extract a producer archive, initialize an external project, execute `pm connectors certify github --full --json`, and assert `29/2/274` in its JSON report | No credentials, network call, checkout fallback, source-lock, or connector-definition changes. |
+
 ## GSD lifecycle and manual fallback
 
 - `scripts/gsd doctor` and `go run ./cmd/agentcontractgen check` passed on 2026-08-20.
 - Resolved commands: `discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review` via `scripts/gsd sources <command>`.
 - Generated and followed inline prompts: `scripts/gsd prompt discuss-phase 4299`, `scripts/gsd prompt plan-phase 4299 --tdd`, `scripts/gsd prompt execute-phase 4299`, `scripts/gsd prompt verify-work 4299`, and `scripts/gsd prompt code-review 4299`.
 - Manual-GSD fallback: Pi role execution is unavailable in this worker and the canonical delivery contract forbids spawning planning/execution/review roles. The captain supplied the resolved Option A scope; this phase directory records equivalent discussion, TDD, execution, verification, and review evidence.
-- Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-graphql`, and `golang-documentation`.
+- Required skills loaded: `golang-how-to`, `golang-cli`, `golang-continuous-integration`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-graphql`, `golang-lint`, and `golang-documentation`.
 
 ## Locked decisions
 

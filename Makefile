@@ -150,6 +150,9 @@ pinned-build-dependencies-check:
 release-workflow-check: pinned-build-dependencies-check
 	./scripts/tests/homebrew-release-notify.sh
 	./scripts/tests/release-target-parity.sh
+	./scripts/tests/release-size-budget.sh
+	./scripts/tests/release-production-layout.sh
+	./scripts/tests/release-installed-github-certification.sh
 
 verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check
 

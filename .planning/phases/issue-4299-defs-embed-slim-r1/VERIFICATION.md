@@ -1,13 +1,33 @@
 # Verification checklist — issue #4299 definition embed slim
 
-Status: local verification complete; PR review pending automatic Claude coverage.
+Status: independent-review remediation in progress; focused release and
+installed-binary evidence is complete, with the full repository gates and
+post-push review/check monitoring still required.
+
+Remediation gates completed locally on 2026-08-20:
+
+```text
+go test -timeout 20m ./...                         PASS
+go vet ./...                                       PASS
+go build ./cmd/pm                                  PASS
+make release-workflow-check                        PASS
+make tidy-check; make lint; make docs-check         PASS
+make smoke-no-build; make agent-contract-check      PASS
+make connectorgen-validate                          PASS (552 connectors, 0 findings)
+make connectorgen-surface-sync                      PASS (552 connectors, 0 changes)
+make github-parity-artifacts-check                  PASS
+make connectorgen-certification-{matrix,candidates,sweep}  PASS
+make connector-boundary                             PASS (clean; 552 connectors)
+make connector-canon-check                          PASS
+scripts/verify-gsd-workflow origin/main             PASS
+```
 
 ## Required behavior
 
 - [x] Real `defs.FS` inventory is sorted, attributed, and rejects `api_surface.json`, `fixtures/**`, and every source lock except the explicit GitHub exception.
 - [x] GitHub source-lock literal bytes and SHA-256 match the committed raw file.
 - [x] `go test -timeout 20m ./internal/connectors/certify` proves GitHub GraphQL schema certification remains available offline.
-- [x] Installed/archive proof runs from a directory without the source checkout and retains the GitHub full-certification boundary.
+- [x] A real assembled archive is extracted to a directory outside the checkout; its installed `pm` initializes a new project and reaches the GitHub full-certification GraphQL boundary with 29 schema-conformant, 2 live-required, and 274 fixture-bound commands. The credential-free full certificate remains non-passing, as expected.
 - [x] Current rebased release-like before/after measurements report identical commands, build metadata, byte sizes, archive sizes, and deltas in [MEASUREMENTS.md](MEASUREMENTS.md).
 
 Focused proof:
@@ -17,12 +37,43 @@ go test -timeout 20m ./internal/connectors/defs ./internal/connectors/certify -c
 scripts/tests/release-size-budget.sh                                                   PASS
 ```
 
-`TestGithubFullGraphQLInventoryUsesEmbeddedSourceLockOutsideCheckout` changes
-to a temporary non-checkout directory, then compiles GitHub's full GraphQL
-inventory from `defs.FS` (29 schema-conformant, 2 live-required, 274
-fixture-bound commands). It is deliberately offline: full live certification
-requires maintainer credentials and is not a substitute for the source-lock
-runtime boundary proved here.
+`TestGithubFullGraphQLInventoryUsesEmbeddedSourceLockOutsideCheckout` is an
+internal-function test only: it changes working directory, then compiles
+GitHub's full GraphQL inventory from `defs.FS`. It does not by itself prove an
+installed binary or archive. That runtime claim is now covered separately by
+`scripts/tests/release-installed-github-certification.sh`, which extracts a
+real assembler-produced host archive, invokes its `pm` from an initialized
+temporary project, accepts the expected nonzero credential-free certificate,
+and parses the JSON report for the passed GraphQL stage and `29/2/274` counts.
+It uses no credentials and makes no provider request.
+
+## Review remediation focused proof
+
+- [x] Red: `bash scripts/tests/release-production-layout.sh` against the
+  reviewed head failed because the actual GNU-tar producer listed `./pm` rather
+  than `pm`.
+- [x] Green: `bash scripts/tests/release-production-layout.sh` passed after the
+  assembler began archiving the explicit root entries. The test invokes the
+  real selected-target verifier, which in turn invokes the real size-budget
+  guard, and rejects root binaries accompanied by `nested/pm` and `../pm`.
+- [x] `bash scripts/tests/release-size-budget.sh` passed. It covers deterministic
+  reports, quiet success/failure behavior, oversized archive/installed binary,
+  missing/duplicate root binaries, and nested/traversal impostors.
+- [x] `scripts/tests/release-installed-github-certification.sh` passed. Its
+  installed binary certificate had the expected nonzero credential-free exit,
+  emitted no stderr, and its JSON proof asserted GraphQL `29/2/274` plus a
+  passed `graphql_schema_conformance` stage.
+- [x] `scripts/tests/release-target-parity.sh` passed; the four supported
+  targets remain darwin/amd64, darwin/arm64, linux/amd64, and linux/arm64.
+- [x] `scripts/verify-release-assets.sh --release-version 0.0.0-snapshot
+  --print-expected-release-assets --targets linux/amd64,linux/arm64` produced
+  only the selected Linux archive/package subjects and their bundles; an
+  unsupported Windows target failed closed.
+
+The PR `package-check` job now runs the real release verifier against the two
+Linux archives and packages it assembled before QEMU installation tests. The
+job installs `rpm` first because package metadata verification is part of that
+real verifier; this is not a reduced or synthetic check.
 
 ## Repository gates
 

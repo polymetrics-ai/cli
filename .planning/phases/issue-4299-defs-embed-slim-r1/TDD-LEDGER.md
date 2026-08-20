@@ -61,3 +61,61 @@ existing release-subject machine output remains a pure subject list.
 ## Refactor/review guard
 
 The final review must prove that the exception stays a literal path, no compression/minification or checkout-root support enters the diff, and no connector definition changed.
+
+## PR #4309 review remediation — archive producer/verifier contract
+
+The independent review found that the former real assembler archived `.` and
+therefore emitted `./pm`, whereas the verifier and size guard deliberately
+accept only the exact root entry `pm`. This is a release enforcement defect,
+not a source-lock or connector-definition change.
+
+### Red
+
+Red: `bash scripts/tests/release-production-layout.sh`
+
+```text
+assembler did not produce the canonical root archive layout
+-LICENSE
+-NOTICE
+-README.md
+-pm
++./
++./LICENSE
++./NOTICE
++./README.md
++./pm
+```
+
+The test used the production assembler with its GNU-tar archive path, rather
+than a hand-written tar fixture. It failed before the assembler change and
+would have let the release verifier reject a freshly produced asset.
+
+### Green
+
+- `scripts/assemble-release-assets.sh` now archives the four declaration-owned
+  top-level entries explicitly: `LICENSE`, `NOTICE`, `README.md`, and `pm`.
+- `scripts/verify-release-assets.sh --targets <goos/goarch,...>` makes the
+  real verifier usable for a selected PR/package target while a no-filter
+  release still verifies all four archive targets and all Linux packages.
+- `scripts/tests/release-production-layout.sh` runs the real assembler, real
+  verifier, and real streamed size guard, then proves the verifier rejects a
+  root `pm` accompanied by either `nested/pm` or `../pm`.
+- `scripts/tests/release-size-budget.sh` rejects oversized archives and
+  installed binaries, missing and duplicate root binaries, nested/traversal
+  impostors, and verifies both successful quiet output and quiet failure
+  diagnostics.
+- `scripts/tests/release-installed-github-certification.sh` extracts a real
+  assembled host archive outside the checkout, initializes a new project, and
+  executes `pm connectors certify github --full --json`. It requires the
+  expected nonzero credential-free certification result while asserting the
+  passed embedded GraphQL stage and exact `29/2/274` inventory counts.
+
+### Refactor/review assertions
+
+- The raw GitHub lock exception, byte/SHA binding, source-lock files, connector
+  definitions, ledgers, command surfaces, and output behavior are untouched.
+- The verifier remains fail-closed for duplicate/path-impostor archive content;
+  target selection cannot silently accept an unsupported target.
+- The PR package workflow now invokes the real verifier on the Linux archive
+  and package assets it assembled, after installing the RPM metadata reader
+  needed by that verifier.
