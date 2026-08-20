@@ -31,3 +31,9 @@ Execution and inline verification complete, including the review-hardening follo
 - Fixture fetchers contain only synthetic artifacts; no credentials, credential values, or provider responses were read or recorded.
 - The importer exposes neither a generic transport nor caller-supplied URL, method, path, header, body, arbitrary JSON, or credential input.
 - The output keeps complete resolved response declarations. Output classification is additive and cannot remove unusual or sensitive-looking provider fields.
+
+## Review-fix evidence — 2026-08-20
+
+| Focused check | Status |
+| --- | --- |
+| Grammar index, whole-document preflight, YAML numeric, structural-limit, source-form, and response-expansion regressions | pass: `go test -timeout 5m ./cmd/connectorgen -run '^TestSourceImport' -count=1` |

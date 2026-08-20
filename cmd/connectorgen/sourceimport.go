@@ -521,11 +521,22 @@ func (budget *sourceImportBudget) add(value any, label string) error {
 	if err != nil {
 		return fmt.Errorf("encode %s descriptor: %w", label, err)
 	}
-	if int64(len(raw)) > budget.limit || budget.used > budget.limit-int64(len(raw)) {
+	return budget.reserve(int64(len(raw)), label)
+}
+
+func (budget *sourceImportBudget) reserve(bytes int64, label string) error {
+	if bytes < 0 || bytes > budget.limit || budget.used > budget.limit-bytes {
 		return fmt.Errorf("resolved descriptor byte limit exceeded while retaining %s", label)
 	}
-	budget.used += int64(len(raw))
+	budget.used += bytes
 	return nil
+}
+
+func (budget *sourceImportBudget) remaining() int64 {
+	if budget == nil || budget.used >= budget.limit {
+		return 0
+	}
+	return budget.limit - budget.used
 }
 
 func sortSourceOperationDescriptors(descriptors []sourceOperationDescriptor) {
@@ -771,7 +782,15 @@ func decodeSourceYAML(raw []byte, target any) error {
 		}
 		return fmt.Errorf("multiple YAML documents are unsupported")
 	}
-	return document.Decode(target)
+	value, err := sourceYAMLNodeValue(&document, "")
+	if err != nil {
+		return err
+	}
+	canonical, err := json.Marshal(value)
+	if err != nil {
+		return fmt.Errorf("encode YAML source artifact: %w", err)
+	}
+	return decodeSourceJSON(canonical, target)
 }
 
 func validateSourceYAMLNode(node *yaml.Node, pointer string) error {
@@ -815,6 +834,74 @@ func validateSourceYAMLNode(node *yaml.Node, pointer string) error {
 	return nil
 }
 
+func sourceYAMLNodeValue(node *yaml.Node, pointer string) (any, error) {
+	if node == nil {
+		return nil, fmt.Errorf("YAML source artifact is empty")
+	}
+	switch node.Kind {
+	case yaml.DocumentNode:
+		if len(node.Content) != 1 {
+			return nil, fmt.Errorf("YAML source artifact has no single document root")
+		}
+		return sourceYAMLNodeValue(node.Content[0], pointer)
+	case yaml.MappingNode:
+		out := make(map[string]any, len(node.Content)/2)
+		for index := 0; index < len(node.Content); index += 2 {
+			key := node.Content[index]
+			if key.Kind != yaml.ScalarNode || key.Tag != "!!str" {
+				return nil, fmt.Errorf("YAML mapping key at %s must be a string", pointer)
+			}
+			childPointer := sourceJSONPointer(pointer, key.Value)
+			child, err := sourceYAMLNodeValue(node.Content[index+1], childPointer)
+			if err != nil {
+				return nil, err
+			}
+			out[key.Value] = child
+		}
+		return out, nil
+	case yaml.SequenceNode:
+		out := make([]any, len(node.Content))
+		for index, child := range node.Content {
+			value, err := sourceYAMLNodeValue(child, sourceJSONPointer(pointer, strconv.Itoa(index)))
+			if err != nil {
+				return nil, err
+			}
+			out[index] = value
+		}
+		return out, nil
+	case yaml.AliasNode:
+		return nil, fmt.Errorf("YAML aliases are unsupported at %s", pointer)
+	case yaml.ScalarNode:
+		switch node.Tag {
+		case "!!null":
+			return nil, nil
+		case "!!bool":
+			value, err := strconv.ParseBool(strings.ToLower(node.Value))
+			if err != nil {
+				return nil, fmt.Errorf("YAML boolean at %s is invalid", pointer)
+			}
+			return value, nil
+		case "!!int", "!!float":
+			var parsed any
+			if err := decodeSourceJSON([]byte(node.Value), &parsed); err != nil {
+				return nil, fmt.Errorf("YAML number at %s is not a finite JSON number", pointer)
+			}
+			number, ok := parsed.(json.Number)
+			if !ok {
+				return nil, fmt.Errorf("YAML number at %s is not a JSON number", pointer)
+			}
+			if _, ok := sourceExactDecimal(string(number)); !ok {
+				return nil, fmt.Errorf("YAML number at %s is not a finite exact decimal", pointer)
+			}
+			return number, nil
+		default:
+			return node.Value, nil
+		}
+	default:
+		return nil, fmt.Errorf("YAML node at %s is unsupported", pointer)
+	}
+}
+
 func sourceJSONPointer(parent, segment string) string {
 	segment = strings.ReplaceAll(strings.ReplaceAll(segment, "~", "~0"), "/", "~1")
 	return parent + "/" + segment
@@ -846,11 +933,12 @@ func normalizeSourceYAML(value any) any {
 }
 
 type sourceReferenceResolver struct {
-	root       map[string]any
-	limits     sourceImportLimits
-	form       sourceDocumentForm
-	references int
-	expansion  sourceSchemaExpansionBudget
+	root           map[string]any
+	limits         sourceImportLimits
+	form           sourceDocumentForm
+	referenceIndex *sourceReferenceIndex
+	references     int
+	expansion      sourceSchemaExpansionBudget
 }
 
 type sourceReferenceKind string
@@ -865,7 +953,24 @@ const (
 	sourceReferenceCallback    sourceReferenceKind = "callback"
 	sourceReferenceLink        sourceReferenceKind = "link"
 	sourceReferenceExample     sourceReferenceKind = "example"
+	sourceReferenceSecurity    sourceReferenceKind = "security scheme"
 )
+
+type sourceReferenceIndex struct {
+	positions map[string]sourceReferenceKind
+	limits    sourceImportLimits
+}
+
+func (index *sourceReferenceIndex) add(pointer string, kind sourceReferenceKind) error {
+	if !strings.HasPrefix(pointer, "#") {
+		pointer = "#" + pointer
+	}
+	if existing, exists := index.positions[pointer]; exists && existing != kind {
+		return fmt.Errorf("ambiguous source grammar position %q is both %s and %s", pointer, existing, kind)
+	}
+	index.positions[pointer] = kind
+	return nil
+}
 
 type sourceSchemaExpansionBudget struct {
 	used  int64
@@ -875,6 +980,17 @@ type sourceSchemaExpansionBudget struct {
 type sourceSchemaExpansionLimitError struct {
 	Scope string
 	Label string
+}
+
+type sourceSchemaStructureLimitError struct {
+	Scope string
+}
+
+func (err *sourceSchemaStructureLimitError) Error() string {
+	if err.Scope == "node" {
+		return "schema node limit exceeded"
+	}
+	return "schema structural byte limit exceeded"
 }
 
 func (err *sourceSchemaExpansionLimitError) Error() string {
@@ -932,6 +1048,842 @@ var sourceSchemaBearingKeywords = []string{
 	"$defs", "definitions", "properties", "patternProperties", "dependentSchemas", "dependencies",
 	"items", "additionalProperties", "contains", "not", "if", "then", "else", "propertyNames", "unevaluatedProperties", "unevaluatedItems", "contentSchema",
 	"allOf", "anyOf", "oneOf", "prefixItems",
+}
+
+func sourceBuildReferenceIndex(root map[string]any, form sourceDocumentForm, limits sourceImportLimits) (*sourceReferenceIndex, error) {
+	index := &sourceReferenceIndex{positions: map[string]sourceReferenceKind{}, limits: limits}
+	if rawPaths, exists := root["paths"]; exists {
+		if err := sourceIndexPathItems(index, rawPaths, sourceJSONPointer("", "paths"), form); err != nil {
+			return nil, err
+		}
+	}
+	if form.isOpenAPI() {
+		if rawWebhooks, exists := root["webhooks"]; exists && form.isOpenAPI31() {
+			if err := sourceIndexPathItems(index, rawWebhooks, sourceJSONPointer("", "webhooks"), form); err != nil {
+				return nil, err
+			}
+		}
+		if rawComponents, exists := root["components"]; exists {
+			if err := sourceIndexOpenAPIComponents(index, rawComponents, sourceJSONPointer("", "components"), form); err != nil {
+				return nil, err
+			}
+		}
+	} else if form.isSwagger2() {
+		if err := sourceIndexSwaggerComponents(index, root, form); err != nil {
+			return nil, err
+		}
+	}
+	return index, nil
+}
+
+func sourceIndexOpenAPIComponents(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	components, err := sourceReferenceObject(value, "components")
+	if err != nil {
+		return err
+	}
+	entries := []struct {
+		name  string
+		index func(any, string) error
+	}{
+		{name: "schemas", index: func(child any, childPointer string) error { return sourceIndexSchema(index, child, childPointer, form) }},
+		{name: "responses", index: func(child any, childPointer string) error {
+			return sourceIndexResponse(index, child, childPointer, form)
+		}},
+		{name: "parameters", index: func(child any, childPointer string) error {
+			return sourceIndexParameter(index, child, childPointer, form)
+		}},
+		{name: "examples", index: func(child any, childPointer string) error {
+			return sourceIndexExample(index, child, childPointer, form)
+		}},
+		{name: "requestBodies", index: func(child any, childPointer string) error {
+			return sourceIndexRequestBody(index, child, childPointer, form)
+		}},
+		{name: "headers", index: func(child any, childPointer string) error { return sourceIndexHeader(index, child, childPointer, form) }},
+		{name: "securitySchemes", index: func(child any, childPointer string) error {
+			return sourceIndexSecurityScheme(index, child, childPointer)
+		}},
+		{name: "links", index: func(child any, childPointer string) error { return sourceIndexLink(index, child, childPointer) }},
+		{name: "callbacks", index: func(child any, childPointer string) error {
+			return sourceIndexCallback(index, child, childPointer, form)
+		}},
+	}
+	if form.isOpenAPI31() {
+		entries = append(entries, struct {
+			name  string
+			index func(any, string) error
+		}{name: "pathItems", index: func(child any, childPointer string) error {
+			return sourceIndexPathItem(index, child, childPointer, form)
+		}})
+	}
+	for _, entry := range entries {
+		raw, exists := components[entry.name]
+		if !exists {
+			continue
+		}
+		if err := sourceIndexEntries(raw, sourceJSONPointer(pointer, entry.name), "components."+entry.name, entry.index); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func sourceIndexSwaggerComponents(index *sourceReferenceIndex, root map[string]any, form sourceDocumentForm) error {
+	entries := []struct {
+		name  string
+		index func(any, string) error
+	}{
+		{name: "definitions", index: func(child any, childPointer string) error { return sourceIndexSchema(index, child, childPointer, form) }},
+		{name: "parameters", index: func(child any, childPointer string) error {
+			return sourceIndexParameter(index, child, childPointer, form)
+		}},
+		{name: "responses", index: func(child any, childPointer string) error {
+			return sourceIndexResponse(index, child, childPointer, form)
+		}},
+		{name: "securityDefinitions", index: func(child any, childPointer string) error {
+			return sourceIndexSecurityScheme(index, child, childPointer)
+		}},
+	}
+	for _, entry := range entries {
+		raw, exists := root[entry.name]
+		if !exists {
+			continue
+		}
+		if err := sourceIndexEntries(raw, sourceJSONPointer("", entry.name), entry.name, entry.index); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func sourceIndexEntries(value any, pointer, label string, indexChild func(any, string) error) error {
+	entries, err := sourceReferenceObject(value, label)
+	if err != nil {
+		return err
+	}
+	for _, name := range sortedSourceMapKeys(entries) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		if err := indexChild(entries[name], sourceJSONPointer(pointer, name)); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func sourceIndexPathItems(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	return sourceIndexEntries(value, pointer, "path items", func(child any, childPointer string) error {
+		return sourceIndexPathItem(index, child, childPointer, form)
+	})
+}
+
+func sourceIndexPathItem(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	if err := index.add(pointer, sourceReferencePathItem); err != nil {
+		return err
+	}
+	pathItem, err := sourceReferenceObject(value, "path item")
+	if err != nil {
+		return err
+	}
+	if parameters, exists := pathItem["parameters"]; exists {
+		if err := sourceIndexParameters(index, parameters, sourceJSONPointer(pointer, "parameters"), form); err != nil {
+			return err
+		}
+	}
+	if form.isOpenAPI() {
+		if callbacks, exists := pathItem["callbacks"]; exists {
+			if err := sourceIndexEntries(callbacks, sourceJSONPointer(pointer, "callbacks"), "path item callbacks", func(child any, childPointer string) error {
+				return sourceIndexCallback(index, child, childPointer, form)
+			}); err != nil {
+				return err
+			}
+		}
+	}
+	for _, method := range sourceHTTPMethods {
+		operation, exists := pathItem[method]
+		if !exists {
+			continue
+		}
+		if err := sourceIndexOperation(index, operation, sourceJSONPointer(pointer, method), form); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func sourceIndexOperation(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	operation, err := sourceReferenceObject(value, "operation")
+	if err != nil {
+		return err
+	}
+	if parameters, exists := operation["parameters"]; exists {
+		if err := sourceIndexParameters(index, parameters, sourceJSONPointer(pointer, "parameters"), form); err != nil {
+			return err
+		}
+	}
+	if form.isOpenAPI() {
+		if requestBody, exists := operation["requestBody"]; exists {
+			if err := sourceIndexRequestBody(index, requestBody, sourceJSONPointer(pointer, "requestBody"), form); err != nil {
+				return err
+			}
+		}
+	}
+	if responses, exists := operation["responses"]; exists {
+		if err := sourceIndexEntries(responses, sourceJSONPointer(pointer, "responses"), "operation responses", func(child any, childPointer string) error {
+			return sourceIndexResponse(index, child, childPointer, form)
+		}); err != nil {
+			return err
+		}
+	}
+	if form.isOpenAPI() {
+		if callbacks, exists := operation["callbacks"]; exists {
+			if err := sourceIndexEntries(callbacks, sourceJSONPointer(pointer, "callbacks"), "operation callbacks", func(child any, childPointer string) error {
+				return sourceIndexCallback(index, child, childPointer, form)
+			}); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func sourceIndexParameters(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	parameters, ok := value.([]any)
+	if !ok {
+		return fmt.Errorf("parameters must be an array")
+	}
+	for position, parameter := range parameters {
+		if err := sourceIndexParameter(index, parameter, sourceJSONPointer(pointer, strconv.Itoa(position)), form); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func sourceIndexParameter(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	if err := index.add(pointer, sourceReferenceParameter); err != nil {
+		return err
+	}
+	parameter, err := sourceReferenceObject(value, "parameter")
+	if err != nil {
+		return err
+	}
+	if schema, exists := parameter["schema"]; exists {
+		if err := sourceIndexSchema(index, schema, sourceJSONPointer(pointer, "schema"), form); err != nil {
+			return err
+		}
+	}
+	if form.isOpenAPI() {
+		if content, exists := parameter["content"]; exists {
+			if err := sourceIndexContent(index, content, sourceJSONPointer(pointer, "content"), form, false); err != nil {
+				return err
+			}
+		}
+		if examples, exists := parameter["examples"]; exists {
+			if err := sourceIndexExamples(index, examples, sourceJSONPointer(pointer, "examples"), form); err != nil {
+				return err
+			}
+		}
+	} else if items, exists := parameter["items"]; exists {
+		if err := sourceIndexSchema(index, items, sourceJSONPointer(pointer, "items"), form); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func sourceIndexRequestBody(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	if err := index.add(pointer, sourceReferenceRequestBody); err != nil {
+		return err
+	}
+	requestBody, err := sourceReferenceObject(value, "request body")
+	if err != nil {
+		return err
+	}
+	if content, exists := requestBody["content"]; exists {
+		return sourceIndexContent(index, content, sourceJSONPointer(pointer, "content"), form, true)
+	}
+	return nil
+}
+
+func sourceIndexResponse(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	if err := index.add(pointer, sourceReferenceResponse); err != nil {
+		return err
+	}
+	response, err := sourceReferenceObject(value, "response")
+	if err != nil {
+		return err
+	}
+	if form.isSwagger2() {
+		if schema, exists := response["schema"]; exists {
+			if err := sourceIndexSchema(index, schema, sourceJSONPointer(pointer, "schema"), form); err != nil {
+				return err
+			}
+		}
+		if headers, exists := response["headers"]; exists {
+			if err := sourceIndexSwaggerHeaders(index, headers, sourceJSONPointer(pointer, "headers"), form); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	if content, exists := response["content"]; exists {
+		if err := sourceIndexContent(index, content, sourceJSONPointer(pointer, "content"), form, false); err != nil {
+			return err
+		}
+	}
+	if headers, exists := response["headers"]; exists {
+		if err := sourceIndexEntries(headers, sourceJSONPointer(pointer, "headers"), "response headers", func(child any, childPointer string) error {
+			return sourceIndexHeader(index, child, childPointer, form)
+		}); err != nil {
+			return err
+		}
+	}
+	if links, exists := response["links"]; exists {
+		if err := sourceIndexLinks(index, links, sourceJSONPointer(pointer, "links")); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func sourceIndexHeader(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	if err := index.add(pointer, sourceReferenceHeader); err != nil {
+		return err
+	}
+	header, err := sourceReferenceObject(value, "header")
+	if err != nil {
+		return err
+	}
+	if schema, exists := header["schema"]; exists {
+		if err := sourceIndexSchema(index, schema, sourceJSONPointer(pointer, "schema"), form); err != nil {
+			return err
+		}
+	}
+	if content, exists := header["content"]; exists {
+		if err := sourceIndexContent(index, content, sourceJSONPointer(pointer, "content"), form, false); err != nil {
+			return err
+		}
+	}
+	if examples, exists := header["examples"]; exists {
+		return sourceIndexExamples(index, examples, sourceJSONPointer(pointer, "examples"), form)
+	}
+	return nil
+}
+
+func sourceIndexSwaggerHeaders(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	return sourceIndexEntries(value, pointer, "Swagger response headers", func(child any, childPointer string) error {
+		header, err := sourceReferenceObject(child, "Swagger response header")
+		if err != nil {
+			return err
+		}
+		if items, exists := header["items"]; exists {
+			return sourceIndexSchema(index, items, sourceJSONPointer(childPointer, "items"), form)
+		}
+		return nil
+	})
+}
+
+func sourceIndexContent(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm, resolveEncoding bool) error {
+	content, err := sourceReferenceObject(value, "content")
+	if err != nil {
+		return err
+	}
+	for _, mediaType := range sortedSourceMapKeys(content) {
+		mediaPointer := sourceJSONPointer(pointer, mediaType)
+		media, err := sourceReferenceObject(content[mediaType], "content media")
+		if err != nil {
+			return err
+		}
+		if schema, exists := media["schema"]; exists {
+			if err := sourceIndexSchema(index, schema, sourceJSONPointer(mediaPointer, "schema"), form); err != nil {
+				return err
+			}
+		}
+		if examples, exists := media["examples"]; exists {
+			if err := sourceIndexExamples(index, examples, sourceJSONPointer(mediaPointer, "examples"), form); err != nil {
+				return err
+			}
+		}
+		if resolveEncoding {
+			if encoding, exists := media["encoding"]; exists {
+				if err := sourceIndexEncoding(index, encoding, sourceJSONPointer(mediaPointer, "encoding"), form); err != nil {
+					return err
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func sourceIndexEncoding(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	return sourceIndexEntries(value, pointer, "encoding", func(child any, childPointer string) error {
+		encoding, err := sourceReferenceObject(child, "encoding entry")
+		if err != nil {
+			return err
+		}
+		if headers, exists := encoding["headers"]; exists {
+			return sourceIndexEntries(headers, sourceJSONPointer(childPointer, "headers"), "encoding headers", func(header any, headerPointer string) error {
+				return sourceIndexHeader(index, header, headerPointer, form)
+			})
+		}
+		return nil
+	})
+}
+
+func sourceIndexLinks(index *sourceReferenceIndex, value any, pointer string) error {
+	return sourceIndexEntries(value, pointer, "links", func(child any, childPointer string) error {
+		return sourceIndexLink(index, child, childPointer)
+	})
+}
+
+func sourceIndexLink(index *sourceReferenceIndex, value any, pointer string) error {
+	if err := index.add(pointer, sourceReferenceLink); err != nil {
+		return err
+	}
+	_, err := sourceReferenceObject(value, "link")
+	return err
+}
+
+func sourceIndexExamples(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	return sourceIndexEntries(value, pointer, "examples", func(child any, childPointer string) error {
+		return sourceIndexExample(index, child, childPointer, form)
+	})
+}
+
+func sourceIndexExample(index *sourceReferenceIndex, value any, pointer string, _ sourceDocumentForm) error {
+	if err := index.add(pointer, sourceReferenceExample); err != nil {
+		return err
+	}
+	_, err := sourceReferenceObject(value, "example")
+	return err
+}
+
+func sourceIndexCallback(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	if err := index.add(pointer, sourceReferenceCallback); err != nil {
+		return err
+	}
+	callback, err := sourceReferenceObject(value, "callback")
+	if err != nil {
+		return err
+	}
+	for _, expression := range sortedSourceMapKeys(callback) {
+		if strings.HasPrefix(expression, "x-") {
+			continue
+		}
+		if err := sourceIndexPathItem(index, callback[expression], sourceJSONPointer(pointer, expression), form); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func sourceIndexSecurityScheme(index *sourceReferenceIndex, value any, pointer string) error {
+	if err := index.add(pointer, sourceReferenceSecurity); err != nil {
+		return err
+	}
+	_, err := sourceReferenceObject(value, "security scheme")
+	return err
+}
+
+func sourceIndexSchema(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
+	if _, err := sourceSchemaStructuralBytes(value, 0, index.limits); err != nil {
+		return err
+	}
+	if err := index.add(pointer, sourceReferenceSchema); err != nil {
+		return err
+	}
+	if _, isBoolean := value.(bool); isBoolean {
+		if !form.isOpenAPI31() {
+			return fmt.Errorf("unsupported %s boolean schema", form.Family)
+		}
+		return nil
+	}
+	object, ok := value.(map[string]any)
+	if !ok {
+		return fmt.Errorf("schema at %s must be an object or boolean", pointer)
+	}
+	grammar := sourceSchemaGrammarFor(form)
+	for _, key := range grammar.mapChildren {
+		raw, exists := object[key]
+		if !exists {
+			continue
+		}
+		children, ok := raw.(map[string]any)
+		if !ok {
+			return fmt.Errorf("schema %s must be an object", key)
+		}
+		for _, name := range sortedSourceMapKeys(children) {
+			if err := sourceIndexSchema(index, children[name], sourceJSONPointer(sourceJSONPointer(pointer, key), name), form); err != nil {
+				return err
+			}
+		}
+	}
+	if grammar.dependencyChildren {
+		if raw, exists := object["dependencies"]; exists {
+			children, ok := raw.(map[string]any)
+			if !ok {
+				return fmt.Errorf("schema dependencies must be an object")
+			}
+			for _, name := range sortedSourceMapKeys(children) {
+				switch child := children[name].(type) {
+				case map[string]any, bool:
+					if err := sourceIndexSchema(index, child, sourceJSONPointer(sourceJSONPointer(pointer, "dependencies"), name), form); err != nil {
+						return err
+					}
+				case []any:
+				default:
+					return fmt.Errorf("schema dependencies[%q] must be a schema or string array", name)
+				}
+			}
+		}
+	}
+	for _, key := range grammar.schemaChildren {
+		raw, exists := object[key]
+		if !exists {
+			continue
+		}
+		if key == "additionalProperties" && !form.isOpenAPI31() {
+			if _, isBoolean := raw.(bool); isBoolean {
+				continue
+			}
+		}
+		if err := sourceIndexSchema(index, raw, sourceJSONPointer(pointer, key), form); err != nil {
+			return err
+		}
+	}
+	for _, key := range grammar.arrayChildren {
+		raw, exists := object[key]
+		if !exists {
+			continue
+		}
+		items, ok := raw.([]any)
+		if !ok {
+			return fmt.Errorf("schema %s must be an array", key)
+		}
+		for position, item := range items {
+			if err := sourceIndexSchema(index, item, sourceJSONPointer(sourceJSONPointer(pointer, key), strconv.Itoa(position)), form); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func sourceReferenceObject(value any, label string) (map[string]any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("%s must be an object", label)
+	}
+	return object, nil
+}
+
+func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, limits sourceImportLimits, resolver *sourceReferenceResolver) error {
+	if resolver == nil {
+		return fmt.Errorf("source importer has no reference resolver")
+	}
+	index, err := sourceBuildReferenceIndex(doc, form, limits)
+	if err != nil {
+		return fmt.Errorf("index source grammar positions: %w", err)
+	}
+	preflight := sourceReferenceResolver{root: doc, limits: limits, form: form, referenceIndex: index}
+	if err := preflight.preflightDocument(); err != nil {
+		return fmt.Errorf("preflight source grammar: %w", err)
+	}
+	resolver.root = doc
+	resolver.limits = limits
+	resolver.form = form
+	resolver.referenceIndex = index
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightDocument() error {
+	if rawPaths, declared := r.root["paths"]; declared {
+		if err := r.preflightPathItems(rawPaths); err != nil {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if rawWebhooks, declared := r.root["webhooks"]; declared && r.form.isOpenAPI31() {
+			if err := r.preflightPathItems(rawWebhooks); err != nil {
+				return err
+			}
+		}
+		if rawComponents, declared := r.root["components"]; declared {
+			if err := r.preflightOpenAPIComponents(rawComponents); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	return r.preflightSwaggerComponents(r.root)
+}
+
+func (r *sourceReferenceResolver) preflightPathItems(value any) error {
+	items, err := sourceReferenceObject(value, "path items")
+	if err != nil {
+		return err
+	}
+	for _, name := range sortedSourceMapKeys(items) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		if err := r.preflightPathItem(items[name]); err != nil {
+			return fmt.Errorf("path item %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightPathItem(value any) error {
+	pathItem, err := r.resolvePathItem(value, nil, 0)
+	if err != nil {
+		return err
+	}
+	if parameters, declared := pathItem["parameters"]; declared {
+		if err := r.preflightParameters(parameters); err != nil {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if callbacks, declared := pathItem["callbacks"]; declared {
+			if err := r.preflightCallbacks(callbacks); err != nil {
+				return err
+			}
+		}
+	}
+	for _, method := range sourceHTTPMethods {
+		operation, declared := pathItem[method]
+		if !declared {
+			continue
+		}
+		if err := r.preflightOperation(operation); err != nil {
+			return fmt.Errorf("%s operation: %w", method, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightOperation(value any) error {
+	operation, err := sourceReferenceObject(value, "operation")
+	if err != nil {
+		return err
+	}
+	if parameters, declared := operation["parameters"]; declared {
+		if err := r.preflightParameters(parameters); err != nil {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if requestBody, declared := operation["requestBody"]; declared {
+			if err := r.preflightRequestBody(requestBody); err != nil {
+				return err
+			}
+		}
+	}
+	if responses, declared := operation["responses"]; declared {
+		if err := r.preflightResponses(responses); err != nil {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if callbacks, declared := operation["callbacks"]; declared {
+			if err := r.preflightCallbacks(callbacks); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightParameters(value any) error {
+	parameters, ok := value.([]any)
+	if !ok {
+		return fmt.Errorf("parameters must be an array")
+	}
+	for index, parameter := range parameters {
+		if err := r.preflightParameter(parameter); err != nil {
+			return fmt.Errorf("parameter %d: %w", index, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightParameter(value any) error {
+	parameter, err := r.resolveParameter(value, nil, 0)
+	if err != nil {
+		return err
+	}
+	schema, content, err := sourceParameterRepresentation(parameter, r.form)
+	if err != nil {
+		return err
+	}
+	if content != nil {
+		return validateBoundedParameterContent("source preflight", content, r.form, r.limits)
+	}
+	if r.form.isSwagger2() {
+		if _, declared := parameter["schema"]; !declared {
+			schema, err = r.resolveSchema(schema, nil, 0)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return validateBoundedRequestSchema(schema, r.form, r.limits, 0)
+}
+
+func (r *sourceReferenceResolver) preflightRequestBody(value any) error {
+	body, err := r.resolveRequestBody(value, nil, 0)
+	if err != nil {
+		return err
+	}
+	content, declared := body["content"]
+	if !declared {
+		return nil
+	}
+	media, err := sourceReferenceObject(content, "request body content")
+	if err != nil {
+		return err
+	}
+	for _, mediaType := range sortedSourceMapKeys(media) {
+		declaration, err := sourceReferenceObject(media[mediaType], "request body media")
+		if err != nil {
+			return err
+		}
+		schema, declared := declaration["schema"]
+		if !declared {
+			continue
+		}
+		if err := validateBoundedRequestSchema(schema, r.form, r.limits, 0); err != nil {
+			return fmt.Errorf("request body media %q: %w", mediaType, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightResponses(value any) error {
+	responses, err := sourceReferenceObject(value, "responses")
+	if err != nil {
+		return err
+	}
+	for _, status := range sortedSourceMapKeys(responses) {
+		if strings.HasPrefix(status, "x-") {
+			continue
+		}
+		if _, err := r.resolveResponse(responses[status], nil, 0); err != nil {
+			return fmt.Errorf("response %q: %w", status, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightCallbacks(value any) error {
+	callbacks, err := sourceReferenceObject(value, "callbacks")
+	if err != nil {
+		return err
+	}
+	for _, name := range sortedSourceMapKeys(callbacks) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		if err := r.preflightCallback(callbacks[name]); err != nil {
+			return fmt.Errorf("callback %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightCallback(value any) error {
+	callback, err := r.resolveCallback(value, nil, 0)
+	if err != nil {
+		return err
+	}
+	for _, expression := range sortedSourceMapKeys(callback) {
+		if strings.HasPrefix(expression, "x-") {
+			continue
+		}
+		if err := r.preflightPathItem(callback[expression]); err != nil {
+			return fmt.Errorf("callback expression %q: %w", expression, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightOpenAPIComponents(value any) error {
+	components, err := sourceReferenceObject(value, "components")
+	if err != nil {
+		return err
+	}
+	entries := []struct {
+		name      string
+		preflight func(any) error
+	}{
+		{name: "schemas", preflight: func(child any) error { _, err := r.resolveSchema(child, nil, 0); return err }},
+		{name: "parameters", preflight: r.preflightParameter},
+		{name: "responses", preflight: func(child any) error { _, err := r.resolveResponse(child, nil, 0); return err }},
+		{name: "requestBodies", preflight: r.preflightRequestBody},
+		{name: "headers", preflight: func(child any) error { _, err := r.resolveHeader(child, nil, 0); return err }},
+		{name: "securitySchemes", preflight: func(child any) error { _, err := r.resolveSecurityScheme(child, nil, 0); return err }},
+		{name: "links", preflight: func(child any) error { _, err := r.resolveLink(child, nil, 0); return err }},
+		{name: "examples", preflight: func(child any) error { _, err := r.resolveExample(child, nil, 0); return err }},
+		{name: "callbacks", preflight: r.preflightCallback},
+	}
+	if r.form.isOpenAPI31() {
+		entries = append(entries, struct {
+			name      string
+			preflight func(any) error
+		}{name: "pathItems", preflight: r.preflightPathItem})
+	}
+	for _, entry := range entries {
+		raw, declared := components[entry.name]
+		if !declared {
+			continue
+		}
+		items, err := sourceReferenceObject(raw, "components."+entry.name)
+		if err != nil {
+			return err
+		}
+		for _, name := range sortedSourceMapKeys(items) {
+			if strings.HasPrefix(name, "x-") {
+				continue
+			}
+			if err := entry.preflight(items[name]); err != nil {
+				return fmt.Errorf("components.%s[%q]: %w", entry.name, name, err)
+			}
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightSwaggerComponents(root map[string]any) error {
+	entries := []struct {
+		name      string
+		preflight func(any) error
+	}{
+		{name: "definitions", preflight: func(child any) error { _, err := r.resolveSchema(child, nil, 0); return err }},
+		{name: "parameters", preflight: r.preflightParameter},
+		{name: "responses", preflight: func(child any) error { _, err := r.resolveResponse(child, nil, 0); return err }},
+		{name: "securityDefinitions", preflight: func(child any) error { _, err := r.resolveSecurityScheme(child, nil, 0); return err }},
+	}
+	for _, entry := range entries {
+		raw, declared := root[entry.name]
+		if !declared {
+			continue
+		}
+		items, err := sourceReferenceObject(raw, entry.name)
+		if err != nil {
+			return err
+		}
+		for _, name := range sortedSourceMapKeys(items) {
+			if strings.HasPrefix(name, "x-") {
+				continue
+			}
+			if err := entry.preflight(items[name]); err != nil {
+				return fmt.Errorf("%s[%q]: %w", entry.name, name, err)
+			}
+		}
+	}
+	return nil
 }
 
 func (r *sourceReferenceResolver) resolve(value any) (any, error) {
@@ -1144,6 +2096,13 @@ func (r *sourceReferenceResolver) resolveResponse(value any, stack map[string]bo
 			}
 			out["schema"] = resolved
 		}
+		if headers, exists := object["headers"]; exists {
+			resolved, err := r.resolveSwaggerHeaders(headers, stack, depth)
+			if err != nil {
+				return nil, err
+			}
+			out["headers"] = resolved
+		}
 	}
 	if r.form.isOpenAPI() {
 		if content, exists := object["content"]; exists {
@@ -1179,6 +2138,30 @@ func (r *sourceReferenceResolver) resolveResponse(value any, stack map[string]bo
 			}
 			out["links"] = resolved
 		}
+	}
+	return out, nil
+}
+
+func (r *sourceReferenceResolver) resolveSwaggerHeaders(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	headers, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("Swagger response headers must be an object")
+	}
+	out := make(map[string]any, len(headers))
+	for _, name := range sortedSourceMapKeys(headers) {
+		header, ok := headers[name].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("Swagger response header %q must be an object", name)
+		}
+		resolvedHeader := sourceCloneMap(header)
+		if items, exists := header["items"]; exists {
+			resolved, err := r.resolveSchema(items, stack, depth)
+			if err != nil {
+				return nil, fmt.Errorf("Swagger response header %q items: %w", name, err)
+			}
+			resolvedHeader["items"] = resolved
+		}
+		out[name] = resolvedHeader
 	}
 	return out, nil
 }
@@ -1371,9 +2354,34 @@ func (r *sourceReferenceResolver) resolveExample(value any, stack map[string]boo
 	return sourceCloneMap(object), nil
 }
 
-func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool, depth int) (any, error) {
-	if err := r.reserveSchemaEntry(value, depth, "schema"); err != nil {
+func (r *sourceReferenceResolver) resolveSecurityScheme(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("security scheme must be an object")
+	}
+	target, reference, next, hasReference, err := r.referenceTarget(object, sourceReferenceSecurity, stack, depth)
+	if err != nil {
 		return nil, err
+	}
+	if hasReference {
+		resolved, err := r.resolveSecurityScheme(target, next, depth+1)
+		if err != nil {
+			return nil, err
+		}
+		return sourceMergeReferenceObject(resolved, reference), nil
+	}
+	return sourceCloneMap(object), nil
+}
+
+func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool, depth int) (any, error) {
+	if err := r.reserveSchemaEntry(value, "schema"); err != nil {
+		return nil, err
+	}
+	if booleanSchema, ok := value.(bool); ok {
+		if !r.form.isOpenAPI31() {
+			return nil, fmt.Errorf("unsupported %s boolean schema", r.form.Family)
+		}
+		return booleanSchema, nil
 	}
 	object, ok := value.(map[string]any)
 	if !ok {
@@ -1399,6 +2407,9 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 			return nil, fmt.Errorf("schema reference with siblings does not resolve to an object")
 		}
 		object = sourceOverlayReferenceObject(targetObject, reference)
+	}
+	if err := sourceValidateSchemaForm(object, r.form); err != nil {
+		return nil, err
 	}
 	grammar := sourceSchemaGrammarFor(r.form)
 	for _, key := range sourceSchemaBearingKeywords {
@@ -1483,6 +2494,15 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 	}
 	for _, key := range grammar.schemaChildren {
 		if raw, exists := object[key]; exists {
+			if key == "additionalProperties" && !r.form.isOpenAPI31() {
+				if booleanValue, isBoolean := raw.(bool); isBoolean {
+					if err := r.reserveSchemaValue(booleanValue, &objectUsed, "schema field "+key); err != nil {
+						return nil, err
+					}
+					out[key] = booleanValue
+					continue
+				}
+			}
 			resolved, err := r.resolveSchemaChild(raw, stack, depth+1, "schema field "+key)
 			if err != nil {
 				return nil, err
@@ -1525,15 +2545,14 @@ func (r *sourceReferenceResolver) resolveSchemaChild(value any, stack map[string
 	}
 }
 
-func (r *sourceReferenceResolver) reserveSchemaEntry(value any, depth int, label string) error {
-	if depth > r.limits.MaxReferenceDepth {
-		return fmt.Errorf("schema depth limit exceeded")
-	}
-	raw, err := sourceMarshalCompact(value)
+func (r *sourceReferenceResolver) reserveSchemaEntry(value any, label string) error {
+	bytes, err := sourceSchemaStructuralBytes(value, 0, r.limits)
 	if err != nil {
-		return fmt.Errorf("encode %s: %w", label, err)
+		if limit, ok := err.(*sourceSchemaStructureLimitError); ok {
+			return &sourceSchemaExpansionLimitError{Scope: limit.Scope, Label: label}
+		}
+		return err
 	}
-	bytes := int64(len(raw))
 	if bytes > sourceSchemaByteLimit(r.limits) {
 		return &sourceSchemaExpansionLimitError{Scope: "object", Label: label}
 	}
@@ -1564,16 +2583,112 @@ func sourceSchemaNodeLimit(limits sourceImportLimits) int {
 }
 
 func (r *sourceReferenceResolver) reserveSchemaValue(value any, objectUsed *int64, label string) error {
-	raw, err := sourceMarshalCompact(value)
+	bytes, err := sourceSchemaStructuralBytes(value, 0, r.limits)
 	if err != nil {
-		return fmt.Errorf("encode %s: %w", label, err)
+		if limit, ok := err.(*sourceSchemaStructureLimitError); ok {
+			return &sourceSchemaExpansionLimitError{Scope: limit.Scope, Label: label}
+		}
+		return err
 	}
-	bytes := int64(len(raw))
 	if bytes > sourceSchemaByteLimit(r.limits) || *objectUsed > sourceSchemaByteLimit(r.limits)-bytes {
 		return &sourceSchemaExpansionLimitError{Scope: "object", Label: label}
 	}
 	*objectUsed += bytes
 	return nil
+}
+
+func sourceSchemaStructuralBytes(value any, depth int, limits sourceImportLimits) (int64, error) {
+	nodes := 0
+	var walk func(any, int) (int64, error)
+	walk = func(current any, currentDepth int) (int64, error) {
+		if currentDepth > limits.MaxReferenceDepth {
+			return 0, fmt.Errorf("schema depth limit exceeded")
+		}
+		nodes++
+		if nodes > sourceSchemaNodeLimit(limits) {
+			return 0, &sourceSchemaStructureLimitError{Scope: "node"}
+		}
+		switch typed := current.(type) {
+		case nil:
+			return 4, nil
+		case bool:
+			if typed {
+				return 4, nil
+			}
+			return 5, nil
+		case string:
+			return sourceStructuralStringBytes(typed), nil
+		case json.Number:
+			return int64(len(typed)), nil
+		case float64:
+			return int64(len(strconv.FormatFloat(typed, 'g', -1, 64))), nil
+		case float32:
+			return int64(len(strconv.FormatFloat(float64(typed), 'g', -1, 32))), nil
+		case int:
+			return int64(len(strconv.Itoa(typed))), nil
+		case int64:
+			return int64(len(strconv.FormatInt(typed, 10))), nil
+		case uint:
+			return int64(len(strconv.FormatUint(uint64(typed), 10))), nil
+		case uint64:
+			return int64(len(strconv.FormatUint(typed, 10))), nil
+		case map[string]any:
+			used := int64(2)
+			for _, key := range sortedSourceMapKeys(typed) {
+				child, err := walk(typed[key], currentDepth+1)
+				if err != nil {
+					return 0, err
+				}
+				used, err = sourceStructuralAdd(used, sourceStructuralStringBytes(key))
+				if err != nil {
+					return 0, err
+				}
+				used, err = sourceStructuralAdd(used, child)
+				if err != nil {
+					return 0, err
+				}
+				used, err = sourceStructuralAdd(used, 2)
+				if err != nil {
+					return 0, err
+				}
+			}
+			return used, nil
+		case []any:
+			used := int64(2)
+			for _, childValue := range typed {
+				child, err := walk(childValue, currentDepth+1)
+				if err != nil {
+					return 0, err
+				}
+				used, err = sourceStructuralAdd(used, child)
+				if err != nil {
+					return 0, err
+				}
+				used, err = sourceStructuralAdd(used, 1)
+				if err != nil {
+					return 0, err
+				}
+			}
+			return used, nil
+		default:
+			return 0, fmt.Errorf("schema contains unsupported value type %T", current)
+		}
+	}
+	return walk(value, depth)
+}
+
+func sourceStructuralStringBytes(value string) int64 {
+	if len(value) > math.MaxInt64/6-2 {
+		return math.MaxInt64
+	}
+	return int64(len(value))*6 + 2
+}
+
+func sourceStructuralAdd(left, right int64) (int64, error) {
+	if right < 0 || left > math.MaxInt64-right {
+		return 0, &sourceSchemaStructureLimitError{Scope: "object"}
+	}
+	return left + right, nil
 }
 
 func (r *sourceReferenceResolver) resolveCallback(value any, stack map[string]bool, depth int) (map[string]any, error) {
@@ -1659,8 +2774,15 @@ func (r *sourceReferenceResolver) referenceSiblingAllowed(kind sourceReferenceKi
 }
 
 func (r *sourceReferenceResolver) validateReferenceTargetKind(target any, kind sourceReferenceKind, ref string) error {
-	if category := r.referencePointerCategory(ref); category != "" && !sourceReferenceCategoryMatches(kind, category) {
-		return fmt.Errorf("%s reference %q resolves to %s rather than the expected kind", kind, ref, category)
+	if r.referenceIndex == nil {
+		return fmt.Errorf("reference grammar index is unavailable")
+	}
+	actual, indexed := r.referenceIndex.positions[ref]
+	if !indexed {
+		return fmt.Errorf("%s reference %q does not resolve to a grammar-defined %s position", kind, ref, kind)
+	}
+	if actual != kind {
+		return fmt.Errorf("%s reference %q resolves to %s rather than the expected kind", kind, ref, actual)
 	}
 	if kind == sourceReferenceSchema {
 		if _, isObject := target.(map[string]any); isObject {
@@ -1726,6 +2848,10 @@ func (r *sourceReferenceResolver) validateReferenceTargetKind(target any, kind s
 				return fmt.Errorf("callback reference does not resolve to a callback object")
 			}
 		}
+	case sourceReferenceSecurity:
+		if _, ok := object["type"].(string); !ok {
+			return fmt.Errorf("security scheme reference does not resolve to a security scheme object")
+		}
 	}
 	return nil
 }
@@ -1755,6 +2881,7 @@ func sourceReferenceCategoryMatches(kind sourceReferenceKind, category string) b
 		sourceReferenceCallback:    "callbacks",
 		sourceReferenceLink:        "links",
 		sourceReferenceExample:     "examples",
+		sourceReferenceSecurity:    "securitySchemes",
 	}[kind] == category || (kind == sourceReferenceSchema && category == "definitions")
 }
 
@@ -1853,6 +2980,9 @@ func importSourceDocument(lock sourceImportLock, doc map[string]any, form source
 func importSourceDocumentResult(lock sourceImportLock, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
 	if budget == nil {
 		return sourceImportResult{}, fmt.Errorf("source importer has no descriptor budget")
+	}
+	if err := sourcePrepareSourceDocument(doc, form, limits, resolver); err != nil {
+		return sourceImportResult{}, err
 	}
 	result := sourceImportResult{Operations: []sourceOperationDescriptor{}}
 	rootServers := sourceServerLayer{}
@@ -1954,7 +3084,7 @@ func importSourceDocumentResult(lock sourceImportLock, doc map[string]any, form 
 			if !ok {
 				return sourceImportResult{}, fmt.Errorf("operation %s %s must be an object", method, path)
 			}
-			descriptor, err := importSourceOperation(lock, doc, form, resolver, path, method, pathParameters, rootServers, pathServers, operation, limits)
+			descriptor, err := importSourceOperation(lock, doc, form, resolver, path, method, pathParameters, rootServers, pathServers, operation, limits, budget.remaining())
 			if err != nil {
 				return sourceImportResult{}, err
 			}
@@ -2005,7 +3135,7 @@ func validateSourceImportPath(path string) error {
 	return nil
 }
 
-func importSourceOperation(lock sourceImportLock, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, path, method string, pathParameters []sourceParameterValue, rootServers, pathServers sourceServerLayer, operation map[string]any, limits sourceImportLimits) (sourceOperationDescriptor, error) {
+func importSourceOperation(lock sourceImportLock, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, path, method string, pathParameters []sourceParameterValue, rootServers, pathServers sourceServerLayer, operation map[string]any, limits sourceImportLimits, remainingDescriptorBytes int64) (sourceOperationDescriptor, error) {
 	location := fmt.Sprintf("paths[%q].%s", path, method)
 	operationParameters, err := sourceParameterValues(operation["parameters"], resolver, form)
 	if err != nil {
@@ -2015,7 +3145,7 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, form sourc
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s request: %w", location, err)
 	}
-	responses, _, err := sourceResponses(operation, doc, form, resolver, limits)
+	responses, _, err := sourceResponses(operation, doc, form, resolver, limits, remainingDescriptorBytes)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s responses: %w", location, err)
 	}
@@ -2512,14 +3642,17 @@ func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm,
 	if depth > limits.MaxReferenceDepth {
 		return fmt.Errorf("schema depth limit exceeded")
 	}
-	raw, err := sourceMarshalCompact(schema)
+	bytes, err := sourceSchemaStructuralBytes(schema, depth, limits)
 	if err != nil {
-		return fmt.Errorf("encode request schema: %w", err)
+		return err
 	}
-	if int64(len(raw)) > sourceSchemaByteLimit(limits) {
+	if bytes > sourceSchemaByteLimit(limits) {
 		return fmt.Errorf("schema byte limit exceeded")
 	}
 	if booleanSchema, ok := schema.(bool); ok {
+		if !form.isOpenAPI31() {
+			return fmt.Errorf("unsupported %s boolean schema", form.Family)
+		}
 		if !booleanSchema {
 			return nil
 		}
@@ -2533,6 +3666,9 @@ func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm,
 		return fmt.Errorf("unbounded request schema must be an object")
 	}
 	if err := sourceRejectDynamicSchemaKeywords(object); err != nil {
+		return err
+	}
+	if err := sourceValidateSchemaForm(object, form); err != nil {
 		return err
 	}
 	for _, composition := range []string{"oneOf", "anyOf", "allOf", "not"} {
@@ -2554,7 +3690,7 @@ func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm,
 	if err != nil {
 		return err
 	}
-	finiteConst, err := sourceFiniteConst(object)
+	finiteConst, err := sourceFiniteConst(object, form)
 	if err != nil {
 		return err
 	}
@@ -2586,7 +3722,7 @@ func validateBoundedRequestSchemaType(object map[string]any, typeName string, fo
 			return err
 		}
 	case "integer", "number":
-		if err := sourceValidateNumericBounds(object, !bounded); err != nil {
+		if err := sourceValidateNumericBounds(object, form, !bounded); err != nil {
 			return err
 		}
 	case "array":
@@ -2703,6 +3839,56 @@ func sourceRequestSchemaTypes(object map[string]any, form sourceDocumentForm) ([
 	return values, nil
 }
 
+func sourceValidateSchemaForm(object map[string]any, form sourceDocumentForm) error {
+	if _, exists := object["const"]; exists && !form.isOpenAPI31() {
+		return fmt.Errorf("unsupported %s schema keyword const", form.Family)
+	}
+	if raw, exists := object["type"]; exists {
+		if _, isArray := raw.([]any); isArray && !form.isOpenAPI31() {
+			return fmt.Errorf("request schema type union requires OpenAPI 3.1")
+		}
+	}
+	if raw, exists := object["nullable"]; exists {
+		if !form.isOpenAPI() || form.isOpenAPI31() {
+			return fmt.Errorf("unsupported %s schema keyword nullable", form.Family)
+		}
+		if _, ok := raw.(bool); !ok {
+			return fmt.Errorf("OpenAPI 3.0 schema nullable must be a boolean")
+		}
+	}
+	if raw, exists := object["items"]; exists {
+		if _, isBoolean := raw.(bool); isBoolean && !form.isOpenAPI31() {
+			return fmt.Errorf("unsupported %s boolean schema items", form.Family)
+		}
+	}
+	for _, key := range []string{"exclusiveMinimum", "exclusiveMaximum"} {
+		raw, exists := object[key]
+		if !exists {
+			continue
+		}
+		if form.isOpenAPI31() {
+			if _, ok := sourceFiniteNumber(raw); !ok {
+				return fmt.Errorf("OpenAPI 3.1 schema %s must be a finite number", key)
+			}
+			continue
+		}
+		flag, ok := raw.(bool)
+		if !ok {
+			return fmt.Errorf("%s schema %s must be a boolean", form.Family, key)
+		}
+		if flag {
+			bound := "minimum"
+			if key == "exclusiveMaximum" {
+				bound = "maximum"
+			}
+			if _, exists := object[bound]; !exists {
+				return fmt.Errorf("%s schema %s requires %s", form.Family, key, bound)
+			}
+		}
+	}
+	return nil
+}
+
 func sourceRejectDynamicSchemaKeywords(object map[string]any) error {
 	for _, keyword := range []string{"$dynamicRef", "$dynamicAnchor", "$recursiveRef", "$recursiveAnchor"} {
 		if _, exists := object[keyword]; exists {
@@ -2729,10 +3915,13 @@ func sourceFiniteEnum(object map[string]any) (bool, error) {
 	return true, nil
 }
 
-func sourceFiniteConst(object map[string]any) (bool, error) {
+func sourceFiniteConst(object map[string]any, form sourceDocumentForm) (bool, error) {
 	raw, exists := object["const"]
 	if !exists {
 		return false, nil
+	}
+	if !form.isOpenAPI31() {
+		return false, fmt.Errorf("unsupported %s schema keyword const", form.Family)
 	}
 	if !sourceFiniteSchemaLiteral(raw) {
 		return false, fmt.Errorf("request schema const contains a non-finite value")
@@ -2811,12 +4000,12 @@ type sourceNumericBound struct {
 	present   bool
 }
 
-func sourceValidateNumericBounds(object map[string]any, requireBoth bool) error {
-	lower, err := sourceNumericBoundFor(object, "minimum", "exclusiveMinimum", true)
+func sourceValidateNumericBounds(object map[string]any, form sourceDocumentForm, requireBoth bool) error {
+	lower, err := sourceNumericBoundFor(object, form, "minimum", "exclusiveMinimum", true)
 	if err != nil {
 		return err
 	}
-	upper, err := sourceNumericBoundFor(object, "maximum", "exclusiveMaximum", false)
+	upper, err := sourceNumericBoundFor(object, form, "maximum", "exclusiveMaximum", false)
 	if err != nil {
 		return err
 	}
@@ -2832,7 +4021,7 @@ func sourceValidateNumericBounds(object map[string]any, requireBoth bool) error 
 	return nil
 }
 
-func sourceNumericBoundFor(object map[string]any, inclusiveKey, exclusiveKey string, lower bool) (sourceNumericBound, error) {
+func sourceNumericBoundFor(object map[string]any, form sourceDocumentForm, inclusiveKey, exclusiveKey string, lower bool) (sourceNumericBound, error) {
 	bound := sourceNumericBound{inclusive: true}
 	if raw, exists := object[inclusiveKey]; exists {
 		value, ok := sourceFiniteNumber(raw)
@@ -2845,6 +4034,19 @@ func sourceNumericBoundFor(object map[string]any, inclusiveKey, exclusiveKey str
 	if !exists {
 		return bound, nil
 	}
+	if form.isOpenAPI31() {
+		exclusive, ok := sourceFiniteNumber(rawExclusive)
+		if !ok {
+			return sourceNumericBound{}, fmt.Errorf("request schema %s must be a finite number", exclusiveKey)
+		}
+		if !bound.present || (lower && exclusive.Cmp(bound.value) > 0) || (!lower && exclusive.Cmp(bound.value) < 0) {
+			return sourceNumericBound{value: exclusive, inclusive: false, present: true}, nil
+		}
+		if exclusive.Cmp(bound.value) == 0 {
+			bound.inclusive = false
+		}
+		return bound, nil
+	}
 	if flag, isFlag := rawExclusive.(bool); isFlag {
 		if flag {
 			if !bound.present {
@@ -2854,17 +4056,7 @@ func sourceNumericBoundFor(object map[string]any, inclusiveKey, exclusiveKey str
 		}
 		return bound, nil
 	}
-	exclusive, ok := sourceFiniteNumber(rawExclusive)
-	if !ok {
-		return sourceNumericBound{}, fmt.Errorf("request schema %s must be a finite number or boolean", exclusiveKey)
-	}
-	if !bound.present || (lower && exclusive.Cmp(bound.value) > 0) || (!lower && exclusive.Cmp(bound.value) < 0) {
-		return sourceNumericBound{value: exclusive, inclusive: false, present: true}, nil
-	}
-	if exclusive.Cmp(bound.value) == 0 {
-		bound.inclusive = false
-	}
-	return bound, nil
+	return sourceNumericBound{}, fmt.Errorf("request schema %s must be a boolean", exclusiveKey)
 }
 
 func sourceOptionalNonNegativeInteger(object map[string]any, key string) (int64, bool, error) {
@@ -3006,12 +4198,17 @@ func sourceExactDecimal(value string) (*big.Rat, bool) {
 	return new(big.Rat).SetFrac(numerator, denominator), true
 }
 
-func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, limits sourceImportLimits) ([]sourceResponseDescriptor, []string, error) {
+func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, limits sourceImportLimits, remainingDescriptorBytes int64) ([]sourceResponseDescriptor, []string, error) {
 	rawResponses, ok := operation["responses"].(map[string]any)
 	if !ok || len(rawResponses) == 0 {
 		return nil, nil, fmt.Errorf("missing responses")
 	}
 	responses := make([]sourceResponseDescriptor, 0, len(rawResponses))
+	responseLimit := sourceResolvedDescriptorLimit(limits)
+	if remainingDescriptorBytes < responseLimit {
+		responseLimit = remainingDescriptorBytes
+	}
+	responseBudget := sourceImportBudget{limit: responseLimit}
 	mediaSet := map[string]bool{}
 	var swaggerProduces []string
 	if form.isSwagger2() {
@@ -3043,6 +4240,9 @@ func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, res
 		if err != nil {
 			return nil, nil, fmt.Errorf("response %q: %w", status, err)
 		}
+		if err := responseBudget.reserve(sourceResponseDescriptorEstimate(status, int64(len(encoded)), media), "response"); err != nil {
+			return nil, nil, err
+		}
 		responses = append(responses, sourceResponseDescriptor{Status: status, Declaration: resolved, Media: media})
 		for _, item := range media {
 			mediaSet[item.MediaType] = true
@@ -3054,6 +4254,28 @@ func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, res
 	}
 	sort.Strings(mediaTypes)
 	return responses, mediaTypes, nil
+}
+
+func sourceResponseDescriptorEstimate(status string, declarationBytes int64, media []sourceResponseMediaDescriptor) int64 {
+	used := declarationBytes
+	for _, value := range append([]string{status}, sourceResponseMediaEstimateValues(media)...) {
+		if used > math.MaxInt64-sourceStructuralStringBytes(value) {
+			return math.MaxInt64
+		}
+		used += sourceStructuralStringBytes(value)
+	}
+	if used > math.MaxInt64-96 {
+		return math.MaxInt64
+	}
+	return used + 96
+}
+
+func sourceResponseMediaEstimateValues(media []sourceResponseMediaDescriptor) []string {
+	values := make([]string, 0, len(media)*2)
+	for _, item := range media {
+		values = append(values, item.MediaType, string(item.Class))
+	}
+	return values
 }
 
 func sourceResponseMedia(response map[string]any, fallback []string) ([]sourceResponseMediaDescriptor, error) {
@@ -3273,7 +4495,7 @@ func sourceImportProvenance(lock sourceImportLock, form sourceDocumentForm, loca
 }
 
 func sourceWebhookEvents(lock sourceImportLock, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver) ([]sourceInboundEventDescriptor, error) {
-	if !form.isOpenAPI() {
+	if !form.isOpenAPI31() {
 		return nil, nil
 	}
 	raw, declared := doc["webhooks"]

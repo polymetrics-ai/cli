@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net"
 	"net/http"
 	"net/url"
@@ -796,6 +797,160 @@ func TestSourceImportBoundsInlineSchemaResolution(t *testing.T) {
 				t.Fatalf("%s inline schema error = %v, want %q", tc.name, err, tc.want)
 			}
 		})
+	}
+}
+
+func TestSourceImportIndexesSchemaReferenceTargetsByGrammarPosition(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","schema":{"$ref":"#/paths/~1items/get/responses/200"}}],"responses":{"200":{"description":"ok","type":"string","maxLength":8}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/wrong-schema-target.json", raw)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "expected kind") {
+		t.Fatalf("wrong schema target error = %v", err)
+	}
+}
+
+func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name string
+		raw  []byte
+		want string
+	}{
+		{
+			name: "unused schema external reference",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"https://provider.invalid/unused.json"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
+			want: "external reference",
+		},
+		{
+			name: "unused schema cycle",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"#/components/schemas/Unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
+			want: "reference cycle",
+		},
+		{
+			name: "unused dynamic schema",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$dynamicRef":"#unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
+			want: "cli-openapi-dynamic-ref-foundation-r1",
+		},
+		{
+			name: "unused example external reference",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"examples":{"Unused":{"$ref":"https://provider.invalid/unused-example.json"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
+			want: "external reference",
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := tc.raw
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-grammar.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("unused grammar error = %v, want %q", err, tc.want)
+			}
+		})
+	}
+}
+
+func TestSourceImportPreservesExactYAMLNumericBounds(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`openapi: 3.1.0
+info:
+  title: x
+  version: "1"
+paths:
+  /items:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: number
+              minimum: 100000000000000000001
+              maximum: 100000000000000000000
+      responses:
+        "200":
+          description: ok
+`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/exact-yaml-bounds.yaml", raw)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "contradictory request schema numeric bounds") {
+		t.Fatalf("exact YAML numeric bounds error = %v", err)
+	}
+}
+
+func TestSourceImportRejectsDeepSchemaBeforeRetention(t *testing.T) {
+	t.Parallel()
+	schema := `{"type":"string","maxLength":1}`
+	for range 64 {
+		schema = `{"type":"array","maxItems":1,"items":` + schema + `}`
+	}
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":` + schema + `}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	limits := defaultSourceImportLimits()
+	limits.MaxReferenceDepth = 8
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/deep-retention.json", raw)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	if err == nil || !strings.Contains(err.Error(), "schema depth limit exceeded") {
+		t.Fatalf("deep schema error = %v", err)
+	}
+}
+
+func TestSourceImportGatesSchemaKeywordShapesByDocumentForm(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name string
+		raw  []byte
+		want string
+	}{
+		{
+			name: "Swagger const",
+			raw:  []byte(`{"swagger":"2.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"parameters":[{"name":"body","in":"body","schema":{"const":"fixed"}}],"consumes":["application/json"],"responses":{"200":{"description":"ok"}}}}}}`),
+			want: "keyword const",
+		},
+		{
+			name: "OpenAPI 3.0 numeric exclusive minimum",
+			raw:  []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"number","minimum":0,"exclusiveMinimum":1,"maximum":2}}}},"responses":{"200":{"description":"ok"}}}}}}`),
+			want: "must be a boolean",
+		},
+		{
+			name: "OpenAPI 3.1 boolean exclusive minimum",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"number","minimum":0,"exclusiveMinimum":true,"maximum":2}}}},"responses":{"200":{"description":"ok"}}}}}}`),
+			want: "must be a finite number",
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			raw := tc.raw
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/version-schema.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("version schema error = %v, want %q", err, tc.want)
+			}
+		})
+	}
+
+	valid := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"paths":{"/items":{"post":{"requestBody":{"content":{"application/json":{"schema":{"type":"string","nullable":true,"maxLength":8}}}},"responses":{"200":{"description":"ok"}}}}}}`)
+	if result := importInlineSourceResult(t, valid, defaultSourceImportLimits()); result.Operations[0].Request.Body == nil {
+		t.Fatal("valid OpenAPI 3.0 nullable schema was not imported")
+	}
+}
+
+func TestSourceImportReservesResponseExpansionBeforeAppend(t *testing.T) {
+	t.Parallel()
+	const responseCount = 40
+	largeDescription := strings.Repeat("x", 64<<10)
+	var responses strings.Builder
+	for index := 0; index < responseCount; index++ {
+		if index > 0 {
+			responses.WriteByte(',')
+		}
+		responses.WriteString(fmt.Sprintf(`"%d":{"$ref":"#/components/responses/Large"}`, 200+index))
+	}
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"Large":{"description":"` + largeDescription + `"}}},"paths":{"/items":{"get":{"responses":{` + responses.String() + `}}}}}`)
+	limits := defaultSourceImportLimits()
+	limits.MaxResolvedDescriptorBytes = 1 << 20
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/response-amplification.json", raw)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining response") {
+		t.Fatalf("response expansion error = %v", err)
 	}
 }
 

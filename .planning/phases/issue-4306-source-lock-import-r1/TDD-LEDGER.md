@@ -48,3 +48,9 @@
 - **Red:** review found non-string operation IDs silently converted to derived IDs, omitted OpenAPI 3.1 schema-bearing positions, descendant component references rejected by category shorthand, OpenAPI response-field loss, float-rounded contradictory bounds, and inline schema expansion bypassing depth/node budgets.
 - **Green:** focused source-import cases now cover typed operation IDs, literal OpenAPI response fields, nested component-schema pointers, `contentSchema`/`unevaluatedItems`, exact large-number bounds, OpenAPI 3.1 finite `const`/union/closed-tuple forms, and inline depth/node limits.
 - **Refactor:** a version-scoped schema grammar owns child traversal and pre-retention limits, while exact rationals own numeric-bound comparisons.
+
+## Cycle 9 — whole-document grammar and allocation closure
+
+- **Red:** review cases found wrong-kind nested pointers, unused invalid components, rounded YAML numerics, late deep-schema materialization, cross-version schema keywords, and repeated response expansion.
+- **Green:** version-scoped grammar indexing now preflights every supported reference and schema position before descriptors; YAML numbers retain exact JSON-number lexemes; structural schema limits precede cloning; source-form keyword shapes are enforced; and response expansion reserves aggregate bytes before append.
+- **Refactor:** one grammar index now supplies both expected reference kinds and whole-document preflight, keeping literal `$ref` values outside reference positions untouched.
