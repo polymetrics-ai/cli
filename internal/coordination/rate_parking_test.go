@@ -263,6 +263,181 @@ func TestRateParkingCoordinator_DefersImmediateRearmUntilResumerReturns(t *testi
 	}
 }
 
+func TestRateParkingStore_ClaimDefersUntilPersistedReset(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		store func(*testing.T) RateParkingStore
+	}{
+		{name: "memory", store: func(t *testing.T) RateParkingStore {
+			t.Helper()
+			return NewMemoryRateParkingStore()
+		}},
+		{name: "file", store: func(t *testing.T) RateParkingStore {
+			t.Helper()
+			store, err := OpenFileRateParkingStore(filepath.Join(t.TempDir(), "rate-parking.json"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			return store
+		}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			now := time.Date(2026, time.August, 20, 13, 30, 0, 0, time.UTC)
+			resetAt := now.Add(time.Minute)
+			run := ParkedRateLimitRun{
+				RunID:      "run-claim-after-reset",
+				Outcome:    RateParkingOutcomeParkedRateLimit,
+				Scope:      connectors.RateLimitScopeKey("scope-claim-after-reset"),
+				Checkpoint: testParkedCheckpoint(now),
+				ResetAt:    resetAt,
+				Reason:     connsdk.RateLimitObservationSourceHeaders,
+			}
+			store := tt.store(t)
+			if _, created, err := store.Create(run); err != nil || !created {
+				t.Fatalf("Create() = created %t, %v", created, err)
+			}
+			got, claimed, retryAt, err := store.Claim(run.RunID, "owner", now, now.Add(2*time.Minute))
+			if err != nil || claimed || !retryAt.Equal(resetAt) {
+				t.Fatalf("Claim(before reset) = run %#v claimed %t retry %s err %v, want retry at %s", got, claimed, retryAt, err, resetAt)
+			}
+			if !parkedRateLimitRunEqual(got, run) {
+				t.Fatalf("Claim(before reset) run = %#v, want %#v", got, run)
+			}
+			if _, claimed, retryAt, err := store.Claim(run.RunID, "owner", resetAt, resetAt.Add(time.Minute)); err != nil || !claimed || !retryAt.IsZero() {
+				t.Fatalf("Claim(at reset) = claimed %t retry %s err %v, want successful claim", claimed, retryAt, err)
+			}
+		})
+	}
+}
+
+func TestRateParkingCoordinator_DefersStaleRearmCallbacksUntilPersistedReset(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		stores func(*testing.T) (RateParkingStore, RateParkingStore)
+	}{
+		{name: "memory", stores: func(t *testing.T) (RateParkingStore, RateParkingStore) {
+			t.Helper()
+			store := NewMemoryRateParkingStore()
+			return store, store
+		}},
+		{name: "file", stores: func(t *testing.T) (RateParkingStore, RateParkingStore) {
+			t.Helper()
+			path := filepath.Join(t.TempDir(), "rate-parking.json")
+			first, err := OpenFileRateParkingStore(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			second, err := OpenFileRateParkingStore(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			return first, second
+		}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			now := time.Date(2026, time.August, 20, 14, 0, 0, 0, time.UTC)
+			firstReset := now.Add(time.Minute)
+			secondReset := now.Add(5 * time.Minute)
+			claimExpiry := firstReset.Add(time.Minute)
+			scope := connectors.RateLimitScopeKey("scope-stale-rearm")
+			checkpoint := testParkedCheckpoint(now)
+			rearmedCheckpoint := checkpoint.Clone()
+			rearmedCheckpoint.Position.Primary = synccontract.OpaqueToken("rearmed")
+			rearmedCheckpoint.Position.TieBreaker = synccontract.OpaqueToken("rearmed-tiebreaker")
+			committedAt := now.Add(30 * time.Second)
+			rearmedCheckpoint.CommittedAt = &committedAt
+			firstStore, secondStore := tt.stores(t)
+			firstScheduler := newRateParkingTestScheduler()
+			secondScheduler := newRateParkingTestScheduler()
+			var first *RateParkingCoordinator
+			var rearmErr error
+			first = NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+				Store:     firstStore,
+				Scheduler: firstScheduler,
+				Now:       func() time.Time { return now },
+				ClaimTTL:  time.Minute,
+				Resume: func(ctx context.Context, parked ParkedRateLimitRun) error {
+					_, rearmErr = first.Rearm(ctx, RateParkingRequest{
+						RunID:      parked.RunID,
+						Scope:      parked.Scope,
+						Checkpoint: rearmedCheckpoint,
+						ResetAt:    secondReset,
+						Reason:     connsdk.RateLimitObservationSourceHeaders,
+					})
+					if rearmErr != nil {
+						return rearmErr
+					}
+					return ErrRateLimitRearmed
+				},
+			})
+			secondResumes := 0
+			providerWrites := 0
+			second := NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+				Store:     secondStore,
+				Scheduler: secondScheduler,
+				Now:       func() time.Time { return now },
+				ClaimTTL:  time.Minute,
+				Resume: func(context.Context, ParkedRateLimitRun) error {
+					secondResumes++
+					providerWrites++
+					return nil
+				},
+			})
+			defer first.Close()
+			defer second.Close()
+
+			if err := first.Start(context.Background()); err != nil {
+				t.Fatalf("first Start() error = %v", err)
+			}
+			if _, err := first.Park(context.Background(), RateParkingRequest{
+				RunID:      "run-stale-rearm",
+				Scope:      scope,
+				Checkpoint: checkpoint,
+				ResetAt:    firstReset,
+				Reason:     connsdk.RateLimitObservationSourceRetryAfter,
+			}); err != nil {
+				t.Fatalf("Park() error = %v", err)
+			}
+			if err := second.Start(context.Background()); err != nil {
+				t.Fatalf("second Start() error = %v", err)
+			}
+
+			now = firstReset
+			firstScheduler.RunThrough(now)
+			if rearmErr != nil {
+				t.Fatalf("Rearm() error = %v", rearmErr)
+			}
+			secondScheduler.RunThrough(now)
+			if secondResumes != 0 || providerWrites != 0 {
+				t.Fatalf("second coordinator resumed during first claim: resumes %d writes %d", secondResumes, providerWrites)
+			}
+			first.Close()
+
+			now = claimExpiry
+			secondScheduler.RunThrough(now)
+			if secondResumes != 0 || providerWrites != 0 {
+				t.Fatalf("stale callback resumed before rearmed reset: resumes %d writes %d", secondResumes, providerWrites)
+			}
+			records, err := secondStore.List()
+			if err != nil || len(records) != 1 || !records[0].ResetAt.Equal(secondReset) {
+				t.Fatalf("records after stale callback = %#v, %v; want one record at %s", records, err, secondReset)
+			}
+
+			now = secondReset
+			secondScheduler.RunThrough(now)
+			if secondResumes != 1 || providerWrites != 1 {
+				t.Fatalf("second coordinator resumes at rearmed reset: resumes %d writes %d, want 1 each", secondResumes, providerWrites)
+			}
+			if records, err := secondStore.List(); err != nil || len(records) != 0 {
+				t.Fatalf("records after rearmed reset = %#v, %v; want none", records, err)
+			}
+			if err := second.Admit(scope); err != nil {
+				t.Fatalf("second Admit() after rearmed reset = %v", err)
+			}
+		})
+	}
+}
+
 func TestRateParkingCoordinator_RetainsImmediateRearmClaimAcrossCoordinators(t *testing.T) {
 	now := time.Date(2026, time.August, 20, 13, 0, 0, 0, time.UTC)
 	firstReset := now.Add(time.Minute)

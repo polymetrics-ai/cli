@@ -175,6 +175,9 @@ func (s *MemoryRateParkingStore) Claim(runID, owner string, now, until time.Time
 	if !found {
 		return ParkedRateLimitRun{}, false, time.Time{}, ErrRateParkingClaimLost
 	}
+	if now.Before(record.Run.ResetAt) {
+		return record.Run.Clone(), false, record.Run.ResetAt, nil
+	}
 	if record.ClaimOwner != "" && record.ClaimOwner != owner && record.ClaimUntil.After(now) {
 		return record.Run.Clone(), false, record.ClaimUntil, nil
 	}
@@ -611,6 +614,7 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 	resumeCtx := c.ctx
 	c.mu.Unlock()
 
+	expectedRun := run.Clone()
 	claimedRun, claimed, retryAt, err := c.store.Claim(runID, c.owner, c.now(), c.now().Add(c.claimTTL))
 	if err != nil {
 		c.finishResumeLease(runID, lease)
@@ -626,6 +630,11 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 		return
 	}
 	run = claimedRun
+	c.mu.Lock()
+	if current, exists := c.runs[runID]; exists && parkedRateLimitRunEqual(current, expectedRun) {
+		c.runs[runID] = run.Clone()
+	}
+	c.mu.Unlock()
 	operationCtx, cancelOperation := context.WithCancel(resumeCtx)
 	renewDone := make(chan struct{})
 	renewResult := make(chan bool, 1)

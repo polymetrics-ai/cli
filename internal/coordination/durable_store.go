@@ -270,6 +270,10 @@ func (s *FileRateParkingStore) Claim(runID, owner string, now, until time.Time) 
 			return state, ErrRateParkingClaimLost
 		}
 		run = record.Run.Clone()
+		if now.Before(record.Run.ResetAt) {
+			retryAt = record.Run.ResetAt
+			return state, nil
+		}
 		if record.ClaimOwner != "" && record.ClaimOwner != owner && record.ClaimUntil.After(now) {
 			retryAt = record.ClaimUntil
 			return state, nil
