@@ -500,6 +500,23 @@ func validateGraphQLOperationPagination(op OperationSpec, kind string, variables
 	if !graphQLVariablesSchemaHasProperty(variables, pagination.CursorVariable) {
 		return fmt.Errorf("operation %q graphql.pagination.cursor_variable %q is absent from variables_schema", op.ID, pagination.CursorVariable)
 	}
+	if (pagination.BackwardCursorVariable == "") != (pagination.BackwardPageSizeVariable == "") {
+		return fmt.Errorf("operation %q graphql.pagination backward cursor and page-size variables must be declared together", op.ID)
+	}
+	for field, name := range map[string]string{
+		"backward_cursor_variable":    pagination.BackwardCursorVariable,
+		"backward_page_size_variable": pagination.BackwardPageSizeVariable,
+	} {
+		if name == "" {
+			continue
+		}
+		if !graphQLNamePattern.MatchString(name) {
+			return fmt.Errorf("operation %q graphql.pagination.%s %q is not a valid GraphQL name", op.ID, field, name)
+		}
+		if !graphQLVariablesSchemaHasProperty(variables, name) {
+			return fmt.Errorf("operation %q graphql.pagination.%s %q is absent from variables_schema", op.ID, field, name)
+		}
+	}
 	if pagination.PageSizeVariable == "" && pagination.MaxPageSize != 0 {
 		return fmt.Errorf("operation %q graphql.pagination.max_page_size requires page_size_variable", op.ID)
 	}
@@ -554,21 +571,41 @@ func graphQLOperationVariables(op OperationSpec, supplied map[string]any, page i
 			return nil, fmt.Errorf("operation %q has no declared GraphQL cursor pagination", op.ID)
 		}
 	} else {
-		if _, suppliedCursor := variables[pagination.CursorVariable]; suppliedCursor {
+		_, forwardCursor := variables[pagination.CursorVariable]
+		_, forwardSize := variables[pagination.PageSizeVariable]
+		_, backwardCursor := variables[pagination.BackwardCursorVariable]
+		_, backwardSize := variables[pagination.BackwardPageSizeVariable]
+		if (forwardCursor || forwardSize) && (backwardCursor || backwardSize) {
+			return nil, fmt.Errorf("operation %q mixes forward and backward pagination variables", op.ID)
+		}
+		if forwardCursor {
 			return nil, fmt.Errorf("operation %q GraphQL cursor variable %q must be supplied with --page-cursor", op.ID, pagination.CursorVariable)
+		}
+		if backwardCursor {
+			return nil, fmt.Errorf("operation %q GraphQL cursor variable %q must be supplied with --page-cursor", op.ID, pagination.BackwardCursorVariable)
 		}
 		if pageCursor != "" {
 			if err := safety.RejectDangerousChars(pageCursor, "page cursor"); err != nil {
 				return nil, err
 			}
-			variables[pagination.CursorVariable] = pageCursor
+			cursorVariable := pagination.CursorVariable
+			if backwardSize {
+				cursorVariable = pagination.BackwardCursorVariable
+			}
+			variables[cursorVariable] = pageCursor
 		}
 	}
-	if pagination != nil && pagination.PageSizeVariable != "" {
-		if value, ok := variables[pagination.PageSizeVariable]; ok {
-			n, ok := graphQLPositiveInt(value)
-			if !ok || n > pagination.MaxPageSize {
-				return nil, fmt.Errorf("operation %q GraphQL page size variable %q must be a positive integer at most %d", op.ID, pagination.PageSizeVariable, pagination.MaxPageSize)
+	if pagination != nil {
+		for _, variable := range []string{pagination.PageSizeVariable, pagination.BackwardPageSizeVariable} {
+			if variable == "" {
+				continue
+			}
+			value, ok := variables[variable]
+			if ok {
+				n, ok := graphQLPositiveInt(value)
+				if !ok || n > pagination.MaxPageSize {
+					return nil, fmt.Errorf("operation %q GraphQL page size variable %q must be a positive integer at most %d", op.ID, variable, pagination.MaxPageSize)
+				}
 			}
 		}
 	}

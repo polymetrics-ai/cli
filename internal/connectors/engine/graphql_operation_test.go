@@ -23,7 +23,7 @@ import (
 // operation executor rather than a generic GraphQL transport.
 func graphQLOperationBundle(baseURL, kind string) Bundle {
 	operationName := "GetWidget"
-	document := "query GetWidget($id: ID!, $first: Int!, $after: String, $filter: WidgetFilterInput) { widget(id: $id, filter: $filter) { id items(first: $first, after: $after) { nodes { id name secret } pageInfo { hasNextPage endCursor } } } rateLimit { limit cost remaining resetAt } }"
+	document := "query GetWidget($id: ID!, $first: Int!, $after: String, $last: Int, $before: String, $filter: WidgetFilterInput) { widget(id: $id, filter: $filter) { id items(first: $first, after: $after, last: $last, before: $before) { nodes { id name secret } pageInfo { hasNextPage hasPreviousPage startCursor endCursor } } } rateLimit { limit cost remaining resetAt } }"
 	mutationClass := ""
 	approval := "none"
 	risk := "low"
@@ -54,6 +54,8 @@ func graphQLOperationBundle(baseURL, kind string) Bundle {
 				"id":{"type":"string"},
 				"first":{"type":"integer"},
 				"after":{"type":["string","null"]},
+				"last":{"type":"integer"},
+				"before":{"type":["string","null"]},
 				"filter":{
 					"type":"object",
 					"additionalProperties":false,
@@ -65,10 +67,12 @@ func graphQLOperationBundle(baseURL, kind string) Bundle {
 			}
 		}`)
 		pagination = &GraphQLOperationPaginationSpec{
-			ConnectionPath:   "widget.items",
-			CursorVariable:   "after",
-			PageSizeVariable: "first",
-			MaxPageSize:      50,
+			ConnectionPath:           "widget.items",
+			CursorVariable:           "after",
+			PageSizeVariable:         "first",
+			BackwardCursorVariable:   "before",
+			BackwardPageSizeVariable: "last",
+			MaxPageSize:              50,
 		}
 	}
 
@@ -373,6 +377,27 @@ func TestValidateGraphQLOperationStructuredJSONVariableRequiresClosedTopLevelCon
 	mutation := graphQLOperationBundle("http://127.0.0.1", "graphql_mutation").Operations[0]
 	if err := ValidateGraphQLOperationStructuredJSONVariable(mutation, "id"); err == nil || !strings.Contains(err.Error(), "object or array") {
 		t.Fatalf("scalar mutation variable = %v, want closed container rejection", err)
+	}
+}
+
+func TestGraphQLOperationVariablesRejectsMixedPaginationDirections(t *testing.T) {
+	op := graphQLOperationBundle("http://127.0.0.1", "graphql_query").Operations[0]
+
+	for name, variables := range map[string]map[string]any{
+		"page sizes": {"id": "widget-1", "first": 10, "last": 10},
+		"cursors":    {"id": "widget-1", "after": "next", "before": "previous"},
+		"crossed":    {"id": "widget-1", "first": 10, "before": "previous"},
+	} {
+		t.Run(name, func(t *testing.T) {
+			_, err := graphQLOperationVariables(op, variables, 0, "")
+			if err == nil || !strings.Contains(err.Error(), "mixes forward and backward pagination") {
+				t.Fatalf("graphQLOperationVariables() error = %v, want mixed-direction rejection", err)
+			}
+		})
+	}
+
+	if _, err := graphQLOperationVariables(op, map[string]any{"id": "widget-1", "last": 10}, 0, ""); err != nil {
+		t.Fatalf("backward-only pagination: %v", err)
 	}
 }
 

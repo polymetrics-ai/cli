@@ -95,6 +95,114 @@ func TestSourceImportProducesClosedCanonicalDescriptors(t *testing.T) {
 	}
 }
 
+func TestSourceImport_CheckedInGitHubLockCoversRESTAndGraphQL(t *testing.T) {
+	t.Parallel()
+	raw, err := os.ReadFile(filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"))
+	if err != nil {
+		t.Fatalf("read checked-in GitHub source lock: %v", err)
+	}
+	lock, err := parseSourceImportLock(raw, "github")
+	if err != nil {
+		t.Fatalf("parse checked-in GitHub source lock: %v", err)
+	}
+	if got := len(lock.Rest.Operations) + len(lock.GraphQL.QueryFields) + len(lock.GraphQL.MutationFields); got != 1525 {
+		t.Fatalf("checked-in source identities = %d, want 1525", got)
+	}
+	if len(lock.Rest.Operations) != 1220 || len(lock.GraphQL.QueryFields) != 31 || len(lock.GraphQL.MutationFields) != 274 {
+		t.Fatalf("checked-in source identity split = REST %d query %d mutation %d", len(lock.Rest.Operations), len(lock.GraphQL.QueryFields), len(lock.GraphQL.MutationFields))
+	}
+	if lock.Rest.Operations[0].SourceLocation != `paths["/"].get` {
+		t.Fatalf("first REST source location = %q", lock.Rest.Operations[0].SourceLocation)
+	}
+	if lock.GraphQL.QueryFields[0].Line <= 0 || lock.GraphQL.QueryFields[0].Root != "Query" {
+		t.Fatalf("first GraphQL source location = %#v", lock.GraphQL.QueryFields[0])
+	}
+	if lock.Rest.Bytes != 12920264 || lock.GraphQL.Bytes != 1546421 || len(lock.Rest.SHA256) != 64 || len(lock.GraphQL.SHA256) != 64 {
+		t.Fatalf("checked-in source byte/digest pins = REST %#v GraphQL %#v", lock.Rest, lock.GraphQL.sourceImportArtifact)
+	}
+}
+
+func TestSourceImport_RejectsUnknownSectionAndIndependentIndexOverflow(t *testing.T) {
+	t.Parallel()
+	fixture := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-operation-source-lock.json"))
+	var document map[string]any
+	if err := json.Unmarshal(fixture, &document); err != nil {
+		t.Fatalf("decode source lock fixture: %v", err)
+	}
+	document["unexpected"] = true
+	unknown, err := json.Marshal(document)
+	if err != nil {
+		t.Fatalf("encode unknown source lock: %v", err)
+	}
+	if _, err := parseSourceImportLock(unknown, "alpha"); err == nil || !strings.Contains(err.Error(), "unknown field") {
+		t.Fatalf("unknown source-lock member error = %v", err)
+	}
+
+	artifact := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", artifact)
+	limits := defaultSourceImportLimits()
+	limits.MaxIndexBytes = 1
+	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return artifact, nil }), limits)
+	if err == nil || !strings.Contains(err.Error(), "source grammar position byte limit") {
+		t.Fatalf("independent index overflow error = %v", err)
+	}
+
+	limits = defaultSourceImportLimits()
+	limits.MaxResolvedDescriptorBytes = 1 << 20
+	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return artifact, nil }), limits); err != nil {
+		t.Fatalf("descriptor ceiling incorrectly constrained grammar index: %v", err)
+	}
+}
+
+func TestSourceImportImportsLockedRESTAndGraphQLIdentities(t *testing.T) {
+	t.Parallel()
+	restRaw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	graphqlRaw := []byte("type Query { viewer: String }\ntype Mutation { updateWidget(input: String!): Boolean }\n")
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", restRaw)
+	lock.SchemaVersion = 2
+	lock.Rest.Operations = []sourceImportRESTOperation{
+		{ID: "alpha.rest.getWidget", Protocol: "rest", Method: "GET", Path: "/widgets/{widget_id}", OperationID: "getWidget", SourceLocation: `paths["/widgets/{widget_id}"].get`},
+		{ID: "alpha.rest.post_widgets", Protocol: "rest", Method: "POST", Path: "/widgets", SourceLocation: `paths["/widgets"].post`},
+	}
+	graphqlDigest := sha256.Sum256(graphqlRaw)
+	lock.GraphQL = sourceImportGraphQL{
+		sourceImportArtifact: sourceImportArtifact{SourceURL: "https://fixtures.polymetrics.invalid/schema.graphql", SHA256: hex.EncodeToString(graphqlDigest[:]), Bytes: int64(len(graphqlRaw))},
+		QueryFields:          []sourceGraphQLField{{Root: "Query", Name: "viewer", Line: 1, Signature: "viewer: String", Arguments: []sourceGraphQLArgument{}, ReturnType: sourceGraphQLTypeRef{Kind: "named", Name: "String"}}},
+		MutationFields:       []sourceGraphQLField{{Root: "Mutation", Name: "updateWidget", Line: 2, Signature: "updateWidget(input: String!): Boolean", Arguments: []sourceGraphQLArgument{{Name: "input", Type: sourceGraphQLTypeRef{Kind: "named", Name: "String", NonNull: true}}}, ReturnType: sourceGraphQLTypeRef{Kind: "named", Name: "Boolean"}}},
+		TypeSystem:           sourceGraphQLTypeSystem{Enums: []sourceGraphQLNamedType{}, InputObjects: []sourceGraphQLNamedType{}, Interfaces: []sourceGraphQLNamedType{}, Objects: []sourceGraphQLNamedType{}, Scalars: []string{"Boolean", "String"}, Unions: []sourceGraphQLNamedType{}},
+	}
+	lock.Counts = sourceImportCounts{REST: 2, GraphQLQuery: 1, GraphQLMutation: 1, Total: 4}
+	fetcher := sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		switch sourceURL {
+		case lock.Rest.SourceURL:
+			return restRaw, nil
+		case lock.GraphQL.SourceURL:
+			return graphqlRaw, nil
+		default:
+			return nil, fmt.Errorf("unexpected source URL %q", sourceURL)
+		}
+	})
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import combined source lock: %v", err)
+	}
+	if len(result.Operations) != 4 || len(result.GraphQLSchemas) != 1 {
+		t.Fatalf("combined descriptor counts = operations %d schemas %d", len(result.Operations), len(result.GraphQLSchemas))
+	}
+	byID := make(map[string]sourceOperationDescriptor, len(result.Operations))
+	for _, operation := range result.Operations {
+		byID[operation.SourceID] = operation
+	}
+	query := byID["alpha.graphql.query.viewer"]
+	mutation := byID["alpha.graphql.mutation.updateWidget"]
+	if query.Protocol != "graphql" || query.Source.Location != `graphql.query_fields["viewer"]@line:1` || query.GraphQL == nil || query.GraphQL.ReturnType.Name != "String" {
+		t.Fatalf("GraphQL query descriptor = %#v", query)
+	}
+	if mutation.GraphQL == nil || len(mutation.GraphQL.Arguments) != 1 || !mutation.GraphQL.Arguments[0].Type.NonNull {
+		t.Fatalf("GraphQL mutation descriptor = %#v", mutation)
+	}
+}
+
 func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 	t.Parallel()
 	baseLimits := defaultSourceImportLimits()
@@ -1595,7 +1703,7 @@ func loadSourceImportFixture(t *testing.T, name string) []byte {
 
 func sourceImportFixtureLock(connector, sourceURL string, raw []byte) sourceImportLock {
 	digest := sha256.Sum256(raw)
-	return sourceImportLock{SchemaVersion: 1, Connector: connector, Rest: sourceImportArtifact{SourceURL: sourceURL, SHA256: hex.EncodeToString(digest[:]), Bytes: int64(len(raw))}}
+	return sourceImportLock{SchemaVersion: 1, Connector: connector, Rest: sourceImportREST{sourceImportArtifact: sourceImportArtifact{SourceURL: sourceURL, SHA256: hex.EncodeToString(digest[:]), Bytes: int64(len(raw))}}}
 }
 
 func descriptorResponse(t *testing.T, descriptor sourceOperationDescriptor, status string) sourceResponseDescriptor {

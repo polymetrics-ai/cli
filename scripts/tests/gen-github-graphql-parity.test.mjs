@@ -60,7 +60,7 @@ test("generates one fixed source-derived contract per GraphQL root", async () =>
   assert.equal(enterprise.graphql.variables_schema.properties.input.properties.login.type, "string");
 
   const node = generated.operations.find((operation) => operation.id === "github.graphql.query.node");
-  assert.match(node.graphql.document, /node\(id: \$id\) \{ __typename .* on User \{ __typename \} .* on Widget \{ __typename \}/u);
+  assert.match(node.graphql.document, /node\(id: \$id\) \{ __typename .* on User \{ __typename id login \} .* on Widget \{ __typename id name \}/u);
   assert.doesNotMatch(node.graphql.document, /caller(?:Selection|Document)|\$selection/u);
   assert.deepEqual(node.graphql.variables_schema.required, ["id"]);
 
@@ -116,9 +116,22 @@ test("uses the declared environment-only secret contract only for source fields 
 	const lock = JSON.parse(await readFile(path.join(projectRoot, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), "utf8"));
 	const generated = buildGitHubGraphQLParityArtifacts({ lock, bundle: emptyBundle() });
 	const node = generated.operations.find((candidate) => candidate.id === "github.graphql.query.node");
-	assert.match(node?.graphql?.document || "", /on Issue \{ id number title isPinned \}/u);
-	assert.match(node?.graphql?.document || "", /on PullRequest \{ id number title isDraft \}/u);
-	assert.match(node?.graphql?.document || "", /on Repository \{ id databaseId nameWithOwner \}/u);
+	assert.match(node?.graphql?.document || "", /on Issue \{ __typename [^}]*\bid\b[^}]*\bisPinned\b[^}]*\bnumber\b[^}]*\btitle\b/u);
+	assert.match(node?.graphql?.document || "", /on PullRequest \{ __typename [^}]*\bid\b[^}]*\bisDraft\b[^}]*\bnumber\b[^}]*\btitle\b/u);
+	assert.match(node?.graphql?.document || "", /on Repository \{ __typename [^}]*\bdatabaseId\b[^}]*\bid\b[^}]*\bnameWithOwner\b/u);
+
+	const search = generated.operations.find((candidate) => candidate.id === "github.graphql.query.search");
+	for (const argument of ["after", "before", "first", "last", "query", "type"]) {
+		assert.match(search?.graphql?.document || "", new RegExp("\\$" + argument + ":", "u"));
+	}
+	assert.match(search?.graphql?.document || "", /pageInfo \{ hasNextPage hasPreviousPage startCursor endCursor \}/u);
+	assert.doesNotMatch(search?.graphql?.document || "", /nodes \{ __typename \}/u);
+	const searchCommand = generated.commands.find((candidate) => candidate.operation === "github.graphql.query.search");
+	assert.ok(searchCommand?.flags.some((flag) => flag.name === "first"));
+	assert.ok(searchCommand?.flags.some((flag) => flag.name === "last"));
+
+	const abort = generated.operations.find((candidate) => candidate.id === "github.graphql.mutation.abort-queued-migrations");
+	assert.match(abort?.graphql?.document || "", /abortQueuedMigrations\(input: \$input\) \{ __typename clientMutationId success \}/u);
 
 	for (const name of ["createMigrationSource", "startOrganizationMigration", "startRepositoryMigration"]) {
 		const suffix = name.replace(/([a-z0-9])([A-Z])/gu, "$1-$2").toLowerCase();

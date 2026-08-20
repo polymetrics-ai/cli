@@ -42,7 +42,10 @@ func generateSkills(dir string, manifests []connectors.Manifest) ([]string, erro
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return nil, fmt.Errorf("create skills dir: %w", err)
 	}
-	docs := baseSkillDocs(manifests)
+	docs, err := baseSkillDocs(manifests)
+	if err != nil {
+		return nil, err
+	}
 	names := make([]string, 0, len(docs))
 	for _, doc := range docs {
 		path := filepath.Join(dir, doc.Name)
@@ -61,7 +64,7 @@ func generateSkills(dir string, manifests []connectors.Manifest) ([]string, erro
 	return names, nil
 }
 
-func baseSkillDocs(manifests []connectors.Manifest) []skillDoc {
+func baseSkillDocs(manifests []connectors.Manifest) ([]skillDoc, error) {
 	docs := []skillDoc{
 		{
 			Name:        "pm-shared",
@@ -138,26 +141,30 @@ func baseSkillDocs(manifests []connectors.Manifest) []skillDoc {
 		if manifest.Metadata.Name == "" {
 			continue
 		}
-		name := "pm-" + manifest.Metadata.Name
-		if name == "pm-warehouse" || name == "pm-outbox" || name == "pm-file" || name == "pm-sample" || name == "pm-github" {
-			docs = append(docs, connectorSkill(manifest.Metadata.Name))
+		doc, err := connectorSkill(manifest.Metadata.Name)
+		if err != nil {
+			return nil, err
 		}
+		docs = append(docs, doc)
 	}
-	return docs
+	return docs, nil
 }
 
-func connectorSkill(name string) skillDoc {
+func connectorSkill(name string) (skillDoc, error) {
 	registry := appRegistry()
 	connector, ok := registry.Get(name)
 	if !ok {
-		return skillDoc{}
+		return skillDoc{}, fmt.Errorf("publish connector skill %q: manifest has no registered connector", name)
+	}
+	if err := connectors.ValidateConnectorGuide(connector); err != nil {
+		return skillDoc{}, fmt.Errorf("publish connector skill %q: %w", name, err)
 	}
 	guide := connectors.GuideOf(connector)
 	return skillDoc{
 		Name:        "pm-" + guide.Name,
 		Description: guide.DisplayName + " connector knowledge and safe action guide.",
 		Body:        connectors.RenderGuideSkill(guide),
-	}
+	}, nil
 }
 
 func skillBody(name, description string, bullets []string) string {

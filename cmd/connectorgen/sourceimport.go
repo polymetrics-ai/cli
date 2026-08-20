@@ -53,12 +53,14 @@ const (
 
 type sourceImportLimits struct {
 	MaxArtifactBytes           int64
+	MaxIndexBytes              int64
 	MaxSchemaBytes             int64
 	MaxResolvedDescriptorBytes int64
 	MaxOperations              int
 	MaxReferences              int
 	MaxReferenceDepth          int
 	MaxSchemaNodes             int
+	AllowSourceContractGaps    bool
 }
 
 type sourceDocumentForm struct {
@@ -89,6 +91,7 @@ func (form sourceDocumentForm) isOpenAPI31() bool {
 func defaultSourceImportLimits() sourceImportLimits {
 	return sourceImportLimits{
 		MaxArtifactBytes:           defaultSourceImportArtifactBytes,
+		MaxIndexBytes:              64 << 20,
 		MaxSchemaBytes:             defaultSourceImportSchemaBytes,
 		MaxResolvedDescriptorBytes: defaultSourceImportDescriptorBytes,
 		MaxOperations:              defaultSourceImportOperations,
@@ -106,10 +109,90 @@ type sourceImportArtifact struct {
 	Swagger   string `json:"swagger,omitempty"`
 }
 
+type sourceImportRESTOperation struct {
+	ID             string `json:"id"`
+	Protocol       string `json:"protocol"`
+	Method         string `json:"method"`
+	Path           string `json:"path"`
+	OperationID    string `json:"operation_id"`
+	Deprecated     bool   `json:"deprecated"`
+	SourceLocation string `json:"source_location"`
+}
+
+type sourceImportREST struct {
+	sourceImportArtifact
+	Commit      string                      `json:"commit,omitempty"`
+	InfoVersion string                      `json:"info_version,omitempty"`
+	Operations  []sourceImportRESTOperation `json:"operations,omitempty"`
+}
+
+type sourceGraphQLTypeRef struct {
+	Kind    string                `json:"kind"`
+	Name    string                `json:"name,omitempty"`
+	NonNull bool                  `json:"non_null"`
+	OfType  *sourceGraphQLTypeRef `json:"of_type,omitempty"`
+}
+
+type sourceGraphQLArgument struct {
+	Name string               `json:"name"`
+	Type sourceGraphQLTypeRef `json:"type"`
+}
+
+type sourceGraphQLField struct {
+	Root       string                  `json:"root"`
+	Name       string                  `json:"name"`
+	Line       int                     `json:"line"`
+	Signature  string                  `json:"signature"`
+	Arguments  []sourceGraphQLArgument `json:"arguments"`
+	ReturnType sourceGraphQLTypeRef    `json:"return_type"`
+	Deprecated bool                    `json:"deprecated"`
+	Preview    bool                    `json:"preview"`
+}
+
+type sourceGraphQLNamedField struct {
+	Name      string                  `json:"name"`
+	Type      sourceGraphQLTypeRef    `json:"type"`
+	Arguments []sourceGraphQLArgument `json:"arguments,omitempty"`
+}
+
+type sourceGraphQLNamedType struct {
+	Name          string                    `json:"name"`
+	Fields        []sourceGraphQLNamedField `json:"fields,omitempty"`
+	Interfaces    []string                  `json:"interfaces,omitempty"`
+	PossibleTypes []string                  `json:"possible_types,omitempty"`
+	Values        []string                  `json:"values,omitempty"`
+}
+
+type sourceGraphQLTypeSystem struct {
+	Enums        []sourceGraphQLNamedType `json:"enums"`
+	InputObjects []sourceGraphQLNamedType `json:"input_objects"`
+	Interfaces   []sourceGraphQLNamedType `json:"interfaces"`
+	Objects      []sourceGraphQLNamedType `json:"objects"`
+	Scalars      []string                 `json:"scalars"`
+	Unions       []sourceGraphQLNamedType `json:"unions"`
+}
+
+type sourceImportGraphQL struct {
+	sourceImportArtifact
+	QueryFields    []sourceGraphQLField    `json:"query_fields"`
+	MutationFields []sourceGraphQLField    `json:"mutation_fields"`
+	TypeSystem     sourceGraphQLTypeSystem `json:"type_system"`
+}
+
+type sourceImportCounts struct {
+	REST            int `json:"rest"`
+	GraphQLQuery    int `json:"graphql_query"`
+	GraphQLMutation int `json:"graphql_mutation"`
+	Total           int `json:"total"`
+}
+
 type sourceImportLock struct {
-	SchemaVersion int                  `json:"schema_version"`
-	Connector     string               `json:"connector"`
-	Rest          sourceImportArtifact `json:"rest"`
+	SchemaVersion int                 `json:"schema_version"`
+	Connector     string              `json:"connector"`
+	CapturedAt    string              `json:"captured_at,omitempty"`
+	Rest          sourceImportREST    `json:"rest"`
+	GraphQL       sourceImportGraphQL `json:"graphql,omitempty"`
+	Counts        sourceImportCounts  `json:"counts,omitempty"`
 }
 
 type sourceImportSource struct {
@@ -219,20 +302,39 @@ type sourceAuthDescriptor struct {
 // their resolved provider declaration wholesale; output classification is
 // additive metadata, never a response-field filter.
 type sourceOperationDescriptor struct {
-	Connector           string                     `json:"connector"`
-	SourceID            string                     `json:"source_id"`
-	ProviderOperationID string                     `json:"operation_id"`
-	Source              sourceImportSource         `json:"source"`
-	Method              string                     `json:"method"`
-	Path                string                     `json:"path"`
-	Request             sourceRequestDescriptor    `json:"request"`
-	Responses           []sourceResponseDescriptor `json:"responses"`
-	Output              sourceOutputDescriptor     `json:"output"`
-	Pagination          any                        `json:"pagination,omitempty"`
-	ByteLimits          sourceByteLimits           `json:"byte_limits"`
-	AuthScopes          sourceAuthDescriptor       `json:"auth_scopes"`
-	Servers             sourceServerOverrides      `json:"servers"`
-	Runtime             sourceRuntimeReachability  `json:"runtime"`
+	Connector           string                            `json:"connector"`
+	Protocol            string                            `json:"protocol,omitempty"`
+	SourceID            string                            `json:"source_id"`
+	ProviderOperationID string                            `json:"operation_id"`
+	Source              sourceImportSource                `json:"source"`
+	Method              string                            `json:"method"`
+	Path                string                            `json:"path"`
+	Request             sourceRequestDescriptor           `json:"request"`
+	Responses           []sourceResponseDescriptor        `json:"responses"`
+	Output              sourceOutputDescriptor            `json:"output"`
+	Pagination          any                               `json:"pagination,omitempty"`
+	ByteLimits          sourceByteLimits                  `json:"byte_limits"`
+	AuthScopes          sourceAuthDescriptor              `json:"auth_scopes"`
+	Servers             sourceServerOverrides             `json:"servers"`
+	Runtime             sourceRuntimeReachability         `json:"runtime"`
+	GraphQL             *sourceGraphQLOperationDescriptor `json:"graphql,omitempty"`
+}
+
+type sourceGraphQLOperationDescriptor struct {
+	Root       string                  `json:"root"`
+	Name       string                  `json:"name"`
+	Line       int                     `json:"line"`
+	Signature  string                  `json:"signature"`
+	Arguments  []sourceGraphQLArgument `json:"arguments"`
+	ReturnType sourceGraphQLTypeRef    `json:"return_type"`
+	Deprecated bool                    `json:"deprecated"`
+	Preview    bool                    `json:"preview"`
+}
+
+type sourceGraphQLSchemaDescriptor struct {
+	Connector  string                  `json:"connector"`
+	Source     sourceImportSource      `json:"source"`
+	TypeSystem sourceGraphQLTypeSystem `json:"type_system"`
 }
 
 type sourceServerLayer struct {
@@ -277,18 +379,20 @@ type sourceExtensionDescriptor struct {
 }
 
 type sourceImportResult struct {
-	Operations    []sourceOperationDescriptor    `json:"operations"`
-	InboundEvents []sourceInboundEventDescriptor `json:"inbound_events,omitempty"`
-	Extensions    []sourceExtensionDescriptor    `json:"extensions,omitempty"`
+	Operations     []sourceOperationDescriptor     `json:"operations"`
+	InboundEvents  []sourceInboundEventDescriptor  `json:"inbound_events,omitempty"`
+	Extensions     []sourceExtensionDescriptor     `json:"extensions,omitempty"`
+	GraphQLSchemas []sourceGraphQLSchemaDescriptor `json:"graphql_schemas,omitempty"`
 }
 
 type sourceImportDescriptorDocument struct {
-	SchemaVersion int                            `json:"schema_version"`
-	Operations    []sourceOperationDescriptor    `json:"operations"`
-	InboundEvents []sourceInboundEventDescriptor `json:"inbound_events,omitempty"`
-	Extensions    []sourceExtensionDescriptor    `json:"extensions,omitempty"`
-	MergeBlocked  bool                           `json:"merge_blocked"`
-	Gaps          []sourceContractGap            `json:"gaps,omitempty"`
+	SchemaVersion  int                             `json:"schema_version"`
+	Operations     []sourceOperationDescriptor     `json:"operations"`
+	InboundEvents  []sourceInboundEventDescriptor  `json:"inbound_events,omitempty"`
+	Extensions     []sourceExtensionDescriptor     `json:"extensions,omitempty"`
+	GraphQLSchemas []sourceGraphQLSchemaDescriptor `json:"graphql_schemas,omitempty"`
+	MergeBlocked   bool                            `json:"merge_blocked"`
+	Gaps           []sourceContractGap             `json:"gaps,omitempty"`
 }
 
 type sourceImportFetcher interface {
@@ -303,7 +407,7 @@ func (f sourceImportFetchFunc) Fetch(ctx context.Context, sourceURL string) ([]b
 
 func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLock, error) {
 	var lock sourceImportLock
-	if err := decodeSourceJSON(raw, &lock); err != nil {
+	if err := decodeSourceStrictJSON(raw, &lock); err != nil {
 		return sourceImportLock{}, fmt.Errorf("parse source lock: %w", err)
 	}
 	if lock.SchemaVersion <= 0 {
@@ -318,10 +422,79 @@ func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLo
 	if err := validateSourceImportConnector(lock.Connector); err != nil {
 		return sourceImportLock{}, err
 	}
-	if err := validateSourceImportArtifact(lock.Rest); err != nil {
+	if err := validateSourceImportArtifact(lock.Rest.sourceImportArtifact); err != nil {
+		return sourceImportLock{}, err
+	}
+	if err := validateSourceImportLockInventory(lock); err != nil {
 		return sourceImportLock{}, err
 	}
 	return lock, nil
+}
+
+func decodeSourceStrictJSON(raw []byte, target any) error {
+	validator := json.NewDecoder(bytes.NewReader(raw))
+	validator.UseNumber()
+	if err := validateSourceJSONValue(validator, ""); err != nil {
+		return err
+	}
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(target); err != nil {
+		return err
+	}
+	return sourceJSONEOF(decoder)
+}
+
+func validateSourceImportLockInventory(lock sourceImportLock) error {
+	if len(lock.Rest.Operations) > 0 {
+		if lock.Counts.REST != len(lock.Rest.Operations) {
+			return fmt.Errorf("source lock REST count %d does not match %d operations", lock.Counts.REST, len(lock.Rest.Operations))
+		}
+		seen := map[string]bool{}
+		for _, operation := range lock.Rest.Operations {
+			if operation.ID == "" || operation.Protocol != "rest" || operation.Method == "" || operation.Path == "" || operation.SourceLocation == "" {
+				return fmt.Errorf("source lock has incomplete REST operation identity")
+			}
+			if seen[operation.ID] {
+				return fmt.Errorf("source lock duplicates REST operation identity %q", operation.ID)
+			}
+			seen[operation.ID] = true
+		}
+	}
+	graphqlCount := len(lock.GraphQL.QueryFields) + len(lock.GraphQL.MutationFields)
+	if graphqlCount == 0 {
+		if lock.Counts.GraphQLQuery != 0 || lock.Counts.GraphQLMutation != 0 {
+			return fmt.Errorf("source lock GraphQL counts require a GraphQL inventory")
+		}
+		return nil
+	}
+	if err := validateSourceImportArtifact(lock.GraphQL.sourceImportArtifact); err != nil {
+		return fmt.Errorf("source lock has invalid GraphQL artifact: %w", err)
+	}
+	if lock.Counts.GraphQLQuery != len(lock.GraphQL.QueryFields) || lock.Counts.GraphQLMutation != len(lock.GraphQL.MutationFields) {
+		return fmt.Errorf("source lock GraphQL counts do not match root fields")
+	}
+	if lock.Counts.Total != lock.Counts.REST+graphqlCount {
+		return fmt.Errorf("source lock total count does not match REST and GraphQL inventories")
+	}
+	seen := map[string]bool{}
+	for _, group := range []struct {
+		root   string
+		fields []sourceGraphQLField
+	}{{"Query", lock.GraphQL.QueryFields}, {"Mutation", lock.GraphQL.MutationFields}} {
+		for _, field := range group.fields {
+			identity := group.root + "." + field.Name
+			if field.Root != group.root || field.Name == "" || field.Line <= 0 || field.Signature == "" {
+				return fmt.Errorf("source lock has incomplete GraphQL root identity %q", identity)
+			}
+			if seen[identity] {
+				return fmt.Errorf("source lock duplicates GraphQL root identity %q", identity)
+			}
+			seen[identity] = true
+		}
+	}
+	return nil
 }
 
 func validateSourceImportConnector(connector string) error {
@@ -400,6 +573,7 @@ func importSourceLockResults(ctx context.Context, locks []sourceImportLock, fetc
 		result.Operations = append(result.Operations, imported.Operations...)
 		result.InboundEvents = append(result.InboundEvents, imported.InboundEvents...)
 		result.Extensions = append(result.Extensions, imported.Extensions...)
+		result.GraphQLSchemas = append(result.GraphQLSchemas, imported.GraphQLSchemas...)
 	}
 	sortSourceOperationDescriptors(result.Operations)
 	sortSourceInboundEventDescriptors(result.InboundEvents)
@@ -446,8 +620,15 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 	if err := validateSourceImportConnector(lock.Connector); err != nil {
 		return sourceImportResult{}, err
 	}
-	if err := validateSourceImportArtifact(lock.Rest); err != nil {
+	if err := validateSourceImportArtifact(lock.Rest.sourceImportArtifact); err != nil {
 		return sourceImportResult{}, err
+	}
+	// Version 2 locks are provider-authoritative inventories. They may contain
+	// open schemas or encodings that the current runtime cannot safely expose;
+	// import retains those contracts and emits source-bound gaps instead of
+	// making the provider operation disappear from the canonical descriptor.
+	if lock.SchemaVersion >= 2 {
+		limits.AllowSourceContractGaps = true
 	}
 	if lock.Rest.Bytes > limits.MaxArtifactBytes {
 		return sourceImportResult{}, fmt.Errorf("artifact byte limit exceeded by source lock")
@@ -467,12 +648,18 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 	if err != nil {
 		return sourceImportResult{}, err
 	}
-	if err := validateSourceImportArtifactForm(lock.Rest, form); err != nil {
+	if err := validateSourceImportArtifactForm(lock.Rest.sourceImportArtifact, form); err != nil {
 		return sourceImportResult{}, err
 	}
 	resolver := sourceReferenceResolver{root: doc, limits: limits, form: form}
 	result, err := importSourceDocumentResult(lock, doc, form, &resolver, limits, budget)
 	if err != nil {
+		return sourceImportResult{}, err
+	}
+	if err := validateLockedRESTProjection(lock, result.Operations); err != nil {
+		return sourceImportResult{}, err
+	}
+	if err := appendLockedGraphQLProjection(ctx, lock, fetcher, limits, budget, &result); err != nil {
 		return sourceImportResult{}, err
 	}
 	sortSourceOperationDescriptors(result.Operations)
@@ -482,6 +669,116 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 		return sourceImportResult{}, err
 	}
 	return result, nil
+}
+
+func validateLockedRESTProjection(lock sourceImportLock, descriptors []sourceOperationDescriptor) error {
+	if len(lock.Rest.Operations) == 0 {
+		return nil
+	}
+	if len(descriptors) != len(lock.Rest.Operations) {
+		return fmt.Errorf("source lock REST inventory has %d operations but imported artifact has %d", len(lock.Rest.Operations), len(descriptors))
+	}
+	actual := make(map[string]sourceOperationDescriptor, len(descriptors))
+	for _, descriptor := range descriptors {
+		key := strings.ToUpper(descriptor.Method) + "\x00" + descriptor.Path
+		if _, exists := actual[key]; exists {
+			return fmt.Errorf("imported REST artifact duplicates route %s %s", descriptor.Method, descriptor.Path)
+		}
+		actual[key] = descriptor
+	}
+	for _, locked := range lock.Rest.Operations {
+		key := strings.ToUpper(locked.Method) + "\x00" + locked.Path
+		descriptor, exists := actual[key]
+		if !exists {
+			return fmt.Errorf("source lock REST identity %q is absent from imported artifact", locked.ID)
+		}
+		if descriptor.ProviderOperationID != locked.OperationID || descriptor.Source.Location != locked.SourceLocation {
+			return fmt.Errorf("source lock REST identity %q disagrees with imported provider operation", locked.ID)
+		}
+	}
+	return nil
+}
+
+func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits, budget *sourceImportBudget, result *sourceImportResult) error {
+	fields := append(append([]sourceGraphQLField(nil), lock.GraphQL.QueryFields...), lock.GraphQL.MutationFields...)
+	if len(fields) == 0 {
+		return nil
+	}
+	if lock.GraphQL.Bytes > limits.MaxArtifactBytes {
+		return fmt.Errorf("GraphQL artifact byte limit exceeded by source lock")
+	}
+	raw, err := fetcher.Fetch(ctx, lock.GraphQL.SourceURL)
+	if err != nil {
+		return fmt.Errorf("fetch locked GraphQL source artifact: %w", err)
+	}
+	if int64(len(raw)) > limits.MaxArtifactBytes {
+		return fmt.Errorf("GraphQL artifact byte limit exceeded")
+	}
+	digest := sha256.Sum256(raw)
+	if int64(len(raw)) != lock.GraphQL.Bytes || !strings.EqualFold(hex.EncodeToString(digest[:]), lock.GraphQL.SHA256) {
+		return fmt.Errorf("source-lock refresh required: fetched GraphQL artifact does not match locked bytes and SHA-256")
+	}
+	countBudget, err := budget.countBudget(limits)
+	if err != nil {
+		return err
+	}
+	if err := countBudget.reserveOperations(len(fields)); err != nil {
+		return err
+	}
+	schema := sourceGraphQLSchemaDescriptor{
+		Connector: lock.Connector,
+		Source: sourceImportSource{
+			URL:      lock.GraphQL.SourceURL,
+			SHA256:   strings.ToLower(lock.GraphQL.SHA256),
+			Bytes:    lock.GraphQL.Bytes,
+			Location: "graphql.type_system",
+			Form:     "graphql",
+			Version:  strconv.Itoa(lock.SchemaVersion),
+		},
+		TypeSystem: lock.GraphQL.TypeSystem,
+	}
+	if err := budget.add(schema, "GraphQL schema"); err != nil {
+		return err
+	}
+	result.GraphQLSchemas = append(result.GraphQLSchemas, schema)
+	for _, field := range fields {
+		kind := "query"
+		if field.Root == "Mutation" {
+			kind = "mutation"
+		}
+		location := fmt.Sprintf("graphql.%s_fields[%q]@line:%d", kind, field.Name, field.Line)
+		descriptor := sourceOperationDescriptor{
+			Connector: lock.Connector,
+			Protocol:  "graphql",
+			SourceID:  fmt.Sprintf("%s.graphql.%s.%s", lock.Connector, kind, field.Name),
+			Source: sourceImportSource{
+				URL:      lock.GraphQL.SourceURL,
+				SHA256:   strings.ToLower(lock.GraphQL.SHA256),
+				Bytes:    lock.GraphQL.Bytes,
+				Location: location,
+				Form:     "graphql",
+				Version:  strconv.Itoa(lock.SchemaVersion),
+			},
+			Method:     "post",
+			Path:       "/graphql",
+			Request:    sourceRequestDescriptor{Path: []sourceParameterDescriptor{}, Query: []sourceParameterDescriptor{}, Header: []sourceParameterDescriptor{}},
+			Responses:  []sourceResponseDescriptor{},
+			Output:     sourceOutputDescriptor{Class: sourceOutputJSON, Success: []sourceOutputVariant{{Status: "200", MediaType: "application/json", Class: sourceOutputJSON}}},
+			ByteLimits: sourceByteLimits{Response: defaultSourceImportSchemaBytes},
+			AuthScopes: sourceAuthDescriptor{Declared: true},
+			Servers:    sourceServerOverrides{Precedence: []string{"graphql_source_lock"}},
+			Runtime:    sourceRuntimeReachability{},
+			GraphQL: &sourceGraphQLOperationDescriptor{
+				Root: field.Root, Name: field.Name, Line: field.Line, Signature: field.Signature,
+				Arguments: field.Arguments, ReturnType: field.ReturnType, Deprecated: field.Deprecated, Preview: field.Preview,
+			},
+		}
+		if err := budget.add(descriptor, "GraphQL operation"); err != nil {
+			return err
+		}
+		result.Operations = append(result.Operations, descriptor)
+	}
+	return nil
 }
 
 func validateSourceImportResultIdentities(result sourceImportResult) error {
@@ -1101,12 +1398,9 @@ func sourceReferenceIndexEntryBytes(pointer string) int64 {
 }
 
 func sourceReferenceIndexByteLimit(limits sourceImportLimits) int64 {
-	limit := limits.MaxArtifactBytes
+	limit := limits.MaxIndexBytes
 	if limit <= 0 {
-		limit = defaultSourceImportArtifactBytes
-	}
-	if descriptorLimit := sourceResolvedDescriptorLimit(limits); descriptorLimit > 0 && descriptorLimit < limit {
-		limit = descriptorLimit
+		limit = 64 << 20
 	}
 	return limit
 }
@@ -4653,10 +4947,11 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, form sourc
 		}
 	}
 	servers.Gaps = sourceSortedGaps(servers.Gaps)
-	runtimeGaps := append(sourceRequestGaps(request), servers.Gaps...)
+	runtimeGaps := append(sourceRequestGaps(request, form, limits), servers.Gaps...)
 	runtime := sourceRuntimeReachability{MergeBlocked: len(runtimeGaps) > 0, Gaps: runtimeGaps}
 	return sourceOperationDescriptor{
 		Connector:           lock.Connector,
+		Protocol:            "rest",
 		SourceID:            sourceID,
 		ProviderOperationID: providerID,
 		Source:              sourceImportProvenance(lock, form, location),
@@ -5045,7 +5340,7 @@ func sourceParameterWire(parameter map[string]any, form sourceDocumentForm, loca
 	return wire, nil
 }
 
-func sourceRequestGaps(request sourceRequestDescriptor) []sourceContractGap {
+func sourceRequestGaps(request sourceRequestDescriptor, form sourceDocumentForm, limits sourceImportLimits) []sourceContractGap {
 	var gaps []sourceContractGap
 	if request.Body != nil && sourceRequestFormMediaType(request.MediaType) {
 		gaps = append(gaps, sourceContractGapFor("cli-request-encoding-foundation-r1", "request body encoding", "provider form request media requires runtime encoding support"))
@@ -5053,6 +5348,20 @@ func sourceRequestGaps(request sourceRequestDescriptor) []sourceContractGap {
 	for _, group := range [][]sourceParameterDescriptor{request.Path, request.Query, request.Header} {
 		for _, parameter := range group {
 			gaps = append(gaps, parameter.Wire.Gaps...)
+			if parameter.Schema != nil {
+				strict := limits
+				strict.AllowSourceContractGaps = false
+				if err := validateBoundedRequestSchema(parameter.Schema, form, strict, 0); err != nil {
+					gaps = append(gaps, sourceContractGapFor("cli-request-schema-foundation-r1", "parameter "+parameter.Name, err.Error()))
+				}
+			}
+		}
+	}
+	if request.Body != nil {
+		strict := limits
+		strict.AllowSourceContractGaps = false
+		if err := validateBoundedRequestSchema(request.Body.Schema, form, strict, 0); err != nil {
+			gaps = append(gaps, sourceContractGapFor("cli-request-schema-foundation-r1", "request body", err.Error()))
 		}
 	}
 	return sourceSortedGaps(gaps)
@@ -5080,7 +5389,13 @@ func sourceSortedGaps(gaps []sourceContractGap) []sourceContractGap {
 }
 
 func validateBoundedRequestSchema(schema any, form sourceDocumentForm, limits sourceImportLimits, depth int) error {
-	return validateBoundedRequestSchemaWithinEnum(schema, form, limits, depth, false)
+	strict := limits
+	strict.AllowSourceContractGaps = false
+	err := validateBoundedRequestSchemaWithinEnum(schema, form, strict, depth, false)
+	if err != nil && limits.AllowSourceContractGaps {
+		return nil
+	}
+	return err
 }
 
 func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm, limits sourceImportLimits, depth int, boundedByFiniteSet bool) error {
@@ -6194,9 +6509,10 @@ func marshalSourceImportDescriptors(descriptors []sourceOperationDescriptor) ([]
 
 func marshalSourceImportResult(result sourceImportResult) ([]byte, error) {
 	copyResult := sourceImportResult{
-		Operations:    append([]sourceOperationDescriptor(nil), result.Operations...),
-		InboundEvents: append([]sourceInboundEventDescriptor(nil), result.InboundEvents...),
-		Extensions:    append([]sourceExtensionDescriptor(nil), result.Extensions...),
+		Operations:     append([]sourceOperationDescriptor(nil), result.Operations...),
+		InboundEvents:  append([]sourceInboundEventDescriptor(nil), result.InboundEvents...),
+		Extensions:     append([]sourceExtensionDescriptor(nil), result.Extensions...),
+		GraphQLSchemas: append([]sourceGraphQLSchemaDescriptor(nil), result.GraphQLSchemas...),
 	}
 	sortSourceOperationDescriptors(copyResult.Operations)
 	sortSourceInboundEventDescriptors(copyResult.InboundEvents)
@@ -6210,12 +6526,13 @@ func marshalSourceImportResult(result sourceImportResult) ([]byte, error) {
 	}
 	gaps = sourceSortedGaps(gaps)
 	document := sourceImportDescriptorDocument{
-		SchemaVersion: 1,
-		Operations:    copyResult.Operations,
-		InboundEvents: copyResult.InboundEvents,
-		Extensions:    copyResult.Extensions,
-		MergeBlocked:  len(gaps) > 0,
-		Gaps:          gaps,
+		SchemaVersion:  2,
+		Operations:     copyResult.Operations,
+		InboundEvents:  copyResult.InboundEvents,
+		Extensions:     copyResult.Extensions,
+		GraphQLSchemas: copyResult.GraphQLSchemas,
+		MergeBlocked:   len(gaps) > 0,
+		Gaps:           gaps,
 	}
 	var buffer bytes.Buffer
 	encoder := json.NewEncoder(&buffer)

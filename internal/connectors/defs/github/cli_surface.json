@@ -39973,8 +39973,12 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer",
-          "required": true
+          "type": "integer"
+        },
+        {
+          "name": "last",
+          "maps_to": "body.last",
+          "type": "integer"
         },
         {
           "name": "organization-id",
@@ -40229,8 +40233,12 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer",
-          "required": true
+          "type": "integer"
+        },
+        {
+          "name": "last",
+          "maps_to": "body.last",
+          "type": "integer"
         },
         {
           "name": "query",
@@ -40288,13 +40296,17 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer",
-          "required": true
+          "type": "integer"
         },
         {
           "name": "identifier",
           "maps_to": "body.identifier",
           "type": "json"
+        },
+        {
+          "name": "last",
+          "maps_to": "body.last",
+          "type": "integer"
         },
         {
           "name": "order-by",
@@ -40378,8 +40390,12 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer",
-          "required": true
+          "type": "integer"
+        },
+        {
+          "name": "last",
+          "maps_to": "body.last",
+          "type": "integer"
         },
         {
           "name": "order-by",
@@ -40453,8 +40469,12 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer",
-          "required": true
+          "type": "integer"
+        },
+        {
+          "name": "last",
+          "maps_to": "body.last",
+          "type": "integer"
         },
         {
           "name": "only-dependencies",

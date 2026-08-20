@@ -263,6 +263,8 @@
                   "connection_path": { "type": "string" },
                   "cursor_variable": { "type": "string" },
                   "page_size_variable": { "type": "string" },
+                  "backward_cursor_variable": { "type": "string" },
+                  "backward_page_size_variable": { "type": "string" },
                   "max_page_size": { "type": "integer" }
                 }
               }

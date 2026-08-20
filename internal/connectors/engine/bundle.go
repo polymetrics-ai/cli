@@ -921,10 +921,12 @@ type GraphQLOperationSpec struct {
 // in the declaration's fixed document; callers may only submit the next
 // cursor returned by the preceding result.
 type GraphQLOperationPaginationSpec struct {
-	ConnectionPath   string `json:"connection_path"`
-	CursorVariable   string `json:"cursor_variable"`
-	PageSizeVariable string `json:"page_size_variable,omitempty"`
-	MaxPageSize      int    `json:"max_page_size,omitempty"`
+	ConnectionPath           string `json:"connection_path"`
+	CursorVariable           string `json:"cursor_variable"`
+	PageSizeVariable         string `json:"page_size_variable,omitempty"`
+	BackwardCursorVariable   string `json:"backward_cursor_variable,omitempty"`
+	BackwardPageSizeVariable string `json:"backward_page_size_variable,omitempty"`
+	MaxPageSize              int    `json:"max_page_size,omitempty"`
 }
 
 type XMLOperationSpec struct {

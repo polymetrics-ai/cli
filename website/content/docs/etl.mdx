@@ -48,8 +48,8 @@ A **connection** is the named pairing of a connector credential and a storage cr
 
 ```bash
 pm connections create <name> \
-  --source <credential>:<credential-name> \
-  --destination <credential>:<credential-name> \
+  --source <connector>:<credential-name> \
+  --destination <connector>:<credential-name> \
   --stream <stream-name> \
   --primary-key <field> \
   --cursor <field> \
@@ -385,6 +385,7 @@ Agents and scripts should branch on exit codes, not parse stderr text.
 | `4` | Auth error | Surface to a human to add or update credentials. |
 | `5` | Connector error | Inspect the error detail; may be retryable. |
 | `6` | Runtime unavailable | Start the required dependency (DuckDB, Postgres, etc.). |
+| `7` | Policy refusal | Resolve the declared safety or authorization policy; do not retry unchanged. |
 | `1` | Internal error | File a bug report. |
 
 ## Where to go next
