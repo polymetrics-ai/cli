@@ -205,6 +205,97 @@ func TestBuildWriteQueryOmitWhenAbsentScopesMissingRecordValuesToTheirDeclaredQu
 	}
 }
 
+func TestBuildWriteQueryPreflightsEveryExpressionBeforeRecordOmission(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		template  string
+		vars      Vars
+		want      string
+		wantOmit  bool
+		wantError string
+	}{
+		{
+			name:      "later query reference",
+			template:  "{{ record.optional }}{{ query.forbidden }}",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: `unresolved key "forbidden" in query`,
+		},
+		{
+			name:      "reversed source order",
+			template:  "{{ query.forbidden }}{{ record.optional }}",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: `unresolved key "forbidden" in query`,
+		},
+		{
+			name:      "later invalid config expression",
+			template:  "{{ record.optional }}{{ config.updated_at | unix_seconds }}",
+			vars:      Vars{Config: map[string]string{"updated_at": "not-a-time"}, Record: map[string]any{"id": "w1"}},
+			wantError: "invalid RFC3339 value",
+		},
+		{
+			name:      "invalid filter after absent record",
+			template:  "{{ record.optional | not-a-filter }}",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: `unknown filter "not-a-filter"`,
+		},
+		{
+			name:      "malformed reference after absent record",
+			template:  "{{ record.optional }}{{ config. }}",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: `malformed reference "config."`,
+		},
+		{
+			name:      "unclosed expression after absent record",
+			template:  "{{ record.optional }}{{ config.scope",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: "malformed template delimiter",
+		},
+		{
+			name:     "mixed expression omits absent record",
+			template: "prefix={{ record.optional }}&scope={{ config.scope }}",
+			vars: Vars{
+				Config: map[string]string{"scope": "workspace-1"},
+				Record: map[string]any{"id": "w1"},
+			},
+			wantOmit: true,
+		},
+		{
+			name:     "mixed expression materializes present record",
+			template: "prefix={{ record.optional }}&scope={{ config.scope }}",
+			vars: Vars{
+				Config: map[string]string{"scope": "workspace-1"},
+				Record: map[string]any{"optional": "record-value"},
+			},
+			want: "prefix=record-value&scope=workspace-1",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			query, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": {Template: tc.template, OmitWhenAbsent: true}},
+			}, tc.vars)
+			if tc.wantError != "" {
+				if err == nil || !strings.Contains(err.Error(), tc.wantError) {
+					t.Fatalf("buildWriteQuery error = %v, want %q", err, tc.wantError)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("buildWriteQuery: %v", err)
+			}
+			if tc.wantOmit {
+				if _, present := query["optional"]; present {
+					t.Fatalf("optional query = %#v, want parameter omitted", query)
+				}
+				return
+			}
+			if got := query.Get("optional"); got != tc.want {
+				t.Fatalf("optional query = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
 func TestWriteActionRecordQueryRejectionsHappenBeforeProviderIO(t *testing.T) {
 	for _, tc := range []struct {
 		name    string
@@ -229,6 +320,12 @@ func TestWriteActionRecordQueryRejectionsHappenBeforeProviderIO(t *testing.T) {
 			param:   QueryParam{Template: "{{ query.optional }}", OmitWhenAbsent: true},
 			record:  connectors.Record{"id": "w1"},
 			wantErr: "unresolved key",
+		},
+		{
+			name:    "missing record cannot hide later wrong source",
+			param:   QueryParam{Template: "{{ record.optional }}{{ query.forbidden }}", OmitWhenAbsent: true},
+			record:  connectors.Record{"id": "w1"},
+			wantErr: `unresolved key "forbidden" in query`,
 		},
 		{
 			name:    "malformed explicit value",

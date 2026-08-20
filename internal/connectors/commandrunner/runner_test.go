@@ -2096,6 +2096,60 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	}
 }
 
+func TestBuildOperationDirectWriteCommandRejectsDuplicateQueryOccurrencesBeforePreview(t *testing.T) {
+	for _, tc := range []struct {
+		name  string
+		flags []connectors.CommandSurfaceFlag
+		input map[string][]string
+	}{
+		{
+			name: "repeated flag",
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"},
+			},
+			input: map[string][]string{"dry-run": {"true", "false"}},
+		},
+		{
+			name: "aliases target the same query parameter",
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"},
+				{Name: "dry-run-alias", Type: "boolean", MapsTo: "query.dry_run"},
+			},
+			input: map[string][]string{"dry-run": {"true"}, "dry-run-alias": {"false"}},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			connector := &fakeConnector{
+				directWriteMetadata: connectors.OperationDirectWriteMetadata{
+					Operation:    "acme.vote",
+					OutputPolicy: "json_redacted",
+				},
+				surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+					Path:         "vote",
+					Intent:       "direct_write",
+					Availability: "implemented",
+					Operation:    "acme.vote",
+					APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote"}},
+					OutputPolicy: "json_redacted",
+					Flags:        tc.flags,
+				}}},
+			}
+
+			_, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path:    []string{"vote"},
+				Flags:   tc.input,
+				Preview: true,
+			})
+			if err == nil || !strings.Contains(err.Error(), "supplied more than once") || !strings.Contains(err.Error(), "dry_run") {
+				t.Fatalf("BuildWriteCommand error = %v, want duplicate query rejection", err)
+			}
+			if connector.operationDirectWriteReq.Operation != "" {
+				t.Fatalf("duplicate query reached operation preview: %+v", connector.operationDirectWriteReq)
+			}
+		})
+	}
+}
+
 func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *testing.T) {
 	batchable := false
 	bundle := engine.Bundle{

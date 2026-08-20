@@ -781,7 +781,40 @@ func resolveWriteQueryParams(params map[string]QueryParam, vars Vars) (url.Value
 
 func resolveQueryParamsWithRecordOmission(params map[string]QueryParam, vars Vars, allowOmitRecord bool) (url.Values, error) {
 	q := url.Values{}
-	for k, param := range params {
+	names := make([]string, 0, len(params))
+	for k := range params {
+		names = append(names, k)
+	}
+	sort.Strings(names)
+	for _, k := range names {
+		param := params[k]
+		if allowOmitRecord {
+			resolutionErrors, err := validateWriteQueryTemplate(param.Template, vars)
+			if err != nil {
+				return nil, fmt.Errorf("engine: resolve query %q: %w", k, err)
+			}
+			if len(resolutionErrors) != 0 {
+				for _, resolutionErr := range resolutionErrors {
+					switch {
+					case isUnresolvedRecordPath(resolutionErr):
+						if param.OmitWhenAbsent {
+							continue
+						}
+					case isUnresolvedConfigSecretOrIncremental(resolutionErr):
+						if param.OmitWhenAbsent || param.Default != "" {
+							continue
+						}
+					}
+					return nil, fmt.Errorf("engine: resolve query %q: %w", k, resolutionErr)
+				}
+				firstResolutionErr := resolutionErrors[0]
+				if isUnresolvedRecordPath(firstResolutionErr) || param.OmitWhenAbsent {
+					continue
+				}
+				q.Set(k, param.Default)
+				continue
+			}
+		}
 		val, err := Interpolate(param.Template, vars)
 		if err != nil {
 			if allowOmitRecord && param.OmitWhenAbsent && isUnresolvedRecordPath(err) {
@@ -801,6 +834,86 @@ func resolveQueryParamsWithRecordOmission(params map[string]QueryParam, vars Var
 		q.Set(k, val)
 	}
 	return q, nil
+}
+
+func validateWriteQueryTemplate(template string, vars Vars) ([]error, error) {
+	matches := templatePattern.FindAllStringSubmatchIndex(template, -1)
+	expressions := make([]string, 0, len(matches))
+	last := 0
+	var syntaxErr error
+	for _, match := range matches {
+		if syntaxErr == nil && containsTemplateDelimiter(template[last:match[0]]) {
+			syntaxErr = fmt.Errorf("interpolate: malformed template delimiter")
+		}
+		expr := template[match[2]:match[3]]
+		if err := validateWriteQueryExpression(expr); err != nil && syntaxErr == nil {
+			syntaxErr = err
+		}
+		expressions = append(expressions, expr)
+		last = match[1]
+	}
+	if syntaxErr == nil && containsTemplateDelimiter(template[last:]) {
+		syntaxErr = fmt.Errorf("interpolate: malformed template delimiter")
+	}
+	if syntaxErr != nil {
+		return nil, syntaxErr
+	}
+
+	resolutionErrors := make([]error, 0)
+	for _, expr := range expressions {
+		if _, err := resolveExpr(expr, vars, false); err != nil {
+			resolutionErrors = append(resolutionErrors, err)
+		}
+	}
+	return resolutionErrors, nil
+}
+
+func containsTemplateDelimiter(text string) bool {
+	return strings.Contains(text, "{{") || strings.Contains(text, "}}")
+}
+
+func validateWriteQueryExpression(expr string) error {
+	if _, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
+		return err
+	}
+	parts := strings.Split(expr, "|")
+	ref := strings.TrimSpace(parts[0])
+	if err := validateWriteQueryReference(ref); err != nil {
+		return err
+	}
+	for _, rawFilter := range parts[1:] {
+		filter := strings.TrimSpace(rawFilter)
+		if filter != "" && !isKnownFilter(filter) {
+			return fmt.Errorf("interpolate: unknown filter %q", filter)
+		}
+	}
+	return nil
+}
+
+func validateWriteQueryReference(ref string) error {
+	if ref == "cursor" {
+		return nil
+	}
+	parts := strings.Split(ref, ".")
+	if len(parts) < 2 || strings.TrimSpace(parts[0]) == "" || strings.TrimSpace(parts[1]) == "" {
+		return fmt.Errorf("interpolate: malformed reference %q", ref)
+	}
+	switch parts[0] {
+	case "config", "secrets", "record", "query":
+		return nil
+	case "incremental":
+		if knownIncrementalKeys[parts[1]] {
+			return nil
+		}
+		return fmt.Errorf("interpolate: unknown incremental reference %q", ref)
+	case "fanout":
+		if knownFanoutKeys[parts[1]] {
+			return nil
+		}
+		return fmt.Errorf("interpolate: unknown fanout reference %q", ref)
+	default:
+		return fmt.Errorf("interpolate: unknown namespace %q in reference %q", parts[0], ref)
+	}
 }
 
 // buildCheckQuery resolves check.query (RequestSpec.Query) against cfg using
