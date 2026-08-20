@@ -1090,7 +1090,11 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		_ = resp.Body.Close()
 		terminal := &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}
 		if readErr != nil {
-			return terminal, fmt.Errorf("read response body: %w", readErr)
+			readBodyErr := fmt.Errorf("read response body: %w", readErr)
+			if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
+				return terminal, errors.Join(requesterResponseStatusError(ctx, strictWrite, resp.StatusCode, fullURL, respBody, observation), readBodyErr)
+			}
+			return terminal, readBodyErr
 		}
 
 		// A 401 can mean the credential was invalidated out of band (revoked
@@ -1129,11 +1133,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			responseErr := responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
-			if (strictWrite || transportpolicy.IsDestructive(ctx)) && resp.StatusCode >= http.StatusMultipleChoices && resp.StatusCode < http.StatusBadRequest {
-				responseErr = fmt.Errorf("%w: %w", transportpolicy.ErrRedirectRefused, responseErr)
-			}
-			return terminal, responseErr
+			return terminal, requesterResponseStatusError(ctx, strictWrite, resp.StatusCode, fullURL, respBody, observation)
 		}
 
 		return terminal, nil
@@ -1268,6 +1268,14 @@ func responseHTTPError(status int, requestURL string, body []byte, observation R
 		HasReset:        observation.HasReset,
 		ResetAtAbsolute: observation.ResetAtAbsolute,
 	}
+}
+
+func requesterResponseStatusError(ctx context.Context, strictWrite bool, status int, requestURL string, body []byte, observation RateLimitObservation) error {
+	responseErr := responseHTTPError(status, requestURL, body, observation)
+	if (strictWrite || transportpolicy.IsDestructive(ctx)) && status >= http.StatusMultipleChoices && status < http.StatusBadRequest {
+		return fmt.Errorf("%w: %w", transportpolicy.ErrRedirectRefused, responseErr)
+	}
+	return responseErr
 }
 
 func truncate(body []byte) string {

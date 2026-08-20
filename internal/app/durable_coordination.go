@@ -19,8 +19,13 @@ type rateParkingResumeContextKey struct{}
 type authRepairContextKey struct{}
 
 func isRateParkingResume(ctx context.Context) bool {
-	resuming, _ := ctx.Value(rateParkingResumeContextKey{}).(bool)
+	_, resuming := rateParkingResumeRunID(ctx)
 	return resuming
+}
+
+func rateParkingResumeRunID(ctx context.Context) (string, bool) {
+	runID, ok := ctx.Value(rateParkingResumeContextKey{}).(string)
+	return runID, ok && runID != ""
 }
 
 func isAuthRepair(ctx context.Context) bool {
@@ -33,9 +38,10 @@ func isAuthRepair(ctx context.Context) bool {
 // checkpoint. Every refusal returns before the parking store or run status is
 // mutated.
 func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchRequest, result etlExecutionResult, runErr error) (Run, bool, error) {
-	if a == nil || a.rateParking == nil || isRateParkingResume(ctx) {
+	if a == nil || a.rateParking == nil {
 		return Run{}, false, nil
 	}
+	resumedRunID, rearming := rateParkingResumeRunID(ctx)
 	if origin, tagged := synctransport.TransportExecutionOriginOf(runErr); tagged && origin != synctransport.TransportExecutionOriginSource {
 		return Run{}, false, nil
 	}
@@ -73,8 +79,14 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 			return Run{}, true, err
 		}
 	}
-	if _, err := engine.ParkRateLimitedRun(ctx, a.rateParking, request.runID, scope, checkpoint, runErr); err != nil {
-		return Run{}, true, err
+	if rearming {
+		if _, err := engine.RearmRateLimitedRun(ctx, a.rateParking, resumedRunID, scope, checkpoint, runErr); err != nil {
+			return Run{}, true, err
+		}
+	} else {
+		if _, err := engine.ParkRateLimitedRun(ctx, a.rateParking, request.runID, scope, checkpoint, runErr); err != nil {
+			return Run{}, true, err
+		}
 	}
 	updated, err := a.updateState(func(current state) (state, error) {
 		for index := range current.Runs {
@@ -107,6 +119,9 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 	}
 	for _, run := range updated.Runs {
 		if run.ID == request.runID {
+			if rearming {
+				return run, true, coordination.ErrRateLimitRearmed
+			}
 			return run, true, coordination.ErrRateLimitParked
 		}
 	}
@@ -165,7 +180,7 @@ func (a *App) resumeParkedRateLimitRun(ctx context.Context, parked coordination.
 		return err
 	}
 	if transportCheckpointEqual(&current, &parked.Checkpoint) {
-		resumeCtx := context.WithValue(ctx, rateParkingResumeContextKey{}, true)
+		resumeCtx := context.WithValue(ctx, rateParkingResumeContextKey{}, parked.RunID)
 		request, err := parkedRateLimitRunETLRequest(original, parked.Checkpoint)
 		if err != nil {
 			return err

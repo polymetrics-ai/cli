@@ -172,6 +172,46 @@ func TestRequesterRetainsPartialResponseOnBodyReadError(t *testing.T) {
 	}
 }
 
+func TestRequesterRetainsRateLimitClassificationOnBodyReadError(t *testing.T) {
+	readErr := errors.New("injected response read failure")
+	now := time.Date(2026, time.August, 20, 10, 0, 0, 0, time.UTC)
+	body := &partialResponseReadCloser{body: []byte("provider response prefix"), err: readErr}
+	r := &Requester{
+		BaseURL:        "https://example.invalid",
+		DisableRetries: true,
+		Now:            func() time.Time { return now },
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			return &http.Response{
+				StatusCode: http.StatusTooManyRequests,
+				Header:     http.Header{"Retry-After": {"90"}, "X-Provider-Receipt": {"receipt-one", "receipt-two"}},
+				Body:       body,
+				Request:    req,
+			}, nil
+		})},
+	}
+
+	response, err := r.Do(context.Background(), http.MethodGet, "/limited", nil, nil)
+	if !errors.Is(err, readErr) {
+		t.Fatalf("Do error = %v, want response read failure", err)
+	}
+	var rateLimitErr *RateLimitError
+	if !errors.As(err, &rateLimitErr) {
+		t.Fatalf("Do error = %T %v, want *RateLimitError", err, err)
+	}
+	if !rateLimitErr.HasReset || !rateLimitErr.ResetAt.Equal(now.Add(90*time.Second)) {
+		t.Fatalf("rate-limit reset = %#v, want parsed Retry-After reset", rateLimitErr)
+	}
+	if response == nil || response.Status != http.StatusTooManyRequests || string(response.Body) != "provider response prefix" {
+		t.Fatalf("response = %#v, want captured partial provider response", response)
+	}
+	if got := response.Header.Values("X-Provider-Receipt"); !slices.Equal(got, []string{"receipt-one", "receipt-two"}) {
+		t.Fatalf("provider receipts = %#v, want both values", got)
+	}
+	if !body.closed {
+		t.Fatal("response body was not closed after the read failure")
+	}
+}
+
 func TestRequesterHonorsProviderRetryAfterBeyondFallbackCap(t *testing.T) {
 	var calls int32
 	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)

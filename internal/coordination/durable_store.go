@@ -216,6 +216,29 @@ func (s *FileRateParkingStore) Create(run ParkedRateLimitRun) (ParkedRateLimitRu
 	return result, created, err
 }
 
+func (s *FileRateParkingStore) Rearm(run ParkedRateLimitRun, owner string) (ParkedRateLimitRun, error) {
+	var result ParkedRateLimitRun
+	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
+		if err := validateRateParkingFileState(state); err != nil {
+			return state, err
+		}
+		if err := validateParkedRateLimitRun(run); err != nil {
+			return state, err
+		}
+		record, found := state.Records[run.RunID]
+		if !found || record.ClaimOwner != owner {
+			return state, ErrRateParkingClaimLost
+		}
+		if record.Run.Scope != run.Scope {
+			return state, ErrRateParkingConflict
+		}
+		state.Records[run.RunID] = rateParkingFileRecord{Run: run.Clone()}
+		result = run.Clone()
+		return state, nil
+	})
+	return result, err
+}
+
 func (s *FileRateParkingStore) HasScope(scope connectors.RateLimitScopeKey) (bool, error) {
 	state, err := s.load()
 	if err != nil {

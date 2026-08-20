@@ -257,6 +257,113 @@ func TestParkedFullAppendRateResumePreservesCheckpointAndBatchSize(t *testing.T)
 	}
 }
 
+func TestParkedFullAppendRateResumeRearmsLatestCheckpoint(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	fixture.app.rateParking.Close()
+	now := time.Date(2026, time.August, 20, 12, 0, 0, 0, time.UTC)
+	firstReset := now.Add(time.Minute)
+	secondReset := now.Add(2 * time.Minute)
+	scheduler := &appRateParkingTestScheduler{}
+	parkingStore := coordination.NewMemoryRateParkingStore()
+	fixture.app.rateParking = coordination.NewRateParkingCoordinator(coordination.RateParkingCoordinatorOptions{
+		Store:     parkingStore,
+		Scheduler: scheduler,
+		Now:       func() time.Time { return now },
+		Resume:    fixture.app.resumeParkedRateLimitRun,
+	})
+	if err := fixture.app.rateParking.Start(context.Background()); err != nil {
+		t.Fatalf("start test rate parking: %v", err)
+	}
+	t.Cleanup(fixture.app.rateParking.Close)
+	fixture.source.rateLimitScope = "transport-source-rate-limit"
+	first := fixture.sourceExecutor.page
+	second := fixture.sourceExecutor.page
+	second.Records = []connectors.Record{{"id": "2", "provider": "second"}}
+	second.CandidateCheckpoint.Position.Primary = synccontract.OpaqueToken("2")
+	second.CandidateCheckpoint.Position.TieBreaker = synccontract.OpaqueToken("2")
+	third := fixture.sourceExecutor.page
+	third.Records = []connectors.Record{{"id": "3", "provider": "third"}}
+	third.CandidateCheckpoint.Position.Primary = synccontract.OpaqueToken("3")
+	third.CandidateCheckpoint.Position.TieBreaker = synccontract.OpaqueToken("3")
+	rateOne := &connsdk.RateLimitError{
+		HTTPError: &connsdk.HTTPError{Status: http.StatusTooManyRequests, URL: "https://provider.invalid/records"},
+		Source:    connsdk.RateLimitObservationSourceRetryAfter,
+		HasReset:  true,
+		ResetAt:   firstReset,
+	}
+	rateTwo := &connsdk.RateLimitError{
+		HTTPError: &connsdk.HTTPError{Status: http.StatusTooManyRequests, URL: "https://provider.invalid/records"},
+		Source:    connsdk.RateLimitObservationSourceHeaders,
+		HasReset:  true,
+		ResetAt:   secondReset,
+	}
+	var firstCheckpoint, secondCheckpoint *synccontract.CheckpointEnvelope
+	fixture.sourceExecutor.read = func(_ context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+		switch fixture.sourceExecutor.readCalls {
+		case 1:
+			if request.Checkpoint != nil {
+				return errors.New("initial full-append request unexpectedly used a checkpoint")
+			}
+			if err := emit(first); err != nil {
+				return err
+			}
+			return rateOne
+		case 2:
+			if !transportCheckpointEqual(request.Checkpoint, firstCheckpoint) {
+				return fmt.Errorf("first resumed checkpoint = %#v, want %#v", request.Checkpoint, firstCheckpoint)
+			}
+			if err := emit(second); err != nil {
+				return err
+			}
+			return rateTwo
+		case 3:
+			if !transportCheckpointEqual(request.Checkpoint, secondCheckpoint) {
+				return fmt.Errorf("second resumed checkpoint = %#v, want %#v", request.Checkpoint, secondCheckpoint)
+			}
+			return emit(third)
+		default:
+			return fmt.Errorf("unexpected source read %d", fixture.sourceExecutor.readCalls)
+		}
+	}
+
+	parked, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	})
+	if !errors.Is(err, coordination.ErrRateLimitParked) {
+		t.Fatalf("initial RunETL() error = %v, want rate-limit parking", err)
+	}
+	checkpoint := fixture.app.state.StreamStates[streamStateKey(fixture.connection, "records")].Checkpoint.Clone()
+	firstCheckpoint = &checkpoint
+
+	now = firstReset
+	scheduler.RunThrough(now)
+	checkpoint = fixture.app.state.StreamStates[streamStateKey(fixture.connection, "records")].Checkpoint.Clone()
+	secondCheckpoint = &checkpoint
+	records, err := parkingStore.List()
+	if err != nil || len(records) != 1 || records[0].RunID != parked.ID {
+		t.Fatalf("rearmed parking records = %#v, %v; want original run", records, err)
+	}
+	if !records[0].ResetAt.Equal(secondReset) || records[0].Reason != connsdk.RateLimitObservationSourceHeaders || !transportCheckpointEqual(&records[0].Checkpoint, secondCheckpoint) {
+		t.Fatalf("rearmed parking record = %#v, want latest checkpoint and second reset", records[0])
+	}
+	if scheduler.Scheduled() != 1 {
+		t.Fatalf("scheduled rearmed callbacks = %d, want 1", scheduler.Scheduled())
+	}
+
+	now = secondReset
+	scheduler.RunThrough(now)
+	if fixture.sourceExecutor.readCalls != 3 || fixture.destinationExecutor.applyCalls != 3 {
+		t.Fatalf("source/apply calls = %d/%d, want one apply for each acknowledged page", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls)
+	}
+	if records, err := parkingStore.List(); err != nil || len(records) != 0 {
+		t.Fatalf("parking records after second resume = %#v, %v; want none", records, err)
+	}
+	original, found := fixture.app.runByID(parked.ID)
+	if !found || original.Status != "resumed" {
+		t.Fatalf("original parked run = %#v, want resumed", original)
+	}
+}
+
 func TestParkRateLimitedRunPersistsOnlyDeclarativeTypedDestinationPlanID(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
 	t.Cleanup(fixture.app.rateParking.Close)
@@ -3322,6 +3429,60 @@ func waitForTransportSignal(t *testing.T, signal <-chan struct{}) {
 	case <-time.After(20 * time.Second):
 		t.Fatal("timed out waiting for transport synchronization")
 	}
+}
+
+type appRateParkingTestScheduler struct {
+	tasks []*appRateParkingTestTask
+}
+
+type appRateParkingTestTask struct {
+	at       time.Time
+	callback func()
+	stopped  bool
+	fired    bool
+}
+
+func (s *appRateParkingTestScheduler) Schedule(at time.Time, callback func()) coordination.RateParkingTimer {
+	task := &appRateParkingTestTask{at: at, callback: callback}
+	s.tasks = append(s.tasks, task)
+	return task
+}
+
+func (s *appRateParkingTestScheduler) Scheduled() int {
+	count := 0
+	for _, task := range s.tasks {
+		if !task.stopped && !task.fired {
+			count++
+		}
+	}
+	return count
+}
+
+func (s *appRateParkingTestScheduler) RunThrough(now time.Time) {
+	for {
+		var next *appRateParkingTestTask
+		for _, task := range s.tasks {
+			if task.stopped || task.fired || task.at.After(now) {
+				continue
+			}
+			if next == nil || task.at.Before(next.at) {
+				next = task
+			}
+		}
+		if next == nil {
+			return
+		}
+		next.fired = true
+		next.callback()
+	}
+}
+
+func (t *appRateParkingTestTask) Stop() bool {
+	if t == nil || t.stopped || t.fired {
+		return false
+	}
+	t.stopped = true
+	return true
 }
 
 type appTransportFailAtLockLocker struct {

@@ -28,7 +28,8 @@ var (
 	// ErrRateLimitParked rejects a new same-scope send while parked work has not
 	// successfully resumed. It intentionally does not expose an opaque scope or
 	// provider response detail.
-	ErrRateLimitParked = errors.New("rate-limited work is parked")
+	ErrRateLimitParked  = errors.New("rate-limited work is parked")
+	ErrRateLimitRearmed = errors.New("rate-limited work was rearmed")
 
 	errRateParkingUnavailable = errors.New("rate parking coordinator is unavailable")
 	errRateParkingNotStarted  = errors.New("rate parking coordinator is not started")
@@ -69,6 +70,7 @@ type RateParkingRequest struct {
 type RateParkingStore interface {
 	List() ([]ParkedRateLimitRun, error)
 	Create(ParkedRateLimitRun) (ParkedRateLimitRun, bool, error)
+	Rearm(ParkedRateLimitRun, string) (ParkedRateLimitRun, error)
 	HasScope(connectors.RateLimitScopeKey) (bool, error)
 	Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error)
 	RenewClaim(runID, owner string, until time.Time) (bool, error)
@@ -122,6 +124,26 @@ func (s *MemoryRateParkingStore) Create(run ParkedRateLimitRun) (ParkedRateLimit
 	}
 	s.runs[run.RunID] = rateParkingFileRecord{Run: run.Clone()}
 	return run.Clone(), true, nil
+}
+
+func (s *MemoryRateParkingStore) Rearm(run ParkedRateLimitRun, owner string) (ParkedRateLimitRun, error) {
+	if s == nil {
+		return ParkedRateLimitRun{}, errRateParkingUnavailable
+	}
+	if err := validateParkedRateLimitRun(run); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	record, found := s.runs[run.RunID]
+	if !found || record.ClaimOwner != owner {
+		return ParkedRateLimitRun{}, ErrRateParkingClaimLost
+	}
+	if record.Run.Scope != run.Scope {
+		return ParkedRateLimitRun{}, ErrRateParkingConflict
+	}
+	s.runs[run.RunID] = rateParkingFileRecord{Run: run.Clone()}
+	return run.Clone(), nil
 }
 
 func (s *MemoryRateParkingStore) HasScope(scope connectors.RateLimitScopeKey) (bool, error) {
@@ -406,15 +428,8 @@ func (c *RateParkingCoordinator) Park(ctx context.Context, request RateParkingRe
 	if c == nil || c.store == nil {
 		return ParkedRateLimitRun{}, errRateParkingUnavailable
 	}
-	run := ParkedRateLimitRun{
-		RunID:      request.RunID,
-		Outcome:    RateParkingOutcomeParkedRateLimit,
-		Scope:      request.Scope,
-		Checkpoint: request.Checkpoint.Clone(),
-		ResetAt:    request.ResetAt.UTC(),
-		Reason:     request.Reason,
-	}
-	if err := validateParkedRateLimitRun(run); err != nil {
+	run, err := parkedRateLimitRunFromRequest(request)
+	if err != nil {
 		return ParkedRateLimitRun{}, err
 	}
 
@@ -441,6 +456,47 @@ func (c *RateParkingCoordinator) Park(ctx context.Context, request RateParkingRe
 	c.mu.Unlock()
 	c.recordEvent(RateParkingEvent{Type: RateLimitEventParked, ResetAt: run.ResetAt, Reason: string(run.Reason)})
 	return run.Clone(), nil
+}
+
+func (c *RateParkingCoordinator) Rearm(ctx context.Context, request RateParkingRequest) (ParkedRateLimitRun, error) {
+	if err := ctx.Err(); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	if c == nil || c.store == nil {
+		return ParkedRateLimitRun{}, errRateParkingUnavailable
+	}
+	run, err := parkedRateLimitRunFromRequest(request)
+	if err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	c.mu.Lock()
+	if !c.started {
+		c.mu.Unlock()
+		return ParkedRateLimitRun{}, errRateParkingNotStarted
+	}
+	existing, found := c.runs[run.RunID]
+	if !found {
+		c.mu.Unlock()
+		return ParkedRateLimitRun{}, ErrRateParkingClaimLost
+	}
+	if existing.Scope != run.Scope {
+		c.mu.Unlock()
+		return ParkedRateLimitRun{}, ErrRateParkingConflict
+	}
+	persisted, err := c.store.Rearm(run, c.owner)
+	if err != nil {
+		c.mu.Unlock()
+		return ParkedRateLimitRun{}, err
+	}
+	if timer := c.timers[run.RunID]; timer != nil {
+		timer.Stop()
+	}
+	delete(c.timers, run.RunID)
+	c.runs[run.RunID] = persisted.Clone()
+	c.scheduleLocked(run.RunID)
+	c.mu.Unlock()
+	c.recordEvent(RateParkingEvent{Type: RateLimitEventParked, ResetAt: persisted.ResetAt, Reason: string(persisted.Reason)})
+	return persisted.Clone(), nil
 }
 
 // Admit refuses a same-scope send while any parked run awaits a successful
@@ -546,6 +602,9 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 	close(renewDone)
 	claimLost := <-renewResult
 	cancelOperation()
+	if errors.Is(resumeErr, ErrRateLimitRearmed) {
+		return
+	}
 	if claimLost {
 		return
 	}
@@ -632,6 +691,21 @@ func validateParkedRateLimitRun(run ParkedRateLimitRun) error {
 		return fmt.Errorf("parked rate-limit checkpoint: %w", err)
 	}
 	return nil
+}
+
+func parkedRateLimitRunFromRequest(request RateParkingRequest) (ParkedRateLimitRun, error) {
+	run := ParkedRateLimitRun{
+		RunID:      request.RunID,
+		Outcome:    RateParkingOutcomeParkedRateLimit,
+		Scope:      request.Scope,
+		Checkpoint: request.Checkpoint.Clone(),
+		ResetAt:    request.ResetAt.UTC(),
+		Reason:     request.Reason,
+	}
+	if err := validateParkedRateLimitRun(run); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	return run, nil
 }
 
 func rateParkingReasonValid(reason connsdk.RateLimitObservationSource) bool {
