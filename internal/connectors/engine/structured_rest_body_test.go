@@ -1523,6 +1523,21 @@ func TestStructuredRESTBodyDeclarationSatisfiabilityAndStaticCoverage(t *testing
 	if !ok || payload["fixed"] != "provider" || payload["name"] != "caller" {
 		t.Fatalf("container static merge = %#v, want fixed provider data and caller field", materialized)
 	}
+
+	unmergeableArray := base
+	unmergeableArrayREST := *base.REST
+	unmergeableArrayREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["tags"],
+		"properties":{"tags":{"type":"array","minItems":2,"maxItems":2,"items":{"type":"string"}}}
+	}`)
+	unmergeableArrayREST.Body = map[string]any{"tags": []any{"provider"}}
+	unmergeableArray.REST = &unmergeableArrayREST
+	if err := ValidateOperationDirectWriteMappings(unmergeableArray, nil, []string{"tags"}); err == nil || !strings.Contains(err.Error(), "cannot merge fixed rest.body container") {
+		t.Fatalf("unmergeable static array container error = %v, want declaration rejection", err)
+	}
+
 	_, err = materializeStructuredRESTBody(merge, merge.REST.Body, map[string]any{"payload": map[string]any{"fixed": "caller", "name": "caller"}})
 	if err == nil || !strings.Contains(err.Error(), "cannot be caller-overridden") {
 		t.Fatalf("container static leaf collision = %v, want fixed-field rejection", err)
@@ -1769,6 +1784,8 @@ func TestOperationDirectWriteStrictHeadersAndProviderHeaders(t *testing.T) {
 	}{
 		{name: "reference tail", headers: map[string]string{"Authorization": "Bearer {{ secrets.token.extra }}"}},
 		{name: "unclosed expression", headers: map[string]string{"Authorization": "Bearer {{ secrets.token"}},
+		{name: "unbound query namespace", headers: map[string]string{"X-Trace": "{{ query.trace }}"}},
+		{name: "unbound record namespace", headers: map[string]string{"X-Trace": "{{ record.trace }}"}},
 		{name: "canonical duplicate", headers: map[string]string{"X-Mode": "one", "x-mode": "two"}},
 		{name: "invalid name", headers: map[string]string{"X Mode": "one"}},
 	} {
@@ -1786,6 +1803,45 @@ func TestOperationDirectWriteStrictHeadersAndProviderHeaders(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("declared query namespace is bound", func(t *testing.T) {
+		calls := 0
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			calls++
+			if got := r.Header.Get("X-Trace"); got != "trace-1" {
+				t.Errorf("X-Trace = %q, want trace-1", got)
+			}
+			_, _ = w.Write([]byte(`{"ok":true}`))
+		}))
+		t.Cleanup(server.Close)
+		bundle := structuredRESTBodyBundle(server.URL)
+		rest := *bundle.Operations[0].REST
+		rest.Parameters = append([]OperationParameter(nil), rest.Parameters...)
+		rest.Parameters = append(rest.Parameters, OperationParameter{Name: "trace", In: "query", Type: "string"})
+		bundle.Operations[0].REST = &rest
+		bundle.HTTP.Headers = map[string]string{"X-Trace": "{{ query.trace }}"}
+		request := structuredRESTBodyRequest()
+		request.Query["trace"] = "trace-1"
+		preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+		if err != nil {
+			t.Fatalf("PreviewOperationDirectWrite: %v", err)
+		}
+		prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+		if err != nil {
+			t.Fatalf("prepareOperationDirectWrite: %v", err)
+		}
+		if got := prepared.prepared.Requests[0].Headers["X-Trace"]; got != "trace-1" {
+			t.Fatalf("prepared X-Trace = %q, want trace-1", got)
+		}
+		request.Approval = approvedEvidenceForPreview(t, preview)
+		request.PreviewDigest = preview.Digest
+		if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err != nil {
+			t.Fatalf("OperationDirectWrite: %v", err)
+		}
+		if calls != 1 {
+			t.Fatalf("calls = %d, want 1", calls)
+		}
+	})
 
 	t.Run("successful response retains headers", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {

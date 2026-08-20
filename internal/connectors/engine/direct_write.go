@@ -165,12 +165,12 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			return &operationDirectWriteError{operation: prepared.op.ID, message: message, cause: operationDirectWriteErrorCause(err, prepared.identity)}
 		}
 		if len(response.Body) > prepared.maxBytes {
-			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
+			return operationDirectWritePostResponseLimitError(prepared.op.ID, prepared.maxBytes, response, prepared.identity)
 		}
 		if prepared.op.Kind == "graphql_mutation" {
 			data, metadata, parseErr := graphQLOperationResponseWithRuntimeErrorPolicy(response.Body, prepared.maxBytes, operationRetainsSecretRuntimeContent(prepared.op))
 			if parseErr != nil {
-				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response: " + parseErr.Error(), cause: errors.Join(parseErr, operationDirectWriteProviderResponseCause(response, prepared.identity))}
+				return operationDirectWritePostResponseErrorWithMessage(prepared.op.ID, "GraphQL response: "+parseErr.Error(), parseErr, response, prepared.identity)
 			}
 			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
@@ -178,18 +178,18 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				if !operationRetainsSecretRuntimeContent(prepared.op) {
 					message = "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), true, prepared.redactionValues)
 				}
-				return &operationDirectWriteError{operation: prepared.op.ID, message: message, cause: operationDirectWriteProviderResponseCause(response, prepared.identity)}
+				return operationDirectWritePostResponseErrorWithMessage(prepared.op.ID, message, nil, response, prepared.identity)
 			}
 			if data == nil {
-				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response has no data", cause: operationDirectWriteProviderResponseCause(response, prepared.identity)}
+				return operationDirectWritePostResponseErrorWithMessage(prepared.op.ID, "GraphQL response has no data", nil, response, prepared.identity)
 			}
 			rawData, marshalErr := json.Marshal(data)
 			if marshalErr != nil {
-				return fmt.Errorf("operation %q encode GraphQL response data: %w", prepared.op.ID, marshalErr)
+				return operationDirectWritePostResponseError(prepared.op.ID, fmt.Errorf("operation %q encode GraphQL response data: %w", prepared.op.ID, marshalErr), response, prepared.identity)
 			}
 			body, bodyErr := operationDirectWriteResponseBody(prepared.policy, rawData, prepared.maxBytes)
 			if bodyErr != nil {
-				return bodyErr
+				return operationDirectWritePostResponseError(prepared.op.ID, bodyErr, response, prepared.identity)
 			}
 			result = connectors.OperationDirectWriteResult{
 				Connector: b.Name,
@@ -205,7 +205,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if prepared.policy == directWritePolicySecretStored {
 			if err := storeOperationResponseSecret(gated, prepared.op, prepared.cfg, response.Body); err != nil {
-				return err
+				return operationDirectWritePostResponseError(prepared.op.ID, err, response, prepared.identity)
 			}
 		}
 		body, err := operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes)
@@ -281,11 +281,31 @@ func operationDirectWriteProviderResponseCause(response *connsdk.Response, ident
 	return &connsdk.HTTPError{Status: response.Status, URL: identity, Header: response.Header.Clone(), Body: string(response.Body)}
 }
 
+func operationDirectWriteProviderResponseMetadataCause(response *connsdk.Response, identity string) error {
+	if response == nil {
+		return nil
+	}
+	return &connsdk.HTTPError{Status: response.Status, URL: identity, Header: response.Header.Clone()}
+}
+
 func operationDirectWritePostResponseError(operation string, cause error, response *connsdk.Response, identity string) error {
+	return operationDirectWritePostResponseErrorWithMessage(operation, "provider response could not be decoded according to the declared output policy", cause, response, identity)
+}
+
+func operationDirectWritePostResponseErrorWithMessage(operation, message string, cause error, response *connsdk.Response, identity string) error {
 	return &operationDirectWriteError{
 		operation: operation,
-		message:   "provider response could not be decoded according to the declared output policy",
+		message:   message,
 		cause:     errors.Join(cause, operationDirectWriteProviderResponseCause(response, identity)),
+	}
+}
+
+func operationDirectWritePostResponseLimitError(operation string, limit int, response *connsdk.Response, identity string) error {
+	message := fmt.Sprintf("provider response too large: exceeds declared limit %d", limit)
+	return &operationDirectWriteError{
+		operation: operation,
+		message:   message,
+		cause:     errors.Join(fmt.Errorf("%s during bounded capture", message), operationDirectWriteProviderResponseMetadataCause(response, identity)),
 	}
 }
 
@@ -603,7 +623,10 @@ func validateOperationDirectWriteStaticBodyMapping(staticBody map[string]any, pa
 		if index == len(path.steps)-1 {
 			object, array := operationDirectWriteBodyNodeKinds(path.node)
 			if object != array && (object || array) {
-				return nil
+				if _, ok := operationDirectWriteStaticBodyScaffold(next); ok {
+					return nil
+				}
+				return fmt.Errorf("cannot merge fixed rest.body container value")
 			}
 			return fmt.Errorf("overlaps a fixed rest.body value")
 		}
@@ -1307,10 +1330,6 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
 	identity := operationDirectWriteIdentity(b, op, method)
-	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
-	if err != nil {
-		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
-	}
 	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -1321,6 +1340,10 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	}
 	if err := requireOperationQueryGroups(op, queryMap); err != nil {
 		return preparedOperationDirectWrite{}, err
+	}
+	headers, err := resolveDirectWriteHeadersWithVars(b.HTTP.Headers, b.Spec, requestVars(cfg, nil, "", queryMap))
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
 	}
 	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, queryMap)
 	if err != nil {
@@ -1552,7 +1575,7 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 	if err != nil {
 		return OperationSpec{}, "", err
 	}
-	if err := validateOperationDirectWriteDeclaredHeaders(b.HTTP.Headers); err != nil {
+	if err := validateOperationDirectWriteDeclaredHeaders(op, b.HTTP.Headers); err != nil {
 		return OperationSpec{}, "", err
 	}
 	if err := validateOperationDirectWriteBaseURLTemplate(b.HTTP.URL); err != nil {
@@ -1601,7 +1624,7 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 	}
 }
 
-func validateOperationDirectWriteDeclaredHeaders(headers map[string]string) error {
+func validateOperationDirectWriteDeclaredHeaders(op OperationSpec, headers map[string]string) error {
 	if _, err := canonicalPreparedRequestHeaders(headers); err != nil {
 		return fmt.Errorf("declared headers: %w", err)
 	}
@@ -1611,11 +1634,73 @@ func validateOperationDirectWriteDeclaredHeaders(headers map[string]string) erro
 	}
 	sort.Strings(names)
 	for _, name := range names {
-		if err := validateDeclaredHeaderTemplate(headers[name]); err != nil {
+		if err := validateOperationDirectWriteDeclaredHeaderTemplate(op, headers[name]); err != nil {
 			return fmt.Errorf("declared header %q: %w", name, err)
 		}
 	}
 	return nil
+}
+
+func validateOperationDirectWriteDeclaredHeaderTemplate(op OperationSpec, template string) error {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		if err := validateDeclaredHeaderExpression(token.expression); err != nil {
+			return err
+		}
+		if err := validateOperationDirectWriteDeclaredHeaderExpression(op, token.expression); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func validateOperationDirectWriteDeclaredHeaderExpression(op OperationSpec, expr string) error {
+	paths, coalesced, err := coalesceRecordPathsExpression(expr)
+	if err != nil {
+		return err
+	}
+	if coalesced {
+		for _, path := range paths {
+			if err := validateOperationDirectWriteDeclaredHeaderReference(op, "record."+path); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	parts := strings.Split(expr, "|")
+	return validateOperationDirectWriteDeclaredHeaderReference(op, strings.TrimSpace(parts[0]))
+}
+
+func validateOperationDirectWriteDeclaredHeaderReference(op OperationSpec, ref string) error {
+	parts := strings.Split(ref, ".")
+	if len(parts) != 2 {
+		return fmt.Errorf("interpolate: direct-write header reference %q is not bound by operation %q", ref, op.ID)
+	}
+	switch parts[0] {
+	case "config", "secrets":
+		return nil
+	case "query":
+		if op.Kind != "rest_write" || op.REST == nil {
+			break
+		}
+		parameters, err := operationDirectWriteQueryParameters(op)
+		if err != nil {
+			return err
+		}
+		if _, ok := parameters[parts[1]]; ok {
+			return nil
+		}
+		if _, ok := op.REST.Query[parts[1]]; ok {
+			return nil
+		}
+	}
+	return fmt.Errorf("interpolate: direct-write header reference %q is not bound by operation %q", ref, op.ID)
 }
 
 func isOperationDirectWriteMethod(method string) bool {

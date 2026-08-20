@@ -214,6 +214,99 @@ func TestOperationDirectWriteStoresReturnedSecretAndRetainsRuntimeResponse(t *te
 	}
 }
 
+func TestOperationDirectWriteRetainsProviderMetadataAfterResponseFailures(t *testing.T) {
+	for _, test := range []struct {
+		name         string
+		maxBytes     int
+		responseBody string
+		providerBody string
+		wantError    string
+	}{
+		{name: "JSON decode", maxBytes: 1024, responseBody: "not-json", providerBody: "not-json"},
+		{name: "bounded capture", maxBytes: 16, responseBody: `{"value":"` + strings.Repeat("x", 64) + `"}`, wantError: "response too large"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("X-Provider-Trace", "response-failure")
+				_, _ = w.Write([]byte(test.responseBody))
+			}))
+			t.Cleanup(server.Close)
+			bundle := Bundle{
+				Name: "acme",
+				HTTP: HTTPBase{URL: server.URL},
+				Operations: []OperationSpec{{
+					ID: "acme.widgets.create", Kind: "rest_write", Summary: "Create widget", Risk: "medium", Approval: "none", OutputPolicy: "json", MutationClass: "create",
+					REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/widgets", MaxBytes: test.maxBytes},
+				}},
+				Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &SurfaceOperation{Model: "write"}}}},
+			}
+			req := connectors.OperationDirectWriteRequest{Operation: "acme.widgets.create"}
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			req.PreviewDigest = preview.Digest
+			_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+			if err == nil {
+				t.Fatal("OperationDirectWrite accepted invalid provider response")
+			}
+			if test.wantError != "" && !strings.Contains(err.Error(), test.wantError) {
+				t.Fatalf("error = %v, want %q", err, test.wantError)
+			}
+			var providerErr *connsdk.HTTPError
+			if !errors.As(err, &providerErr) {
+				t.Fatalf("error = %T %v, want retained provider response", err, err)
+			}
+			if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "response-failure" || providerErr.Body != test.providerBody {
+				t.Fatalf("provider response = status %d headers %#v body %q, want retained declared capture", providerErr.Status, providerErr.Header, providerErr.Body)
+			}
+		})
+	}
+}
+
+func TestOperationDirectWriteRetainsProviderMetadataWhenSecretStoreFails(t *testing.T) {
+	const canary = "returned-credential-store-failure-canary"
+	store := newRecordingSecretStore()
+	store.err = errors.New("fixture secret store failure")
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
+		w.Header().Set("X-Provider-Trace", "secret-store-failure")
+		_, _ = w.Write([]byte(`{"credential":"` + canary + `"}`))
+	}))
+	t.Cleanup(server.Close)
+	bundle := Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{
+		ID: "acme.credentials.create", Kind: "rest_write", Summary: "Create credential", Risk: "high", Approval: "typed", OutputPolicy: directWritePolicySecretStored,
+		MutationClass: "secret", SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{InputMode: "env", ApprovalMode: "typed_confirmation", ResponseSecretField: "credential", ResponseSecretStoreKey: "generated_credential"},
+		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/credentials", MaxBytes: 1024},
+	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/credentials", Operation: &SurfaceOperation{Model: "write"}}}}}
+	req := connectors.OperationDirectWriteRequest{Operation: "acme.credentials.create", Config: connectors.RuntimeConfig{SecretStore: store, CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", WriteApprovalScope: connectors.WriteApprovalScopeFixture}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite accepted secret-store failure")
+	}
+	if strings.Contains(err.Error(), canary) {
+		t.Fatalf("secret-store error leaked provider credential: %v", err)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatalf("error = %T %v, want retained provider response", err, err)
+	}
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "secret-store-failure" || providerErr.Body != `{"credential":"`+canary+`"}` {
+		t.Fatalf("provider response = status %d headers %#v body %q, want exact secret-store failure response", providerErr.Status, providerErr.Header, providerErr.Body)
+	}
+	if requests != 1 {
+		t.Fatalf("requests = %d, want 1", requests)
+	}
+}
+
 func TestOperationDirectWriteRejectsSecretResponseWithoutEncryptedStoreBeforeIO(t *testing.T) {
 	requests := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))

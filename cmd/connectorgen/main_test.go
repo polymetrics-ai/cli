@@ -551,6 +551,39 @@ func TestValidate_CLISurfaceReverseETLStructuredJSONRequiresDeclaredTopLevelCont
 	}
 }
 
+func TestCheckCLISurfaceStructuredJSONFlagsAllowsNestedRESTBodyPath(t *testing.T) {
+	op := engine.OperationSpec{
+		ID:   "cli-surface.widgets.configure",
+		Kind: "rest_write",
+		REST: &engine.RESTOperationSpec{
+			ContentType: "application/json",
+			BodySchema: json.RawMessage(`{
+				"type":"object",
+				"additionalProperties":false,
+				"properties":{"payload":{"type":"object","additionalProperties":false,"properties":{"settings":{"type":"object","additionalProperties":false,"properties":{"theme":{"type":"string"}}}}}}
+			}`),
+		},
+	}
+	findings := checkCLISurfaceStructuredJSONFlags(engine.Bundle{
+		Name:       "cli-surface",
+		Operations: []engine.OperationSpec{op},
+	}, 0, engine.CLICommand{
+		Path:         "widgets configure",
+		Intent:       "direct_write",
+		Availability: "implemented",
+		Operation:    op.ID,
+		Flags: []engine.CLIFlag{{
+			Name:     "settings",
+			Type:     "json",
+			MapsTo:   "body.payload.settings",
+			Required: true,
+		}},
+	})
+	if len(findings) != 0 {
+		t.Fatalf("nested REST structured JSON findings = %+v, want none", findings)
+	}
+}
+
 func TestValidate_CLISurfaceFixedGraphQLCommandRequiresDeclaredTopLevelJSONVariable(t *testing.T) {
 	bundle := engine.Bundle{
 		Name: "cli-surface",
