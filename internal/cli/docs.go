@@ -535,7 +535,7 @@ DECLARATION-BOUND STRUCTURED WRITE INPUTS
   command help and connector manual name the accepted fields and their
   maps_to=body.<schema-path> binding. A schema path resolves only declared
   provider object properties and numeric array item positions; it is not an
-  open dotted key. The operation declaration—not the caller—owns the method,
+  open dotted key. The provider declaration—not the caller—owns the method,
   route, content type, headers, and nested schema. There is no raw-body escape
   hatch: no raw --body flag and no method, path, content-type, action, or
   connector override.

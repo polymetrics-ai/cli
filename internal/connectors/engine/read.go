@@ -777,10 +777,6 @@ func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spe
 	return resolveHeadersWithInterpolator(headers, cfg, spec, InterpolateHeader)
 }
 
-func resolveDirectWriteHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema) (map[string]string, error) {
-	return resolveDirectWriteHeadersWithVars(headers, spec, requestVars(cfg, nil, ""))
-}
-
 func resolveDirectWriteHeadersWithVars(headers map[string]string, spec *Schema, vars Vars) (map[string]string, error) {
 	return resolveHeadersWithVars(headers, spec, vars, interpolateDeclaredHeader)
 }
@@ -1112,22 +1108,6 @@ func interpolateDeclaredHeader(template string, vars Vars) (string, error) {
 		return "", err
 	}
 	return value, nil
-}
-
-func validateDeclaredHeaderTemplate(template string) error {
-	tokens, err := parseWriteQueryTemplate(template)
-	if err != nil {
-		return err
-	}
-	for _, token := range tokens {
-		if token.expression == "" {
-			continue
-		}
-		if err := validateDeclaredHeaderExpression(token.expression); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func validateDeclaredHeaderExpression(expr string) error {

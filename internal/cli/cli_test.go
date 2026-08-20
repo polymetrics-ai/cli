@@ -515,12 +515,13 @@ func TestStructuredWriteDocumentationMirrorsNestedSchemaPaths(t *testing.T) {
 		if err != nil {
 			t.Fatalf("read %s: %v", path, err)
 		}
+		contentText := strings.Join(strings.Fields(string(content)), " ")
 		for _, want := range []string{
 			"maps_to=body.<schema-path>",
 			"numeric array item positions",
 			"no raw-body escape hatch",
 		} {
-			if !strings.Contains(string(content), want) {
+			if !strings.Contains(contentText, want) {
 				t.Fatalf("%s missing %q", path, want)
 			}
 		}
