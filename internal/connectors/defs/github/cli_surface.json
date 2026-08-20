@@ -413,9 +413,10 @@
       "flags": [
         {
           "name": "issue-number",
-          "type": "integer",
           "summary": "Issue number to unlock.",
-          "maps_to": "record.issue_number"
+          "type": "integer",
+          "maps_to": "record.issue_number",
+          "required": true
         }
       ]
     },
@@ -1141,10 +1142,11 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "pull-number",
-          "type": "integer",
+          "name": "issue-number",
           "summary": "Pull request number to unlock.",
-          "maps_to": "record.issue_number"
+          "type": "integer",
+          "maps_to": "record.issue_number",
+          "required": true
         }
       ]
     },
@@ -1511,8 +1513,8 @@
       "flags": [
         {
           "name": "autolink-id",
-          "type": "string",
           "summary": "Autolink reference ID.",
+          "type": "integer",
           "maps_to": "record.autolink_id",
           "required": true
         }
@@ -1594,9 +1596,10 @@
       "flags": [
         {
           "name": "key-id",
-          "type": "integer",
           "summary": "Deploy key ID to delete.",
-          "maps_to": "record.key_id"
+          "type": "integer",
+          "maps_to": "record.key_id",
+          "required": true
         }
       ]
     },
@@ -1829,9 +1832,10 @@
       "flags": [
         {
           "name": "release-id",
-          "type": "integer",
           "summary": "Release ID to delete.",
-          "maps_to": "record.release_id"
+          "type": "integer",
+          "maps_to": "record.release_id",
+          "required": true
         }
       ]
     },
@@ -1893,9 +1897,10 @@
       "flags": [
         {
           "name": "asset-id",
-          "type": "integer",
           "summary": "Release asset ID to delete.",
-          "maps_to": "record.asset_id"
+          "type": "integer",
+          "maps_to": "record.asset_id",
+          "required": true
         }
       ]
     },
@@ -2117,9 +2122,10 @@
       "flags": [
         {
           "name": "run-id",
-          "type": "integer",
           "summary": "Workflow run ID to cancel.",
-          "maps_to": "record.run_id"
+          "type": "integer",
+          "maps_to": "record.run_id",
+          "required": true
         }
       ]
     },
@@ -2141,9 +2147,10 @@
       "flags": [
         {
           "name": "run-id",
-          "type": "integer",
           "summary": "Workflow run ID to delete.",
-          "maps_to": "record.run_id"
+          "type": "integer",
+          "maps_to": "record.run_id",
+          "required": true
         }
       ]
     },
@@ -2254,9 +2261,10 @@
       "flags": [
         {
           "name": "cache-id",
-          "type": "integer",
           "summary": "Actions cache id to delete.",
-          "maps_to": "record.cache_id"
+          "type": "integer",
+          "maps_to": "record.cache_id",
+          "required": true
         }
       ]
     },
@@ -2370,9 +2378,11 @@
       "flags": [
         {
           "name": "name",
-          "type": "string",
           "summary": "Label name to delete.",
-          "maps_to": "record.name"
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
         }
       ]
     },
@@ -2592,9 +2602,10 @@
       "flags": [
         {
           "name": "ruleset-id",
-          "type": "integer",
           "summary": "Ruleset ID to delete.",
-          "maps_to": "record.ruleset_id"
+          "type": "integer",
+          "maps_to": "record.ruleset_id",
+          "required": true
         }
       ]
     },
@@ -2658,9 +2669,11 @@
       "flags": [
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "Repository Actions secret name.",
-          "maps_to": "record.secret_name"
+          "type": "string",
+          "maps_to": "record.secret_name",
+          "required": true,
+          "max_bytes": 8192
         }
       ]
     },
@@ -2738,10 +2751,11 @@
       "flags": [
         {
           "name": "name",
-          "type": "string",
           "summary": "Repository variable name.",
+          "type": "string",
           "maps_to": "record.name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -3503,7 +3517,21 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "key",
+          "type": "string",
+          "maps_to": "record.key",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "maps_to": "record.ref",
+          "max_bytes": 8192
+        }
+      ],
       "api_surface": [
         {
           "method": "DELETE",
@@ -3573,9 +3601,10 @@
       "flags": [
         {
           "name": "cache-id",
-          "type": "integer",
           "summary": "cache_id path parameter",
-          "maps_to": "record.cache_id"
+          "type": "integer",
+          "maps_to": "record.cache_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4105,9 +4134,10 @@
       "flags": [
         {
           "name": "runner-id",
-          "type": "integer",
           "summary": "runner_id path parameter",
-          "maps_to": "record.runner_id"
+          "type": "integer",
+          "maps_to": "record.runner_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4153,9 +4183,10 @@
       "flags": [
         {
           "name": "runner-id",
-          "type": "integer",
           "summary": "runner_id path parameter",
-          "maps_to": "record.runner_id"
+          "type": "integer",
+          "maps_to": "record.runner_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4248,16 +4279,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "runner-id",
-          "type": "integer",
-          "summary": "runner_id path parameter",
-          "maps_to": "record.runner_id"
+          "name": "name",
+          "summary": "name path parameter",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "name",
-          "type": "string",
-          "summary": "name path parameter",
-          "maps_to": "record.name"
+          "name": "runner-id",
+          "summary": "runner_id path parameter",
+          "type": "integer",
+          "maps_to": "record.runner_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4303,9 +4337,10 @@
       "flags": [
         {
           "name": "run-id",
-          "type": "integer",
           "summary": "run_id path parameter",
-          "maps_to": "record.run_id"
+          "type": "integer",
+          "maps_to": "record.run_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4505,9 +4540,10 @@
       "flags": [
         {
           "name": "run-id",
-          "type": "integer",
           "summary": "run_id path parameter",
-          "maps_to": "record.run_id"
+          "type": "integer",
+          "maps_to": "record.run_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4655,9 +4691,11 @@
       "flags": [
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "secret_name path parameter",
-          "maps_to": "record.secret_name"
+          "type": "string",
+          "maps_to": "record.secret_name",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -4787,10 +4825,11 @@
       "flags": [
         {
           "name": "name",
-          "type": "string",
           "summary": "name path parameter",
+          "type": "string",
           "maps_to": "record.name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -5049,9 +5088,10 @@
       "flags": [
         {
           "name": "autolink-id",
-          "type": "string",
           "summary": "autolink_id path parameter",
-          "maps_to": "record.autolink_id"
+          "type": "integer",
+          "maps_to": "record.autolink_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -5123,9 +5163,11 @@
       "flags": [
         {
           "name": "branch",
-          "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "record.branch"
+          "type": "string",
+          "maps_to": "record.branch",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -5224,9 +5266,11 @@
       "flags": [
         {
           "name": "branch",
-          "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "record.branch"
+          "type": "string",
+          "maps_to": "record.branch",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -5272,9 +5316,11 @@
       "flags": [
         {
           "name": "branch",
-          "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "record.branch"
+          "type": "string",
+          "maps_to": "record.branch",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -5296,9 +5342,11 @@
       "flags": [
         {
           "name": "branch",
-          "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "record.branch"
+          "type": "string",
+          "maps_to": "record.branch",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -5368,9 +5416,11 @@
       "flags": [
         {
           "name": "branch",
-          "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "record.branch"
+          "type": "string",
+          "maps_to": "record.branch",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -5416,9 +5466,11 @@
       "flags": [
         {
           "name": "branch",
-          "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "record.branch"
+          "type": "string",
+          "maps_to": "record.branch",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -5440,9 +5492,11 @@
       "flags": [
         {
           "name": "branch",
-          "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "record.branch"
+          "type": "string",
+          "maps_to": "record.branch",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -5608,9 +5662,11 @@
       "flags": [
         {
           "name": "branch",
-          "type": "string",
           "summary": "branch path parameter",
-          "maps_to": "record.branch"
+          "type": "string",
+          "maps_to": "record.branch",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -6135,9 +6191,10 @@
       "flags": [
         {
           "name": "check-run-id",
-          "type": "integer",
           "summary": "check_run_id path parameter",
-          "maps_to": "record.check_run_id"
+          "type": "integer",
+          "maps_to": "record.check_run_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6268,9 +6325,10 @@
       "flags": [
         {
           "name": "check-suite-id",
-          "type": "integer",
           "summary": "check_suite_id path parameter",
-          "maps_to": "record.check_suite_id"
+          "type": "integer",
+          "maps_to": "record.check_suite_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6410,9 +6468,10 @@
       "flags": [
         {
           "name": "alert-number",
-          "type": "integer",
           "summary": "alert_number path parameter",
-          "maps_to": "record.alert_number"
+          "type": "integer",
+          "maps_to": "record.alert_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -6560,9 +6619,16 @@
       "flags": [
         {
           "name": "analysis-id",
-          "type": "integer",
           "summary": "analysis_id path parameter",
-          "maps_to": "record.analysis_id"
+          "type": "integer",
+          "maps_to": "record.analysis_id",
+          "required": true
+        },
+        {
+          "name": "confirm-delete",
+          "type": "string",
+          "maps_to": "record.confirm_delete",
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -6624,9 +6690,11 @@
       "flags": [
         {
           "name": "language",
-          "type": "string",
           "summary": "language path parameter",
-          "maps_to": "record.language"
+          "type": "string",
+          "maps_to": "record.language",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -6764,7 +6832,59 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "languages",
+          "type": "json",
+          "maps_to": "record.languages"
+        },
+        {
+          "name": "query-suite",
+          "type": "enum",
+          "values": [
+            "default",
+            "extended"
+          ],
+          "maps_to": "record.query_suite",
+          "max_bytes": 8192
+        },
+        {
+          "name": "runner-label",
+          "type": "string",
+          "maps_to": "record.runner_label",
+          "max_bytes": 8192
+        },
+        {
+          "name": "runner-type",
+          "type": "enum",
+          "values": [
+            "standard",
+            "labeled"
+          ],
+          "maps_to": "record.runner_type",
+          "max_bytes": 8192
+        },
+        {
+          "name": "state",
+          "type": "enum",
+          "values": [
+            "configured",
+            "not-configured"
+          ],
+          "maps_to": "record.state",
+          "max_bytes": 8192
+        },
+        {
+          "name": "threat-model",
+          "type": "enum",
+          "values": [
+            "remote",
+            "remote_and_local"
+          ],
+          "maps_to": "record.threat_model",
+          "max_bytes": 8192
+        }
+      ],
       "api_surface": [
         {
           "method": "PATCH",
@@ -6781,7 +6901,52 @@
       "source_cli_path": "",
       "risk": "medium",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "checkout-uri",
+          "type": "string",
+          "maps_to": "record.checkout_uri",
+          "max_bytes": 8192
+        },
+        {
+          "name": "commit-sha",
+          "type": "string",
+          "maps_to": "record.commit_sha",
+          "required": true,
+          "max_bytes": 64
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "maps_to": "record.ref",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "sarif",
+          "type": "string",
+          "maps_to": "record.sarif",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "maps_to": "record.started_at",
+          "max_bytes": 8192
+        },
+        {
+          "name": "tool-name",
+          "type": "string",
+          "maps_to": "record.tool_name",
+          "max_bytes": 8192
+        },
+        {
+          "name": "validate",
+          "type": "boolean",
+          "maps_to": "record.validate"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -7040,9 +7205,11 @@
       "flags": [
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "secret_name path parameter",
-          "maps_to": "record.secret_name"
+          "type": "string",
+          "maps_to": "record.secret_name",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -7176,15 +7343,17 @@
       "flags": [
         {
           "name": "comment-id",
-          "type": "integer",
           "summary": "comment_id path parameter",
-          "maps_to": "record.comment_id"
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
         },
         {
           "name": "reaction-id",
-          "type": "integer",
           "summary": "reaction_id path parameter",
-          "maps_to": "record.reaction_id"
+          "type": "integer",
+          "maps_to": "record.reaction_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7482,9 +7651,11 @@
       "flags": [
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "secret_name path parameter",
-          "maps_to": "record.secret_name"
+          "type": "string",
+          "maps_to": "record.secret_name",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -7653,9 +7824,10 @@
       "flags": [
         {
           "name": "deployment-id",
-          "type": "integer",
           "summary": "deployment_id path parameter",
-          "maps_to": "record.deployment_id"
+          "type": "integer",
+          "maps_to": "record.deployment_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -7789,16 +7961,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "environment-name",
-          "type": "string",
-          "summary": "environment_name path parameter",
-          "maps_to": "record.environment_name"
+          "name": "branch-policy-id",
+          "summary": "branch_policy_id path parameter",
+          "type": "integer",
+          "maps_to": "record.branch_policy_id",
+          "required": true
         },
         {
-          "name": "branch-policy-id",
-          "type": "integer",
-          "summary": "branch_policy_id path parameter",
-          "maps_to": "record.branch_policy_id"
+          "name": "environment-name",
+          "summary": "environment_name path parameter",
+          "type": "string",
+          "maps_to": "record.environment_name",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -7953,15 +8128,18 @@
       "flags": [
         {
           "name": "environment-name",
-          "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "record.environment_name"
+          "type": "string",
+          "maps_to": "record.environment_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "protection-rule-id",
-          "type": "integer",
           "summary": "protection_rule_id path parameter",
-          "maps_to": "record.protection_rule_id"
+          "type": "integer",
+          "maps_to": "record.protection_rule_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8062,15 +8240,19 @@
       "flags": [
         {
           "name": "environment-name",
-          "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "record.environment_name"
+          "type": "string",
+          "maps_to": "record.environment_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "secret_name path parameter",
-          "maps_to": "record.secret_name"
+          "type": "string",
+          "maps_to": "record.secret_name",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -8201,15 +8383,19 @@
       "flags": [
         {
           "name": "environment-name",
-          "type": "string",
           "summary": "environment_name path parameter",
-          "maps_to": "record.environment_name"
+          "type": "string",
+          "maps_to": "record.environment_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "name",
-          "type": "string",
           "summary": "name path parameter",
-          "maps_to": "record.name"
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -8596,16 +8782,18 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "hook-id",
+          "name": "delivery-id",
+          "summary": "delivery_id path parameter",
           "type": "integer",
-          "summary": "hook_id path parameter",
-          "maps_to": "record.hook_id"
+          "maps_to": "record.delivery_id",
+          "required": true
         },
         {
-          "name": "delivery-id",
+          "name": "hook-id",
+          "summary": "hook_id path parameter",
           "type": "integer",
-          "summary": "delivery_id path parameter",
-          "maps_to": "record.delivery_id"
+          "maps_to": "record.hook_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8627,9 +8815,10 @@
       "flags": [
         {
           "name": "hook-id",
-          "type": "integer",
           "summary": "hook_id path parameter",
-          "maps_to": "record.hook_id"
+          "type": "integer",
+          "maps_to": "record.hook_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8651,9 +8840,10 @@
       "flags": [
         {
           "name": "hook-id",
-          "type": "integer",
           "summary": "hook_id path parameter",
-          "maps_to": "record.hook_id"
+          "type": "integer",
+          "maps_to": "record.hook_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -8815,9 +9005,22 @@
       "flags": [
         {
           "name": "author-id",
-          "type": "integer",
           "summary": "author_id path parameter",
-          "maps_to": "record.author_id"
+          "type": "integer",
+          "maps_to": "record.author_id",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "maps_to": "record.email",
+          "max_bytes": 8192
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -8988,9 +9191,10 @@
       "flags": [
         {
           "name": "invitation-id",
-          "type": "integer",
           "summary": "invitation_id path parameter",
-          "maps_to": "record.invitation_id"
+          "type": "integer",
+          "maps_to": "record.invitation_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -9052,9 +9256,10 @@
       "flags": [
         {
           "name": "comment-id",
-          "type": "integer",
           "summary": "comment_id path parameter",
-          "maps_to": "record.comment_id"
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -9076,9 +9281,10 @@
       "flags": [
         {
           "name": "comment-id",
-          "type": "integer",
           "summary": "comment_id path parameter",
-          "maps_to": "record.comment_id"
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -9164,15 +9370,17 @@
       "flags": [
         {
           "name": "comment-id",
-          "type": "integer",
           "summary": "comment_id path parameter",
-          "maps_to": "record.comment_id"
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
         },
         {
           "name": "reaction-id",
-          "type": "integer",
           "summary": "reaction_id path parameter",
-          "maps_to": "record.reaction_id"
+          "type": "integer",
+          "maps_to": "record.reaction_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -9272,16 +9480,18 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "issue-number",
+          "name": "issue-id",
+          "summary": "issue_id path parameter",
           "type": "integer",
-          "summary": "issue_number path parameter",
-          "maps_to": "record.issue_number"
+          "maps_to": "record.issue_id",
+          "required": true
         },
         {
-          "name": "issue-id",
+          "name": "issue-number",
+          "summary": "issue_number path parameter",
           "type": "integer",
-          "summary": "issue_id path parameter",
-          "maps_to": "record.issue_id"
+          "maps_to": "record.issue_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -9398,16 +9608,18 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "issue-number",
+          "name": "issue-field-id",
+          "summary": "issue_field_id path parameter",
           "type": "integer",
-          "summary": "issue_number path parameter",
-          "maps_to": "record.issue_number"
+          "maps_to": "record.issue_field_id",
+          "required": true
         },
         {
-          "name": "issue-field-id",
+          "name": "issue-number",
+          "summary": "issue_number path parameter",
           "type": "integer",
-          "summary": "issue_field_id path parameter",
-          "maps_to": "record.issue_field_id"
+          "maps_to": "record.issue_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -9517,15 +9729,17 @@
       "flags": [
         {
           "name": "issue-number",
-          "type": "integer",
           "summary": "issue_number path parameter",
-          "maps_to": "record.issue_number"
+          "type": "integer",
+          "maps_to": "record.issue_number",
+          "required": true
         },
         {
           "name": "reaction-id",
-          "type": "integer",
           "summary": "reaction_id path parameter",
-          "maps_to": "record.reaction_id"
+          "type": "integer",
+          "maps_to": "record.reaction_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -10133,15 +10347,17 @@
       "flags": [
         {
           "name": "comment-id",
-          "type": "integer",
           "summary": "comment_id path parameter",
-          "maps_to": "record.comment_id"
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
         },
         {
           "name": "reaction-id",
-          "type": "integer",
           "summary": "reaction_id path parameter",
-          "maps_to": "record.reaction_id"
+          "type": "integer",
+          "maps_to": "record.reaction_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -10445,20 +10661,44 @@
       "output_policy": "json_redacted"
     },
     {
-      "path": "releases assets view-3",
-      "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/assets",
+      "path": "releases assets upload",
+      "summary": "Upload one release asset as exact binary bytes.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "releases_release_id_assets2",
       "source_cli_path": "",
-      "risk": "medium",
+      "risk": "medium: uploads one root-confined local file to uploads.github.com without redirects or automatic retries",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
+          "name": "file-path",
+          "summary": "Project-relative path to the release asset bytes.",
+          "type": "string",
+          "maps_to": "record.file_path",
+          "required": true,
+          "max_bytes": 4096
+        },
+        {
+          "name": "label",
+          "summary": "Optional provider release-asset label query parameter.",
+          "type": "string",
+          "maps_to": "record.label",
+          "max_bytes": 8192
+        },
+        {
+          "name": "name",
+          "summary": "Provider release-asset name query parameter.",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
           "name": "release-id",
-          "type": "integer",
           "summary": "release_id path parameter",
-          "maps_to": "record.release_id"
+          "type": "integer",
+          "maps_to": "record.release_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -10541,16 +10781,18 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "release-id",
+          "name": "reaction-id",
+          "summary": "reaction_id path parameter",
           "type": "integer",
-          "summary": "release_id path parameter",
-          "maps_to": "record.release_id"
+          "maps_to": "record.reaction_id",
+          "required": true
         },
         {
-          "name": "reaction-id",
+          "name": "release-id",
+          "summary": "release_id path parameter",
           "type": "integer",
-          "summary": "reaction_id path parameter",
-          "maps_to": "record.reaction_id"
+          "maps_to": "record.release_id",
+          "required": true
         }
       ],
       "api_surface": [
@@ -10769,7 +11011,67 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "credits",
+          "type": "json",
+          "maps_to": "record.credits"
+        },
+        {
+          "name": "cve-id",
+          "type": "string",
+          "maps_to": "record.cve_id",
+          "max_bytes": 8192
+        },
+        {
+          "name": "cvss-vector-string",
+          "type": "string",
+          "maps_to": "record.cvss_vector_string",
+          "max_bytes": 8192
+        },
+        {
+          "name": "cwe-ids",
+          "type": "json",
+          "maps_to": "record.cwe_ids"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "maps_to": "record.description",
+          "required": true,
+          "max_bytes": 65535
+        },
+        {
+          "name": "severity",
+          "type": "enum",
+          "values": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "maps_to": "record.severity",
+          "max_bytes": 8192
+        },
+        {
+          "name": "start-private-fork",
+          "type": "boolean",
+          "maps_to": "record.start_private_fork"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "maps_to": "record.summary",
+          "required": true,
+          "max_bytes": 1024
+        },
+        {
+          "name": "vulnerabilities",
+          "type": "json",
+          "maps_to": "record.vulnerabilities",
+          "required": true
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -10786,7 +11088,55 @@
       "source_cli_path": "",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "cvss-vector-string",
+          "type": "string",
+          "maps_to": "record.cvss_vector_string",
+          "max_bytes": 8192
+        },
+        {
+          "name": "cwe-ids",
+          "type": "json",
+          "maps_to": "record.cwe_ids"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "maps_to": "record.description",
+          "required": true,
+          "max_bytes": 65535
+        },
+        {
+          "name": "severity",
+          "type": "enum",
+          "values": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "maps_to": "record.severity",
+          "max_bytes": 8192
+        },
+        {
+          "name": "start-private-fork",
+          "type": "boolean",
+          "maps_to": "record.start_private_fork"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "maps_to": "record.summary",
+          "required": true,
+          "max_bytes": 1024
+        },
+        {
+          "name": "vulnerabilities",
+          "type": "json",
+          "maps_to": "record.vulnerabilities"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -10805,10 +11155,84 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
+          "name": "collaborating-teams",
+          "type": "json",
+          "maps_to": "record.collaborating_teams"
+        },
+        {
+          "name": "collaborating-users",
+          "type": "json",
+          "maps_to": "record.collaborating_users"
+        },
+        {
+          "name": "credits",
+          "type": "json",
+          "maps_to": "record.credits"
+        },
+        {
+          "name": "cve-id",
+          "type": "string",
+          "maps_to": "record.cve_id",
+          "max_bytes": 8192
+        },
+        {
+          "name": "cvss-vector-string",
+          "type": "string",
+          "maps_to": "record.cvss_vector_string",
+          "max_bytes": 8192
+        },
+        {
+          "name": "cwe-ids",
+          "type": "json",
+          "maps_to": "record.cwe_ids"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "maps_to": "record.description",
+          "max_bytes": 65535
+        },
+        {
           "name": "ghsa-id",
-          "type": "integer",
           "summary": "ghsa_id path parameter",
-          "maps_to": "record.ghsa_id"
+          "type": "string",
+          "maps_to": "record.ghsa_id",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "severity",
+          "type": "enum",
+          "values": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "maps_to": "record.severity",
+          "max_bytes": 8192
+        },
+        {
+          "name": "state",
+          "type": "enum",
+          "values": [
+            "published",
+            "closed",
+            "draft"
+          ],
+          "maps_to": "record.state",
+          "max_bytes": 8192
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "maps_to": "record.summary",
+          "max_bytes": 1024
+        },
+        {
+          "name": "vulnerabilities",
+          "type": "json",
+          "maps_to": "record.vulnerabilities"
         }
       ],
       "api_surface": [
@@ -10830,9 +11254,11 @@
       "flags": [
         {
           "name": "ghsa-id",
-          "type": "integer",
           "summary": "ghsa_id path parameter",
-          "maps_to": "record.ghsa_id"
+          "type": "string",
+          "maps_to": "record.ghsa_id",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -10854,9 +11280,11 @@
       "flags": [
         {
           "name": "ghsa-id",
-          "type": "integer",
           "summary": "ghsa_id path parameter",
-          "maps_to": "record.ghsa_id"
+          "type": "string",
+          "maps_to": "record.ghsa_id",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -20741,10 +21169,11 @@
       "flags": [
         {
           "name": "code",
-          "type": "string",
           "summary": "Sets code.",
+          "type": "string",
           "maps_to": "record.code",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -20810,8 +21239,8 @@
       "flags": [
         {
           "name": "delivery-id",
-          "type": "integer",
           "summary": "Sets delivery_id.",
+          "type": "integer",
           "maps_to": "record.delivery_id",
           "required": true
         }
@@ -20836,8 +21265,8 @@
       "flags": [
         {
           "name": "installation-id",
-          "type": "integer",
           "summary": "The unique identifier of the installation.",
+          "type": "integer",
           "maps_to": "record.installation_id",
           "required": true
         }
@@ -20862,8 +21291,8 @@
       "flags": [
         {
           "name": "installation-id",
-          "type": "integer",
           "summary": "The unique identifier of the installation.",
+          "type": "integer",
           "maps_to": "record.installation_id",
           "required": true
         }
@@ -20888,8 +21317,8 @@
       "flags": [
         {
           "name": "installation-id",
-          "type": "integer",
           "summary": "The unique identifier of the installation.",
+          "type": "integer",
           "maps_to": "record.installation_id",
           "required": true
         }
@@ -21087,18 +21516,20 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "enterprise",
+          "name": "custom-property-name",
+          "summary": "The name of the custom property to remove from OIDC token inclusion",
           "type": "string",
-          "summary": "The slug version of the enterprise name.",
-          "maps_to": "record.enterprise",
-          "required": true
+          "maps_to": "record.custom_property_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "custom-property-name",
+          "name": "enterprise",
+          "summary": "The slug version of the enterprise name.",
           "type": "string",
-          "summary": "The name of the custom property to remove from OIDC token inclusion",
-          "maps_to": "record.custom_property_name",
-          "required": true
+          "maps_to": "record.enterprise",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -21600,18 +22031,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "enterprise",
-          "type": "string",
-          "summary": "The slug version of the enterprise name.",
-          "maps_to": "record.enterprise",
+          "name": "configuration-id",
+          "summary": "The unique identifier of the code security configuration.",
+          "type": "integer",
+          "maps_to": "record.configuration_id",
           "required": true
         },
         {
-          "name": "configuration-id",
-          "type": "integer",
-          "summary": "The unique identifier of the code security configuration.",
-          "maps_to": "record.configuration_id",
-          "required": true
+          "name": "enterprise",
+          "summary": "The slug version of the enterprise name.",
+          "type": "string",
+          "maps_to": "record.enterprise",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -21633,29 +22065,31 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "enterprise",
-          "type": "string",
-          "summary": "The slug version of the enterprise name.",
-          "maps_to": "record.enterprise",
-          "required": true
-        },
-        {
           "name": "configuration-id",
-          "type": "integer",
           "summary": "The unique identifier of the code security configuration.",
+          "type": "integer",
           "maps_to": "record.configuration_id",
           "required": true
         },
         {
+          "name": "enterprise",
+          "summary": "The slug version of the enterprise name.",
+          "type": "string",
+          "maps_to": "record.enterprise",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
           "name": "scope",
-          "type": "enum",
           "summary": "Sets scope.",
-          "maps_to": "record.scope",
+          "type": "enum",
           "values": [
             "all",
             "all_without_configurations"
           ],
-          "required": true
+          "maps_to": "record.scope",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22031,17 +22465,19 @@
       "flags": [
         {
           "name": "enterprise",
-          "type": "string",
           "summary": "The slug version of the enterprise name.",
+          "type": "string",
           "maps_to": "record.enterprise",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22064,17 +22500,19 @@
       "flags": [
         {
           "name": "enterprise",
-          "type": "string",
           "summary": "The slug version of the enterprise name.",
+          "type": "string",
           "maps_to": "record.enterprise",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22163,17 +22601,19 @@
       "flags": [
         {
           "name": "enterprise",
-          "type": "string",
           "summary": "The slug version of the enterprise name.",
+          "type": "string",
           "maps_to": "record.enterprise",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22196,17 +22636,19 @@
       "flags": [
         {
           "name": "enterprise",
-          "type": "string",
           "summary": "The slug version of the enterprise name.",
+          "type": "string",
           "maps_to": "record.enterprise",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22311,17 +22753,19 @@
       "flags": [
         {
           "name": "enterprise",
-          "type": "string",
           "summary": "The slug version of the enterprise name.",
+          "type": "string",
           "maps_to": "record.enterprise",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "team-slug",
-          "type": "string",
           "summary": "The slug of the team name.",
+          "type": "string",
           "maps_to": "record.team_slug",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22414,10 +22858,11 @@
       "flags": [
         {
           "name": "gist-id",
-          "type": "string",
           "summary": "The unique identifier of the gist.",
+          "type": "string",
           "maps_to": "record.gist_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22512,18 +22957,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "gist-id",
-          "type": "string",
-          "summary": "The unique identifier of the gist.",
-          "maps_to": "record.gist_id",
+          "name": "comment-id",
+          "summary": "The unique identifier of the comment.",
+          "type": "integer",
+          "maps_to": "record.comment_id",
           "required": true
         },
         {
-          "name": "comment-id",
-          "type": "integer",
-          "summary": "The unique identifier of the comment.",
-          "maps_to": "record.comment_id",
-          "required": true
+          "name": "gist-id",
+          "summary": "The unique identifier of the gist.",
+          "type": "string",
+          "maps_to": "record.gist_id",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22546,10 +22992,11 @@
       "flags": [
         {
           "name": "gist-id",
-          "type": "string",
           "summary": "The unique identifier of the gist.",
+          "type": "string",
           "maps_to": "record.gist_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22572,10 +23019,11 @@
       "flags": [
         {
           "name": "gist-id",
-          "type": "string",
           "summary": "The unique identifier of the gist.",
+          "type": "string",
           "maps_to": "record.gist_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22598,10 +23046,11 @@
       "flags": [
         {
           "name": "gist-id",
-          "type": "string",
           "summary": "The unique identifier of the gist.",
+          "type": "string",
           "maps_to": "record.gist_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -22673,8 +23122,8 @@
       "flags": [
         {
           "name": "thread-id",
-          "type": "integer",
           "summary": "The unique identifier of the notification thread.",
+          "type": "integer",
           "maps_to": "record.thread_id",
           "required": true
         }
@@ -22699,8 +23148,8 @@
       "flags": [
         {
           "name": "thread-id",
-          "type": "integer",
           "summary": "The unique identifier of the notification thread.",
+          "type": "integer",
           "maps_to": "record.thread_id",
           "required": true
         }
@@ -22757,8 +23206,8 @@
       "flags": [
         {
           "name": "thread-id",
-          "type": "integer",
           "summary": "The unique identifier of the notification thread.",
+          "type": "integer",
           "maps_to": "record.thread_id",
           "required": true
         }
@@ -23003,18 +23452,20 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "budget-id",
+          "summary": "The ID corresponding to the budget.",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.budget_id",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "budget-id",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The ID corresponding to the budget.",
-          "maps_to": "record.budget_id",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -23254,10 +23705,11 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -23351,18 +23803,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "image-definition-id",
+          "summary": "Image definition ID of custom image",
+          "type": "integer",
+          "maps_to": "record.image_definition_id",
           "required": true
         },
         {
-          "name": "image-definition-id",
-          "type": "integer",
-          "summary": "Image definition ID of custom image",
-          "maps_to": "record.image_definition_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -23384,25 +23837,27 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
           "name": "image-definition-id",
-          "type": "integer",
           "summary": "Image definition ID of custom image",
+          "type": "integer",
           "maps_to": "record.image_definition_id",
           "required": true
         },
         {
-          "name": "version",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "version",
           "summary": "Version of a custom image",
+          "type": "string",
           "maps_to": "record.version",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -23516,18 +23971,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "hosted-runner-id",
+          "summary": "Unique identifier of the GitHub-hosted runner.",
+          "type": "integer",
+          "maps_to": "record.hosted_runner_id",
           "required": true
         },
         {
-          "name": "hosted-runner-id",
-          "type": "integer",
-          "summary": "Unique identifier of the GitHub-hosted runner.",
-          "maps_to": "record.hosted_runner_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -23582,18 +24038,20 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "custom-property-name",
+          "summary": "The name of the custom property to remove from OIDC token inclusion",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.custom_property_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "custom-property-name",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The name of the custom property to remove from OIDC token inclusion",
-          "maps_to": "record.custom_property_name",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -23864,15 +24322,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -23897,15 +24356,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -24045,15 +24505,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -24078,15 +24539,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -24296,15 +24758,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "runner-group-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner group.",
+          "type": "integer",
           "maps_to": "record.runner_group_id",
           "required": true
         }
@@ -24369,23 +24832,24 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "The unique identifier of the repository.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "runner-group-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner group.",
-          "maps_to": "record.runner_group_id",
-          "required": true
-        },
-        {
-          "name": "repository-id",
           "type": "integer",
-          "summary": "The unique identifier of the repository.",
-          "maps_to": "record.repository_id",
+          "maps_to": "record.runner_group_id",
           "required": true
         }
       ],
@@ -24409,23 +24873,24 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "The unique identifier of the repository.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "runner-group-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner group.",
-          "maps_to": "record.runner_group_id",
-          "required": true
-        },
-        {
-          "name": "repository-id",
           "type": "integer",
-          "summary": "The unique identifier of the repository.",
-          "maps_to": "record.repository_id",
+          "maps_to": "record.runner_group_id",
           "required": true
         }
       ],
@@ -24489,22 +24954,23 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "runner-group-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner group.",
+          "type": "integer",
           "maps_to": "record.runner_group_id",
           "required": true
         },
         {
           "name": "runner-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner.",
+          "type": "integer",
           "maps_to": "record.runner_id",
           "required": true
         }
@@ -24529,22 +24995,23 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "runner-group-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner group.",
+          "type": "integer",
           "maps_to": "record.runner_group_id",
           "required": true
         },
         {
           "name": "runner-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner.",
+          "type": "integer",
           "maps_to": "record.runner_id",
           "required": true
         }
@@ -24622,10 +25089,11 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -24648,10 +25116,11 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -24674,15 +25143,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "runner-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner.",
+          "type": "integer",
           "maps_to": "record.runner_id",
           "required": true
         }
@@ -24787,15 +25257,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "runner-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner.",
+          "type": "integer",
           "maps_to": "record.runner_id",
           "required": true
         }
@@ -24819,24 +25290,26 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "name",
+          "summary": "The name of a self-hosted runner's custom label.",
           "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "org",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "runner-id",
-          "type": "integer",
           "summary": "Unique identifier of the self-hosted runner.",
+          "type": "integer",
           "maps_to": "record.runner_id",
-          "required": true
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "The name of a self-hosted runner's custom label.",
-          "maps_to": "record.name",
           "required": true
         }
       ],
@@ -24919,17 +25392,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -24992,24 +25467,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
-        },
-        {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -25032,24 +25509,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
-        },
-        {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -25173,18 +25652,20 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "name",
+          "summary": "The name of the variable.",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "name",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The name of the variable.",
-          "maps_to": "record.name",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -25246,23 +25727,25 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "org",
+          "name": "name",
+          "summary": "The name of the variable.",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "name",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The name of the variable.",
-          "maps_to": "record.name",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "Sets repository_id.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -25286,23 +25769,25 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "name",
+          "summary": "The name of the variable.",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "name",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The name of the variable.",
-          "maps_to": "record.name",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "Sets repository_id.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -25386,17 +25871,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -25459,24 +25946,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
-        },
-        {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -25499,24 +25988,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
-        },
-        {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -25640,18 +26131,20 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "name",
+          "summary": "The name of the variable.",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "name",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The name of the variable.",
-          "maps_to": "record.name",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -25713,23 +26206,25 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "org",
+          "name": "name",
+          "summary": "The name of the variable.",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "name",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The name of the variable.",
-          "maps_to": "record.name",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "Sets repository_id.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -25753,23 +26248,25 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "name",
+          "summary": "The name of the variable.",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "name",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The name of the variable.",
-          "maps_to": "record.name",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "Sets repository_id.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -26145,17 +26642,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "subject-digest",
-          "type": "string",
           "summary": "Subject Digest",
+          "type": "string",
           "maps_to": "record.subject_digest",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -26177,18 +26676,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "attestation-id",
+          "summary": "Attestation ID",
+          "type": "integer",
+          "maps_to": "record.attestation_id",
           "required": true
         },
         {
-          "name": "attestation-id",
-          "type": "integer",
-          "summary": "Attestation ID",
-          "maps_to": "record.attestation_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -26211,17 +26711,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -26244,17 +26746,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -26276,64 +26780,70 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
           "name": "campaign-number",
-          "type": "integer",
           "summary": "The campaign number.",
+          "type": "integer",
           "maps_to": "record.campaign_number",
           "required": true
         },
         {
-          "name": "name",
+          "name": "contact-link",
+          "summary": "Sets contact_link.",
           "type": "string",
-          "summary": "Sets name.",
-          "maps_to": "record.name"
+          "maps_to": "record.contact_link",
+          "max_bytes": 8192
         },
         {
           "name": "description",
-          "type": "string",
           "summary": "Sets description.",
-          "maps_to": "record.description"
-        },
-        {
-          "name": "managers",
-          "type": "string_array",
-          "summary": "Sets managers.",
-          "maps_to": "record.managers"
-        },
-        {
-          "name": "team-managers",
-          "type": "string_array",
-          "summary": "Sets team_managers.",
-          "maps_to": "record.team_managers"
+          "type": "string",
+          "maps_to": "record.description",
+          "max_bytes": 255
         },
         {
           "name": "ends-at",
-          "type": "string",
           "summary": "Sets ends_at.",
-          "maps_to": "record.ends_at"
+          "type": "string",
+          "maps_to": "record.ends_at",
+          "max_bytes": 8192
         },
         {
-          "name": "contact-link",
+          "name": "managers",
+          "summary": "Sets managers.",
+          "type": "json",
+          "maps_to": "record.managers"
+        },
+        {
+          "name": "name",
+          "summary": "Sets name.",
           "type": "string",
-          "summary": "Sets contact_link.",
-          "maps_to": "record.contact_link"
+          "maps_to": "record.name",
+          "max_bytes": 50
+        },
+        {
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "state",
-          "type": "enum",
           "summary": "Sets state.",
-          "maps_to": "record.state",
+          "type": "enum",
           "values": [
             "open",
             "closed"
-          ]
+          ],
+          "maps_to": "record.state",
+          "max_bytes": 8192
+        },
+        {
+          "name": "team-managers",
+          "summary": "Sets team_managers.",
+          "type": "json",
+          "maps_to": "record.team_managers"
         }
       ],
       "api_surface": [
@@ -26355,18 +26865,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "campaign-number",
+          "summary": "The campaign number.",
+          "type": "integer",
+          "maps_to": "record.campaign_number",
           "required": true
         },
         {
-          "name": "campaign-number",
-          "type": "integer",
-          "summary": "The campaign number.",
-          "maps_to": "record.campaign_number",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -26648,17 +27159,18 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "selected-repository-ids",
+          "summary": "Required selected repository ids record field.",
           "type": "json",
           "maps_to": "record.selected_repository_ids",
-          "required": true,
-          "summary": "Required selected repository ids record field."
+          "required": true
         }
       ],
       "api_surface": [
@@ -26945,18 +27457,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "configuration-id",
+          "summary": "The unique identifier of the code security configuration.",
+          "type": "integer",
+          "maps_to": "record.configuration_id",
           "required": true
         },
         {
-          "name": "configuration-id",
-          "type": "integer",
-          "summary": "The unique identifier of the code security configuration.",
-          "maps_to": "record.configuration_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -26978,24 +27491,24 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
           "name": "configuration-id",
-          "type": "integer",
           "summary": "The unique identifier of the code security configuration.",
+          "type": "integer",
           "maps_to": "record.configuration_id",
           "required": true
         },
         {
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
           "name": "scope",
-          "type": "enum",
           "summary": "Sets scope.",
-          "maps_to": "record.scope",
+          "type": "enum",
           "values": [
             "all",
             "all_without_configurations",
@@ -27003,7 +27516,14 @@
             "private_or_internal",
             "selected"
           ],
-          "required": true
+          "maps_to": "record.scope",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids"
         }
       ],
       "api_surface": [
@@ -27239,17 +27759,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -27312,24 +27834,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
-        },
-        {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -27352,24 +27876,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
-        },
-        {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -27512,15 +28038,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "space-number",
-          "type": "integer",
           "summary": "The unique identifier of the Copilot Space.",
+          "type": "integer",
           "maps_to": "record.space_number",
           "required": true
         }
@@ -27667,31 +28194,38 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "actor-identifier",
+          "summary": "The username (for users) or team slug (for teams).",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
-          "name": "space-number",
-          "type": "integer",
-          "summary": "The unique identifier of the Copilot Space.",
-          "maps_to": "record.space_number",
-          "required": true
+          "maps_to": "record.actor_identifier",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "actor-type",
-          "type": "string",
           "summary": "The type of actor (user or team).",
+          "type": "enum",
+          "values": [
+            "User",
+            "Team"
+          ],
           "maps_to": "record.actor_type",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "actor-identifier",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The username (for users) or team slug (for teams).",
-          "maps_to": "record.actor_identifier",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "space-number",
+          "summary": "The unique identifier of the Copilot Space.",
+          "type": "integer",
+          "maps_to": "record.space_number",
           "required": true
         }
       ],
@@ -27809,22 +28343,23 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "space-number",
-          "type": "integer",
           "summary": "The unique identifier of the Copilot Space.",
+          "type": "integer",
           "maps_to": "record.space_number",
           "required": true
         },
         {
           "name": "space-resource-id",
-          "type": "integer",
           "summary": "The unique identifier of the resource.",
+          "type": "integer",
           "maps_to": "record.space_resource_id",
           "required": true
         }
@@ -28052,15 +28587,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -28085,15 +28621,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -28270,17 +28807,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -28343,24 +28882,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
-        },
-        {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -28383,24 +28924,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
-        },
-        {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -28525,18 +29068,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "hook-id",
+          "summary": "The unique identifier of the hook.",
+          "type": "integer",
+          "maps_to": "record.hook_id",
           "required": true
         },
         {
-          "name": "hook-id",
-          "type": "integer",
-          "summary": "The unique identifier of the hook.",
-          "maps_to": "record.hook_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -28615,25 +29159,26 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "delivery-id",
+          "summary": "Sets delivery_id.",
+          "type": "integer",
+          "maps_to": "record.delivery_id",
           "required": true
         },
         {
           "name": "hook-id",
-          "type": "integer",
           "summary": "The unique identifier of the hook.",
+          "type": "integer",
           "maps_to": "record.hook_id",
           "required": true
         },
         {
-          "name": "delivery-id",
-          "type": "integer",
-          "summary": "Sets delivery_id.",
-          "maps_to": "record.delivery_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -28655,18 +29200,19 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "hook-id",
+          "summary": "The unique identifier of the hook.",
+          "type": "integer",
+          "maps_to": "record.hook_id",
           "required": true
         },
         {
-          "name": "hook-id",
-          "type": "integer",
-          "summary": "The unique identifier of the hook.",
-          "maps_to": "record.hook_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -28740,10 +29286,11 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -28854,18 +29401,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "invitation-id",
+          "summary": "The unique identifier of the invitation.",
+          "type": "integer",
+          "maps_to": "record.invitation_id",
           "required": true
         },
         {
-          "name": "invitation-id",
-          "type": "integer",
-          "summary": "The unique identifier of the invitation.",
-          "maps_to": "record.invitation_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29005,18 +29553,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "issue-field-id",
+          "summary": "The unique identifier of the issue field.",
+          "type": "integer",
+          "maps_to": "record.issue_field_id",
           "required": true
         },
         {
-          "name": "issue-field-id",
-          "type": "integer",
-          "summary": "The unique identifier of the issue field.",
-          "maps_to": "record.issue_field_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29169,18 +29718,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "issue-type-id",
+          "summary": "The unique identifier of the issue type.",
+          "type": "integer",
+          "maps_to": "record.issue_type_id",
           "required": true
         },
         {
-          "name": "issue-type-id",
-          "type": "integer",
-          "summary": "The unique identifier of the issue type.",
-          "maps_to": "record.issue_type_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29203,17 +29753,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29235,25 +29787,28 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "codespace-name",
+          "summary": "The name of the codespace.",
           "type": "string",
+          "maps_to": "record.codespace_name",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "org",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
-        },
-        {
-          "name": "codespace-name",
           "type": "string",
-          "summary": "The name of the codespace.",
-          "maps_to": "record.codespace_name",
-          "required": true
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29275,25 +29830,28 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "org",
+          "name": "codespace-name",
+          "summary": "The name of the codespace.",
           "type": "string",
+          "maps_to": "record.codespace_name",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "org",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
-        },
-        {
-          "name": "codespace-name",
           "type": "string",
-          "summary": "The name of the codespace.",
-          "maps_to": "record.codespace_name",
-          "required": true
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29359,17 +29917,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29472,18 +30032,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "migration-id",
+          "summary": "The unique identifier of the migration.",
+          "type": "integer",
+          "maps_to": "record.migration_id",
           "required": true
         },
         {
-          "name": "migration-id",
-          "type": "integer",
-          "summary": "The unique identifier of the migration.",
-          "maps_to": "record.migration_id",
-          "required": true
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29505,25 +30066,27 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
           "name": "migration-id",
-          "type": "integer",
           "summary": "The unique identifier of the migration.",
+          "type": "integer",
           "maps_to": "record.migration_id",
           "required": true
         },
         {
-          "name": "repo-name",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "repo-name",
           "summary": "reponame parameter",
+          "type": "string",
           "maps_to": "record.repo_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29546,17 +30109,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "team-slug",
-          "type": "string",
           "summary": "The slug of the team name.",
+          "type": "string",
           "maps_to": "record.team_slug",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29579,24 +30144,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "role-id",
+          "summary": "The unique identifier of the role.",
+          "type": "integer",
+          "maps_to": "record.role_id",
           "required": true
         },
         {
           "name": "team-slug",
-          "type": "string",
           "summary": "The slug of the team name.",
+          "type": "string",
           "maps_to": "record.team_slug",
-          "required": true
-        },
-        {
-          "name": "role-id",
-          "type": "integer",
-          "summary": "The unique identifier of the role.",
-          "maps_to": "record.role_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29619,24 +30186,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "role-id",
+          "summary": "The unique identifier of the role.",
+          "type": "integer",
+          "maps_to": "record.role_id",
           "required": true
         },
         {
           "name": "team-slug",
-          "type": "string",
           "summary": "The slug of the team name.",
+          "type": "string",
           "maps_to": "record.team_slug",
-          "required": true
-        },
-        {
-          "name": "role-id",
-          "type": "integer",
-          "summary": "The unique identifier of the role.",
-          "maps_to": "record.role_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29659,17 +30228,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29692,24 +30263,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "role-id",
+          "summary": "The unique identifier of the role.",
+          "type": "integer",
+          "maps_to": "record.role_id",
           "required": true
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
-        },
-        {
-          "name": "role-id",
-          "type": "integer",
-          "summary": "The unique identifier of the role.",
-          "maps_to": "record.role_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29732,24 +30305,26 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "role-id",
+          "summary": "The unique identifier of the role.",
+          "type": "integer",
+          "maps_to": "record.role_id",
           "required": true
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
-        },
-        {
-          "name": "role-id",
-          "type": "integer",
-          "summary": "The unique identifier of the role.",
-          "maps_to": "record.role_id",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29811,17 +30386,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29844,24 +30421,35 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
-          "name": "package-type",
           "type": "string",
-          "summary": "The type of supported package.",
-          "maps_to": "record.package_type",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-name",
-          "type": "string",
           "summary": "The name of the package.",
+          "type": "string",
           "maps_to": "record.package_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "package-type",
+          "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
+          "maps_to": "record.package_type",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29884,24 +30472,41 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
-          "name": "package-type",
           "type": "string",
-          "summary": "The type of supported package.",
-          "maps_to": "record.package_type",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-name",
-          "type": "string",
           "summary": "The name of the package.",
+          "type": "string",
           "maps_to": "record.package_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "package-type",
+          "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
+          "maps_to": "record.package_type",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "token",
+          "type": "string",
+          "maps_to": "record.token",
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -29924,29 +30529,40 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
-          "name": "package-type",
           "type": "string",
-          "summary": "The type of supported package.",
-          "maps_to": "record.package_type",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-name",
-          "type": "string",
           "summary": "The name of the package.",
+          "type": "string",
           "maps_to": "record.package_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "package-type",
+          "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
+          "maps_to": "record.package_type",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-version-id",
-          "type": "integer",
           "summary": "Unique identifier of the package version.",
+          "type": "integer",
           "maps_to": "record.package_version_id",
           "required": true
         }
@@ -29971,29 +30587,40 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
-          "name": "package-type",
           "type": "string",
-          "summary": "The type of supported package.",
-          "maps_to": "record.package_type",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-name",
-          "type": "string",
           "summary": "The name of the package.",
+          "type": "string",
           "maps_to": "record.package_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "package-type",
+          "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
+          "maps_to": "record.package_type",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-version-id",
-          "type": "integer",
           "summary": "Unique identifier of the package version.",
+          "type": "integer",
           "maps_to": "record.package_version_id",
           "required": true
         }
@@ -30597,17 +31224,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -30722,24 +31351,25 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
+          "name": "item-id",
+          "summary": "The unique identifier of the project item.",
+          "type": "integer",
+          "maps_to": "record.item_id",
           "required": true
+        },
+        {
+          "name": "org",
+          "summary": "The organization name.",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "project-number",
-          "type": "integer",
           "summary": "The project's number.",
-          "maps_to": "record.project_number",
-          "required": true
-        },
-        {
-          "name": "item-id",
           "type": "integer",
-          "summary": "The unique identifier of the project item.",
-          "maps_to": "record.item_id",
+          "maps_to": "record.project_number",
           "required": true
         }
       ],
@@ -30940,18 +31570,20 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "custom-property-name",
+          "summary": "The custom property name",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.custom_property_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "custom-property-name",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "The custom property name",
-          "maps_to": "record.custom_property_name",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -31014,17 +31646,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -31047,17 +31681,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -31392,15 +32028,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "ruleset-id",
-          "type": "integer",
           "summary": "The ID of the ruleset.",
+          "type": "integer",
           "maps_to": "record.ruleset_id",
           "required": true
         }
@@ -31533,17 +32170,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "team-slug",
-          "type": "string",
           "summary": "The slug of the team name.",
+          "type": "string",
           "maps_to": "record.team_slug",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -31566,17 +32205,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "team-slug",
-          "type": "string",
           "summary": "The slug of the team name.",
+          "type": "string",
           "maps_to": "record.team_slug",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -31670,15 +32311,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -31703,15 +32345,16 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -31864,18 +32507,20 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "org",
+          "name": "network-configuration-id",
+          "summary": "Unique identifier of the hosted compute network configuration.",
           "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "maps_to": "record.network_configuration_id",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "network-configuration-id",
+          "name": "org",
+          "summary": "The organization name.",
           "type": "string",
-          "summary": "Unique identifier of the hosted compute network configuration.",
-          "maps_to": "record.network_configuration_id",
-          "required": true
+          "maps_to": "record.org",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -32079,17 +32724,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "team-slug",
-          "type": "string",
           "summary": "The slug of the team name.",
+          "type": "string",
           "maps_to": "record.team_slug",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -32162,24 +32809,27 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "team-slug",
-          "type": "string",
           "summary": "The slug of the team name.",
+          "type": "string",
           "maps_to": "record.team_slug",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -32241,17 +32891,19 @@
       "flags": [
         {
           "name": "org",
-          "type": "string",
           "summary": "The organization name.",
+          "type": "string",
           "maps_to": "record.org",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "team-slug",
-          "type": "string",
           "summary": "The slug of the team name.",
+          "type": "string",
           "maps_to": "record.team_slug",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -32356,15 +33008,15 @@
       "flags": [
         {
           "name": "issue-number",
-          "type": "integer",
           "summary": "The number that identifies the issue.",
+          "type": "integer",
           "maps_to": "record.issue_number",
           "required": true
         },
         {
           "name": "suggestion-id",
-          "type": "integer",
           "summary": "The unique identifier of the suggestion.",
+          "type": "integer",
           "maps_to": "record.suggestion_id",
           "required": true
         }
@@ -32389,15 +33041,15 @@
       "flags": [
         {
           "name": "issue-number",
-          "type": "integer",
           "summary": "The number that identifies the issue.",
+          "type": "integer",
           "maps_to": "record.issue_number",
           "required": true
         },
         {
           "name": "suggestion-id",
-          "type": "integer",
           "summary": "The unique identifier of the suggestion.",
+          "type": "integer",
           "maps_to": "record.suggestion_id",
           "required": true
         }
@@ -32609,8 +33261,8 @@
       "flags": [
         {
           "name": "stack-number",
-          "type": "integer",
           "summary": "The number that identifies the pull request stack.",
+          "type": "integer",
           "maps_to": "record.stack_number",
           "required": true
         }
@@ -32781,8 +33433,8 @@
       "flags": [
         {
           "name": "team-id",
-          "type": "integer",
           "summary": "The unique identifier of the team.",
+          "type": "integer",
           "maps_to": "record.team_id",
           "required": true
         }
@@ -32807,17 +33459,18 @@
       "flags": [
         {
           "name": "team-id",
-          "type": "integer",
           "summary": "The unique identifier of the team.",
+          "type": "integer",
           "maps_to": "record.team_id",
           "required": true
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -32840,17 +33493,18 @@
       "flags": [
         {
           "name": "team-id",
-          "type": "integer",
           "summary": "The unique identifier of the team.",
+          "type": "integer",
           "maps_to": "record.team_id",
           "required": true
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -32916,17 +33570,18 @@
       "flags": [
         {
           "name": "team-id",
-          "type": "integer",
           "summary": "The unique identifier of the team.",
+          "type": "integer",
           "maps_to": "record.team_id",
           "required": true
         },
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -32986,8 +33641,8 @@
       "flags": [
         {
           "name": "team-id",
-          "type": "integer",
           "summary": "The unique identifier of the team.",
+          "type": "integer",
           "maps_to": "record.team_id",
           "required": true
         }
@@ -33079,10 +33734,11 @@
       "flags": [
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33105,10 +33761,11 @@
       "flags": [
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33176,10 +33833,11 @@
       "flags": [
         {
           "name": "secret-name",
-          "type": "string",
           "summary": "The name of the secret.",
+          "type": "string",
           "maps_to": "record.secret_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33234,18 +33892,19 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "secret-name",
-          "type": "string",
-          "summary": "The name of the secret.",
-          "maps_to": "record.secret_name",
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "name": "secret-name",
+          "summary": "The name of the secret.",
+          "type": "string",
+          "maps_to": "record.secret_name",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33267,18 +33926,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "secret-name",
-          "type": "string",
-          "summary": "The name of the secret.",
-          "maps_to": "record.secret_name",
+          "name": "repository-id",
+          "summary": "Sets repository_id.",
+          "type": "integer",
+          "maps_to": "record.repository_id",
           "required": true
         },
         {
-          "name": "repository-id",
-          "type": "integer",
-          "summary": "Sets repository_id.",
-          "maps_to": "record.repository_id",
-          "required": true
+          "name": "secret-name",
+          "summary": "The name of the secret.",
+          "type": "string",
+          "maps_to": "record.secret_name",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33345,10 +34005,11 @@
       "flags": [
         {
           "name": "codespace-name",
-          "type": "string",
           "summary": "The name of the codespace.",
+          "type": "string",
           "maps_to": "record.codespace_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33371,10 +34032,11 @@
       "flags": [
         {
           "name": "codespace-name",
-          "type": "string",
           "summary": "The name of the codespace.",
+          "type": "string",
           "maps_to": "record.codespace_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33435,10 +34097,11 @@
       "flags": [
         {
           "name": "codespace-name",
-          "type": "string",
           "summary": "The name of the codespace.",
+          "type": "string",
           "maps_to": "record.codespace_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33461,10 +34124,11 @@
       "flags": [
         {
           "name": "codespace-name",
-          "type": "string",
           "summary": "The name of the codespace.",
+          "type": "string",
           "maps_to": "record.codespace_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33517,10 +34181,11 @@
       "flags": [
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33543,10 +34208,11 @@
       "flags": [
         {
           "name": "username",
-          "type": "string",
           "summary": "The handle for the GitHub user account.",
+          "type": "string",
           "maps_to": "record.username",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33601,8 +34267,8 @@
       "flags": [
         {
           "name": "gpg-key-id",
-          "type": "integer",
           "summary": "The unique identifier of the GPG key.",
+          "type": "integer",
           "maps_to": "record.gpg_key_id",
           "required": true
         }
@@ -33627,15 +34293,15 @@
       "flags": [
         {
           "name": "installation-id",
-          "type": "integer",
           "summary": "The unique identifier of the installation.",
+          "type": "integer",
           "maps_to": "record.installation_id",
           "required": true
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -33660,15 +34326,15 @@
       "flags": [
         {
           "name": "installation-id",
-          "type": "integer",
           "summary": "The unique identifier of the installation.",
+          "type": "integer",
           "maps_to": "record.installation_id",
           "required": true
         },
         {
           "name": "repository-id",
-          "type": "integer",
           "summary": "The unique identifier of the repository.",
+          "type": "integer",
           "maps_to": "record.repository_id",
           "required": true
         }
@@ -33787,8 +34453,8 @@
       "flags": [
         {
           "name": "key-id",
-          "type": "integer",
           "summary": "The unique identifier of the key.",
+          "type": "integer",
           "maps_to": "record.key_id",
           "required": true
         }
@@ -33923,8 +34589,8 @@
       "flags": [
         {
           "name": "migration-id",
-          "type": "integer",
           "summary": "The unique identifier of the migration.",
+          "type": "integer",
           "maps_to": "record.migration_id",
           "required": true
         }
@@ -33949,17 +34615,18 @@
       "flags": [
         {
           "name": "migration-id",
-          "type": "integer",
           "summary": "The unique identifier of the migration.",
+          "type": "integer",
           "maps_to": "record.migration_id",
           "required": true
         },
         {
           "name": "repo-name",
-          "type": "string",
           "summary": "reponame parameter",
+          "type": "string",
           "maps_to": "record.repo_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -33981,18 +34648,28 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "package-type",
+          "name": "package-name",
+          "summary": "The name of the package.",
           "type": "string",
-          "summary": "The type of supported package.",
-          "maps_to": "record.package_type",
-          "required": true
+          "maps_to": "record.package_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "package-name",
-          "type": "string",
-          "summary": "The name of the package.",
-          "maps_to": "record.package_name",
-          "required": true
+          "name": "package-type",
+          "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
+          "maps_to": "record.package_type",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -34014,18 +34691,34 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "package-type",
+          "name": "package-name",
+          "summary": "The name of the package.",
           "type": "string",
-          "summary": "The type of supported package.",
-          "maps_to": "record.package_type",
-          "required": true
+          "maps_to": "record.package_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "package-name",
+          "name": "package-type",
+          "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
+          "maps_to": "record.package_type",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "token",
           "type": "string",
-          "summary": "The name of the package.",
-          "maps_to": "record.package_name",
-          "required": true
+          "maps_to": "record.token",
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -34047,23 +34740,33 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "package-type",
+          "name": "package-name",
+          "summary": "The name of the package.",
           "type": "string",
-          "summary": "The type of supported package.",
-          "maps_to": "record.package_type",
-          "required": true
+          "maps_to": "record.package_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "package-name",
-          "type": "string",
-          "summary": "The name of the package.",
-          "maps_to": "record.package_name",
-          "required": true
+          "name": "package-type",
+          "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
+          "maps_to": "record.package_type",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-version-id",
-          "type": "integer",
           "summary": "Unique identifier of the package version.",
+          "type": "integer",
           "maps_to": "record.package_version_id",
           "required": true
         }
@@ -34087,23 +34790,33 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "package-type",
+          "name": "package-name",
+          "summary": "The name of the package.",
           "type": "string",
-          "summary": "The type of supported package.",
-          "maps_to": "record.package_type",
-          "required": true
+          "maps_to": "record.package_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "package-name",
-          "type": "string",
-          "summary": "The name of the package.",
-          "maps_to": "record.package_name",
-          "required": true
+          "name": "package-type",
+          "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
+          "maps_to": "record.package_type",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-version-id",
-          "type": "integer",
           "summary": "Unique identifier of the package version.",
+          "type": "integer",
           "maps_to": "record.package_version_id",
           "required": true
         }
@@ -34304,8 +35017,8 @@
       "flags": [
         {
           "name": "invitation-id",
-          "type": "integer",
           "summary": "The unique identifier of the invitation.",
+          "type": "integer",
           "maps_to": "record.invitation_id",
           "required": true
         }
@@ -34330,8 +35043,8 @@
       "flags": [
         {
           "name": "invitation-id",
-          "type": "integer",
           "summary": "The unique identifier of the invitation.",
+          "type": "integer",
           "maps_to": "record.invitation_id",
           "required": true
         }
@@ -34440,8 +35153,8 @@
       "flags": [
         {
           "name": "ssh-signing-key-id",
-          "type": "integer",
           "summary": "The unique identifier of the SSH signing key.",
+          "type": "integer",
           "maps_to": "record.ssh_signing_key_id",
           "required": true
         }
@@ -34624,18 +35337,20 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "username",
+          "name": "subject-digest",
+          "summary": "Subject Digest",
           "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
+          "maps_to": "record.subject_digest",
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "subject-digest",
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
           "type": "string",
-          "summary": "Subject Digest",
-          "maps_to": "record.subject_digest",
-          "required": true
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -34657,18 +35372,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "username",
-          "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
+          "name": "attestation-id",
+          "summary": "Attestation ID",
+          "type": "integer",
+          "maps_to": "record.attestation_id",
           "required": true
         },
         {
-          "name": "attestation-id",
-          "type": "integer",
-          "summary": "Attestation ID",
-          "maps_to": "record.attestation_id",
-          "required": true
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -34806,18 +35522,19 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "username",
-          "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
+          "name": "space-number",
+          "summary": "The unique identifier of the Copilot Space.",
+          "type": "integer",
+          "maps_to": "record.space_number",
           "required": true
         },
         {
-          "name": "space-number",
-          "type": "integer",
-          "summary": "The unique identifier of the Copilot Space.",
-          "maps_to": "record.space_number",
-          "required": true
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -34962,32 +35679,39 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "username",
+          "name": "actor-identifier",
+          "summary": "The username of the collaborator.",
           "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
+          "maps_to": "record.actor_identifier",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "actor-type",
+          "summary": "The type of actor (must be User for user-owned spaces; Team will be rejected).",
+          "type": "enum",
+          "values": [
+            "User",
+            "Team"
+          ],
+          "maps_to": "record.actor_type",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "space-number",
-          "type": "integer",
           "summary": "The unique identifier of the Copilot Space.",
+          "type": "integer",
           "maps_to": "record.space_number",
           "required": true
         },
         {
-          "name": "actor-type",
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
           "type": "string",
-          "summary": "The type of actor (must be User for user-owned spaces; Team will be rejected).",
-          "maps_to": "record.actor_type",
-          "required": true
-        },
-        {
-          "name": "actor-identifier",
-          "type": "string",
-          "summary": "The username of the collaborator.",
-          "maps_to": "record.actor_identifier",
-          "required": true
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -35103,25 +35827,26 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "username",
-          "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
-        },
-        {
           "name": "space-number",
-          "type": "integer",
           "summary": "The unique identifier of the Copilot Space.",
+          "type": "integer",
           "maps_to": "record.space_number",
           "required": true
         },
         {
           "name": "space-resource-id",
-          "type": "integer",
           "summary": "The unique identifier of the resource.",
+          "type": "integer",
           "maps_to": "record.space_resource_id",
           "required": true
+        },
+        {
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -35143,25 +35868,36 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "username",
+          "name": "package-name",
+          "summary": "The name of the package.",
           "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
+          "maps_to": "record.package_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-type",
-          "type": "string",
           "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "package-name",
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
           "type": "string",
-          "summary": "The name of the package.",
-          "maps_to": "record.package_name",
-          "required": true
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -35183,25 +35919,42 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "username",
+          "name": "package-name",
+          "summary": "The name of the package.",
           "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
+          "maps_to": "record.package_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-type",
-          "type": "string",
           "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
-          "name": "package-name",
+          "name": "token",
           "type": "string",
-          "summary": "The name of the package.",
-          "maps_to": "record.package_name",
-          "required": true
+          "maps_to": "record.token",
+          "max_bytes": 8192
+        },
+        {
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -35223,32 +35976,43 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "username",
+          "name": "package-name",
+          "summary": "The name of the package.",
           "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
+          "maps_to": "record.package_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-type",
-          "type": "string",
           "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type",
-          "required": true
-        },
-        {
-          "name": "package-name",
-          "type": "string",
-          "summary": "The name of the package.",
-          "maps_to": "record.package_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-version-id",
-          "type": "integer",
           "summary": "Unique identifier of the package version.",
+          "type": "integer",
           "maps_to": "record.package_version_id",
           "required": true
+        },
+        {
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -35270,32 +36034,43 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "username",
+          "name": "package-name",
+          "summary": "The name of the package.",
           "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
+          "maps_to": "record.package_name",
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-type",
-          "type": "string",
           "summary": "The type of supported package.",
+          "type": "enum",
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type",
-          "required": true
-        },
-        {
-          "name": "package-name",
-          "type": "string",
-          "summary": "The name of the package.",
-          "maps_to": "record.package_name",
-          "required": true
+          "required": true,
+          "max_bytes": 8192
         },
         {
           "name": "package-version-id",
-          "type": "integer",
           "summary": "Unique identifier of the package version.",
+          "type": "integer",
           "maps_to": "record.package_version_id",
           "required": true
+        },
+        {
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -35364,25 +36139,26 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
-          "name": "username",
-          "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
+          "name": "item-id",
+          "summary": "The unique identifier of the project item.",
+          "type": "integer",
+          "maps_to": "record.item_id",
           "required": true
         },
         {
           "name": "project-number",
-          "type": "integer",
           "summary": "The project's number.",
+          "type": "integer",
           "maps_to": "record.project_number",
           "required": true
         },
         {
-          "name": "item-id",
-          "type": "integer",
-          "summary": "The unique identifier of the project item.",
-          "maps_to": "record.item_id",
-          "required": true
+          "name": "username",
+          "summary": "The handle for the GitHub user account.",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -36721,10 +37497,10 @@
       "flags": [
         {
           "name": "artifact-id",
+          "summary": "The unique identifier of the artifact.",
           "type": "integer",
           "maps_to": "record.artifact_id",
-          "required": true,
-          "summary": "The unique identifier of the artifact."
+          "required": true
         }
       ],
       "api_surface": [
@@ -36852,10 +37628,10 @@
       "flags": [
         {
           "name": "run-id",
+          "summary": "The unique identifier of the workflow run.",
           "type": "integer",
           "maps_to": "record.run_id",
-          "required": true,
-          "summary": "The unique identifier of the workflow run."
+          "required": true
         }
       ],
       "api_surface": [
@@ -37207,10 +37983,11 @@
       "flags": [
         {
           "name": "secret-name",
+          "summary": "The name of the secret.",
           "type": "string",
           "maps_to": "record.secret_name",
           "required": true,
-          "summary": "The name of the secret."
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -37356,10 +38133,11 @@
       "flags": [
         {
           "name": "name",
+          "summary": "The name of the variable.",
           "type": "string",
           "maps_to": "record.name",
           "required": true,
-          "summary": "The name of the variable."
+          "max_bytes": 8192
         }
       ],
       "api_surface": [
@@ -38163,10 +38941,10 @@
       "flags": [
         {
           "name": "issue-number",
+          "summary": "The number that identifies the issue.",
           "type": "integer",
           "maps_to": "record.issue_number",
-          "required": true,
-          "summary": "The number that identifies the issue."
+          "required": true
         }
       ],
       "api_surface": [
@@ -38510,17 +39288,17 @@
       "flags": [
         {
           "name": "pull-number",
+          "summary": "The number that identifies the pull request.",
           "type": "integer",
           "maps_to": "record.pull_number",
-          "required": true,
-          "summary": "The number that identifies the pull request."
+          "required": true
         },
         {
           "name": "review-id",
+          "summary": "The unique identifier of the review.",
           "type": "integer",
           "maps_to": "record.review_id",
-          "required": true,
-          "summary": "The unique identifier of the review."
+          "required": true
         }
       ],
       "api_surface": [
@@ -47417,6 +48195,232 @@
       "output_policy": "json_redacted",
       "risk": "critical",
       "approval": "plan, preview, approval, execute (typed destructive confirmation)"
+    },
+    {
+      "path": "api repos remove-collaborator",
+      "summary": "DELETE /repos/{owner}/{repo}/collaborators/{username}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_collaborator",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "risk": "revokes a collaborator's access to the repository",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/collaborators/{username}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 8192
+        }
+      ]
+    },
+    {
+      "path": "api repos delete-commit-comment",
+      "summary": "DELETE /repos/{owner}/{repo}/comments/{comment_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_commit_comment",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "risk": "removes a commit comment",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/comments/{comment_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "api repos delete-an-environment",
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_environment",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "risk": "removes a deployment environment and its protection rules",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "maps_to": "record.environment_name",
+          "required": true,
+          "max_bytes": 8192
+        }
+      ]
+    },
+    {
+      "path": "api git delete-ref",
+      "summary": "DELETE /repos/{owner}/{repo}/git/refs/{ref}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ref",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "risk": "permanently deletes a branch or tag ref",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/git/refs/{ref}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "maps_to": "record.ref",
+          "required": true,
+          "max_bytes": 8192
+        }
+      ]
+    },
+    {
+      "path": "api repos delete-webhook",
+      "summary": "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "risk": "removes a webhook; the target will stop receiving repository event payloads",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "maps_to": "record.hook_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "api issues delete-comment",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_issue_comment",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "risk": "removes an issue or pull request comment",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "api issues remove-label",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_issue_label",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "risk": "removes a single label from an issue or pull request",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels/{name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "maps_to": "record.issue_number",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 8192
+        }
+      ]
+    },
+    {
+      "path": "api issues delete-milestone",
+      "summary": "DELETE /repos/{owner}/{repo}/milestones/{milestone_number}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_milestone",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "risk": "removes repository planning metadata from GitHub",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/milestones/{milestone_number}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "milestone-number",
+          "type": "integer",
+          "maps_to": "record.milestone_number",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "api pulls delete-review-comment",
+      "summary": "DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_review_comment",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "risk": "removes a pull request review comment",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
+        }
+      ]
     }
   ],
   "help_topics": [

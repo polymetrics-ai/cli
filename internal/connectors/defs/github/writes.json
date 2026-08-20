@@ -522,11 +522,13 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "name"
         ],
         "properties": {
           "name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -617,6 +619,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "milestone_number"
         ],
@@ -728,6 +731,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "release_id"
         ],
@@ -804,6 +808,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "run_id"
         ],
@@ -827,6 +832,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "run_id"
         ],
@@ -1096,6 +1102,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "hook_id"
         ],
@@ -1151,6 +1158,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "key_id"
         ],
@@ -1209,11 +1217,13 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "environment_name"
         ],
         "properties": {
           "environment_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -1304,6 +1314,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "comment_id"
         ],
@@ -1363,6 +1374,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "comment_id"
         ],
@@ -1427,6 +1439,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "issue_number"
         ],
@@ -1580,6 +1593,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "issue_number",
           "name"
@@ -1589,6 +1603,7 @@
             "type": "integer"
           },
           "name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -1767,6 +1782,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "comment_id"
         ],
@@ -1944,6 +1960,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "asset_id"
         ],
@@ -2032,11 +2049,13 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "username"
         ],
         "properties": {
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -2121,11 +2140,13 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "ref"
         ],
         "properties": {
           "ref": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -2433,6 +2454,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "ruleset_id"
         ],
@@ -2499,10 +2521,11 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -2598,14 +2621,33 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/caches",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "additionalProperties": false,
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "ref": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "query": {
+        "key": "{{ record.key }}",
+        "ref": {
+          "template": "{{ record.ref }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "actions_caches_cache_id",
@@ -2615,10 +2657,11 @@
       "path_fields": [
         "cache_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "cache_id"
         ],
@@ -2794,10 +2837,11 @@
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/registration-token",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -2809,10 +2853,11 @@
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/remove-token",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -2826,10 +2871,11 @@
       "path_fields": [
         "runner_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "runner_id"
         ],
@@ -2849,10 +2895,11 @@
       "path_fields": [
         "runner_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "runner_id"
         ],
@@ -2919,20 +2966,22 @@
         "runner_id",
         "name"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "runner_id",
-          "name"
+          "name",
+          "runner_id"
         ],
         "properties": {
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "runner_id": {
             "type": "integer"
-          },
-          "name": {
-            "type": "string"
           }
         }
       },
@@ -2946,10 +2995,11 @@
       "path_fields": [
         "run_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "run_id"
         ],
@@ -2992,10 +3042,11 @@
       "path_fields": [
         "run_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "run_id"
         ],
@@ -3039,15 +3090,17 @@
       "path_fields": [
         "secret_name"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "secret_name"
         ],
         "properties": {
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3122,15 +3175,17 @@
       "path_fields": [
         "name"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "name"
         ],
         "properties": {
           "name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3263,16 +3318,17 @@
       "path_fields": [
         "autolink_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "autolink_id"
         ],
         "properties": {
           "autolink_id": {
-            "type": "string"
+            "type": "integer"
           }
         }
       },
@@ -3284,10 +3340,11 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -3299,10 +3356,11 @@
       "method": "PUT",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -3316,15 +3374,17 @@
       "path_fields": [
         "branch"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "branch"
         ],
         "properties": {
           "branch": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3378,15 +3438,17 @@
       "path_fields": [
         "branch"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "branch"
         ],
         "properties": {
           "branch": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3401,15 +3463,17 @@
       "path_fields": [
         "branch"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "branch"
         ],
         "properties": {
           "branch": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3424,15 +3488,17 @@
       "path_fields": [
         "branch"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "branch"
         ],
         "properties": {
           "branch": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3470,15 +3536,17 @@
       "path_fields": [
         "branch"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "branch"
         ],
         "properties": {
           "branch": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3493,15 +3561,17 @@
       "path_fields": [
         "branch"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "branch"
         ],
         "properties": {
           "branch": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3516,15 +3586,17 @@
       "path_fields": [
         "branch"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "branch"
         ],
         "properties": {
           "branch": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3631,15 +3703,17 @@
       "path_fields": [
         "branch"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "branch"
         ],
         "properties": {
           "branch": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -3975,10 +4049,11 @@
       "path_fields": [
         "check_run_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "check_run_id"
         ],
@@ -4028,10 +4103,11 @@
       "path_fields": [
         "check_suite_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "check_suite_id"
         ],
@@ -4066,10 +4142,11 @@
       "path_fields": [
         "alert_number"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "alert_number"
         ],
@@ -4112,20 +4189,34 @@
       "path_fields": [
         "analysis_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "analysis_id"
         ],
         "properties": {
           "analysis_id": {
             "type": "integer"
+          },
+          "confirm_delete": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "query": {
+        "confirm_delete": {
+          "template": "{{ record.confirm_delete }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "code_scanning_codeql_databases_language",
@@ -4135,15 +4226,17 @@
       "path_fields": [
         "language"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "language"
         ],
         "properties": {
           "language": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -4175,10 +4268,78 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
-        "properties": {}
+        "properties": {
+          "languages": {
+            "items": {
+              "enum": [
+                "actions",
+                "c-cpp",
+                "csharp",
+                "go",
+                "java-kotlin",
+                "javascript-typescript",
+                "python",
+                "ruby",
+                "swift"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "query_suite": {
+            "enum": [
+              "default",
+              "extended"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "runner_label": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "runner_type": {
+            "enum": [
+              "standard",
+              "labeled"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "configured",
+              "not-configured"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "threat_model": {
+            "enum": [
+              "remote",
+              "remote_and_local"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
       },
-      "risk": "high"
+      "risk": "high",
+      "body_fields": [
+        "languages",
+        "query_suite",
+        "runner_label",
+        "runner_type",
+        "state",
+        "threat_model"
+      ]
     },
     {
       "name": "code_scanning_sarifs",
@@ -4190,10 +4351,55 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "additionalProperties": false,
+        "required": [
+          "commit_sha",
+          "ref",
+          "sarif"
+        ],
+        "properties": {
+          "checkout_uri": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "commit_sha": {
+            "maxLength": 64,
+            "minLength": 40,
+            "pattern": "^([0-9a-fA-F]{40}(?:[0-9a-fA-F]{24})?)$",
+            "type": "string"
+          },
+          "ref": {
+            "maxLength": 8192,
+            "pattern": "^refs/(heads|tags|pull)/.*$",
+            "type": "string"
+          },
+          "sarif": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "started_at": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "tool_name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "validate": {
+            "type": "boolean"
+          }
+        }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "body_fields": [
+        "checkout_uri",
+        "commit_sha",
+        "ref",
+        "sarif",
+        "started_at",
+        "tool_name",
+        "validate"
+      ]
     },
     {
       "name": "codespaces2",
@@ -4218,15 +4424,17 @@
       "path_fields": [
         "secret_name"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "secret_name"
         ],
         "properties": {
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -4290,10 +4498,11 @@
         "comment_id",
         "reaction_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "comment_id",
           "reaction_id"
@@ -4317,15 +4526,17 @@
       "path_fields": [
         "secret_name"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "secret_name"
         ],
         "properties": {
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -4378,10 +4589,11 @@
       "path_fields": [
         "deployment_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "deployment_id"
         ],
@@ -4464,20 +4676,22 @@
         "environment_name",
         "branch_policy_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "environment_name",
-          "branch_policy_id"
+          "branch_policy_id",
+          "environment_name"
         ],
         "properties": {
-          "environment_name": {
-            "type": "string"
-          },
           "branch_policy_id": {
             "type": "integer"
+          },
+          "environment_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -4543,16 +4757,18 @@
         "environment_name",
         "protection_rule_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "environment_name",
           "protection_rule_id"
         ],
         "properties": {
           "environment_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "protection_rule_id": {
@@ -4571,19 +4787,22 @@
         "environment_name",
         "secret_name"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "environment_name",
           "secret_name"
         ],
         "properties": {
           "environment_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -4650,19 +4869,22 @@
         "environment_name",
         "name"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "environment_name",
           "name"
         ],
         "properties": {
           "environment_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -4835,19 +5057,20 @@
         "hook_id",
         "delivery_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "hook_id",
-          "delivery_id"
+          "delivery_id",
+          "hook_id"
         ],
         "properties": {
-          "hook_id": {
+          "delivery_id": {
             "type": "integer"
           },
-          "delivery_id": {
+          "hook_id": {
             "type": "integer"
           }
         }
@@ -4862,10 +5085,11 @@
       "path_fields": [
         "hook_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "hook_id"
         ],
@@ -4885,10 +5109,11 @@
       "path_fields": [
         "hook_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "hook_id"
         ],
@@ -4906,10 +5131,11 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -4921,10 +5147,11 @@
       "method": "PUT",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -4936,10 +5163,11 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -4987,16 +5215,29 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "author_id"
         ],
         "properties": {
           "author_id": {
             "type": "integer"
+          },
+          "email": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "body_fields": [
+        "email",
+        "name"
+      ]
     },
     {
       "name": "import_lfs",
@@ -5019,10 +5260,11 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -5081,10 +5323,11 @@
       "path_fields": [
         "invitation_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "invitation_id"
         ],
@@ -5127,10 +5370,11 @@
       "path_fields": [
         "comment_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "comment_id"
         ],
@@ -5150,10 +5394,11 @@
       "path_fields": [
         "comment_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "comment_id"
         ],
@@ -5197,10 +5442,11 @@
         "comment_id",
         "reaction_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "comment_id",
           "reaction_id"
@@ -5248,19 +5494,20 @@
         "issue_number",
         "issue_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "issue_number",
-          "issue_id"
+          "issue_id",
+          "issue_number"
         ],
         "properties": {
-          "issue_number": {
+          "issue_id": {
             "type": "integer"
           },
-          "issue_id": {
+          "issue_number": {
             "type": "integer"
           }
         }
@@ -5322,19 +5569,20 @@
         "issue_number",
         "issue_field_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "issue_number",
-          "issue_field_id"
+          "issue_field_id",
+          "issue_number"
         ],
         "properties": {
-          "issue_number": {
+          "issue_field_id": {
             "type": "integer"
           },
-          "issue_field_id": {
+          "issue_number": {
             "type": "integer"
           }
         }
@@ -5373,10 +5621,11 @@
         "issue_number",
         "reaction_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "issue_number",
           "reaction_id"
@@ -5497,10 +5746,11 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -5542,10 +5792,11 @@
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/builds",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -5595,10 +5846,11 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -5610,10 +5862,11 @@
       "method": "PUT",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -5666,10 +5919,11 @@
         "comment_id",
         "reaction_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "comment_id",
           "reaction_id"
@@ -5750,18 +6004,46 @@
       "name": "releases_release_id_assets2",
       "kind": "create",
       "method": "POST",
+      "base_url": "https://uploads.github.com",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/assets",
       "path_fields": [
         "release_id"
       ],
-      "body_type": "json",
+      "query": {
+        "label": {
+          "template": "{{ record.label }}",
+          "omit_when_absent": true
+        },
+        "name": "{{ record.name }}"
+      },
+      "body_type": "binary_upload",
+      "binary_upload": {
+        "source_field": "file_path",
+        "max_bytes": 67108864
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
+          "file_path",
+          "name",
           "release_id"
         ],
         "properties": {
+          "file_path": {
+            "maxLength": 4096,
+            "minLength": 1,
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "release_id": {
             "type": "integer"
           }
@@ -5801,19 +6083,20 @@
         "release_id",
         "reaction_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "release_id",
-          "reaction_id"
+          "reaction_id",
+          "release_id"
         ],
         "properties": {
-          "release_id": {
+          "reaction_id": {
             "type": "integer"
           },
-          "reaction_id": {
+          "release_id": {
             "type": "integer"
           }
         }
@@ -5845,10 +6128,186 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "additionalProperties": false,
+        "required": [
+          "description",
+          "summary",
+          "vulnerabilities"
+        ],
+        "properties": {
+          "credits": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "login": {
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "type": {
+                  "enum": [
+                    "analyst",
+                    "finder",
+                    "reporter",
+                    "coordinator",
+                    "remediation_developer",
+                    "remediation_reviewer",
+                    "remediation_verifier",
+                    "tool",
+                    "sponsor",
+                    "other"
+                  ],
+                  "maxLength": 8192,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "login",
+                "type"
+              ],
+              "type": "object"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "cve_id": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cvss_vector_string": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cwe_ids": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "maxLength": 65535,
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "start_private_fork": {
+            "type": "boolean"
+          },
+          "summary": {
+            "maxLength": 1024,
+            "type": "string"
+          },
+          "vulnerabilities": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "package": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "ecosystem": {
+                      "enum": [
+                        "rubygems",
+                        "npm",
+                        "pip",
+                        "maven",
+                        "nuget",
+                        "composer",
+                        "go",
+                        "rust",
+                        "erlang",
+                        "actions",
+                        "pub",
+                        "other",
+                        "swift"
+                      ],
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "name": {
+                      "maxLength": 8192,
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ecosystem"
+                  ],
+                  "type": "object"
+                },
+                "patched_versions": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "vulnerable_functions": {
+                  "items": {
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "maxItems": 256,
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "vulnerable_version_range": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "package"
+              ],
+              "type": "object"
+            },
+            "maxItems": 256,
+            "type": "array"
+          }
+        }
       },
-      "risk": "high"
+      "risk": "high",
+      "body_fields": [
+        "credits",
+        "cve_id",
+        "cvss_vector_string",
+        "cwe_ids",
+        "description",
+        "severity",
+        "start_private_fork",
+        "summary",
+        "vulnerabilities"
+      ]
     },
     {
       "name": "security_advisories_reports",
@@ -5860,10 +6319,142 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [],
-        "properties": {}
+        "additionalProperties": false,
+        "required": [
+          "description",
+          "summary"
+        ],
+        "properties": {
+          "cvss_vector_string": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cwe_ids": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "maxLength": 65535,
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "start_private_fork": {
+            "type": "boolean"
+          },
+          "summary": {
+            "maxLength": 1024,
+            "type": "string"
+          },
+          "vulnerabilities": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "package": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "ecosystem": {
+                      "enum": [
+                        "rubygems",
+                        "npm",
+                        "pip",
+                        "maven",
+                        "nuget",
+                        "composer",
+                        "go",
+                        "rust",
+                        "erlang",
+                        "actions",
+                        "pub",
+                        "other",
+                        "swift"
+                      ],
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "name": {
+                      "maxLength": 8192,
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ecosystem"
+                  ],
+                  "type": "object"
+                },
+                "patched_versions": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "vulnerable_functions": {
+                  "items": {
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "maxItems": 256,
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "vulnerable_version_range": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "package"
+              ],
+              "type": "object"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        }
       },
-      "risk": "high"
+      "risk": "high",
+      "body_fields": [
+        "cvss_vector_string",
+        "cwe_ids",
+        "description",
+        "severity",
+        "start_private_fork",
+        "summary",
+        "vulnerabilities"
+      ]
     },
     {
       "name": "security_advisories_ghsa_id",
@@ -5877,16 +6468,218 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "ghsa_id"
         ],
         "properties": {
+          "collaborating_teams": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "collaborating_users": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "credits": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "login": {
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "type": {
+                  "enum": [
+                    "analyst",
+                    "finder",
+                    "reporter",
+                    "coordinator",
+                    "remediation_developer",
+                    "remediation_reviewer",
+                    "remediation_verifier",
+                    "tool",
+                    "sponsor",
+                    "other"
+                  ],
+                  "maxLength": 8192,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "login",
+                "type"
+              ],
+              "type": "object"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "cve_id": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cvss_vector_string": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cwe_ids": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "maxLength": 65535,
+            "type": "string"
+          },
           "ghsa_id": {
-            "type": "integer"
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "state": {
+            "enum": [
+              "published",
+              "closed",
+              "draft"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "summary": {
+            "maxLength": 1024,
+            "type": "string"
+          },
+          "vulnerabilities": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "package": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "ecosystem": {
+                      "enum": [
+                        "rubygems",
+                        "npm",
+                        "pip",
+                        "maven",
+                        "nuget",
+                        "composer",
+                        "go",
+                        "rust",
+                        "erlang",
+                        "actions",
+                        "pub",
+                        "other",
+                        "swift"
+                      ],
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "name": {
+                      "maxLength": 8192,
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ecosystem"
+                  ],
+                  "type": "object"
+                },
+                "patched_versions": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "vulnerable_functions": {
+                  "items": {
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "maxItems": 256,
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "vulnerable_version_range": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "package"
+              ],
+              "type": "object"
+            },
+            "maxItems": 256,
+            "type": "array"
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "body_fields": [
+        "collaborating_teams",
+        "collaborating_users",
+        "credits",
+        "cve_id",
+        "cvss_vector_string",
+        "cwe_ids",
+        "description",
+        "severity",
+        "state",
+        "summary",
+        "vulnerabilities"
+      ]
     },
     {
       "name": "security_advisories_ghsa_id_cve",
@@ -5896,16 +6689,18 @@
       "path_fields": [
         "ghsa_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "ghsa_id"
         ],
         "properties": {
           "ghsa_id": {
-            "type": "integer"
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -5919,16 +6714,18 @@
       "path_fields": [
         "ghsa_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "ghsa_id"
         ],
         "properties": {
           "ghsa_id": {
-            "type": "integer"
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -5982,10 +6779,11 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscription",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -6028,10 +6826,11 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -6043,10 +6842,11 @@
       "method": "PUT",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
       "path_fields": [],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -6092,15 +6892,17 @@
       "kind": "create",
       "method": "POST",
       "path": "/app-manifests/{{ record.code }}/conversions",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "code"
         ],
         "properties": {
           "code": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -6143,10 +6945,11 @@
       "kind": "create",
       "method": "POST",
       "path": "/app/hook/deliveries/{{ record.delivery_id }}/attempts",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "delivery_id"
         ],
@@ -6166,10 +6969,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/app/installations/{{ record.installation_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "installation_id"
         ],
@@ -6195,10 +6999,11 @@
       "kind": "update",
       "method": "PUT",
       "path": "/app/installations/{{ record.installation_id }}/suspended",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "installation_id"
         ],
@@ -6218,10 +7023,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/app/installations/{{ record.installation_id }}/suspended",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "installation_id"
         ],
@@ -6784,19 +7590,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/enterprises/{{ record.enterprise }}/actions/oidc/customization/properties/repo/{{ record.custom_property_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "enterprise",
-          "custom_property_name"
+          "custom_property_name",
+          "enterprise"
         ],
         "properties": {
-          "enterprise": {
+          "custom_property_name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "custom_property_name": {
+          "enterprise": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -7234,20 +8043,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "enterprise",
-          "configuration_id"
+          "configuration_id",
+          "enterprise"
         ],
         "properties": {
-          "enterprise": {
-            "type": "string"
-          },
           "configuration_id": {
             "type": "integer"
+          },
+          "enterprise": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -7272,24 +8083,27 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "enterprise",
           "configuration_id",
+          "enterprise",
           "scope"
         ],
         "properties": {
-          "enterprise": {
-            "type": "string"
-          },
           "configuration_id": {
             "type": "integer"
           },
+          "enterprise": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "scope": {
-            "type": "string",
             "enum": [
               "all",
               "all_without_configurations"
-            ]
+            ],
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -7297,6 +8111,9 @@
       "path_fields": [
         "enterprise",
         "configuration_id"
+      ],
+      "body_fields": [
+        "scope"
       ]
     },
     {
@@ -7661,19 +8478,22 @@
       "kind": "update",
       "method": "PUT",
       "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "enterprise",
           "username"
         ],
         "properties": {
           "enterprise": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -7689,19 +8509,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "enterprise",
           "username"
         ],
         "properties": {
           "enterprise": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -7783,19 +8606,22 @@
       "kind": "update",
       "method": "PUT",
       "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "enterprise",
           "org"
         ],
         "properties": {
           "enterprise": {
+            "maxLength": 8192,
             "type": "string"
           },
           "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -7811,19 +8637,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "enterprise",
           "org"
         ],
         "properties": {
           "enterprise": {
+            "maxLength": 8192,
             "type": "string"
           },
           "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -7904,19 +8733,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.team_slug }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "enterprise",
           "team_slug"
         ],
         "properties": {
           "enterprise": {
+            "maxLength": 8192,
             "type": "string"
           },
           "team_slug": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -7993,15 +8825,17 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/gists/{{ record.gist_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "gist_id"
         ],
         "properties": {
           "gist_id": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -8081,20 +8915,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/gists/{{ record.gist_id }}/comments/{{ record.comment_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "gist_id",
-          "comment_id"
+          "comment_id",
+          "gist_id"
         ],
         "properties": {
-          "gist_id": {
-            "type": "string"
-          },
           "comment_id": {
             "type": "integer"
+          },
+          "gist_id": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -8115,15 +8951,17 @@
       "kind": "create",
       "method": "POST",
       "path": "/gists/{{ record.gist_id }}/forks",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "gist_id"
         ],
         "properties": {
           "gist_id": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -8138,15 +8976,17 @@
       "kind": "update",
       "method": "PUT",
       "path": "/gists/{{ record.gist_id }}/star",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "gist_id"
         ],
         "properties": {
           "gist_id": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -8161,15 +9001,17 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/gists/{{ record.gist_id }}/star",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "gist_id"
         ],
         "properties": {
           "gist_id": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -8190,10 +9032,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/installation/token",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -8232,10 +9075,11 @@
       "kind": "update",
       "method": "PATCH",
       "path": "/notifications/threads/{{ record.thread_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "thread_id"
         ],
@@ -8255,10 +9099,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/notifications/threads/{{ record.thread_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "thread_id"
         ],
@@ -8310,10 +9155,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/notifications/threads/{{ record.thread_id }}/subscription",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "thread_id"
         ],
@@ -8526,19 +9372,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/organizations/{{ record.org }}/settings/billing/budgets/{{ record.budget_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "budget_id"
+          "budget_id",
+          "org"
         ],
         "properties": {
-          "org": {
+          "budget_id": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "budget_id": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -8684,15 +9533,17 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -8777,20 +9628,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/hosted-runners/images/custom/{{ record.image_definition_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "image_definition_id"
+          "image_definition_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "image_definition_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -8811,23 +9664,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/hosted-runners/images/custom/{{ record.image_definition_id }}/versions/{{ record.version }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
           "image_definition_id",
+          "org",
           "version"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "image_definition_id": {
             "type": "integer"
           },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "version": {
+            "maxLength": 8192,
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
             "type": "string"
           }
         }
@@ -8910,20 +9767,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/hosted-runners/{{ record.hosted_runner_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "hosted_runner_id"
+          "hosted_runner_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "hosted_runner_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -8971,19 +9830,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/oidc/customization/properties/repo/{{ record.custom_property_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "custom_property_name"
+          "custom_property_name",
+          "org"
         ],
         "properties": {
-          "org": {
+          "custom_property_name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "custom_property_name": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -9205,16 +10067,18 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/actions/permissions/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "repository_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -9233,16 +10097,18 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/permissions/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "repository_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -9364,16 +10230,18 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/actions/permissions/self-hosted-runners/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "repository_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -9392,16 +10260,18 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/permissions/self-hosted-runners/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "repository_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -9576,16 +10446,18 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "runner_group_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "runner_group_id": {
@@ -9645,23 +10517,25 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "runner_group_id",
-          "repository_id"
+          "repository_id",
+          "runner_group_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "runner_group_id": {
+          "repository_id": {
             "type": "integer"
           },
-          "repository_id": {
+          "runner_group_id": {
             "type": "integer"
           }
         }
@@ -9678,23 +10552,25 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "runner_group_id",
-          "repository_id"
+          "repository_id",
+          "runner_group_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "runner_group_id": {
+          "repository_id": {
             "type": "integer"
           },
-          "repository_id": {
+          "runner_group_id": {
             "type": "integer"
           }
         }
@@ -9752,10 +10628,11 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/runners/{{ record.runner_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "runner_group_id",
@@ -9763,6 +10640,7 @@
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "runner_group_id": {
@@ -9785,10 +10663,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/runners/{{ record.runner_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "runner_group_id",
@@ -9796,6 +10675,7 @@
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "runner_group_id": {
@@ -9865,15 +10745,17 @@
       "kind": "create",
       "method": "POST",
       "path": "/orgs/{{ record.org }}/actions/runners/registration-token",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -9888,15 +10770,17 @@
       "kind": "create",
       "method": "POST",
       "path": "/orgs/{{ record.org }}/actions/runners/remove-token",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -9911,16 +10795,18 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "runner_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "runner_id": {
@@ -10015,16 +10901,18 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "runner_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "runner_id": {
@@ -10049,24 +10937,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
+          "name",
           "org",
-          "runner_id",
-          "name"
+          "runner_id"
         ],
         "properties": {
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "runner_id": {
             "type": "integer"
-          },
-          "name": {
-            "type": "string"
           }
         }
       },
@@ -10139,19 +11030,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "secret_name"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -10208,24 +11102,27 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -10241,24 +11138,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -10371,19 +11271,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/variables/{{ record.name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "name"
+          "name",
+          "org"
         ],
         "properties": {
-          "org": {
+          "name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "name": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -10440,20 +11343,23 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
           "name",
+          "org",
           "repository_id"
         ],
         "properties": {
-          "org": {
+          "name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "name": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -10473,20 +11379,23 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
           "name",
+          "org",
           "repository_id"
         ],
         "properties": {
-          "org": {
+          "name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "name": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -10563,19 +11472,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "secret_name"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -10632,24 +11544,27 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -10665,24 +11580,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -10795,19 +11713,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/agents/variables/{{ record.name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "name"
+          "name",
+          "org"
         ],
         "properties": {
-          "org": {
+          "name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "name": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -10864,20 +11785,23 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
           "name",
+          "org",
           "repository_id"
         ],
         "properties": {
-          "org": {
+          "name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "name": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -10897,20 +11821,23 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
           "name",
+          "org",
           "repository_id"
         ],
         "properties": {
-          "org": {
+          "name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "name": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -11255,19 +12182,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/attestations/digest/{{ record.subject_digest }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "subject_digest"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "subject_digest": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -11289,20 +12219,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/attestations/{{ record.attestation_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "attestation_id"
+          "attestation_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "attestation_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -11323,19 +12255,22 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/blocks/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "username"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -11351,19 +12286,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/blocks/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "username"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -11389,49 +12327,63 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "campaign_number"
+          "campaign_number",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "campaign_number": {
             "type": "integer"
           },
-          "name": {
-            "type": "string"
+          "contact_link": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "description": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "ends_at": {
+            "maxLength": 8192,
             "type": "string"
           },
           "managers": {
-            "type": "array",
             "items": {
+              "maxLength": 8192,
               "type": "string"
-            }
+            },
+            "maxItems": 10,
+            "type": "array"
           },
-          "team_managers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "name": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
           },
-          "ends_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "contact_link": {
-            "type": "string",
-            "format": "uri"
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           },
           "state": {
-            "type": "string",
             "enum": [
               "open",
               "closed"
-            ]
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "team_managers": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 10,
+            "type": "array"
           }
         }
       },
@@ -11439,6 +12391,15 @@
       "path_fields": [
         "org",
         "campaign_number"
+      ],
+      "body_fields": [
+        "contact_link",
+        "description",
+        "ends_at",
+        "managers",
+        "name",
+        "state",
+        "team_managers"
       ]
     },
     {
@@ -11446,20 +12407,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/campaigns/{{ record.campaign_number }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "campaign_number"
+          "campaign_number",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "campaign_number": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -11740,19 +12703,23 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "selected_repository_ids"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "selected_repository_ids": {
-            "type": "array",
             "items": {
               "type": "integer"
-            }
+            },
+            "maxItems": 250,
+            "minItems": 1,
+            "type": "array"
           }
         }
       },
@@ -11765,7 +12732,10 @@
         "missing_ok_status": [
           404
         ]
-      }
+      },
+      "body_fields": [
+        "selected_repository_ids"
+      ]
     },
     {
       "name": "code_security_update_configuration",
@@ -12032,20 +13002,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "configuration_id"
+          "configuration_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "configuration_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -12070,33 +13042,37 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
           "configuration_id",
+          "org",
           "scope"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "configuration_id": {
             "type": "integer"
           },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "scope": {
-            "type": "string",
             "enum": [
               "all",
               "all_without_configurations",
               "public",
               "private_or_internal",
               "selected"
-            ]
+            ],
+            "maxLength": 8192,
+            "type": "string"
           },
           "selected_repository_ids": {
-            "type": "array",
             "items": {
               "type": "integer"
-            }
+            },
+            "maxItems": 256,
+            "type": "array"
           }
         }
       },
@@ -12104,6 +13080,10 @@
       "path_fields": [
         "org",
         "configuration_id"
+      ],
+      "body_fields": [
+        "scope",
+        "selected_repository_ids"
       ]
     },
     {
@@ -12302,19 +13282,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "secret_name"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -12371,24 +13354,27 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -12404,24 +13390,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -12611,16 +13600,18 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "space_number"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "space_number": {
@@ -12742,28 +13733,36 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "space_number",
+          "actor_identifier",
           "actor_type",
-          "actor_identifier"
+          "org",
+          "space_number"
         ],
         "properties": {
+          "actor_identifier": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "actor_type": {
+            "enum": [
+              "User",
+              "Team"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "space_number": {
             "type": "integer"
-          },
-          "actor_type": {
-            "type": "string"
-          },
-          "actor_identifier": {
-            "type": "string"
           }
         }
       },
@@ -12865,10 +13864,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "space_number",
@@ -12876,6 +13876,7 @@
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "space_number": {
@@ -13098,16 +14099,18 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/copilot/coding-agent/permissions/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "repository_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -13126,16 +14129,18 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/copilot/coding-agent/permissions/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "repository_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -13298,19 +14303,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "secret_name"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -13367,24 +14375,27 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -13400,24 +14411,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -13564,20 +14578,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/hooks/{{ record.hook_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "hook_id"
+          "hook_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "hook_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -13639,24 +14655,26 @@
       "kind": "create",
       "method": "POST",
       "path": "/orgs/{{ record.org }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
+          "delivery_id",
           "hook_id",
-          "delivery_id"
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
+          "delivery_id": {
+            "type": "integer"
           },
           "hook_id": {
             "type": "integer"
           },
-          "delivery_id": {
-            "type": "integer"
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -13672,20 +14690,22 @@
       "kind": "create",
       "method": "POST",
       "path": "/orgs/{{ record.org }}/hooks/{{ record.hook_id }}/pings",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "hook_id"
+          "hook_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "hook_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -13742,15 +14762,17 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/interaction-limits",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -13845,20 +14867,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/invitations/{{ record.invitation_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "invitation_id"
+          "invitation_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "invitation_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -14041,20 +15065,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/issue-fields/{{ record.issue_field_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "issue_field_id"
+          "issue_field_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "issue_field_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -14174,20 +15200,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/issue-types/{{ record.issue_type_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "issue_type_id"
+          "issue_type_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "issue_type_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -14208,19 +15236,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/members/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "username"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14242,23 +15273,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/members/{{ record.username }}/codespaces/{{ record.codespace_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
+          "codespace_name",
           "org",
-          "username",
-          "codespace_name"
+          "username"
         ],
         "properties": {
+          "codespace_name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
-            "type": "string"
-          },
-          "codespace_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14281,23 +15316,27 @@
       "kind": "create",
       "method": "POST",
       "path": "/orgs/{{ record.org }}/members/{{ record.username }}/codespaces/{{ record.codespace_name }}/stop",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
+          "codespace_name",
           "org",
-          "username",
-          "codespace_name"
+          "username"
         ],
         "properties": {
+          "codespace_name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
-            "type": "string"
-          },
-          "codespace_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14349,19 +15388,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/memberships/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "username"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14443,20 +15485,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/migrations/{{ record.migration_id }}/archive",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "migration_id"
+          "migration_id",
+          "org"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "migration_id": {
             "type": "integer"
+          },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -14477,23 +15521,26 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/migrations/{{ record.migration_id }}/repos/{{ record.repo_name }}/lock",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
           "migration_id",
+          "org",
           "repo_name"
         ],
         "properties": {
-          "org": {
-            "type": "string"
-          },
           "migration_id": {
             "type": "integer"
           },
+          "org": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "repo_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14516,19 +15563,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "team_slug"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "team_slug": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14550,24 +15600,27 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}/{{ record.role_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "team_slug",
-          "role_id"
+          "role_id",
+          "team_slug"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "team_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "role_id": {
             "type": "integer"
+          },
+          "team_slug": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -14583,24 +15636,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}/{{ record.role_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "team_slug",
-          "role_id"
+          "role_id",
+          "team_slug"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "team_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "role_id": {
             "type": "integer"
+          },
+          "team_slug": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -14622,19 +15678,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/organization-roles/users/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "username"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14656,24 +15715,27 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/organization-roles/users/{{ record.username }}/{{ record.role_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "username",
-          "role_id"
+          "role_id",
+          "username"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "username": {
+            "maxLength": 8192,
             "type": "string"
           },
           "role_id": {
             "type": "integer"
+          },
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -14689,24 +15751,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/organization-roles/users/{{ record.username }}/{{ record.role_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "username",
-          "role_id"
+          "role_id",
+          "username"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "username": {
+            "maxLength": 8192,
             "type": "string"
           },
           "role_id": {
             "type": "integer"
+          },
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -14759,19 +15824,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/outside_collaborators/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "username"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14793,23 +15861,35 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "package_type",
-          "package_name"
+          "package_name",
+          "package_type"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "package_type": {
+            "maxLength": 8192,
             "type": "string"
           },
           "package_name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14832,23 +15912,39 @@
       "kind": "create",
       "method": "POST",
       "path": "/orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/restore",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "package_type",
-          "package_name"
+          "package_name",
+          "package_type"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "package_type": {
+            "maxLength": 8192,
             "type": "string"
           },
           "package_name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "token": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -14858,31 +15954,49 @@
         "org",
         "package_type",
         "package_name"
-      ]
+      ],
+      "query": {
+        "token": {
+          "template": "{{ record.token }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "packages_delete_package_version_for_org",
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "package_type",
           "package_name",
+          "package_type",
           "package_version_id"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "package_type": {
+            "maxLength": 8192,
             "type": "string"
           },
           "package_name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           },
           "package_version_id": {
@@ -14909,24 +16023,36 @@
       "kind": "create",
       "method": "POST",
       "path": "/orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
-          "package_type",
           "package_name",
+          "package_type",
           "package_version_id"
         ],
         "properties": {
           "org": {
-            "type": "string"
-          },
-          "package_type": {
+            "maxLength": 8192,
             "type": "string"
           },
           "package_name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           },
           "package_version_id": {
@@ -15366,19 +16492,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/private-registries/{{ record.secret_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "secret_name"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -15487,23 +16616,25 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
+          "item_id",
           "org",
-          "project_number",
-          "item_id"
+          "project_number"
         ],
         "properties": {
+          "item_id": {
+            "type": "integer"
+          },
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "project_number": {
-            "type": "integer"
-          },
-          "item_id": {
             "type": "integer"
           }
         }
@@ -15746,19 +16877,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/properties/schema/{{ record.custom_property_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "custom_property_name"
+          "custom_property_name",
+          "org"
         ],
         "properties": {
-          "org": {
+          "custom_property_name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "custom_property_name": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -15829,19 +16963,22 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/public_members/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "username"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -15857,19 +16994,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/public_members/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "username"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -16189,16 +17329,18 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/rulesets/{{ record.ruleset_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "ruleset_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "ruleset_id": {
@@ -16403,19 +17545,22 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/security-managers/teams/{{ record.team_slug }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "team_slug"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "team_slug": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -16431,19 +17576,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/security-managers/teams/{{ record.team_slug }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "team_slug"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "team_slug": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -16533,16 +17681,18 @@
       "kind": "update",
       "method": "PUT",
       "path": "/orgs/{{ record.org }}/settings/immutable-releases/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "repository_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -16561,16 +17711,18 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/settings/immutable-releases/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "repository_id"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repository_id": {
@@ -16698,19 +17850,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/settings/network-configurations/{{ record.network_configuration_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "org",
-          "network_configuration_id"
+          "network_configuration_id",
+          "org"
         ],
         "properties": {
-          "org": {
+          "network_configuration_id": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "network_configuration_id": {
+          "org": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -16863,19 +18018,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/teams/{{ record.team_slug }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "team_slug"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "team_slug": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -16937,10 +18095,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/teams/{{ record.team_slug }}/memberships/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "team_slug",
@@ -16948,12 +18107,15 @@
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "team_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -17007,19 +18169,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/orgs/{{ record.org }}/teams/{{ record.team_slug }}/repos/{{ config.owner }}/{{ config.repo }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "org",
           "team_slug"
         ],
         "properties": {
           "org": {
+            "maxLength": 8192,
             "type": "string"
           },
           "team_slug": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -17104,10 +18269,11 @@
       "kind": "create",
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/suggestions/{{ record.suggestion_id }}/approve",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "issue_number",
           "suggestion_id"
@@ -17132,10 +18298,11 @@
       "kind": "create",
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/suggestions/{{ record.suggestion_id }}/dismiss",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "issue_number",
           "suggestion_id"
@@ -17361,10 +18528,11 @@
       "kind": "create",
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/stacks/{{ record.stack_number }}/unstack",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "stack_number"
         ],
@@ -17486,10 +18654,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/teams/{{ record.team_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "team_id"
         ],
@@ -17515,10 +18684,11 @@
       "kind": "update",
       "method": "PUT",
       "path": "/teams/{{ record.team_id }}/members/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "team_id",
           "username"
@@ -17528,6 +18698,7 @@
             "type": "integer"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -17543,10 +18714,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/teams/{{ record.team_id }}/members/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "team_id",
           "username"
@@ -17556,6 +18728,7 @@
             "type": "integer"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -17612,10 +18785,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/teams/{{ record.team_id }}/memberships/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "team_id",
           "username"
@@ -17625,6 +18799,7 @@
             "type": "integer"
           },
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -17677,10 +18852,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/teams/{{ record.team_id }}/repos/{{ config.owner }}/{{ config.repo }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "team_id"
         ],
@@ -17745,15 +18921,17 @@
       "kind": "update",
       "method": "PUT",
       "path": "/user/blocks/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "username"
         ],
         "properties": {
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -17768,15 +18946,17 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/blocks/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "username"
         ],
         "properties": {
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -17833,15 +19013,17 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/codespaces/secrets/{{ record.secret_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "secret_name"
         ],
         "properties": {
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -17892,20 +19074,22 @@
       "kind": "update",
       "method": "PUT",
       "path": "/user/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
-          "secret_name": {
-            "type": "string"
-          },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -17920,20 +19104,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "secret_name",
-          "repository_id"
+          "repository_id",
+          "secret_name"
         ],
         "properties": {
-          "secret_name": {
-            "type": "string"
-          },
           "repository_id": {
             "type": "integer"
+          },
+          "secret_name": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -17989,15 +19175,17 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/codespaces/{{ record.codespace_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "codespace_name"
         ],
         "properties": {
           "codespace_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -18018,15 +19206,17 @@
       "kind": "create",
       "method": "POST",
       "path": "/user/codespaces/{{ record.codespace_name }}/exports",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "codespace_name"
         ],
         "properties": {
           "codespace_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -18070,15 +19260,17 @@
       "kind": "create",
       "method": "POST",
       "path": "/user/codespaces/{{ record.codespace_name }}/start",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "codespace_name"
         ],
         "properties": {
           "codespace_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -18093,15 +19285,17 @@
       "kind": "create",
       "method": "POST",
       "path": "/user/codespaces/{{ record.codespace_name }}/stop",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "codespace_name"
         ],
         "properties": {
           "codespace_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -18140,15 +19334,17 @@
       "kind": "update",
       "method": "PUT",
       "path": "/user/following/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "username"
         ],
         "properties": {
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -18163,15 +19359,17 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/following/{{ record.username }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "username"
         ],
         "properties": {
           "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -18215,10 +19413,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/gpg_keys/{{ record.gpg_key_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "gpg_key_id"
         ],
@@ -18244,10 +19443,11 @@
       "kind": "update",
       "method": "PUT",
       "path": "/user/installations/{{ record.installation_id }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "installation_id",
           "repository_id"
@@ -18272,10 +19472,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/installations/{{ record.installation_id }}/repositories/{{ record.repository_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "installation_id",
           "repository_id"
@@ -18341,10 +19542,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/interaction-limits",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -18384,10 +19586,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/keys/{{ record.key_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "key_id"
         ],
@@ -18496,10 +19699,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/migrations/{{ record.migration_id }}/archive",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "migration_id"
         ],
@@ -18525,10 +19729,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/migrations/{{ record.migration_id }}/repos/{{ record.repo_name }}/lock",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "migration_id",
           "repo_name"
@@ -18538,6 +19743,7 @@
             "type": "integer"
           },
           "repo_name": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -18559,19 +19765,30 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/packages/{{ record.package_type }}/{{ record.package_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "package_type",
-          "package_name"
+          "package_name",
+          "package_type"
         ],
         "properties": {
-          "package_type": {
+          "package_name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "package_name": {
+          "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -18593,19 +19810,34 @@
       "kind": "create",
       "method": "POST",
       "path": "/user/packages/{{ record.package_type }}/{{ record.package_name }}/restore",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "package_type",
-          "package_name"
+          "package_name",
+          "package_type"
         ],
         "properties": {
-          "package_type": {
+          "package_name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "package_name": {
+          "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "token": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -18614,27 +19846,44 @@
       "path_fields": [
         "package_type",
         "package_name"
-      ]
+      ],
+      "query": {
+        "token": {
+          "template": "{{ record.token }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "packages_delete_package_version_for_authenticated_user",
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "package_type",
           "package_name",
+          "package_type",
           "package_version_id"
         ],
         "properties": {
-          "package_type": {
+          "package_name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "package_name": {
+          "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           },
           "package_version_id": {
@@ -18660,20 +19909,31 @@
       "kind": "create",
       "method": "POST",
       "path": "/user/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "package_type",
           "package_name",
+          "package_type",
           "package_version_id"
         ],
         "properties": {
-          "package_type": {
+          "package_name": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "package_name": {
+          "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           },
           "package_version_id": {
@@ -18797,10 +20057,11 @@
       "kind": "update",
       "method": "PATCH",
       "path": "/user/repository_invitations/{{ record.invitation_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "invitation_id"
         ],
@@ -18820,10 +20081,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/repository_invitations/{{ record.invitation_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "invitation_id"
         ],
@@ -18924,10 +20186,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/ssh_signing_keys/{{ record.ssh_signing_key_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "ssh_signing_key_id"
         ],
@@ -18953,10 +20216,11 @@
       "kind": "update",
       "method": "PUT",
       "path": "/user/starred/{{ config.owner }}/{{ config.repo }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -18967,10 +20231,11 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/user/starred/{{ config.owner }}/{{ config.repo }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [],
         "properties": {}
       },
@@ -19058,19 +20323,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ record.username }}/attestations/digest/{{ record.subject_digest }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
-          "subject_digest"
+          "subject_digest",
+          "username"
         ],
         "properties": {
-          "username": {
+          "subject_digest": {
+            "maxLength": 8192,
             "type": "string"
           },
-          "subject_digest": {
+          "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -19092,20 +20360,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ record.username }}/attestations/{{ record.attestation_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
-          "attestation_id"
+          "attestation_id",
+          "username"
         ],
         "properties": {
-          "username": {
-            "type": "string"
-          },
           "attestation_id": {
             "type": "integer"
+          },
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -19290,20 +20560,22 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
-          "space_number"
+          "space_number",
+          "username"
         ],
         "properties": {
-          "username": {
-            "type": "string"
-          },
           "space_number": {
             "type": "integer"
+          },
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -19421,27 +20693,35 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
-          "space_number",
+          "actor_identifier",
           "actor_type",
-          "actor_identifier"
+          "space_number",
+          "username"
         ],
         "properties": {
-          "username": {
+          "actor_identifier": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "actor_type": {
+            "enum": [
+              "User",
+              "Team"
+            ],
+            "maxLength": 8192,
             "type": "string"
           },
           "space_number": {
             "type": "integer"
           },
-          "actor_type": {
-            "type": "string"
-          },
-          "actor_identifier": {
+          "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -19544,24 +20824,26 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
           "space_number",
-          "space_resource_id"
+          "space_resource_id",
+          "username"
         ],
         "properties": {
-          "username": {
-            "type": "string"
-          },
           "space_number": {
             "type": "integer"
           },
           "space_resource_id": {
             "type": "integer"
+          },
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -19583,23 +20865,35 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
+          "package_name",
           "package_type",
-          "package_name"
+          "username"
         ],
         "properties": {
-          "username": {
+          "package_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           },
-          "package_name": {
+          "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -19622,23 +20916,39 @@
       "kind": "create",
       "method": "POST",
       "path": "/users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/restore",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
+          "package_name",
           "package_type",
-          "package_name"
+          "username"
         ],
         "properties": {
-          "username": {
+          "package_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "package_type": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           },
-          "package_name": {
+          "token": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "username": {
+            "maxLength": 8192,
             "type": "string"
           }
         }
@@ -19648,35 +20958,53 @@
         "username",
         "package_type",
         "package_name"
-      ]
+      ],
+      "query": {
+        "token": {
+          "template": "{{ record.token }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "packages_delete_package_version_for_user",
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
-          "package_type",
           "package_name",
-          "package_version_id"
+          "package_type",
+          "package_version_id",
+          "username"
         ],
         "properties": {
-          "username": {
+          "package_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "package_type": {
-            "type": "string"
-          },
-          "package_name": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           },
           "package_version_id": {
             "type": "integer"
+          },
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -19699,28 +21027,40 @@
       "kind": "create",
       "method": "POST",
       "path": "/users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
-          "package_type",
           "package_name",
-          "package_version_id"
+          "package_type",
+          "package_version_id",
+          "username"
         ],
         "properties": {
-          "username": {
+          "package_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "package_type": {
-            "type": "string"
-          },
-          "package_name": {
+            "enum": [
+              "npm",
+              "maven",
+              "rubygems",
+              "docker",
+              "nuget",
+              "container"
+            ],
+            "maxLength": 8192,
             "type": "string"
           },
           "package_version_id": {
             "type": "integer"
+          },
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -19789,24 +21129,26 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}",
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
-          "username",
+          "item_id",
           "project_number",
-          "item_id"
+          "username"
         ],
         "properties": {
-          "username": {
-            "type": "string"
+          "item_id": {
+            "type": "integer"
           },
           "project_number": {
             "type": "integer"
           },
-          "item_id": {
-            "type": "integer"
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -21030,10 +22372,11 @@
       "path_fields": [
         "artifact_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "artifact_id"
         ],
@@ -21041,8 +22384,7 @@
           "artifact_id": {
             "type": "integer"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "risk": "low",
       "confirm": "destructive"
@@ -21055,10 +22397,11 @@
       "path_fields": [
         "run_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "run_id"
         ],
@@ -21066,8 +22409,7 @@
           "run_id": {
             "type": "integer"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "risk": "low"
     },
@@ -21105,19 +22447,20 @@
       "path_fields": [
         "secret_name"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "secret_name"
         ],
         "properties": {
           "secret_name": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "risk": "low",
       "confirm": "destructive"
@@ -21191,19 +22534,20 @@
       "path_fields": [
         "name"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "name"
         ],
         "properties": {
           "name": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "risk": "low",
       "confirm": "destructive"
@@ -21339,10 +22683,11 @@
       "path_fields": [
         "issue_number"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "issue_number"
         ],
@@ -21350,8 +22695,7 @@
           "issue_number": {
             "type": "integer"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "risk": "low",
       "confirm": "destructive"
@@ -21397,10 +22741,11 @@
         "pull_number",
         "review_id"
       ],
-      "body_type": "json",
+      "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "pull_number",
           "review_id"
@@ -21412,8 +22757,7 @@
           "review_id": {
             "type": "integer"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "risk": "low",
       "confirm": "destructive"

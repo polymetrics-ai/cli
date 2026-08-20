@@ -62,8 +62,8 @@ func TestCertificationSweepForGitHubIsSurfaceDerivedAndExhaustive(t *testing.T) 
 	if sweep.Source != "connector declarations" {
 		t.Fatalf("source = %q, want connector declarations", sweep.Source)
 	}
-	if sweep.DeclaredCommands != 1571 || sweep.DeclaredRows != 1575 || len(sweep.Commands) != 1575 {
-		t.Fatalf("declared commands/rows/commands = %d/%d/%d, want 1571/1575/1575", sweep.DeclaredCommands, sweep.DeclaredRows, len(sweep.Commands))
+	if sweep.DeclaredCommands != 1580 || sweep.DeclaredRows != 1584 || len(sweep.Commands) != 1584 {
+		t.Fatalf("declared commands/rows/commands = %d/%d/%d, want 1580/1584/1584", sweep.DeclaredCommands, sweep.DeclaredRows, len(sweep.Commands))
 	}
 
 	seen := make(map[string]bool, len(sweep.Commands))

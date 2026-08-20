@@ -643,6 +643,16 @@ func (r *Requester) DoTextLimited(ctx context.Context, method, path string, quer
 	return r.do(ctx, method, path, query, []byte(body), "text/plain", maxBodyBytes+1)
 }
 
+// DoBinaryLimited sends one declaration-owned application/octet-stream body.
+// The media type is fixed here rather than accepted from the caller, keeping
+// this a binary capability instead of a generic raw-request escape hatch.
+func (r *Requester) DoBinaryLimited(ctx context.Context, method, path string, query url.Values, body []byte, maxBodyBytes int) (*Response, error) {
+	if body == nil {
+		body = []byte{}
+	}
+	return r.do(ctx, method, path, query, body, "application/octet-stream", maxBodyBytes+1)
+}
+
 // DoForm performs an HTTP request with an application/x-www-form-urlencoded body,
 // reusing the same auth, retry, and rate-limit handling as Do. It is the form
 // counterpart used by APIs (e.g. Stripe) whose write endpoints take form bodies.

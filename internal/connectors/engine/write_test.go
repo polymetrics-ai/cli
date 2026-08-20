@@ -2348,3 +2348,206 @@ func TestDryRunBase64UploadDoesNotReadTheFile(t *testing.T) {
 		t.Fatalf("RecordsStaged = %d, want 1", preview.RecordsStaged)
 	}
 }
+
+func githubReleaseAssetUploadAction(t *testing.T, serverURL string) Bundle {
+	t.Helper()
+	bundle, err := Load(os.DirFS(filepath.Join("..", "defs")), "github")
+	if err != nil {
+		t.Fatalf("load installed GitHub bundle: %v", err)
+	}
+	var installed WriteAction
+	for _, action := range bundle.Writes {
+		if action.Name == "releases_release_id_assets2" {
+			installed = action
+			break
+		}
+	}
+	if installed.Name == "" {
+		t.Fatal("installed GitHub release-asset upload action is missing")
+	}
+	// The production declaration pins uploads.github.com. The test substitutes
+	// only the origin so the real installed path/query/body contract can be
+	// exercised without live credentials or provider I/O.
+	installed.BaseURL = serverURL
+	bundle.HTTP.URL = serverURL
+	bundle.HTTP.Auth = nil
+	bundle.HTTP.Headers = nil
+	bundle.Writes = []WriteAction{installed}
+	return bundle
+}
+
+func TestGitHubReleaseAssetUpload_InstalledCommandSendsExactBytes(t *testing.T) {
+	var calls int
+	var gotBody []byte
+	var gotQuery url.Values
+	var gotContentType string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		gotQuery = r.URL.Query()
+		gotContentType = r.Header.Get("Content-Type")
+		gotBody, _ = io.ReadAll(r.Body)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		_, _ = w.Write([]byte(`{"id":9007199254740993,"name":"asset.bin"}`))
+	}))
+	defer server.Close()
+
+	payload := []byte{0x00, 0xff, 'p', 'm', '\n'}
+	projectDir, relative := writeTempPayload(t, "asset.bin", payload)
+	bundle := githubReleaseAssetUploadAction(t, server.URL)
+	result, err := Write(context.Background(), bundle, connectors.WriteRequest{
+		Action: "releases_release_id_assets2",
+		Config: connectors.RuntimeConfig{
+			ProjectDir: projectDir,
+			Config:     map[string]string{"owner": "octo cat", "repo": "hello/world"},
+		},
+	}, []connectors.Record{{
+		"release_id": int64(42),
+		"name":       "asset +1.bin",
+		"label":      "release/one",
+		"file_path":  relative,
+	}}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("provider calls = %d, want 1", calls)
+	}
+	if !bytes.Equal(gotBody, payload) {
+		t.Fatalf("body = %x, want %x", gotBody, payload)
+	}
+	if gotContentType != "application/octet-stream" {
+		t.Fatalf("Content-Type = %q, want application/octet-stream", gotContentType)
+	}
+	if gotQuery.Get("name") != "asset +1.bin" || gotQuery.Get("label") != "release/one" {
+		t.Fatalf("query = %q", gotQuery.Encode())
+	}
+	if len(result.ProviderResponses) != 1 || result.ProviderResponses[0].Status != http.StatusCreated {
+		t.Fatalf("provider responses = %#v", result.ProviderResponses)
+	}
+	if body, ok := result.ProviderResponses[0].Body.(map[string]any); !ok || body["id"] != json.Number("9007199254740993") {
+		t.Fatalf("provider response body = %#v", result.ProviderResponses[0].Body)
+	}
+}
+
+func TestGitHubReleaseAssetUpload_RejectsMissingChangedUnsafeOrOversizeFile(t *testing.T) {
+	var calls int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusCreated)
+	}))
+	defer server.Close()
+	baseRecord := connectors.Record{"release_id": int64(42), "name": "asset.bin"}
+
+	t.Run("missing", func(t *testing.T) {
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{baseRecord}, nil)
+		if err == nil || !strings.Contains(err.Error(), "file_path") {
+			t.Fatalf("error = %v, want missing file_path", err)
+		}
+	})
+
+	t.Run("unsafe", func(t *testing.T) {
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		record := connectors.Record{"release_id": int64(42), "name": "asset.bin", "file_path": "../escape.bin"}
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: t.TempDir(), Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{record}, nil)
+		if err == nil || (!strings.Contains(strings.ToLower(err.Error()), "outside") && !strings.Contains(strings.ToLower(err.Error()), "project root")) {
+			t.Fatalf("error = %v, want confinement refusal", err)
+		}
+	})
+
+	t.Run("oversize", func(t *testing.T) {
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		for index := range bundle.Writes {
+			bundle.Writes[index].BinaryUpload.MaxBytes = 3
+		}
+		dir, path := writeTempPayload(t, "large.bin", []byte("four"))
+		record := connectors.Record{"release_id": int64(42), "name": "asset.bin", "file_path": path}
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: dir, Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{record}, nil)
+		if err == nil || !strings.Contains(err.Error(), "too large") {
+			t.Fatalf("error = %v, want size refusal", err)
+		}
+	})
+
+	t.Run("changed", func(t *testing.T) {
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		dir, path := writeTempPayload(t, "changed.bin", []byte("changed"))
+		record := connectors.Record{"release_id": int64(42), "name": "asset.bin", "file_path": path}
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{
+			ProjectDir: dir,
+			Config:     map[string]string{"owner": "o", "repo": "r"},
+			ApprovedPayloadSHA256: map[string]string{
+				connectors.PayloadApprovalKey(0, "file_path"): strings.Repeat("0", 64),
+			},
+		}}, []connectors.Record{record}, nil)
+		if err == nil || !strings.Contains(err.Error(), "approved digest") {
+			t.Fatalf("error = %v, want approved digest refusal", err)
+		}
+	})
+
+	if calls != 0 {
+		t.Fatalf("invalid uploads reached provider %d time(s)", calls)
+	}
+}
+
+func TestGitHubReleaseAssetUpload_EmptyFileAndTerminalFailures(t *testing.T) {
+	t.Run("empty", func(t *testing.T) {
+		var body []byte
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			body, _ = io.ReadAll(r.Body)
+			w.WriteHeader(http.StatusCreated)
+		}))
+		defer server.Close()
+		dir, path := writeTempPayload(t, "empty.bin", nil)
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: dir, Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{{"release_id": int64(42), "name": "empty.bin", "file_path": path}}, nil)
+		if err != nil {
+			t.Fatalf("empty upload: %v", err)
+		}
+		if body == nil || len(body) != 0 {
+			t.Fatalf("empty body = %#v, want present zero-byte body", body)
+		}
+	})
+
+	t.Run("redirect and 4xx", func(t *testing.T) {
+		var redirected int
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path == "/redirected" {
+				redirected++
+				w.WriteHeader(http.StatusCreated)
+				return
+			}
+			if r.URL.Query().Get("name") == "redirect.bin" {
+				http.Redirect(w, r, "/redirected", http.StatusTemporaryRedirect)
+				return
+			}
+			w.Header().Add("X-Request-Id", "occurrence-1")
+			w.Header().Add("X-Request-Id", "occurrence-2")
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			_, _ = w.Write([]byte(`{"message":"duplicate asset"}`))
+		}))
+		defer server.Close()
+		dir, path := writeTempPayload(t, "payload.bin", []byte("payload"))
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		request := func(name string) (connectors.WriteResult, error) {
+			return Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: dir, Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{{"release_id": int64(42), "name": name, "file_path": path}}, nil)
+		}
+		if _, err := request("redirect.bin"); err == nil || !strings.Contains(strings.ToLower(err.Error()), "redirect") {
+			t.Fatalf("redirect error = %v", err)
+		}
+		if redirected != 0 {
+			t.Fatalf("redirect target calls = %d, want 0", redirected)
+		}
+		result, err := request("duplicate.bin")
+		if err == nil {
+			t.Fatal("4xx upload: want terminal error")
+		}
+		if len(result.ProviderResponses) != 1 || result.ProviderResponses[0].Status != http.StatusUnprocessableEntity {
+			t.Fatalf("4xx receipt = %#v", result.ProviderResponses)
+		}
+		if got := result.ProviderResponses[0].Headers["X-Request-Id"].Values; !reflect.DeepEqual(got, []string{"occurrence-1", "occurrence-2"}) {
+			t.Fatalf("X-Request-Id = %#v", got)
+		}
+	})
+}

@@ -122,6 +122,30 @@ func TestSourceImport_CheckedInGitHubLockCoversRESTAndGraphQL(t *testing.T) {
 	}
 }
 
+func TestSourceImportVersion2UsesEmbeddedLockedGraphQLProjection(t *testing.T) {
+	t.Parallel()
+	rest := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"operationId":"items/list","responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/rest.json", rest)
+	lock.SchemaVersion = 2
+	lock.GraphQL = sourceImportGraphQL{
+		sourceImportArtifact: sourceImportArtifact{SourceURL: "https://fixtures.polymetrics.invalid/unversioned.graphql", SHA256: strings.Repeat("a", 64), Bytes: 128},
+		QueryFields:          []sourceGraphQLField{{Root: "Query", Name: "viewer", Line: 7, Signature: "viewer: User", ReturnType: sourceGraphQLTypeRef{Kind: "OBJECT", Name: "User"}}},
+		TypeSystem:           sourceGraphQLTypeSystem{Enums: []sourceGraphQLNamedType{}, InputObjects: []sourceGraphQLNamedType{}, Interfaces: []sourceGraphQLNamedType{}, Objects: []sourceGraphQLNamedType{}, Scalars: []string{}, Unions: []sourceGraphQLNamedType{}},
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		if sourceURL != lock.Rest.SourceURL {
+			t.Fatalf("version 2 import fetched unversioned GraphQL URL %q", sourceURL)
+		}
+		return rest, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("version 2 import: %v", err)
+	}
+	if len(result.Operations) != 2 || result.Operations[1].GraphQL == nil || result.Operations[1].Source.SHA256 != lock.GraphQL.SHA256 {
+		t.Fatalf("embedded GraphQL projection = %#v", result.Operations)
+	}
+}
+
 func TestSourceImport_RejectsUnknownSectionAndIndependentIndexOverflow(t *testing.T) {
 	t.Parallel()
 	fixture := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-operation-source-lock.json"))
@@ -773,6 +797,19 @@ func TestSourceImportReservesSchemaExpansionBeforeRetainingReferences(t *testing
 	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
 	if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining request media") {
 		t.Fatalf("schema expansion error = %v", err)
+	}
+}
+
+func TestSourceImportScopesSchemaExpansionToEachRoot(t *testing.T) {
+	t.Parallel()
+	limits := defaultSourceImportLimits()
+	limits.MaxSchemaNodes = 3
+	resolver := sourceReferenceResolver{limits: limits, form: sourceDocumentForm{Family: "openapi", Version: "3.0.3"}}
+	schema := map[string]any{"type": "string", "maxLength": json.Number("8")}
+	for index := 0; index < 4; index++ {
+		if _, err := resolver.resolveSchema(schema, nil, 0); err != nil {
+			t.Fatalf("root schema %d shared an expansion budget with a prior root: %v", index, err)
+		}
 	}
 }
 

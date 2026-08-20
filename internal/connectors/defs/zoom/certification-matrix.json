@@ -461,13 +461,6 @@
       "executor_source": "internal/connectors/engine/binary_read.go:OperationBinaryDownload"
     },
     {
-      "id": "operation:text_export",
-      "category": "operation",
-      "name": "text_export",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=text_export)",
-      "executor_source": "internal/connectors/engine/binary_read.go:OperationBinaryDownload"
-    },
-    {
       "id": "operation:xml_export",
       "category": "operation",
       "name": "xml_export",

@@ -124,7 +124,7 @@ func cloneWriteExecutionRecords(records []connectors.Record) []connectors.Record
 
 func prepareDeclarativeRequest(b Bundle, action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (PreparedRequest, error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(record)}
-	baseURL, err := Interpolate(b.HTTP.URL, vars)
+	baseURL, err := Interpolate(writeActionBaseURL(b, action), vars)
 	if err != nil {
 		return PreparedRequest{}, fmt.Errorf("engine: resolve write base url: %w", err)
 	}
@@ -244,6 +244,16 @@ func prepareCanonicalWriteBody(action WriteAction, record connectors.Record, rec
 			return "", "", "", err
 		}
 		return string(raw), "base64-upload-canonical-v1", "application/json", nil
+	case "binary_upload":
+		payload, err := prepareCanonicalBinaryUpload(action, record, recordIndex, cfg, requirePayloadApproval)
+		if err != nil {
+			return "", "", "", err
+		}
+		raw, err := json.Marshal(payload)
+		if err != nil {
+			return "", "", "", err
+		}
+		return string(raw), "binary-upload-canonical-v1", "application/octet-stream", nil
 	default:
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
@@ -358,6 +368,34 @@ func prepareCanonicalBase64Upload(action WriteAction, record connectors.Record, 
 		SourcePathDigest string           `json:"source_path_digest"`
 		Spec             Base64UploadSpec `json:"spec"`
 	}{Body: body, ContentField: spec.ContentField, ContentSHA256: approved, SourcePathDigest: digestBytes([]byte(filepath.Clean(path))), Spec: *spec}, nil
+}
+
+func prepareCanonicalBinaryUpload(action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (any, error) {
+	spec := action.BinaryUpload
+	if spec == nil {
+		return nil, fmt.Errorf("engine: write action %q: binary_upload spec is required", action.Name)
+	}
+	raw, err := resolveRecordPathValue(map[string]any(record), strings.Split(spec.SourceField, "."))
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: resolve binary_upload source_field %q: %w", action.Name, spec.SourceField, err)
+	}
+	path, ok := raw.(string)
+	if !ok || strings.TrimSpace(path) == "" {
+		return nil, fmt.Errorf("engine: write action %q: binary_upload source_field %q requires a non-empty file path", action.Name, spec.SourceField)
+	}
+	approved := cfg.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(recordIndex, spec.SourceField)]
+	if requirePayloadApproval && strings.TrimSpace(approved) == "" {
+		return nil, fmt.Errorf("engine: write action %q: binary_upload source_field %q is missing its approved payload digest", action.Name, spec.SourceField)
+	}
+	return struct {
+		SourcePathDigest string `json:"source_path_digest"`
+		ContentSHA256    string `json:"content_sha256,omitempty"`
+		MaxBytes         int64  `json:"max_bytes"`
+	}{
+		SourcePathDigest: digestBytes([]byte(filepath.Clean(path))),
+		ContentSHA256:    approved,
+		MaxBytes:         spec.MaxBytes,
+	}, nil
 }
 
 func digestBytes(value []byte) string {

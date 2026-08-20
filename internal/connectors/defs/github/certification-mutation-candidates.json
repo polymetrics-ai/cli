@@ -2763,7 +2763,7 @@
         },
         {
           "path": "record.managers",
-          "type": "string_array",
+          "type": "json",
           "required": false
         },
         {
@@ -2787,7 +2787,7 @@
         },
         {
           "path": "record.team_managers",
-          "type": "string_array",
+          "type": "json",
           "required": false
         }
       ],
@@ -10884,11 +10884,13 @@
       "input_slots": [
         {
           "path": "record.autolink_id",
-          "type": "string",
+          "type": "integer",
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--autolink-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -10991,7 +10993,7 @@
       "input_slots": [
         {
           "path": "record.autolink_id",
-          "type": "string",
+          "type": "integer",
           "required": true
         }
       ],
@@ -11934,7 +11936,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--key-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -12034,7 +12038,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_declared_cycle_actions",
@@ -12694,7 +12700,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--release-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_declared_cycle_actions",
@@ -12893,7 +12901,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--ruleset-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -13003,8 +13013,64 @@
         ],
         "evidence": "POST or PUT declaration(s) security-advisories create share the derived REST collection \"/repos/{owner}/{repo}/security-advisories\"; URL depth 4 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.credits",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.cve_id",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.cvss_vector_string",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.cwe_ids",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.severity",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        {
+          "path": "record.start_private_fork",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "path": "record.summary",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.vulnerabilities",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--description",
+        "--summary",
+        "--vulnerabilities"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -13044,12 +13110,80 @@
       },
       "input_slots": [
         {
+          "path": "record.collaborating_teams",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.collaborating_users",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.credits",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.cve_id",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.cvss_vector_string",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.cwe_ids",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.description",
+          "type": "string",
+          "required": false
+        },
+        {
           "path": "record.ghsa_id",
-          "type": "integer",
+          "type": "string",
           "required": true
+        },
+        {
+          "path": "record.severity",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        {
+          "path": "record.state",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "published",
+            "closed",
+            "draft"
+          ]
+        },
+        {
+          "path": "record.summary",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.vulnerabilities",
+          "type": "json",
+          "required": false
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--ghsa-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -17844,7 +17978,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--secret-name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -18395,8 +18531,48 @@
         ],
         "evidence": "POST or PUT declaration(s) code-sanning upload share the derived REST collection \"/repos/{owner}/{repo}/code-scanning/sarifs\"; URL depth 5 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.checkout_uri",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.commit_sha",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.ref",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.sarif",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.started_at",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.tool_name",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.validate",
+          "type": "boolean",
+          "required": false
+        }
+      ],
+      "required_flags": [
+        "--commit-sha",
+        "--ref",
+        "--sarif"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -18441,7 +18617,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--secret-name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -18531,7 +18709,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--secret-name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -19583,8 +19763,53 @@
         ],
         "evidence": "POST or PUT declaration(s) security-advisories reports create share the derived REST collection \"/repos/{owner}/{repo}/security-advisories/reports\"; URL depth 5 orders parent collections first"
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.cvss_vector_string",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.cwe_ids",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.severity",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        {
+          "path": "record.start_private_fork",
+          "type": "boolean",
+          "required": false
+        },
+        {
+          "path": "record.summary",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.vulnerabilities",
+          "type": "json",
+          "required": false
+        }
+      ],
+      "required_flags": [
+        "--description",
+        "--summary"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -19792,8 +20017,21 @@
         },
         {
           "path": "record.package_type",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
+        },
+        {
+          "path": "record.token",
           "type": "string",
-          "required": true
+          "required": false
         }
       ],
       "required_flags": [
@@ -22780,6 +23018,11 @@
             "private_or_internal",
             "selected"
           ]
+        },
+        {
+          "path": "record.selected_repository_ids",
+          "type": "json",
+          "required": false
         }
       ],
       "required_flags": [
@@ -23076,8 +23319,12 @@
         },
         {
           "path": "record.actor_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "User",
+            "Team"
+          ]
         },
         {
           "path": "record.org",
@@ -23565,8 +23812,21 @@
         },
         {
           "path": "record.package_type",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
+        },
+        {
+          "path": "record.token",
           "type": "string",
-          "required": true
+          "required": false
         }
       ],
       "required_flags": [
@@ -24170,7 +24430,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -24334,7 +24596,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--check-run-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -24380,7 +24644,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--check-suite-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -24517,7 +24783,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--comment-id",
+        "--reaction-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -24662,7 +24931,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch-policy-id",
+        "--environment-name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -24811,7 +25083,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--environment-name",
+        "--protection-rule-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -24861,7 +25136,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--environment-name",
+        "--secret-name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -25006,7 +25284,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--environment-name",
+        "--name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -25101,7 +25382,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--hook-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -25146,7 +25429,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--hook-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -25375,7 +25660,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--issue-field-id",
+        "--issue-number"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -25523,7 +25811,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--issue-number"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_declared_cycle_actions",
@@ -25620,7 +25910,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--issue-number",
+        "--reaction-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -26105,11 +26398,11 @@
       "generated": true
     },
     {
-      "command": "releases assets view-3",
+      "command": "releases assets upload",
       "command_tokens": [
         "releases",
         "assets",
-        "view-3"
+        "upload"
       ],
       "intent": "reverse_etl",
       "cohort": "fixture_required_mutations",
@@ -26131,18 +26424,37 @@
         "collection": "/repos/{owner}/{repo}/releases/{release_id}/assets",
         "collection_depth": 6,
         "provisioner_commands": [
-          "releases assets view-3"
+          "releases assets upload"
         ],
-        "evidence": "POST or PUT declaration(s) releases assets view-3 share the derived REST collection \"/repos/{owner}/{repo}/releases/{release_id}/assets\"; URL depth 6 orders parent collections first"
+        "evidence": "POST or PUT declaration(s) releases assets upload share the derived REST collection \"/repos/{owner}/{repo}/releases/{release_id}/assets\"; URL depth 6 orders parent collections first"
       },
       "input_slots": [
+        {
+          "path": "record.file_path",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.label",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": true
+        },
         {
           "path": "record.release_id",
           "type": "integer",
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--file-path",
+        "--name",
+        "--release-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -26239,7 +26551,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--reaction-id",
+        "--release-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -26281,11 +26596,13 @@
       "input_slots": [
         {
           "path": "record.ghsa_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--ghsa-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -26327,11 +26644,13 @@
       "input_slots": [
         {
           "path": "record.ghsa_id",
-          "type": "integer",
+          "type": "string",
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--ghsa-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -26477,8 +26796,12 @@
         },
         {
           "path": "record.actor_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "User",
+            "Team"
+          ]
         },
         {
           "path": "record.space_number",
@@ -26619,8 +26942,21 @@
         },
         {
           "path": "record.package_type",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
+        },
+        {
+          "path": "record.token",
           "type": "string",
-          "required": true
+          "required": false
         },
         {
           "path": "record.username",
@@ -27142,7 +27478,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--runner-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27194,7 +27532,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--name",
+        "--runner-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27287,7 +27628,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--run-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27332,7 +27675,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--run-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27856,7 +28201,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27902,7 +28249,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27948,7 +28297,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -27994,7 +28345,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -28040,7 +28393,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--alert-number"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -28086,7 +28441,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--comment-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -28132,7 +28489,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--comment-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -28229,7 +28588,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--comment-id",
+        "--reaction-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -28326,7 +28688,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--issue-id",
+        "--issue-number"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -28469,7 +28834,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--comment-id",
+        "--reaction-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -28515,8 +28883,16 @@
         },
         {
           "path": "record.package_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
         },
         {
           "path": "record.package_version_id",
@@ -28649,8 +29025,16 @@
         },
         {
           "path": "record.package_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
         },
         {
           "path": "record.package_version_id",
@@ -29323,7 +29707,10 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--delivery-id",
+        "--hook-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -29535,8 +29922,16 @@
         },
         {
           "path": "record.package_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
         },
         {
           "path": "record.package_version_id",
@@ -29633,8 +30028,21 @@
         "exception_code": "collection_without_creator",
         "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/actions/caches\""
       },
-      "input_slots": [],
-      "required_flags": [],
+      "input_slots": [
+        {
+          "path": "record.key",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.ref",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "required_flags": [
+        "--key"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -29676,7 +30084,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--cache-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -29871,7 +30281,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--run-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -29913,7 +30325,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--runner-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -29999,6 +30413,408 @@
       ],
       "required_flags": [
         "--thread-id"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "api git delete-ref",
+      "command_tokens": [
+        "api",
+        "git",
+        "delete-ref"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_ref",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/git/refs/{ref}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "collection_without_creator",
+        "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/git/refs\""
+      },
+      "input_slots": [
+        {
+          "path": "record.ref",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--ref"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "api issues delete-comment",
+      "command_tokens": [
+        "api",
+        "issues",
+        "delete-comment"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_issue_comment",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "collection_without_creator",
+        "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/issues/comments\""
+      },
+      "input_slots": [
+        {
+          "path": "record.comment_id",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--comment-id"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "api issues delete-milestone",
+      "command_tokens": [
+        "api",
+        "issues",
+        "delete-milestone"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_milestone",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/milestones/{milestone_number}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "collection_without_creator",
+        "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/milestones\""
+      },
+      "input_slots": [
+        {
+          "path": "record.milestone_number",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--milestone-number"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "api issues remove-label",
+      "command_tokens": [
+        "api",
+        "issues",
+        "remove-label"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "remove_issue_label",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels/{name}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "collection_without_creator",
+        "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/issues/{issue_number}/labels\""
+      },
+      "input_slots": [
+        {
+          "path": "record.issue_number",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--issue-number",
+        "--name"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "api pulls delete-review-comment",
+      "command_tokens": [
+        "api",
+        "pulls",
+        "delete-review-comment"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_review_comment",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "collection_without_creator",
+        "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/pulls/comments\""
+      },
+      "input_slots": [
+        {
+          "path": "record.comment_id",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--comment-id"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "api repos delete-an-environment",
+      "command_tokens": [
+        "api",
+        "repos",
+        "delete-an-environment"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_environment",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "collection_without_creator",
+        "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/environments\""
+      },
+      "input_slots": [
+        {
+          "path": "record.environment_name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--environment-name"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "api repos delete-commit-comment",
+      "command_tokens": [
+        "api",
+        "repos",
+        "delete-commit-comment"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_commit_comment",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/comments/{comment_id}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "collection_without_creator",
+        "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/comments\""
+      },
+      "input_slots": [
+        {
+          "path": "record.comment_id",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--comment-id"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "api repos delete-webhook",
+      "command_tokens": [
+        "api",
+        "repos",
+        "delete-webhook"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_webhook",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "collection_without_creator",
+        "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/hooks\""
+      },
+      "input_slots": [
+        {
+          "path": "record.hook_id",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--hook-id"
+      ],
+      "classification": {
+        "code": "contained",
+        "family": "contained_remaining_rest",
+        "evidence": "the candidate is a declared REST mutation outside an explicitly escaping family; any future execution must bind its scope and identifiers to the disposable certification identity or Polymetrics-Cert organisation and delete the run-owned container during cleanup"
+      },
+      "generated": true
+    },
+    {
+      "command": "api repos remove-collaborator",
+      "command_tokens": [
+        "api",
+        "repos",
+        "remove-collaborator"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "fixture_required_mutations",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "remove_collaborator",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "cli_surface",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/collaborators/{username}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "collection_without_creator",
+        "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/collaborators\""
+      },
+      "input_slots": [
+        {
+          "path": "record.username",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [
+        "--username"
       ],
       "classification": {
         "code": "contained",
@@ -30225,7 +31041,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -30309,7 +31127,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -30393,7 +31213,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--branch"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -30505,9 +31327,16 @@
           "path": "record.analysis_id",
           "type": "integer",
           "required": true
+        },
+        {
+          "path": "record.confirm_delete",
+          "type": "string",
+          "required": false
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--analysis-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -30549,7 +31378,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--language"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -30584,7 +31415,54 @@
         "exception_code": "collection_without_creator",
         "evidence": "no POST or PUT declaration shares the derived REST collection \"/repos/{owner}/{repo}/code-scanning/default-setup\""
       },
-      "input_slots": [],
+      "input_slots": [
+        {
+          "path": "record.languages",
+          "type": "json",
+          "required": false
+        },
+        {
+          "path": "record.query_suite",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "default",
+            "extended"
+          ]
+        },
+        {
+          "path": "record.runner_label",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.runner_type",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "standard",
+            "labeled"
+          ]
+        },
+        {
+          "path": "record.state",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "configured",
+            "not-configured"
+          ]
+        },
+        {
+          "path": "record.threat_model",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "remote",
+            "remote_and_local"
+          ]
+        }
+      ],
       "required_flags": [],
       "classification": {
         "code": "contained",
@@ -30816,7 +31694,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--deployment-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -30856,9 +31736,21 @@
           "path": "record.author_id",
           "type": "integer",
           "required": true
+        },
+        {
+          "path": "record.email",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": false
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--author-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -31037,7 +31929,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--invitation-id"
+      ],
       "classification": {
         "code": "real_people",
         "family": "real_people_rest",
@@ -32112,8 +33006,16 @@
         },
         {
           "path": "record.package_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
         }
       ],
       "required_flags": [
@@ -32166,8 +33068,16 @@
         },
         {
           "path": "record.package_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
         }
       ],
       "required_flags": [
@@ -32216,8 +33126,16 @@
         },
         {
           "path": "record.package_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
         },
         {
           "path": "record.username",
@@ -32271,8 +33189,16 @@
         },
         {
           "path": "record.package_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
         },
         {
           "path": "record.package_version_id",
@@ -32331,8 +33257,16 @@
         },
         {
           "path": "record.package_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
         },
         {
           "path": "record.package_version_id",
@@ -32387,8 +33321,16 @@
         },
         {
           "path": "record.package_type",
-          "type": "string",
-          "required": true
+          "type": "enum",
+          "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ]
         },
         {
           "path": "record.package_version_id",
@@ -32525,7 +33467,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--asset-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -32722,7 +33666,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--run-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_remaining_rest",
@@ -45673,7 +46619,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--cache-id"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_friendly_alias",
@@ -45995,7 +46943,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--issue-number"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_friendly_alias",
@@ -46217,7 +47167,9 @@
           "required": true
         }
       ],
-      "required_flags": [],
+      "required_flags": [
+        "--secret-name"
+      ],
       "classification": {
         "code": "contained",
         "family": "contained_friendly_alias",

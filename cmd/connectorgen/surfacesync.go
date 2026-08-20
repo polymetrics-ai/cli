@@ -160,7 +160,21 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 
 	total := surfaceSyncStats{}
 	changed := 0
+	sourceProjectionDrift := 0
 	for _, name := range names {
+		projection, err := syncCheckedInSourceProjection(filepath.Join(dir, name), name, check)
+		if err != nil {
+			logf(stderr, "connectorgen surface-sync: %s source projection: %v\n", name, err)
+			return 1
+		}
+		if projection.Changed() {
+			sourceProjectionDrift++
+			verb := "updated"
+			if check {
+				verb = "would update"
+			}
+			logf(stdout, "%s: source projection %s writes=%d cli=%d\n", name, verb, projection.Writes, projection.CLI)
+		}
 		stats, err := syncBundle(filepath.Join(dir, name), check)
 		if err != nil {
 			logf(stderr, "connectorgen surface-sync: %s: %v\n", name, err)
@@ -191,14 +205,45 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 		logf(stdout, "runtime operation endpoint ledger: %s %d endpoint(s)\n", verb, ledgerStats.Entries)
 	}
 
-	if check && (total.total() > 0 || ledgerStats.Changed) {
-		logf(stderr, "connectorgen surface-sync: %d connector(s) out of sync, %d field(s) missing, %d field(s) divergent, runtime endpoint ledger drift=%t; run `connectorgen surface-sync`\n",
-			changed, total.Filled.total(), total.Corrected.total(), ledgerStats.Changed)
+	if check && (total.total() > 0 || ledgerStats.Changed || sourceProjectionDrift > 0) {
+		logf(stderr, "connectorgen surface-sync: %d connector(s) out of sync, %d field(s) missing, %d field(s) divergent, %d source projection(s) drifted, runtime endpoint ledger drift=%t; run `connectorgen surface-sync`\n",
+			changed, total.Filled.total(), total.Corrected.total(), sourceProjectionDrift, ledgerStats.Changed)
 		return 1
 	}
 	logf(stdout, "connectorgen surface-sync: %d connector(s) scanned, %d field(s) filled and %d field(s) corrected across %d connector(s)\n",
 		len(names), total.Filled.total(), total.Corrected.total(), changed)
 	return 0
+}
+
+func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sourceProjectionStats, error) {
+	lockPath := filepath.Join(bundleDir, "sources", connector+"-operation-source-lock.json")
+	if _, err := os.Stat(lockPath); err != nil {
+		if os.IsNotExist(err) {
+			return sourceProjectionStats{}, nil
+		}
+		return sourceProjectionStats{}, err
+	}
+	descriptorPath := filepath.Join(bundleDir, "sources", connector+"-operation-descriptor.json")
+	raw, err := os.ReadFile(descriptorPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return sourceProjectionStats{}, fmt.Errorf("canonical source descriptor is missing")
+		}
+		return sourceProjectionStats{}, err
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
+		return sourceProjectionStats{}, fmt.Errorf("parse canonical source descriptor: %w", err)
+	}
+	if descriptor.SchemaVersion != 2 {
+		return sourceProjectionStats{}, fmt.Errorf("source descriptor schema_version = %d, want 2", descriptor.SchemaVersion)
+	}
+	return projectSourceDescriptorToBundle(bundleDir, sourceImportResult{
+		Operations:     descriptor.Operations,
+		InboundEvents:  descriptor.InboundEvents,
+		Extensions:     descriptor.Extensions,
+		GraphQLSchemas: descriptor.GraphQLSchemas,
+	}, check)
 }
 
 type runtimeOperationEndpointLedgerStats struct {

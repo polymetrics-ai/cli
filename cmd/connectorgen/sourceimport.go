@@ -26,14 +26,14 @@ import (
 // canonical intermediate descriptor. It intentionally owns no execution
 // controls: a connector name selects its checked-in lock, and that lock alone
 // supplies the artifact URL, byte count, and digest.
-const sourceImportUsage = `connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
+const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--check]
 
 Verifies the connector-owned source lock, retrieves only its fixed public
 artifact URL, and writes canonical provider operation descriptors for later
 declaration generators.
 
   <connector>     connector whose sources/<connector>-operation-source-lock.json is used
-  --out <path>    descriptor output path
+  --out <path>    descriptor output path (default: connector-owned canonical descriptor)
   --defs <dir>    connector defs root (default internal/connectors/defs)
   --check         compare generated descriptors with --out; do not write
 
@@ -42,9 +42,15 @@ source-lock refresh; this command never accepts a replacement URL, method,
 path, header, body, credential, or generic request input.`
 
 const (
-	defaultSourceImportArtifactBytes   = int64(16 << 20)
-	defaultSourceImportSchemaBytes     = int64(1 << 20)
-	defaultSourceImportDescriptorBytes = int64(32 << 20)
+	defaultSourceImportArtifactBytes = int64(16 << 20)
+	// The pinned GitHub REST description contains a few legitimate resolved
+	// response unions larger than 1 MiB. This is a per-schema expansion bound,
+	// independent from both artifact bytes and the aggregate descriptor budget.
+	defaultSourceImportSchemaBytes = int64(32 << 20)
+	// Aggregate descriptor accounting is deliberately independent from both
+	// artifact and index size. The pinned GitHub inventory expands referenced
+	// request/response declarations well beyond the compressed source bytes.
+	defaultSourceImportDescriptorBytes = int64(128 << 20)
 	defaultSourceImportOperations      = 10_000
 	defaultSourceImportReferences      = 50_000
 	defaultSourceImportReferenceDepth  = 32
@@ -238,12 +244,20 @@ type sourceRequestBodyDescriptor struct {
 	Encoding any  `json:"encoding,omitempty"`
 }
 
+type sourceRequestMediaDescriptor struct {
+	MediaType string `json:"media_type"`
+	Required  bool   `json:"required"`
+	Schema    any    `json:"schema"`
+	Encoding  any    `json:"encoding,omitempty"`
+}
+
 type sourceRequestDescriptor struct {
-	Path      []sourceParameterDescriptor  `json:"path"`
-	Query     []sourceParameterDescriptor  `json:"query"`
-	Header    []sourceParameterDescriptor  `json:"header"`
-	Body      *sourceRequestBodyDescriptor `json:"body,omitempty"`
-	MediaType string                       `json:"media_type,omitempty"`
+	Path      []sourceParameterDescriptor    `json:"path"`
+	Query     []sourceParameterDescriptor    `json:"query"`
+	Header    []sourceParameterDescriptor    `json:"header"`
+	Body      *sourceRequestBodyDescriptor   `json:"body,omitempty"`
+	MediaType string                         `json:"media_type,omitempty"`
+	Media     []sourceRequestMediaDescriptor `json:"media,omitempty"`
 }
 
 type sourceResponseDescriptor struct {
@@ -707,16 +721,22 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 	if lock.GraphQL.Bytes > limits.MaxArtifactBytes {
 		return fmt.Errorf("GraphQL artifact byte limit exceeded by source lock")
 	}
-	raw, err := fetcher.Fetch(ctx, lock.GraphQL.SourceURL)
-	if err != nil {
-		return fmt.Errorf("fetch locked GraphQL source artifact: %w", err)
-	}
-	if int64(len(raw)) > limits.MaxArtifactBytes {
-		return fmt.Errorf("GraphQL artifact byte limit exceeded")
-	}
-	digest := sha256.Sum256(raw)
-	if int64(len(raw)) != lock.GraphQL.Bytes || !strings.EqualFold(hex.EncodeToString(digest[:]), lock.GraphQL.SHA256) {
-		return fmt.Errorf("source-lock refresh required: fetched GraphQL artifact does not match locked bytes and SHA-256")
+	// Version 2 embeds the complete, normalized GraphQL field and type-system
+	// projection in the strict checked-in lock. Import from those reviewed bytes
+	// instead of requiring an unversioned public URL to continue serving the
+	// historical capture. Legacy locks still verify their external artifact.
+	if lock.SchemaVersion < 2 {
+		raw, err := fetcher.Fetch(ctx, lock.GraphQL.SourceURL)
+		if err != nil {
+			return fmt.Errorf("fetch locked GraphQL source artifact: %w", err)
+		}
+		if int64(len(raw)) > limits.MaxArtifactBytes {
+			return fmt.Errorf("GraphQL artifact byte limit exceeded")
+		}
+		digest := sha256.Sum256(raw)
+		if int64(len(raw)) != lock.GraphQL.Bytes || !strings.EqualFold(hex.EncodeToString(digest[:]), lock.GraphQL.SHA256) {
+			return fmt.Errorf("source-lock refresh required: fetched GraphQL artifact does not match locked bytes and SHA-256")
+		}
 	}
 	countBudget, err := budget.countBudget(limits)
 	if err != nil {
@@ -4018,6 +4038,13 @@ func (r *sourceReferenceResolver) resolveSecurityScheme(value any, stack map[str
 }
 
 func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool, depth int) (any, error) {
+	if depth == 0 && len(stack) == 0 {
+		// Bound each retained root schema independently. Aggregate descriptor,
+		// response, media, and reference budgets already account for the encoded
+		// result; carrying this expansion counter across unrelated roots made a
+		// large but finite source fail according to traversal order.
+		r.expansion = sourceSchemaExpansionBudget{}
+	}
 	if err := r.reserveSchemaEntry(value, "schema"); err != nil {
 		return nil, err
 	}
@@ -4932,8 +4959,13 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, form sourc
 		Operation:  operationServers,
 		Precedence: []string{"operation", "path_item", "root"},
 	}
-	if rootServers.Declared || pathServers.Declared || operationServers.Declared {
-		servers.Gaps = []sourceContractGap{sourceContractGapFor("cli-operation-route-override-foundation-r1", location+".servers", "provider-declared server routing requires runtime route-override support")}
+	// A root server is the connector's ordinary base declaration. A single
+	// fixed path/operation origin is representable by the shared declaration-
+	// owned base_url override; only variable or ambiguous route sets remain a
+	// typed gap.
+	if (pathServers.Declared && !sourceServerLayerHasFixedOrigin(pathServers)) ||
+		(operationServers.Declared && !sourceServerLayerHasFixedOrigin(operationServers)) {
+		servers.Gaps = []sourceContractGap{sourceContractGapFor("cli-operation-route-override-foundation-r1", location+".servers", "provider-declared server routing is variable or ambiguous")}
 	}
 	if form.isSwagger2() {
 		binding, err := sourceSwaggerRouteBindingFrom(doc, operation, path)
@@ -5121,31 +5153,47 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 		return sourceRequestDescriptor{}, err
 	}
 	content, ok := body["content"].(map[string]any)
-	if !ok || len(content) != 1 {
-		return sourceRequestDescriptor{}, fmt.Errorf("request body requires exactly one unambiguous media type")
+	if !ok || len(content) == 0 {
+		return sourceRequestDescriptor{}, fmt.Errorf("request body requires at least one declared media type")
 	}
-	mediaType := sortedSourceMapKeys(content)[0]
-	media, ok := content[mediaType].(map[string]any)
-	if !ok {
-		return sourceRequestDescriptor{}, fmt.Errorf("request media declaration must be an object")
+	for _, mediaType := range sortedSourceMapKeys(content) {
+		media, ok := content[mediaType].(map[string]any)
+		if !ok {
+			return sourceRequestDescriptor{}, fmt.Errorf("request media declaration %q must be an object", mediaType)
+		}
+		encoding, hasEncoding := media["encoding"]
+		formMedia := sourceRequestFormMediaType(mediaType)
+		if hasEncoding && !formMedia {
+			return sourceRequestDescriptor{}, fmt.Errorf("unsupported encoding on request content media %q", mediaType)
+		}
+		if !sourceJSONMediaType(mediaType) && !formMedia && mediaType != "text/plain" && mediaType != "application/octet-stream" {
+			if !limits.AllowSourceContractGaps {
+				return sourceRequestDescriptor{}, fmt.Errorf("unsupported request encoding %q", mediaType)
+			}
+		}
+		schema, ok := media["schema"]
+		if !ok {
+			if !limits.AllowSourceContractGaps {
+				return sourceRequestDescriptor{}, fmt.Errorf("request media %q is missing schema", mediaType)
+			}
+			schema = true
+		}
+		if err := validateBoundedRequestSchema(schema, form, limits, 0); err != nil {
+			return sourceRequestDescriptor{}, fmt.Errorf("request media %q: %w", mediaType, err)
+		}
+		request.Media = append(request.Media, sourceRequestMediaDescriptor{
+			MediaType: mediaType,
+			Required:  sourceBool(body["required"]),
+			Schema:    schema,
+			Encoding:  encoding,
+		})
 	}
-	encoding, hasEncoding := media["encoding"]
-	formMedia := sourceRequestFormMediaType(mediaType)
-	if hasEncoding && !formMedia {
-		return sourceRequestDescriptor{}, fmt.Errorf("unsupported encoding on request content media %q", mediaType)
+	if len(request.Media) == 1 {
+		media := request.Media[0]
+		request.Body = &sourceRequestBodyDescriptor{Required: media.Required, Schema: media.Schema, Encoding: media.Encoding}
+		request.MediaType = media.MediaType
+		request.Media = nil
 	}
-	if !sourceJSONMediaType(mediaType) && !formMedia {
-		return sourceRequestDescriptor{}, fmt.Errorf("unsupported request encoding %q", mediaType)
-	}
-	schema, ok := media["schema"]
-	if !ok {
-		return sourceRequestDescriptor{}, fmt.Errorf("request body is missing schema")
-	}
-	if err := validateBoundedRequestSchema(schema, form, limits, 0); err != nil {
-		return sourceRequestDescriptor{}, err
-	}
-	request.Body = &sourceRequestBodyDescriptor{Required: sourceBool(body["required"]), Schema: schema, Encoding: encoding}
-	request.MediaType = mediaType
 	return request, nil
 }
 
@@ -5342,6 +5390,9 @@ func sourceParameterWire(parameter map[string]any, form sourceDocumentForm, loca
 
 func sourceRequestGaps(request sourceRequestDescriptor, form sourceDocumentForm, limits sourceImportLimits) []sourceContractGap {
 	var gaps []sourceContractGap
+	if len(request.Media) > 1 {
+		gaps = append(gaps, sourceContractGapFor("cli-request-media-selection-foundation-r1", "request body media", "provider declares multiple request media types; generated command must select one exact media contract"))
+	}
 	if request.Body != nil && sourceRequestFormMediaType(request.MediaType) {
 		gaps = append(gaps, sourceContractGapFor("cli-request-encoding-foundation-r1", "request body encoding", "provider form request media requires runtime encoding support"))
 	}
@@ -5349,22 +5400,73 @@ func sourceRequestGaps(request sourceRequestDescriptor, form sourceDocumentForm,
 		for _, parameter := range group {
 			gaps = append(gaps, parameter.Wire.Gaps...)
 			if parameter.Schema != nil {
-				strict := limits
-				strict.AllowSourceContractGaps = false
-				if err := validateBoundedRequestSchema(parameter.Schema, form, strict, 0); err != nil {
+				if err := sourceProjectionSchemaGap(parameter.Schema, form, limits); err != nil {
 					gaps = append(gaps, sourceContractGapFor("cli-request-schema-foundation-r1", "parameter "+parameter.Name, err.Error()))
 				}
 			}
 		}
 	}
 	if request.Body != nil {
-		strict := limits
-		strict.AllowSourceContractGaps = false
-		if err := validateBoundedRequestSchema(request.Body.Schema, form, strict, 0); err != nil {
+		if err := sourceProjectionSchemaGap(request.Body.Schema, form, limits); err != nil {
 			gaps = append(gaps, sourceContractGapFor("cli-request-schema-foundation-r1", "request body", err.Error()))
 		}
 	}
+	for _, media := range request.Media {
+		if err := sourceProjectionSchemaGap(media.Schema, form, limits); err != nil {
+			gaps = append(gaps, sourceContractGapFor("cli-request-schema-foundation-r1", "request media "+media.MediaType, err.Error()))
+		}
+	}
 	return sourceSortedGaps(gaps)
+}
+
+func sourceProjectionSchemaGap(schema any, form sourceDocumentForm, limits sourceImportLimits) error {
+	strict := limits
+	strict.AllowSourceContractGaps = false
+	err := validateBoundedRequestSchema(schema, form, strict, 0)
+	if err != nil && !sourceCommonInputBoundaryHandles(err) {
+		return err
+	}
+	// The runtime supplies common scalar and collection caps, but source
+	// contracts with structural ambiguity still need an explicit typed gap.
+	// Checking projection after a handled boundary prevents an early missing
+	// maxLength from hiding a later union or dynamic object in the same body.
+	_, projectionErr := sourceProjectionSchema(schema)
+	return projectionErr
+}
+
+func sourceCommonInputBoundaryHandles(err error) bool {
+	if err == nil {
+		return false
+	}
+	message := err.Error()
+	for _, suffix := range []string{
+		"unbounded request schema string has no maxLength",
+		"unbounded request schema number has no minimum",
+		"unbounded request schema number has no maximum",
+		"unbounded request schema array has no maxItems",
+	} {
+		if strings.Contains(message, suffix) {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceServerLayerHasFixedOrigin(layer sourceServerLayer) bool {
+	items, ok := layer.Servers.([]any)
+	if !ok || len(items) != 1 {
+		return false
+	}
+	server, ok := items[0].(map[string]any)
+	if !ok {
+		return false
+	}
+	raw, ok := server["url"].(string)
+	if !ok || strings.Contains(raw, "{") {
+		return false
+	}
+	parsed, err := url.Parse(raw)
+	return err == nil && parsed.Host != "" && (parsed.Scheme == "https" || parsed.Scheme == "http") && parsed.User == nil && parsed.RawQuery == "" && parsed.Fragment == "" && (parsed.Path == "" || parsed.Path == "/")
 }
 
 func sourceContractGapFor(foundation, location, reason string) sourceContractGap {
@@ -6585,8 +6687,13 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 	}
 	existing, readErr := os.ReadFile(opts.Output)
 	if opts.Check {
-		if readErr != nil || !bytes.Equal(existing, raw) {
-			logln(stderr, "connectorgen source-import: descriptor output has drifted; rerun without --check after source-lock verification")
+		projection, projectionErr := projectSourceDescriptorToBundle(filepath.Join(opts.DefsDir, opts.Connector), result, true)
+		if projectionErr != nil {
+			logln(stderr, "connectorgen source-import: check source-derived bundle projection:", projectionErr)
+			return 1
+		}
+		if readErr != nil || !bytes.Equal(existing, raw) || projection.Changed() {
+			logln(stderr, fmt.Sprintf("connectorgen source-import: descriptor or derived bundle projection has drifted (writes=%d cli=%d); rerun without --check after source-lock verification", projection.Writes, projection.CLI))
 			return 1
 		}
 		logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) verified", opts.Connector, len(result.Operations), len(result.InboundEvents)))
@@ -6596,7 +6703,12 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import: write descriptors:", err)
 		return 1
 	}
-	logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) imported", opts.Connector, len(result.Operations), len(result.InboundEvents)))
+	projection, err := projectSourceDescriptorToBundle(filepath.Join(opts.DefsDir, opts.Connector), result, false)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: project source-derived bundle:", err)
+		return 1
+	}
+	logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) imported; source projection updated writes=%d cli=%d", opts.Connector, len(result.Operations), len(result.InboundEvents), projection.Writes, projection.CLI))
 	return 0
 }
 
@@ -6633,7 +6745,7 @@ func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 		return sourceImportOptions{}, err
 	}
 	if opts.Output == "" {
-		return sourceImportOptions{}, fmt.Errorf("--out is required")
+		opts.Output = filepath.Join(opts.DefsDir, opts.Connector, "sources", opts.Connector+"-operation-descriptor.json")
 	}
 	return opts, nil
 }

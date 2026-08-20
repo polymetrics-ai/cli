@@ -148,12 +148,29 @@ func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error 
 	}
 
 	var schema struct {
-		Type string `json:"type"`
+		Type json.RawMessage `json:"type"`
 	}
 	if err := json.Unmarshal(property, &schema); err != nil {
 		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
 	}
-	if schema.Type != "object" && schema.Type != "array" {
+	var types []string
+	var single string
+	if err := json.Unmarshal(schema.Type, &single); err == nil {
+		types = []string{single}
+	} else if err := json.Unmarshal(schema.Type, &types); err != nil {
+		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	}
+	structured := false
+	for _, typeName := range types {
+		if typeName == "object" || typeName == "array" {
+			structured = true
+			continue
+		}
+		if typeName != "null" {
+			return fmt.Errorf("structured JSON field %q must declare type object or array (optionally null)", field)
+		}
+	}
+	if !structured {
 		return fmt.Errorf("structured JSON field %q must declare type object or array", field)
 	}
 	return nil

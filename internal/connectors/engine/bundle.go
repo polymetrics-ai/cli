@@ -11,6 +11,7 @@ import (
 	"io/fs"
 	"mime"
 	"net/http"
+	"net/url"
 	"regexp"
 	"sort"
 	"strconv"
@@ -444,10 +445,15 @@ type IncrementalSpec struct {
 
 // WriteAction is one entry in writes.json's "actions" array.
 type WriteAction struct {
-	Name       string   `json:"name"`
-	Kind       string   `json:"kind"` // create|update|upsert|delete|custom
-	Method     string   `json:"method"`
-	Path       string   `json:"path"`
+	Name   string `json:"name"`
+	Kind   string `json:"kind"` // create|update|upsert|delete|custom
+	Method string `json:"method"`
+	Path   string `json:"path"`
+	// BaseURL pins an action to a declaration-owned alternate provider origin.
+	// It is an absolute origin (no path/query/userinfo), never caller input. This
+	// covers APIs such as GitHub release uploads whose mutation endpoint is
+	// intentionally hosted away from the connector's ordinary REST origin.
+	BaseURL    string   `json:"base_url,omitempty"`
 	PathFields []string `json:"path_fields,omitempty"`
 	// Query is the OPTIONAL write-action query-parameter map. It is the
 	// SAME construct (and the same QueryParam type, so the same
@@ -467,7 +473,7 @@ type WriteAction struct {
 	// samples and returned write errors. DryRunWrite preview warnings preserve
 	// their resolved values.
 	RedactFields []string `json:"redact_fields,omitempty"`
-	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload
+	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload | binary_upload
 	// BodyRequired forces an empty JSON object onto the wire when body construction
 	// resolves no fields. It is valid only for the default json body type.
 	BodyRequired bool                `json:"body_required,omitempty"`
@@ -477,6 +483,7 @@ type WriteAction struct {
 	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
 	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
 	Base64Upload *Base64UploadSpec   `json:"base64_upload,omitempty"`
+	BinaryUpload *BinaryUploadSpec   `json:"binary_upload,omitempty"`
 	RecordSchema json.RawMessage     `json:"record_schema"`
 	// IdempotencyKeyHeader names a provider-documented request header. Execution
 	// generates one fresh key per record and reuses it only across that record's retries.
@@ -614,6 +621,15 @@ type Base64UploadSpec struct {
 	// APIs document the encoded limit — Airtable's attachment cap is 5 MB of
 	// base64, not 5 MB of file.
 	MaxEncodedBytes int64 `json:"max_encoded_bytes,omitempty"`
+}
+
+// BinaryUploadSpec describes a declaration-owned application/octet-stream
+// body read from a root-confined local file. The path itself is never sent.
+// Preview binds its normalized identity and approved SHA-256; execution
+// reopens, bounds, and hashes the file before sending the exact bytes once.
+type BinaryUploadSpec struct {
+	SourceField string `json:"source_field"`
+	MaxBytes    int64  `json:"max_bytes"`
 }
 
 type MultipartPartSpec struct {
@@ -2054,6 +2070,9 @@ func validateWriteBodies(actions []WriteAction) error {
 			return err
 		}
 		bodyType := bodyTypeOf(action)
+		if err := validateWriteActionBaseURL(i, action); err != nil {
+			return err
+		}
 		if action.BodyRequired && bodyType != "json" {
 			return fmt.Errorf("action %d (%q) body_required requires body_type json, got %q", i, action.Name, bodyType)
 		}
@@ -2068,6 +2087,9 @@ func validateWriteBodies(actions []WriteAction) error {
 		}
 		if action.Base64Upload != nil && bodyType != "base64_upload" {
 			return fmt.Errorf("action %d (%q) declares base64_upload but body_type is %q", i, action.Name, bodyType)
+		}
+		if action.BinaryUpload != nil && bodyType != "binary_upload" {
+			return fmt.Errorf("action %d (%q) declares binary_upload but body_type is %q", i, action.Name, bodyType)
 		}
 		switch bodyType {
 		case "graphql":
@@ -2094,6 +2116,10 @@ func validateWriteBodies(actions []WriteAction) error {
 			if err := validateBase64UploadSpec(i, action); err != nil {
 				return err
 			}
+		case "binary_upload":
+			if err := validateBinaryUploadSpec(i, action); err != nil {
+				return err
+			}
 		case "multipart":
 			if action.Multipart == nil || len(action.Multipart.Parts) == 0 {
 				return fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name)
@@ -2112,6 +2138,36 @@ func validateWriteBodies(actions []WriteAction) error {
 				}
 			}
 		}
+	}
+	return nil
+}
+
+const maxBinaryUploadBytes = int64(64 << 20)
+
+func validateWriteActionBaseURL(i int, action WriteAction) error {
+	if strings.TrimSpace(action.BaseURL) == "" {
+		return nil
+	}
+	if action.BaseURL != strings.TrimSpace(action.BaseURL) || strings.Contains(action.BaseURL, "{{") {
+		return fmt.Errorf("action %d (%q) base_url must be one fixed absolute origin", i, action.Name)
+	}
+	parsed, err := url.Parse(action.BaseURL)
+	if err != nil || parsed.Host == "" || (parsed.Scheme != "https" && parsed.Scheme != "http") || parsed.User != nil || parsed.RawQuery != "" || parsed.Fragment != "" || (parsed.Path != "" && parsed.Path != "/") {
+		return fmt.Errorf("action %d (%q) base_url must be one fixed absolute HTTP origin", i, action.Name)
+	}
+	return nil
+}
+
+func validateBinaryUploadSpec(i int, action WriteAction) error {
+	spec := action.BinaryUpload
+	if spec == nil {
+		return fmt.Errorf("action %d (%q) body_type binary_upload requires binary_upload", i, action.Name)
+	}
+	if strings.TrimSpace(spec.SourceField) == "" {
+		return fmt.Errorf("action %d (%q) binary_upload requires source_field", i, action.Name)
+	}
+	if spec.MaxBytes <= 0 || spec.MaxBytes > maxBinaryUploadBytes {
+		return fmt.Errorf("action %d (%q) binary_upload max_bytes must be between 1 and %d", i, action.Name, maxBinaryUploadBytes)
 	}
 	return nil
 }

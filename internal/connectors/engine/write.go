@@ -115,7 +115,7 @@ func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, rec
 func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig) (method, path string, err error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
 
-	baseURL, err := Interpolate(b.HTTP.URL, vars)
+	baseURL, err := Interpolate(writeActionBaseURL(b, action), vars)
 	if err != nil {
 		return "", "", fmt.Errorf("engine: resolve write base url: %w", err)
 	}
@@ -463,6 +463,9 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	if err != nil {
 		return nil, err
 	}
+	if action.BaseURL != "" {
+		requester.BaseURL = action.BaseURL
+	}
 
 	switch bodyTypeOf(action) {
 	case "form":
@@ -515,6 +518,12 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 			return nil, err
 		}
 		return requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
+	case "binary_upload":
+		payload, err := resolveBinaryUploadPayload(action, rec, recordIndex, cfg)
+		if err != nil {
+			return nil, err
+		}
+		return requester.DoBinaryLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 	default: // "json" (default)
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
@@ -874,6 +883,13 @@ func bodyTypeOf(action WriteAction) string {
 	return action.BodyType
 }
 
+func writeActionBaseURL(b Bundle, action WriteAction) string {
+	if action.BaseURL != "" {
+		return action.BaseURL
+	}
+	return b.HTTP.URL
+}
+
 // buildJSONBody returns every record field not consumed by path_fields
 // (design §B.2 default body construction rule).
 func buildJSONBody(rec connectors.Record, pathFields []string) map[string]any {
@@ -969,6 +985,29 @@ func buildBase64UploadPayload(action WriteAction, rec connectors.Record, recordI
 	delete(body, spec.SourceField)
 	body[spec.ContentField] = encoded
 	return body, nil
+}
+
+func resolveBinaryUploadPayload(action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) ([]byte, error) {
+	spec := action.BinaryUpload
+	if spec == nil {
+		return nil, fmt.Errorf("engine: write action %q: binary_upload spec is required", action.Name)
+	}
+	raw, err := resolveRecordPathValue(map[string]any(rec), strings.Split(spec.SourceField, "."))
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: resolve binary_upload source_field %q: %w", action.Name, spec.SourceField, err)
+	}
+	path, ok := raw.(string)
+	if !ok || strings.TrimSpace(path) == "" {
+		return nil, fmt.Errorf("engine: write action %q: binary_upload source_field %q requires a non-empty file path", action.Name, spec.SourceField)
+	}
+	payload, err := readBoundedProjectFile(cfg.ProjectDir, path, spec.MaxBytes)
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: binary_upload source_field %q: %w", action.Name, spec.SourceField, err)
+	}
+	if err := verifyApprovedPayload(action, spec.SourceField, recordIndex, payload, cfg); err != nil {
+		return nil, err
+	}
+	return payload, nil
 }
 
 // resolveBase64UploadPayload returns the decoded payload bytes for either source

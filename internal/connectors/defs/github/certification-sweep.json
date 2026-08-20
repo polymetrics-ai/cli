@@ -2,9 +2,9 @@
   "schema_version": 1,
   "connector": "github",
   "source": "connector declarations",
-  "declared_commands": 1571,
-  "declared_rows": 1575,
-  "status_total": 1575,
+  "declared_commands": 1580,
+  "declared_rows": 1584,
+  "status_total": 1584,
   "commands": [
     {
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/access",
@@ -280,7 +280,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.run_id"
         }
       ],
@@ -291,7 +291,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --run-id",
+      "required_flags": [
+        "--run-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
@@ -386,7 +389,20 @@
       "operation_kind": "rest_write",
       "op_class": "direct_write",
       "write_action_kind": "delete",
-      "flags": [],
+      "flags": [
+        {
+          "name": "key",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.key"
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.ref"
+        }
+      ],
       "api_surface": [
         {
           "method": "DELETE",
@@ -394,7 +410,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --key",
+      "required_flags": [
+        "--key"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/actions/caches/{cache_id}",
@@ -408,7 +427,7 @@
         {
           "name": "cache-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.cache_id"
         }
       ],
@@ -419,7 +438,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --cache-id",
+      "required_flags": [
+        "--cache-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/caches",
@@ -2416,7 +2438,7 @@
         {
           "name": "runner-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.runner_id"
         }
       ],
@@ -2427,7 +2449,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --runner-id",
+      "required_flags": [
+        "--runner-id"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
@@ -2441,13 +2466,13 @@
         {
           "name": "name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.name"
         },
         {
           "name": "runner-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.runner_id"
         }
       ],
@@ -2458,7 +2483,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name, --runner-id",
+      "required_flags": [
+        "--name",
+        "--runner-id"
+      ]
     },
     {
       "summary": "PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
@@ -3005,7 +3034,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.run_id"
         }
       ],
@@ -3016,7 +3045,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --run-id",
+      "required_flags": [
+        "--run-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/organization-secrets",
@@ -3659,7 +3691,7 @@
         {
           "name": "runner-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.runner_id"
         }
       ],
@@ -3670,7 +3702,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --runner-id",
+      "required_flags": [
+        "--runner-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/runners",
@@ -6865,6 +6900,265 @@
       "reason": "declared availability is \"unsupported_local\", not implemented"
     },
     {
+      "summary": "DELETE /repos/{owner}/{repo}/git/refs/{ref}",
+      "path": "api git delete-ref",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.ref"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/git/refs/{ref}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --ref",
+      "required_flags": [
+        "--ref"
+      ]
+    },
+    {
+      "summary": "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}",
+      "path": "api issues delete-comment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "required": true,
+          "maps_to": "record.comment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
+    },
+    {
+      "summary": "DELETE /repos/{owner}/{repo}/milestones/{milestone_number}",
+      "path": "api issues delete-milestone",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "milestone-number",
+          "type": "integer",
+          "required": true,
+          "maps_to": "record.milestone_number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/milestones/{milestone_number}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --milestone-number",
+      "required_flags": [
+        "--milestone-number"
+      ]
+    },
+    {
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+      "path": "api issues remove-label",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "required": true,
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels/{name}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --issue-number, --name",
+      "required_flags": [
+        "--issue-number",
+        "--name"
+      ]
+    },
+    {
+      "summary": "DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}",
+      "path": "api pulls delete-review-comment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "required": true,
+          "maps_to": "record.comment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
+    },
+    {
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}",
+      "path": "api repos delete-an-environment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.environment_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --environment-name",
+      "required_flags": [
+        "--environment-name"
+      ]
+    },
+    {
+      "summary": "DELETE /repos/{owner}/{repo}/comments/{comment_id}",
+      "path": "api repos delete-commit-comment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "required": true,
+          "maps_to": "record.comment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/comments/{comment_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
+    },
+    {
+      "summary": "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
+      "path": "api repos delete-webhook",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "required": true,
+          "maps_to": "record.hook_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --hook-id",
+      "required_flags": [
+        "--hook-id"
+      ]
+    },
+    {
+      "summary": "DELETE /repos/{owner}/{repo}/collaborators/{username}",
+      "path": "api repos remove-collaborator",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.username"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/collaborators/{username}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --username",
+      "required_flags": [
+        "--username"
+      ]
+    },
+    {
       "summary": "Get route stats by actor",
       "path": "api-insights get-route-stats-by-actor",
       "intent": "direct_read",
@@ -8570,8 +8864,8 @@
       "flags": [
         {
           "name": "autolink-id",
-          "type": "string",
-          "required": false,
+          "type": "integer",
+          "required": true,
           "maps_to": "record.autolink_id"
         }
       ],
@@ -8582,7 +8876,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --autolink-id",
+      "required_flags": [
+        "--autolink-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/autolinks/{autolink_id}",
@@ -9353,7 +9650,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch"
         }
       ],
@@ -9364,7 +9661,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
@@ -9378,7 +9678,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch"
         }
       ],
@@ -9389,7 +9689,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
@@ -9430,7 +9733,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch"
         }
       ],
@@ -9441,7 +9744,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection",
@@ -9563,7 +9869,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch"
         }
       ],
@@ -9574,7 +9880,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
@@ -9640,7 +9949,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch"
         }
       ],
@@ -9651,7 +9960,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
@@ -9665,7 +9977,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch"
         }
       ],
@@ -9676,7 +9988,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
@@ -9717,7 +10032,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch"
         }
       ],
@@ -9728,7 +10043,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
@@ -9794,7 +10112,7 @@
         {
           "name": "branch",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch"
         }
       ],
@@ -9805,7 +10123,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch",
+      "required_flags": [
+        "--branch"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
@@ -10096,13 +10417,16 @@
         {
           "name": "cache-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.cache_id"
         }
       ],
       "api_surface": null,
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --cache-id",
+      "required_flags": [
+        "--cache-id"
+      ]
     },
     {
       "summary": "List GitHub Actions caches",
@@ -10286,7 +10610,7 @@
         },
         {
           "name": "managers",
-          "type": "string_array",
+          "type": "json",
           "required": false,
           "maps_to": "record.managers"
         },
@@ -10314,7 +10638,7 @@
         },
         {
           "name": "team-managers",
-          "type": "string_array",
+          "type": "json",
           "required": false,
           "maps_to": "record.team_managers"
         }
@@ -10469,7 +10793,7 @@
         {
           "name": "check-run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.check_run_id"
         }
       ],
@@ -10480,7 +10804,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --check-run-id",
+      "required_flags": [
+        "--check-run-id"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}",
@@ -10636,7 +10963,7 @@
         {
           "name": "check-suite-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.check_suite_id"
         }
       ],
@@ -10647,7 +10974,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --check-suite-id",
+      "required_flags": [
+        "--check-suite-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/check-suites/{check_suite_id}",
@@ -10936,7 +11266,50 @@
       "operation_kind": "reverse_etl",
       "op_class": "reverse_etl",
       "write_action_kind": "create",
-      "flags": [],
+      "flags": [
+        {
+          "name": "checkout-uri",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.checkout_uri"
+        },
+        {
+          "name": "commit-sha",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.commit_sha"
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.ref"
+        },
+        {
+          "name": "sarif",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.sarif"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.started_at"
+        },
+        {
+          "name": "tool-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.tool_name"
+        },
+        {
+          "name": "validate",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.validate"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -10944,7 +11317,12 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --commit-sha, --ref, --sarif",
+      "required_flags": [
+        "--commit-sha",
+        "--ref",
+        "--sarif"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
@@ -10994,8 +11372,14 @@
         {
           "name": "analysis-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.analysis_id"
+        },
+        {
+          "name": "confirm-delete",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.confirm_delete"
         }
       ],
       "api_surface": [
@@ -11005,7 +11389,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --analysis-id",
+      "required_flags": [
+        "--analysis-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses",
@@ -11131,7 +11518,7 @@
         {
           "name": "alert-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.alert_number"
         }
       ],
@@ -11142,7 +11529,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --alert-number",
+      "required_flags": [
+        "--alert-number"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
@@ -11217,7 +11607,7 @@
         {
           "name": "language",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.language"
         }
       ],
@@ -11228,7 +11618,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --language",
+      "required_flags": [
+        "--language"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases",
@@ -11300,7 +11693,60 @@
       "operation_kind": "reverse_etl",
       "op_class": "reverse_etl",
       "write_action_kind": "update",
-      "flags": [],
+      "flags": [
+        {
+          "name": "languages",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.languages"
+        },
+        {
+          "name": "query-suite",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "default",
+            "extended"
+          ],
+          "maps_to": "record.query_suite"
+        },
+        {
+          "name": "runner-label",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.runner_label"
+        },
+        {
+          "name": "runner-type",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "standard",
+            "labeled"
+          ],
+          "maps_to": "record.runner_type"
+        },
+        {
+          "name": "state",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "configured",
+            "not-configured"
+          ],
+          "maps_to": "record.state"
+        },
+        {
+          "name": "threat-model",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "remote",
+            "remote_and_local"
+          ],
+          "maps_to": "record.threat_model"
+        }
+      ],
       "api_surface": [
         {
           "method": "PATCH",
@@ -11593,6 +12039,12 @@
             "selected"
           ],
           "maps_to": "record.scope"
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.selected_repository_ids"
         }
       ],
       "api_surface": [
@@ -15207,13 +15659,13 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.comment_id"
         },
         {
           "name": "reaction-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.reaction_id"
         }
       ],
@@ -15224,7 +15676,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id, --reaction-id",
+      "required_flags": [
+        "--comment-id",
+        "--reaction-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/comments/{comment_id}/reactions",
@@ -17823,8 +18279,12 @@
         },
         {
           "name": "actor-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "User",
+            "Team"
+          ],
           "maps_to": "record.actor_type"
         },
         {
@@ -17872,8 +18332,12 @@
         },
         {
           "name": "actor-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "User",
+            "Team"
+          ],
           "maps_to": "record.actor_type"
         },
         {
@@ -19117,7 +19581,7 @@
         {
           "name": "deployment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.deployment_id"
         }
       ],
@@ -19128,7 +19592,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --deployment-id",
+      "required_flags": [
+        "--deployment-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
@@ -20127,13 +20594,13 @@
         {
           "name": "branch-policy-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.branch_policy_id"
         },
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.environment_name"
         }
       ],
@@ -20144,7 +20611,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --branch-policy-id, --environment-name",
+      "required_flags": [
+        "--branch-policy-id",
+        "--environment-name"
+      ]
     },
     {
       "summary": "PUT /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
@@ -20275,13 +20746,13 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.environment_name"
         },
         {
           "name": "protection-rule-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.protection_rule_id"
         }
       ],
@@ -20292,7 +20763,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --environment-name, --protection-rule-id",
+      "required_flags": [
+        "--environment-name",
+        "--protection-rule-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
@@ -29690,8 +30165,14 @@
         {
           "name": "first",
           "type": "integer",
-          "required": true,
+          "required": false,
           "maps_to": "body.first"
+        },
+        {
+          "name": "last",
+          "type": "integer",
+          "required": false,
+          "maps_to": "body.last"
         },
         {
           "name": "organization-id",
@@ -29737,10 +30218,7 @@
         }
       ],
       "status": "schema_conformant",
-      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
-      "required_flags": [
-        "--first"
-      ]
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query meta.",
@@ -29994,8 +30472,14 @@
         {
           "name": "first",
           "type": "integer",
-          "required": true,
+          "required": false,
           "maps_to": "body.first"
+        },
+        {
+          "name": "last",
+          "type": "integer",
+          "required": false,
+          "maps_to": "body.last"
         },
         {
           "name": "query",
@@ -30028,7 +30512,6 @@
       "status": "schema_conformant",
       "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
       "required_flags": [
-        "--first",
         "--query",
         "--type"
       ]
@@ -30062,7 +30545,7 @@
         {
           "name": "first",
           "type": "integer",
-          "required": true,
+          "required": false,
           "maps_to": "body.first"
         },
         {
@@ -30070,6 +30553,12 @@
           "type": "json",
           "required": false,
           "maps_to": "body.identifier"
+        },
+        {
+          "name": "last",
+          "type": "integer",
+          "required": false,
+          "maps_to": "body.last"
         },
         {
           "name": "order-by",
@@ -30097,10 +30586,7 @@
         }
       ],
       "status": "schema_conformant",
-      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
-      "required_flags": [
-        "--first"
-      ]
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query securityAdvisory.",
@@ -30166,8 +30652,14 @@
         {
           "name": "first",
           "type": "integer",
-          "required": true,
+          "required": false,
           "maps_to": "body.first"
+        },
+        {
+          "name": "last",
+          "type": "integer",
+          "required": false,
+          "maps_to": "body.last"
         },
         {
           "name": "order-by",
@@ -30195,10 +30687,7 @@
         }
       ],
       "status": "schema_conformant",
-      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
-      "required_flags": [
-        "--first"
-      ]
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query sponsorables.",
@@ -30250,8 +30739,14 @@
         {
           "name": "first",
           "type": "integer",
-          "required": true,
+          "required": false,
           "maps_to": "body.first"
+        },
+        {
+          "name": "last",
+          "type": "integer",
+          "required": false,
+          "maps_to": "body.last"
         },
         {
           "name": "only-dependencies",
@@ -30279,10 +30774,7 @@
         }
       ],
       "status": "schema_conformant",
-      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed",
-      "required_flags": [
-        "--first"
-      ]
+      "reason": "source-pinned typed GraphQL schema lock confirms the generated root field, argument contract, and return type; no provider-produced values were executed"
     },
     {
       "summary": "Run fixed GitHub GraphQL query topic.",
@@ -30840,8 +31332,20 @@
         {
           "name": "author-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.author_id"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.email"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
         }
       ],
       "api_surface": [
@@ -30851,7 +31355,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --author-id",
+      "required_flags": [
+        "--author-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/import/authors",
@@ -31426,7 +31933,7 @@
         {
           "name": "invitation-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.invitation_id"
         }
       ],
@@ -31437,7 +31944,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --invitation-id",
+      "required_flags": [
+        "--invitation-id"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/invitations/{invitation_id}",
@@ -31874,7 +32384,7 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.issue_number"
         }
       ],
@@ -31885,7 +32395,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --issue-number",
+      "required_flags": [
+        "--issue-number"
+      ]
     },
     {
       "summary": "Unpin an issue",
@@ -32065,13 +32578,13 @@
         {
           "name": "issue-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.issue_id"
         },
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.issue_number"
         }
       ],
@@ -32082,7 +32595,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --issue-id, --issue-number",
+      "required_flags": [
+        "--issue-id",
+        "--issue-number"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
@@ -32348,13 +32865,13 @@
         {
           "name": "issue-field-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.issue_field_id"
         },
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.issue_number"
         }
       ],
@@ -32365,7 +32882,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --issue-field-id, --issue-number",
+      "required_flags": [
+        "--issue-field-id",
+        "--issue-number"
+      ]
     },
     {
       "summary": "PUT /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
@@ -32613,7 +33134,7 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.comment_id"
         }
       ],
@@ -32624,7 +33145,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
     },
     {
       "summary": "PUT /repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
@@ -32638,7 +33162,7 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.comment_id"
         }
       ],
@@ -32649,7 +33173,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id",
+      "required_flags": [
+        "--comment-id"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
@@ -32738,13 +33265,13 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.comment_id"
         },
         {
           "name": "reaction-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.reaction_id"
         }
       ],
@@ -32755,7 +33282,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id, --reaction-id",
+      "required_flags": [
+        "--comment-id",
+        "--reaction-id"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
@@ -32769,13 +33300,13 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.issue_number"
         },
         {
           "name": "reaction-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.reaction_id"
         }
       ],
@@ -32786,7 +33317,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --issue-number, --reaction-id",
+      "required_flags": [
+        "--issue-number",
+        "--reaction-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
@@ -33120,7 +33655,7 @@
         {
           "name": "name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.name"
         }
       ],
@@ -33131,7 +33666,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name",
+      "required_flags": [
+        "--name"
+      ]
     },
     {
       "summary": "Edit a label",
@@ -39359,8 +39897,16 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
         }
       ],
@@ -39400,8 +39946,16 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
         }
       ],
@@ -39436,8 +39990,16 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
         },
         {
@@ -39478,8 +40040,16 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
         },
         {
@@ -39526,8 +40096,16 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
         },
         {
@@ -39569,8 +40147,16 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
         },
         {
@@ -40249,9 +40835,23 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
+        },
+        {
+          "name": "token",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.token"
         }
       ],
       "api_surface": [
@@ -40290,9 +40890,23 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
+        },
+        {
+          "name": "token",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.token"
         }
       ],
       "api_surface": [
@@ -40326,9 +40940,23 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
+        },
+        {
+          "name": "token",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.token"
         },
         {
           "name": "username",
@@ -40368,8 +40996,16 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
         },
         {
@@ -40416,8 +41052,16 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
         },
         {
@@ -40459,8 +41103,16 @@
         },
         {
           "name": "package-type",
-          "type": "string",
+          "type": "enum",
           "required": true,
+          "values": [
+            "npm",
+            "maven",
+            "rubygems",
+            "docker",
+            "nuget",
+            "container"
+          ],
           "maps_to": "record.package_type"
         },
         {
@@ -41315,15 +41967,18 @@
       "write_action_kind": "update",
       "flags": [
         {
-          "name": "pull-number",
+          "name": "issue-number",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.issue_number"
         }
       ],
       "api_surface": null,
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --issue-number",
+      "required_flags": [
+        "--issue-number"
+      ]
     },
     {
       "summary": "Update a pull request branch",
@@ -43457,13 +44112,13 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.comment_id"
         },
         {
           "name": "reaction-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.reaction_id"
         }
       ],
@@ -43474,7 +44129,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --comment-id, --reaction-id",
+      "required_flags": [
+        "--comment-id",
+        "--reaction-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
@@ -43942,7 +44601,7 @@
         {
           "name": "release-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.release_id"
         }
       ],
@@ -43953,7 +44612,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --release-id",
+      "required_flags": [
+        "--release-id"
+      ]
     },
     {
       "summary": "Delete a release asset",
@@ -43967,7 +44629,7 @@
         {
           "name": "asset-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.asset_id"
         }
       ],
@@ -43978,7 +44640,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --asset-id",
+      "required_flags": [
+        "--asset-id"
+      ]
     },
     {
       "summary": "Download release assets",
@@ -44155,6 +44820,54 @@
       ]
     },
     {
+      "summary": "Upload one release asset as exact binary bytes.",
+      "path": "releases assets upload",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "file-path",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.file_path"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.label"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "release-id",
+          "type": "integer",
+          "required": true,
+          "maps_to": "record.release_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --file-path, --name, --release-id",
+      "required_flags": [
+        "--file-path",
+        "--name",
+        "--release-id"
+      ]
+    },
+    {
       "summary": "Read /repos/{owner}/{repo}/releases/assets/{asset_id}",
       "path": "releases assets view",
       "intent": "direct_read",
@@ -44207,31 +44920,6 @@
       "required_flags": [
         "--release-id"
       ]
-    },
-    {
-      "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/assets",
-      "path": "releases assets view-3",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "operation_kind": "reverse_etl",
-      "op_class": "reverse_etl",
-      "write_action_kind": "create",
-      "flags": [
-        {
-          "name": "release-id",
-          "type": "integer",
-          "required": false,
-          "maps_to": "record.release_id"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
-        }
-      ],
-      "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/releases/generate-notes",
@@ -44305,13 +44993,13 @@
         {
           "name": "reaction-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.reaction_id"
         },
         {
           "name": "release-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.release_id"
         }
       ],
@@ -44322,7 +45010,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --reaction-id, --release-id",
+      "required_flags": [
+        "--reaction-id",
+        "--release-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/releases/{release_id}/reactions",
@@ -44532,7 +45224,7 @@
       "flags": [
         {
           "name": "autolink-id",
-          "type": "string",
+          "type": "integer",
           "required": true,
           "maps_to": "record.autolink_id"
         }
@@ -44721,7 +45413,7 @@
         {
           "name": "key-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.key_id"
         }
       ],
@@ -44732,7 +45424,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --key-id",
+      "required_flags": [
+        "--key-id"
+      ]
     },
     {
       "summary": "List deploy keys",
@@ -44987,7 +45682,7 @@
         {
           "name": "ruleset-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.ruleset_id"
         }
       ],
@@ -44998,7 +45693,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --ruleset-id",
+      "required_flags": [
+        "--ruleset-id"
+      ]
     },
     {
       "summary": "Update a repository ruleset",
@@ -46729,7 +47427,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.run_id"
         }
       ],
@@ -46740,7 +47438,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --run-id",
+      "required_flags": [
+        "--run-id"
+      ]
     },
     {
       "summary": "Delete a workflow run",
@@ -46754,7 +47455,7 @@
         {
           "name": "run-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.run_id"
         }
       ],
@@ -46765,7 +47466,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --run-id",
+      "required_flags": [
+        "--run-id"
+      ]
     },
     {
       "summary": "Download workflow artifacts",
@@ -47205,13 +47909,16 @@
         {
           "name": "secret-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.secret_name"
         }
       ],
       "api_surface": null,
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --secret-name",
+      "required_flags": [
+        "--secret-name"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}",
@@ -47225,7 +47932,7 @@
         {
           "name": "secret-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.secret_name"
         }
       ],
@@ -47236,7 +47943,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --secret-name",
+      "required_flags": [
+        "--secret-name"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
@@ -47250,7 +47960,7 @@
         {
           "name": "secret-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.secret_name"
         }
       ],
@@ -47261,7 +47971,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --secret-name",
+      "required_flags": [
+        "--secret-name"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
@@ -47275,7 +47988,7 @@
         {
           "name": "secret-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.secret_name"
         }
       ],
@@ -47286,7 +47999,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --secret-name",
+      "required_flags": [
+        "--secret-name"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
@@ -47300,13 +48016,13 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.environment_name"
         },
         {
           "name": "secret-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.secret_name"
         }
       ],
@@ -47317,7 +48033,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --environment-name, --secret-name",
+      "required_flags": [
+        "--environment-name",
+        "--secret-name"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/agents/secrets/{secret_name}",
@@ -48000,7 +48720,68 @@
       "operation_kind": "reverse_etl",
       "op_class": "reverse_etl",
       "write_action_kind": "create",
-      "flags": [],
+      "flags": [
+        {
+          "name": "credits",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.credits"
+        },
+        {
+          "name": "cve-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.cve_id"
+        },
+        {
+          "name": "cvss-vector-string",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.cvss_vector_string"
+        },
+        {
+          "name": "cwe-ids",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.cwe_ids"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "severity",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "maps_to": "record.severity"
+        },
+        {
+          "name": "start-private-fork",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.start_private_fork"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.summary"
+        },
+        {
+          "name": "vulnerabilities",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.vulnerabilities"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -48008,7 +48789,12 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --description, --summary, --vulnerabilities",
+      "required_flags": [
+        "--description",
+        "--summary",
+        "--vulnerabilities"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
@@ -48021,8 +48807,8 @@
       "flags": [
         {
           "name": "ghsa-id",
-          "type": "integer",
-          "required": false,
+          "type": "string",
+          "required": true,
           "maps_to": "record.ghsa_id"
         }
       ],
@@ -48033,7 +48819,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --ghsa-id",
+      "required_flags": [
+        "--ghsa-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
@@ -48046,8 +48835,8 @@
       "flags": [
         {
           "name": "ghsa-id",
-          "type": "integer",
-          "required": false,
+          "type": "string",
+          "required": true,
           "maps_to": "record.ghsa_id"
         }
       ],
@@ -48058,7 +48847,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --ghsa-id",
+      "required_flags": [
+        "--ghsa-id"
+      ]
     },
     {
       "summary": "Get a global security advisory",
@@ -48139,7 +48931,56 @@
       "operation_kind": "reverse_etl",
       "op_class": "reverse_etl",
       "write_action_kind": "create",
-      "flags": [],
+      "flags": [
+        {
+          "name": "cvss-vector-string",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.cvss_vector_string"
+        },
+        {
+          "name": "cwe-ids",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.cwe_ids"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "severity",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "maps_to": "record.severity"
+        },
+        {
+          "name": "start-private-fork",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.start_private_fork"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.summary"
+        },
+        {
+          "name": "vulnerabilities",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.vulnerabilities"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -48147,7 +48988,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --description, --summary",
+      "required_flags": [
+        "--description",
+        "--summary"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
@@ -48159,10 +49004,87 @@
       "write_action_kind": "update",
       "flags": [
         {
-          "name": "ghsa-id",
-          "type": "integer",
+          "name": "collaborating-teams",
+          "type": "json",
           "required": false,
+          "maps_to": "record.collaborating_teams"
+        },
+        {
+          "name": "collaborating-users",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.collaborating_users"
+        },
+        {
+          "name": "credits",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.credits"
+        },
+        {
+          "name": "cve-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.cve_id"
+        },
+        {
+          "name": "cvss-vector-string",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.cvss_vector_string"
+        },
+        {
+          "name": "cwe-ids",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.cwe_ids"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "ghsa-id",
+          "type": "string",
+          "required": true,
           "maps_to": "record.ghsa_id"
+        },
+        {
+          "name": "severity",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "maps_to": "record.severity"
+        },
+        {
+          "name": "state",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "published",
+            "closed",
+            "draft"
+          ],
+          "maps_to": "record.state"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.summary"
+        },
+        {
+          "name": "vulnerabilities",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.vulnerabilities"
         }
       ],
       "api_surface": [
@@ -48172,7 +49094,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --ghsa-id",
+      "required_flags": [
+        "--ghsa-id"
+      ]
     },
     {
       "summary": "Read /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
@@ -51725,13 +52650,13 @@
         {
           "name": "environment-name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.environment_name"
         },
         {
           "name": "name",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "record.name"
         }
       ],
@@ -51742,7 +52667,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --environment-name, --name",
+      "required_flags": [
+        "--environment-name",
+        "--name"
+      ]
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/agents/variables/{name}",
@@ -52002,13 +52931,13 @@
         {
           "name": "delivery-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.delivery_id"
         },
         {
           "name": "hook-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.hook_id"
         }
       ],
@@ -52019,7 +52948,11 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --delivery-id, --hook-id",
+      "required_flags": [
+        "--delivery-id",
+        "--hook-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/pings",
@@ -52033,7 +52966,7 @@
         {
           "name": "hook-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.hook_id"
         }
       ],
@@ -52044,7 +52977,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --hook-id",
+      "required_flags": [
+        "--hook-id"
+      ]
     },
     {
       "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/tests",
@@ -52058,7 +52994,7 @@
         {
           "name": "hook-id",
           "type": "integer",
-          "required": false,
+          "required": true,
           "maps_to": "record.hook_id"
         }
       ],
@@ -52069,7 +53005,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --hook-id",
+      "required_flags": [
+        "--hook-id"
+      ]
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config",
