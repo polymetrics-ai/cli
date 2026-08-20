@@ -954,6 +954,124 @@ func TestSourceImportReservesResponseExpansionBeforeAppend(t *testing.T) {
 	}
 }
 
+func TestSourceImportIndexesXPrefixedComponentsWithoutTreatingThemAsExtensions(t *testing.T) {
+	t.Parallel()
+	valid := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"headers":{"x-trace":{"description":"trace","schema":{"type":"string","maxLength":8}}}},"paths":{"x-provider-metadata":{"$ref":"https://provider.invalid/literal"},"/items":{"get":{"responses":{"200":{"description":"ok","headers":{"x-trace":{"$ref":"#/components/headers/x-trace"}}}}}}}}`)
+	result := importInlineSourceResult(t, valid, defaultSourceImportLimits())
+	if len(result.Extensions) != 1 || result.Extensions[0].Location != `paths["x-provider-metadata"]` {
+		t.Fatalf("path extension = %#v", result.Extensions)
+	}
+	response := descriptorResponse(t, result.Operations[0], "200")
+	declaration, ok := response.Declaration.(map[string]any)
+	if !ok {
+		t.Fatalf("response declaration = %T", response.Declaration)
+	}
+	headers, ok := declaration["headers"].(map[string]any)
+	if !ok || headers["x-trace"] == nil {
+		t.Fatalf("x-prefixed header component was not resolved: %#v", declaration)
+	}
+
+	for _, component := range []string{"schemas", "responses", "parameters", "examples", "requestBodies", "headers", "securitySchemes", "links", "callbacks", "pathItems"} {
+		component := component
+		t.Run(component, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"` + component + `":{"x-unused":{"$ref":"https://provider.invalid/external"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/x-prefixed-component.json", raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), "external reference") {
+				t.Fatalf("%s x-prefixed component error = %v", component, err)
+			}
+		})
+	}
+}
+
+func TestSourceImportRejectsNonRequestContentEncodings(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name string
+		raw  []byte
+	}{
+		{
+			name: "response content",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"encoding":{"part":{"headers":{"X-Trace":{"$ref":"https://provider.invalid/header"}}}}}}}}}}}}`),
+		},
+		{
+			name: "parameter content",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","content":{"application/json":{"encoding":{"part":{"headers":{"X-Trace":{"$ref":"https://provider.invalid/header"}}}}}}}],"responses":{"200":{"description":"ok"}}}}}}`),
+		},
+		{
+			name: "header content",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","headers":{"X-Trace":{"content":{"application/json":{"encoding":{"part":{"headers":{"X-Trace":{"$ref":"https://provider.invalid/header"}}}}}}}}}}}}}}`),
+		},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/non-request-encoding.json", tc.raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return tc.raw, nil }), defaultSourceImportLimits())
+			if err == nil || !strings.Contains(err.Error(), "unsupported encoding on non-request content") {
+				t.Fatalf("%s encoding error = %v", tc.name, err)
+			}
+		})
+	}
+}
+
+func TestSourceImportReservesInboundResponseExpansionBeforeResolution(t *testing.T) {
+	t.Parallel()
+	const responseCount = 40
+	largeDescription := strings.Repeat("x", 64<<10)
+	var responses strings.Builder
+	for index := 0; index < responseCount; index++ {
+		if index > 0 {
+			responses.WriteByte(',')
+		}
+		responses.WriteString(fmt.Sprintf(`"%d":{"$ref":"#/components/responses/Large"}`, 200+index))
+	}
+	cases := []struct {
+		name string
+		raw  []byte
+	}{
+		{
+			name: "webhook",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"Large":{"description":"` + largeDescription + `"}}},"webhooks":{"invoice":{"post":{"responses":{` + responses.String() + `}}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
+		},
+		{
+			name: "callback",
+			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"Large":{"description":"` + largeDescription + `"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}},"callbacks":{"deliver":{"{$request.body#/url}":{"post":{"responses":{` + responses.String() + `}}}}}}}}}`),
+		},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			limits := defaultSourceImportLimits()
+			limits.MaxResolvedDescriptorBytes = 1 << 20
+			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inbound-response-amplification.json", tc.raw)
+			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return tc.raw, nil }), limits)
+			if err == nil || !strings.Contains(err.Error(), "resolved descriptor byte limit exceeded while retaining response") {
+				t.Fatalf("%s inbound response expansion error = %v", tc.name, err)
+			}
+		})
+	}
+}
+
+func TestSourceImportBoundsGrammarIndexBeforeSortingComponents(t *testing.T) {
+	t.Parallel()
+	var schemas strings.Builder
+	for index := 0; index < 8; index++ {
+		if index > 0 {
+			schemas.WriteByte(',')
+		}
+		schemas.WriteString(fmt.Sprintf(`"S%d":{"type":"string","maxLength":1}`, index))
+	}
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{` + schemas.String() + `}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+	limits := defaultSourceImportLimits()
+	limits.MaxSchemaNodes = 3
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/grammar-index-limit.json", raw)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	if err == nil || !strings.Contains(err.Error(), "source grammar position limit exceeded") {
+		t.Fatalf("grammar index limit error = %v", err)
+	}
+}
+
 func importInlineSourceResult(t *testing.T, raw []byte, limits sourceImportLimits) sourceImportResult {
 	t.Helper()
 	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inline-openapi.json", raw)

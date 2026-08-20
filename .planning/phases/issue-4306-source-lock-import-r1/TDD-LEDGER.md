@@ -54,3 +54,9 @@
 - **Red:** review cases found wrong-kind nested pointers, unused invalid components, rounded YAML numerics, late deep-schema materialization, cross-version schema keywords, and repeated response expansion.
 - **Green:** version-scoped grammar indexing now preflights every supported reference and schema position before descriptors; YAML numbers retain exact JSON-number lexemes; structural schema limits precede cloning; source-form keyword shapes are enforced; and response expansion reserves aggregate bytes before append.
 - **Refactor:** one grammar index now supplies both expected reference kinds and whole-document preflight, keeping literal `$ref` values outside reference positions untouched.
+
+## Cycle 10 — extension-context and inbound expansion closure
+
+- **Red:** review cases exposed legal x-prefixed reusable-component names being skipped as extensions, non-request Media Type encodings surviving resolution, inbound response amplification, and unbounded grammar-index position staging.
+- **Green:** focused source-import cases cover x-prefixed reusable component references and unused external refs, non-request encoding rejection, webhook/callback response expansion limits, and grammar-position caps before component ordering.
+- **Refactor:** extension handling is now explicit per grammar owner, while response and grammar-index accounting are shared pre-retention boundaries.

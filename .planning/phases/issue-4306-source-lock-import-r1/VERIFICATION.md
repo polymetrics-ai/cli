@@ -37,3 +37,4 @@ Execution and inline verification complete, including the review-hardening follo
 | Focused check | Status |
 | --- | --- |
 | Grammar index, whole-document preflight, YAML numeric, structural-limit, source-form, and response-expansion regressions | pass: `go test -timeout 5m ./cmd/connectorgen -run '^TestSourceImport' -count=1` |
+| Extension-context, non-request encoding, inbound response-budget, and grammar-index regressions | pass: `go test -timeout 5m ./cmd/connectorgen -run '^TestSourceImport' -count=1` on 2026-08-20 |

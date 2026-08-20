@@ -21,6 +21,7 @@ The post-review findings were legitimate and repaired in the shared importer rat
 - Form and identity integrity: exact OpenAPI/Swagger versions are retained and validated, Swagger host/basePath/root-and-operation schemes remain merge-blocked route evidence, source identities are connector-global across outbound and inbound descriptors, and YAML keys must remain strings before normalization.
 - Expansion safety: schema children reserve deterministic object/document capacity before cloning or retention, with typed limit errors for reference amplification.
 - Semantic closure: finite composite enums are recognized as bounded contracts without permitting dynamic children, while OpenAPI-only reference positions remain form-scoped and Encoding Header references are resolved before retention.
+- Extension and allocation closure: reusable component names remain grammar entries even when they begin `x-`; non-request Media Type encodings fail before cloning; response expansion is reserved before shared resolver retention; and grammar-index capacity is checked before large key ordering.
 
 ## Automated review route
 

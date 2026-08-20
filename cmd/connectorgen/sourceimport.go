@@ -516,6 +516,11 @@ type sourceImportBudget struct {
 	used  int64
 }
 
+type sourceResponseExpansionBudget struct {
+	limit int64
+	used  int64
+}
+
 func (budget *sourceImportBudget) add(value any, label string) error {
 	raw, err := sourceMarshalCompact(value)
 	if err != nil {
@@ -537,6 +542,21 @@ func (budget *sourceImportBudget) remaining() int64 {
 		return 0
 	}
 	return budget.limit - budget.used
+}
+
+func (budget *sourceResponseExpansionBudget) check(bytes int64) error {
+	if budget == nil || bytes < 0 || bytes > budget.limit || budget.used > budget.limit-bytes {
+		return fmt.Errorf("resolved descriptor byte limit exceeded while retaining response")
+	}
+	return nil
+}
+
+func (budget *sourceResponseExpansionBudget) reserve(bytes int64) error {
+	if err := budget.check(bytes); err != nil {
+		return err
+	}
+	budget.used += bytes
+	return nil
 }
 
 func sortSourceOperationDescriptors(descriptors []sourceOperationDescriptor) {
@@ -933,12 +953,14 @@ func normalizeSourceYAML(value any) any {
 }
 
 type sourceReferenceResolver struct {
-	root           map[string]any
-	limits         sourceImportLimits
-	form           sourceDocumentForm
-	referenceIndex *sourceReferenceIndex
-	references     int
-	expansion      sourceSchemaExpansionBudget
+	root              map[string]any
+	limits            sourceImportLimits
+	form              sourceDocumentForm
+	referenceIndex    *sourceReferenceIndex
+	references        int
+	expansion         sourceSchemaExpansionBudget
+	responseExpansion sourceResponseExpansionBudget
+	responseScope     *sourceResponseExpansionBudget
 }
 
 type sourceReferenceKind string
@@ -957,18 +979,122 @@ const (
 )
 
 type sourceReferenceIndex struct {
-	positions map[string]sourceReferenceKind
-	limits    sourceImportLimits
+	positions     map[string]sourceReferenceKind
+	limits        sourceImportLimits
+	positionBytes int64
 }
 
 func (index *sourceReferenceIndex) add(pointer string, kind sourceReferenceKind) error {
-	if !strings.HasPrefix(pointer, "#") {
-		pointer = "#" + pointer
-	}
+	pointer = sourceReferenceIndexPointer(pointer)
 	if existing, exists := index.positions[pointer]; exists && existing != kind {
 		return fmt.Errorf("ambiguous source grammar position %q is both %s and %s", pointer, existing, kind)
 	}
+	if _, exists := index.positions[pointer]; exists {
+		return nil
+	}
+	bytes := sourceReferenceIndexEntryBytes(pointer)
+	if err := index.checkAddition(1, bytes); err != nil {
+		return err
+	}
 	index.positions[pointer] = kind
+	index.positionBytes += bytes
+	return nil
+}
+
+func sourceReferenceIndexPointer(pointer string) string {
+	if strings.HasPrefix(pointer, "#") {
+		return pointer
+	}
+	return "#" + pointer
+}
+
+func sourceReferenceIndexEntryBytes(pointer string) int64 {
+	bytes := sourceStructuralStringBytes(pointer)
+	if bytes > math.MaxInt64-32 {
+		return math.MaxInt64
+	}
+	return bytes + 32
+}
+
+func sourceReferenceIndexByteLimit(limits sourceImportLimits) int64 {
+	limit := limits.MaxArtifactBytes
+	if limit <= 0 {
+		limit = defaultSourceImportArtifactBytes
+	}
+	if descriptorLimit := sourceResolvedDescriptorLimit(limits); descriptorLimit > 0 && descriptorLimit < limit {
+		limit = descriptorLimit
+	}
+	return limit
+}
+
+func (index *sourceReferenceIndex) checkAddition(count int, bytes int64) error {
+	if count < 0 || count > sourceSchemaNodeLimit(index.limits)-len(index.positions) {
+		return fmt.Errorf("source grammar position limit exceeded")
+	}
+	limit := sourceReferenceIndexByteLimit(index.limits)
+	if bytes < 0 || bytes > limit || index.positionBytes > limit-bytes {
+		return fmt.Errorf("source grammar position byte limit exceeded")
+	}
+	return nil
+}
+
+func (index *sourceReferenceIndex) preflightEntries(pointer string, entries map[string]any, skipExtensions bool) error {
+	remainingPositions := sourceSchemaNodeLimit(index.limits) - len(index.positions)
+	if remainingPositions < 0 {
+		return fmt.Errorf("source grammar position limit exceeded")
+	}
+	count := 0
+	for name := range entries {
+		if skipExtensions && strings.HasPrefix(name, "x-") {
+			continue
+		}
+		childPointer := sourceReferenceIndexPointer(sourceJSONPointer(pointer, name))
+		if _, exists := index.positions[childPointer]; exists {
+			continue
+		}
+		if count == remainingPositions {
+			return fmt.Errorf("source grammar position limit exceeded")
+		}
+		count++
+	}
+	remainingBytes := sourceReferenceIndexByteLimit(index.limits) - index.positionBytes
+	if remainingBytes < 0 {
+		return fmt.Errorf("source grammar position byte limit exceeded")
+	}
+	used := int64(0)
+	for name := range entries {
+		if skipExtensions && strings.HasPrefix(name, "x-") {
+			continue
+		}
+		childPointer := sourceReferenceIndexPointer(sourceJSONPointer(pointer, name))
+		if _, exists := index.positions[childPointer]; exists {
+			continue
+		}
+		entryBytes := sourceReferenceIndexEntryBytes(childPointer)
+		if entryBytes == math.MaxInt64 || entryBytes > remainingBytes-used {
+			return fmt.Errorf("source grammar position byte limit exceeded")
+		}
+		used += entryBytes
+	}
+	return nil
+}
+
+func (index *sourceReferenceIndex) preflightArrayEntries(pointer string, count int) error {
+	if count < 0 || count > sourceSchemaNodeLimit(index.limits)-len(index.positions) {
+		return fmt.Errorf("source grammar position limit exceeded")
+	}
+	remainingBytes := sourceReferenceIndexByteLimit(index.limits) - index.positionBytes
+	if remainingBytes < 0 {
+		return fmt.Errorf("source grammar position byte limit exceeded")
+	}
+	used := int64(0)
+	for position := 0; position < count; position++ {
+		entryBytes := sourceReferenceIndexEntryBytes(sourceReferenceIndexPointer(sourceJSONPointer(pointer, strconv.Itoa(position))))
+		if entryBytes == math.MaxInt64 || entryBytes > remainingBytes-used {
+			return fmt.Errorf("source grammar position byte limit exceeded")
+		}
+		used += entryBytes
+	}
 	return nil
 }
 
@@ -1120,7 +1246,7 @@ func sourceIndexOpenAPIComponents(index *sourceReferenceIndex, value any, pointe
 		if !exists {
 			continue
 		}
-		if err := sourceIndexEntries(raw, sourceJSONPointer(pointer, entry.name), "components."+entry.name, entry.index); err != nil {
+		if err := sourceIndexEntries(index, raw, sourceJSONPointer(pointer, entry.name), "components."+entry.name, false, entry.index); err != nil {
 			return err
 		}
 	}
@@ -1148,20 +1274,23 @@ func sourceIndexSwaggerComponents(index *sourceReferenceIndex, root map[string]a
 		if !exists {
 			continue
 		}
-		if err := sourceIndexEntries(raw, sourceJSONPointer("", entry.name), entry.name, entry.index); err != nil {
+		if err := sourceIndexEntries(index, raw, sourceJSONPointer("", entry.name), entry.name, false, entry.index); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func sourceIndexEntries(value any, pointer, label string, indexChild func(any, string) error) error {
+func sourceIndexEntries(index *sourceReferenceIndex, value any, pointer, label string, skipExtensions bool, indexChild func(any, string) error) error {
 	entries, err := sourceReferenceObject(value, label)
 	if err != nil {
 		return err
 	}
+	if err := index.preflightEntries(pointer, entries, skipExtensions); err != nil {
+		return err
+	}
 	for _, name := range sortedSourceMapKeys(entries) {
-		if strings.HasPrefix(name, "x-") {
+		if skipExtensions && strings.HasPrefix(name, "x-") {
 			continue
 		}
 		if err := indexChild(entries[name], sourceJSONPointer(pointer, name)); err != nil {
@@ -1172,7 +1301,7 @@ func sourceIndexEntries(value any, pointer, label string, indexChild func(any, s
 }
 
 func sourceIndexPathItems(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
-	return sourceIndexEntries(value, pointer, "path items", func(child any, childPointer string) error {
+	return sourceIndexEntries(index, value, pointer, "path items", true, func(child any, childPointer string) error {
 		return sourceIndexPathItem(index, child, childPointer, form)
 	})
 }
@@ -1192,7 +1321,7 @@ func sourceIndexPathItem(index *sourceReferenceIndex, value any, pointer string,
 	}
 	if form.isOpenAPI() {
 		if callbacks, exists := pathItem["callbacks"]; exists {
-			if err := sourceIndexEntries(callbacks, sourceJSONPointer(pointer, "callbacks"), "path item callbacks", func(child any, childPointer string) error {
+			if err := sourceIndexEntries(index, callbacks, sourceJSONPointer(pointer, "callbacks"), "path item callbacks", true, func(child any, childPointer string) error {
 				return sourceIndexCallback(index, child, childPointer, form)
 			}); err != nil {
 				return err
@@ -1229,7 +1358,7 @@ func sourceIndexOperation(index *sourceReferenceIndex, value any, pointer string
 		}
 	}
 	if responses, exists := operation["responses"]; exists {
-		if err := sourceIndexEntries(responses, sourceJSONPointer(pointer, "responses"), "operation responses", func(child any, childPointer string) error {
+		if err := sourceIndexEntries(index, responses, sourceJSONPointer(pointer, "responses"), "operation responses", true, func(child any, childPointer string) error {
 			return sourceIndexResponse(index, child, childPointer, form)
 		}); err != nil {
 			return err
@@ -1237,7 +1366,7 @@ func sourceIndexOperation(index *sourceReferenceIndex, value any, pointer string
 	}
 	if form.isOpenAPI() {
 		if callbacks, exists := operation["callbacks"]; exists {
-			if err := sourceIndexEntries(callbacks, sourceJSONPointer(pointer, "callbacks"), "operation callbacks", func(child any, childPointer string) error {
+			if err := sourceIndexEntries(index, callbacks, sourceJSONPointer(pointer, "callbacks"), "operation callbacks", true, func(child any, childPointer string) error {
 				return sourceIndexCallback(index, child, childPointer, form)
 			}); err != nil {
 				return err
@@ -1251,6 +1380,9 @@ func sourceIndexParameters(index *sourceReferenceIndex, value any, pointer strin
 	parameters, ok := value.([]any)
 	if !ok {
 		return fmt.Errorf("parameters must be an array")
+	}
+	if err := index.preflightArrayEntries(pointer, len(parameters)); err != nil {
+		return err
 	}
 	for position, parameter := range parameters {
 		if err := sourceIndexParameter(index, parameter, sourceJSONPointer(pointer, strconv.Itoa(position)), form); err != nil {
@@ -1333,7 +1465,7 @@ func sourceIndexResponse(index *sourceReferenceIndex, value any, pointer string,
 		}
 	}
 	if headers, exists := response["headers"]; exists {
-		if err := sourceIndexEntries(headers, sourceJSONPointer(pointer, "headers"), "response headers", func(child any, childPointer string) error {
+		if err := sourceIndexEntries(index, headers, sourceJSONPointer(pointer, "headers"), "response headers", false, func(child any, childPointer string) error {
 			return sourceIndexHeader(index, child, childPointer, form)
 		}); err != nil {
 			return err
@@ -1372,7 +1504,7 @@ func sourceIndexHeader(index *sourceReferenceIndex, value any, pointer string, f
 }
 
 func sourceIndexSwaggerHeaders(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
-	return sourceIndexEntries(value, pointer, "Swagger response headers", func(child any, childPointer string) error {
+	return sourceIndexEntries(index, value, pointer, "Swagger response headers", false, func(child any, childPointer string) error {
 		header, err := sourceReferenceObject(child, "Swagger response header")
 		if err != nil {
 			return err
@@ -1387,6 +1519,9 @@ func sourceIndexSwaggerHeaders(index *sourceReferenceIndex, value any, pointer s
 func sourceIndexContent(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm, resolveEncoding bool) error {
 	content, err := sourceReferenceObject(value, "content")
 	if err != nil {
+		return err
+	}
+	if err := index.preflightEntries(pointer, content, false); err != nil {
 		return err
 	}
 	for _, mediaType := range sortedSourceMapKeys(content) {
@@ -1405,11 +1540,12 @@ func sourceIndexContent(index *sourceReferenceIndex, value any, pointer string, 
 				return err
 			}
 		}
-		if resolveEncoding {
-			if encoding, exists := media["encoding"]; exists {
-				if err := sourceIndexEncoding(index, encoding, sourceJSONPointer(mediaPointer, "encoding"), form); err != nil {
-					return err
-				}
+		if encoding, exists := media["encoding"]; exists {
+			if !resolveEncoding {
+				return fmt.Errorf("unsupported encoding on non-request content media %q", mediaType)
+			}
+			if err := sourceIndexEncoding(index, encoding, sourceJSONPointer(mediaPointer, "encoding"), form); err != nil {
+				return err
 			}
 		}
 	}
@@ -1417,13 +1553,13 @@ func sourceIndexContent(index *sourceReferenceIndex, value any, pointer string, 
 }
 
 func sourceIndexEncoding(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
-	return sourceIndexEntries(value, pointer, "encoding", func(child any, childPointer string) error {
+	return sourceIndexEntries(index, value, pointer, "encoding", false, func(child any, childPointer string) error {
 		encoding, err := sourceReferenceObject(child, "encoding entry")
 		if err != nil {
 			return err
 		}
 		if headers, exists := encoding["headers"]; exists {
-			return sourceIndexEntries(headers, sourceJSONPointer(childPointer, "headers"), "encoding headers", func(header any, headerPointer string) error {
+			return sourceIndexEntries(index, headers, sourceJSONPointer(childPointer, "headers"), "encoding headers", false, func(header any, headerPointer string) error {
 				return sourceIndexHeader(index, header, headerPointer, form)
 			})
 		}
@@ -1432,7 +1568,7 @@ func sourceIndexEncoding(index *sourceReferenceIndex, value any, pointer string,
 }
 
 func sourceIndexLinks(index *sourceReferenceIndex, value any, pointer string) error {
-	return sourceIndexEntries(value, pointer, "links", func(child any, childPointer string) error {
+	return sourceIndexEntries(index, value, pointer, "links", false, func(child any, childPointer string) error {
 		return sourceIndexLink(index, child, childPointer)
 	})
 }
@@ -1446,7 +1582,7 @@ func sourceIndexLink(index *sourceReferenceIndex, value any, pointer string) err
 }
 
 func sourceIndexExamples(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
-	return sourceIndexEntries(value, pointer, "examples", func(child any, childPointer string) error {
+	return sourceIndexEntries(index, value, pointer, "examples", false, func(child any, childPointer string) error {
 		return sourceIndexExample(index, child, childPointer, form)
 	})
 }
@@ -1465,6 +1601,12 @@ func sourceIndexCallback(index *sourceReferenceIndex, value any, pointer string,
 	}
 	callback, err := sourceReferenceObject(value, "callback")
 	if err != nil {
+		return err
+	}
+	if _, hasReference := callback["$ref"]; hasReference {
+		return nil
+	}
+	if err := index.preflightEntries(pointer, callback, true); err != nil {
 		return err
 	}
 	for _, expression := range sortedSourceMapKeys(callback) {
@@ -1513,6 +1655,9 @@ func sourceIndexSchema(index *sourceReferenceIndex, value any, pointer string, f
 		if !ok {
 			return fmt.Errorf("schema %s must be an object", key)
 		}
+		if err := index.preflightEntries(sourceJSONPointer(pointer, key), children, false); err != nil {
+			return err
+		}
 		for _, name := range sortedSourceMapKeys(children) {
 			if err := sourceIndexSchema(index, children[name], sourceJSONPointer(sourceJSONPointer(pointer, key), name), form); err != nil {
 				return err
@@ -1524,6 +1669,9 @@ func sourceIndexSchema(index *sourceReferenceIndex, value any, pointer string, f
 			children, ok := raw.(map[string]any)
 			if !ok {
 				return fmt.Errorf("schema dependencies must be an object")
+			}
+			if err := index.preflightEntries(sourceJSONPointer(pointer, "dependencies"), children, false); err != nil {
+				return err
 			}
 			for _, name := range sortedSourceMapKeys(children) {
 				switch child := children[name].(type) {
@@ -1561,6 +1709,9 @@ func sourceIndexSchema(index *sourceReferenceIndex, value any, pointer string, f
 		if !ok {
 			return fmt.Errorf("schema %s must be an array", key)
 		}
+		if err := index.preflightArrayEntries(sourceJSONPointer(pointer, key), len(items)); err != nil {
+			return err
+		}
 		for position, item := range items {
 			if err := sourceIndexSchema(index, item, sourceJSONPointer(sourceJSONPointer(pointer, key), strconv.Itoa(position)), form); err != nil {
 				return err
@@ -1586,7 +1737,13 @@ func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, li
 	if err != nil {
 		return fmt.Errorf("index source grammar positions: %w", err)
 	}
-	preflight := sourceReferenceResolver{root: doc, limits: limits, form: form, referenceIndex: index}
+	preflight := sourceReferenceResolver{
+		root:              doc,
+		limits:            limits,
+		form:              form,
+		referenceIndex:    index,
+		responseExpansion: sourceResponseExpansionBudget{limit: sourceResolvedDescriptorLimit(limits)},
+	}
 	if err := preflight.preflightDocument(); err != nil {
 		return fmt.Errorf("preflight source grammar: %w", err)
 	}
@@ -1594,6 +1751,10 @@ func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, li
 	resolver.limits = limits
 	resolver.form = form
 	resolver.referenceIndex = index
+	resolver.references = 0
+	resolver.expansion = sourceSchemaExpansionBudget{}
+	resolver.responseExpansion = sourceResponseExpansionBudget{limit: sourceResolvedDescriptorLimit(limits)}
+	resolver.responseScope = nil
 	return nil
 }
 
@@ -1844,9 +2005,6 @@ func (r *sourceReferenceResolver) preflightOpenAPIComponents(value any) error {
 			return err
 		}
 		for _, name := range sortedSourceMapKeys(items) {
-			if strings.HasPrefix(name, "x-") {
-				continue
-			}
 			if err := entry.preflight(items[name]); err != nil {
 				return fmt.Errorf("components.%s[%q]: %w", entry.name, name, err)
 			}
@@ -1875,9 +2033,6 @@ func (r *sourceReferenceResolver) preflightSwaggerComponents(root map[string]any
 			return err
 		}
 		for _, name := range sortedSourceMapKeys(items) {
-			if strings.HasPrefix(name, "x-") {
-				continue
-			}
 			if err := entry.preflight(items[name]); err != nil {
 				return fmt.Errorf("%s[%q]: %w", entry.name, name, err)
 			}
@@ -1971,6 +2126,10 @@ func (r *sourceReferenceResolver) resolveInboundPathItem(value any, stack map[st
 			}
 			resolvedResponses := make(map[string]any, len(responseMap))
 			for _, status := range sortedSourceMapKeys(responseMap) {
+				if strings.HasPrefix(status, "x-") {
+					resolvedResponses[status] = sourceCloneLiteral(responseMap[status])
+					continue
+				}
 				resolved, err := r.resolveResponse(responseMap[status], nil, 0)
 				if err != nil {
 					return nil, err
@@ -2072,6 +2231,58 @@ func (r *sourceReferenceResolver) resolveRequestBody(value any, stack map[string
 }
 
 func (r *sourceReferenceResolver) resolveResponse(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	if err := r.reserveResponseEntry(value, stack, depth); err != nil {
+		return nil, err
+	}
+	return r.resolveResponseUnchecked(value, stack, depth)
+}
+
+func (r *sourceReferenceResolver) reserveResponseEntry(value any, stack map[string]bool, depth int) error {
+	bytes, err := r.responseExpansionBytes(value, stack, depth)
+	if err != nil {
+		return err
+	}
+	if err := r.responseExpansion.check(bytes); err != nil {
+		return err
+	}
+	if r.responseScope != nil {
+		if err := r.responseScope.check(bytes); err != nil {
+			return err
+		}
+	}
+	if err := r.responseExpansion.reserve(bytes); err != nil {
+		return err
+	}
+	if r.responseScope != nil {
+		r.responseScope.used += bytes
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) responseExpansionBytes(value any, stack map[string]bool, depth int) (int64, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return 0, fmt.Errorf("response must be an object")
+	}
+	target, reference, next, hasReference, err := r.referenceTargetWithCount(object, sourceReferenceResponse, stack, depth, false)
+	if err != nil {
+		return 0, err
+	}
+	if !hasReference {
+		return sourceResponseStructuralBytes(object, r.limits)
+	}
+	targetBytes, err := r.responseExpansionBytes(target, next, depth+1)
+	if err != nil {
+		return 0, err
+	}
+	referenceBytes, err := sourceResponseStructuralBytes(reference, r.limits)
+	if err != nil {
+		return 0, err
+	}
+	return sourceStructuralAdd(targetBytes, referenceBytes)
+}
+
+func (r *sourceReferenceResolver) resolveResponseUnchecked(value any, stack map[string]bool, depth int) (map[string]any, error) {
 	object, ok := value.(map[string]any)
 	if !ok {
 		return nil, fmt.Errorf("response must be an object")
@@ -2081,7 +2292,7 @@ func (r *sourceReferenceResolver) resolveResponse(value any, stack map[string]bo
 		return nil, err
 	}
 	if hasReference {
-		resolved, err := r.resolveResponse(target, next, depth+1)
+		resolved, err := r.resolveResponseUnchecked(target, next, depth+1)
 		if err != nil {
 			return nil, err
 		}
@@ -2223,6 +2434,9 @@ func (r *sourceReferenceResolver) resolveContent(value any, stack map[string]boo
 		if !ok {
 			return nil, fmt.Errorf("content media %q must be an object", mediaType)
 		}
+		if _, exists := media["encoding"]; exists && !resolveEncoding {
+			return nil, fmt.Errorf("unsupported encoding on non-request content media %q", mediaType)
+		}
 		resolvedMedia := sourceCloneMap(media)
 		if schema, exists := media["schema"]; exists {
 			resolved, err := r.resolveSchema(schema, stack, depth)
@@ -2238,14 +2452,12 @@ func (r *sourceReferenceResolver) resolveContent(value any, stack map[string]boo
 			}
 			resolvedMedia["examples"] = resolved
 		}
-		if resolveEncoding {
-			if encoding, exists := media["encoding"]; exists {
-				resolved, err := r.resolveEncoding(encoding, stack, depth)
-				if err != nil {
-					return nil, fmt.Errorf("content media %q encoding: %w", mediaType, err)
-				}
-				resolvedMedia["encoding"] = resolved
+		if encoding, exists := media["encoding"]; exists {
+			resolved, err := r.resolveEncoding(encoding, stack, depth)
+			if err != nil {
+				return nil, fmt.Errorf("content media %q encoding: %w", mediaType, err)
 			}
+			resolvedMedia["encoding"] = resolved
 		}
 		out[mediaType] = resolvedMedia
 	}
@@ -2598,11 +2810,23 @@ func (r *sourceReferenceResolver) reserveSchemaValue(value any, objectUsed *int6
 }
 
 func sourceSchemaStructuralBytes(value any, depth int, limits sourceImportLimits) (int64, error) {
+	return sourceStructuralBytes(value, depth, limits.MaxReferenceDepth, "schema depth limit exceeded", limits)
+}
+
+func sourceResponseStructuralBytes(value any, limits sourceImportLimits) (int64, error) {
+	depthLimit := limits.MaxReferenceDepth
+	if depthLimit < defaultSourceImportReferenceDepth {
+		depthLimit = defaultSourceImportReferenceDepth
+	}
+	return sourceStructuralBytes(value, 0, depthLimit, "response structural depth limit exceeded", limits)
+}
+
+func sourceStructuralBytes(value any, depth, depthLimit int, depthError string, limits sourceImportLimits) (int64, error) {
 	nodes := 0
 	var walk func(any, int) (int64, error)
 	walk = func(current any, currentDepth int) (int64, error) {
-		if currentDepth > limits.MaxReferenceDepth {
-			return 0, fmt.Errorf("schema depth limit exceeded")
+		if currentDepth > depthLimit {
+			return 0, fmt.Errorf("%s", depthError)
 		}
 		nodes++
 		if nodes > sourceSchemaNodeLimit(limits) {
@@ -2634,8 +2858,8 @@ func sourceSchemaStructuralBytes(value any, depth int, limits sourceImportLimits
 			return int64(len(strconv.FormatUint(typed, 10))), nil
 		case map[string]any:
 			used := int64(2)
-			for _, key := range sortedSourceMapKeys(typed) {
-				child, err := walk(typed[key], currentDepth+1)
+			for key, value := range typed {
+				child, err := walk(value, currentDepth+1)
 				if err != nil {
 					return 0, err
 				}
@@ -2722,6 +2946,10 @@ func (r *sourceReferenceResolver) resolveCallback(value any, stack map[string]bo
 }
 
 func (r *sourceReferenceResolver) referenceTarget(object map[string]any, kind sourceReferenceKind, stack map[string]bool, depth int) (any, map[string]any, map[string]bool, bool, error) {
+	return r.referenceTargetWithCount(object, kind, stack, depth, true)
+}
+
+func (r *sourceReferenceResolver) referenceTargetWithCount(object map[string]any, kind sourceReferenceKind, stack map[string]bool, depth int, countReference bool) (any, map[string]any, map[string]bool, bool, error) {
 	rawRef, hasReference := object["$ref"]
 	if !hasReference {
 		return nil, object, stack, false, nil
@@ -2738,9 +2966,11 @@ func (r *sourceReferenceResolver) referenceTarget(object map[string]any, kind so
 	if !ok || (ref != "#" && !strings.HasPrefix(ref, "#/")) {
 		return nil, nil, nil, false, fmt.Errorf("external reference %q is unsupported", rawRef)
 	}
-	r.references++
-	if r.references > r.limits.MaxReferences {
-		return nil, nil, nil, false, fmt.Errorf("reference count limit exceeded")
+	if countReference {
+		r.references++
+		if r.references > r.limits.MaxReferences {
+			return nil, nil, nil, false, fmt.Errorf("reference count limit exceeded")
+		}
 	}
 	if stack != nil && stack[ref] {
 		return nil, nil, nil, false, fmt.Errorf("reference cycle at %q", ref)
@@ -4209,6 +4439,10 @@ func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, res
 		responseLimit = remainingDescriptorBytes
 	}
 	responseBudget := sourceImportBudget{limit: responseLimit}
+	responseExpansion := sourceResponseExpansionBudget{limit: responseLimit}
+	previousScope := resolver.responseScope
+	resolver.responseScope = &responseExpansion
+	defer func() { resolver.responseScope = previousScope }()
 	mediaSet := map[string]bool{}
 	var swaggerProduces []string
 	if form.isSwagger2() {
@@ -4225,6 +4459,9 @@ func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, res
 		}
 	}
 	for _, status := range sortedSourceMapKeys(rawResponses) {
+		if strings.HasPrefix(status, "x-") {
+			continue
+		}
 		resolved, err := resolver.resolveResponse(rawResponses[status], nil, 0)
 		if err != nil {
 			return nil, nil, err
