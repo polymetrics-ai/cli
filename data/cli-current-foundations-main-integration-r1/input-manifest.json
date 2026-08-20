@@ -31,7 +31,7 @@
       "sha": "19a32bd0bc08faf217be8f45b39841b5ff589a92",
       "remote_ref_verified": true,
       "qualification": "firstmate-issued exact published head; remote ref re-read",
-      "state": "eligible_unmerged"
+      "state": "merged_preserved_history"
     },
     {
       "issue": 4307,
@@ -40,7 +40,7 @@
       "sha": "3c768cade6703426afd2272fbc01bfd60583e04f",
       "remote_ref_verified": true,
       "qualification": "firstmate-issued exact published head; remote ref re-read",
-      "state": "eligible_unmerged"
+      "state": "merged_preserved_history"
     },
     {
       "issue": 4302,
@@ -54,7 +54,7 @@
         "checks": ["verify", "linux-amd64 native-build", "darwin-arm64 native-build"],
         "live_assertions": ["HEAD 200", "HEAD 404", "exact text export", "exact binary export", "missing-path error with no artifact"]
       },
-      "state": "eligible_unmerged"
+      "state": "eligible_conflict_resolution_red"
     },
     {
       "issue": 4305,

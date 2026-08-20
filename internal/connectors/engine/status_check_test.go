@@ -68,6 +68,39 @@ func TestOperationStatusCheckUsesDeclaredHEADWithoutJSONBody(t *testing.T) {
 	}
 }
 
+func TestOperationStatusCheckPreservesTerminalNon2xxMetadataAndDeclaredHeaders(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if r.Method != http.MethodHead {
+			t.Fatalf("method = %s, want HEAD", r.Method)
+		}
+		w.Header().Set("X-Provider-Status", "not-found")
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	t.Cleanup(srv.Close)
+
+	bundle := statusCheckBundle(srv.URL, http.MethodHead)
+	bundle.Operations[0].REST.Response = &OperationResponseSpec{
+		SuccessStatuses: []string{"200-299"},
+		Headers: []OperationResponseHeaderSpec{{
+			Name:     "X-Provider-Status",
+			MaxBytes: 32,
+		}},
+	}
+
+	result, err := New(bundle, nil).OperationStatusCheck(context.Background(), connectors.OperationStatusCheckRequest{Operation: "acme.tags.status"})
+	if err != nil {
+		t.Fatalf("OperationStatusCheck: %v", err)
+	}
+	if result.Status != http.StatusNotFound || result.BodyBytes != 0 || requests != 1 {
+		t.Fatalf("result = %+v, requests = %d; want final 404 metadata", result, requests)
+	}
+	if got := result.Headers["X-Provider-Status"].Values; len(got) != 1 || got[0] != "not-found" {
+		t.Fatalf("X-Provider-Status = %#v, want final declared 404 header", got)
+	}
+}
+
 func TestOperationStatusCheckRejectsNonHEADBeforeIO(t *testing.T) {
 	requests := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
