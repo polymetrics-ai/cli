@@ -1488,6 +1488,41 @@ func TestStructuredRESTBodyDeclarationSatisfiabilityAndStaticCoverage(t *testing
 	if err := ValidateOperationDirectWriteMappings(merge, nil, []string{"payload.fixed"}); err == nil || !strings.Contains(err.Error(), "fixed rest.body") {
 		t.Fatalf("static overlap error = %v, want declared fixed-field rejection", err)
 	}
+
+	arrayMerge := base
+	arrayMergeREST := *base.REST
+	arrayMergeREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["targets"],
+		"properties":{"targets":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"object","additionalProperties":false,"required":["fixed","name"],"properties":{"fixed":{"type":"string"},"name":{"type":"string"}}}}}
+	}`)
+	arrayMergeREST.Body = map[string]any{"targets": []any{map[string]any{"fixed": "provider"}}}
+	arrayMerge.REST = &arrayMergeREST
+	if err := ValidateOperationDirectWriteMappings(arrayMerge, nil, []string{"targets.0.name"}); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteMappings array nested value: %v", err)
+	}
+	arrayBundle := structuredRESTBodyBundle("https://example.invalid")
+	arrayBundle.Operations[0] = arrayMerge
+	arrayDynamic, err := MaterializeOperationDirectWriteBodyMappings(arrayBundle, arrayMerge.ID, map[string]any{"targets.0.name": "caller"})
+	if err != nil {
+		t.Fatalf("MaterializeOperationDirectWriteBodyMappings array nested value: %v", err)
+	}
+	arrayMaterialized, err := materializeStructuredRESTBody(arrayMerge, arrayMerge.REST.Body, arrayDynamic)
+	if err != nil {
+		t.Fatalf("materializeStructuredRESTBody array nested merge: %v", err)
+	}
+	targets, ok := arrayMaterialized["targets"].([]any)
+	if !ok || len(targets) != 1 {
+		t.Fatalf("array nested static merge targets = %#v, want one target", arrayMaterialized)
+	}
+	target, ok := targets[0].(map[string]any)
+	if !ok || target["fixed"] != "provider" || target["name"] != "caller" {
+		t.Fatalf("array nested static merge = %#v, want fixed provider data and caller field", arrayMaterialized)
+	}
+	if err := ValidateOperationDirectWriteMappings(arrayMerge, nil, []string{"targets.0.fixed"}); err == nil || !strings.Contains(err.Error(), "fixed rest.body") {
+		t.Fatalf("array static overlap error = %v, want declared fixed-field rejection", err)
+	}
 }
 
 func TestStructuredRESTBodyRejectsUnreachableNodeMinimumAndFloatByteDrift(t *testing.T) {
@@ -1551,6 +1586,49 @@ func TestStructuredRESTBodyRejectsUnreachableNodeMinimumAndFloatByteDrift(t *tes
 	byteLimited.REST = &byteLimitedREST
 	if err := ValidateOperationDirectWriteMappings(byteLimited, nil, nil); err == nil || !strings.Contains(err.Error(), "minimum valid body requires") || !strings.Contains(err.Error(), "bytes") {
 		t.Fatalf("byte-minimum error = %v, want unreachable declaration rejection", err)
+	}
+
+	patternLimited := base
+	patternLimitedREST := *base.REST
+	patternLimitedREST.MaxBytes = 512
+	patternLimitedREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["code"],
+		"properties":{"code":{"type":"string","pattern":"^.{1000}$"}}
+	}`)
+	patternLimited.REST = &patternLimitedREST
+	if err := ValidateOperationDirectWriteMappings(patternLimited, nil, nil); err == nil || !strings.Contains(err.Error(), "minimum valid body requires") || !strings.Contains(err.Error(), "bytes") {
+		t.Fatalf("pattern byte-minimum error = %v, want unreachable declaration rejection", err)
+	}
+
+	escapedPatternLimited := base
+	escapedPatternLimitedREST := *base.REST
+	escapedPatternLimitedREST.MaxBytes = 1024
+	escapedPatternLimitedREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["code"],
+		"properties":{"code":{"type":"string","pattern":"^(?:\\x00){200}$"}}
+	}`)
+	escapedPatternLimited.REST = &escapedPatternLimitedREST
+	if err := ValidateOperationDirectWriteMappings(escapedPatternLimited, nil, nil); err == nil || !strings.Contains(err.Error(), "minimum valid body requires") || !strings.Contains(err.Error(), "bytes") {
+		t.Fatalf("escaped pattern byte-minimum error = %v, want unreachable declaration rejection", err)
+	}
+
+	completionLimited := base
+	completionLimitedREST := *base.REST
+	completionLimitedREST.MaxBytes = 1024
+	completionLimitedREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["fixed","name"],
+		"properties":{"fixed":{"type":"string"},"name":{"type":"string","enum":["x"]}}
+	}`)
+	completionLimitedREST.Body = map[string]any{"fixed": strings.Repeat("x", 1003)}
+	completionLimited.REST = &completionLimitedREST
+	if err := ValidateOperationDirectWriteMappings(completionLimited, nil, nil); err == nil || !strings.Contains(err.Error(), "completion") || !strings.Contains(err.Error(), "bytes") {
+		t.Fatalf("merged static completion error = %v, want unreachable declaration rejection", err)
 	}
 
 	staticLimited := base

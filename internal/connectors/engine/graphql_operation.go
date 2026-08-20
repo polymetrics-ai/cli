@@ -467,7 +467,7 @@ func requireClosedBoundedGraphQLVariables(operation string, node map[string]any,
 	return nil
 }
 
-func sortedMapKeys(values map[string]any) []string {
+func sortedMapKeys[V any](values map[string]V) []string {
 	keys := make([]string, 0, len(values))
 	for key := range values {
 		keys = append(keys, key)

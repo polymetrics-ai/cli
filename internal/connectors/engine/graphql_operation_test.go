@@ -688,6 +688,101 @@ func TestOperationDirectWriteFailsClosedOnGraphQLErrors(t *testing.T) {
 	}
 }
 
+func TestOperationDirectWriteRetainsGraphQLApplicationErrorResponse(t *testing.T) {
+	const secret = "graphql-provider-canary"
+	const responseBody = `{"data":{"deleteWidget":null},"errors":[{"message":"` + secret + `"}]}`
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("X-Provider-Trace", "trace-123")
+		_, _ = w.Write([]byte(responseBody))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+	bundle.Operations[0].SecretSensitive = true
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want GraphQL application error")
+	}
+	if strings.Contains(err.Error(), secret) {
+		t.Fatalf("GraphQL application error leaked provider secret: %v", err)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatalf("GraphQL application error cause = %T, want provider response error", err)
+	}
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "trace-123" || providerErr.Body != responseBody {
+		t.Fatal("GraphQL application provider response did not retain exact status, headers, and body")
+	}
+	if calls != 1 {
+		t.Fatalf("GraphQL application error calls = %d, want exactly one approved request", calls)
+	}
+}
+
+func TestOperationDirectWriteBindsGraphQLQueryAuth(t *testing.T) {
+	const token = "graphql-query-key"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if got := r.URL.Query().Get("api_key"); got != token {
+			t.Error("api_key did not match the preview-bound value")
+		}
+		_, _ = w.Write([]byte(`{"data":{"deleteWidget":{"deletedId":"widget-1"}}}`))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "{{ secrets.api_key }}"}}
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+			Secrets:             map[string]string{"api_key": token},
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	if got := prepared.query.Get("api_key"); got != token {
+		t.Fatal("prepared api_key did not retain the exact bound value")
+	}
+	if got := prepared.prepared.Requests[0].Query; got != "api_key="+token {
+		t.Fatal("prepared query did not retain the exact bound value")
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("GraphQL query-auth calls = %d, want exactly one approved request", calls)
+	}
+}
+
 func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
