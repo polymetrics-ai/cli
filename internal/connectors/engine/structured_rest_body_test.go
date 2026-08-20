@@ -509,6 +509,22 @@ func TestOperationDirectWriteCredentialBoundHTTPErrorHidesEchoAndKeepsProviderRe
 			hidesEcho: true,
 		},
 		{
+			name: "declared secret base URL",
+			configure: func(bundle *Bundle) {
+				bundle.HTTP.URL += "/{{ secrets.tenant }}"
+			},
+			configureInput: func(request *connectors.OperationDirectWriteRequest) {
+				request.Config.Secrets = map[string]string{"tenant": credential}
+			},
+			assertRequest: func(t *testing.T, request *http.Request) {
+				t.Helper()
+				if got := request.URL.Path; got != "/"+credential+"/workspaces/workspace-1/widgets" {
+					t.Fatalf("path = %q, want declared base URL segment", got)
+				}
+			},
+			hidesEcho: true,
+		},
+		{
 			name: "API key query authentication",
 			configure: func(bundle *Bundle) {
 				rest := *bundle.Operations[0].REST

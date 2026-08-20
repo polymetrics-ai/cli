@@ -1687,7 +1687,32 @@ func operationDirectWriteHasSensitiveHTTPBinding(cfg connectors.RuntimeConfig, h
 	if found && !strings.EqualFold(strings.TrimSpace(spec.Mode), "none") {
 		return true, nil
 	}
+	baseURLReferencesSecrets, err := operationDirectWriteBaseURLTemplateReferencesSecrets(httpBase.URL)
+	if err != nil {
+		return false, err
+	}
+	if baseURLReferencesSecrets {
+		return true, nil
+	}
 	return operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers)
+}
+
+func operationDirectWriteBaseURLTemplateReferencesSecrets(template string) (bool, error) {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return false, err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		ref := strings.TrimSpace(strings.Split(token.expression, "|")[0])
+		segments := strings.Split(ref, ".")
+		if len(segments) == 2 && segments[0] == "secrets" {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers map[string]string) (bool, error) {

@@ -1173,6 +1173,56 @@ func TestOperationDirectWriteCredentialBoundGraphQLApplicationErrorHidesEchoAndK
 	}
 }
 
+func TestOperationDirectWriteBaseURLSecretGraphQLApplicationErrorHidesEchoAndKeepsProviderResponse(t *testing.T) {
+	const baseURLSecret = "graphql-base-url-placeholder"
+	const responseBody = `{"data":{"deleteWidget":null},"errors":[{"message":"graphql-base-url-placeholder"}]}`
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if got := r.URL.Path; got != "/"+baseURLSecret+"/graphql" {
+			t.Fatalf("path = %q, want declared base URL segment", got)
+		}
+		w.Header().Set("X-Provider-Trace", "base-url-secret")
+		_, _ = w.Write([]byte(responseBody))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL+"/{{ secrets.tenant }}", "graphql_mutation")
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+			Secrets:             map[string]string{"tenant": baseURLSecret},
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want GraphQL application error")
+	}
+	if strings.Contains(err.Error(), baseURLSecret) || !strings.Contains(err.Error(), "provider returned application errors") {
+		t.Fatalf("base-URL-secret GraphQL application error = %v, want generic taint-safe diagnostic", err)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatal("GraphQL application error did not retain a provider response cause")
+	}
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "base-url-secret" || providerErr.Body != responseBody {
+		t.Fatal("GraphQL application provider response did not retain exact status, headers, and body")
+	}
+	if calls != 1 {
+		t.Fatalf("calls = %d, want one approved request", calls)
+	}
+}
+
 func TestOperationDirectWriteRetainsGraphQLResponseOnRemarshalFailure(t *testing.T) {
 	providerValue := strings.Repeat("<", 80)
 	responseBody := `{"data":{"deleteWidget":{"value":"` + providerValue + `"}}}`
