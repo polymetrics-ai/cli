@@ -3,12 +3,14 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *testing.T) {
@@ -357,6 +359,69 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 			}
 			t.Logf("direct-write policy=%q status=%d response=%s", tt.policy, result.Status, encoded)
 		})
+	}
+}
+
+func TestOperationDirectWriteRetainsRESTDecodeFailureResponse(t *testing.T) {
+	const rawResponse = `{"result":"provider-response-canary"`
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("X-Provider-Trace", "trace-123")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(rawResponse))
+	}))
+	t.Cleanup(srv.Close)
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:            "acme.widgets.create",
+			Kind:          "rest_write",
+			Summary:       "Create one widget",
+			Risk:          "medium",
+			Approval:      "none",
+			OutputPolicy:  directWritePolicyJSON,
+			MutationClass: "create",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &SurfaceOperation{Model: "write"}}}},
+	}
+	req := connectors.OperationDirectWriteRequest{Operation: "acme.widgets.create", Body: map[string]any{"name": "widget"}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want decode failure")
+	}
+	if strings.Contains(err.Error(), "provider-response-canary") {
+		t.Fatalf("OperationDirectWrite printable error exposed provider response: %v", err)
+	}
+	var providerResponse *connsdk.HTTPError
+	if !errors.As(err, &providerResponse) {
+		t.Fatalf("OperationDirectWrite error = %v, want retained provider response cause", err)
+	}
+	if providerResponse.Status != http.StatusOK {
+		t.Fatalf("provider response status = %d, want %d", providerResponse.Status, http.StatusOK)
+	}
+	if providerResponse.Header.Get("X-Provider-Trace") != "trace-123" {
+		t.Fatalf("provider response headers = %#v, want provider trace", providerResponse.Header)
+	}
+	if providerResponse.Body != rawResponse {
+		t.Fatalf("provider response body = %q, want %q", providerResponse.Body, rawResponse)
+	}
+	if calls != 1 {
+		t.Fatalf("provider calls = %d, want 1", calls)
 	}
 }
 

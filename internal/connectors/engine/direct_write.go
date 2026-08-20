@@ -210,7 +210,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		body, err := operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes)
 		if err != nil {
-			return err
+			return operationDirectWritePostResponseError(prepared.op.ID, err, response, prepared.identity)
 		}
 		result = connectors.OperationDirectWriteResult{
 			Connector: b.Name,
@@ -279,6 +279,14 @@ func operationDirectWriteProviderResponseCause(response *connsdk.Response, ident
 		return nil
 	}
 	return &connsdk.HTTPError{Status: response.Status, URL: identity, Header: response.Header.Clone(), Body: string(response.Body)}
+}
+
+func operationDirectWritePostResponseError(operation string, cause error, response *connsdk.Response, identity string) error {
+	return &operationDirectWriteError{
+		operation: operation,
+		message:   "provider response could not be decoded according to the declared output policy",
+		cause:     errors.Join(cause, operationDirectWriteProviderResponseCause(response, identity)),
+	}
 }
 
 func cloneOperationDirectWriteHeaders(headers http.Header) map[string][]string {
@@ -758,6 +766,24 @@ func MaterializeOperationDirectWriteBodyMappings(b Bundle, operation string, map
 	if err != nil {
 		return nil, err
 	}
+	body := make(map[string]any, len(mappings))
+	if OperationDirectWriteHasStructuredRESTBody(op) {
+		compiled, err := compileStructuredRESTBodySchema(op)
+		if err != nil {
+			return nil, err
+		}
+		staticBody, err := canonicalizeStructuredRESTBodyFragment(compiled, op, op.REST.Body, "rest.body")
+		if err != nil {
+			return nil, err
+		}
+		if len(staticBody) != 0 {
+			shape, ok := operationDirectWriteStaticBodyShape(staticBody).(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("operation %q rest.body shape must be an object", op.ID)
+			}
+			body = shape
+		}
+	}
 	resolved := make([]operationDirectWriteBodyPath, 0, len(mappings))
 	for _, path := range sortedMapKeys(mappings) {
 		candidate, err := resolveOperationDirectWriteBodySchemaPath(root, path)
@@ -774,7 +800,6 @@ func MaterializeOperationDirectWriteBodyMappings(b Bundle, operation string, map
 	sort.SliceStable(resolved, func(left, right int) bool {
 		return operationDirectWriteBodyPathLess(resolved[left], resolved[right])
 	})
-	body := make(map[string]any, len(resolved))
 	for _, candidate := range resolved {
 		if _, err := setOperationDirectWriteBodyPathValue(body, candidate.steps, mappings[candidate.raw], candidate.raw); err != nil {
 			return nil, err
@@ -825,6 +850,9 @@ func operationDirectWriteBodyPathValue(body map[string]any, steps []operationDir
 		}
 		current = next
 	}
+	if isOperationDirectWriteStaticBodyPlaceholder(current) {
+		return nil, false
+	}
 	return current, true
 }
 
@@ -837,7 +865,7 @@ func operationDirectWriteLiteralBodyValue(body map[string]any, path string) (any
 		switch value := current.(type) {
 		case map[string]any:
 			next, ok := value[part]
-			if !ok || next == nil {
+			if !ok || next == nil || isOperationDirectWriteStaticBodyPlaceholder(next) {
 				return nil, false
 			}
 			current = next
@@ -851,12 +879,18 @@ func operationDirectWriteLiteralBodyValue(body map[string]any, path string) (any
 			return nil, false
 		}
 	}
+	if isOperationDirectWriteStaticBodyPlaceholder(current) {
+		return nil, false
+	}
 	return current, true
 }
 
 func setOperationDirectWriteBodyPathValue(current any, steps []operationDirectWriteBodyPathStep, value any, path string) (any, error) {
 	if len(steps) == 0 {
 		return value, nil
+	}
+	if isOperationDirectWriteStaticBodyPlaceholder(current) {
+		current = operationDirectWriteBodyPathContainer(steps[0])
 	}
 	step := steps[0]
 	if step.array {
@@ -875,7 +909,7 @@ func setOperationDirectWriteBodyPathValue(current any, steps []operationDirectWr
 			return items, nil
 		}
 		child := items[step.index]
-		if child == nil {
+		if child == nil || isOperationDirectWriteStaticBodyPlaceholder(child) {
 			child = operationDirectWriteBodyPathContainer(steps[1])
 		}
 		updated, err := setOperationDirectWriteBodyPathValue(child, steps[1:], value, path)
@@ -894,7 +928,7 @@ func setOperationDirectWriteBodyPathValue(current any, steps []operationDirectWr
 		return object, nil
 	}
 	child, ok := object[step.key]
-	if !ok {
+	if !ok || isOperationDirectWriteStaticBodyPlaceholder(child) {
 		child = operationDirectWriteBodyPathContainer(steps[1])
 	}
 	updated, err := setOperationDirectWriteBodyPathValue(child, steps[1:], value, path)

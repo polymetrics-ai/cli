@@ -1523,6 +1523,43 @@ func TestStructuredRESTBodyDeclarationSatisfiabilityAndStaticCoverage(t *testing
 	if err := ValidateOperationDirectWriteMappings(arrayMerge, nil, []string{"targets.0.fixed"}); err == nil || !strings.Contains(err.Error(), "fixed rest.body") {
 		t.Fatalf("array static overlap error = %v, want declared fixed-field rejection", err)
 	}
+
+	arrayPrefix := base
+	arrayPrefixREST := *base.REST
+	arrayPrefixREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["targets"],
+		"properties":{"targets":{"type":"array","minItems":2,"maxItems":2,"prefixItems":[
+			{"type":"object","additionalProperties":false,"required":["fixed"],"properties":{"fixed":{"type":"string"}}},
+			{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}
+		]}}
+	}`)
+	arrayPrefixREST.Body = map[string]any{"targets": []any{map[string]any{"fixed": "provider"}}}
+	arrayPrefix.REST = &arrayPrefixREST
+	if err := ValidateOperationDirectWriteMappings(arrayPrefix, nil, []string{"targets.1.name"}); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteMappings static array prefix: %v", err)
+	}
+	arrayPrefixBundle := structuredRESTBodyBundle("https://example.invalid")
+	arrayPrefixBundle.Operations[0] = arrayPrefix
+	arrayPrefixDynamic, err := MaterializeOperationDirectWriteBodyMappings(arrayPrefixBundle, arrayPrefix.ID, map[string]any{"targets.1.name": "caller"})
+	if err != nil {
+		t.Fatalf("MaterializeOperationDirectWriteBodyMappings static array prefix: %v", err)
+	}
+	arrayPrefixMaterialized, err := materializeStructuredRESTBody(arrayPrefix, arrayPrefix.REST.Body, arrayPrefixDynamic)
+	if err != nil {
+		t.Fatalf("materializeStructuredRESTBody static array prefix: %v", err)
+	}
+	arrayPrefixTargets, ok := arrayPrefixMaterialized["targets"].([]any)
+	if !ok || len(arrayPrefixTargets) != 2 {
+		t.Fatalf("static array prefix targets = %#v, want two targets", arrayPrefixMaterialized)
+	}
+	if first, ok := arrayPrefixTargets[0].(map[string]any); !ok || first["fixed"] != "provider" {
+		t.Fatalf("static array prefix first target = %#v, want fixed provider value", arrayPrefixTargets[0])
+	}
+	if second, ok := arrayPrefixTargets[1].(map[string]any); !ok || second["name"] != "caller" {
+		t.Fatalf("static array prefix second target = %#v, want caller value", arrayPrefixTargets[1])
+	}
 }
 
 func TestStructuredRESTBodyRejectsUnreachableNodeMinimumAndFloatByteDrift(t *testing.T) {
@@ -1614,6 +1651,45 @@ func TestStructuredRESTBodyRejectsUnreachableNodeMinimumAndFloatByteDrift(t *tes
 	escapedPatternLimited.REST = &escapedPatternLimitedREST
 	if err := ValidateOperationDirectWriteMappings(escapedPatternLimited, nil, nil); err == nil || !strings.Contains(err.Error(), "minimum valid body requires") || !strings.Contains(err.Error(), "bytes") {
 		t.Fatalf("escaped pattern byte-minimum error = %v, want unreachable declaration rejection", err)
+	}
+
+	wordBoundary := base
+	wordBoundaryREST := *base.REST
+	wordBoundaryREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["code"],
+		"properties":{"code":{"type":"string","pattern":"^\\b$"}}
+	}`)
+	wordBoundary.REST = &wordBoundaryREST
+	if err := ValidateOperationDirectWriteMappings(wordBoundary, nil, nil); err == nil || !strings.Contains(err.Error(), "schema-valid string witness") {
+		t.Fatalf("word-boundary satisfiability error = %v, want declaration rejection", err)
+	}
+
+	conflictingString := base
+	conflictingStringREST := *base.REST
+	conflictingStringREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["endpoint"],
+		"properties":{"endpoint":{"type":"string","pattern":"^x$","format":"uri"}}
+	}`)
+	conflictingString.REST = &conflictingStringREST
+	if err := ValidateOperationDirectWriteMappings(conflictingString, nil, nil); err == nil || !strings.Contains(err.Error(), "schema-valid string witness") {
+		t.Fatalf("pattern-format satisfiability error = %v, want declaration rejection", err)
+	}
+
+	compatibleString := base
+	compatibleStringREST := *base.REST
+	compatibleStringREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["endpoint"],
+		"properties":{"endpoint":{"type":"string","pattern":"^x://a$","format":"uri"}}
+	}`)
+	compatibleString.REST = &compatibleStringREST
+	if err := ValidateOperationDirectWriteMappings(compatibleString, nil, nil); err != nil {
+		t.Fatalf("compatible pattern-format declaration: %v", err)
 	}
 
 	completionLimited := base
