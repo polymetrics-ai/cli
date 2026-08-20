@@ -577,6 +577,14 @@ func validateOperationDirectWriteStaticBodyMapping(staticBody map[string]any, pa
 			if !ok {
 				return fmt.Errorf("does not match its fixed rest.body structure")
 			}
+			if step.index > len(values) {
+				return fmt.Errorf("uses sparse array index %d after its fixed rest.body prefix", step.index)
+			}
+			for prefix := 0; prefix < step.index && prefix < len(values); prefix++ {
+				if _, ok := operationDirectWriteStaticBodyScaffold(values[prefix]); !ok {
+					return fmt.Errorf("cannot follow fixed scalar rest.body array item %d", prefix)
+				}
+			}
 			if step.index >= len(values) {
 				return nil
 			}
@@ -593,6 +601,10 @@ func validateOperationDirectWriteStaticBodyMapping(staticBody map[string]any, pa
 			return nil
 		}
 		if index == len(path.steps)-1 {
+			object, array := operationDirectWriteBodyNodeKinds(path.node)
+			if object != array && (object || array) {
+				return nil
+			}
 			return fmt.Errorf("overlaps a fixed rest.body value")
 		}
 		current = next
@@ -776,12 +788,13 @@ func MaterializeOperationDirectWriteBodyMappings(b Bundle, operation string, map
 		if err != nil {
 			return nil, err
 		}
-		if len(staticBody) != 0 {
-			shape, ok := operationDirectWriteStaticBodyShape(staticBody).(map[string]any)
-			if !ok {
+		if len(staticBody) != 0 && len(mappings) != 0 {
+			shape, ok := operationDirectWriteStaticBodyScaffold(staticBody)
+			shapeMap, okMap := shape.(map[string]any)
+			if !ok || !okMap {
 				return nil, fmt.Errorf("operation %q rest.body shape must be an object", op.ID)
 			}
-			body = shape
+			body = shapeMap
 		}
 	}
 	resolved := make([]operationDirectWriteBodyPath, 0, len(mappings))
@@ -850,9 +863,6 @@ func operationDirectWriteBodyPathValue(body map[string]any, steps []operationDir
 		}
 		current = next
 	}
-	if isOperationDirectWriteStaticBodyPlaceholder(current) {
-		return nil, false
-	}
 	return current, true
 }
 
@@ -865,7 +875,7 @@ func operationDirectWriteLiteralBodyValue(body map[string]any, path string) (any
 		switch value := current.(type) {
 		case map[string]any:
 			next, ok := value[part]
-			if !ok || next == nil || isOperationDirectWriteStaticBodyPlaceholder(next) {
+			if !ok || next == nil {
 				return nil, false
 			}
 			current = next
@@ -879,18 +889,12 @@ func operationDirectWriteLiteralBodyValue(body map[string]any, path string) (any
 			return nil, false
 		}
 	}
-	if isOperationDirectWriteStaticBodyPlaceholder(current) {
-		return nil, false
-	}
 	return current, true
 }
 
 func setOperationDirectWriteBodyPathValue(current any, steps []operationDirectWriteBodyPathStep, value any, path string) (any, error) {
 	if len(steps) == 0 {
 		return value, nil
-	}
-	if isOperationDirectWriteStaticBodyPlaceholder(current) {
-		current = operationDirectWriteBodyPathContainer(steps[0])
 	}
 	step := steps[0]
 	if step.array {
@@ -909,7 +913,7 @@ func setOperationDirectWriteBodyPathValue(current any, steps []operationDirectWr
 			return items, nil
 		}
 		child := items[step.index]
-		if child == nil || isOperationDirectWriteStaticBodyPlaceholder(child) {
+		if child == nil {
 			child = operationDirectWriteBodyPathContainer(steps[1])
 		}
 		updated, err := setOperationDirectWriteBodyPathValue(child, steps[1:], value, path)
@@ -928,7 +932,7 @@ func setOperationDirectWriteBodyPathValue(current any, steps []operationDirectWr
 		return object, nil
 	}
 	child, ok := object[step.key]
-	if !ok || isOperationDirectWriteStaticBodyPlaceholder(child) {
+	if !ok {
 		child = operationDirectWriteBodyPathContainer(steps[1])
 	}
 	updated, err := setOperationDirectWriteBodyPathValue(child, steps[1:], value, path)
