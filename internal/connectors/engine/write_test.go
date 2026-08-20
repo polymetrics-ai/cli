@@ -1217,8 +1217,8 @@ func TestWriteRetainsOrderedProviderResponsesBeforeTrailingJSONFailure(t *testin
 	})
 	records := []connectors.Record{{"id": "first"}, {"id": "second"}}
 	result, err := Write(context.Background(), bundle, approvedWriteRequest(t, bundle, "update_widget", records, nil), records, nil)
-	if err == nil || !strings.Contains(err.Error(), "trailing") {
-		t.Fatalf("Write() error = %v, want trailing JSON failure", err)
+	if err == nil {
+		t.Fatal("Write() error = nil, want trailing JSON failure")
 	}
 	if calls != 2 || result.RecordsWritten != 1 || result.RecordsFailed != 1 || len(result.ProviderResponses) != 2 {
 		t.Fatalf("Write() result = %#v calls=%d, want first success and two correlated responses", result, calls)
@@ -1228,6 +1228,111 @@ func TestWriteRetainsOrderedProviderResponsesBeforeTrailingJSONFailure(t *testin
 	}
 	if second := result.ProviderResponses[1]; second.RecordIndex != 1 || second.BodyEncoding != "text" || second.Body != `{"provider_id":"second"} trailing` {
 		t.Fatalf("second provider response = %#v, want complete raw trailing response", second)
+	}
+}
+
+func TestWriteRequiresOneJSONValueForDeclaredResponses(t *testing.T) {
+	for _, testCase := range []struct {
+		name         string
+		status       int
+		contentType  string
+		response     []byte
+		wantErr      bool
+		wantBody     any
+		wantEncoding string
+	}{
+		{
+			name:         "empty declared JSON",
+			status:       http.StatusOK,
+			contentType:  "application/json",
+			wantErr:      true,
+			wantBody:     "",
+			wantEncoding: "text",
+		},
+		{
+			name:         "whitespace declared JSON",
+			status:       http.StatusOK,
+			contentType:  "application/json",
+			response:     []byte(" \n\t "),
+			wantErr:      true,
+			wantBody:     " \n\t ",
+			wantEncoding: "text",
+		},
+		{
+			name:         "one JSON value with trailing whitespace",
+			status:       http.StatusOK,
+			contentType:  "application/json; charset=utf-8",
+			response:     []byte("{\"provider_id\":\"one\"}\n\t"),
+			wantBody:     map[string]any{"provider_id": "one"},
+			wantEncoding: "",
+		},
+		{
+			name:         "multiple declared JSON values",
+			status:       http.StatusOK,
+			contentType:  "application/json",
+			response:     []byte("{\"provider_id\":\"one\"} {\"provider_id\":\"two\"}"),
+			wantErr:      true,
+			wantBody:     "{\"provider_id\":\"one\"} {\"provider_id\":\"two\"}",
+			wantEncoding: "text",
+		},
+		{
+			name:         "non JSON whitespace text",
+			status:       http.StatusOK,
+			contentType:  "text/plain",
+			response:     []byte(" \n\t "),
+			wantBody:     " \n\t ",
+			wantEncoding: "text",
+		},
+		{
+			name:         "bodyless status",
+			status:       http.StatusNoContent,
+			wantBody:     "",
+			wantEncoding: "text",
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Add("X-Provider-Receipt", "receipt-one")
+				w.Header().Add("X-Provider-Receipt", "receipt-two")
+				if testCase.contentType != "" {
+					w.Header().Set("Content-Type", testCase.contentType)
+				}
+				w.WriteHeader(testCase.status)
+				_, _ = w.Write(testCase.response)
+			}))
+			t.Cleanup(srv.Close)
+			bundle := newWriteTestBundle(srv, WriteAction{Kind: "update", Method: http.MethodPost, Path: "/widgets/{{ record.id }}", PathFields: []string{"id"}})
+
+			result, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{{"id": "widget-1"}}, nil)
+			if testCase.wantErr {
+				if err == nil {
+					t.Fatal("Write() error = nil, want declared JSON response failure")
+				}
+				if !strings.Contains(err.Error(), "provider response") {
+					t.Fatalf("Write() error = %v, want provider response failure", err)
+				}
+			} else if err != nil {
+				t.Fatalf("Write(): %v", err)
+			}
+
+			if len(result.ProviderResponses) != 1 {
+				t.Fatalf("provider responses = %#v, want one captured response", result.ProviderResponses)
+			}
+			provider := result.ProviderResponses[0]
+			if provider.RecordIndex != 0 || provider.Status != testCase.status || !reflect.DeepEqual(provider.Headers["X-Provider-Receipt"].Values, []string{"receipt-one", "receipt-two"}) {
+				t.Fatalf("provider response = %#v, want captured status and receipts", provider)
+			}
+			if provider.BodyEncoding != testCase.wantEncoding || !reflect.DeepEqual(provider.Body, testCase.wantBody) {
+				t.Fatalf("provider response body = %#v encoding=%q, want %#v encoding=%q", provider.Body, provider.BodyEncoding, testCase.wantBody, testCase.wantEncoding)
+			}
+			if testCase.wantErr {
+				if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+					t.Fatalf("failed write result = %#v, want one failed record", result)
+				}
+			} else if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+				t.Fatalf("successful write result = %#v, want one written record", result)
+			}
+		})
 	}
 }
 

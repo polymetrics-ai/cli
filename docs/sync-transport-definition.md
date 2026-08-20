@@ -145,15 +145,14 @@ never omitted because they are rare, destructive, paid-tier-specific,
 unfamiliar, or outside a summary list. JSON bodies retain their original
 structure; text and binary bodies retain an explicit encoding.
 
-The sole exception is the existing credential boundary. Credential-bearing
-response headers and a response value equal to or containing a configured
-credential are represented in place as `{ "masked": true }`; the field/header
-name remains present. No route, request body, action selector, or credential is
-accepted from a runtime caller to influence this output. The regular persisted
-reverse-ETL run uses the same `destination_result` contract, and an
-operation-direct-write run applies the same masking to its declared response
-secret fields. Its declared `output_policy` may select a parsing form, but it
-does not suppress a successful ordinary provider response.
+Provider-returned fields, keys, and values are preserved verbatim, even when
+they equal configured credential bytes. System-generated plans, logs, request
+diagnostics, and synthetic errors remain secret-taint-safe. No route, request
+body, action selector, or credential is accepted from a runtime caller to
+influence this output. The regular persisted reverse-ETL run uses the same
+`destination_result` contract, and an operation-direct-write run preserves the
+same provider response facts. Its declared `output_policy` may select a parsing
+form, but it does not suppress a successful ordinary provider response.
 
 At plan time the adapter verifies the declared mode, persisted selected action,
 and source binding, then requires the existing reverse-ETL plan, preview,

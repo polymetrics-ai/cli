@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"bytes"
 	"context"
 	"crypto/rand"
 	"crypto/sha256"
@@ -515,30 +514,17 @@ func writeProviderResponse(response *connsdk.Response, recordIndex int) (connect
 		Status:      response.Status,
 		Headers:     writeProviderHeaders(response.Header),
 	}
-	if len(bytes.TrimSpace(response.Body)) == 0 {
-		result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
-		return result, nil
-	}
 	if !writeProviderResponseDeclaresJSON(response.Header) {
 		result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
 		return result, nil
 	}
-	decoder := json.NewDecoder(bytes.NewReader(response.Body))
-	decoder.UseNumber()
-	if err := decoder.Decode(&result.Body); err == nil {
-		var extra any
-		if err := decoder.Decode(&extra); err == io.EOF {
-			return result, nil
-		} else if err == nil {
-			result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
-			return result, errors.New("provider response contains multiple JSON values")
-		} else {
-			result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
-			return result, errors.New("provider response has trailing data")
-		}
+	body, err := decodeDirectReadBody(response.Body, -1)
+	if err != nil {
+		result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
+		return result, errors.New("provider response is not valid JSON")
 	}
-	result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
-	return result, errors.New("provider response is not valid JSON")
+	result.Body = body
+	return result, nil
 }
 
 func writeProviderRawBody(body []byte) (any, string) {
