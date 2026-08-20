@@ -15,6 +15,8 @@ const (
 	defaultOperationStatusTimeout  = 15 * time.Second
 )
 
+// pmcert:executes rest_status
+//
 // OperationStatusCheck executes exactly one declared HEAD operation and
 // returns status metadata only. This intentionally does not share the JSON
 // direct-read executor: status operations cannot decode or print a body.
@@ -26,12 +28,22 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
+	if _, err := requireOperationSuccessStatusPolicy(op); err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	if _, err := operationRedirectPolicy(op); err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
 	cfg := materializeConfigDefaults(b, req.Config)
 	path, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
 	query, err := directReadQuery(req.Query)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	headers, err := operationRequestHeaders(b, op, req.Headers, req.HeaderValues)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
@@ -45,10 +57,11 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
-	cap := op.REST.MaxBytes
-	if cap == 0 {
-		cap = defaultOperationStatusMaxBytes
+	requester, err = requesterWithOperationHeaders(requester, op, headers)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
 	}
+	cap := op.REST.MaxBytes
 	response, err := requester.DoLimited(requestCtx, http.MethodHead, normalizeDirectReadPathForBaseURL(path, directReadBaseURL(b, cfg)), query, nil, cap)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status %s %s: %w", http.MethodHead, op.REST.Path, err)
@@ -56,7 +69,11 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if len(response.Body) > cap {
 		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status response exceeded metadata cap")
 	}
-	return connectors.OperationStatusCheckResult{Connector: b.Name, Operation: op.ID, Method: http.MethodHead, Path: path, Status: response.Status, BodyBytes: len(response.Body)}, nil
+	responseHeaders, err := operationResponseHeaders(b, op, response.Header)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	return connectors.OperationStatusCheckResult{Connector: b.Name, Operation: op.ID, Method: http.MethodHead, Path: path, Status: response.Status, BodyBytes: len(response.Body), Headers: responseHeaders}, nil
 }
 
 func PreflightOperationStatusCheck(b Bundle, operation, method, path, outputPolicy string) error {
@@ -81,13 +98,19 @@ func operationStatusCheckSpec(b Bundle, operation string) (OperationSpec, error)
 	if op.Kind != "rest_status" || op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodHead || op.OutputPolicy != "status" {
 		return OperationSpec{}, fmt.Errorf("operation %q is not a declared HEAD status operation", operation)
 	}
-	if op.REST.MaxBytes < 0 || op.REST.MaxBytes > defaultOperationStatusMaxBytes {
-		return OperationSpec{}, fmt.Errorf("operation %q status response cap must be between 0 and %d bytes", operation, defaultOperationStatusMaxBytes)
+	if op.REST.MaxBytes <= 0 || op.REST.MaxBytes > defaultOperationStatusMaxBytes {
+		return OperationSpec{}, fmt.Errorf("operation %q status response cap must be between 1 and %d bytes", operation, defaultOperationStatusMaxBytes)
 	}
 	if len(op.REST.Body) != 0 || len(op.REST.BodySchema) != 0 || strings.TrimSpace(op.REST.ContentType) != "" {
 		return OperationSpec{}, fmt.Errorf("operation %q status check must not declare a request body", operation)
 	}
 	if err := requireOperationSurfaceEndpoint(b, http.MethodHead, op.REST.Path); err != nil {
+		return OperationSpec{}, err
+	}
+	if _, err := requireOperationSuccessStatusPolicy(op); err != nil {
+		return OperationSpec{}, err
+	}
+	if _, err := operationRedirectPolicy(op); err != nil {
 		return OperationSpec{}, err
 	}
 	return op, nil

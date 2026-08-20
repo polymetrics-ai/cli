@@ -157,18 +157,33 @@ func TestGitHubDeclaredParityProviderContracts(t *testing.T) {
 	if !ok {
 		t.Fatal("github release download operation is not declared")
 	}
+	if releaseDownload.Binary == nil {
+		t.Fatal("github release download has no binary declaration")
+	}
 	if got := releaseDownload.Binary.Accept; got != "application/octet-stream" {
 		t.Errorf("github release download Accept = %q, want application/octet-stream", got)
 	}
-	if got := strings.Join(releaseDownload.Binary.AllowedHosts, ","); got != "release-assets.githubusercontent.com" {
+	if releaseDownload.Binary.Redirect == nil {
+		t.Fatal("github release download has no redirect declaration")
+	}
+	if releaseDownload.Binary.Redirect.MaxHops != 1 || !releaseDownload.Binary.Redirect.AllowSameOrigin {
+		t.Errorf("github release download redirect = %+v, want one same-origin hop", releaseDownload.Binary.Redirect)
+	}
+	if got := strings.Join(releaseDownload.Binary.Redirect.AllowedHosts, ","); got != "release-assets.githubusercontent.com" {
 		t.Errorf("github release download allowed_hosts = %q, want release-assets.githubusercontent.com", got)
 	}
 	artifactDownload, ok := operations["github.actions_artifacts_artifact_id_archive_format"]
 	if !ok {
 		t.Fatal("github Actions artifact download operation is not declared")
 	}
-	if !artifactDownload.Binary.AllowCrossHost {
-		t.Error("github Actions artifact download must allow GitHub's signed cross-host storage redirect")
+	if artifactDownload.Binary == nil || artifactDownload.Binary.Redirect == nil {
+		t.Fatal("github Actions artifact download must declare a redirect policy")
+	}
+	if artifactDownload.Binary.Redirect.MaxHops != 1 || !artifactDownload.Binary.Redirect.AllowSameOrigin {
+		t.Errorf("github Actions artifact download redirect = %+v, want one same-origin hop", artifactDownload.Binary.Redirect)
+	}
+	if got := strings.Join(artifactDownload.Binary.Redirect.AllowedHosts, ","); got != "pipelines.actions.githubusercontent.com" {
+		t.Errorf("github Actions artifact download allowed_hosts = %q, want pipelines.actions.githubusercontent.com", got)
 	}
 	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
 	for _, action := range bundle.Writes {

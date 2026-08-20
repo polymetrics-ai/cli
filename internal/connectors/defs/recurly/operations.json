@@ -141,7 +141,15 @@
       "binary": {
         "method": "GET",
         "path": "/invoices/{invoice_id}.pdf",
-        "max_bytes": 16777216
+        "max_bytes": 16777216,
+        "content_types": [
+          "application/pdf"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        }
       }
     },
     {
@@ -1821,7 +1829,15 @@
       "binary": {
         "method": "GET",
         "path": "/export_dates",
-        "max_bytes": 16777216
+        "max_bytes": 16777216,
+        "content_types": [
+          "application/json"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        }
       }
     },
     {
@@ -1835,7 +1851,15 @@
       "binary": {
         "method": "GET",
         "path": "/export_dates/{export_date}/export_files",
-        "max_bytes": 16777216
+        "max_bytes": 16777216,
+        "content_types": [
+          "application/json"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        }
       }
     },
     {

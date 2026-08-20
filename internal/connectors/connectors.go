@@ -436,7 +436,12 @@ type OperationDirectReadRequest struct {
 	Config     RuntimeConfig
 	PathParams map[string]string
 	Query      map[string]string
-	Body       map[string]any
+	// Headers contains only values for exact, provider-declared non-auth
+	// header parameters. The operation engine validates the declaration and
+	// values before constructing a runtime or issuing I/O.
+	Headers      map[string]string
+	HeaderValues map[string][]string
+	Body         map[string]any
 	// RawBody is available only to an operation that explicitly declares a
 	// text/plain POST with a root string body schema. It is a pointer so an
 	// absent body is distinct from an intentionally empty one; the operation
@@ -456,6 +461,10 @@ type DirectReadResult struct {
 	Path      string `json:"path"`
 	Status    int    `json:"status"`
 	Body      any    `json:"body"`
+	// Headers contains only response headers explicitly admitted by the exact
+	// operation response contract. A redacted header remains present with its
+	// explicit marker; arbitrary provider metadata is never an output channel.
+	Headers map[string]OperationResponseHeader `json:"headers,omitempty"`
 	// GraphQL is present only for a declared fixed-document GraphQL operation.
 	// It deliberately exposes a small, redacted response summary rather than
 	// a provider error envelope, so a provider cannot turn errors/extensions
@@ -466,6 +475,14 @@ type DirectReadResult struct {
 	// page 2..N, so before this field a truncated collection and a complete
 	// one were indistinguishable at status 200.
 	Page DirectReadPage `json:"page"`
+}
+
+// OperationResponseHeader is one declared provider response header. Values are
+// complete when ordinary; Redacted preserves presence for credential or
+// transport-secret headers without exposing their values.
+type OperationResponseHeader struct {
+	Values   []string `json:"values,omitempty"`
+	Redacted bool     `json:"redacted,omitempty"`
 }
 
 // GraphQLResponseMetadata is the bounded protocol metadata retained for a
@@ -602,10 +619,14 @@ type OperationStructuredJSONVariablePreflighter interface {
 // issued for that exact preview; the engine consumes it at its shared write
 // gate immediately before dispatch.
 type OperationDirectWriteRequest struct {
-	Operation    string
-	Config       RuntimeConfig
-	PathParams   map[string]string
-	Query        map[string]string
+	Operation  string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+	// Headers contains only exact declaration-owned non-auth header values.
+	// They are included in the preview digest that authorizes execution.
+	Headers      map[string]string
+	HeaderValues map[string][]string
 	Body         map[string]any
 	OutputPolicy string
 	// RedactFields remains part of the request contract for compatibility, but
@@ -619,13 +640,14 @@ type OperationDirectWriteRequest struct {
 // fixed-document GraphQL mutation. Body is nil only for an output policy that
 // intentionally discards response content.
 type OperationDirectWriteResult struct {
-	Connector string                   `json:"connector"`
-	Operation string                   `json:"operation"`
-	Method    string                   `json:"method"`
-	Path      string                   `json:"path"`
-	Status    int                      `json:"status"`
-	Body      any                      `json:"body,omitempty"`
-	GraphQL   *GraphQLResponseMetadata `json:"graphql,omitempty"`
+	Connector string                             `json:"connector"`
+	Operation string                             `json:"operation"`
+	Method    string                             `json:"method"`
+	Path      string                             `json:"path"`
+	Status    int                                `json:"status"`
+	Body      any                                `json:"body,omitempty"`
+	Headers   map[string]OperationResponseHeader `json:"headers,omitempty"`
+	GraphQL   *GraphQLResponseMetadata           `json:"graphql,omitempty"`
 }
 
 // OperationDirectWriteMetadata is the no-network operation metadata needed by
@@ -644,7 +666,8 @@ type OperationDirectWriteMetadata struct {
 	// multipart operation it is the closed set of body paths whose local-file
 	// identities must be captured before preview, even when their names do not
 	// follow a file_path convention.
-	PayloadFileFields []string
+	PayloadFileFields   []string
+	PayloadFileMaxBytes map[string]int64
 	// RedactFields is the operation's declared sensitive_policy.redact_fields.
 	// It is the ONLY redaction source for an operation-backed reverse plan:
 	// operation IDs and write-action names are separate namespaces that
@@ -688,6 +711,9 @@ type OperationBinaryDownloadRequest struct {
 	Config     RuntimeConfig
 	PathParams map[string]string
 	Query      map[string]string
+	// Headers contains only exact declaration-owned non-auth header values.
+	Headers      map[string]string
+	HeaderValues map[string][]string
 	// MaxBytes may only lower the operation's declared cap, never raise it.
 	MaxBytes int64
 	DestRoot string
@@ -700,15 +726,23 @@ type OperationBinaryDownloadRequest struct {
 // OperationBinaryDownloadResult describes what landed on disk. Bytes are never
 // inlined: a 25 MiB attachment would become a 34 MiB JSON line.
 type OperationBinaryDownloadResult struct {
-	Connector string `json:"connector"`
-	Operation string `json:"operation"`
-	Record    Record `json:"record"`
+	Connector string                             `json:"connector"`
+	Operation string                             `json:"operation"`
+	Method    string                             `json:"method"`
+	Path      string                             `json:"path"`
+	Record    Record                             `json:"record"`
+	Status    int                                `json:"status"`
+	Headers   map[string]OperationResponseHeader `json:"headers,omitempty"`
 }
 
 // OperationBinaryDownloader is implemented by connectors that can execute a
 // declared binary_download operation.
 type OperationBinaryDownloader interface {
 	OperationBinaryDownload(context.Context, OperationBinaryDownloadRequest) (OperationBinaryDownloadResult, error)
+}
+
+type OperationBinaryDownloadPreflighter interface {
+	PreflightOperationBinaryDownload(operation, method, path string) error
 }
 
 // OperationStatusCheckRequest selects one declared response-less HEAD
@@ -719,17 +753,21 @@ type OperationStatusCheckRequest struct {
 	Config     RuntimeConfig
 	PathParams map[string]string
 	Query      map[string]string
+	// Headers contains only exact declaration-owned non-auth header values.
+	Headers      map[string]string
+	HeaderValues map[string][]string
 }
 
 // OperationStatusCheckResult intentionally exposes only bounded response
 // metadata. HEAD response bodies are never decoded or surfaced.
 type OperationStatusCheckResult struct {
-	Connector string `json:"connector"`
-	Operation string `json:"operation"`
-	Method    string `json:"method"`
-	Path      string `json:"path"`
-	Status    int    `json:"status"`
-	BodyBytes int    `json:"body_bytes"`
+	Connector string                             `json:"connector"`
+	Operation string                             `json:"operation"`
+	Method    string                             `json:"method"`
+	Path      string                             `json:"path"`
+	Status    int                                `json:"status"`
+	BodyBytes int                                `json:"body_bytes"`
+	Headers   map[string]OperationResponseHeader `json:"headers,omitempty"`
 }
 
 type OperationStatusChecker interface {

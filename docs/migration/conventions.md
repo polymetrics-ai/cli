@@ -361,8 +361,8 @@ not a full override by default.
   `internal/connectors/direct_read_page_flags.json` and answered from the connector's own declared
   pagination spec, so no bundle declares them (see AGENTS.md, "Direct Reads Return One Page, And
   Say So"). The command fields that are derivable from `operations.json` — `api_surface`, flag
-  `maps_to`, requiredness for a mapped required REST path parameter, `output_policy`, and
-  `rest.max_bytes` — are not hand-authored:
+  `maps_to`, requiredness for mapped required path or header parameters, repeatability for
+  mapped repeatable headers, `output_policy`, and `rest.max_bytes` — are not hand-authored:
   `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
   "Command Surface Must Stay Executable"). The same command generates the embedded
   `operation_endpoint_ledger.json` runtime projection from `api_surface.json` and
@@ -402,12 +402,20 @@ not a full override by default.
   `internal/connectors/binary_download_flags.json` by runtime help, the generated `MANUAL.md`/
   `SKILL.md`, and the website generator, so one declaration keeps all three documenting the same
   flag surface. `--max-bytes` may only lower the operation's declared `binary.max_bytes`, never
-  raise it.
+  raise it. An executable binary operation must declare non-empty `binary.content_types` (exact
+  media types or bounded media ranges) and `binary.response.success_statuses` (exact 2xx statuses
+  or inclusive 2xx ranges). A redirect is disabled unless `binary.redirect` declares its hop bound
+  plus same-origin permission and/or exact cross-origin hosts.
 - **Operation-only capability contracts stay typed and bounded**: use `rest_status` with
   `intent:"status_check"`, a single HEAD endpoint, and `output_policy:"status"` for a
-  response-less status probe; it cannot be declared as `direct_read`. Use `text_export` only
-  for a declared `binary.accept:"text/csv"` GET with positive `binary.max_bytes`; it writes the
-  same explicit destination manifest as a binary download and never streams text to stdout. A
+  response-less status probe; it cannot be declared as `direct_read`, its `rest.max_bytes` must
+  be between 1 and 1024, and its `rest.response` must declare accepted successful statuses. Use
+  `text_export` only for a declared
+  `binary.accept:"text/csv"` GET with positive `binary.max_bytes`, a non-empty CSV-compatible
+  `binary.content_types` declaration, exact `binary.charset`, declared success statuses, and
+  operation `output_policy:"file_manifest"`; its command leaves `output_policy` unset because it
+  writes the same explicit destination manifest as a binary download and never streams text to
+  stdout. A
   `rest_read.rest.pagination` may override connector-level pagination for one endpoint; its
   `pagination_parameters` are source-imported evidence only, not command flags, and every
   declared query mechanic must match them. For a secret-returning `rest_write`, declare the
@@ -434,8 +442,10 @@ not a full override by default.
 
 ## 2.9 Command parameters and paging are DERIVED — never hand-author them
 
-Two parts of a `direct_read` command's surface are generated from declarations
-you already own. Hand-writing either one is a bug, not a shortcut.
+Paging and operation parameters are generated from declarations you already
+own. Paging applies only to `direct_read`; the parameter-import contract applies
+to registered REST and binary operation kinds. Hand-writing derived surface is a
+bug, not a shortcut.
 
 ### Paging
 
@@ -466,13 +476,60 @@ go run ./cmd/connectorgen params-import <connector> --artifact <spec.json>
 go run ./cmd/connectorgen surface-sync internal/connectors/defs
 ```
 
-`params-import` writes the accepted parameter set into `operations.json` under
-`rest.parameters` (name, location, type, requiredness, enum values, summary). When an operation
-declares `rest.pagination`, it additionally writes the pager's source-only query set under
-`rest.pagination_parameters`; these values remain excluded from generated flags.
+`params-import` writes the accepted parameter set into `operations.json` under the registered
+operation block's `parameters` field (`rest.parameters` or `binary.parameters`; name, location,
+type, requiredness, enum values, summary). When an operation declares `rest.pagination`, it
+additionally writes the pager's source-only query set under `rest.pagination_parameters`; these
+values remain excluded from generated flags.
 `surface-sync` then derives the command flags from it. The split exists so CI
 stays hermetic: `surface-sync --check` verifies drift with no artifact and no
 network.
+
+### Declaration-owned request headers and response metadata
+
+A fixed REST or binary operation may declare a non-auth request parameter with
+`"in":"header"`. It must use its provider's exact field name, a bounded
+string `schema`, and a positive `max_bytes` no greater than the shared 16 KiB
+ceiling. The declaration, not the command, owns the header name. `params-import`
+accepts only OpenAPI string headers it can bound; `surface-sync` derives a
+string/enum flag with a `header-` prefix (lowercasing the declared name and
+changing `_` to `-` for the CLI spelling) while retaining the exact declared
+name in `maps_to:"header.<provider-name>"`. Generated command help therefore
+lists only the operation's declared header flags; authors must not add a header
+map, a generic `--header`, or a hand-authored mapping.
+
+Request headers are a separate namespace from path, query, and body fields. They are single-value
+by default; an exact `repeatable:true` header declaration validates and sends every supplied value
+in order.
+The engine validates requiredness, enum/pattern/length and byte bounds before
+credential setup or I/O. It refuses unknown names, duplicate case variants,
+CR/LF/control characters, cross-operation mappings, and every runtime-owned
+field, including authorization, proxy authorization, cookies (including
+`Set-Cookie`), host/routing, content metadata, connection/proxy, forwarding,
+transport metadata, and credential/API-key/token aliases, as well as every case
+or underscore normalization variant. An operation may never declare a
+runtime-owned field to make it caller-selectable.
+
+An operation may also declare only the response headers it needs to expose:
+
+```json
+"response": {
+  "success_statuses": ["200", "202-204"],
+  "headers": [
+    { "name": "X-Request-ID", "max_bytes": 128 },
+    { "name": "ETag", "max_bytes": 256 }
+  ]
+}
+```
+
+The result retains every ordinary provider body field, status, and declared
+response-header value within the operation's existing body/media/schema bounds;
+it does not filter a value for scope, rarity, pricing tier, destructive effect,
+or unfamiliarity. Undeclared headers are not an output channel. Established
+credential/transport-secret header masking remains mandatory: a present masked
+header is returned as `{"redacted":true}` rather than silently disappearing.
+If a declared response header exceeds its cap, execution fails rather than
+truncating or leaking an unbounded value.
 
 The import deliberately drops two classes of parameter:
 
@@ -495,9 +552,10 @@ The import deliberately drops two classes of parameter:
 
 A flag the derivation cannot know about, and a better summary or narrower type
 than the specification carries. `surface-sync` adds missing derived flags and
-synchronizes only the operation-owned fields it can prove: `maps_to` and
-requiredness for a flag mapped to a required REST path parameter. A declared
-summary, type, and supported optional query/body behavior remain author-owned.
+synchronizes only the operation-owned fields it can prove: `maps_to`, requiredness
+for a flag mapped to a required path or header parameter, and repeatability
+for a mapped header. A declared summary, type, and supported optional query/body
+behavior remain author-owned.
 
 ### Verifying
 
@@ -507,8 +565,8 @@ go run ./cmd/connectorgen surface-sync --check internal/connectors/defs
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-`validate` rejects a malformed `rest.parameters` entry at build time — an `in`
-outside `query|path` fails with the exact JSON pointer — so a declaration that
+`validate` rejects a malformed operation `parameters` entry at build time — an `in`
+outside `query|path|header` fails with the exact JSON pointer — so a declaration that
 could not produce a valid command never reaches the runtime.
 
 ## 3. The engine dialect reference
@@ -1319,6 +1377,17 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   {"status": 201, "body": {"number": 42}}` because `hooks/github/hooks.go`'s `createPullRequest`
   decodes the POST response's `number` field before issuing its follow-up requests; a fixture with
   no `response` block is unaffected, still gets `200 {}`).
+- **Multipart write fixtures carry declared payload assets, never inline bytes.** For every
+  `multipart.parts[].type: "file"` field present in a write fixture record, add the sanitized,
+  bounded test payload at `fixtures/writes/<action>.payloads/<declared-record-field>`. The fixture
+  record keeps the ordinary project-relative source path (for example `"media_file_path":
+  "fixture-media.bin"`); conformance stages the asset into that path in a private temporary
+  project, computes its SHA-256 through the action's declared file and aggregate byte caps, and
+  sends only that digest through the real preview → fixture-approval → execute path. The asset
+  bytes and source content never enter plans, grants, reports, or provider-facing fixture output.
+  A missing, oversized, unsafe, changed-after-preview, or stale-digest asset is a hard conformance
+  failure before the replay server receives a request. This contract is provider-neutral: do not
+  add connector-specific fixture approval helpers or inline/base64 raw-byte escape hatches.
 - **No secret-looking values, ever.** `connectorgen validate`'s `secret_literal` rule and
   `conformance`'s `secret_redaction` check both regex-scan every fixture file (and `docs.md`) for
   Bearer-header shapes, `api_key`/`access_token`/`secret`/`password`-adjacent long tokens, and

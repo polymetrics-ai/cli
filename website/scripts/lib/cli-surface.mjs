@@ -78,7 +78,7 @@ const keyNames = (keyStyle) => {
 function withBinaryDownloadFlags(flags, intent) {
   const declared = Array.isArray(flags) ? flags : [];
   const runtimeFlags =
-    intent === 'binary_download'
+    intent === 'binary_download' || intent === 'text_export'
       ? BINARY_DOWNLOAD_FLAGS
       : intent === 'direct_read'
         ? DIRECT_READ_PAGE_FLAGS
@@ -112,6 +112,7 @@ export function mapFlags(flags, options = {}) {
       if (typeof flag.allow_empty === 'boolean') out[keys.allowEmpty] = flag.allow_empty;
       if (typeof flag.minimum === 'number' && Number.isFinite(flag.minimum)) out.minimum = flag.minimum;
       if (typeof flag.required === 'boolean') out.required = flag.required;
+      if (typeof flag.repeatable === 'boolean') out.repeatable = flag.repeatable;
       return out;
     })
     .filter((flag) => flag.name);

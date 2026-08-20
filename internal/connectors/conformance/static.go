@@ -68,6 +68,8 @@ var surfaceCategories = map[string]bool{
 var surfaceOperationModels = map[string]bool{
 	"direct_read":           true,
 	"binary_read":           true,
+	"text_export":           true,
+	"status_check":          true,
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
 	"destructive_action":    true,
@@ -327,8 +329,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 			// binary_download commands consume an api_surface endpoint the same
 			// way a direct read does and are tracked by the same covered_by
 			// bookkeeping, so they satisfy that coverage too.
-			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download") &&
-				cmd.Availability == "implemented" {
+			if engine.IsReadSurfaceIntent(cmd.Intent) && cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
 			}
 		}
@@ -379,8 +380,8 @@ func checkSurfaceComplete(b engine.Bundle) error {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead)
 				}
 				method := strings.ToUpper(strings.TrimSpace(ep.Method))
-				if method != "GET" && method != "POST" {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path)
+				if !engine.IsReadSurfaceMethod(method) {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET, HEAD, or POST", i, ep.Method, ep.Path)
 				}
 			}
 			for _, operationID := range ep.CoveredBy.OperationTargets() {
@@ -397,6 +398,9 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				case "graphql_mutation":
 					hasNonExcludedMutation = true
 				}
+			}
+			if len(coveredDirectReadTargets(ep.CoveredBy)) > 0 && engine.IsReadSurfaceMethod(ep.Method) {
+				hasNonExcludedGET = true
 			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true

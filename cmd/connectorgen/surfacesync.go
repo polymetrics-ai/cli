@@ -441,13 +441,12 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			}
 		}
 
-		// DERIVED: a direct_read command's flags come from the operation's
-		// imported parameter set, never from hand-authoring. An operation that
-		// declares no parameters leaves the command's flags untouched, so a
-		// connector whose parameters have not been imported yet is unaffected.
-		if intent == "direct_read" {
-			stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
-		}
+		// DERIVED: fixed-operation command flags come from the operation's
+		// imported parameter set, never from hand-authoring. This includes the
+		// closed header.<declared-name> channel for REST, status, binary, and
+		// text-export operations; a connector with no imported parameters is
+		// unaffected.
+		stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
 
 		// DERIVED: a REST path parameter marked required is an executable
 		// command input, not a display preference. Its mapped CLI flag must
@@ -458,6 +457,12 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		filled, corrected := deriveRequiredPathFlagRequiredness(cmd, block)
 		stats.Filled.FlagRequired += filled
 		stats.Corrected.FlagRequired += corrected
+		filled, corrected = deriveRequiredHeaderFlagRequiredness(cmd, block)
+		stats.Filled.FlagRequired += filled
+		stats.Corrected.FlagRequired += corrected
+		filled, corrected = deriveHeaderFlagRepeatability(cmd, block)
+		stats.Filled.FlagDerived += filled
+		stats.Corrected.FlagDerived += corrected
 
 		// DEFAULTED for REST direct operations: a binary_download operation
 		// must declare its own positive max_bytes at bundle load, and a
@@ -698,7 +703,7 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 	declared := map[string]bool{}
 	for _, raw := range arrayField(cmd, "flags") {
 		if flag, ok := raw.(*orderedObject); ok {
-			declared[strings.ReplaceAll(stringField(flag, "name"), "-", "_")] = true
+			declared[normalizedDerivedFlagName(stringField(flag, "name"))] = true
 		}
 	}
 	flags := append([]any(nil), arrayField(cmd, "flags")...)
@@ -709,15 +714,22 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 			continue
 		}
 		name := stringField(param, "name")
-		if name == "" || declared[name] {
+		location := stringField(param, "in")
+		if location != "query" && location != "path" && location != "header" {
 			continue
 		}
-		location := stringField(param, "in")
-		if location != "query" && location != "path" {
+		flagName := strings.ReplaceAll(name, "_", "-")
+		if location == "header" {
+			// Header names are case-insensitive and may overlap a path/query
+			// parameter. The generated CLI flag carries its location explicitly,
+			// while maps_to remains the exact provider header name.
+			flagName = "header-" + strings.ToLower(strings.ReplaceAll(name, "_", "-"))
+		}
+		if name == "" || declared[normalizedDerivedFlagName(flagName)] {
 			continue
 		}
 		flag := newOrderedObject()
-		flag.set("name", strings.ReplaceAll(name, "_", "-"))
+		flag.set("name", flagName)
 		flag.set("type", derivedFlagType(param))
 		if summary := stringField(param, "summary"); summary != "" {
 			flag.set("summary", summary)
@@ -728,15 +740,105 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 		if required, _ := param.get("required"); required == true {
 			flag.set("required", true)
 		}
+		if repeatable, _ := param.get("repeatable"); location == "header" && repeatable == true {
+			flag.set("repeatable", true)
+		}
 		flag.set("maps_to", location+"."+name)
 		flags = append(flags, flag)
-		declared[name] = true
+		declared[normalizedDerivedFlagName(flagName)] = true
 		added++
 	}
 	if added > 0 {
 		cmd.set("flags", flags)
 	}
 	return added
+}
+
+func normalizedDerivedFlagName(name string) string {
+	return strings.ToLower(strings.ReplaceAll(strings.TrimSpace(name), "-", "_"))
+}
+
+// deriveRequiredHeaderFlagRequiredness mirrors the path rule for the other
+// caller-owned, fixed-operation input location. The engine independently
+// rejects an absent required header before I/O; synchronizing it here makes
+// generated help and the command parser explain the requirement earlier.
+func deriveRequiredHeaderFlagRequiredness(cmd, block *orderedObject) (filled, corrected int) {
+	required := map[string]bool{}
+	for _, raw := range arrayField(block, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "header" {
+			continue
+		}
+		if isRequired, _ := parameter.get("required"); isRequired == true {
+			required[strings.ToLower(stringField(parameter, "name"))] = true
+		}
+	}
+	if len(required) == 0 {
+		return 0, 0
+	}
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		target, mapped := strings.CutPrefix(strings.TrimSpace(stringField(flag, "maps_to")), "header.")
+		if !mapped || !required[strings.ToLower(target)] {
+			continue
+		}
+		isRequired, present := flag.get("required")
+		if isRequired == true {
+			continue
+		}
+		flag.set("required", true)
+		if present {
+			corrected++
+		} else {
+			filled++
+		}
+	}
+	return filled, corrected
+}
+
+func deriveHeaderFlagRepeatability(cmd, block *orderedObject) (filled, corrected int) {
+	repeatable := map[string]bool{}
+	for _, raw := range arrayField(block, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "header" {
+			continue
+		}
+		if declared, _ := parameter.get("repeatable"); declared == true {
+			repeatable[strings.ToLower(strings.ReplaceAll(stringField(parameter, "name"), "_", "-"))] = true
+		}
+	}
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		target, mapped := strings.CutPrefix(strings.TrimSpace(stringField(flag, "maps_to")), "header.")
+		if !mapped {
+			continue
+		}
+		want := repeatable[strings.ToLower(strings.ReplaceAll(target, "_", "-"))]
+		got, present := flag.get("repeatable")
+		if want {
+			if got == true {
+				continue
+			}
+			flag.set("repeatable", true)
+			if present {
+				corrected++
+			} else {
+				filled++
+			}
+			continue
+		}
+		if present {
+			flag.remove("repeatable")
+			corrected++
+		}
+	}
+	return filled, corrected
 }
 
 // deriveRequiredPathFlagRequiredness synchronizes requiredness for flags that

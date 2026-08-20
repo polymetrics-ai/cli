@@ -635,8 +635,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 			// binary_download commands consume an api_surface endpoint the same
 			// way a direct read does and are tracked by the same covered_by
 			// bookkeeping, so they satisfy that coverage too.
-			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download" || cmd.Intent == "text_export" || cmd.Intent == "status_check") &&
-				cmd.Availability == "implemented" {
+			if engine.IsReadSurfaceIntent(cmd.Intent) && cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
 			}
 		}
@@ -714,10 +713,10 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					})
 				}
 				method := strings.ToUpper(strings.TrimSpace(ep.Method))
-				if method != "GET" && method != "POST" {
+				if !engine.IsReadSurfaceMethod(method) {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path),
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET, HEAD, or POST", i, ep.Method, ep.Path),
 					})
 				}
 			}
@@ -751,6 +750,9 @@ func checkAPISurface(b engine.Bundle) []Finding {
 				case "graphql_mutation":
 					hasNonExcludedMutation = true
 				}
+			}
+			if len(coveredDirectReadTargets(ep.CoveredBy)) > 0 && engine.IsReadSurfaceMethod(ep.Method) {
+				hasNonExcludedGET = true
 			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
@@ -1124,17 +1126,18 @@ func checkCLISurfaceOperationSafety(
 	if !ok {
 		return nil
 	}
+	headerFindings := checkCLISurfaceOperationHeaderMappings(b, i, cmd, op)
 	if cmd.Intent == "binary_download" || cmd.Intent == "text_export" {
-		return checkCLISurfaceBinaryOperationSafety(b, i, cmd, op)
+		return append(headerFindings, checkCLISurfaceBinaryOperationSafety(b, i, cmd, op)...)
 	}
 	if cmd.Intent == "status_check" {
-		return checkCLISurfaceStatusCheckOperationSafety(b, i, cmd, op)
+		return append(headerFindings, checkCLISurfaceStatusCheckOperationSafety(b, i, cmd, op)...)
 	}
 	if op.Kind == "graphql_query" || op.Kind == "graphql_mutation" {
 		return checkCLISurfaceGraphQLOperationSafety(b, i, cmd, op)
 	}
 	if cmd.Intent == "direct_write" {
-		return checkCLISurfaceDirectWriteOperationSafety(b, i, cmd, op)
+		return append(headerFindings, checkCLISurfaceDirectWriteOperationSafety(b, i, cmd, op)...)
 	}
 	if cmd.Intent != "direct_read" {
 		return []Finding{{
@@ -1144,7 +1147,7 @@ func checkCLISurfaceOperationSafety(
 			Message:   fmt.Sprintf("implemented command %d (%q) references operation %q, but its intent has no operation executor", i, cmd.Path, cmd.Operation),
 		}}
 	}
-	var findings []Finding
+	findings := headerFindings
 	if op.Kind != "rest_read" || op.REST == nil {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must be rest_read", i, cmd.Path, cmd.Operation)})
 		return findings
@@ -1186,7 +1189,7 @@ func checkCLISurfaceOperationSafety(
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
 		switch {
-		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."):
+		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."), strings.HasPrefix(mapsTo, "header."):
 			// allowed
 		case strings.HasPrefix(mapsTo, "body."):
 			if method != "POST" {
@@ -1200,6 +1203,66 @@ func checkCLISurfaceOperationSafety(
 			}
 		default:
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
+		}
+	}
+	return findings
+}
+
+// checkCLISurfaceOperationHeaderMappings is the static half of the engine's
+// closed request-header admission. A command may map a flag only to the exact
+// header parameter in its selected operation; command flags are never a raw
+// header map and no other operation's parameter is in scope.
+func checkCLISurfaceOperationHeaderMappings(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	var parameters []engine.OperationParameter
+	if op.REST != nil {
+		parameters = op.REST.Parameters
+	} else if op.Binary != nil {
+		parameters = op.Binary.Parameters
+	}
+	declared := make(map[string]engine.OperationParameter)
+	for _, parameter := range parameters {
+		if parameter.In == "header" {
+			declared[parameter.Name] = parameter
+		}
+	}
+	if len(declared) == 0 {
+		for _, flag := range cmd.Flags {
+			if strings.HasPrefix(strings.TrimSpace(flag.MapsTo), "header.") {
+				return []Finding{{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented command %d (%q) flag --%s maps to a request header absent from operation %q", i, cmd.Path, flag.Name, op.ID)}}
+			}
+		}
+		return nil
+	}
+	mapped := make(map[string]bool)
+	var findings []Finding
+	for _, flag := range cmd.Flags {
+		target, isHeader := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "header.")
+		if !isHeader {
+			continue
+		}
+		parameter, ok := declared[target]
+		if !ok {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented command %d (%q) flag --%s must map to an exact declared header.<name>, got %q", i, cmd.Path, flag.Name, flag.MapsTo)})
+			continue
+		}
+		if mapped[target] {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented command %d (%q) maps multiple flags to declared header %q", i, cmd.Path, target)})
+			continue
+		}
+		mapped[target] = true
+		if flag.Type != "string" && (flag.Type != "enum" || len(parameter.Values) == 0) {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented command %d (%q) header flag --%s must have string or declared enum type", i, cmd.Path, flag.Name)})
+		}
+		if parameter.Required && !flag.Required {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented command %d (%q) required header %q must use a required flag", i, cmd.Path, target)})
+		}
+		if parameter.Repeatable != flag.Repeatable {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented command %d (%q) header flag --%s repeatable must match declared header %q", i, cmd.Path, flag.Name, target)})
+		}
+	}
+	for name, parameter := range declared {
+		if parameter.Required && !mapped[name] {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented command %d (%q) required declared header %q has no mapped flag", i, cmd.Path, name)})
 		}
 	}
 	return findings
@@ -1247,7 +1310,7 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
 		switch {
-		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."):
+		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."), strings.HasPrefix(mapsTo, "header."):
 			// Typed path/query bindings are supported by the shared operation
 			// shaper and validated again at command runtime.
 		case strings.HasPrefix(mapsTo, "body."):
@@ -2514,8 +2577,27 @@ func checkCLISurfaceBinaryOperationSafety(b engine.Bundle, i int, cmd engine.CLI
 			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must declare positive binary.max_bytes", label, i, cmd.Path, cmd.Operation),
 		})
 	}
+	if len(op.Binary.ContentTypes) == 0 {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must declare response content_types", label, i, cmd.Path, cmd.Operation),
+		})
+	}
+	if op.Binary.Response == nil || len(op.Binary.Response.SuccessStatuses) == 0 {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented %s command %d (%q) operation %q must declare response success_statuses", label, i, cmd.Path, cmd.Operation),
+		})
+	}
 	if cmd.Intent == "text_export" && !strings.EqualFold(strings.TrimSpace(op.Binary.Accept), "text/csv") {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented text export command %d (%q) operation %q must accept text/csv", i, cmd.Path, cmd.Operation)})
+	}
+	if cmd.Intent == "text_export" && strings.TrimSpace(op.Binary.Charset) == "" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented text export command %d (%q) operation %q must declare response charset", i, cmd.Path, cmd.Operation)})
 	}
 	if op.Binary.ExtractArchives {
 		findings = append(findings, Finding{
@@ -2527,7 +2609,7 @@ func checkCLISurfaceBinaryOperationSafety(b engine.Bundle, i int, cmd engine.CLI
 	}
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
-		if strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.") {
+		if strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.") || strings.HasPrefix(mapsTo, "header.") {
 			continue
 		}
 		findings = append(findings, Finding{
@@ -2554,12 +2636,15 @@ func checkCLISurfaceStatusCheckOperationSafety(b engine.Bundle, i int, cmd engin
 	if op.REST.MaxBytes < 0 || op.REST.MaxBytes > 1024 {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) operation %q must bound rest.max_bytes to 1024", i, cmd.Path, cmd.Operation)})
 	}
+	if op.REST.Response == nil || len(op.REST.Response.SuccessStatuses) == 0 {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) operation %q must declare response success_statuses", i, cmd.Path, cmd.Operation)})
+	}
 	if op.OutputPolicy != "status" || cmd.OutputPolicy != op.OutputPolicy {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) output_policy must match status operation", i, cmd.Path)})
 	}
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
-		if strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.") {
+		if strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.") || strings.HasPrefix(mapsTo, "header.") {
 			continue
 		}
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented status check command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})

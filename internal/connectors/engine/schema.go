@@ -31,6 +31,10 @@ type schemaNode struct {
 	enum                 []any
 	pattern              *regexp.Regexp
 	format               string
+	minLength            int
+	hasMinLength         bool
+	maxLength            int
+	hasMaxLength         bool
 	minProperties        int
 	hasMinProperties     bool
 	additionalProperties bool // true unless explicitly set to false
@@ -85,6 +89,8 @@ var structuralKeywords = map[string]bool{
 	"items":                true,
 	"enum":                 true,
 	"pattern":              true,
+	"minLength":            true,
+	"maxLength":            true,
 	"minProperties":        true,
 	"minItems":             true,
 	"maxItems":             true,
@@ -203,6 +209,9 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		}
 		n.pattern = re
 	}
+	if err := compileStringLength(m, n); err != nil {
+		return nil, err
+	}
 
 	if raw, ok := m["format"]; ok {
 		if err := json.Unmarshal(raw, &n.format); err != nil {
@@ -268,6 +277,33 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 	}
 
 	return n, nil
+}
+
+// compileStringLength accepts the draft-07 string cardinality pair. Header
+// parameter schemas need the same declaration-owned length semantics as any
+// other scalar schema; keeping it in the shared compiler prevents a parallel
+// one-off validator from drifting.
+func compileStringLength(m map[string]json.RawMessage, n *schemaNode) error {
+	if raw, ok := m["minLength"]; ok {
+		v, err := compileNonNegativeInt(raw, "minLength")
+		if err != nil {
+			return err
+		}
+		n.minLength = v
+		n.hasMinLength = true
+	}
+	if raw, ok := m["maxLength"]; ok {
+		v, err := compileNonNegativeInt(raw, "maxLength")
+		if err != nil {
+			return err
+		}
+		n.maxLength = v
+		n.hasMaxLength = true
+	}
+	if n.hasMinLength && n.hasMaxLength && n.maxLength < n.minLength {
+		return fmt.Errorf("compile schema: maxLength %d is below minLength %d", n.maxLength, n.minLength)
+	}
+	return nil
 }
 
 // compileArrayCardinality compiles the draft-07 minItems/maxItems pair.
@@ -366,6 +402,12 @@ func (n *schemaNode) validate(v any, path string) error {
 	case string:
 		if n.pattern != nil && !n.pattern.MatchString(val) {
 			return fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String())
+		}
+		if n.hasMinLength && len([]rune(val)) < n.minLength {
+			return fmt.Errorf("%s: minLength %d not satisfied (got %d)", displayPath(path), n.minLength, len([]rune(val)))
+		}
+		if n.hasMaxLength && len([]rune(val)) > n.maxLength {
+			return fmt.Errorf("%s: maxLength %d exceeded (got %d)", displayPath(path), n.maxLength, len([]rune(val)))
 		}
 		if n.format == "uri" && !validURI(val) {
 			return fmt.Errorf("%s: value does not match format %q", displayPath(path), n.format)

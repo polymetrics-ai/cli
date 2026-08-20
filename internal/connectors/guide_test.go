@@ -19,6 +19,22 @@ func TestRenderCommandSurfaceCommandIncludesOperationMapping(t *testing.T) {
 	}
 }
 
+func TestRenderCommandSurfaceCommandRendersRepeatableAndTextExportFlags(t *testing.T) {
+	line := renderCommandSurfaceCommand(CommandSurfaceCommand{
+		Path:   "audit export",
+		Intent: "text_export",
+		Flags:  []CommandSurfaceFlag{{Name: "header-x-mode", Repeatable: true}},
+	})
+	if !strings.Contains(line, "--header-x-mode (repeatable)") {
+		t.Fatalf("rendered command did not mark repeatable flag: %s", line)
+	}
+	for _, flag := range BinaryDownloadFlags() {
+		if !strings.Contains(line, "--"+flag.Name) {
+			t.Fatalf("text export guide did not render --%s: %s", flag.Name, line)
+		}
+	}
+}
+
 func TestConfigSectionRendersConditionalSecretRequirement(t *testing.T) {
 	section := configSection(Manifest{SecretFields: []SecretField{{
 		Name:         "password",

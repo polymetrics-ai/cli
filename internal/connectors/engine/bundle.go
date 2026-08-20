@@ -785,12 +785,18 @@ func (o OperationSpec) IsBatchable() bool {
 // OperationParameter is one parameter a REST operation accepts, as its
 // provider specification declares it.
 type OperationParameter struct {
-	Name     string   `json:"name"`
-	In       string   `json:"in"`
-	Type     string   `json:"type,omitempty"`
-	Required bool     `json:"required,omitempty"`
-	Values   []string `json:"values,omitempty"`
-	Summary  string   `json:"summary,omitempty"`
+	Name       string   `json:"name"`
+	In         string   `json:"in"`
+	Type       string   `json:"type,omitempty"`
+	Required   bool     `json:"required,omitempty"`
+	Repeatable bool     `json:"repeatable,omitempty"`
+	Values     []string `json:"values,omitempty"`
+	Summary    string   `json:"summary,omitempty"`
+	// Schema and MaxBytes are required for a caller-provided header. Headers
+	// are strings on the wire, so their schema is deliberately a bounded
+	// string schema rather than a second generic request-body dialect.
+	Schema   json.RawMessage `json:"schema,omitempty"`
+	MaxBytes int             `json:"max_bytes,omitempty"`
 }
 
 type RESTOperationSpec struct {
@@ -833,7 +839,28 @@ type RESTOperationSpec struct {
 	// value on the outgoing request; a value hardcoded in Query counts, since
 	// the constraint is about the wire request rather than about who supplied
 	// it. Empty (the default) imposes nothing.
-	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+	RequiredQuery []RequiredQueryGroup   `json:"required_query,omitempty"`
+	Response      *OperationResponseSpec `json:"response,omitempty"`
+	Redirect      *OperationRedirectSpec `json:"redirect,omitempty"`
+}
+
+// OperationResponseSpec is a narrow result metadata contract. Body bytes and
+// media remain governed by the operation's existing output policy/max_bytes;
+// only these named, bounded headers may appear in fixed-operation results.
+type OperationResponseSpec struct {
+	Headers         []OperationResponseHeaderSpec `json:"headers,omitempty"`
+	SuccessStatuses []string                      `json:"success_statuses,omitempty"`
+}
+
+type OperationResponseHeaderSpec struct {
+	Name     string `json:"name"`
+	MaxBytes int    `json:"max_bytes"`
+}
+
+type OperationRedirectSpec struct {
+	MaxHops         int      `json:"max_hops"`
+	AllowSameOrigin bool     `json:"allow_same_origin,omitempty"`
+	AllowedHosts    []string `json:"allowed_hosts,omitempty"`
 }
 
 // RequiredQueryGroup is one "at least one of these" constraint. Several groups
@@ -910,6 +937,12 @@ type BinaryOperationSpec struct {
 	Method   string `json:"method"`
 	Path     string `json:"path"`
 	MaxBytes int    `json:"max_bytes,omitempty"`
+	// Parameters admits only the same declaration-owned typed path/query/header
+	// parameter dialect as REST operations. In particular, no arbitrary upload
+	// metadata or request header map exists.
+	Parameters []OperationParameter   `json:"parameters,omitempty"`
+	Response   *OperationResponseSpec `json:"response,omitempty"`
+	Redirect   *OperationRedirectSpec `json:"redirect,omitempty"`
 	// Accept selects one fixed provider-documented response representation.
 	// It is declaration-owned and cannot be overridden by command callers.
 	Accept string `json:"accept,omitempty"`
@@ -928,10 +961,15 @@ type BinaryOperationSpec struct {
 	// AllowedHosts permits redirects to exactly these hosts. Credentials are
 	// stripped on such a hop regardless.
 	AllowedHosts []string `json:"allowed_hosts,omitempty"`
-	// ContentTypes records the content types this operation is documented to
-	// return. It is metadata for authors and is deliberately NOT enforced:
-	// providers mislabel binary payloads routinely.
+	// ContentTypes is the closed provider media-type allowlist for the streamed
+	// response. The runtime parses and enforces it before opening a destination
+	// file; an omitted list preserves legacy operations that have no exact media
+	// declaration.
 	ContentTypes []string `json:"content_types,omitempty"`
+	// Charset, when declared for a text_export, is exact and enforced on the
+	// response Content-Type. Empty preserves legacy declarations that specify a
+	// bounded media type but no provider charset guarantee.
+	Charset string `json:"charset,omitempty"`
 	// StallTimeoutSeconds bounds how long the download may make NO progress.
 	// It is not a wall-clock deadline, which would turn the byte cap into a
 	// bandwidth requirement.
@@ -1003,6 +1041,7 @@ type CLIFlag struct {
 	AllowEmpty *bool    `json:"allow_empty,omitempty"`
 	Minimum    *float64 `json:"minimum,omitempty"`
 	Required   bool     `json:"required,omitempty"`
+	Repeatable bool     `json:"repeatable,omitempty"`
 	EnvOnly    bool     `json:"env_only,omitempty"`
 	// MaxItems/MinItems bound a string_array flag's item count so a bounded
 	// provider-search list can be enforced against the flag the user typed, not
@@ -1572,6 +1611,9 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	operations, rawOperations, err := loadOperations(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
+	}
+	if err := validateOperationRuntimeHeaderIsolation(httpBase, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
 	}
 	directWriteSurface := deriveDirectWriteSurface(operations)
 
@@ -2464,31 +2506,6 @@ func operationExecutionBlock(op OperationSpec) (string, int) {
 	return block, count
 }
 
-func expectedOperationBlock(kind string) string {
-	switch kind {
-	case "rest_read", "rest_write", "provider_search":
-		return "rest"
-	case "graphql_query", "graphql_mutation":
-		return "graphql"
-	case "xml_export", "xml_import":
-		return "xml"
-	case "binary_download":
-		return "binary"
-	case "file_upload":
-		return "file"
-	case "local_git":
-		return "local_git"
-	case "local_file":
-		return "local_file"
-	case "browser_open":
-		return "browser"
-	case "stream_etl", "composite":
-		return "composite"
-	default:
-		return ""
-	}
-}
-
 // validateRequiredQuery rejects a required_query group that could never be
 // satisfied. The meta-schema already enforces a non-empty any_of; this catches
 // the blank-name case it cannot express. Both failures are load errors rather
@@ -2582,6 +2599,9 @@ func validateOperationMultipartSemantics(i int, op OperationSpec) error {
 			}
 			if part.MaxBytes <= 0 {
 				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires a positive max_bytes", i, op.ID, part.Name)
+			}
+			if strings.TrimSpace(part.ContentType) == "" && len(part.AllowedMediaTypes) == 0 {
+				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires declared media policy", i, op.ID, part.Name)
 			}
 		default:
 			return fmt.Errorf("operation %d (%q) rest.multipart part %d has unsupported type %q", i, op.ID, partIndex, part.Type)
@@ -2687,6 +2707,12 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	if err := validateRequiredQuery(i, op); err != nil {
 		return err
 	}
+	if err := validateOperationHeaderParameters(op); err != nil {
+		return fmt.Errorf("operation %d (%q): %w", i, op.ID, err)
+	}
+	if err := validateOperationResponseContract(op); err != nil {
+		return fmt.Errorf("operation %d (%q): %w", i, op.ID, err)
+	}
 	if err := validateOperationMultipartSemantics(i, op); err != nil {
 		return err
 	}
@@ -2725,8 +2751,8 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if op.OutputPolicy != "status" {
 			return fmt.Errorf("operation %d (%q) rest_status output_policy must be status", i, op.ID)
 		}
-		if op.REST.MaxBytes < 0 || op.REST.MaxBytes > 1024 {
-			return fmt.Errorf("operation %d (%q) rest_status max_bytes must be between 0 and 1024", i, op.ID)
+		if op.REST.MaxBytes <= 0 || op.REST.MaxBytes > 1024 {
+			return fmt.Errorf("operation %d (%q) rest_status max_bytes must be between 1 and 1024", i, op.ID)
 		}
 		if len(op.REST.Body) != 0 || len(op.REST.BodySchema) != 0 || strings.TrimSpace(op.REST.ContentType) != "" {
 			return fmt.Errorf("operation %d (%q) rest_status must not declare a request body", i, op.ID)
@@ -2779,6 +2805,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 				return fmt.Errorf("operation %d (%q) binary_download accept %q is not a valid media type: %w", i, op.ID, op.Binary.Accept, err)
 			}
 		}
+		if err := validateOperationBinaryContentTypes(op); err != nil {
+			return fmt.Errorf("operation %d (%q) binary_download: %w", i, op.ID, err)
+		}
 	case "text_export":
 		if method := strings.ToUpper(strings.TrimSpace(op.Binary.Method)); method != http.MethodGet {
 			return fmt.Errorf("operation %d (%q) text_export method must be GET, got %s", i, op.ID, method)
@@ -2791,6 +2820,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		}
 		if op.OutputPolicy != "file_manifest" {
 			return fmt.Errorf("operation %d (%q) text_export output_policy must be file_manifest", i, op.ID)
+		}
+		if err := validateOperationBinaryContentTypes(op); err != nil {
+			return fmt.Errorf("operation %d (%q) text_export: %w", i, op.ID, err)
 		}
 	case "file_upload":
 		if op.File.Direction != "upload" {

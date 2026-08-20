@@ -15,14 +15,15 @@ import (
 )
 
 type PreparedRequest struct {
-	Method      string            `json:"method"`
-	URL         string            `json:"url"`
-	Target      string            `json:"target,omitempty"`
-	Query       string            `json:"query,omitempty"`
-	ContentType string            `json:"content_type,omitempty"`
-	BodyFormat  string            `json:"body_format,omitempty"`
-	Body        string            `json:"body,omitempty"`
-	Headers     map[string]string `json:"headers,omitempty"`
+	Method       string              `json:"method"`
+	URL          string              `json:"url"`
+	Target       string              `json:"target,omitempty"`
+	Query        string              `json:"query,omitempty"`
+	ContentType  string              `json:"content_type,omitempty"`
+	BodyFormat   string              `json:"body_format,omitempty"`
+	Body         string              `json:"body,omitempty"`
+	Headers      map[string]string   `json:"headers,omitempty"`
+	HeaderValues map[string][]string `json:"header_values,omitempty"`
 }
 
 type PreparedWrite struct {

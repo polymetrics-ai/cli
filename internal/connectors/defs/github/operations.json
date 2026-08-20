@@ -137,9 +137,21 @@
         "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
         "max_bytes": 104857600,
         "accept": "application/octet-stream",
-        "allowed_hosts": [
-          "release-assets.githubusercontent.com"
+        "content_types": [
+          "application/octet-stream"
         ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
+        "redirect": {
+          "max_hops": 1,
+          "allow_same_origin": true,
+          "allowed_hosts": [
+            "release-assets.githubusercontent.com"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -157,6 +169,14 @@
         "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
         "max_bytes": 104857600,
         "accept": "application/vnd.github.diff",
+        "content_types": [
+          "text/plain"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -245,7 +265,21 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
         "max_bytes": 104857600,
-        "allow_cross_host": true,
+        "content_types": [
+          "application/zip"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
+        "redirect": {
+          "max_hops": 1,
+          "allow_same_origin": true,
+          "allowed_hosts": [
+            "pipelines.actions.githubusercontent.com"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -501,6 +535,21 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/zip"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
+        "redirect": {
+          "max_hops": 1,
+          "allow_same_origin": true,
+          "allowed_hosts": [
+            "pipelines.actions.githubusercontent.com"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -1090,6 +1139,21 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/zip"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
+        "redirect": {
+          "max_hops": 1,
+          "allow_same_origin": true,
+          "allowed_hosts": [
+            "pipelines.actions.githubusercontent.com"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -1191,6 +1255,21 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/zip"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
+        "redirect": {
+          "max_hops": 1,
+          "allow_same_origin": true,
+          "allowed_hosts": [
+            "pipelines.actions.githubusercontent.com"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -3625,6 +3704,14 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/dependency-graph/sbom",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/json"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -3641,6 +3728,14 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/json"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -3657,6 +3752,14 @@
         "method": "GET",
         "path": "/repos/{owner}/{repo}/dependency-graph/sbom/generate-report",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/json"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -6707,9 +6810,21 @@
         "max_bytes": 104857600,
         "allow_overwrite": false,
         "extract_archives": false,
-        "allowed_hosts": [
-          "codeload.github.com"
-        ]
+        "content_types": [
+          "application/x-gzip"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
+        "redirect": {
+          "max_hops": 1,
+          "allow_same_origin": true,
+          "allowed_hosts": [
+            "codeload.github.com"
+          ]
+        }
       }
     },
     {
@@ -6877,9 +6992,21 @@
         "max_bytes": 104857600,
         "allow_overwrite": false,
         "extract_archives": false,
-        "allowed_hosts": [
-          "codeload.github.com"
-        ]
+        "content_types": [
+          "application/zip"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
+        "redirect": {
+          "max_hops": 1,
+          "allow_same_origin": true,
+          "allowed_hosts": [
+            "codeload.github.com"
+          ]
+        }
       }
     },
     {
@@ -6894,6 +7021,21 @@
         "method": "GET",
         "path": "/orgs/{org}/migrations/{migration_id}/archive",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/octet-stream"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
+        "redirect": {
+          "max_hops": 1,
+          "allow_same_origin": true,
+          "allowed_hosts": [
+            "github-cloud.s3.amazonaws.com"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -6910,6 +7052,21 @@
         "method": "GET",
         "path": "/user/migrations/{migration_id}/archive",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/octet-stream"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
+        "redirect": {
+          "max_hops": 1,
+          "allow_same_origin": true,
+          "allowed_hosts": [
+            "github-cloud.s3.amazonaws.com"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }

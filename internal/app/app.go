@@ -1955,11 +1955,13 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 				return ReversePlan{}, nil, fmt.Errorf("connector %q does not support direct-write previews", connector.Name())
 			}
 			preview, err := directWriter.PreviewOperationDirectWrite(ctx, connectors.OperationDirectWriteRequest{
-				Operation:  writeCommand.Operation,
-				Config:     runtime,
-				PathParams: writeCommand.PathParams,
-				Query:      writeCommand.Query,
-				Body:       map[string]any(writeCommand.Record),
+				Operation:    writeCommand.Operation,
+				Config:       runtime,
+				PathParams:   writeCommand.PathParams,
+				Query:        writeCommand.Query,
+				Headers:      writeCommand.Headers,
+				HeaderValues: writeCommand.HeaderValues,
+				Body:         map[string]any(writeCommand.Record),
 			})
 			if err != nil {
 				return ReversePlan{}, nil, err
@@ -1979,7 +1981,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	}
 	planHash, err := connectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Write, writeCommand.Record, payloadIdentity)
 	if writeCommand.Operation != "" {
-		planHash, err = operationConnectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Operation, writeCommand.PathParams, writeCommand.Query, writeCommand.Record, payloadIdentity)
+		planHash, err = operationConnectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Operation, writeCommand.PathParams, writeCommand.Query, writeCommand.Headers, writeCommand.HeaderValues, writeCommand.Record, payloadIdentity)
 	}
 	if err != nil {
 		return ReversePlan{}, nil, err
@@ -2009,32 +2011,34 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		expires = seal.ExpiresAt
 	}
 	plan := ReversePlan{
-		ID:                         id,
-		Name:                       name,
-		Status:                     "planned",
-		Mode:                       reversePlanModeConnectorCommand,
-		DestinationConnector:       req.Connector,
-		DestinationCredential:      req.Credential,
-		DestinationConfig:          cloneStringMap(req.Config),
-		Action:                     writeCommand.Write,
-		Mappings:                   map[string]string{},
-		ConnectorCommand:           writeCommand.Command,
-		ConnectorCommandPath:       append([]string(nil), req.Path...),
-		ConnectorCommandOperation:  writeCommand.Operation,
-		ConnectorCommandPathParams: cloneStringMap(writeCommand.PathParams),
-		ConnectorCommandQuery:      cloneStringMap(writeCommand.Query),
-		ConnectorCommandRecord:     withheldRecord,
-		PayloadIdentity:            payloadIdentity,
-		ConfirmationChallenge:      writeCommand.ConfirmationChallenge,
-		ConfirmationPolicy:         confirmationFromChallenge(writeCommand.ConfirmationChallenge),
-		RecordCount:                1,
-		RedactFields:               redactFields,
-		WithheldFields:             withheldFields,
-		Sample:                     RedactReversePlanRecords([]connectors.Record{cloneRecord(writeCommand.RedactedRecord)}, redactFields),
-		PlanHash:                   planHash,
-		PlanSeal:                   planSeal,
-		CreatedAt:                  created,
-		ExpiresAt:                  expires,
+		ID:                           id,
+		Name:                         name,
+		Status:                       "planned",
+		Mode:                         reversePlanModeConnectorCommand,
+		DestinationConnector:         req.Connector,
+		DestinationCredential:        req.Credential,
+		DestinationConfig:            cloneStringMap(req.Config),
+		Action:                       writeCommand.Write,
+		Mappings:                     map[string]string{},
+		ConnectorCommand:             writeCommand.Command,
+		ConnectorCommandPath:         append([]string(nil), req.Path...),
+		ConnectorCommandOperation:    writeCommand.Operation,
+		ConnectorCommandPathParams:   cloneStringMap(writeCommand.PathParams),
+		ConnectorCommandQuery:        cloneStringMap(writeCommand.Query),
+		ConnectorCommandHeaders:      cloneStringMap(writeCommand.Headers),
+		ConnectorCommandHeaderValues: cloneStringSliceMap(writeCommand.HeaderValues),
+		ConnectorCommandRecord:       withheldRecord,
+		PayloadIdentity:              payloadIdentity,
+		ConfirmationChallenge:        writeCommand.ConfirmationChallenge,
+		ConfirmationPolicy:           confirmationFromChallenge(writeCommand.ConfirmationChallenge),
+		RecordCount:                  1,
+		RedactFields:                 redactFields,
+		WithheldFields:               withheldFields,
+		Sample:                       RedactReversePlanRecords([]connectors.Record{cloneRecord(writeCommand.RedactedRecord)}, redactFields),
+		PlanHash:                     planHash,
+		PlanSeal:                     planSeal,
+		CreatedAt:                    created,
+		ExpiresAt:                    expires,
 	}
 	if strings.TrimSpace(writeCommand.ConfirmationChallenge) == "" && writeCommand.Operation == "" {
 		token, err := randomToken(18)
@@ -2143,11 +2147,13 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string, withhe
 			return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("connector %q no longer supports direct-write previews", writer.Name())
 		}
 		preview, err := directWriter.PreviewOperationDirectWrite(ctx, connectors.OperationDirectWriteRequest{
-			Operation:  plan.ConnectorCommandOperation,
-			Config:     runtime,
-			PathParams: plan.ConnectorCommandPathParams,
-			Query:      plan.ConnectorCommandQuery,
-			Body:       map[string]any(record),
+			Operation:    plan.ConnectorCommandOperation,
+			Config:       runtime,
+			PathParams:   plan.ConnectorCommandPathParams,
+			Query:        plan.ConnectorCommandQuery,
+			Headers:      plan.ConnectorCommandHeaders,
+			HeaderValues: plan.ConnectorCommandHeaderValues,
+			Body:         map[string]any(record),
 		})
 		if err != nil {
 			return ReversePlan{}, connectors.WritePreview{}, err
@@ -2192,6 +2198,8 @@ func connectorCommandHashForPlan(plan ReversePlan, record connectors.Record, pay
 			plan.ConnectorCommandOperation,
 			plan.ConnectorCommandPathParams,
 			plan.ConnectorCommandQuery,
+			plan.ConnectorCommandHeaders,
+			plan.ConnectorCommandHeaderValues,
 			record,
 			payloadIdentity,
 		)
@@ -2822,11 +2830,13 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 		return ReverseRun{}, fmt.Errorf("connector %q no longer supports direct writes", writer.Name())
 	}
 	operationRequest := connectors.OperationDirectWriteRequest{
-		Operation:  plan.ConnectorCommandOperation,
-		Config:     runtime,
-		PathParams: plan.ConnectorCommandPathParams,
-		Query:      plan.ConnectorCommandQuery,
-		Body:       map[string]any(record),
+		Operation:    plan.ConnectorCommandOperation,
+		Config:       runtime,
+		PathParams:   plan.ConnectorCommandPathParams,
+		Query:        plan.ConnectorCommandQuery,
+		Headers:      plan.ConnectorCommandHeaders,
+		HeaderValues: plan.ConnectorCommandHeaderValues,
+		Body:         map[string]any(record),
 	}
 	preview, err := validateOperationDirectWritePreview(ctx, directWriter, plan, operationRequest)
 	if err != nil {

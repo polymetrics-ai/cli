@@ -245,7 +245,7 @@ func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 func commandSurfaceRenderedFlags(cmd CommandSurfaceCommand) []CommandSurfaceFlag {
 	var runtimeFlags []CommandSurfaceFlag
 	switch cmd.Intent {
-	case "binary_download":
+	case "binary_download", "text_export":
 		runtimeFlags = BinaryDownloadFlags()
 	case "direct_read":
 		runtimeFlags = DirectReadPageFlags()
@@ -308,6 +308,9 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 			name := "--" + strings.TrimLeft(flag.Name, "-")
 			if flag.Required {
 				name += " (required)"
+			}
+			if flag.Repeatable {
+				name += " (repeatable)"
 			}
 			flags = append(flags, name)
 		}

@@ -313,7 +313,7 @@ func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.
 		var err error
 		result, err = OperationBinaryDownload(admitted, c.bundle, BinaryDownloadRequest{
 			Operation: req.Operation, Config: req.Config, PathParams: req.PathParams, Query: req.Query,
-			MaxBytes: req.MaxBytes, DestRoot: req.DestRoot, FileName: req.FileName, RedactFields: req.RedactFields,
+			Headers: req.Headers, HeaderValues: req.HeaderValues, MaxBytes: req.MaxBytes, DestRoot: req.DestRoot, FileName: req.FileName, RedactFields: req.RedactFields,
 		}, c.hooks)
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
 	})
@@ -323,8 +323,16 @@ func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.
 	return connectors.OperationBinaryDownloadResult{
 		Connector: result.Connector,
 		Operation: result.Operation,
+		Method:    result.Method,
+		Path:      result.Path,
 		Record:    result.Record,
+		Status:    result.Status,
+		Headers:   result.Headers,
 	}, nil
+}
+
+func (c *Connector) PreflightOperationBinaryDownload(operation, method, path string) error {
+	return PreflightOperationBinaryDownload(c.bundle, operation, method, path)
 }
 
 // InitialState satisfies connectors.StatefulReader by delegating to the
@@ -825,6 +833,7 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
 		Minimum:    cloneFloat64Ptr(flag.Minimum),
 		Required:   flag.Required,
+		Repeatable: flag.Repeatable,
 		EnvOnly:    flag.EnvOnly,
 		MaxItems:   flag.MaxItems,
 		MinItems:   flag.MinItems,

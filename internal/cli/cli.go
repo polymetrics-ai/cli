@@ -1110,7 +1110,7 @@ func connectorCommandConfirmationHelp(connector connectors.Connector, cmd connec
 // here, so runtime help and the generated manual/skill/website docs cannot
 // document different flags.
 func writeConnectorDownloadFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
-	if cmd.Intent != "binary_download" {
+	if cmd.Intent != "binary_download" && cmd.Intent != "text_export" {
 		return
 	}
 	b.WriteString("\nDOWNLOAD FLAGS\n")
@@ -1143,6 +1143,9 @@ func writeConnectorFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) 
 	}
 	if flag.Required {
 		b.WriteString(" required")
+	}
+	if flag.Repeatable {
+		b.WriteString(" repeatable")
 	}
 	if flag.EnvOnly {
 		fmt.Fprintf(b, " env-only (use --from-env %s=ENV)", strings.TrimLeft(flag.Name, "-"))
@@ -1333,38 +1336,64 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		return err
 	}
 	if result.BinaryDownload != nil {
-		if jsonOut {
-			return writeJSON(stdout, envelope{
-				"kind":      "ConnectorCommandBinaryDownload",
-				"connector": result.Connector,
-				"command":   result.Command,
-				"operation": result.BinaryDownload.Operation,
-				"record":    result.BinaryDownload.Record,
-			})
+		out := envelope{
+			"kind":      "ConnectorCommandBinaryDownload",
+			"connector": result.Connector,
+			"command":   result.Command,
+			"operation": result.BinaryDownload.Operation,
+			"method":    result.BinaryDownload.Method,
+			"path":      result.BinaryDownload.Path,
+			"status":    result.BinaryDownload.Status,
+			"headers":   result.BinaryDownload.Headers,
+			"record":    result.BinaryDownload.Record,
 		}
-		b, _ := json.MarshalIndent(result.BinaryDownload.Record, "", "  ")
+		if jsonOut {
+			return writeJSON(stdout, out)
+		}
+		b, _ := json.MarshalIndent(out, "", "  ")
+		_, _ = fmt.Fprintln(stdout, string(b))
+		return nil
+	}
+	if result.StatusCheck != nil {
+		out := envelope{
+			"kind":       "ConnectorCommandStatusCheck",
+			"connector":  result.Connector,
+			"command":    result.Command,
+			"operation":  result.StatusCheck.Operation,
+			"method":     result.StatusCheck.Method,
+			"path":       result.StatusCheck.Path,
+			"status":     result.StatusCheck.Status,
+			"body_bytes": result.StatusCheck.BodyBytes,
+			"headers":    result.StatusCheck.Headers,
+		}
+		if jsonOut {
+			return writeJSON(stdout, out)
+		}
+		b, _ := json.MarshalIndent(out, "", "  ")
 		_, _ = fmt.Fprintln(stdout, string(b))
 		return nil
 	}
 	if result.DirectRead != nil {
+		out := envelope{
+			"kind":      "ConnectorCommandDirectRead",
+			"connector": result.Connector,
+			"command":   result.Command,
+			"method":    result.DirectRead.Method,
+			"path":      result.DirectRead.Path,
+			"status":    result.DirectRead.Status,
+			"headers":   result.DirectRead.Headers,
+			"response":  result.DirectRead.Body,
+		}
+		if directReadPageIsReported(result.DirectRead.Page) {
+			out["page"] = result.DirectRead.Page
+		}
+		if result.DirectRead.GraphQL != nil {
+			out["graphql"] = result.DirectRead.GraphQL
+		}
 		if jsonOut {
-			out := envelope{
-				"kind":      "ConnectorCommandDirectRead",
-				"connector": result.Connector,
-				"command":   result.Command,
-				"method":    result.DirectRead.Method,
-				"path":      result.DirectRead.Path,
-				"status":    result.DirectRead.Status,
-				"response":  result.DirectRead.Body,
-			}
-			// A connector that reports no page context has none; an all-zero
-			// page would read as a measured, incomplete result.
-			if directReadPageIsReported(result.DirectRead.Page) {
-				out["page"] = result.DirectRead.Page
-			}
 			return writeJSON(stdout, out)
 		}
-		b, _ := json.MarshalIndent(result.DirectRead.Body, "", "  ")
+		b, _ := json.MarshalIndent(out, "", "  ")
 		_, _ = fmt.Fprintln(stdout, string(b))
 		// A human reading this must not have to infer completeness from the row
 		// count. The notice goes to stderr so piping the body stays lossless.
@@ -1838,6 +1867,8 @@ func safeReversePlanForOutput(plan app.ReversePlan) app.ReversePlan {
 	plan.ConnectorCommandRecord = nil
 	plan.ConnectorCommandPathParams = nil
 	plan.ConnectorCommandQuery = nil
+	plan.ConnectorCommandHeaders = nil
+	plan.ConnectorCommandHeaderValues = nil
 	plan.Sample = app.RedactReversePlanRecords(plan.Sample, plan.RedactFields)
 	return plan
 }

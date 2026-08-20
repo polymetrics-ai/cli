@@ -1024,6 +1024,126 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 	return form, nil
 }
 
+// ApprovedMultipartPayloadSHA256ForWrite returns the exact bounded file
+// digests that a declared multipart write must carry through preview and
+// approval. It shares the real action lookup, record-hook mapping, project
+// confinement, part declarations, and aggregate limits with execution; it
+// never reads an undeclared record field or returns payload bytes.
+//
+// Fixture conformance uses this before issuing its synthetic approval grant.
+// Production callers retain the App-owned plan identity flow, which records
+// the same opaque SHA-256 values with its persisted plan.
+func ApprovedMultipartPayloadSHA256ForWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (map[string]string, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	action, err := findWriteAction(b, req.Action)
+	if err != nil {
+		return nil, err
+	}
+	if bodyTypeOf(action) != "multipart" {
+		return nil, nil
+	}
+	if action.Multipart == nil {
+		return nil, fmt.Errorf("engine: write action %q: multipart spec is required", action.Name)
+	}
+	mapped, err := applyWriteRecordHook(h, action, records)
+	if err != nil {
+		return nil, err
+	}
+	cfg := materializeConfigDefaults(b, req.Config)
+	root, err := openMultipartRoot(cfg.ProjectDir)
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: open multipart project root: %w", action.Name, err)
+	}
+	defer func() { _ = root.Close() }()
+
+	declaredFields := make(map[string]string, len(action.Multipart.Parts))
+	for _, part := range action.Multipart.Parts {
+		if part.Type != "file" {
+			continue
+		}
+		if _, duplicate := declaredFields[part.Name]; duplicate {
+			return nil, fmt.Errorf("engine: write action %q: multipart file part %q is declared more than once", action.Name, part.Name)
+		}
+		declaredFields[part.Name] = part.Field
+	}
+
+	approved := make(map[string]string)
+	for recordIndex, record := range mapped {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+		form, err := buildMultipartPayload(action, record, recordIndex, cfg, root)
+		if err != nil {
+			return nil, err
+		}
+		var total int64
+		for _, file := range form.Files {
+			field, ok := declaredFields[file.FieldName]
+			if !ok {
+				return nil, fmt.Errorf("engine: write action %q: multipart file part %q is not declared", action.Name, file.FieldName)
+			}
+			digest, size, err := digestMultipartPayloadForApproval(file)
+			if err != nil {
+				return nil, fmt.Errorf("engine: write action %q: multipart file part %q: %w", action.Name, file.FieldName, err)
+			}
+			total += size
+			if form.MaxBytes > 0 && total > form.MaxBytes {
+				return nil, fmt.Errorf("engine: write action %q: multipart payload too large: %d bytes exceeds limit %d", action.Name, total, form.MaxBytes)
+			}
+			approved[connectors.PayloadApprovalKey(recordIndex, field)] = digest
+		}
+	}
+	if len(approved) == 0 {
+		return nil, nil
+	}
+	return approved, nil
+}
+
+// digestMultipartPayloadForApproval reads one already declaration-validated
+// multipart source through its root, with an explicit cap and a before/after
+// identity check. The result is safe approval evidence, never payload content.
+func digestMultipartPayloadForApproval(file connsdk.MultipartFile) (string, int64, error) {
+	if file.Root == nil || strings.TrimSpace(file.RelPath) == "" {
+		return "", 0, fmt.Errorf("approved multipart source is not root-confined")
+	}
+	if file.MaxBytes <= 0 {
+		return "", 0, fmt.Errorf("approved multipart source has no positive byte cap")
+	}
+	source, err := file.Root.Open(file.RelPath)
+	if err != nil {
+		return "", 0, err
+	}
+	defer func() { _ = source.Close() }()
+	before, err := source.Stat()
+	if err != nil {
+		return "", 0, err
+	}
+	if !before.Mode().IsRegular() {
+		return "", 0, fmt.Errorf("file must be a regular file")
+	}
+	if before.Size() > file.MaxBytes {
+		return "", 0, fmt.Errorf("file too large: %d bytes exceeds limit %d", before.Size(), file.MaxBytes)
+	}
+	hash := sha256.New()
+	written, err := io.Copy(hash, io.LimitReader(source, file.MaxBytes+1))
+	if err != nil {
+		return "", 0, err
+	}
+	if written > file.MaxBytes {
+		return "", 0, fmt.Errorf("file grew beyond byte cap %d while computing approval digest", file.MaxBytes)
+	}
+	after, err := source.Stat()
+	if err != nil {
+		return "", 0, err
+	}
+	if before.Size() != after.Size() || !before.ModTime().Equal(after.ModTime()) {
+		return "", 0, fmt.Errorf("file changed while computing approval digest")
+	}
+	return hex.EncodeToString(hash.Sum(nil)), written, nil
+}
+
 // openMultipartRoot opens the containment root for a multipart upload. Every
 // access to a multipart source file goes through this root, so an escaping path
 // is refused at each open rather than by a single check performed beforehand.

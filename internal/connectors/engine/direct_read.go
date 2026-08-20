@@ -67,6 +67,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		return connectors.DirectReadResult{}, err
 	}
 	if op.Kind == "graphql_query" {
+		if len(req.Headers) != 0 || len(req.HeaderValues) != 0 {
+			return connectors.DirectReadResult{}, fmt.Errorf("operation %q fixed GraphQL query does not accept request header overrides", op.ID)
+		}
 		return operationGraphQLDirectRead(ctx, b, op, req, h)
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
@@ -101,6 +104,10 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	headers, err := operationRequestHeaders(b, op, req.Headers, req.HeaderValues)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 
 	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
 	defer cancel()
@@ -116,6 +123,8 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		query:           query,
 		body:            body,
 		bodyContentType: operationDirectReadContentType(op),
+		headers:         headers,
+		operation:       &op,
 		outputPolicy:    policy,
 		maxBytes:        maxBytes,
 		page:            req.Page,
@@ -157,7 +166,11 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if len(redactFields) > 0 {
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
-	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded, Page: pageInfo}, nil
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded, Headers: responseHeaders, Page: pageInfo}, nil
 }
 
 // PreflightOperationDirectRead proves a command's named operation can reach

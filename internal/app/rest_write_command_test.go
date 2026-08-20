@@ -210,6 +210,9 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 		if got := r.Form.Get("dir"); got != "1" {
 			t.Fatalf("dir = %q, want 1", got)
 		}
+		if got := r.Header.Get("X-Change-Reason"); got != "correctness" {
+			t.Fatalf("X-Change-Reason = %q, want declaration-owned header", got)
+		}
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"ok":true,"token":"fixture-token"}`))
 	}))
@@ -217,12 +220,19 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 
 	a := setupRestWriteDemoAppWithBundle(t, ctx, server.URL, func(bundle *engine.Bundle) {
 		bundle.CLISurface.Commands[0].RedactFields = []string{"id"}
+		bundle.Operations[0].REST.Parameters = []engine.OperationParameter{{
+			Name: "X-Change-Reason", In: "header", Type: "string", Required: true,
+			Values: []string{"correctness", "moderation"}, Schema: json.RawMessage(`{"type":"string","enum":["correctness","moderation"]}`), MaxBytes: 32,
+		}}
+		bundle.CLISurface.Commands[0].Flags = append(bundle.CLISurface.Commands[0].Flags,
+			engine.CLIFlag{Name: "header-x-change-reason", Type: "enum", Values: []string{"correctness", "moderation"}, Required: true, MapsTo: "header.X-Change-Reason"},
+		)
 	})
 	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 		Connector:  restWriteDemoConnector,
 		Credential: "restwrite-local",
 		Path:       []string{"vote"},
-		Flags:      map[string][]string{"id": {"t3_abc"}, "dir": {"1"}},
+		Flags:      map[string][]string{"id": {"t3_abc"}, "dir": {"1"}, "header-x-change-reason": {"correctness"}},
 		Preview:    true,
 	})
 	if err != nil {
@@ -236,6 +246,9 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	}
 	if plan.ConnectorCommandOperation != "restwrite-demo.vote" {
 		t.Fatalf("plan operation = %q, want restwrite-demo.vote", plan.ConnectorCommandOperation)
+	}
+	if got := plan.ConnectorCommandHeaders["X-Change-Reason"]; got != "correctness" {
+		t.Fatalf("plan headers = %#v, want preview-bound declared header", plan.ConnectorCommandHeaders)
 	}
 	if plan.ApprovalToken == "" || plan.ConfirmationChallenge != "destructive" {
 		t.Fatalf("plan approval/confirmation = %q/%q, want a single-use token and destructive confirmation", plan.ApprovalToken, plan.ConfirmationChallenge)
