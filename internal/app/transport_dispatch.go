@@ -25,6 +25,13 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	return sourceDeclared && destinationDeclared
 }
 
+type transportRouteReason string
+
+const (
+	transportRouteDeclarationAbsent transportRouteReason = "declaration_absent"
+	transportRouteDeclared          transportRouteReason = "declared_transport"
+)
+
 // shouldRunTransport keeps the closed issue-label transport opt-in at the
 // persisted connection boundary. Its definition owns the admitted source
 // executors, streams, and record mappings. Open installs the exact
@@ -38,57 +45,80 @@ func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 // definition selects the allowed destination action for each declared mode;
 // non-additive modes are additionally gated by the persisted connection.
 func (a *App) shouldRunTransport(conn Connection, streamName string, mode SyncMode, source, destination connectors.Connector) bool {
+	selected, _, _ := a.selectTransportRoute(conn, streamName, mode, source, destination)
+	return selected
+}
+
+func (a *App) selectTransportRoute(conn Connection, streamName string, mode SyncMode, source, destination connectors.Connector) (bool, transportRouteReason, error) {
 	action := conn.Streams[streamName].DestinationAction
+	if !hasDeclaredSyncTransport(source, destination) {
+		return false, transportRouteDeclarationAbsent, nil
+	}
+	if a == nil || a.transports == nil {
+		return false, transportRouteDeclared, fmt.Errorf("closed transport registry is unavailable")
+	}
 	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
-	destinationIssueLabel := isIssueLabelTransportConnector(destination)
+	destinationDescriptor, destinationDeclared := connectors.DestinationTransportDescriptorOf(destination)
+	destinationIssueLabel := destinationDeclared && destinationDescriptor.Executor == issueLabelDestinationReference
+	if sourceDeclarative && !destinationIssueLabel {
+		descriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
+		if !declared {
+			return false, transportRouteDeclarationAbsent, nil
+		}
+		executor, registered := a.transports.RegisteredDestination(descriptor.Executor)
+		_, managedTarget := executor.(synctransport.ManagedTargetApprovalDestination)
+		_, definitionOwnedApproval := executor.(synctransport.DefinitionOwnedApprovalDestination)
+		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
+		if !registered || (!managedTarget && !definitionOwnedApproval && !(localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode))) {
+			return false, transportRouteDeclarationAbsent, nil
+		}
+	}
+	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: action,
+	})
+	if err != nil {
+		return false, transportRouteDeclared, err
+	}
 	if destinationIssueLabel {
-		if a == nil || a.transports == nil {
-			return false
-		}
-		if _, err := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: action}); err != nil {
-			return false
-		}
 	} else if !sourceDeclarative {
-		return hasDeclaredSyncTransport(source, destination)
-	} else if !hasDeclaredSyncTransport(source, destination) {
-		return false
+		return true, transportRouteDeclared, nil
 	} else {
 		// A definition-selected source may pair with another definition-selected
 		// destination. Its own eligible stream/mode and the destination strategy
 		// remain enforced by registry preflight. Only the semantic managed-target
 		// destination marker admits this cross-definition route, so legacy API-to-
 		// warehouse connections are not diverted from their established ETL path.
-		if a == nil || a.transports == nil {
-			return false
-		}
-		resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
-			Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: action,
-		})
-		if err != nil {
-			return false
-		}
 		_, managedTarget := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
 		_, definitionOwnedApproval := resolved.Destination.(synctransport.DefinitionOwnedApprovalDestination)
 		if managedTarget || definitionOwnedApproval {
-			return true
+			return true, transportRouteDeclared, nil
 		}
 		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
-		return localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode)
+		if localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode) {
+			return true, transportRouteDeclared, nil
+		}
+		return false, transportRouteDeclarationAbsent, nil
 	}
 	transportConn, err := a.issueLabelTransportConnection(conn.ID)
 	if err != nil {
-		return false
+		return false, transportRouteDeclared, err
 	}
 	configuredStream, _, err := issueLabelTransportStream(transportConn)
-	if err != nil || streamName != configuredStream {
-		return false
+	if err != nil {
+		return false, transportRouteDeclared, err
+	}
+	if streamName != configuredStream {
+		return false, transportRouteDeclared, fmt.Errorf("declared issue-label transport stream %q does not match configured stream %q", streamName, configuredStream)
 	}
 	contract, err := a.issueLabelTransportContract(transportConn)
 	if err != nil {
-		return false
+		return false, transportRouteDeclared, err
 	}
 	_, err = contract.actionForSyncMode(mode.ContractMode)
-	return err == nil
+	if err != nil {
+		return false, transportRouteDeclared, err
+	}
+	return true, transportRouteDeclared, nil
 }
 
 func isWarehouseDedupeContractMode(mode synccontract.Mode) bool {

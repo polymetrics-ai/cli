@@ -1359,6 +1359,22 @@ type DeclarativeTypedDestination interface {
 	DeclarativeTypedDestinationActionDigest(actionName string) (string, error)
 }
 
+// DeclarativeTypedDestinationReadBackRequest is a declaration-owned bounded
+// provider-state read. Operation remains opaque to shared orchestration.
+type DeclarativeTypedDestinationReadBackRequest struct {
+	Operation  string
+	Runtime    RuntimeConfig
+	MaxRecords int
+	Receipt    json.RawMessage
+}
+
+// DeclarativeTypedDestinationReadBack is required by the generic typed
+// destination adapter. Connectors without a real provider read cannot claim
+// provider-state read-back from local receipt checks.
+type DeclarativeTypedDestinationReadBack interface {
+	ReadBackDeclarativeDestination(context.Context, DeclarativeTypedDestinationReadBackRequest) ([]Record, error)
+}
+
 type DryRunWriter interface {
 	DryRunWrite(ctx context.Context, req WriteRequest, records []Record) (WritePreview, error)
 }

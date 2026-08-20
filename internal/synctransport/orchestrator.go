@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -156,6 +157,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			if err := tombstone.Validate(); err != nil {
 				return fmt.Errorf("source transport tombstone: %w", err)
 			}
+		}
+		if len(page.Tombstones) != 0 && resolved.DestinationDescriptor.Delivery.Deletes != connectors.DeliveryDeletesTombstone {
+			return fmt.Errorf("destination transport did not declare tombstone delivery for a source page containing deletes")
 		}
 		// Extraction has completed when the source gives us a valid bounded page,
 		// independently of whether a later warehouse or destination unit fails.

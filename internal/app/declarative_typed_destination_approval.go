@@ -323,11 +323,18 @@ func (a *App) validateDeclarativeTypedDestinationPlan(plan ReversePlan, prepared
 	if err != nil {
 		return err
 	}
-	if plan.Mode != reversePlanModeDeclarativeTypedDestinationTransport || plan.TransportConnectionID != prepared.connection.ID || plan.TransportStream != prepared.binding.Stream || plan.SourceConnection != prepared.connection.Name || plan.DestinationConnector != prepared.destination.Name() || plan.DestinationCredential != prepared.connection.Destination.Credential || plan.Action != prepared.resolved.ApplyStrategy.Action || plan.RecordCount != 0 || len(plan.Mappings) != 0 || !constantTimeStringEqual(plan.TransportBindingSHA256, bindingSHA256) || !constantTimeStringEqual(plan.TransportActionDefinitionSHA256, prepared.binding.ActionDefinitionSHA256) || !constantTimeStringEqual(plan.PlanHash, planHash) {
+	if plan.Mode != reversePlanModeDeclarativeTypedDestinationTransport || plan.TransportConnectionID != prepared.connection.ID || plan.TransportStream != prepared.binding.Stream || plan.SourceConnection != prepared.connection.Name || plan.DestinationConnector != prepared.destination.Name() || plan.DestinationCredential != prepared.connection.Destination.Credential || plan.Action != prepared.resolved.ApplyStrategy.Action || plan.RecordCount != 0 || len(plan.Mappings) != 0 || validateDeclarativeTypedDestinationPlanBinding(plan, bindingSHA256) != nil || !constantTimeStringEqual(plan.TransportActionDefinitionSHA256, prepared.binding.ActionDefinitionSHA256) || !constantTimeStringEqual(plan.PlanHash, planHash) {
 		return fmt.Errorf("declarative typed destination approval plan does not bind the exact persisted connection action")
 	}
 	if plan.ConfirmationPolicy.Kind != connectors.ConfirmationKindDestructive || a.confirmationPolicyForPlan(plan).Kind != connectors.ConfirmationKindDestructive {
 		return fmt.Errorf("declarative typed destination approval plan does not require destructive confirmation")
+	}
+	return nil
+}
+
+func validateDeclarativeTypedDestinationPlanBinding(plan ReversePlan, bindingSHA256 string) error {
+	if !constantTimeStringEqual(plan.TransportBindingSHA256, bindingSHA256) {
+		return fmt.Errorf("declarative typed destination approval plan does not bind the exact persisted connection action")
 	}
 	return nil
 }
@@ -341,6 +348,9 @@ func (a *App) markDeclarativeTypedDestinationPlanExecuted(planID string) error {
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID != planID {
 				continue
+			}
+			if current.ReversePlans[i].Status == "executed" {
+				return current, nil
 			}
 			if current.ReversePlans[i].Status != reversePlanStatusApprovalConsumptionUncertain {
 				return current, fmt.Errorf("declarative typed destination plan %q is not awaiting write completion", planID)

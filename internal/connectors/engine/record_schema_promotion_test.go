@@ -105,6 +105,47 @@ func TestValidatePromotableRecordSchemaAllowsClosedNamedFields(t *testing.T) {
 	}
 }
 
+func TestPreflightWriteActionAllowsOnlyDeclaredNoInputEmptyRecord(t *testing.T) {
+	empty := json.RawMessage(`{"type":"object","properties":{},"additionalProperties":false}`)
+	tests := []struct {
+		name    string
+		action  WriteAction
+		wantErr bool
+	}{
+		{
+			name: "configuration-bound no-body operation",
+			action: WriteAction{
+				Name: "delete_configured_repo", Method: "DELETE", Path: "/repos/{{ config.owner }}/{{ config.repo }}",
+				BodyType: "none", RecordSchema: empty,
+			},
+		},
+		{
+			name: "hollow JSON operation",
+			action: WriteAction{
+				Name: "collapsed_provider_body", Method: "POST", Path: "/widgets", RecordSchema: empty,
+			},
+			wantErr: true,
+		},
+		{
+			name: "undeclared record-bound path",
+			action: WriteAction{
+				Name: "missing_path_schema", Method: "DELETE", Path: "/widgets/{{ record.id }}",
+				BodyType: "none", RecordSchema: empty,
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := New(Bundle{Name: "widgets", Writes: []WriteAction{tt.action}}, nil)
+			err := connector.PreflightWriteAction(tt.action.Name)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("PreflightWriteAction() error = %v, wantErr %t", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestValidateRecordSchemaFieldMappingRequiresExactCompleteFields(t *testing.T) {
 	schema := json.RawMessage(`{
 		"type": "object",

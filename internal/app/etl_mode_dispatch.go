@@ -48,7 +48,10 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 		}
 		return a.completeAcknowledgedTransportRun(request.runID, result)
 	}
-	transportRoute := a.shouldRunTransport(request.connection, request.streamName, request.mode, request.source, request.destination)
+	transportRoute, _, routeErr := a.selectTransportRoute(request.connection, request.streamName, request.mode, request.source, request.destination)
+	if routeErr != nil {
+		return a.failAcknowledgedTransportRun(request.runID, etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}, fmt.Errorf("select closed transport route: %w", routeErr))
+	}
 	if request.maxInFlightBatches > 0 && (!transportRoute || !isOrderedArrowFullOverwriteCandidate(request)) {
 		return a.failRun(request.runID, &synctransport.OrderedPipelineUnsupportedError{Source: request.source.Name(), Destination: request.destination.Name()})
 	}

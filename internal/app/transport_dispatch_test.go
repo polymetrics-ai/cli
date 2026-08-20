@@ -2995,6 +2995,10 @@ func TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t *testi
 	}
 }
 
+func TestETLRouteSelection_PropagatesDeclaredRoutePreflightErrors(t *testing.T) {
+	TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t)
+}
+
 func TestHasDeclaredSyncTransportRequiresBothEndpoints(t *testing.T) {
 	source := &appTransportConnector{
 		meta:       connectors.Metadata{Name: "invalid_source", IntegrationType: "api"},

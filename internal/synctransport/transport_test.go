@@ -422,6 +422,112 @@ func TestOrchestratorFullOverwritePublishesAllBoundedPagesBeforeOneCheckpoint(t 
 	}
 }
 
+func TestFullOverwrite_PublishSuccessReadbackFailureDoesNotAbort(t *testing.T) {
+	t.Run("standard", func(t *testing.T) {
+		pair := newTestTransportPair("database", "database")
+		pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+		pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+		pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+		pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+		run := &testFullOverwriteRun{sink: pair.destination.Name(), readBackErr: errors.New("provider read-back unavailable")}
+		pair.destinationExecutor.fullOverwrite = run
+		registry := NewRegistry(pair.verifier)
+		registerTransportPair(t, registry, pair)
+		_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1, Stage: &testWarehouseStage{}, Commit: func(synccontract.CheckpointEnvelope) error { return nil }})
+		if err == nil || run.publishCalls != 1 || run.readBackCalls != 1 || run.abortCalls != 0 {
+			t.Fatalf("err/publish/readback/abort = %v/%d/%d/%d, want read-back error after one publication and no abort", err, run.publishCalls, run.readBackCalls, run.abortCalls)
+		}
+	})
+
+	for _, pipelineDepth := range []int{1, 2} {
+		t.Run(fmt.Sprintf("arrow-depth-%d", pipelineDepth), func(t *testing.T) {
+			pair := newTestTransportPair("database", "database")
+			pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+			pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+			pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+			pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+			if pipelineDepth > 1 {
+				pair.source.descriptor.Source.OrderedPipeline = true
+				pair.destination.descriptor.Destination.OrderedPipeline = true
+			}
+			checkpoint := testCheckpoint(pair.source.Name())
+			record := testArrowRecord(t, []int64{1}, []string{"open"})
+			source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}, batches: []ArrowSourceBatch{{Record: record, SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: checkpoint}}}
+			run := &testArrowFullOverwriteRun{sink: pair.destination.Name(), readBackErr: errors.New("provider read-back unavailable")}
+			destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: run}
+			registry := NewRegistry(pair.verifier)
+			if err := registry.RegisterSource(source); err != nil {
+				t.Fatal(err)
+			}
+			if err := registry.RegisterDestination(destination); err != nil {
+				t.Fatal(err)
+			}
+			plan := `{"version":1,"select":[{"source":"id","target":"id","type":"int64"}]}`
+			hash, err := databaseTransformHash(plan)
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = NewOrchestrator(registry).Run(context.Background(), RunRequest{Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1, MaxInFlightBatches: pipelineDepth, TransformPlanJSON: plan, TransformPlanHash: hash, FastSegments: &testFastSegmentStore{}, ByteCreditCapacity: 64, Commit: func(synccontract.CheckpointEnvelope) error { return nil }})
+			if err == nil || run.publishCalls != 1 || run.readBackCalls != 1 || run.abortCalls != 0 {
+				t.Fatalf("err/publish/readback/abort = %v/%d/%d/%d, want read-back error after one publication and no abort", err, run.publishCalls, run.readBackCalls, run.abortCalls)
+			}
+		})
+	}
+}
+
+func TestTransportPreflight_EnforcesDeliveryGuaranteeCompatibility(t *testing.T) {
+	tests := []struct {
+		name     string
+		mode     synccontract.Mode
+		strategy connectors.ApplyStrategy
+		mutate   func(*testTransportPair)
+	}{
+		{name: "replayable source idempotency", mode: synccontract.ModeFullAppend, strategy: connectors.ApplyStrategyAppend, mutate: func(pair *testTransportPair) {
+			pair.source.descriptor.Source.Delivery.Idempotency = connectors.DeliveryIdempotencyNone
+		}},
+		{name: "replayable destination idempotency", mode: synccontract.ModeIncrementalUpsert, strategy: connectors.ApplyStrategyMerge, mutate: func(pair *testTransportPair) {
+			pair.destination.descriptor.Destination.Delivery.Idempotency = connectors.DeliveryIdempotencyAtLeastOnce
+		}},
+		{name: "dedupe ordering", mode: synccontract.ModeIncrementalDedupe, strategy: connectors.ApplyStrategyDedupe, mutate: func(pair *testTransportPair) {
+			pair.destination.descriptor.Destination.Delivery.Ordering = connectors.DeliveryOrderingUnordered
+		}},
+		{name: "change capture tombstones", mode: synccontract.ModeChangeCapture, strategy: connectors.ApplyStrategyChangeApply, mutate: func(pair *testTransportPair) {
+			pair.destination.descriptor.Destination.Delivery.Deletes = connectors.DeliveryDeletesUnavailable
+		}},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			pair := newTestTransportPair("database", "database")
+			pair.source.descriptor.Source.Modes = []synccontract.Mode{testCase.mode}
+			pair.destination.descriptor.Destination.Modes = []synccontract.Mode{testCase.mode}
+			pair.destination.descriptor.Destination.EligibleActions = []string{"apply"}
+			pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: testCase.mode, Strategy: testCase.strategy, Action: "apply"}}
+			testCase.mutate(pair)
+			registry := NewRegistry(pair.verifier)
+			registerTransportPair(t, registry, pair)
+			if _, err := registry.Preflight(PreflightRequest{Source: pair.source, Destination: pair.destination, Stream: "records", Mode: testCase.mode, DestinationAction: "apply"}); err == nil {
+				t.Fatal("incompatible declared delivery guarantees passed preflight")
+			}
+		})
+	}
+}
+
+func TestTransportRuntime_RejectsUndeclaredTombstoneBeforeIO(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Delivery.Deletes = connectors.DeliveryDeletesTombstone
+	pair.destination.descriptor.Destination.Delivery.Deletes = connectors.DeliveryDeletesUnavailable
+	page := pair.sourceExecutor.pages[0]
+	page.Tombstones = []synccontract.Tombstone{{Operation: synccontract.OperationDelete, EventID: synccontract.OpaqueToken("event-1"), Key: json.RawMessage(`{"id":"1"}`), DeleteImage: synccontract.DeleteImageKeyOnly, Position: page.CandidateCheckpoint.Position.Clone()}}
+	pair.sourceExecutor.pages = []SourcePage{page}
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	stage := &testWarehouseStage{}
+	_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend, BatchSize: 1, Stage: stage, Commit: func(synccontract.CheckpointEnvelope) error { return nil }})
+	if err == nil || stage.calls != 0 || pair.destinationExecutor.applyCalls != 0 {
+		t.Fatalf("err/stage/apply = %v/%d/%d, want tombstone refusal before stage and provider I/O", err, stage.calls, pair.destinationExecutor.applyCalls)
+	}
+}
+
 func TestOrchestratorSourceCheckpointFollowsRefreshSemantics(t *testing.T) {
 	tests := []struct {
 		mode           synccontract.Mode
@@ -1584,6 +1690,7 @@ type testFullOverwriteRun struct {
 	readBackCalls int
 	abortCalls    int
 	publishOutput json.RawMessage
+	readBackErr   error
 }
 
 func (r *testFullOverwriteRun) ApplyFullOverwrite(_ context.Context, request DestinationApplyRequest) error {
@@ -1612,7 +1719,7 @@ func (r *testFullOverwriteRun) ReadBackFullOverwrite(_ context.Context, acknowle
 	if acknowledgement.Sink != r.sink || acknowledgement.AcknowledgedAt.IsZero() {
 		return fmt.Errorf("test full-overwrite receipt is not durable")
 	}
-	return nil
+	return r.readBackErr
 }
 
 func (r *testFullOverwriteRun) AbortFullOverwrite(context.Context) error {
@@ -1678,6 +1785,7 @@ type testArrowFullOverwriteRun struct {
 	failApplyAt   int
 	applyErr      error
 	publishOutput json.RawMessage
+	readBackErr   error
 }
 
 func (r *testArrowFullOverwriteRun) ApplyArrowSegment(_ context.Context, request ArrowBulkApplyRequest) error {
@@ -1716,7 +1824,7 @@ func (r *testArrowFullOverwriteRun) ReadBackArrowFullOverwrite(_ context.Context
 	if acknowledgement.Sink != r.sink || acknowledgement.AcknowledgedAt.IsZero() {
 		return ErrArrowFastPathInvalid
 	}
-	return nil
+	return r.readBackErr
 }
 
 func (r *testArrowFullOverwriteRun) AbortArrowFullOverwrite(context.Context) error {

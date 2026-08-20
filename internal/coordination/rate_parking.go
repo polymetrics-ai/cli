@@ -39,12 +39,14 @@ var (
 // run. Scope is an already opaque projection and must remain internal to a
 // parking store; events and errors never include it.
 type ParkedRateLimitRun struct {
-	RunID      string
-	Outcome    RateParkingOutcome
-	Scope      connectors.RateLimitScopeKey
-	Checkpoint synccontract.CheckpointEnvelope
-	ResetAt    time.Time
-	Reason     connsdk.RateLimitObservationSource
+	RunID           string
+	Outcome         RateParkingOutcome
+	Scope           connectors.RateLimitScopeKey
+	Checkpoint      synccontract.CheckpointEnvelope
+	ResetAt         time.Time
+	Reason          connsdk.RateLimitObservationSource
+	ResumeStarted   bool
+	ResumeCompleted bool
 }
 
 // Clone returns a defensive copy that preserves opaque checkpoint bytes.
@@ -73,6 +75,8 @@ type RateParkingStore interface {
 	Rearm(ParkedRateLimitRun, string, time.Time) (ParkedRateLimitRun, error)
 	HasScope(connectors.RateLimitScopeKey) (bool, error)
 	Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error)
+	BeginResume(runID, owner string) (ParkedRateLimitRun, error)
+	MarkResumeCompleted(runID, owner string) (ParkedRateLimitRun, error)
 	RenewClaim(runID, owner string, until time.Time) (bool, error)
 	ReleaseClaim(runID, owner string) error
 	Complete(runID, owner string) error
@@ -111,6 +115,9 @@ func (s *MemoryRateParkingStore) Create(run ParkedRateLimitRun) (ParkedRateLimit
 	if s == nil {
 		return ParkedRateLimitRun{}, false, errRateParkingUnavailable
 	}
+	if err := validateParkedRateLimitRun(run); err != nil {
+		return ParkedRateLimitRun{}, false, err
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.runs == nil {
@@ -131,6 +138,9 @@ func (s *MemoryRateParkingStore) Rearm(run ParkedRateLimitRun, owner string, unt
 		return ParkedRateLimitRun{}, errRateParkingUnavailable
 	}
 	if err := validateParkedRateLimitRun(run); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
 		return ParkedRateLimitRun{}, err
 	}
 	if until.IsZero() {
@@ -169,6 +179,9 @@ func (s *MemoryRateParkingStore) Claim(runID, owner string, now, until time.Time
 	if s == nil {
 		return ParkedRateLimitRun{}, false, time.Time{}, errRateParkingUnavailable
 	}
+	if err := validateRateParkingClaimInput(runID, owner, now, until); err != nil {
+		return ParkedRateLimitRun{}, false, time.Time{}, err
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	record, found := s.runs[runID]
@@ -177,6 +190,9 @@ func (s *MemoryRateParkingStore) Claim(runID, owner string, now, until time.Time
 	}
 	if now.Before(record.Run.ResetAt) {
 		return record.Run.Clone(), false, record.Run.ResetAt, nil
+	}
+	if leaderID, retryAt := rateParkingScopeLeader(s.runs, record.Run.Scope, now); leaderID != runID {
+		return record.Run.Clone(), false, retryAt, nil
 	}
 	if record.ClaimOwner != "" && record.ClaimOwner != owner && record.ClaimUntil.After(now) {
 		return record.Run.Clone(), false, record.ClaimUntil, nil
@@ -187,15 +203,57 @@ func (s *MemoryRateParkingStore) Claim(runID, owner string, now, until time.Time
 	return record.Run.Clone(), true, time.Time{}, nil
 }
 
+func (s *MemoryRateParkingStore) BeginResume(runID, owner string) (ParkedRateLimitRun, error) {
+	return s.updateResumePhase(runID, owner, false)
+}
+
+func (s *MemoryRateParkingStore) MarkResumeCompleted(runID, owner string) (ParkedRateLimitRun, error) {
+	return s.updateResumePhase(runID, owner, true)
+}
+
+func (s *MemoryRateParkingStore) updateResumePhase(runID, owner string, completed bool) (ParkedRateLimitRun, error) {
+	if s == nil {
+		return ParkedRateLimitRun{}, errRateParkingUnavailable
+	}
+	if runID == "" {
+		return ParkedRateLimitRun{}, errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	record, found := s.runs[runID]
+	if !found || record.ClaimOwner != owner {
+		return ParkedRateLimitRun{}, ErrRateParkingClaimLost
+	}
+	record.Run.ResumeStarted = true
+	record.Run.ResumeCompleted = completed
+	if err := validateParkedRateLimitRun(record.Run); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	s.runs[runID] = record
+	return record.Run.Clone(), nil
+}
+
 func (s *MemoryRateParkingStore) RenewClaim(runID, owner string, until time.Time) (bool, error) {
 	if s == nil {
 		return false, errRateParkingUnavailable
+	}
+	if runID == "" {
+		return false, errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return false, err
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	record, found := s.runs[runID]
 	if !found || record.ClaimOwner != owner {
 		return false, nil
+	}
+	if !until.After(record.ClaimUntil) {
+		return false, errors.New("rate parking renewal deadline must move forward")
 	}
 	record.ClaimUntil = until.UTC()
 	s.runs[runID] = record
@@ -205,6 +263,12 @@ func (s *MemoryRateParkingStore) RenewClaim(runID, owner string, until time.Time
 func (s *MemoryRateParkingStore) ReleaseClaim(runID, owner string) error {
 	if s == nil {
 		return errRateParkingUnavailable
+	}
+	if runID == "" {
+		return errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return err
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -225,11 +289,20 @@ func (s *MemoryRateParkingStore) Complete(runID, owner string) error {
 	if s == nil {
 		return errRateParkingUnavailable
 	}
+	if runID == "" {
+		return errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return err
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	record, found := s.runs[runID]
 	if !found || record.ClaimOwner != owner {
 		return ErrRateParkingClaimLost
+	}
+	if !record.Run.ResumeCompleted {
+		return errors.New("rate parking resume completion is not persisted")
 	}
 	delete(s.runs, runID)
 	return nil
@@ -272,8 +345,10 @@ func (wallRateParkingScheduler) Schedule(at time.Time, callback func()) RatePark
 type RateParkingEventType string
 
 const (
-	RateLimitEventParked  RateParkingEventType = "parked"
-	RateLimitEventResumed RateParkingEventType = "resumed"
+	RateLimitEventParked    RateParkingEventType = "parked"
+	RateLimitEventResumed   RateParkingEventType = "resumed"
+	RateLimitEventRetry     RateParkingEventType = "retry_scheduled"
+	RateLimitEventReconcile RateParkingEventType = "reconciliation_required"
 )
 
 // RateParkingEvent is safe for operator output. It deliberately excludes run
@@ -294,28 +369,37 @@ type RateParkingEventSink interface {
 // checkpoint. It must not replay an already acknowledged destination apply.
 type RateParkingResumeFunc func(context.Context, ParkedRateLimitRun) error
 
+type RateParkingReconcileFunc func(context.Context, ParkedRateLimitRun) error
+
 // RateParkingCoordinatorOptions configures a connector-neutral parking owner.
 type RateParkingCoordinatorOptions struct {
-	Store     RateParkingStore
-	Scheduler RateParkingScheduler
-	Now       func() time.Time
-	Resume    RateParkingResumeFunc
-	Events    RateParkingEventSink
-	ClaimTTL  time.Duration
+	Store               RateParkingStore
+	Scheduler           RateParkingScheduler
+	Now                 func() time.Time
+	Resume              RateParkingResumeFunc
+	Reconcile           RateParkingReconcileFunc
+	Events              RateParkingEventSink
+	ClaimTTL            time.Duration
+	RetryBackoff        time.Duration
+	RetryBackoffMaximum time.Duration
 }
 
 // RateParkingCoordinator blocks same-scope admission while a persisted run is
 // parked, then automatically invokes its resumer at or after the stored reset.
 // It never interprets provider data or performs a connector request itself.
 type RateParkingCoordinator struct {
-	mu        sync.Mutex
-	store     RateParkingStore
-	scheduler RateParkingScheduler
-	now       func() time.Time
-	resume    RateParkingResumeFunc
-	events    RateParkingEventSink
-	owner     string
-	claimTTL  time.Duration
+	mu                  sync.Mutex
+	active              sync.WaitGroup
+	store               RateParkingStore
+	scheduler           RateParkingScheduler
+	now                 func() time.Time
+	resume              RateParkingResumeFunc
+	reconcile           RateParkingReconcileFunc
+	events              RateParkingEventSink
+	owner               string
+	claimTTL            time.Duration
+	retryBackoff        time.Duration
+	retryBackoffMaximum time.Duration
 
 	ctx          context.Context
 	cancel       context.CancelFunc
@@ -325,6 +409,7 @@ type RateParkingCoordinator struct {
 	resuming     map[string]uint64
 	rearmPending map[string]uint64
 	nextLease    uint64
+	retryCount   map[string]uint
 }
 
 // NewRateParkingCoordinator constructs a coordinator. A nil store/scheduler
@@ -343,18 +428,31 @@ func NewRateParkingCoordinator(options RateParkingCoordinatorOptions) *RateParki
 	if options.ClaimTTL <= 0 {
 		options.ClaimTTL = 30 * time.Second
 	}
+	if options.RetryBackoff <= 0 {
+		options.RetryBackoff = 100 * time.Millisecond
+	}
+	if options.RetryBackoffMaximum <= 0 {
+		options.RetryBackoffMaximum = 30 * time.Second
+	}
+	if options.Reconcile == nil {
+		options.Reconcile = RateParkingReconcileFunc(options.Resume)
+	}
 	return &RateParkingCoordinator{
-		store:        options.Store,
-		scheduler:    options.Scheduler,
-		now:          options.Now,
-		resume:       options.Resume,
-		events:       options.Events,
-		owner:        newRateParkingOwner(),
-		claimTTL:     options.ClaimTTL,
-		runs:         make(map[string]ParkedRateLimitRun),
-		timers:       make(map[string]RateParkingTimer),
-		resuming:     make(map[string]uint64),
-		rearmPending: make(map[string]uint64),
+		store:               options.Store,
+		scheduler:           options.Scheduler,
+		now:                 options.Now,
+		resume:              options.Resume,
+		reconcile:           options.Reconcile,
+		events:              options.Events,
+		owner:               newRateParkingOwner(),
+		claimTTL:            options.ClaimTTL,
+		retryBackoff:        options.RetryBackoff,
+		retryBackoffMaximum: options.RetryBackoffMaximum,
+		runs:                make(map[string]ParkedRateLimitRun),
+		timers:              make(map[string]RateParkingTimer),
+		resuming:            make(map[string]uint64),
+		rearmPending:        make(map[string]uint64),
+		retryCount:          make(map[string]uint),
 	}
 }
 
@@ -383,6 +481,7 @@ func (c *RateParkingCoordinator) Start(ctx context.Context) error {
 	c.timers = make(map[string]RateParkingTimer)
 	c.resuming = make(map[string]uint64)
 	c.rearmPending = make(map[string]uint64)
+	c.retryCount = make(map[string]uint)
 	for _, run := range runs {
 		if err := validateParkedRateLimitRun(run); err != nil {
 			c.cancel()
@@ -426,12 +525,16 @@ func (c *RateParkingCoordinator) Close() {
 	c.timers = make(map[string]RateParkingTimer)
 	c.resuming = make(map[string]uint64)
 	c.rearmPending = make(map[string]uint64)
+	c.retryCount = make(map[string]uint)
 	if c.cancel != nil {
 		c.cancel()
 	}
+	c.started = false
+	c.mu.Unlock()
+	c.active.Wait()
+	c.mu.Lock()
 	c.cancel = nil
 	c.ctx = nil
-	c.started = false
 	c.mu.Unlock()
 }
 
@@ -590,6 +693,8 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 		c.mu.Unlock()
 		return
 	}
+	c.active.Add(1)
+	defer c.active.Done()
 	run, exists := c.runs[runID]
 	if !exists {
 		c.mu.Unlock()
@@ -617,13 +722,16 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 	expectedRun := run.Clone()
 	claimedRun, claimed, retryAt, err := c.store.Claim(runID, c.owner, c.now(), c.now().Add(c.claimTTL))
 	if err != nil {
-		c.finishResumeLease(runID, lease)
+		c.retryResume(runID, lease, c.nextRetryAt(runID), "claim")
 		return
 	}
 	if !claimed {
 		c.mu.Lock()
 		owned, rearmed := c.finishResumeLeaseLocked(runID, lease)
 		if owned && c.started && !rearmed {
+			if !retryAt.After(c.now()) {
+				retryAt = c.nextRetryAtLocked(runID)
+			}
 			c.timers[runID] = c.scheduler.Schedule(retryAt, func() { c.resumeDue(runID) })
 		}
 		c.mu.Unlock()
@@ -635,11 +743,29 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 		c.runs[runID] = run.Clone()
 	}
 	c.mu.Unlock()
+	startedNow := false
+	if !run.ResumeStarted {
+		run, err = c.store.BeginResume(runID, c.owner)
+		if err != nil {
+			_ = c.store.ReleaseClaim(runID, c.owner)
+			c.retryResume(runID, lease, c.nextRetryAt(runID), "begin_reconcile")
+			return
+		}
+		startedNow = true
+	}
 	operationCtx, cancelOperation := context.WithCancel(resumeCtx)
 	renewDone := make(chan struct{})
 	renewResult := make(chan bool, 1)
 	go c.renewClaim(operationCtx, runID, renewDone, renewResult, cancelOperation)
-	resumeErr := c.resume(operationCtx, run.Clone())
+	var resumeErr error
+	if !run.ResumeCompleted {
+		if startedNow {
+			resumeErr = c.resume(operationCtx, run.Clone())
+		} else {
+			c.recordEvent(RateParkingEvent{Type: RateLimitEventReconcile, ResetAt: run.ResetAt, Reason: string(run.Reason)})
+			resumeErr = c.reconcile(operationCtx, run.Clone())
+		}
+	}
 	close(renewDone)
 	claimLost := <-renewResult
 	cancelOperation()
@@ -648,31 +774,81 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 		return
 	}
 	if claimLost {
-		c.finishResumeLease(runID, lease)
+		c.retryResume(runID, lease, c.nextRetryAt(runID), "claim_renewal")
 		return
 	}
 	if resumeErr != nil {
-		_ = c.store.ReleaseClaim(runID, c.owner)
-		c.finishResumeLease(runID, lease)
+		releaseErr := c.store.ReleaseClaim(runID, c.owner)
+		retryAt := c.nextRetryAt(runID)
+		if releaseErr != nil {
+			claimDeadline := c.now().Add(c.claimTTL)
+			if claimDeadline.After(retryAt) {
+				retryAt = claimDeadline
+			}
+		}
+		c.retryResume(runID, lease, retryAt, "resume")
 		return
+	}
+	if !run.ResumeCompleted {
+		run, err = c.store.MarkResumeCompleted(runID, c.owner)
+		if err != nil {
+			c.retryResume(runID, lease, c.nextRetryAt(runID), "persist_completion")
+			return
+		}
 	}
 
 	c.mu.Lock()
 	current, exists := c.runs[runID]
-	if !exists || !parkedRateLimitRunEqual(current, run) {
+	if !exists || !parkedRateLimitRunSameIdentity(current, run) {
 		c.finishResumeLeaseLocked(runID, lease)
 		c.mu.Unlock()
 		return
 	}
 	if err := c.store.Complete(runID, c.owner); err != nil {
-		c.finishResumeLeaseLocked(runID, lease)
 		c.mu.Unlock()
+		c.retryResume(runID, lease, c.nextRetryAt(runID), "complete")
 		return
 	}
 	delete(c.runs, runID)
+	delete(c.retryCount, runID)
 	c.finishResumeLeaseLocked(runID, lease)
 	c.mu.Unlock()
 	c.recordEvent(RateParkingEvent{Type: RateLimitEventResumed, ResetAt: run.ResetAt, Reason: string(run.Reason)})
+}
+
+func (c *RateParkingCoordinator) retryResume(runID string, lease uint64, at time.Time, reason string) {
+	c.mu.Lock()
+	owned, rearmed := c.finishResumeLeaseLocked(runID, lease)
+	if owned && c.started && !rearmed {
+		if !at.After(c.now()) {
+			at = c.nextRetryAtLocked(runID)
+		}
+		c.timers[runID] = c.scheduler.Schedule(at, func() { c.resumeDue(runID) })
+	}
+	c.mu.Unlock()
+	c.recordEvent(RateParkingEvent{Type: RateLimitEventRetry, ResetAt: at, Reason: reason})
+}
+
+func (c *RateParkingCoordinator) nextRetryAt(runID string) time.Time {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.nextRetryAtLocked(runID)
+}
+
+func (c *RateParkingCoordinator) nextRetryAtLocked(runID string) time.Time {
+	count := c.retryCount[runID]
+	if count < 31 {
+		count++
+	}
+	c.retryCount[runID] = count
+	delay := c.retryBackoff
+	for step := uint(1); step < count && delay < c.retryBackoffMaximum; step++ {
+		delay *= 2
+		if delay > c.retryBackoffMaximum {
+			delay = c.retryBackoffMaximum
+		}
+	}
+	return c.now().Add(delay)
 }
 
 func (c *RateParkingCoordinator) finishResumeLease(runID string, lease uint64) {
@@ -756,7 +932,55 @@ func validateParkedRateLimitRun(run ParkedRateLimitRun) error {
 	if err := run.Checkpoint.Validate(); err != nil {
 		return fmt.Errorf("parked rate-limit checkpoint: %w", err)
 	}
+	if run.ResumeCompleted && !run.ResumeStarted {
+		return errors.New("parked rate-limit resume completion requires a started phase")
+	}
 	return nil
+}
+
+func validateRateParkingOwner(owner string) error {
+	if owner == "" || len(owner) > 256 {
+		return errors.New("rate parking claim owner is invalid")
+	}
+	return nil
+}
+
+func validateRateParkingClaimInput(runID, owner string, now, until time.Time) error {
+	if runID == "" || len(runID) > 256 {
+		return errors.New("rate parking run identifier is invalid")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return err
+	}
+	if now.IsZero() || !until.After(now) {
+		return errors.New("rate parking claim deadline must follow a concrete claim time")
+	}
+	return nil
+}
+
+func rateParkingScopeLeader(records map[string]rateParkingFileRecord, scope connectors.RateLimitScopeKey, now time.Time) (string, time.Time) {
+	var leader rateParkingFileRecord
+	found := false
+	for _, candidate := range records {
+		if candidate.Run.Scope != scope {
+			continue
+		}
+		if !found || candidate.Run.ResetAt.Before(leader.Run.ResetAt) || (candidate.Run.ResetAt.Equal(leader.Run.ResetAt) && candidate.Run.RunID < leader.Run.RunID) {
+			leader = candidate
+			found = true
+		}
+	}
+	if !found {
+		return "", now.Add(time.Millisecond)
+	}
+	retryAt := leader.Run.ResetAt
+	if leader.ClaimOwner != "" && leader.ClaimUntil.After(retryAt) {
+		retryAt = leader.ClaimUntil
+	}
+	if !retryAt.After(now) {
+		retryAt = now.Add(time.Millisecond)
+	}
+	return leader.Run.RunID, retryAt
 }
 
 func parkedRateLimitRunFromRequest(request RateParkingRequest) (ParkedRateLimitRun, error) {
@@ -788,10 +1012,16 @@ func rateParkingReasonValid(reason connsdk.RateLimitObservationSource) bool {
 
 func parkedRateLimitRunEqual(left, right ParkedRateLimitRun) bool {
 	if left.RunID != right.RunID || left.Outcome != right.Outcome || left.Scope != right.Scope ||
-		!left.ResetAt.Equal(right.ResetAt) || left.Reason != right.Reason {
+		!left.ResetAt.Equal(right.ResetAt) || left.Reason != right.Reason || left.ResumeStarted != right.ResumeStarted || left.ResumeCompleted != right.ResumeCompleted {
 		return false
 	}
 	return checkpointEnvelopeEqual(left.Checkpoint, right.Checkpoint)
+}
+
+func parkedRateLimitRunSameIdentity(left, right ParkedRateLimitRun) bool {
+	left.ResumeStarted, left.ResumeCompleted = false, false
+	right.ResumeStarted, right.ResumeCompleted = false, false
+	return parkedRateLimitRunEqual(left, right)
 }
 
 func checkpointEnvelopeEqual(left, right synccontract.CheckpointEnvelope) bool {

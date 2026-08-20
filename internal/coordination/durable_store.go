@@ -192,6 +192,9 @@ func (s *FileRateParkingStore) List() ([]ParkedRateLimitRun, error) {
 }
 
 func (s *FileRateParkingStore) Create(run ParkedRateLimitRun) (ParkedRateLimitRun, bool, error) {
+	if err := validateParkedRateLimitRun(run); err != nil {
+		return ParkedRateLimitRun{}, false, err
+	}
 	var result ParkedRateLimitRun
 	created := false
 	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
@@ -205,10 +208,10 @@ func (s *FileRateParkingStore) Create(run ParkedRateLimitRun) (ParkedRateLimitRu
 			result = existing.Run.Clone()
 			return state, nil
 		}
-		if err := validateParkedRateLimitRun(run); err != nil {
+		state.Records[run.RunID] = rateParkingFileRecord{Run: run.Clone()}
+		if err := validateRateParkingFileState(state); err != nil {
 			return state, err
 		}
-		state.Records[run.RunID] = rateParkingFileRecord{Run: run.Clone()}
 		result = run.Clone()
 		created = true
 		return state, nil
@@ -225,6 +228,9 @@ func (s *FileRateParkingStore) Rearm(run ParkedRateLimitRun, owner string, until
 		if err := validateParkedRateLimitRun(run); err != nil {
 			return state, err
 		}
+		if err := validateRateParkingOwner(owner); err != nil {
+			return state, err
+		}
 		if until.IsZero() {
 			return state, errors.New("rate parking claim deadline is required")
 		}
@@ -238,6 +244,9 @@ func (s *FileRateParkingStore) Rearm(run ParkedRateLimitRun, owner string, until
 		record.Run = run.Clone()
 		record.ClaimUntil = until.UTC()
 		state.Records[run.RunID] = record
+		if err := validateRateParkingFileState(state); err != nil {
+			return state, err
+		}
 		result = run.Clone()
 		return state, nil
 	})
@@ -258,6 +267,9 @@ func (s *FileRateParkingStore) HasScope(scope connectors.RateLimitScopeKey) (boo
 }
 
 func (s *FileRateParkingStore) Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error) {
+	if err := validateRateParkingClaimInput(runID, owner, now, until); err != nil {
+		return ParkedRateLimitRun{}, false, time.Time{}, err
+	}
 	var run ParkedRateLimitRun
 	var retryAt time.Time
 	claimed := false
@@ -274,6 +286,10 @@ func (s *FileRateParkingStore) Claim(runID, owner string, now, until time.Time) 
 			retryAt = record.Run.ResetAt
 			return state, nil
 		}
+		if leaderID, leaderRetryAt := rateParkingScopeLeader(state.Records, record.Run.Scope, now); leaderID != runID {
+			retryAt = leaderRetryAt
+			return state, nil
+		}
 		if record.ClaimOwner != "" && record.ClaimOwner != owner && record.ClaimUntil.After(now) {
 			retryAt = record.ClaimUntil
 			return state, nil
@@ -281,13 +297,58 @@ func (s *FileRateParkingStore) Claim(runID, owner string, now, until time.Time) 
 		record.ClaimOwner = owner
 		record.ClaimUntil = until.UTC()
 		state.Records[runID] = record
+		if err := validateRateParkingFileState(state); err != nil {
+			return state, err
+		}
 		claimed = true
 		return state, nil
 	})
 	return run, claimed, retryAt, err
 }
 
+func (s *FileRateParkingStore) BeginResume(runID, owner string) (ParkedRateLimitRun, error) {
+	return s.updateResumePhase(runID, owner, false)
+}
+
+func (s *FileRateParkingStore) MarkResumeCompleted(runID, owner string) (ParkedRateLimitRun, error) {
+	return s.updateResumePhase(runID, owner, true)
+}
+
+func (s *FileRateParkingStore) updateResumePhase(runID, owner string, completed bool) (ParkedRateLimitRun, error) {
+	if runID == "" {
+		return ParkedRateLimitRun{}, errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	var result ParkedRateLimitRun
+	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
+		if err := validateRateParkingFileState(state); err != nil {
+			return state, err
+		}
+		record, found := state.Records[runID]
+		if !found || record.ClaimOwner != owner {
+			return state, ErrRateParkingClaimLost
+		}
+		record.Run.ResumeStarted = true
+		record.Run.ResumeCompleted = completed
+		state.Records[runID] = record
+		if err := validateRateParkingFileState(state); err != nil {
+			return state, err
+		}
+		result = record.Run.Clone()
+		return state, nil
+	})
+	return result, err
+}
+
 func (s *FileRateParkingStore) RenewClaim(runID, owner string, until time.Time) (bool, error) {
+	if runID == "" {
+		return false, errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return false, err
+	}
 	renewed := false
 	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
 		if err := validateRateParkingFileState(state); err != nil {
@@ -297,8 +358,14 @@ func (s *FileRateParkingStore) RenewClaim(runID, owner string, until time.Time) 
 		if !found || record.ClaimOwner != owner {
 			return state, nil
 		}
+		if !until.After(record.ClaimUntil) {
+			return state, errors.New("rate parking renewal deadline must move forward")
+		}
 		record.ClaimUntil = until.UTC()
 		state.Records[runID] = record
+		if err := validateRateParkingFileState(state); err != nil {
+			return state, err
+		}
 		renewed = true
 		return state, nil
 	})
@@ -306,6 +373,12 @@ func (s *FileRateParkingStore) RenewClaim(runID, owner string, until time.Time) 
 }
 
 func (s *FileRateParkingStore) ReleaseClaim(runID, owner string) error {
+	if runID == "" {
+		return errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return err
+	}
 	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
 		if err := validateRateParkingFileState(state); err != nil {
 			return state, err
@@ -320,12 +393,18 @@ func (s *FileRateParkingStore) ReleaseClaim(runID, owner string) error {
 		record.ClaimOwner = ""
 		record.ClaimUntil = time.Time{}
 		state.Records[runID] = record
-		return state, nil
+		return state, validateRateParkingFileState(state)
 	})
 	return err
 }
 
 func (s *FileRateParkingStore) Complete(runID, owner string) error {
+	if runID == "" {
+		return errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return err
+	}
 	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
 		if err := validateRateParkingFileState(state); err != nil {
 			return state, err
@@ -333,6 +412,9 @@ func (s *FileRateParkingStore) Complete(runID, owner string) error {
 		record, found := state.Records[runID]
 		if !found || record.ClaimOwner != owner {
 			return state, ErrRateParkingClaimLost
+		}
+		if !record.Run.ResumeCompleted {
+			return state, errors.New("rate parking resume completion is not persisted")
 		}
 		delete(state.Records, runID)
 		return state, nil
@@ -382,6 +464,11 @@ func validateRateParkingFileState(state rateParkingFileState) error {
 		}
 		if (record.ClaimOwner == "") != record.ClaimUntil.IsZero() {
 			return errors.New("rate parking store claim is incomplete")
+		}
+		if record.ClaimOwner != "" {
+			if err := validateRateParkingOwner(record.ClaimOwner); err != nil {
+				return err
+			}
 		}
 	}
 	return nil

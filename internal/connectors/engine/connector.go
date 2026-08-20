@@ -239,6 +239,39 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 	return result, err
 }
 
+// ReadBackDeclarativeDestination performs the connector-owned provider read
+// selected by a destination read-back declaration. Engine-backed connectors
+// bind the opaque operation to an exact declared stream and reuse its bounded
+// read executor; shared App code never learns a provider path or URL.
+func (c *Connector) ReadBackDeclarativeDestination(ctx context.Context, req connectors.DeclarativeTypedDestinationReadBackRequest) ([]connectors.Record, error) {
+	if req.MaxRecords < 1 {
+		return nil, fmt.Errorf("declarative destination read-back requires a positive record bound")
+	}
+	found := false
+	for _, stream := range c.bundle.Streams {
+		if stream.Name == req.Operation {
+			found = true
+			break
+		}
+	}
+	if !found {
+		return nil, fmt.Errorf("declarative destination read-back operation %q is not a declared stream", req.Operation)
+	}
+	records := make([]connectors.Record, 0)
+	err := c.Read(ctx, connectors.ReadRequest{Stream: req.Operation, Config: req.Runtime}, func(record connectors.Record) error {
+		if len(records) >= req.MaxRecords {
+			return fmt.Errorf("declarative destination read-back exceeded max_records %d", req.MaxRecords)
+		}
+		copy := make(connectors.Record, len(record))
+		for key, value := range record {
+			copy[key] = value
+		}
+		records = append(records, copy)
+		return nil
+	})
+	return records, err
+}
+
 // PreflightOperationDirectRead proves a command's declared binding can reach
 // this connector's bounded direct-read executor without resolving credentials
 // or making a network request.
@@ -454,7 +487,31 @@ func (c *Connector) PreflightWriteAction(name string) error {
 	if err != nil {
 		return err
 	}
+	shape, err := InspectRecordSchema(action.RecordSchema)
+	if err != nil {
+		return err
+	}
+	// A closed empty record is executable when the provider operation itself
+	// declares that it consumes no record input. These actions are deliberate
+	// triggers whose target is fully bound by connector configuration (for
+	// example DELETE /repos/{configured owner}/{configured repo}); treating
+	// them as hollow would make a provider-declared operation unreachable.
+	if shape.AdmitsOnlyEmptyObject && writeActionConsumesNoRecord(action) {
+		return nil
+	}
 	return ValidatePromotableRecordSchema(action.RecordSchema)
+}
+
+func writeActionConsumesNoRecord(action WriteAction) bool {
+	if bodyTypeOf(action) != "none" || len(action.PathFields) != 0 || strings.Contains(action.Path, "record.") {
+		return false
+	}
+	for _, param := range action.Query {
+		if strings.Contains(param.Template, "record.") {
+			return false
+		}
+	}
+	return true
 }
 
 // PreflightWriteRecordField proves that one exact, declaration-owned write

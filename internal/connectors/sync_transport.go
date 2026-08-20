@@ -210,6 +210,74 @@ func (b DestinationSourceBinding) Validate() error {
 	return b.RecordMapping.Validate()
 }
 
+// DestinationReadBackField maps one field in provider state to the
+// corresponding field in the destination record that was written.
+type DestinationReadBackField struct {
+	ProviderField string `json:"provider_field"`
+	ExpectedField string `json:"expected_field"`
+}
+
+// DestinationReadBackPolicy declares the bounded provider read that proves a
+// typed destination write before its source checkpoint may advance. Operation
+// is interpreted only by the connector that owns the declaration.
+type DestinationReadBackPolicy struct {
+	Operation              string                       `json:"operation"`
+	Identity               []DestinationReadBackField   `json:"identity"`
+	Expected               []DestinationReadBackField   `json:"expected"`
+	MaxRecords             int                          `json:"max_records"`
+	MaxAttempts            int                          `json:"max_attempts"`
+	TimeoutMilliseconds    int                          `json:"timeout_milliseconds"`
+	RetryDelayMilliseconds int                          `json:"retry_delay_milliseconds,omitempty"`
+	Conformance            ConformanceEvidenceReference `json:"conformance"`
+}
+
+func (p DestinationReadBackPolicy) Validate() error {
+	if !isConcreteTransportIdentifier(p.Operation) {
+		return fmt.Errorf("destination read-back requires a concrete operation")
+	}
+	if p.MaxRecords < 1 || p.MaxRecords > 10000 {
+		return fmt.Errorf("destination read-back max_records must be between 1 and 10000")
+	}
+	if p.MaxAttempts < 1 || p.MaxAttempts > 10 {
+		return fmt.Errorf("destination read-back max_attempts must be between 1 and 10")
+	}
+	if p.TimeoutMilliseconds < 1 || p.TimeoutMilliseconds > 60000 {
+		return fmt.Errorf("destination read-back timeout_milliseconds must be between 1 and 60000")
+	}
+	if p.RetryDelayMilliseconds < 0 || p.RetryDelayMilliseconds > 10000 {
+		return fmt.Errorf("destination read-back retry_delay_milliseconds must be between 0 and 10000")
+	}
+	if err := validateDestinationReadBackFields("identity", p.Identity); err != nil {
+		return err
+	}
+	if err := validateDestinationReadBackFields("expected", p.Expected); err != nil {
+		return err
+	}
+	return p.Conformance.Validate()
+}
+
+func validateDestinationReadBackFields(kind string, fields []DestinationReadBackField) error {
+	if len(fields) == 0 {
+		return fmt.Errorf("destination read-back %s fields are required", kind)
+	}
+	provider := make(map[string]struct{}, len(fields))
+	expected := make(map[string]struct{}, len(fields))
+	for _, field := range fields {
+		if strings.TrimSpace(field.ProviderField) == "" || len(field.ProviderField) > 256 || strings.TrimSpace(field.ExpectedField) == "" || len(field.ExpectedField) > 256 {
+			return fmt.Errorf("destination read-back %s fields require concrete provider and expected names", kind)
+		}
+		if _, duplicate := provider[field.ProviderField]; duplicate {
+			return fmt.Errorf("destination read-back %s duplicates provider field %q", kind, field.ProviderField)
+		}
+		if _, duplicate := expected[field.ExpectedField]; duplicate {
+			return fmt.Errorf("destination read-back %s duplicates expected field %q", kind, field.ExpectedField)
+		}
+		provider[field.ProviderField] = struct{}{}
+		expected[field.ExpectedField] = struct{}{}
+	}
+	return nil
+}
+
 // SourceTransportDescriptor is the source side of a connector's transport
 // declaration. EligibleStreams are the only streams this role may receive.
 type SourceTransportDescriptor struct {
@@ -243,6 +311,7 @@ type DestinationTransportDescriptor struct {
 	Acknowledgement   TransportAcknowledgement     `json:"acknowledgement"`
 	ApplyStrategies   []DestinationApplyStrategy   `json:"apply_strategies"`
 	SourceBindings    []DestinationSourceBinding   `json:"source_bindings,omitempty"`
+	ReadBack          *DestinationReadBackPolicy   `json:"read_back,omitempty"`
 }
 
 // SyncTransportDescriptor declares one or both roles a connector can perform.
@@ -378,6 +447,11 @@ func (d DestinationTransportDescriptor) Validate() error {
 	}
 	if err := validateDestinationSourceBindings(d.SourceBindings); err != nil {
 		return err
+	}
+	if d.ReadBack != nil {
+		if err := d.ReadBack.Validate(); err != nil {
+			return err
+		}
 	}
 	switch d.Acknowledgement {
 	case TransportAcknowledgementDurableWarehouse, TransportAcknowledgementNone:

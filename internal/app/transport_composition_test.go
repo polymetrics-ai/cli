@@ -368,7 +368,7 @@ func TestDefinitionTransportFactoriesRegisterSharedSourceOnce(t *testing.T) {
 // destination without App, engine, orchestrator, or dispatch name-routing.
 // The adapter may use only the action, input bindings, acknowledgement, and
 // per-mode strategy declared in this bundle.
-func TestDefinitionTransportFactoriesRunTypedDestinationFromDefinition(t *testing.T) {
+func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *testing.T) {
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
 		t.Fatal(err)
@@ -425,6 +425,16 @@ func TestDefinitionTransportFactoriesRunTypedDestinationFromDefinition(t *testin
     "conformance": {"suite": "synthetic_typed_destination", "run_id": "destination_v1"},
     "acknowledgement": "durable_warehouse",
     "apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "apply_widget"}],
+    "read_back": {
+      "operation": "widgets",
+      "identity": [{"provider_field": "id", "expected_field": "target_id"}],
+      "expected": [{"provider_field": "value", "expected_field": "value"}],
+      "max_records": 1000,
+      "max_attempts": 2,
+      "timeout_milliseconds": 5000,
+      "retry_delay_milliseconds": 1,
+      "conformance": {"suite": "synthetic_typed_destination", "run_id": "destination_v1"}
+    },
     "source_bindings": [{
       "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
       "eligible_streams": ["widgets"],
@@ -471,11 +481,37 @@ func TestDefinitionTransportFactoriesRunTypedDestinationFromDefinition(t *testin
 	if err != nil {
 		t.Fatalf("run synthetic typed destination: %v", err)
 	}
-	if reads != 1 || writes != 1 || commits != 1 {
-		t.Fatalf("synthetic typed destination effects read/write/commit = %d/%d/%d, want 1 each", reads, writes, commits)
+	if reads != 2 || writes != 1 || commits != 1 {
+		t.Fatalf("synthetic typed destination effects read/write/commit = %d/%d/%d, want source read + provider read-back, one write, one commit", reads, writes, commits)
 	}
 	if result.RecordsRead != 1 || result.RecordsApplied != 1 || result.CommittedCheckpoint == nil {
 		t.Fatalf("synthetic typed destination result = %#v, want one acknowledged action", result)
+	}
+}
+
+func TestDeclarativeTypedDestination_MissingOrMismatchedReadBackDoesNotCommit(t *testing.T) {
+	policy := connectors.DestinationReadBackPolicy{
+		Identity: []connectors.DestinationReadBackField{{ProviderField: "id", ExpectedField: "target_id"}},
+		Expected: []connectors.DestinationReadBackField{{ProviderField: "value", ExpectedField: "value"}},
+	}
+	expected := []connectors.Record{{"target_id": "widget-1", "value": "approved"}}
+	for _, testCase := range []struct {
+		name     string
+		provider []connectors.Record
+	}{
+		{name: "missing", provider: nil},
+		{name: "mismatch", provider: []connectors.Record{{"id": "widget-1", "value": "stale"}}},
+		{name: "duplicate identity", provider: []connectors.Record{{"id": "widget-1", "value": "approved"}, {"id": "widget-1", "value": "approved"}}},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			commits := 0
+			if err := matchDeclarativeTypedDestinationProviderState(expected, testCase.provider, policy); err == nil {
+				commits++
+			}
+			if commits != 0 {
+				t.Fatal("missing, mismatched, or duplicate provider state admitted checkpoint commit")
+			}
+		})
 	}
 }
 
@@ -704,8 +740,8 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			if err == nil {
 				t.Fatal("persisted connection accepted an absent or foreign typed destination action")
 			}
-			if reads != 3 || appendWrites != 1 || replaceWrites != 1 || otherWrites != 1 {
-				t.Fatalf("refused persisted selection caused I/O reads/append/replace/other=%d/%d/%d/%d, want 3/1/1/1", reads, appendWrites, replaceWrites, otherWrites)
+			if reads != 6 || appendWrites != 1 || replaceWrites != 1 || otherWrites != 1 {
+				t.Fatalf("refused persisted selection caused I/O reads/append/replace/other=%d/%d/%d/%d, want 6/1/1/1 (source plus provider read-back)", reads, appendWrites, replaceWrites, otherWrites)
 			}
 		})
 	}
@@ -728,8 +764,8 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: appendConnection.Name, Stream: "widgets", BatchSize: 1}); err == nil {
 		t.Fatal("RunETL accepted a persisted multi-action stream without destination_action")
 	}
-	if reads != 3 || appendWrites != 1 || replaceWrites != 1 || otherWrites != 1 {
-		t.Fatalf("persisted missing action reached I/O reads/append/replace/other=%d/%d/%d/%d, want 3/1/1/1", reads, appendWrites, replaceWrites, otherWrites)
+	if reads != 6 || appendWrites != 1 || replaceWrites != 1 || otherWrites != 1 {
+		t.Fatalf("persisted missing action reached I/O reads/append/replace/other=%d/%d/%d/%d, want 6/1/1/1 (source plus provider read-back)", reads, appendWrites, replaceWrites, otherWrites)
 	}
 }
 
@@ -1757,13 +1793,23 @@ func declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID str
     "conformance": {"suite": "typed_destination", "run_id": %q},
     "acknowledgement": "durable_warehouse",
     "apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "apply_widget"}],
+    "read_back": {
+      "operation": "widgets",
+      "identity": [{"provider_field": "id", "expected_field": "target_id"}],
+      "expected": [{"provider_field": "value", "expected_field": "value"}],
+      "max_records": 1000,
+      "max_attempts": 2,
+      "timeout_milliseconds": 5000,
+      "retry_delay_milliseconds": 1,
+      "conformance": {"suite": "typed_destination", "run_id": %q}
+    },
     "source_bindings": [{
       "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
       "eligible_streams": ["widgets"],
       "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}
     }]
   }
-}`, sourceRunID, destinationRunID))}
+}`, sourceRunID, destinationRunID, destinationRunID))}
 	return files
 }
 
@@ -1804,13 +1850,23 @@ func declarativeTypedDestinationMultiActionBundleFS(name, sourceRunID, destinati
       {"mode": "full_append", "strategy": "append", "action": "append_widget"},
       {"mode": "full_append", "strategy": "append", "action": "replace_widget"}
     ],
+    "read_back": {
+      "operation": "widgets",
+      "identity": [{"provider_field": "id", "expected_field": "target_id"}],
+      "expected": [{"provider_field": "value", "expected_field": "value"}],
+      "max_records": 1000,
+      "max_attempts": 2,
+      "timeout_milliseconds": 5000,
+      "retry_delay_milliseconds": 1,
+      "conformance": {"suite": "typed_destination", "run_id": %q}
+    },
     "source_bindings": [{
       "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
       "eligible_streams": ["widgets"],
       "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}
     }]
   }
-}`, sourceRunID, destinationRunID))}
+}`, sourceRunID, destinationRunID, destinationRunID))}
 	return files
 }
 
@@ -1871,6 +1927,10 @@ type syntheticDefinitionConnector struct {
 
 type nativeTypedDestinationTestConnector struct {
 	engine.Base
+}
+
+func (*nativeTypedDestinationTestConnector) ReadBackDeclarativeDestination(context.Context, connectors.DeclarativeTypedDestinationReadBackRequest) ([]connectors.Record, error) {
+	return []connectors.Record{}, nil
 }
 
 func (*nativeTypedDestinationTestConnector) Check(context.Context, connectors.RuntimeConfig) error {

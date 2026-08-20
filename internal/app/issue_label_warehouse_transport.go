@@ -158,6 +158,7 @@ type declarativeTypedDestinationExecutor struct{}
 
 type declarativeTypedDestinationContract struct {
 	connector  connectors.DeclarativeTypedDestination
+	readBack   connectors.DeclarativeTypedDestinationReadBack
 	descriptor connectors.DestinationTransportDescriptor
 	actions    map[string]connectors.WriteActionInfo
 }
@@ -294,7 +295,7 @@ func validateDeclarativeTypedDestinationApprovalDefinition(approval synctranspor
 	return nil
 }
 
-func (e *declarativeTypedDestinationExecutor) ReadBackDestination(_ context.Context, request synctransport.DestinationReadBackRequest) error {
+func (e *declarativeTypedDestinationExecutor) ReadBackDestination(ctx context.Context, request synctransport.DestinationReadBackRequest) error {
 	if e == nil {
 		return fmt.Errorf("declarative typed destination is unavailable")
 	}
@@ -318,7 +319,100 @@ func (e *declarativeTypedDestinationExecutor) ReadBackDestination(_ context.Cont
 	if request.Acknowledgement.Sink != contract.connector.Name() || request.Acknowledgement.AcknowledgedAt.IsZero() {
 		return fmt.Errorf("declarative typed destination read-back requires its durable acknowledgement")
 	}
+	binding, err := contract.plan(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy)
+	if err != nil {
+		return err
+	}
+	expected, err := declarativeTypedDestinationRecords(request.Workset.Records, binding)
+	if err != nil {
+		return err
+	}
+	policy := *contract.descriptor.ReadBack
+	readCtx, cancel := context.WithTimeout(ctx, time.Duration(policy.TimeoutMilliseconds)*time.Millisecond)
+	defer cancel()
+	var lastErr error
+	for attempt := 1; attempt <= policy.MaxAttempts; attempt++ {
+		provider, readErr := contract.readBack.ReadBackDeclarativeDestination(readCtx, connectors.DeclarativeTypedDestinationReadBackRequest{
+			Operation: policy.Operation, Runtime: request.Runtime, MaxRecords: policy.MaxRecords,
+			Receipt: append(json.RawMessage(nil), request.Acknowledgement.Output...),
+		})
+		if readErr == nil {
+			readErr = matchDeclarativeTypedDestinationProviderState(expected, provider, policy)
+		}
+		if readErr == nil {
+			return nil
+		}
+		lastErr = readErr
+		if attempt == policy.MaxAttempts {
+			break
+		}
+		delay := time.Duration(policy.RetryDelayMilliseconds) * time.Millisecond
+		timer := time.NewTimer(delay)
+		select {
+		case <-readCtx.Done():
+			timer.Stop()
+			return fmt.Errorf("declarative typed destination provider read-back: %w", readCtx.Err())
+		case <-timer.C:
+		}
+	}
+	return fmt.Errorf("declarative typed destination provider read-back did not confirm expected state: %w", lastErr)
+}
+
+func matchDeclarativeTypedDestinationProviderState(expected, provider []connectors.Record, policy connectors.DestinationReadBackPolicy) error {
+	providerByIdentity := make(map[string]connectors.Record, len(provider))
+	for _, record := range provider {
+		identity, err := declarativeDestinationReadBackIdentity(record, policy.Identity, true)
+		if err != nil {
+			return err
+		}
+		if _, duplicate := providerByIdentity[identity]; duplicate {
+			return fmt.Errorf("provider read-back returned duplicate destination identity")
+		}
+		providerByIdentity[identity] = record
+	}
+	seenExpected := make(map[string]struct{}, len(expected))
+	for _, record := range expected {
+		identity, err := declarativeDestinationReadBackIdentity(record, policy.Identity, false)
+		if err != nil {
+			return err
+		}
+		if _, duplicate := seenExpected[identity]; duplicate {
+			return fmt.Errorf("destination workset contains duplicate read-back identity")
+		}
+		seenExpected[identity] = struct{}{}
+		actual, found := providerByIdentity[identity]
+		if !found {
+			return fmt.Errorf("provider read-back is missing an expected destination identity")
+		}
+		for _, field := range policy.Expected {
+			want, wantFound := record[field.ExpectedField]
+			got, gotFound := actual[field.ProviderField]
+			if !wantFound || !gotFound || !reflect.DeepEqual(want, got) {
+				return fmt.Errorf("provider read-back field %q does not match expected destination state", field.ProviderField)
+			}
+		}
+	}
 	return nil
+}
+
+func declarativeDestinationReadBackIdentity(record connectors.Record, fields []connectors.DestinationReadBackField, provider bool) (string, error) {
+	values := make([]any, 0, len(fields))
+	for _, field := range fields {
+		name := field.ExpectedField
+		if provider {
+			name = field.ProviderField
+		}
+		value, found := record[name]
+		if !found || value == nil {
+			return "", fmt.Errorf("destination read-back identity field %q is missing", name)
+		}
+		values = append(values, value)
+	}
+	digest, err := hashJSON(values)
+	if err != nil {
+		return "", fmt.Errorf("hash destination read-back identity: %w", err)
+	}
+	return digest, nil
 }
 
 func declarativeTypedDestinationContractFor(connector connectors.Connector) (declarativeTypedDestinationContract, error) {
@@ -349,6 +443,16 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 	if len(descriptor.SourceBindings) == 0 {
 		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires explicit source bindings")
 	}
+	if descriptor.ReadBack == nil {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination declares provider read-back unavailable")
+	}
+	readBack, ok := candidate.(connectors.DeclarativeTypedDestinationReadBack)
+	if !ok || reflect.ValueOf(readBack).Kind() == reflect.Pointer && reflect.ValueOf(readBack).IsNil() {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination does not implement its declared provider read-back")
+	}
+	if descriptor.ReadBack.Conformance != descriptor.Conformance {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination read-back conformance is not bound to the admitted destination evidence")
+	}
 	for _, binding := range descriptor.SourceBindings {
 		if binding.RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires input_fields source mapping")
@@ -370,7 +474,7 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q selects a different closed adapter", action.Name)
 		}
 	}
-	return declarativeTypedDestinationContract{connector: candidate, descriptor: descriptor, actions: actions}, nil
+	return declarativeTypedDestinationContract{connector: candidate, readBack: readBack, descriptor: descriptor, actions: actions}, nil
 }
 
 func declarativeTypedDestinationIsNil(candidate connectors.DeclarativeTypedDestination) bool {

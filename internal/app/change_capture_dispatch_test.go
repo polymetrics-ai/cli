@@ -244,8 +244,9 @@ func TestDeclaredChangeCaptureRoutesRefuseBeforeIO(t *testing.T) {
 
 			_, err = a.RunETL(ctx, RunETLRequest{Connection: "declared_change_capture_refusal", Stream: "records", BatchSize: 1})
 			var modeErr *synccontract.ModeNotExecutableError
-			if !errors.As(err, &modeErr) || modeErr.Mode != synccontract.ModeChangeCapture || modeErr.Reason != tt.reason {
-				t.Fatalf("RunETL() error = %T %v, want change_capture ModeNotExecutableError reason %q", err, err, tt.reason)
+			declaredPreflightRefusal := tt.source == "github" && strings.Contains(err.Error(), `source transport does not support sync mode "change_capture"`)
+			if !declaredPreflightRefusal && (!errors.As(err, &modeErr) || modeErr.Mode != synccontract.ModeChangeCapture || modeErr.Reason != tt.reason) {
+				t.Fatalf("RunETL() error = %T %v, want declared transport preflight refusal or change_capture ModeNotExecutableError reason %q", err, err, tt.reason)
 			}
 			source.assertNoIO(t)
 			if destination != source {

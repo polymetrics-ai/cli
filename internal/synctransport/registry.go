@@ -70,6 +70,20 @@ func (r *Registry) RegisterDestination(executor DestinationExecutor) error {
 	return nil
 }
 
+// RegisteredDestination returns the exact executor selected by a declaration
+// without performing mode-specific preflight. App uses this only to determine
+// whether a declared pair selects one of its closed transport routes; all
+// executable selections still pass through Preflight before I/O.
+func (r *Registry) RegisteredDestination(reference connectors.TransportExecutorReference) (DestinationExecutor, bool) {
+	if r == nil {
+		return nil, false
+	}
+	r.mu.RLock()
+	executor, found := r.destinations[reference]
+	r.mu.RUnlock()
+	return executor, found && !isNilInterface(executor)
+}
+
 // ResolvedTransport is the immutable result of a successful runtime
 // preflight. It contains no provider records and no self-reported evidence.
 type ResolvedTransport struct {
@@ -171,6 +185,9 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	if err != nil {
 		return ResolvedTransport{}, err
 	}
+	if err := validateDeliveryCompatibility(request.Mode, strategy.Strategy, sourceDescriptor.Delivery, destinationDescriptor.Delivery); err != nil {
+		return ResolvedTransport{}, err
+	}
 
 	r.mu.RLock()
 	source, sourceRegistered := r.sources[sourceDescriptor.Executor]
@@ -216,6 +233,36 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 		DestinationDescriptor: *destinationDescriptor,
 		ApplyStrategy:         strategy,
 	}, nil
+}
+
+func validateDeliveryCompatibility(mode synccontract.Mode, strategy connectors.ApplyStrategy, source, destination connectors.DeliveryGuarantees) error {
+	wantStrategy := map[synccontract.Mode]connectors.ApplyStrategy{
+		synccontract.ModeFullOverwrite:            connectors.ApplyStrategyReplace,
+		synccontract.ModeFullAppend:               connectors.ApplyStrategyAppend,
+		synccontract.ModeIncrementalAppend:        connectors.ApplyStrategyAppend,
+		synccontract.ModeIncrementalUpsert:        connectors.ApplyStrategyMerge,
+		synccontract.ModeIncrementalDedupe:        connectors.ApplyStrategyDedupe,
+		synccontract.ModeIncrementalDedupeHistory: connectors.ApplyStrategyDedupeHistory,
+		synccontract.ModeChangeCapture:            connectors.ApplyStrategyChangeApply,
+	}[mode]
+	if wantStrategy == "" || strategy != wantStrategy {
+		return fmt.Errorf("transport sync mode %q requires apply strategy %q, got %q", mode, wantStrategy, strategy)
+	}
+	if source.Idempotency == connectors.DeliveryIdempotencyNone {
+		return fmt.Errorf("transport sync mode %q cannot replay a source declaring no idempotency", mode)
+	}
+	if destination.Idempotency != connectors.DeliveryIdempotencyKeyed {
+		return fmt.Errorf("transport sync mode %q requires keyed destination idempotency", mode)
+	}
+	if mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory || mode == synccontract.ModeChangeCapture {
+		if source.Ordering != connectors.DeliveryOrderingSource || destination.Ordering != connectors.DeliveryOrderingSource {
+			return fmt.Errorf("transport sync mode %q requires source-ordered delivery at both endpoints", mode)
+		}
+	}
+	if mode == synccontract.ModeChangeCapture && (source.Deletes != connectors.DeliveryDeletesTombstone || destination.Deletes != connectors.DeliveryDeletesTombstone) {
+		return fmt.Errorf("transport change_capture requires tombstone delivery at both endpoints")
+	}
+	return nil
 }
 
 func containsMode(modes []synccontract.Mode, want synccontract.Mode) bool {

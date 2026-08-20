@@ -707,6 +707,156 @@ func TestRateParkingCoordinator_ConcurrentSameScopeAdmissionHasZeroSends(t *test
 	}
 }
 
+func TestRateParking_TransientFailuresRemainScheduledOrReconcile(t *testing.T) {
+	now := time.Date(2026, time.August, 21, 9, 0, 0, 0, time.UTC)
+	base := NewMemoryRateParkingStore()
+	faults := &rateParkingFaultStore{RateParkingStore: base, claimFailures: 1, completeFailures: 1}
+	scheduler := newRateParkingTestScheduler()
+	providerResumes := 0
+	coordinator := NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store: faults, Scheduler: scheduler, Now: func() time.Time { return now },
+		RetryBackoff: time.Second, RetryBackoffMaximum: 4 * time.Second,
+		Resume: func(context.Context, ParkedRateLimitRun) error { providerResumes++; return nil },
+		Reconcile: func(context.Context, ParkedRateLimitRun) error {
+			t.Fatal("completed resume replayed through reconciliation")
+			return nil
+		},
+	})
+	if err := coordinator.Start(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := coordinator.Park(context.Background(), RateParkingRequest{RunID: "transient", Scope: "scope-transient", Checkpoint: testParkedCheckpoint(now), ResetAt: now, Reason: connsdk.RateLimitObservationSourceHTTP429}); err != nil {
+		t.Fatal(err)
+	}
+	scheduler.RunThrough(now)
+	if providerResumes != 0 || scheduler.Scheduled() != 1 {
+		t.Fatalf("claim failure resumes/scheduled = %d/%d, want 0/1", providerResumes, scheduler.Scheduled())
+	}
+	now = now.Add(time.Second)
+	scheduler.RunThrough(now)
+	if providerResumes != 1 || scheduler.Scheduled() != 1 {
+		t.Fatalf("completion failure resumes/scheduled = %d/%d, want 1/1", providerResumes, scheduler.Scheduled())
+	}
+	now = now.Add(4 * time.Second)
+	scheduler.RunThrough(now)
+	if providerResumes != 1 {
+		t.Fatalf("provider resumes after persisted completion = %d, want 1", providerResumes)
+	}
+	if runs, err := base.List(); err != nil || len(runs) != 0 {
+		t.Fatalf("reconciled completion retained runs %#v, %v", runs, err)
+	}
+
+	base = NewMemoryRateParkingStore()
+	faults = &rateParkingFaultStore{RateParkingStore: base, releaseFailures: 1}
+	scheduler = newRateParkingTestScheduler()
+	providerResumes, reconciles := 0, 0
+	coordinator = NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store: faults, Scheduler: scheduler, Now: func() time.Time { return now }, ClaimTTL: 2 * time.Second,
+		RetryBackoff: time.Second, RetryBackoffMaximum: 4 * time.Second,
+		Resume: func(context.Context, ParkedRateLimitRun) error {
+			providerResumes++
+			return errors.New("transient pre-provider failure")
+		},
+		Reconcile: func(context.Context, ParkedRateLimitRun) error { reconciles++; return nil },
+	})
+	if err := coordinator.Start(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := coordinator.Park(context.Background(), RateParkingRequest{RunID: "release", Scope: "scope-release", Checkpoint: testParkedCheckpoint(now), ResetAt: now, Reason: connsdk.RateLimitObservationSourceHeaders}); err != nil {
+		t.Fatal(err)
+	}
+	scheduler.RunThrough(now)
+	if providerResumes != 1 || scheduler.Scheduled() != 1 {
+		t.Fatalf("release failure resumes/scheduled = %d/%d, want 1/1", providerResumes, scheduler.Scheduled())
+	}
+	now = now.Add(3 * time.Second)
+	scheduler.RunThrough(now)
+	if providerResumes != 1 || reconciles != 1 {
+		t.Fatalf("provider/reconcile calls = %d/%d, want 1/1 without provider replay", providerResumes, reconciles)
+	}
+}
+
+func TestRateParking_SerializesSameScopeAcrossCoordinators(t *testing.T) {
+	for _, testCase := range []struct {
+		name   string
+		stores func(*testing.T) (RateParkingStore, RateParkingStore)
+	}{
+		{name: "memory", stores: func(*testing.T) (RateParkingStore, RateParkingStore) {
+			store := NewMemoryRateParkingStore()
+			return store, store
+		}},
+		{name: "file", stores: func(t *testing.T) (RateParkingStore, RateParkingStore) {
+			path := filepath.Join(t.TempDir(), "scope-queue.json")
+			first, err := OpenFileRateParkingStore(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			second, err := OpenFileRateParkingStore(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			return first, second
+		}},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			now := time.Date(2026, time.August, 21, 10, 0, 0, 0, time.UTC)
+			first, second := testCase.stores(t)
+			for _, id := range []string{"run-a", "run-b"} {
+				if _, _, err := first.Create(ParkedRateLimitRun{RunID: id, Outcome: RateParkingOutcomeParkedRateLimit, Scope: "shared-scope", Checkpoint: testParkedCheckpoint(now), ResetAt: now, Reason: connsdk.RateLimitObservationSourceRetryAfter}); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if _, claimed, _, err := second.Claim("run-b", "coordinator-b", now, now.Add(time.Minute)); err != nil || claimed {
+				t.Fatalf("non-leader claim = %t, %v; want queued", claimed, err)
+			}
+			if _, claimed, _, err := first.Claim("run-a", "coordinator-a", now, now.Add(time.Minute)); err != nil || !claimed {
+				t.Fatalf("leader claim = %t, %v; want claimed", claimed, err)
+			}
+			if _, err := first.BeginResume("run-a", "coordinator-a"); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := first.MarkResumeCompleted("run-a", "coordinator-a"); err != nil {
+				t.Fatal(err)
+			}
+			if err := first.Complete("run-a", "coordinator-a"); err != nil {
+				t.Fatal(err)
+			}
+			if _, claimed, _, err := second.Claim("run-b", "coordinator-b", now, now.Add(time.Minute)); err != nil || !claimed {
+				t.Fatalf("next leader claim = %t, %v; want claimed after predecessor completion", claimed, err)
+			}
+		})
+	}
+}
+
+type rateParkingFaultStore struct {
+	RateParkingStore
+	claimFailures    int
+	completeFailures int
+	releaseFailures  int
+}
+
+func (s *rateParkingFaultStore) Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error) {
+	if s.claimFailures > 0 {
+		s.claimFailures--
+		return ParkedRateLimitRun{}, false, time.Time{}, errors.New("transient claim failure")
+	}
+	return s.RateParkingStore.Claim(runID, owner, now, until)
+}
+func (s *rateParkingFaultStore) Complete(runID, owner string) error {
+	if s.completeFailures > 0 {
+		s.completeFailures--
+		return errors.New("transient completion failure")
+	}
+	return s.RateParkingStore.Complete(runID, owner)
+}
+func (s *rateParkingFaultStore) ReleaseClaim(runID, owner string) error {
+	if s.releaseFailures > 0 {
+		s.releaseFailures--
+		return errors.New("transient release failure")
+	}
+	return s.RateParkingStore.ReleaseClaim(runID, owner)
+}
+
 func testParkedCheckpoint(observedAt time.Time) synccontract.CheckpointEnvelope {
 	committedAt := observedAt.Add(time.Second)
 	positionObserved := true
