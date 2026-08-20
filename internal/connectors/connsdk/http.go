@@ -40,11 +40,12 @@ type Response struct {
 }
 
 // HTTPError is returned when a request completes with a 4xx/5xx status after
-// exhausting retries. The body is truncated and never assumed to be secret-free
-// by callers, but connsdk itself never logs it.
+// exhausting retries. Its body and headers are never assumed to be secret-free
+// by callers, but connsdk itself never logs them.
 type HTTPError struct {
 	Status int
 	URL    string
+	Header http.Header
 	Body   string
 }
 
@@ -1095,7 +1096,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 				// buy a second one.
 				reauthAttempted = true
 				if err := refresher.RefreshAuth(ctx, req); err == nil {
-					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Header: resp.Header.Clone(), Body: string(respBody)}
 					// The reauth retry does not spend the transient-failure
 					// budget, so a MaxRetries:0 requester still gets its one
 					// post-refresh attempt. Bounded by reauthAttempted, which
@@ -1109,7 +1110,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 
 		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
-			lastErr = responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, respBody, observation)
 			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
 				return nil, werr
 			}
@@ -1117,7 +1118,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			return nil, responseHTTPError(resp.StatusCode, fullURL, resp.Header, respBody, observation)
 		}
 
 		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}, nil
@@ -1226,8 +1227,8 @@ func (r *Requester) fullJitter(cap time.Duration) time.Duration {
 	return delay
 }
 
-func responseHTTPError(status int, requestURL string, body []byte, observation RateLimitObservation) error {
-	httpErr := &HTTPError{Status: status, URL: requestURL, Body: truncate(body)}
+func responseHTTPError(status int, requestURL string, header http.Header, body []byte, observation RateLimitObservation) error {
+	httpErr := &HTTPError{Status: status, URL: requestURL, Header: header.Clone(), Body: string(body)}
 	if status != http.StatusTooManyRequests {
 		return httpErr
 	}
@@ -1240,11 +1241,4 @@ func responseHTTPError(status int, requestURL string, body []byte, observation R
 		HasReset:        observation.HasReset,
 		ResetAtAbsolute: observation.ResetAtAbsolute,
 	}
-}
-
-func truncate(body []byte) string {
-	if len(body) > maxErrorBody {
-		return string(body[:maxErrorBody])
-	}
-	return string(body)
 }

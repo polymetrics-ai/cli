@@ -624,6 +624,7 @@ type OperationDirectWriteResult struct {
 	Method    string                   `json:"method"`
 	Path      string                   `json:"path"`
 	Status    int                      `json:"status"`
+	Headers   map[string][]string      `json:"headers,omitempty"`
 	Body      any                      `json:"body,omitempty"`
 	GraphQL   *GraphQLResponseMetadata `json:"graphql,omitempty"`
 }
@@ -672,6 +673,10 @@ type OperationDirectWritePreflighter interface {
 
 type OperationDirectWriteBindingPreflighter interface {
 	PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error
+}
+
+type OperationDirectWriteBodyMaterializer interface {
+	MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error)
 }
 
 // OperationStructuredJSONBodyPreflighter proves that one named top-level

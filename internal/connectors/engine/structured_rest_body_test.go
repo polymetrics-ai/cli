@@ -3,6 +3,8 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -10,6 +12,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 func structuredRESTBodyBundle(baseURL string) Bundle {
@@ -950,7 +953,7 @@ func TestOperationStructuredJSONBodyPreflightRejectsSchemaAndActionMismatches(t 
 	}{
 		{name: "field from another action", op: first, field: "archive", want: "does not declare"},
 		{name: "first field on second action", op: second, field: "attributes", want: "does not declare"},
-		{name: "dotted traversal", op: first, field: "attributes.owner", want: "top-level"},
+		{name: "scalar dotted traversal", op: first, field: "attributes.owner", want: "must be an object or array"},
 		{
 			name: "open nested object",
 			op: func() OperationSpec {
@@ -1073,4 +1076,318 @@ func TestOperationDirectWriteValidatesPathAndBodyBindingsAgainstDeclaration(t *t
 			}
 		})
 	}
+}
+
+func TestMaterializeOperationDirectWriteBodyMappingsUsesDeclaredSchemaPaths(t *testing.T) {
+	bundle := structuredRESTBodyBundle("https://example.invalid")
+	op := bundle.Operations[0]
+	rest := *op.REST
+	rest.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"properties": {
+			"0": {"type": "string"},
+			"a.b": {"type": "string"},
+			"config.v1": {"type": "object", "additionalProperties": false, "properties": {"enabled": {"type": "boolean"}}},
+			"targets": {
+				"type": "array",
+				"maxItems": 1024,
+				"items": {
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["id"],
+					"properties": {"id": {"type": "string"}}
+				}
+			}
+		}
+	}`)
+	op.REST = &rest
+	bundle.Operations[0] = op
+
+	mappings := map[string]any{"0": "zero", "a.b": "dotted"}
+	for index := 0; index < 130; index++ {
+		mappings[fmt.Sprintf("targets.%d.id", index)] = fmt.Sprintf("id-%d", index)
+	}
+	body, err := MaterializeOperationDirectWriteBodyMappings(bundle, op.ID, mappings)
+	if err != nil {
+		t.Fatalf("MaterializeOperationDirectWriteBodyMappings: %v", err)
+	}
+	if body["0"] != "zero" || body["a.b"] != "dotted" {
+		t.Fatalf("object-key mappings = %#v, want declared numeric and dotted keys", body)
+	}
+	if err := ValidateOperationStructuredJSONBodyField(op, "config.v1"); err != nil {
+		t.Fatalf("dotted structured property preflight: %v", err)
+	}
+	targets, ok := body["targets"].([]any)
+	if !ok || len(targets) != 130 {
+		t.Fatalf("targets = %#v, want 130 declared array entries", body["targets"])
+	}
+	for _, index := range []int{0, 1, 10, 129} {
+		entry, ok := targets[index].(map[string]any)
+		if !ok || entry["id"] != fmt.Sprintf("id-%d", index) {
+			t.Fatalf("targets[%d] = %#v, want declared indexed value", index, targets[index])
+		}
+	}
+
+	_, err = MaterializeOperationDirectWriteBodyMappings(bundle, op.ID, map[string]any{"targets.1.id": "second"})
+	if err == nil || !strings.Contains(err.Error(), "sparse array") {
+		t.Fatalf("sparse array error = %v, want declared sparse-index rejection", err)
+	}
+}
+
+func TestValidateOperationDirectWriteCLIFlagsProjectsRequiredArraysAndDomains(t *testing.T) {
+	requiredArray := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	rest := *requiredArray.REST
+	rest.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["targets"],
+		"properties": {
+			"targets": {
+				"type": "array",
+				"minItems": 1,
+				"maxItems": 1,
+				"items": {
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["id"],
+					"properties": {"id": {"type": "string", "enum": ["safe"]}}
+				}
+			}
+		}
+	}`)
+	requiredArray.REST = &rest
+	validNested := []CLIFlag{{Name: "target-id", Type: "enum", Values: []string{"safe"}, MapsTo: "body.targets.0.id", Required: true}}
+	if err := ValidateOperationDirectWriteCLIFlags(requiredArray, validNested); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteCLIFlags required nested array: %v", err)
+	}
+	invalidNested := append([]CLIFlag(nil), validNested...)
+	invalidNested[0].Values = []string{"unsafe"}
+	if err := ValidateOperationDirectWriteCLIFlags(requiredArray, invalidNested); err == nil || !strings.Contains(err.Error(), "does not match") {
+		t.Fatalf("invalid nested enum error = %v, want declared-domain rejection", err)
+	}
+
+	stringArray := requiredArray
+	stringArrayREST := *requiredArray.REST
+	stringArrayREST.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"properties": {
+			"tags": {"type": "array", "maxItems": 1, "items": {"type": "string", "enum": ["safe"]}}
+		}
+	}`)
+	stringArray.REST = &stringArrayREST
+	for _, test := range []struct {
+		name string
+		flag CLIFlag
+		want bool
+	}{
+		{name: "bounded declared domain", flag: CLIFlag{Name: "tags", Type: "string_array", Values: []string{"safe"}, MapsTo: "body.tags", MaxItems: 1}, want: true},
+		{name: "undeclared enum value", flag: CLIFlag{Name: "tags", Type: "string_array", Values: []string{"unsafe"}, MapsTo: "body.tags", MaxItems: 1}},
+		{name: "overdeclared cardinality", flag: CLIFlag{Name: "tags", Type: "string_array", Values: []string{"safe"}, MapsTo: "body.tags", MaxItems: 2}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			err := ValidateOperationDirectWriteCLIFlags(stringArray, []CLIFlag{test.flag})
+			if test.want {
+				if err != nil {
+					t.Fatalf("ValidateOperationDirectWriteCLIFlags: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), "does not match") {
+				t.Fatalf("ValidateOperationDirectWriteCLIFlags error = %v, want declared-domain rejection", err)
+			}
+		})
+	}
+}
+
+func TestStructuredRESTBodyDeclarationSatisfiabilityAndStaticCoverage(t *testing.T) {
+	base := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	unsatisfiable := base
+	unsatisfiableREST := *base.REST
+	unsatisfiableREST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"required":["mode"],"properties":{}}`)
+	unsatisfiable.REST = &unsatisfiableREST
+	if err := ValidateOperationDirectWriteMappings(unsatisfiable, nil, nil); err == nil || !strings.Contains(err.Error(), "required property") {
+		t.Fatalf("unsatisfiable required property error = %v, want declaration rejection", err)
+	}
+
+	invalidStatic := base
+	invalidStaticREST := *base.REST
+	invalidStaticREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["settings"],
+		"properties":{"settings":{"type":"object","additionalProperties":false,"properties":{"enabled":{"type":"boolean"}}}}
+	}`)
+	invalidStaticREST.Body = map[string]any{"settings": nil}
+	invalidStatic.REST = &invalidStaticREST
+	if err := ValidateOperationDirectWriteCLIFlags(invalidStatic, nil); err == nil || !strings.Contains(err.Error(), "does not match type") {
+		t.Fatalf("invalid static body error = %v, want preflight schema rejection", err)
+	}
+
+	merge := base
+	mergeREST := *base.REST
+	mergeREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["payload"],
+		"properties":{"payload":{"type":"object","additionalProperties":false,"required":["fixed","name"],"properties":{"fixed":{"type":"string"},"name":{"type":"string"}}}}
+	}`)
+	mergeREST.Body = map[string]any{"payload": map[string]any{"fixed": "provider"}}
+	merge.REST = &mergeREST
+	bundle := structuredRESTBodyBundle("https://example.invalid")
+	bundle.Operations[0] = merge
+	dynamic, err := MaterializeOperationDirectWriteBodyMappings(bundle, merge.ID, map[string]any{"payload.name": "caller"})
+	if err != nil {
+		t.Fatalf("MaterializeOperationDirectWriteBodyMappings nested value: %v", err)
+	}
+	materialized, err := materializeStructuredRESTBody(merge, merge.REST.Body, dynamic)
+	if err != nil {
+		t.Fatalf("materializeStructuredRESTBody nested merge: %v", err)
+	}
+	payload, ok := materialized["payload"].(map[string]any)
+	if !ok || payload["fixed"] != "provider" || payload["name"] != "caller" {
+		t.Fatalf("nested static merge = %#v, want fixed provider data and caller field", materialized)
+	}
+	if err := ValidateOperationDirectWriteMappings(merge, nil, []string{"payload.fixed"}); err == nil || !strings.Contains(err.Error(), "fixed rest.body") {
+		t.Fatalf("static overlap error = %v, want declared fixed-field rejection", err)
+	}
+}
+
+func TestStructuredRESTBodyRejectsUnreachableNodeMinimumAndFloatByteDrift(t *testing.T) {
+	base := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	properties := make(map[string]any, maxStructuredRESTBodyFields-1)
+	required := make([]any, 0, maxStructuredRESTBodyFields-1)
+	for index := 0; index < maxStructuredRESTBodyFields-1; index++ {
+		name := fmt.Sprintf("field_%d", index)
+		properties[name] = map[string]any{"type": "string"}
+		required = append(required, name)
+	}
+	nodeSchema := map[string]any{
+		"type":                 "object",
+		"additionalProperties": false,
+		"required":             []any{"targets"},
+		"properties": map[string]any{
+			"targets": map[string]any{
+				"type":     "array",
+				"minItems": float64(maxStructuredRESTBodyItems),
+				"maxItems": float64(maxStructuredRESTBodyItems),
+				"items": map[string]any{
+					"type":                 "object",
+					"additionalProperties": false,
+					"required":             required,
+					"properties":           properties,
+				},
+			},
+		},
+	}
+	rawNodeSchema, err := json.Marshal(nodeSchema)
+	if err != nil {
+		t.Fatalf("marshal node schema: %v", err)
+	}
+	nodeLimited := base
+	nodeLimitedREST := *base.REST
+	nodeLimitedREST.BodySchema = rawNodeSchema
+	nodeLimited.REST = &nodeLimitedREST
+	if err := ValidateOperationDirectWriteMappings(nodeLimited, nil, nil); err == nil || !strings.Contains(err.Error(), "minimum valid body requires") {
+		t.Fatalf("node-minimum error = %v, want unreachable declaration rejection", err)
+	}
+
+	floatLimited := base
+	floatLimitedREST := *base.REST
+	floatLimitedREST.MaxBytes = 17
+	floatLimitedREST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"ratio":{"type":"number"}}}`)
+	floatLimited.REST = &floatLimitedREST
+	_, err = materializeStructuredRESTBody(floatLimited, nil, map[string]any{"ratio": 1e-6})
+	if err == nil || !strings.Contains(err.Error(), "request body too large") || !strings.Contains(err.Error(), "body.ratio") {
+		t.Fatalf("float byte-limit error = %v, want pre-copy JSON-compatible accounting", err)
+	}
+}
+
+func TestOperationDirectWriteStrictHeadersAndProviderHeaders(t *testing.T) {
+	request := structuredRESTBodyRequest()
+	request.Config.Secrets = map[string]string{"token": "header-secret-canary"}
+	for _, test := range []struct {
+		name    string
+		headers map[string]string
+	}{
+		{name: "reference tail", headers: map[string]string{"Authorization": "Bearer {{ secrets.token.extra }}"}},
+		{name: "unclosed expression", headers: map[string]string{"Authorization": "Bearer {{ secrets.token"}},
+		{name: "canonical duplicate", headers: map[string]string{"X-Mode": "one", "x-mode": "two"}},
+		{name: "invalid name", headers: map[string]string{"X Mode": "one"}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { calls++ }))
+			t.Cleanup(server.Close)
+			bundle := structuredRESTBodyBundle(server.URL)
+			bundle.HTTP.Headers = test.headers
+			if _, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil); err == nil {
+				t.Fatal("invalid declared header was accepted")
+			}
+			if calls != 0 {
+				t.Fatalf("invalid header reached provider; calls = %d", calls)
+			}
+		})
+	}
+
+	t.Run("successful response retains headers", func(t *testing.T) {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			w.Header().Add("X-Provider-Trace", "one")
+			w.Header().Add("X-Provider-Trace", "two")
+			_, _ = w.Write([]byte(`{"ok":true}`))
+		}))
+		t.Cleanup(server.Close)
+		bundle := structuredRESTBodyBundle(server.URL)
+		request := structuredRESTBodyRequest()
+		preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+		if err != nil {
+			t.Fatalf("PreviewOperationDirectWrite: %v", err)
+		}
+		request.Approval = approvedEvidenceForPreview(t, preview)
+		request.PreviewDigest = preview.Digest
+		result, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+		if err != nil {
+			t.Fatalf("OperationDirectWrite: %v", err)
+		}
+		if got, want := result.Headers["X-Provider-Trace"], []string{"one", "two"}; !reflect.DeepEqual(got, want) {
+			t.Fatalf("response headers = %#v, want %#v", result.Headers, want)
+		}
+	})
+
+	t.Run("failure retains headers with safe identity", func(t *testing.T) {
+		const secret = "url-secret-canary"
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			w.Header().Add("X-Provider-Trace", "failed")
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte(" provider failure body "))
+		}))
+		t.Cleanup(server.Close)
+		bundle := structuredRESTBodyBundle(server.URL + "/{{ secrets.token }}")
+		request := structuredRESTBodyRequest()
+		request.Config.Secrets = map[string]string{"token": secret}
+		preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+		if err != nil {
+			t.Fatalf("PreviewOperationDirectWrite: %v", err)
+		}
+		request.Approval = approvedEvidenceForPreview(t, preview)
+		request.PreviewDigest = preview.Digest
+		_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+		if err == nil {
+			t.Fatal("provider failure was accepted")
+		}
+		var httpErr *connsdk.HTTPError
+		if !errors.As(err, &httpErr) {
+			t.Fatalf("error = %T %v, want retained HTTP error", err, err)
+		}
+		if strings.Contains(httpErr.URL, secret) || strings.Contains(err.Error(), secret) {
+			t.Fatalf("provider failure exposed resolved URL secret: %v", err)
+		}
+		if got, want := httpErr.Header.Values("X-Provider-Trace"), []string{"failed"}; !reflect.DeepEqual(got, want) {
+			t.Fatalf("error headers = %#v, want %#v", httpErr.Header, want)
+		}
+		if httpErr.Body != " provider failure body " {
+			t.Fatalf("error body = %q, want exact provider response", httpErr.Body)
+		}
+	})
 }

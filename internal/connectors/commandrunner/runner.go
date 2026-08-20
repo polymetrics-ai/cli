@@ -254,7 +254,8 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 		return WriteCommand{}, err
 	}
-	pathParams, query, body, _, err := operationDirectReadOverrides(cmd, req.Flags)
+	bodyMaterializer := connector.(connectors.OperationDirectWriteBodyMaterializer)
+	pathParams, query, body, _, err := operationDirectWriteOverrides(cmd, req.Flags, bodyMaterializer.MaterializeOperationDirectWriteBody)
 	if err != nil {
 		return WriteCommand{}, err
 	}
@@ -468,8 +469,8 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 
 // preflightStructuredJSONFlags preserves the original reverse-ETL record
 // boundary and adds operation-specific exceptions. A JSON flag never means
-// "take an arbitrary request body": a direct write can name only one
-// top-level body field from its fixed REST operation and a direct read can name
+// "take an arbitrary request body": a direct write can name only a declared
+// body field from its fixed REST operation and a direct read can name
 // only one variable from its fixed GraphQL operation. The engine proves the
 // named value is a closed, bounded object or array in that exact declaration.
 func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
@@ -497,8 +498,8 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 			}
 		case cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "":
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
-			if !ok || variable == "" || strings.Contains(variable, ".") {
-				return fmt.Errorf("structured JSON flag --%s must map to one top-level body.<field> of its declared operation", flag.Name)
+			if !ok || variable == "" {
+				return fmt.Errorf("structured JSON flag --%s must map to a declared body field of its operation", flag.Name)
 			}
 			preflighter, supported := connector.(structuredJSONOperationBodyPreflighter)
 			if !supported {
@@ -770,6 +771,9 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	bindingPreflighter, ok := connector.(connectors.OperationDirectWriteBindingPreflighter)
 	if !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write binding metadata"}
+	}
+	if _, ok := connector.(connectors.OperationDirectWriteBodyMaterializer); !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write body materialization"}
 	}
 	metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
@@ -1113,12 +1117,20 @@ func nestedBodyValue(body map[string]any, path string) (any, bool) {
 	parts := strings.Split(path, ".")
 	var cur any = body
 	for _, part := range parts {
-		m, ok := cur.(map[string]any)
-		if !ok {
-			return nil, false
-		}
-		cur, ok = m[part]
-		if !ok || cur == nil {
+		switch value := cur.(type) {
+		case map[string]any:
+			next, ok := value[part]
+			if !ok || next == nil {
+				return nil, false
+			}
+			cur = next
+		case []any:
+			index, ok := bodyMappingArrayIndex(part)
+			if !ok || index >= uint64(len(value)) || value[index] == nil {
+				return nil, false
+			}
+			cur = value[index]
+		default:
 			return nil, false
 		}
 	}
@@ -1435,6 +1447,14 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 // may name the exact maps_to value "body", and the engine subsequently admits
 // it only for its declared text/plain root-string contract.
 func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, *string, error) {
+	return operationDirectOverrides(cmd, flags, nil)
+}
+
+func operationDirectWriteOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string, materialize func(string, map[string]any) (map[string]any, error)) (map[string]string, map[string]string, map[string]any, *string, error) {
+	return operationDirectOverrides(cmd, flags, materialize)
+}
+
+func operationDirectOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string, materialize func(string, map[string]any) (map[string]any, error)) (map[string]string, map[string]string, map[string]any, *string, error) {
 	if cmd.Intent == "direct_write" {
 		if err := validateOperationDirectWriteQueryOccurrences(cmd, flags); err != nil {
 			return nil, nil, nil, nil, err
@@ -1510,15 +1530,30 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 			return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
 		}
 	}
-	sort.SliceStable(bodyMappings, func(left, right int) bool {
-		return bodyMappingPathLess(bodyMappings[left].path, bodyMappings[right].path)
-	})
-	for _, mapping := range bodyMappings {
-		if err := setOperationBodyValue(body, mapping.path, mapping.value, cmd.Intent == "direct_write"); err != nil {
+	if materialize != nil {
+		mappings := make(map[string]any, len(bodyMappings))
+		for _, mapping := range bodyMappings {
+			if _, duplicate := mappings[mapping.path]; duplicate {
+				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("multiple flags map to body.%s", mapping.path)}
+			}
+			mappings[mapping.path] = mapping.value
+		}
+		var err error
+		body, err = materialize(cmd.Operation, mappings)
+		if err != nil {
 			return nil, nil, nil, nil, err
 		}
+	} else {
+		sort.SliceStable(bodyMappings, func(left, right int) bool {
+			return bodyMappingPathLess(bodyMappings[left].path, bodyMappings[right].path)
+		})
+		for _, mapping := range bodyMappings {
+			if err := setOperationBodyValue(body, mapping.path, mapping.value, false); err != nil {
+				return nil, nil, nil, nil, err
+			}
+		}
 	}
-	if rawBody != nil && len(body) != 0 {
+	if rawBody != nil && len(bodyMappings) != 0 {
 		return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "raw body cannot mix with JSON body fields"}
 	}
 	return pathParams, query, body, rawBody, nil
@@ -1879,7 +1914,7 @@ func isDeclaredStructuredJSONOperationBodyFlag(cmd connectors.CommandSurfaceComm
 		return false
 	}
 	variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
-	return ok && variable != "" && !strings.Contains(variable, ".")
+	return ok && variable != ""
 }
 
 func coerceDeclaredPlainTextBodyFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
@@ -1951,6 +1986,17 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		}
 		if flag.MinItems > 0 && len(out) < flag.MinItems {
 			return nil, fmt.Errorf("invalid --%s: %d values is below the minimum of %d", flag.Name, len(out), flag.MinItems)
+		}
+		if len(flag.Values) != 0 {
+			allowed := make(map[string]struct{}, len(flag.Values))
+			for _, value := range flag.Values {
+				allowed[value] = struct{}{}
+			}
+			for _, item := range out {
+				if _, ok := allowed[item]; !ok {
+					return nil, fmt.Errorf("invalid --%s value %q", flag.Name, item)
+				}
+			}
 		}
 		return out, nil
 	default:
