@@ -46,6 +46,26 @@ make build
 
 `connector-boundary` reported `outcome: clean`, loading all 552 bundles.
 
+## CI timeout repair
+
+- **Red:** PR #4310 `verify` exhausted the 20-minute `internal/cli` test
+  timeout while `TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts`
+  was running. In isolation, its one-route fixture spent about 170 seconds on
+  the unrelated Recurly `--full-parity` sweep.
+- **Green:** The test now runs the bounded external-proof path that it actually
+  asserts: a fresh child makes an authenticated provider request while its
+  argv/process observation and temporary artifacts remain free of the synthetic
+  credential. Its direct live check passed in 32.502 seconds; the focused
+  credential-and-child regression command below passed in 95.244 seconds:
+
+  ```text
+  go test -count=1 -timeout=2m -v -run '^TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts$' ./internal/cli
+  go test -count=1 -timeout=5m -run '^(TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifacts|TestExternalProofFreshChildPublishesBoundedProofWithoutFullParity|TestPrepareExternalCertifyStdinCredential(UsesChildMemoryOnly|NormalizesOneDelimiter|RejectsEmptyNormalizedValue)|TestCredentialsAdd(StdinPreservesSingleTerminalDelimiterAndRoundTrips|StdinRejectsEmptyNormalizedSecretBeforePersistence|FromEnvRejectsTransportOnlySecretBeforePersistence))$' ./internal/cli
+  ```
+
+- The active no-mistakes run owns the remaining aggregate validation and PR/CI
+  phases; no pipeline command, push, or PR action was performed by this repair.
+
 ## Controlled limitations
 
 - A whole-package `go test -timeout 20m ./internal/cli -count=1` was run.
