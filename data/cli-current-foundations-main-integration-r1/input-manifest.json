@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "integration": "cli-current-foundations-main-integration-r1",
+  "branch": "fm/cli-current-foundations-main-integration-r1",
+  "target_branch": "main",
+  "base": {
+    "ref": "refs/heads/main",
+    "sha": "e62ae21d428f0d27225f9bff564dc2cd797f6b65",
+    "verified_remote": true,
+    "included_foundations": [
+      {
+        "pr": 4310,
+        "issue": 4301,
+        "sha": "e62ae21d428f0d27225f9bff564dc2cd797f6b65",
+        "description": "non-empty credential-input foundation"
+      },
+      {
+        "pr": 4309,
+        "issue": 4299,
+        "sha": "484c18cf30cb77244d2e7d2c5194a55338b40209",
+        "description": "slim production source-lock embed"
+      }
+    ]
+  },
+  "composition_order": [4306, 4307, 4302, 4305, 4303],
+  "inputs": [
+    {
+      "issue": 4306,
+      "pr": 4312,
+      "remote_ref": "refs/pull/4312/head",
+      "sha": "19a32bd0bc08faf217be8f45b39841b5ff589a92",
+      "remote_ref_verified": true,
+      "qualification": "firstmate-issued exact published head; remote ref re-read",
+      "state": "eligible_unmerged"
+    },
+    {
+      "issue": 4307,
+      "pr": 4311,
+      "remote_ref": "refs/pull/4311/head",
+      "sha": "3c768cade6703426afd2272fbc01bfd60583e04f",
+      "remote_ref_verified": true,
+      "qualification": "firstmate-issued exact published head; remote ref re-read",
+      "state": "eligible_unmerged"
+    },
+    {
+      "issue": 4302,
+      "pr": 4308,
+      "remote_ref": "refs/pull/4308/head",
+      "sha": "fe5b8e18788538c4fcce34969da7ff88a7fa66d6",
+      "remote_ref_verified": true,
+      "qualification": "firstmate terminal gate: Verify run 32354323284 succeeded; real-provider qualification supplied",
+      "qualification_evidence": {
+        "verify_run": 32354323284,
+        "checks": ["verify", "linux-amd64 native-build", "darwin-arm64 native-build"],
+        "live_assertions": ["HEAD 200", "HEAD 404", "exact text export", "exact binary export", "missing-path error with no artifact"]
+      },
+      "state": "eligible_unmerged"
+    },
+    {
+      "issue": 4305,
+      "branch": "fm/cli-rest-structured-body-r1",
+      "qualification": "pending_final_published_firstmate_head",
+      "state": "not_eligible"
+    },
+    {
+      "issue": 4303,
+      "supersedes_visible_pr": 4304,
+      "visible_remote_ref": "refs/pull/4304/head",
+      "visible_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57",
+      "visible_checks": "15 passed, 3 failed, 6 skipped",
+      "qualification": "pending_final_published_firstmate_head; visible head is explicitly unusable",
+      "state": "not_eligible"
+    }
+  ],
+  "intake": {
+    "gh_axi_reread": [4308, 4311, 4312, 4304],
+    "remote_ref_verification": "git ls-remote origin",
+    "status": "partial_inputs_only"
+  }
+}
