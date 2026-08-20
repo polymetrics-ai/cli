@@ -2136,7 +2136,7 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 	case "number":
 		parsed, err := strconv.ParseFloat(value, 64)
 		if err != nil || math.IsNaN(parsed) || math.IsInf(parsed, 0) {
-			return nil, fmt.Errorf("invalid --%s %q, want finite number", flag.Name, value)
+			return nil, fmt.Errorf("invalid --%s: want finite number", flag.Name)
 		}
 		return parsed, nil
 	case "string_array":

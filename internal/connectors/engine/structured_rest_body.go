@@ -925,6 +925,13 @@ func canonicalizeStructuredRESTBodyFragment(compiled *structuredRESTBodySchemaCo
 	return canonical, nil
 }
 
+func validateStructuredRESTBodyFiniteFloat(number float64, path string) error {
+	if math.IsNaN(number) || math.IsInf(number, 0) {
+		return fmt.Errorf("%s does not permit non-finite numbers", path)
+	}
+	return nil
+}
+
 func mergeStructuredRESTBodyObject(node map[string]any, staticBody, overrideBody map[string]any, path string) (map[string]any, error) {
 	properties, ok := node["properties"].(map[string]any)
 	if !ok {
@@ -1386,7 +1393,11 @@ func canonicalizeStructuredRESTBodyValue(node map[string]any, value reflect.Valu
 		}
 		return number, nil
 	case reflect.Float32, reflect.Float64:
-		number, err := json.Marshal(value.Float())
+		numberValue := value.Float()
+		if err := validateStructuredRESTBodyFiniteFloat(numberValue, path); err != nil {
+			return nil, err
+		}
+		number, err := json.Marshal(numberValue)
 		if err != nil {
 			return nil, fmt.Errorf("%s does not permit non-finite numbers", path)
 		}
@@ -1575,7 +1586,11 @@ func normalizeStructuredRESTBodyReflectValue(value reflect.Value, path string, d
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
 		return json.Number(strconv.FormatUint(value.Uint(), 10)), nil
 	case reflect.Float32, reflect.Float64:
-		return value.Float(), nil
+		number := value.Float()
+		if err := validateStructuredRESTBodyFiniteFloat(number, path); err != nil {
+			return nil, err
+		}
+		return number, nil
 	case reflect.Struct:
 		return nil, fmt.Errorf("%s does not permit struct values", path)
 	default:

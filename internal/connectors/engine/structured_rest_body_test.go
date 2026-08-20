@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -370,6 +371,27 @@ func TestOperationDirectWriteRejectsMalformedScalarOnlyJSONBodiesBeforeIO(t *tes
 	bundle.Operations[0].REST = &rest
 
 	for _, test := range []struct {
+		name  string
+		price any
+		want  float64
+	}{
+		{name: "float32", price: float32(12.5), want: 12.5},
+		{name: "float64", price: -42.25, want: -42.25},
+	} {
+		t.Run("finite "+test.name, func(t *testing.T) {
+			request := structuredRESTBodyRequest()
+			request.Body = map[string]any{"label": "valid", "price": test.price}
+			prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+			if err != nil {
+				t.Fatalf("prepareOperationDirectWrite: %v", err)
+			}
+			if got, ok := prepared.body["price"].(float64); !ok || got != test.want {
+				t.Fatalf("canonical price = %#v, want %v", prepared.body["price"], test.want)
+			}
+		})
+	}
+
+	for _, test := range []struct {
 		name      string
 		body      map[string]any
 		want      string
@@ -386,6 +408,42 @@ func TestOperationDirectWriteRejectsMalformedScalarOnlyJSONBodiesBeforeIO(t *tes
 			body:      map[string]any{"label": "invalid-utf8-canary" + string([]byte{0xff}), "price": json.Number("1")},
 			want:      "invalid UTF-8",
 			forbidden: "invalid-utf8-canary",
+		},
+		{
+			name:      "float64 NaN",
+			body:      map[string]any{"label": "valid", "price": math.NaN()},
+			want:      "does not permit non-finite numbers",
+			forbidden: "NaN",
+		},
+		{
+			name:      "float64 positive infinity",
+			body:      map[string]any{"label": "valid", "price": math.Inf(1)},
+			want:      "does not permit non-finite numbers",
+			forbidden: "+Inf",
+		},
+		{
+			name:      "float64 negative infinity",
+			body:      map[string]any{"label": "valid", "price": math.Inf(-1)},
+			want:      "does not permit non-finite numbers",
+			forbidden: "-Inf",
+		},
+		{
+			name:      "float32 NaN",
+			body:      map[string]any{"label": "valid", "price": float32(math.NaN())},
+			want:      "does not permit non-finite numbers",
+			forbidden: "NaN",
+		},
+		{
+			name:      "float32 positive infinity",
+			body:      map[string]any{"label": "valid", "price": float32(math.Inf(1))},
+			want:      "does not permit non-finite numbers",
+			forbidden: "+Inf",
+		},
+		{
+			name:      "float32 negative infinity",
+			body:      map[string]any{"label": "valid", "price": float32(math.Inf(-1))},
+			want:      "does not permit non-finite numbers",
+			forbidden: "-Inf",
 		},
 	} {
 		t.Run(test.name, func(t *testing.T) {
