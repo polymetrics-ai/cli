@@ -578,6 +578,15 @@ func (r *Requester) DoLimited(ctx context.Context, method, path string, query ur
 	return r.DoJSONLimited(ctx, method, path, query, body, "application/json", maxBodyBytes)
 }
 
+// DoStatusCheck executes a bodyless HEAD request and returns the final response
+// metadata even when its status is non-2xx. Transport, request setup, and
+// admission failures still return errors.
+func (r *Requester) DoStatusCheck(ctx context.Context, path string, query url.Values, maxBodyBytes int) (*Response, error) {
+	return r.doWithBodyPolicy(ctx, http.MethodHead, path, query, maxBodyBytes+1, true, func() (*requestBody, error) {
+		return nil, nil
+	})
+}
+
 // DoJSONLimited is the narrow JSON-family counterpart to DoLimited. The
 // operation engine admits its media type from a closed declaration set; this
 // method does not expose arbitrary raw request media types to callers.
@@ -1089,6 +1098,10 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 }
 
 func (r *Requester) doWithBody(ctx context.Context, method, path string, query url.Values, maxBodyBytes int, bodyFactory func() (*requestBody, error)) (*Response, error) {
+	return r.doWithBodyPolicy(ctx, method, path, query, maxBodyBytes, false, bodyFactory)
+}
+
+func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, query url.Values, maxBodyBytes int, returnFinalStatus bool, bodyFactory func() (*requestBody, error)) (*Response, error) {
 	fullURL, err := r.resolveURL(path, query)
 	if err != nil {
 		return nil, err
@@ -1228,11 +1241,15 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			continue
 		}
 
+		response := &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+			if returnFinalStatus {
+				return response, nil
+			}
 			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
 		}
 
-		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}, nil
+		return response, nil
 	}
 	if lastErr == nil {
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)

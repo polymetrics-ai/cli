@@ -18,8 +18,11 @@ const (
 // pmcert:executes rest_status
 //
 // OperationStatusCheck executes exactly one declared HEAD operation and
-// returns status metadata only. This intentionally does not share the JSON
-// direct-read executor: status operations cannot decode or print a body.
+// returns final status metadata only, including a non-2xx response after normal
+// retries. This intentionally does not share the JSON direct-read executor:
+// status operations cannot decode or print a body.
+//
+// pmcert:executes rest_status
 func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.OperationStatusCheckRequest, h Hooks) (connectors.OperationStatusCheckResult, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.OperationStatusCheckResult{}, err
@@ -62,7 +65,7 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 		return connectors.OperationStatusCheckResult{}, err
 	}
 	cap := op.REST.MaxBytes
-	response, err := requester.DoLimited(requestCtx, http.MethodHead, normalizeDirectReadPathForBaseURL(path, directReadBaseURL(b, cfg)), query, nil, cap)
+	response, err := requester.DoStatusCheck(requestCtx, normalizeDirectReadPathForBaseURL(path, directReadBaseURL(b, cfg)), query, cap)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status %s %s: %w", http.MethodHead, op.REST.Path, err)
 	}

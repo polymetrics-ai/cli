@@ -632,9 +632,10 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	directReads := map[string]bool{}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
-			// binary_download commands consume an api_surface endpoint the same
-			// way a direct read does and are tracked by the same covered_by
-			// bookkeeping, so they satisfy that coverage too.
+			// Each closed, operation-backed read-only intent consumes its declared
+			// api_surface endpoint through the same covered_by bookkeeping as a
+			// direct read. Keep the shared predicate aligned with the runtime's
+			// operation-kind contract instead of duplicating its closed vocabulary.
 			if engine.IsReadSurfaceIntent(cmd.Intent) && cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
 			}
@@ -2195,9 +2196,9 @@ func checkCLISurfaceEndpointCoverage(
 			if cmd.Operation != "" && state.operation != nil {
 				continue
 			}
-			// binary_download shares direct_read's coverage bookkeeping: an
-			// api_surface row records the command that consumes the endpoint,
-			// and which executor runs it does not change who covers it.
+			// Operation-backed read-only commands share direct_read's coverage
+			// bookkeeping: an api_surface row records the command that consumes
+			// the endpoint, and which executor runs it does not change who covers it.
 			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download" || cmd.Intent == "text_export" || cmd.Intent == "status_check") &&
 				directReadCoverageMatches(state.coveredBy, cmd.Path) {
 				continue
@@ -2531,8 +2532,8 @@ func specPropertyHasDateShapedFormat(rawSpec []byte, key string) bool {
 }
 
 // checkCLISurfaceBinaryOperationSafety enforces, against the operation a
-// binary_download command references, exactly what engine.OperationBinaryDownload
-// enforces at execution time.
+// binary_download or text_export command references, exactly what
+// engine.OperationBinaryDownload enforces at execution time.
 //
 // extract_archives is checked here rather than only at execution because a
 // command backed by an extracting operation can never succeed: the executor

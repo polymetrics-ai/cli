@@ -56,6 +56,6 @@
 
 - [x] Isolated worktree, clean `main` base, no-mistakes daemon health, GSD adapter, skills, base commit, and published-ref intake verified.
 - [ ] All five Firstmate-qualified immutable component heads received and re-read through `gh-axi` (three currently eligible: #4306, #4307, and #4302).
-- [ ] Component history merged in dependency order with conflict probes and red-green-refactor evidence.
+- [ ] Component history merged in dependency order with conflict probes and red-green-refactor evidence (first three exact inputs composed; #4305 and #4303 pending final heads).
 - [ ] Full local and provider qualifications pass from one final integrated SHA.
 - [ ] Evidence manifest/report is complete, temporary qualification material is removed recoverably, branch is clean, and implementation is committed.

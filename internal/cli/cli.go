@@ -1335,6 +1335,10 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		}
 		return err
 	}
+	return writeConnectorCommandResult(stdout, stderr, jsonOut, result, rows)
+}
+
+func writeConnectorCommandResult(stdout, stderr io.Writer, jsonOut bool, result commandrunner.Result, rows []connectors.Record) error {
 	if result.BinaryDownload != nil {
 		out := envelope{
 			"kind":      "ConnectorCommandBinaryDownload",
@@ -1368,6 +1372,10 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		}
 		if jsonOut {
 			return writeJSON(stdout, out)
+		}
+		if len(result.StatusCheck.Headers) == 0 {
+			_, err := fmt.Fprintf(stdout, "connector=%s command=%q operation=%s method=%s path=%s status=%d body_bytes=%d\n", result.Connector, result.Command, result.StatusCheck.Operation, result.StatusCheck.Method, result.StatusCheck.Path, result.StatusCheck.Status, result.StatusCheck.BodyBytes)
+			return err
 		}
 		b, _ := json.MarshalIndent(out, "", "  ")
 		_, _ = fmt.Fprintln(stdout, string(b))

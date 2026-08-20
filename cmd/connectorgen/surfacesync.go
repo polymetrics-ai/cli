@@ -38,7 +38,8 @@ import (
 //     parsed endpoint must already appear in api_surface.json, so this is a
 //     join across consistent files, never an invented endpoint. An
 //     operation-backed endpoint remains an authoritative, more specific source
-//     for direct_read, direct_write, and binary_download.
+//     for direct_read, direct_write, binary_download, text_export, and
+//     status_check.
 //   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
 //     that endpoint's path.
 //   - flags[].required <- true when the mapped REST path parameter is declared
@@ -54,8 +55,8 @@ import (
 //   - direct_write output_policy <- operations[].output_policy exactly. The
 //     response contract is bound into its preview digest, so this is derived,
 //     not a display preference.
-//   - a binary_download carries no output policy at all: the response becomes
-//     a file, not a JSON body.
+//   - binary_download and text_export carry no output policy at all: the
+//     response becomes a file, not a JSON body.
 //   - rest.max_bytes <- defaultOperationRESTMaxBytes when unset or
 //     non-positive, matching the direct operation executors' default. A
 //     positive value is the operation's own declaration and is left alone.
@@ -351,8 +352,8 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		}
 		// The endpoint block is whichever one the operation's kind declares.
 		// A direct operation never borrows a binary operation's endpoint and
-		// a binary download never borrows a REST one, so a mismatched pair is
-		// left untouched for the validator to report.
+		// a file download or export never borrows a REST one, so a mismatched
+		// pair is left untouched for the validator to report.
 		kind := stringField(op, "kind")
 		blockName := "rest"
 		if intent == "binary_download" || intent == "text_export" {
@@ -382,7 +383,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 
 		// A direct write's response policy is part of the operation's own
 		// preview-bound contract, so it must exactly match. Direct reads use a
-		// supported default and binary downloads carry no body policy.
+		// supported default and file downloads or exports carry no body policy.
 		switch policy := strings.TrimSpace(stringField(cmd, "output_policy")); {
 		case intent == "binary_download" || intent == "text_export":
 			if cmd.remove("output_policy") {
@@ -464,9 +465,9 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		stats.Filled.FlagDerived += filled
 		stats.Corrected.FlagDerived += corrected
 
-		// DEFAULTED for REST direct operations: a binary_download operation
-		// must declare its own positive max_bytes at bundle load, and a
-		// positive rest.max_bytes is the operation's own declaration rather
+		// DEFAULTED for REST direct operations: a binary_download or text_export
+		// operation must declare its own positive max_bytes at bundle load, and
+		// a positive rest.max_bytes is the operation's own declaration rather
 		// than anything this tool derives.
 		if intent == "direct_read" || intent == "direct_write" {
 			maxBytes, present := block.get("max_bytes")

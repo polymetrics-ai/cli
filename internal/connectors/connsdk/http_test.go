@@ -1034,6 +1034,31 @@ func TestRequesterDoLimitedCapsCapturedBody(t *testing.T) {
 	}
 }
 
+func TestRequesterDoStatusCheckPreservesFinalNon2xxResponse(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if r.Method != http.MethodHead {
+			t.Fatalf("method = %s, want HEAD", r.Method)
+		}
+		w.Header().Set("X-Status-Probe", "unavailable")
+		w.WriteHeader(http.StatusServiceUnavailable)
+	}))
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, MaxRetries: 2, Sleep: noSleep}
+	resp, err := r.DoStatusCheck(context.Background(), "/health", nil, 8)
+	if err != nil {
+		t.Fatalf("DoStatusCheck error = %v", err)
+	}
+	if resp.Status != http.StatusServiceUnavailable || resp.Header.Get("X-Status-Probe") != "unavailable" || len(resp.Body) != 0 {
+		t.Fatalf("status response = %#v, want final 503 metadata", resp)
+	}
+	if requests != 3 {
+		t.Fatalf("requests = %d, want 3", requests)
+	}
+}
+
 func TestRequesterRetriesOn503(t *testing.T) {
 	var calls int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

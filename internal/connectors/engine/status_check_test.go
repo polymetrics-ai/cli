@@ -101,6 +101,26 @@ func TestOperationStatusCheckPreservesTerminalNon2xxMetadataAndDeclaredHeaders(t
 	}
 }
 
+func TestOperationStatusCheckPreservesFinalNon2xxStatus(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if r.Method != http.MethodHead {
+			t.Fatalf("method = %s, want HEAD", r.Method)
+		}
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	t.Cleanup(srv.Close)
+
+	result, err := New(statusCheckBundle(srv.URL, http.MethodHead), nil).OperationStatusCheck(context.Background(), connectors.OperationStatusCheckRequest{Operation: "acme.tags.status"})
+	if err != nil {
+		t.Fatalf("OperationStatusCheck: %v", err)
+	}
+	if result.Status != http.StatusNotFound || result.BodyBytes != 0 || requests != 1 {
+		t.Fatalf("result = %+v, requests = %d", result, requests)
+	}
+}
+
 func TestOperationStatusCheckRejectsNonHEADBeforeIO(t *testing.T) {
 	requests := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))

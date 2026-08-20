@@ -93,16 +93,24 @@ decides before any network or filesystem access:
   declared pagination spec, the result reports whether that page is the whole
   collection, and the runtime-owned `--page`/`--page-cursor` flags reach the
   rest. See AGENTS.md, "Direct Reads Return One Page, And Say So".
+- `intent:"status_check"` with `availability:"implemented"` executes exactly one
+  declared `rest_status` HEAD through `connectors.OperationStatusChecker`, which
+  the declarative engine satisfies with `engine.OperationStatusCheck`. It returns
+  status, body-byte count, and only declared bounded response metadata. The final
+  HTTP status, including a non-2xx response after normal retry handling, remains
+  a typed status result; transport, request-setup, and admission failures remain
+  errors.
 - `intent:"direct_write"` with `availability:"implemented"` executes one declared
   `rest_write` (including typed multipart) or fixed-document `graphql_mutation`
   only through the connector-command plan → preview → approval → execute lifecycle.
   The command and operation must declare matching, explicit output policies;
   their intent-specific choices are defined in the
   [connector authoring conventions](../migration/conventions.md#2-authoring-rules).
-- `intent:"binary_download"` with `availability:"implemented"` executes through
-  `connectors.OperationBinaryDownloader`, which the declarative engine satisfies
-  with `engine.OperationBinaryDownload`. The endpoint must be a single
-  connector-relative GET, the caller must supply a destination root, and the
+- `intent:"binary_download"` or `intent:"text_export"` with
+  `availability:"implemented"` executes through `connectors.OperationBinaryDownloader`,
+  which the declarative engine satisfies with `engine.OperationBinaryDownload`.
+  The endpoint must be a single connector-relative GET; `text_export` is the
+  closed `text/csv` variant. The caller must supply a destination root, and the
   byte cap is the request value clamped by the operation's declared maximum and
   then by the engine's own ceiling. The operation declares its accepted success
   statuses, response media types, optional bounded response headers, and any

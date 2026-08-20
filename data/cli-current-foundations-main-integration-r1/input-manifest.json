@@ -54,7 +54,8 @@
         "checks": ["verify", "linux-amd64 native-build", "darwin-arm64 native-build"],
         "live_assertions": ["HEAD 200", "HEAD 404", "exact text export", "exact binary export", "missing-path error with no artifact"]
       },
-      "state": "eligible_conflict_resolution_red"
+      "state": "merged_preserved_history_targeted_green",
+      "integration_correction": "closed rest_status response path preserves final non-2xx metadata while retaining declaration-owned response headers"
     },
     {
       "issue": 4305,
