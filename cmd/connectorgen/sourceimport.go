@@ -4372,7 +4372,7 @@ func sourceMergeReferenceObject(target, reference map[string]any) map[string]any
 }
 
 func sourceOverlayReferenceObject(target, reference map[string]any) map[string]any {
-	out := make(map[string]any, len(target)+len(reference))
+	out := make(map[string]any, len(target))
 	for key, value := range target {
 		out[key] = value
 	}

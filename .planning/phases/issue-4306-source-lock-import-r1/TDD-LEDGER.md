@@ -1,5 +1,31 @@
 # TDD ledger — source-lock operation import
 
+## Task Delivery Header
+
+- Issue: Refs #4306 — feat(connectorgen): import hash-locked provider operation contracts
+- Base branch: main (verified from the GitHub pull-request API for #4312)
+- Merges into: main
+- Delivery: CodeQL allocation-overflow findings are fixed in the source-import foundation, focused local regression checks pass, and the worktree is returned to the outer CI executor without pushing or controlling its pipeline.
+- Working branch: fm/cli-source-lock-import-r1
+- Task: Remove the overflow-prone allocation-capacity sum reported by CodeQL in `cmd/connectorgen/sourceimport.go` without weakening the source-import contract or accepting an oversized document.
+- Verification: Run the existing source-import reference-sibling regression, the `cmd/connectorgen` package tests, `go vet ./cmd/connectorgen`, and `git diff --check`.
+
+## Evidence Table
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| A reference-sibling overlay does not combine two map lengths to preallocate its result | live | The implementation preallocates only from an already representable single map length; the outer CI executor owns the subsequent CodeQL re-analysis. |
+| Valid bounded source-import documents retain their canonical descriptor behavior | live | Existing source-import golden tests assert the exact canonical descriptor output for the synthetic Alpha and Beta fixtures. |
+| The fix is scoped to the reported CodeQL root cause | live | `git diff --check` and the focused package tests exercise only the allocation guard and its regression coverage. |
+
+## Cycle 16 — CodeQL allocation-size closure
+
+- **Red:** CodeQL reported two high-severity `size computation for allocation may overflow` alerts at `cmd/connectorgen/sourceimport.go:4375`; the preallocation size directly adds two map lengths.
+- **Green:** the overlay preallocates from `len(target)` only, then lets normal map growth accommodate reference siblings; it no longer evaluates the overflow-prone aggregate capacity.
+- **Refactor constraint:** preserve the existing importer limits and valid descriptor ordering; do not broaden source inputs or alter connector definitions.
+- **Verification:** `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportPreservesLiteralReferenceFieldsAndReferenceSiblings$' -count=1` passed; `go test -timeout 20m ./cmd/connectorgen` passed; `go vet ./cmd/connectorgen` and `git diff --check` passed.
+- **CI-phase fallback:** this is an assigned active no-mistakes CI phase. The outer executor retains pipeline, PR, push, and lifecycle control; required `golang-how-to`, security, safety, error-handling, lint, testing, and no-mistakes guidance is applied inline.
+
 ## Cycle 1 — closed retrieval and integrity
 
 - **Red:** `go test -timeout 20m ./cmd/connectorgen -run 'TestSourceImport'` initially failed to compile because no `sourceImportLock`, fetch boundary, descriptor, limits, or importer existed.
