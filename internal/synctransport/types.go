@@ -489,9 +489,11 @@ type Result struct {
 	ParquetBytes           int64
 	PeakCreditBytes        int64
 	CreditWaitElapsed      time.Duration
-	// DestinationResults are the complete, credential-sanitized typed-action
-	// results acknowledged by the destination. They remain opaque to the
-	// transport core: mapping and provider protocol stay connector-owned.
+	// DestinationResults retain every provider-returned response field, key,
+	// value, receipt, status, body, occurrence ID, and credential-equal byte
+	// verbatim. They remain opaque to the transport core: mapping and provider
+	// protocol stay connector-owned. Only system-generated diagnostics, plans,
+	// logs, and errors are rendered secret-safely.
 	DestinationResults  []json.RawMessage
 	CommittedCheckpoint *synccontract.CheckpointEnvelope
 }

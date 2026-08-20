@@ -503,6 +503,7 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			_, _ = writer.Write([]byte(`{"data":[{"id":"widget-1","value":"definition-owned"}]}`))
 		case request.Method == http.MethodPost && request.URL.Path == "/widgets/append":
 			appendWrites++
+			writer.Header().Set("Content-Type", "application/json")
 			writer.Header().Set("X-Provider-Request-ID", "append-request-1")
 			writer.Header().Set("Authorization", "provider-response-secret")
 			writer.Header().Set("X-Echoed-Credential", "destination-secret")
