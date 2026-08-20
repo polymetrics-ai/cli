@@ -438,8 +438,8 @@ func (c *Connector) PreflightWriteRecordField(actionName, field string) error {
 	return ValidateRecordSchemaField(action.RecordSchema, field)
 }
 
-// PreflightWriteRecordFieldMapping proves a declaration-owned mapping covers
-// the required top-level fields of one exact write action.
+// PreflightWriteRecordFieldMapping validates a declaration-owned mapping
+// against the exact write action's top-level schema.
 func (c *Connector) PreflightWriteRecordFieldMapping(actionName string, fields []string) error {
 	action, err := findWriteAction(c.bundle, actionName)
 	if err != nil {
@@ -448,6 +448,8 @@ func (c *Connector) PreflightWriteRecordFieldMapping(actionName string, fields [
 	return ValidateRecordSchemaFieldMapping(action.RecordSchema, fields)
 }
 
+// DeclarativeTypedDestinationActionDigest returns the canonical digest of one
+// declaration-selected typed action, including its effective HTTP defaults.
 func (c *Connector) DeclarativeTypedDestinationActionDigest(actionName string) (string, error) {
 	return declarativeTypedDestinationActionDigest(c.bundle, actionName)
 }
@@ -521,6 +523,8 @@ func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolic
 	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
 }
 
+// PreflightWriteRecordFieldMapping proves a declaration-owned mapping covers
+// the required top-level fields of one exact write action.
 func (b Base) PreflightWriteRecordFieldMapping(actionName string, fields []string) error {
 	action, err := findWriteAction(b.bundle, actionName)
 	if err != nil {
@@ -529,6 +533,8 @@ func (b Base) PreflightWriteRecordFieldMapping(actionName string, fields []strin
 	return ValidateRecordSchemaFieldMapping(action.RecordSchema, fields)
 }
 
+// DeclarativeTypedDestinationActionDigest returns the canonical digest of one
+// declaration-selected typed action, including its effective HTTP defaults.
 func (b Base) DeclarativeTypedDestinationActionDigest(actionName string) (string, error) {
 	return declarativeTypedDestinationActionDigest(b.bundle, actionName)
 }

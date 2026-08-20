@@ -829,6 +829,9 @@ func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
 	}
 }
 
+// WriteResult reports record accounting and the complete ordinary provider
+// responses for one named typed write action. System-generated diagnostics use
+// separate secret-taint-safe surfaces.
 type WriteResult struct {
 	RecordsWritten    int                     `json:"records_written"`
 	RecordsFailed     int                     `json:"records_failed"`
@@ -1044,6 +1047,9 @@ type WriteValidator interface {
 	ValidateWrite(ctx context.Context, req WriteRequest, records []Record) error
 }
 
+// DeclarativeTypedDestination is the closed capability required to execute a
+// definition-selected typed destination action. It proves the mapping against
+// the exact action schema and binds plans to that action's definition.
 type DeclarativeTypedDestination interface {
 	Connector
 	DefinitionProvider

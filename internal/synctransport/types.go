@@ -65,6 +65,8 @@ type DestinationExecutor interface {
 	ReadBackDestination(context.Context, DestinationReadBackRequest) error
 }
 
+// TransportExecutionOrigin classifies the source, destination, or internal
+// boundary that produced an execution error.
 type TransportExecutionOrigin string
 
 const (
@@ -92,6 +94,8 @@ func (e *transportExecutionOriginError) Unwrap() error {
 	return e.err
 }
 
+// TransportExecutionOriginOf reports the first closed transport boundary that
+// tagged err.
 func TransportExecutionOriginOf(err error) (TransportExecutionOrigin, bool) {
 	var tagged *transportExecutionOriginError
 	if !errors.As(err, &tagged) || tagged == nil {
@@ -110,11 +114,15 @@ func tagTransportExecutionError(origin TransportExecutionOrigin, err error) erro
 	return &transportExecutionOriginError{origin: origin, err: err}
 }
 
+// DestinationApplyOutputError joins a failed apply with its already captured
+// provider output so App can persist factual results even when the apply fails.
 type DestinationApplyOutputError struct {
 	err    error
 	output json.RawMessage
 }
 
+// NewDestinationApplyOutputError attaches one captured provider result to an
+// apply error.
 func NewDestinationApplyOutputError(err error, output json.RawMessage) error {
 	if err == nil {
 		return nil
@@ -136,6 +144,7 @@ func (e *DestinationApplyOutputError) Unwrap() error {
 	return e.err
 }
 
+// DestinationApplyOutput returns the captured provider output attached to err.
 func DestinationApplyOutput(err error) (json.RawMessage, bool) {
 	var outputErr *DestinationApplyOutputError
 	if !errors.As(err, &outputErr) || outputErr == nil || len(outputErr.output) == 0 {

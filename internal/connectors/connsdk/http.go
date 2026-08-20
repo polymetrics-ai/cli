@@ -27,6 +27,9 @@ import (
 
 // maxErrorBody bounds how much of an error response body is captured in HTTPError.
 const maxErrorBody = 8 << 10 // 8 KiB
+
+// DefaultMaxResponseBody bounds a successful provider response when no
+// operation-specific limit is supplied.
 const DefaultMaxResponseBody = 64 << 20
 const maxRedirects = 10
 

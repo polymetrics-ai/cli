@@ -2,10 +2,10 @@
 
 `sync_transport.json` is an optional, versioned claim that a connector can
 participate in the closed warehouse-mediated sync path. It is not a way to
-turn an arbitrary provider endpoint, SQL statement, or HTTP request into a
-transport. The engine loads it strictly; runtime preflight additionally
-requires a registered exact executor and accepted conformance evidence before
-any source or destination I/O.
+turn an arbitrary provider endpoint, SQL statement, shell command, or HTTP
+request into a transport. The engine loads it strictly; runtime preflight
+additionally requires a registered exact executor and accepted conformance
+evidence before any source or destination I/O.
 
 Place the file only at `internal/connectors/defs/<connector>/sync_transport.json`.
 Use `schema_version: 1`. The complete structural schema is
@@ -67,7 +67,7 @@ source I/O.
 
 `declarative_api/declarative_typed_destination` is the reusable destination
 adapter for a declarative API connector. It is intentionally narrower than a
-generic HTTP writer:
+generic HTTP, shell, SQL, or arbitrary-action writer:
 
 - Declare only action names that already exist in that connector's
   `writes.json`; every declared record-driven action needs an explicit
@@ -111,8 +111,8 @@ generic HTTP writer:
 `destination_action` lives on the saved connection stream, not in
 `sync_transport.json` and not on `pm etl run`. It is the stable,
 definition-owned identity that selects one eligible action when a connector
-declares more than one typed destination action for a mode. A connection create
-or update validates the exact descriptor, source allowlist, `input_fields`
+declares more than one typed destination action for a mode. Connection creation
+validates the exact descriptor, source allowlist, `input_fields`
 mapping, mode/strategy, action, acknowledgement, and conformance evidence
 before catalog, source, warehouse, or provider I/O.
 
@@ -167,10 +167,11 @@ executor.
 
 ## Typed action contract
 
-A destination action is a connector-owned, named action, not a generic HTTP
-or SQL writer. For the action to be executable, its `writes.json` entry must
-be present in `eligible_actions` and satisfy the exact closed adapter's
-contract. The `source_bindings` mapping supplies only the upstream values; it
+A destination action is a connector-owned, named action, not a generic HTTP,
+shell, SQL, or arbitrary-action writer. For the action to be executable, its
+`writes.json` entry must be present in `eligible_actions` and satisfy the
+exact closed adapter's contract. The `source_bindings` mapping supplies only
+the upstream values; it
 cannot add action fields, an operation name, an endpoint, or a body template.
 
 The adapter must validate the declaration-selected strategy and source binding
