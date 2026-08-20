@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -481,7 +483,8 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 		"write=true/false",
 		"REVERSE ETL WRITE ACTIONS",
 		"DECLARATION-BOUND STRUCTURED WRITE INPUTS",
-		"There is no raw\n  --body flag",
+		"maps_to=body.<schema-path>",
+		"There is no raw-body escape\n  hatch",
 		"pm connectors catalog --capability write --json",
 		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
 		"legacy_unverified",
@@ -499,6 +502,27 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 	} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("connectors manual missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestStructuredWriteDocumentationMirrorsNestedSchemaPaths(t *testing.T) {
+	for _, path := range []string{
+		filepath.Join("..", "..", "docs", "cli", "connectors.md"),
+		filepath.Join("..", "..", "website", "content", "docs", "cli-reference.mdx"),
+	} {
+		content, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read %s: %v", path, err)
+		}
+		for _, want := range []string{
+			"maps_to=body.<schema-path>",
+			"numeric array item positions",
+			"no raw-body escape hatch",
+		} {
+			if !strings.Contains(string(content), want) {
+				t.Fatalf("%s missing %q", path, want)
+			}
 		}
 	}
 }

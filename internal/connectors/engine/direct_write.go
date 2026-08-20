@@ -1508,11 +1508,36 @@ type operationDirectWriteAuthBinding struct {
 	found bool
 }
 
-func operationDirectWriteHasSensitiveHTTPBinding(headers map[string]string, binding operationDirectWriteAuthBinding) (bool, error) {
+func operationDirectWriteHasSensitiveHTTPBinding(baseURLTemplate string, headers map[string]string, binding operationDirectWriteAuthBinding) (bool, error) {
 	if binding.found && !strings.EqualFold(strings.TrimSpace(binding.spec.Mode), "none") {
 		return true, nil
 	}
+	baseURLReferencesSecrets, err := operationDirectWriteBaseURLTemplateReferencesSecrets(baseURLTemplate)
+	if err != nil {
+		return false, err
+	}
+	if baseURLReferencesSecrets {
+		return true, nil
+	}
 	return operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers)
+}
+
+func operationDirectWriteBaseURLTemplateReferencesSecrets(template string) (bool, error) {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return false, err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		ref := strings.TrimSpace(strings.Split(token.expression, "|")[0])
+		segments := strings.Split(ref, ".")
+		if len(segments) == 2 && segments[0] == "secrets" {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers map[string]string) (bool, error) {
@@ -1752,7 +1777,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP header mutations: %w", identity, err)
 	}
-	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(b.HTTP.Headers, authBinding)
+	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(b.HTTP.URL, b.HTTP.Headers, authBinding)
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: inspect declared HTTP bindings: %w", identity, err)
 	}
@@ -1900,7 +1925,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP header mutations: %w", identity, err)
 	}
-	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(b.HTTP.Headers, authBinding)
+	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(b.HTTP.URL, b.HTTP.Headers, authBinding)
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: inspect declared HTTP bindings: %w", identity, err)
 	}

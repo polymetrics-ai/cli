@@ -661,24 +661,24 @@ func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
 	}
 }
 
-func TestGraphQLCredentialBoundApplicationErrorDoesNotPersistEcho(t *testing.T) {
-	const credential = "graphql-app-credential-placeholder"
-	const responseBody = `{"data":{"updateWidget":null},"errors":[{"message":"graphql-app-credential-placeholder"}]}`
+func TestGraphQLBaseURLSecretApplicationErrorDoesNotPersistEcho(t *testing.T) {
+	const baseURLSecret = "graphql-app-base-url-placeholder"
+	const responseBody = `{"data":{"updateWidget":null},"errors":[{"message":"graphql-app-base-url-placeholder"}]}`
 	ctx := context.Background()
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls++
-		if got := r.Header.Get("Authorization"); got != "Bearer "+credential {
-			t.Fatalf("Authorization = %q, want bound credential", got)
+		if got := r.URL.Path; got != "/"+baseURLSecret+"/graphql" {
+			t.Fatalf("path = %q, want declared base URL segment", got)
 		}
-		w.Header().Set("X-Provider-Trace", "app-credential-bound")
+		w.Header().Set("X-Provider-Trace", "app-base-url-secret")
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(responseBody))
 	}))
 	defer server.Close()
 
 	a, root := operationWithholdingApp(t, ctx, server.URL, func(bundle *engine.Bundle) {
-		bundle.HTTP.Auth = []engine.AuthSpec{{Mode: "bearer", Token: credential}}
+		bundle.HTTP.URL = "{{ config.base_url }}/{{ secrets.tenant }}"
 		for index := range bundle.Operations {
 			if bundle.Operations[index].ID != "restwrite-demo.widget-update" {
 				continue
@@ -714,9 +714,17 @@ func TestGraphQLCredentialBoundApplicationErrorDoesNotPersistEcho(t *testing.T) 
 			bundle.Surface.Endpoints[index].CoveredBy = &engine.SurfaceCoverage{Operations: []string{"restwrite-demo.widget-update"}}
 		}
 	})
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "restwrite-base-url-secret",
+		Connector: restWriteDemoConnector,
+		Config:    map[string]string{"base_url": server.URL},
+		Secrets:   map[string]string{"tenant": baseURLSecret},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
 	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 		Connector:  restWriteDemoConnector,
-		Credential: "restwrite-local",
+		Credential: "restwrite-base-url-secret",
 		Path:       []string{"widget", "update"},
 		Flags:      map[string][]string{"id": {"w_1"}},
 		Preview:    true,
@@ -728,20 +736,20 @@ func TestGraphQLCredentialBoundApplicationErrorDoesNotPersistEcho(t *testing.T) 
 	if err == nil {
 		t.Fatal("RunReverseETL error = nil, want GraphQL application error")
 	}
-	if strings.Contains(err.Error(), credential) || strings.Contains(run.Error, credential) {
-		t.Fatalf("GraphQL application error leaked bound credential: error=%q persisted=%q", err, run.Error)
+	if strings.Contains(err.Error(), baseURLSecret) || strings.Contains(run.Error, baseURLSecret) {
+		t.Fatalf("GraphQL application error leaked base URL secret: error=%q persisted=%q", err, run.Error)
 	}
 	if calls != 1 || run.Status != "failed" {
 		t.Fatalf("failed run/calls = %+v/%d, want one failed direct write", run, calls)
 	}
-	if strings.Contains(stateBytes(t, root), credential) {
-		t.Fatal("state.json persisted the bound credential")
+	if strings.Contains(stateBytes(t, root), baseURLSecret) {
+		t.Fatal("state.json persisted the base URL secret")
 	}
 	var providerErr *connsdk.HTTPError
 	if !errors.As(err, &providerErr) {
 		t.Fatal("RunReverseETL error did not retain a provider response cause")
 	}
-	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "app-credential-bound" || providerErr.Body != responseBody {
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "app-base-url-secret" || providerErr.Body != responseBody {
 		t.Fatal("RunReverseETL provider response did not retain exact status, headers, and body")
 	}
 }
