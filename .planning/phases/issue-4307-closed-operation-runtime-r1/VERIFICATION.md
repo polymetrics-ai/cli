@@ -41,3 +41,17 @@ record a precise not-applicable result only when no corresponding public command
   were reviewed for unbounded output, header injection, secret disclosure, and
   approval-digest bypasses; no actionable finding remained. `git diff --check`
   passed after the final lint simplification in `cmd/connectorgen/validate.go`.
+
+## CI repair: generated connector manuals
+
+- PR #4311's `verify` check found the Gmail connector manual stale after its
+  attachment download was correctly reclassified as `availability=partial`.
+  The same generation pass also reconciled Gorgias's already-declared partial
+  binary download.
+- Regenerated the canonical output with
+  `go run ./cmd/pm docs generate --dir docs/cli`; the only generated changes
+  are the Gmail and Gorgias `MANUAL.md` and `SKILL.md` command entries.
+- Targeted recheck passed:
+  `go run ./cmd/pm docs validate --connectors-dir docs/connectors`.
+  `git diff --check` also passed. Full aggregate verification remains owned by
+  the outer CI phase.
