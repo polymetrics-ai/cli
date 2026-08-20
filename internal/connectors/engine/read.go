@@ -555,14 +555,18 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 }
 
 func newRuntimeWithResolvedHTTP(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks, baseURL string, headers map[string]string) (*Runtime, error) {
+	return newRuntimeWithResolvedHTTPBindings(ctx, b, cfg, h, baseURL, headers, b.HTTP.UserAgent, b.HTTP.Auth, b.HTTP.Auth)
+}
+
+func newRuntimeWithResolvedHTTPBindings(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks, baseURL string, headers map[string]string, userAgent string, authSpecs, rateLimitAuthSpecs []AuthSpec) (*Runtime, error) {
 	requester := &connsdk.Requester{
 		BaseURL:                   baseURL,
-		UserAgent:                 b.HTTP.UserAgent,
+		UserAgent:                 userAgent,
 		DefaultHeaders:            cloneResolvedHeaders(headers),
 		RateLimitEvents:           rateLimitEventSinkFor(cfg.ProjectDir),
 		RateLimitAdmissionTimeout: rateLimitAdmissionTimeoutFor(cfg.ProjectDir),
 	}
-	resolver := newRateLimitResolverWithContext(ctx, b, rateLimitConfigForSelectedAuth(cfg, b.HTTP.Auth, h))
+	resolver := newRateLimitResolverWithContext(ctx, b, rateLimitConfigForSelectedAuth(cfg, rateLimitAuthSpecs, h))
 	budget := cfg.BudgetCoordinator
 	if budget == nil {
 		budget = coordination.NewRateBudgetCoordinator(nil, coordination.RateBudgetCoordinatorOptions{})
@@ -577,8 +581,8 @@ func newRuntimeWithResolvedHTTP(ctx context.Context, b Bundle, cfg connectors.Ru
 		auth connsdk.Authenticator
 		err  error
 	)
-	if len(b.HTTP.Auth) > 0 {
-		auth, err = selectAuthWithDeclaredRoute(ctx, cfg, b.HTTP.Auth, h, declaredRouteRequester{runtime: authRuntime})
+	if len(authSpecs) > 0 {
+		auth, err = selectAuthWithDeclaredRoute(ctx, cfg, authSpecs, h, declaredRouteRequester{runtime: authRuntime})
 		if err != nil {
 			return nil, fmt.Errorf("engine: %w", err)
 		}

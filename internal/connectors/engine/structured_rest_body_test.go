@@ -365,6 +365,204 @@ func TestOperationDirectWriteBindsResolvedHeadersBeforeApproval(t *testing.T) {
 	}
 }
 
+func TestOperationDirectWriteBindsStaticHTTPMutationsBeforeApproval(t *testing.T) {
+	const token = "api-key-canary"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if got := r.Header.Get("X-API-Key"); got != token {
+			t.Errorf("X-API-Key = %q, want preview-bound value", got)
+		}
+		if got := r.Header.Get("User-Agent"); got != "acme-direct-write/1.0" {
+			t.Errorf("User-Agent = %q, want preview-bound value", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := structuredRESTBodyBundle(server.URL)
+	bundle.HTTP.UserAgent = "acme-direct-write/1.0"
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_header", Header: "X-API-Key", Value: "{{ secrets.api_key }}"}}
+	request := structuredRESTBodyRequest()
+	request.Config.Secrets = map[string]string{"api_key": token}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	if got := prepared.prepared.Requests[0].Headers["X-Api-Key"]; got != token {
+		t.Fatalf("prepared API key header = %q, want exact bound value", got)
+	}
+	if got := prepared.prepared.Requests[0].Headers["User-Agent"]; got != "acme-direct-write/1.0" {
+		t.Fatalf("prepared user agent = %q, want exact bound value", got)
+	}
+	request.Approval = approvedEvidenceForPreview(t, preview)
+	request.PreviewDigest = preview.Digest
+	if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("calls = %d, want one bound request", calls)
+	}
+}
+
+func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
+	const token = "query-key-canary"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if got := r.URL.Query().Get("api_key"); got != token {
+			t.Errorf("api_key = %q, want preview-bound value", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
+	bundle := structuredRESTBodyBundle(server.URL)
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "{{ secrets.api_key }}"}}
+	request := structuredRESTBodyRequest()
+	request.Config.Secrets = map[string]string{"api_key": token}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	if got := prepared.query.Get("api_key"); got != token {
+		t.Fatalf("prepared api_key = %q, want exact bound value", got)
+	}
+	request.Approval = approvedEvidenceForPreview(t, preview)
+	request.PreviewDigest = preview.Digest
+	if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("calls = %d, want one bound request", calls)
+	}
+}
+
+func TestOperationDirectWriteRejectsStaticHTTPMutationConflictsBeforeIO(t *testing.T) {
+	for _, test := range []struct {
+		name   string
+		mutate func(*Bundle)
+		want   string
+	}{
+		{
+			name: "declared header collision",
+			mutate: func(bundle *Bundle) {
+				bundle.HTTP.Headers = map[string]string{"X-API-Key": "fixed"}
+				bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_header", Header: "X-API-Key", Value: "key"}}
+			},
+			want: "collides",
+		},
+		{
+			name: "user agent collision",
+			mutate: func(bundle *Bundle) {
+				bundle.HTTP.UserAgent = "acme/1.0"
+				bundle.HTTP.Headers = map[string]string{"User-Agent": "provider-agent"}
+			},
+			want: "collides",
+		},
+		{
+			name: "query collision",
+			mutate: func(bundle *Bundle) {
+				bundle.Operations[0].REST.Parameters = append(bundle.Operations[0].REST.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string"})
+				bundle.Operations[0].REST.Query = map[string]string{"api_key": "fixed"}
+				bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "key"}}
+			},
+			want: "collides",
+		},
+		{
+			name: "invalid auth header",
+			mutate: func(bundle *Bundle) {
+				bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_header", Header: "X Invalid", Value: "key"}}
+			},
+			want: "invalid header",
+		},
+		{
+			name: "invalid auth reference",
+			mutate: func(bundle *Bundle) {
+				bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_header", Header: "X-API-Key", Value: "{{ secrets.api_key.extra }}"}}
+			},
+			want: "malformed reference",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { calls++ }))
+			t.Cleanup(server.Close)
+			bundle := structuredRESTBodyBundle(server.URL)
+			test.mutate(&bundle)
+			if _, err := PreviewOperationDirectWrite(context.Background(), bundle, structuredRESTBodyRequest(), nil); err == nil || !strings.Contains(strings.ToLower(err.Error()), test.want) {
+				t.Fatalf("PreviewOperationDirectWrite error = %v, want %q", err, test.want)
+			}
+			if calls != 0 {
+				t.Fatalf("invalid static HTTP mutation reached provider; calls = %d", calls)
+			}
+		})
+	}
+}
+
+func TestOperationDirectWriteRejectsMalformedBaseURLTemplateBeforeIO(t *testing.T) {
+	for _, template := range []string{"{{ config.base_url.extra }}", "{{ query.forbidden }}"} {
+		t.Run(template, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { calls++ }))
+			t.Cleanup(server.Close)
+			bundle := structuredRESTBodyBundle(server.URL + "/" + template)
+			if _, err := PreviewOperationDirectWrite(context.Background(), bundle, structuredRESTBodyRequest(), nil); err == nil || !strings.Contains(err.Error(), "declared base URL") {
+				t.Fatalf("PreviewOperationDirectWrite error = %v, want strict base URL template rejection", err)
+			}
+			if calls != 0 {
+				t.Fatalf("malformed base URL reached provider; calls = %d", calls)
+			}
+		})
+	}
+}
+
+func TestOperationDirectWriteRejectsOversizeErrorBodyWithoutPresentingPrefix(t *testing.T) {
+	const canary = "oversize-provider-body-canary"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("X-Provider-Trace", "oversize")
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(canary + strings.Repeat("x", 2048)))
+	}))
+	t.Cleanup(server.Close)
+	bundle := structuredRESTBodyBundle(server.URL)
+	request := structuredRESTBodyRequest()
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	request.Approval = approvedEvidenceForPreview(t, preview)
+	request.PreviewDigest = preview.Digest
+	_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil || !strings.Contains(err.Error(), "exceeds declared limit") {
+		t.Fatalf("OperationDirectWrite error = %v, want explicit over-limit failure", err)
+	}
+	if strings.Contains(err.Error(), canary) {
+		t.Fatal("oversize provider response prefix was presented")
+	}
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) {
+		t.Fatalf("OperationDirectWrite cause = %T, want HTTPError", err)
+	}
+	if httpErr.Body != "" || httpErr.Status != http.StatusInternalServerError || httpErr.Header.Get("X-Provider-Trace") != "oversize" {
+		t.Fatalf("oversize HTTP cause = %#v, want status and headers without a truncated body", httpErr)
+	}
+	if calls != 1 {
+		t.Fatalf("calls = %d, want one provider response", calls)
+	}
+}
+
 func TestOperationDirectWriteErrorsDoNotExposeResolvedURLValues(t *testing.T) {
 	const secret = "url-secret-canary"
 	request := structuredRESTBodyRequest()
@@ -1201,6 +1399,44 @@ func TestValidateOperationDirectWriteCLIFlagsProjectsRequiredArraysAndDomains(t 
 	}
 }
 
+func TestValidateOperationDirectWriteCLIFlagsProjectsContainerLowerBounds(t *testing.T) {
+	base := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	tags := base
+	tagsREST := *base.REST
+	tagsREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["tags"],
+		"properties":{"tags":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"string"}}}
+	}`)
+	tags.REST = &tagsREST
+	if err := ValidateOperationDirectWriteCLIFlags(tags, []CLIFlag{{Name: "tag", Type: "string", MapsTo: "body.tags.0", Required: true}}); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteCLIFlags scalar lower-bound array: %v", err)
+	}
+	if err := ValidateOperationDirectWriteCLIFlags(tags, nil); err == nil || !strings.Contains(err.Error(), "body.tags.0") {
+		t.Fatalf("scalar lower-bound array error = %v, want required indexed mapping", err)
+	}
+
+	properties := base
+	propertiesREST := *base.REST
+	propertiesREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"minProperties":2,
+		"properties":{"one":{"type":"string"},"two":{"type":"string"}}
+	}`)
+	properties.REST = &propertiesREST
+	if err := ValidateOperationDirectWriteCLIFlags(properties, []CLIFlag{
+		{Name: "one", Type: "string", MapsTo: "body.one", Required: true},
+		{Name: "two", Type: "string", MapsTo: "body.two", Required: true},
+	}); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteCLIFlags minProperties coverage: %v", err)
+	}
+	if err := ValidateOperationDirectWriteCLIFlags(properties, nil); err == nil || !strings.Contains(err.Error(), "minProperties") {
+		t.Fatalf("minProperties coverage error = %v, want declaration-bound lower-bound rejection", err)
+	}
+}
+
 func TestStructuredRESTBodyDeclarationSatisfiabilityAndStaticCoverage(t *testing.T) {
 	base := structuredRESTBodyBundle("https://example.invalid").Operations[0]
 	unsatisfiable := base
@@ -1301,6 +1537,30 @@ func TestStructuredRESTBodyRejectsUnreachableNodeMinimumAndFloatByteDrift(t *tes
 	_, err = materializeStructuredRESTBody(floatLimited, nil, map[string]any{"ratio": 1e-6})
 	if err == nil || !strings.Contains(err.Error(), "request body too large") || !strings.Contains(err.Error(), "body.ratio") {
 		t.Fatalf("float byte-limit error = %v, want pre-copy JSON-compatible accounting", err)
+	}
+
+	byteLimited := base
+	byteLimitedREST := *base.REST
+	byteLimitedREST.MaxBytes = 1024
+	byteLimitedREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["mode"],
+		"properties":{"mode":{"type":"string","enum":["` + strings.Repeat("x", 2048) + `"]}}
+	}`)
+	byteLimited.REST = &byteLimitedREST
+	if err := ValidateOperationDirectWriteMappings(byteLimited, nil, nil); err == nil || !strings.Contains(err.Error(), "minimum valid body requires") || !strings.Contains(err.Error(), "bytes") {
+		t.Fatalf("byte-minimum error = %v, want unreachable declaration rejection", err)
+	}
+
+	staticLimited := base
+	staticLimitedREST := *base.REST
+	staticLimitedREST.MaxBytes = 32
+	staticLimitedREST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"fixed":{"type":"string"}}}`)
+	staticLimitedREST.Body = map[string]any{"fixed": strings.Repeat("x", 64)}
+	staticLimited.REST = &staticLimitedREST
+	if err := ValidateOperationDirectWriteMappings(staticLimited, nil, nil); err == nil || !strings.Contains(err.Error(), "rest.body") {
+		t.Fatalf("fixed body byte-limit error = %v, want declaration rejection", err)
 	}
 }
 
