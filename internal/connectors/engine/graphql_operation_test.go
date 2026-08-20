@@ -701,6 +701,7 @@ func TestOperationDirectWriteRetainsGraphQLApplicationErrorResponse(t *testing.T
 
 	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
 	bundle.Operations[0].SecretSensitive = true
+	bundle.Operations[0].MutationClass = "secret"
 	req := connectors.OperationDirectWriteRequest{
 		Operation: "acme.widgets.mutation",
 		Config: connectors.RuntimeConfig{
@@ -721,11 +722,11 @@ func TestOperationDirectWriteRetainsGraphQLApplicationErrorResponse(t *testing.T
 		t.Fatal("OperationDirectWrite error = nil, want GraphQL application error")
 	}
 	if strings.Contains(err.Error(), secret) {
-		t.Fatalf("GraphQL application error leaked provider secret: %v", err)
+		t.Fatal("GraphQL application error leaked provider secret")
 	}
 	var providerErr *connsdk.HTTPError
 	if !errors.As(err, &providerErr) {
-		t.Fatalf("GraphQL application error cause = %T, want provider response error", err)
+		t.Fatal("GraphQL application error did not retain a provider response cause")
 	}
 	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "trace-123" || providerErr.Body != responseBody {
 		t.Fatal("GraphQL application provider response did not retain exact status, headers, and body")
@@ -867,7 +868,7 @@ func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	}
 }
 
-func TestOperationDirectWriteSecretOperationRetainsProviderErrors(t *testing.T) {
+func TestOperationDirectWriteSecretOperationRetainsProviderErrorProvenance(t *testing.T) {
 	const sensitiveValue = "provider-echoed-github-pat"
 	for _, tt := range []struct {
 		name       string
@@ -889,6 +890,7 @@ func TestOperationDirectWriteSecretOperationRetainsProviderErrors(t *testing.T) 
 			calls := 0
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 				calls++
+				w.Header().Set("X-Provider-Trace", "secret-operation-trace")
 				w.WriteHeader(tt.statusCode)
 				_, _ = w.Write([]byte(tt.body))
 			}))
@@ -914,11 +916,15 @@ func TestOperationDirectWriteSecretOperationRetainsProviderErrors(t *testing.T) 
 			if err == nil {
 				t.Fatal("OperationDirectWrite error = nil, want provider failure")
 			}
-			if !strings.Contains(err.Error(), sensitiveValue) {
-				t.Fatal("OperationDirectWrite did not retain the complete provider error")
+			if strings.Contains(err.Error(), sensitiveValue) {
+				t.Fatal("OperationDirectWrite leaked the provider error into the system diagnostic")
 			}
-			if strings.Contains(err.Error(), "redacted") {
-				t.Fatal("OperationDirectWrite redacted a secret-operation provider error")
+			var providerErr *connsdk.HTTPError
+			if !errors.As(err, &providerErr) {
+				t.Fatal("OperationDirectWrite did not retain provider response provenance")
+			}
+			if providerErr.Status != tt.statusCode || providerErr.Header.Get("X-Provider-Trace") != "secret-operation-trace" || providerErr.Body != tt.body {
+				t.Fatal("OperationDirectWrite did not retain the exact provider response")
 			}
 			if calls != 1 {
 				t.Fatalf("provider error calls = %d, want exactly one approved request", calls)

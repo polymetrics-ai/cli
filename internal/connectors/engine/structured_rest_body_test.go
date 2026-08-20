@@ -464,6 +464,66 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	}
 }
 
+func TestOperationDirectWritePlanTransformsCanonicalizeTypedStringArrays(t *testing.T) {
+	bundle := structuredRESTBodyBundle("https://example.invalid")
+	rest := *bundle.Operations[0].REST
+	rest.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{"tags":{"type":"array","maxItems":2,"items":{"type":"string"}}}
+	}`)
+	bundle.Operations[0].REST = &rest
+	body := map[string]any{"tags": []string{"typed-array-canary"}}
+
+	withheld, fields, err := WithholdOperationDirectWriteBodyFields(bundle, bundle.Operations[0].ID, body, []string{"body.tags.0"})
+	if err != nil {
+		t.Fatalf("WithholdOperationDirectWriteBodyFields: %v", err)
+	}
+	if !reflect.DeepEqual(fields, []string{"tags.0"}) {
+		t.Fatalf("withheld fields = %#v, want [tags.0]", fields)
+	}
+	withheldTags, ok := withheld["tags"].([]any)
+	if !ok || len(withheldTags) != 1 || withheldTags[0] != nil {
+		t.Fatalf("withheld typed array = %#v, want canonical array with withheld element", withheld["tags"])
+	}
+
+	redacted, err := RedactOperationDirectWriteBodyFields(bundle, bundle.Operations[0].ID, body, []string{"body.tags.0"})
+	if err != nil {
+		t.Fatalf("RedactOperationDirectWriteBodyFields: %v", err)
+	}
+	redactedTags, ok := redacted["tags"].([]any)
+	if !ok || !reflect.DeepEqual(redactedTags, []any{"redacted"}) {
+		t.Fatalf("redacted typed array = %#v, want canonical redacted array", redacted["tags"])
+	}
+}
+
+func TestPreflightOperationDirectWriteRejectsConditionalAPIKeyQueryOwnership(t *testing.T) {
+	bundle := structuredRESTBodyBundle("https://example.invalid")
+	rest := *bundle.Operations[0].REST
+	rest.Parameters = append(rest.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string", Required: true})
+	bundle.Operations[0].REST = &rest
+	bundle.HTTP.Auth = []AuthSpec{
+		{Mode: "api_key_query", Param: "api_key", Value: "key", When: "{{ config.auth_type == 'api' }}"},
+		{Mode: "bearer", Token: "token", When: "{{ config.auth_type == 'bearer' }}"},
+		{Mode: "none"},
+	}
+	operation := bundle.Operations[0]
+	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy); err == nil || !strings.Contains(err.Error(), "conditionally supplied") {
+		t.Fatalf("conditional API key ownership error = %v, want declaration rejection", err)
+	}
+
+	bundle.HTTP.Auth = []AuthSpec{
+		{Mode: "api_key_query", Param: "api_key", Value: "first", When: "{{ config.auth_type == 'first' }}"},
+		{Mode: "api_key_query", Param: "api_key", Value: "second"},
+	}
+	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy); err != nil {
+		t.Fatalf("all-auth-path API key ownership: %v", err)
+	}
+	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy, "api_key"); err == nil || !strings.Contains(err.Error(), "owned") {
+		t.Fatalf("caller API key collision error = %v, want declaration rejection", err)
+	}
+}
+
 func TestOperationDirectWriteRedactsNestedStructuredBodyValuesInSystemErrors(t *testing.T) {
 	const token = "nested-sensitive-canary"
 	calls := 0

@@ -155,7 +155,10 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				}
 			}
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(err, prepared.identity, prepared.op.Kind == "graphql_mutation" && !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)
+			message := "provider returned a GraphQL HTTP error"
+			if !operationDirectWriteSecretGraphQLMutation(prepared.op) {
+				message = operationDirectWriteErrorText(err, prepared.identity, prepared.op.Kind == "graphql_mutation" && !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)
+			}
 			if hint != "" {
 				message += ": " + hint
 			}
@@ -175,9 +178,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
 				message := "graphql errors: provider returned application errors"
-				if strings.EqualFold(prepared.op.MutationClass, "secret") {
-					message = "graphql errors: " + graphQLErrorSummary(metadata)
-				} else if !operationRetainsSecretRuntimeContent(prepared.op) {
+				if !operationDirectWriteSecretGraphQLMutation(prepared.op) && !operationRetainsSecretRuntimeContent(prepared.op) {
 					message = "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), true, prepared.redactionValues)
 				}
 				return operationDirectWritePostResponseErrorWithMessage(prepared.op.ID, message, nil, response, prepared.identity)
@@ -345,6 +346,10 @@ func operationRetainsSecretRuntimeContent(op OperationSpec) bool {
 	return op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
 }
 
+func operationDirectWriteSecretGraphQLMutation(op OperationSpec) bool {
+	return op.Kind == "graphql_mutation" && strings.EqualFold(op.MutationClass, "secret")
+}
+
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
 // declared rest_write operation. It validates the operation's executable
 // shape, but deliberately does not resolve config, build auth, or touch the
@@ -410,7 +415,11 @@ func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, ou
 	if err := validateOperationDirectWriteOutputPolicy(outputPolicy); err != nil {
 		return err
 	}
-	return validateOperationDirectWriteQueryFieldsWithAuth(op, queryFields, operationDirectWriteStaticAuthQueryParameters(b.HTTP.Auth))
+	authQueryParameters, err := operationDirectWriteStaticAuthQueryParameters(op, b.HTTP.Auth)
+	if err != nil {
+		return err
+	}
+	return validateOperationDirectWriteQueryFieldsWithAuth(op, queryFields, authQueryParameters)
 }
 
 func PreflightOperationDirectWriteBindings(b Bundle, operation string, pathFields, bodyFields []string) error {
@@ -869,11 +878,10 @@ func ResolveOperationDirectWriteBodyMappingValue(b Bundle, operation string, bod
 }
 
 func WithholdOperationDirectWriteBodyFields(b Bundle, operation string, body map[string]any, fields []string) (map[string]any, []string, error) {
-	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	_, root, out, err := operationDirectWriteCanonicalBodyPlanFragment(b, operation, body)
 	if err != nil {
 		return nil, nil, err
 	}
-	out := cloneOperationDirectWriteBodyMap(body)
 	withheld := make([]string, 0, len(fields))
 	for _, rawField := range fields {
 		field := operationDirectWriteBodyRelativePath(rawField)
@@ -899,11 +907,10 @@ func WithholdOperationDirectWriteBodyFields(b Bundle, operation string, body map
 }
 
 func RedactOperationDirectWriteBodyFields(b Bundle, operation string, body map[string]any, fields []string) (map[string]any, error) {
-	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	_, root, out, err := operationDirectWriteCanonicalBodyPlanFragment(b, operation, body)
 	if err != nil {
 		return nil, err
 	}
-	out := cloneOperationDirectWriteBodyMap(body)
 	for _, rawField := range fields {
 		field := operationDirectWriteBodyRelativePath(rawField)
 		if field == "" {
@@ -983,6 +990,22 @@ func operationDirectWriteStructuredBodyPlanRoot(b Bundle, operation string) (Ope
 		return OperationSpec{}, nil, err
 	}
 	return op, root, nil
+}
+
+func operationDirectWriteCanonicalBodyPlanFragment(b Bundle, operation string, body map[string]any) (OperationSpec, map[string]any, map[string]any, error) {
+	op, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return OperationSpec{}, nil, nil, err
+	}
+	compiled, err := compileStructuredRESTBodySchema(op)
+	if err != nil {
+		return OperationSpec{}, nil, nil, err
+	}
+	canonical, err := canonicalizeStructuredRESTBodyFragment(compiled, op, body, "body")
+	if err != nil {
+		return OperationSpec{}, nil, nil, err
+	}
+	return op, root, canonical, nil
 }
 
 func operationDirectWriteBodyRelativePath(path string) string {
@@ -2239,16 +2262,52 @@ func validateOperationDirectWriteQueryFieldsWithAuth(op OperationSpec, queryFiel
 	return nil
 }
 
-func operationDirectWriteStaticAuthQueryParameters(specs []AuthSpec) map[string]struct{} {
+func operationDirectWriteStaticAuthQueryParameters(op OperationSpec, specs []AuthSpec) (map[string]struct{}, error) {
 	parameters := make(map[string]struct{})
-	for _, spec := range specs {
+	selectable := operationDirectWriteSelectableAuthSpecs(specs)
+	for _, spec := range selectable {
 		if strings.EqualFold(strings.TrimSpace(spec.Mode), "api_key_query") {
 			if name := strings.TrimSpace(spec.Param); name != "" {
 				parameters[name] = struct{}{}
 			}
 		}
 	}
-	return parameters
+	if op.Kind != "rest_write" || op.REST == nil || len(parameters) == 0 {
+		return parameters, nil
+	}
+	declared, err := operationDirectWriteQueryParameters(op)
+	if err != nil {
+		return nil, err
+	}
+	names := make([]string, 0, len(parameters))
+	for name := range parameters {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		parameter, found := declared[name]
+		if !found || !parameter.Required {
+			continue
+		}
+		for _, spec := range selectable {
+			if strings.EqualFold(strings.TrimSpace(spec.Mode), "api_key_query") && strings.TrimSpace(spec.Param) == name {
+				continue
+			}
+			return nil, fmt.Errorf("operation %q required query parameter %q is conditionally supplied by declared API key authentication; every selectable auth rule must supply it", op.ID, name)
+		}
+	}
+	return parameters, nil
+}
+
+func operationDirectWriteSelectableAuthSpecs(specs []AuthSpec) []AuthSpec {
+	selectable := make([]AuthSpec, 0, len(specs))
+	for _, spec := range specs {
+		selectable = append(selectable, spec)
+		if strings.TrimSpace(spec.When) == "" {
+			break
+		}
+	}
+	return selectable
 }
 
 func operationDirectWriteQuery(op OperationSpec, requested map[string]string) (map[string]string, error) {

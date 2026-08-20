@@ -146,7 +146,7 @@ func TestOperationBackedPlanWithholdsNestedStructuredBodyFields(t *testing.T) {
 		targets, ok := body["targets"].([]any)
 		if !ok || len(targets) != 1 {
 			t.Error("provider did not receive the declared nested target")
-		} else if target, ok := targets[0].(map[string]any); !ok || target["id"] != "target-1" || target["token"] != nestedBodyTokenSentinel {
+		} else if target, ok := targets[0].(map[string]any); !ok || target["fixed"] != "provider" || target["id"] != "target-1" || target["token"] != nestedBodyTokenSentinel {
 			t.Error("provider did not receive the reconstituted nested target")
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -165,8 +165,9 @@ func TestOperationBackedPlanWithholdsNestedStructuredBodyFields(t *testing.T) {
 				"type":"object",
 				"additionalProperties":false,
 				"required":["targets"],
-				"properties":{"targets":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"object","additionalProperties":false,"required":["id","token"],"properties":{"id":{"type":"string"},"token":{"type":"string"}}}}}
+				"properties":{"targets":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"object","additionalProperties":false,"required":["fixed","id","token"],"properties":{"fixed":{"type":"string"},"id":{"type":"string"},"token":{"type":"string"}}}}}
 			}`)
+			rest.Body = map[string]any{"targets": []any{map[string]any{"fixed": "provider"}}}
 			bundle.Operations[index].REST = &rest
 			bundle.Operations[index].SensitivePolicy = &engine.SensitivePolicySpec{RedactFields: []string{"body.targets.0.token"}}
 		}
@@ -176,12 +177,12 @@ func TestOperationBackedPlanWithholdsNestedStructuredBodyFields(t *testing.T) {
 			}
 			bundle.CLISurface.Commands[index].Flags = []engine.CLIFlag{
 				{Name: "id", Type: "string", Summary: "Target id.", MapsTo: "path.id", Required: true},
-				{Name: "target-id", Type: "string", Summary: "Nested target id.", MapsTo: "body.targets.0.id", Required: true},
-				{Name: "token", Type: "string", Summary: "Nested target token.", MapsTo: "body.targets.0.token", Required: true},
+				{Name: "targets", Type: "json", Summary: "Nested targets.", MapsTo: "body.targets", Required: true},
 			}
 		}
 	})
-	flags := map[string][]string{"id": {"w_1"}, "target-id": {"target-1"}, "token": {nestedBodyTokenSentinel}}
+	targetsJSON := `[{"id":"target-1","token":"` + nestedBodyTokenSentinel + `"}]`
+	flags := map[string][]string{"id": {"w_1"}, "targets": {targetsJSON}}
 	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 		Connector:  restWriteDemoConnector,
 		Credential: "restwrite-local",
@@ -220,7 +221,7 @@ func TestOperationBackedPlanWithholdsNestedStructuredBodyFields(t *testing.T) {
 		t.Fatal("plan sample did not redact the nested sensitive token")
 	}
 
-	previewed, preview, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, map[string][]string{"token": {nestedBodyTokenSentinel}})
+	previewed, preview, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, map[string][]string{"targets": {targetsJSON}})
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan: %v", err)
 	}
@@ -237,7 +238,7 @@ func TestOperationBackedPlanWithholdsNestedStructuredBodyFields(t *testing.T) {
 	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
 		PlanID:        previewed.ID,
 		ApprovalToken: previewed.ApprovalToken,
-		WithheldFlags: map[string][]string{"token": {nestedBodyTokenSentinel}},
+		WithheldFlags: map[string][]string{"targets": {targetsJSON}},
 	})
 	if err == nil {
 		t.Fatal("RunReverseETL error = nil, want provider error")

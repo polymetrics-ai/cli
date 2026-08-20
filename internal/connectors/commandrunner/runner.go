@@ -1343,6 +1343,33 @@ func reconstituteOperationDirectWriteWithheldFields(connector connectors.Connect
 			}
 			continue
 		}
+		container := ""
+		for candidate := range byTarget {
+			contains, err := transformer.OperationDirectWriteBodyPathContains(cmd.Operation, candidate, target)
+			if err != nil {
+				return nil, nil, err
+			}
+			if !contains {
+				continue
+			}
+			if container == "" {
+				container = candidate
+				continue
+			}
+			containsContainer, err := transformer.OperationDirectWriteBodyPathContains(cmd.Operation, container, candidate)
+			if err != nil {
+				return nil, nil, err
+			}
+			if containsContainer {
+				container = candidate
+			}
+		}
+		if container != "" {
+			if err := addMapping(container, byTarget[container]); err != nil {
+				return nil, nil, err
+			}
+			continue
+		}
 		descendants := make([]string, 0, len(byTarget))
 		for candidate := range byTarget {
 			contains, err := transformer.OperationDirectWriteBodyPathContains(cmd.Operation, target, candidate)
