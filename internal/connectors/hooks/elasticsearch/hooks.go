@@ -43,6 +43,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/credential"
 )
 
 func init() {
@@ -67,19 +68,25 @@ func (Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, sp
 	id := firstNonEmpty(cfg.Config["api_key_id"], cfg.Config["apiKeyId"])
 	secret := firstNonEmpty(cfg.Secrets["api_key_secret"], cfg.Secrets["apiKeySecret"])
 	if id != "" && secret != "" {
+		if err := credential.ValidateHTTPHeaderValue("API key ID", id); err != nil {
+			return nil, err
+		}
+		if err := credential.ValidateHTTPHeaderValue("API key secret", secret); err != nil {
+			return nil, err
+		}
 		encoded := base64.StdEncoding.EncodeToString([]byte(id + ":" + secret))
 		return connsdk.APIKeyHeader("Authorization", encoded, "ApiKey "), nil
 	}
-	if username := strings.TrimSpace(cfg.Config["username"]); username != "" {
-		return connsdk.Basic(username, cfg.Secrets["password"]), nil
+	if username := firstNonEmpty(cfg.Config["username"]); username != "" {
+		return connsdk.BasicWithRequirements(username, cfg.Secrets["password"], true, false), nil
 	}
 	return connsdk.AuthFunc(func(context.Context, *http.Request) error { return nil }), nil
 }
 
 func firstNonEmpty(values ...string) string {
 	for _, value := range values {
-		if trimmed := strings.TrimSpace(value); trimmed != "" {
-			return trimmed
+		if strings.TrimSpace(value) != "" {
+			return value
 		}
 	}
 	return ""

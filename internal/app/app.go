@@ -18,6 +18,7 @@ import (
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/coordination"
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
@@ -733,6 +734,9 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	}
 	if err := connectors.ValidateConfiguration(connector, req.Config); err != nil {
 		return CredentialMeta{}, fmt.Errorf("credential configuration: %w", err)
+	}
+	if err := credential.RequirePersistentValues(req.Secrets); err != nil {
+		return CredentialMeta{}, err
 	}
 	if err := a.vault.Put(ctx, id, req.Secrets); err != nil {
 		return CredentialMeta{}, err

@@ -11,6 +11,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/credential"
 )
 
 const (
@@ -182,9 +183,9 @@ func (c Connector) requester(cfg connectors.RuntimeConfig) (*connsdk.Requester, 
 	if err != nil {
 		return nil, err
 	}
-	token := strings.TrimSpace(secret(cfg, "access_token"))
-	if token == "" {
-		return nil, errors.New("safetyculture connector requires secret access_token")
+	token := secret(cfg, "access_token")
+	if err := credential.RequireAuthenticationValue("access_token", token); err != nil {
+		return nil, fmt.Errorf("safetyculture: %w", err)
 	}
 	return &connsdk.Requester{Client: c.Client, BaseURL: base, Auth: connsdk.Bearer(token), UserAgent: userAgent}, nil
 }

@@ -12,7 +12,45 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/credential"
 )
+
+func TestWriteErrorEmptySecretIsValidation(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	exitCode := writeError(&stdout, &stderr, &credential.EmptySecretError{Field: "external proof stdin"}, true)
+	if got, want := exitCode, 3; got != want {
+		t.Fatalf("empty secret exit code = %d, want %d", got, want)
+	}
+	var envelope struct {
+		Error struct {
+			Category string `json:"category"`
+			Code     string `json:"code"`
+			Message  string `json:"message"`
+		} `json:"error"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil {
+		t.Fatalf("decode empty-secret error envelope: %v", err)
+	}
+	if got, want := envelope.Error.Category, "validation"; got != want {
+		t.Fatalf("empty secret category = %q, want %q", got, want)
+	}
+	if got, want := envelope.Error.Code, "validation_error"; got != want {
+		t.Fatalf("empty secret code = %q, want %q", got, want)
+	}
+	if !strings.Contains(envelope.Error.Message, "external proof stdin") {
+		t.Fatalf("empty secret message = %q, want actionable field context", envelope.Error.Message)
+	}
+}
+
+func TestClassifyInvalidSecretValueAsValidation(t *testing.T) {
+	classified := classifyError(&credential.InvalidSecretValueError{Field: "bearer token"})
+	if got, want := classified.category, categoryValidation; got != want {
+		t.Fatalf("invalid secret category = %q, want %q", got, want)
+	}
+	if got, want := exitCodeFor(classified), 3; got != want {
+		t.Fatalf("invalid secret exit code = %d, want %d", got, want)
+	}
+}
 
 func TestClassifyErrorProvider401IsCredentialError(t *testing.T) {
 	classified := classifyError(&connsdk.HTTPError{

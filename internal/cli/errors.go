@@ -9,6 +9,7 @@ import (
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/safety"
 	"polymetrics.ai/internal/schedule"
@@ -107,6 +108,14 @@ func classifyError(err error) *cliError {
 	var missingRequiredFlag *commandrunner.MissingRequiredFlagError
 	if errors.As(err, &missingRequiredFlag) {
 		return &cliError{category: categoryUsage, code: "usage_error", message: missingRequiredFlag.Error(), err: err}
+	}
+	var emptySecret *credential.EmptySecretError
+	if errors.As(err, &emptySecret) {
+		return &cliError{category: categoryValidation, code: "validation_error", message: emptySecret.Error(), err: err}
+	}
+	var invalidSecret *credential.InvalidSecretValueError
+	if errors.As(err, &invalidSecret) {
+		return &cliError{category: categoryValidation, code: "validation_error", message: invalidSecret.Error(), err: err}
 	}
 	var replay *app.AuthorizationTokenReplayError
 	if errors.As(err, &replay) {

@@ -19,6 +19,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/credential"
 )
 
 // credentialName / warehouseCredentialName / connection names used for every
@@ -258,13 +259,9 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 	defer removeAdmissionTimeout()
 	defer func() { rep.RateLimitEvents = rateLimitEvents.snapshot() }()
 
-	secretValues := make([]string, 0, len(r.opts.SecretEnv))
-	secretFields := make(map[string]string, len(r.opts.SecretEnv))
-	for field, envName := range r.opts.SecretEnv {
-		if v := os.Getenv(envName); v != "" {
-			secretValues = append(secretValues, v)
-			secretFields[field] = v
-		}
+	secretFields, secretValues, err := certificationSourceSecretMaterial(r.opts)
+	if err != nil {
+		return Report{}, err
 	}
 	if r.opts.RuntimeObservation != nil {
 		if err := r.opts.RuntimeObservation(RuntimeObservationInput{
@@ -792,14 +789,6 @@ func stagePreflight(rc *runContext, rep *Report) error {
 		}
 		if !found {
 			return false, cliInfoFrom(res), fmt.Sprintf("preflight: connector %q not present in registry list", rc.opts.Connector)
-		}
-		if len(rc.opts.SecretEnv) == 0 {
-			return true, cliInfoFrom(res), ""
-		}
-		for field, envName := range rc.opts.SecretEnv {
-			if os.Getenv(envName) == "" {
-				return false, cliInfoFrom(res), fmt.Sprintf("preflight: secret env %s (field %s) is empty", envName, field)
-			}
 		}
 		return true, cliInfoFrom(res), ""
 	})
@@ -1602,4 +1591,32 @@ func secretValuesFromEnv(secretEnv map[string]string) []string {
 		}
 	}
 	return values
+}
+
+func certificationSourceSecretMaterial(opts Options) (map[string]string, []string, error) {
+	provided := make(map[string]string, len(opts.SecretEnv))
+	for field, envName := range opts.SecretEnv {
+		if value, supplied := os.LookupEnv(envName); supplied {
+			provided[field] = value
+		}
+	}
+
+	if bundle, err := engine.Load(defs.FS, opts.Connector); err == nil {
+		if err := engine.ValidateExplicitEmptyRequiredSecretFields(bundle, provided); err != nil {
+			return nil, nil, err
+		}
+	} else if err := credential.RequirePersistentValues(provided); err != nil {
+		return nil, nil, err
+	}
+
+	fields := make(map[string]string, len(provided))
+	values := make([]string, 0, len(provided))
+	for field, value := range provided {
+		if value == "" {
+			continue
+		}
+		fields[field] = value
+		values = append(values, value)
+	}
+	return fields, values, nil
 }

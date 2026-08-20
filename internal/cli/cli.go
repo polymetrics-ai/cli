@@ -19,6 +19,7 @@ import (
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/coordination"
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
@@ -389,8 +390,8 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 				return fmt.Errorf("invalid --from-env %q, want field=ENV", spec)
 			}
 			secrets[key] = os.Getenv(env)
-			if secrets[key] == "" {
-				return fmt.Errorf("environment variable %s is empty", env)
+			if err := credential.RequirePersistentValue(key, secrets[key]); err != nil {
+				return validationErrorf("%v", err)
 			}
 		}
 		if field := flags.first("value-stdin"); field != "" {
@@ -398,7 +399,10 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			if err != nil {
 				return fmt.Errorf("read stdin secret: %w", err)
 			}
-			secrets[field] = strings.TrimRight(string(b), "\r\n")
+			secrets[field] = credential.NormalizeStdin(string(b))
+			if err := credential.RequirePersistentValue(field, secrets[field]); err != nil {
+				return validationErrorf("%v", err)
+			}
 		}
 		config, err := keyValues(flags.values["config"])
 		if err != nil {
@@ -502,6 +506,10 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 }
 
 func credentialCoordinationInputError(err error) error {
+	var emptySecret *credential.EmptySecretError
+	if errors.As(err, &emptySecret) {
+		return validationErrorf("%v", err)
+	}
 	var declarationErr *app.CredentialCoordinationDeclarationError
 	if errors.As(err, &declarationErr) {
 		return validationErrorf("%v", err)

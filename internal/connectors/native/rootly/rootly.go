@@ -11,6 +11,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/credential"
 )
 
 const (
@@ -171,9 +172,9 @@ func (c Connector) requester(cfg connectors.RuntimeConfig) (*connsdk.Requester, 
 	if err != nil {
 		return nil, err
 	}
-	token := strings.TrimSpace(secret(cfg, "api_key"))
-	if token == "" {
-		return nil, errors.New("rootly connector requires secret api_key")
+	token := secret(cfg, "api_key")
+	if err := credential.RequirePersistentValue("api_key", token); err != nil {
+		return nil, fmt.Errorf("rootly connector requires secret api_key: %w", err)
 	}
 	return &connsdk.Requester{Client: c.Client, BaseURL: base, Auth: connsdk.Bearer(token), UserAgent: userAgent}, nil
 }
