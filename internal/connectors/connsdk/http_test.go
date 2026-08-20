@@ -1049,6 +1049,74 @@ func TestRequesterDisableRetriesRejectsMutationRedirect(t *testing.T) {
 	}
 }
 
+func TestRequesterIdempotentMutationStillRefusesRedirectAndRetainsTerminalResponse(t *testing.T) {
+	for _, status := range []int{
+		http.StatusMovedPermanently,
+		http.StatusFound,
+		http.StatusSeeOther,
+		http.StatusTemporaryRedirect,
+		http.StatusPermanentRedirect,
+	} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			var redirected int32
+			target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				atomic.AddInt32(&redirected, 1)
+				w.WriteHeader(http.StatusNoContent)
+			}))
+			defer target.Close()
+			source := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+				w.Header().Set("Location", target.URL+"/outside-approved-target")
+				w.Header().Set("X-Request-ID", "redirect-receipt")
+				w.WriteHeader(status)
+			}))
+			defer source.Close()
+
+			r := &Requester{
+				BaseURL: source.URL,
+				DefaultHeaders: map[string]string{
+					"Idempotency-Key": "preview-bound-key",
+				},
+				MaxRetries: 1,
+				Sleep:      func(context.Context, time.Duration) error { return nil },
+			}
+			resp, err := r.Do(context.Background(), http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"})
+			if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
+				t.Fatalf("Do error = %v, want redirect refusal", err)
+			}
+			if resp == nil || resp.Status != status || resp.Header.Get("X-Request-ID") != "redirect-receipt" {
+				t.Fatalf("terminal response = %#v, want status %d and complete receipt", resp, status)
+			}
+			if got := atomic.LoadInt32(&redirected); got != 0 {
+				t.Fatalf("redirect target hits = %d, want 0", got)
+			}
+		})
+	}
+}
+
+func TestRequesterMutationRetryCancellationRetainsLastResponse(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("X-Request-ID", "terminal-retry-receipt")
+		http.Error(w, "retry later", http.StatusServiceUnavailable)
+	}))
+	defer srv.Close()
+
+	cancelled := errors.New("retry parking cancelled")
+	r := &Requester{
+		BaseURL:    srv.URL,
+		MaxRetries: 1,
+		Sleep: func(context.Context, time.Duration) error {
+			return cancelled
+		},
+	}
+	resp, err := r.Do(context.Background(), http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"})
+	if !errors.Is(err, cancelled) {
+		t.Fatalf("Do error = %v, want cancellation", err)
+	}
+	if resp == nil || resp.Status != http.StatusServiceUnavailable || resp.Header.Get("X-Request-ID") != "terminal-retry-receipt" || string(resp.Body) != "retry later\n" {
+		t.Fatalf("terminal response = %#v, want complete last provider response", resp)
+	}
+}
+
 func TestRequesterAdmitsReplayableReadOncePerLogicalAttempt(t *testing.T) {
 	var readHits int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
@@ -1641,6 +1709,34 @@ func TestRequesterDoStripsOverwrittenAuthHeaderCrossOrigin(t *testing.T) {
 	}
 	if got := sawAccept.Load().(string); got != "" {
 		t.Fatalf("cross-origin redirect received overwritten auth header %q", got)
+	}
+}
+
+func TestBufferedRequesterDefaultRedirectPolicyProtectsCustomCredentials(t *testing.T) {
+	var targetHits int32
+	var targetCredential atomic.Value
+	targetCredential.Store("")
+	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&targetHits, 1)
+		targetCredential.Store(r.Header.Get("X-API-Key"))
+		w.WriteHeader(http.StatusOK)
+	}))
+	t.Cleanup(target.Close)
+	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, target.URL+"/final", http.StatusFound)
+	}))
+	t.Cleanup(origin.Close)
+
+	r := &Requester{BaseURL: origin.URL, DefaultHeaders: map[string]string{"X-API-Key": "configured-secret"}}
+	_, err := r.Do(context.Background(), http.MethodGet, "/start", nil, nil)
+	if err == nil || !strings.Contains(err.Error(), "cross-host redirect") {
+		t.Fatalf("Do error = %v, want safe-default cross-host refusal", err)
+	}
+	if got := atomic.LoadInt32(&targetHits); got != 0 {
+		t.Fatalf("redirect target hits = %d, want 0", got)
+	}
+	if got := targetCredential.Load().(string); got != "" {
+		t.Fatalf("redirect target received custom credential %q", got)
 	}
 }
 

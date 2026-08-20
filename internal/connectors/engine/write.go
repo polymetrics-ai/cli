@@ -15,6 +15,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 	"unicode/utf8"
@@ -128,16 +129,30 @@ func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record
 func copyRecordMap(src map[string]any) map[string]any {
 	out := make(map[string]any, len(src))
 	for k, v := range src {
-		switch typed := v.(type) {
-		case map[string]any:
-			out[k] = copyRecordMap(typed)
-		case connectors.Record:
-			out[k] = copyRecordMap(map[string]any(typed))
-		default:
-			out[k] = v
-		}
+		out[k] = copyRecordValue(v)
 	}
 	return out
+}
+
+func copyRecordValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		return copyRecordMap(typed)
+	case connectors.Record:
+		return copyRecordMap(map[string]any(typed))
+	case []any:
+		out := make([]any, len(typed))
+		for index, item := range typed {
+			out[index] = copyRecordValue(item)
+		}
+		return out
+	case []string:
+		return append([]string(nil), typed...)
+	case []byte:
+		return append([]byte(nil), typed...)
+	default:
+		return value
+	}
 }
 
 type writeActionRedactedError struct {
@@ -316,7 +331,7 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 	var result connectors.WriteResult
 	err = ExecutePreparedWrite(ctx, prepared, req.Approval, preview.Digest, func(executeCtx context.Context) error {
 		var executeErr error
-		result, executeErr = executeApprovedWrite(executeCtx, b, action, req, records, h)
+		result, executeErr = executeApprovedWrite(executeCtx, b, action, req, records, prepared, preview.Digest, h)
 		return executeErr
 	})
 	if err != nil && result.RecordsWritten == 0 && result.RecordsFailed == 0 {
@@ -325,9 +340,9 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 	return result, err
 }
 
-// applyWriteRecordHook returns the records the declarative body is built from.
-// prepareDeclarativeWrite and executeApprovedWrite both call it, so the request
-// an operator approves in the preview is the request that runs.
+// applyWriteRecordHook materializes the record plan exactly once, before the
+// preview digest is produced. Execution consumes PreparedWrite's private deep
+// clone and never invokes the mapper again.
 func applyWriteRecordHook(h Hooks, action WriteAction, records []connectors.Record) ([]connectors.Record, error) {
 	mapper, ok := h.(WriteRecordHook)
 	if !ok {
@@ -347,8 +362,11 @@ func applyWriteRecordHook(h Hooks, action WriteAction, records []connectors.Reco
 	return mapped, nil
 }
 
-func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WriteResult, error) {
+func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req connectors.WriteRequest, records []connectors.Record, prepared PreparedWrite, previewDigest string, h Hooks) (connectors.WriteResult, error) {
 	cfg := materializeConfigDefaults(b, req.Config)
+	if len(prepared.executionRecords) != len(records) || len(prepared.Requests) != len(records) {
+		return connectors.WriteResult{RecordsFailed: len(records)}, fmt.Errorf("engine: prepared execution plan cardinality changed")
+	}
 
 	rt, err := newRuntime(ctx, b, cfg, h)
 	if err != nil {
@@ -373,12 +391,18 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			}
 		}
 
-		pinned, err := applyWriteRecordHook(h, action, []connectors.Record{rec})
+		pinned := prepared.executionRecords[i]
+		current, err := prepareDeclarativeRequest(b, action, pinned, i, cfg, prepared.Target.RequiresApproval())
 		if err != nil {
 			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
-			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
+			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, pinned)}
 		}
-		response, err := executeWriteRecordWithResponse(ctx, b, action, pinned[0], i, cfg, rt)
+		if !reflect.DeepEqual(current, prepared.Requests[i]) {
+			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: errors.New("prepared request no longer matches its approved execution plan")}
+		}
+		idempotencyKey := writeIdempotencyKey(b.Name, action, previewDigest, i)
+		response, err := executeWriteRecordWithResponse(ctx, b, action, pinned, i, cfg, rt, idempotencyKey)
 		var responseErr error
 		if response != nil {
 			providerResponse, providerResponseErr := writeProviderResponse(response, i)
@@ -406,14 +430,14 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 // executeWriteRecord performs the single HTTP request for one record: builds
 // the path from path_fields, the body per body_type, and issues Do/DoForm.
 func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime) error {
-	_, err := executeWriteRecordWithResponse(ctx, b, action, rec, recordIndex, cfg, rt)
+	_, err := executeWriteRecordWithResponse(ctx, b, action, rec, recordIndex, cfg, rt, "")
 	return err
 }
 
 // executeWriteRecordWithResponse is the private result-preserving form used
 // by the named-action executor. The exported connector surface remains the
 // closed WriteAction contract; no caller can provide a route, verb, or body.
-func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime) (*connsdk.Response, error) {
+func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime, idempotencyKey string) (*connsdk.Response, error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
 
 	path, err := InterpolatePath(action.Path, vars)
@@ -435,7 +459,7 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	if err != nil {
 		return nil, err
 	}
-	requester, err := writeRequester(requesterForAction, action)
+	requester, err := writeRequester(requesterForAction, action, idempotencyKey)
 	if err != nil {
 		return nil, err
 	}
@@ -611,7 +635,7 @@ func writeProviderHeaders(headers map[string][]string) map[string]connectors.Wri
 
 // writeRequester clones the shared requester and permits mutation replay only
 // when the action carries provider-scoped idempotency evidence.
-func writeRequester(base *connsdk.Requester, action WriteAction) (*connsdk.Requester, error) {
+func writeRequester(base *connsdk.Requester, action WriteAction, idempotencyKey string) (*connsdk.Requester, error) {
 	if base == nil {
 		return nil, fmt.Errorf("engine: write action %q: requester is nil", action.Name)
 	}
@@ -630,12 +654,36 @@ func writeRequester(base *connsdk.Requester, action WriteAction) (*connsdk.Reque
 		}
 		return &requester, nil
 	}
-	keyBytes := make([]byte, 16)
-	if _, err := rand.Read(keyBytes); err != nil {
-		return nil, fmt.Errorf("engine: write action %q: create idempotency key: %w", action.Name, err)
+	if idempotencyKey == "" {
+		keyBytes := make([]byte, 16)
+		if _, err := rand.Read(keyBytes); err != nil {
+			return nil, fmt.Errorf("engine: write action %q: create idempotency key: %w", action.Name, err)
+		}
+		idempotencyKey = hex.EncodeToString(keyBytes)
 	}
-	requester.DefaultHeaders[header] = hex.EncodeToString(keyBytes)
+	requester.DefaultHeaders[header] = idempotencyKey
 	return &requester, nil
+}
+
+// writeIdempotencyKey derives the provider key from the exact approved
+// preview identity. The action declaration binds the provider-selected header
+// name into that preview; the record index keeps one approved batch from
+// aliasing two provider mutations. Retries reuse this value because Requester
+// clones the same default headers for every attempt against the original URL.
+func writeIdempotencyKey(connector string, action WriteAction, previewDigest string, recordIndex int) string {
+	if strings.TrimSpace(action.IdempotencyKeyHeader) == "" || strings.TrimSpace(previewDigest) == "" {
+		return ""
+	}
+	payload := strings.Join([]string{
+		"polymetrics/write-idempotency/v1",
+		strings.TrimSpace(connector),
+		strings.TrimSpace(action.Name),
+		strings.ToLower(strings.TrimSpace(action.IdempotencyKeyHeader)),
+		strings.TrimSpace(previewDigest),
+		fmt.Sprintf("%d", recordIndex),
+	}, "\x00")
+	sum := sha256.Sum256([]byte(payload))
+	return hex.EncodeToString(sum[:])
 }
 
 const (

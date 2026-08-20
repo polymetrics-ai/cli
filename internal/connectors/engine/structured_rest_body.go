@@ -708,16 +708,18 @@ func compileStructuredRESTBodySchema(op OperationSpec) (*structuredRESTBodySchem
 	if err := requireClosedBoundedStructuredRESTBody(op.ID, root, "body_schema", 1, &state); err != nil {
 		return nil, err
 	}
-	minimumNodes, maximumNodes, err := structuredRESTBodyNodeCosts(root)
+	minimumNodes, _, err := structuredRESTBodyNodeCosts(root)
 	if err != nil {
 		return nil, fmt.Errorf("operation %q body_schema: %w", op.ID, err)
 	}
 	if minimumNodes > maxStructuredRESTBodyNodes {
 		return nil, structuredRESTBodyFoundationGap(op.ID, "body_schema", fmt.Sprintf("minimum valid body requires %d nodes, exceeding limit %d", minimumNodes, maxStructuredRESTBodyNodes))
 	}
-	if maximumNodes > maxStructuredRESTBodyNodes {
-		return nil, structuredRESTBodyFoundationGap(op.ID, "body_schema", fmt.Sprintf("maximum valid body requires %d nodes, exceeding limit %d", maximumNodes, maxStructuredRESTBodyNodes))
-	}
+	// A schema may describe several independently bounded arrays whose
+	// theoretical maxima cannot coexist inside the operation's byte limit. The
+	// runtime enforces both the node ceiling and max_bytes on the materialized
+	// value, so rejecting that safe union here would make declared operations
+	// unreachable without strengthening the actual boundary.
 	minimumBytes, err := structuredRESTBodyMinimumJSONBytes(root)
 	if err != nil {
 		return nil, fmt.Errorf("operation %q body_schema: %w", op.ID, err)

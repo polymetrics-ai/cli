@@ -8,6 +8,8 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"net/url"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -663,10 +665,18 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		maxBytes = MaxOperationDirectReadBytes
 	}
 	direct, err := reader.OperationDirectRead(ctx, connectors.OperationDirectReadRequest{
-		Operation:    cmd.Operation,
-		Config:       req.Config,
-		PathParams:   pathParams,
-		Query:        query,
+		Operation:  cmd.Operation,
+		Config:     req.Config,
+		PathParams: pathParams,
+		Query:      query,
+		CommandBindings: &connectors.OperationDirectReadBindings{
+			Path:  operationMappedFields(cmd, "path."),
+			Query: operationMappedFields(cmd, "query."),
+			Body:  operationMappedFields(cmd, "body."),
+			RawBody: slices.ContainsFunc(cmd.Flags, func(flag connectors.CommandSurfaceFlag) bool {
+				return strings.TrimSpace(flag.MapsTo) == "body"
+			}),
+		},
 		Headers:      headers,
 		HeaderValues: headerValues,
 		Body:         body,
@@ -686,6 +696,17 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		return Result{}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
+}
+
+func operationMappedFields(cmd connectors.CommandSurfaceCommand, prefix string) []string {
+	fields := make([]string, 0, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		if strings.HasPrefix(mapsTo, prefix) {
+			fields = append(fields, strings.TrimPrefix(mapsTo, prefix))
+		}
+	}
+	return fields
 }
 
 func validateDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
@@ -756,6 +777,10 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	if !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-read metadata"}
 	}
+	bindingPreflighter, ok := connector.(connectors.OperationDirectReadBindingPreflighter)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-read binding metadata"}
+	}
 	if strings.TrimSpace(cmd.Operation) == "" {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require operation"}
 	}
@@ -774,6 +799,29 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	}
 	if err := preflighter.PreflightOperationDirectRead(cmd.Operation, method, cmd.APISurface[0].Path, MaxOperationDirectReadBytes, cmd.OutputPolicy); err != nil {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct read metadata is not executable: %v", err)}
+	}
+	pathFields := make([]string, 0, len(cmd.Flags))
+	queryFields := make([]string, 0, len(cmd.Flags))
+	bodyFields := make([]string, 0, len(cmd.Flags))
+	rawBody := false
+	for _, flag := range cmd.Flags {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		switch {
+		case strings.HasPrefix(mapsTo, "path."):
+			pathFields = append(pathFields, strings.TrimPrefix(mapsTo, "path."))
+		case strings.HasPrefix(mapsTo, "query."):
+			queryFields = append(queryFields, strings.TrimPrefix(mapsTo, "query."))
+		case strings.HasPrefix(mapsTo, "header."):
+		case strings.HasPrefix(mapsTo, "body."):
+			bodyFields = append(bodyFields, strings.TrimPrefix(mapsTo, "body."))
+		case mapsTo == "body":
+			rawBody = true
+		default:
+			return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read flag --%s maps to unsupported target %q", flag.Name, flag.MapsTo)}
+		}
+	}
+	if err := bindingPreflighter.PreflightOperationDirectReadBindings(cmd.Operation, pathFields, queryFields, bodyFields, rawBody); err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct read bindings are not executable: %v", err)}
 	}
 	return nil
 }
@@ -971,6 +1019,9 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 			return connectors.RuntimeConfig{}, nil, err
 		}
 		allowed[flag.Name] = flag
+	}
+	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
+		return connectors.RuntimeConfig{}, nil, err
 	}
 	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
 		return connectors.RuntimeConfig{}, nil, err
@@ -1435,6 +1486,9 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 		}
 		allowed[flag.Name] = flag
 	}
+	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
+		return nil, nil, err
+	}
 	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
 		return nil, nil, err
 	}
@@ -1498,11 +1552,6 @@ func operationDirectWriteOverrides(cmd connectors.CommandSurfaceCommand, flags m
 }
 
 func operationDirectOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string, materialize func(string, map[string]any) (map[string]any, error)) (map[string]string, map[string]string, map[string]string, map[string][]string, map[string]any, *string, error) {
-	if cmd.Intent == "direct_write" {
-		if err := validateOperationDirectWriteQueryOccurrences(cmd, flags); err != nil {
-			return nil, nil, nil, nil, nil, nil, err
-		}
-	}
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
@@ -1510,12 +1559,8 @@ func operationDirectOverrides(cmd connectors.CommandSurfaceCommand, flags map[st
 		}
 		allowed[flag.Name] = flag
 	}
-	for name, values := range flags {
-		flag, ok := allowed[name]
-		if !ok || !strings.HasPrefix(flag.MapsTo, "header.") || len(values) <= 1 || flag.Repeatable {
-			continue
-		}
-		return nil, nil, nil, nil, nil, nil, fmt.Errorf("invalid --%s: declared request headers accept exactly one value", name)
+	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
+		return nil, nil, nil, nil, nil, nil, err
 	}
 	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
 		return nil, nil, nil, nil, nil, nil, err
@@ -1686,7 +1731,7 @@ func bodyMappingArrayIndex(part string) (uint64, bool) {
 	return index, true
 }
 
-func validateOperationDirectWriteQueryOccurrences(cmd connectors.CommandSurfaceCommand, flags map[string][]string) error {
+func validateCanonicalFlagOccurrences(cmd connectors.CommandSurfaceCommand, flags map[string][]string) error {
 	allowed := make(map[string]connectors.CommandSurfaceFlag, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
 		allowed[flag.Name] = flag
@@ -1706,19 +1751,34 @@ func validateOperationDirectWriteQueryOccurrences(cmd connectors.CommandSurfaceC
 		if !ok {
 			continue
 		}
-		target, isQuery := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "query.")
-		if !isQuery {
-			continue
+		target, err := canonicalCommandFlagTarget(flag)
+		if err != nil {
+			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error()}
 		}
-		if len(values) > 1 {
-			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("query parameter %q was supplied more than once via --%s", target, name)}
+		if len(values) > 1 && !flag.Repeatable && flag.Type != "string_array" {
+			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("target %q must accept exactly one value; it was supplied more than once via --%s", target, name)}
 		}
 		if previous, duplicate := seen[target]; duplicate {
-			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("query parameter %q was supplied more than once via --%s and --%s", target, previous, name)}
+			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("target %q must accept exactly one value; it was supplied more than once via --%s and --%s", target, previous, name)}
 		}
 		seen[target] = name
 	}
 	return nil
+}
+
+func canonicalCommandFlagTarget(flag connectors.CommandSurfaceFlag) (string, error) {
+	target := strings.TrimSpace(flag.MapsTo)
+	if target == "" {
+		return "", fmt.Errorf("flag --%s has no request target", flag.Name)
+	}
+	if header, ok := strings.CutPrefix(target, "header."); ok {
+		canonical, err := connectors.CanonicalOperationHeaderName(header)
+		if err != nil {
+			return "", err
+		}
+		return "header." + canonical, nil
+	}
+	return target, nil
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {
@@ -1842,6 +1902,9 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 			return nil, err
 		}
 		allowed[flag.Name] = flag
+	}
+	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
+		return nil, err
 	}
 	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
 		return nil, err
@@ -2029,6 +2092,9 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
 			return nil, err
 		}
+		if err := validateCommandFlagEncodedBytes(flag, value); err != nil {
+			return nil, err
+		}
 		if err := validateFlagValue(flag, value); err != nil {
 			return nil, err
 		}
@@ -2093,6 +2159,37 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
 		}
 	}
+}
+
+func validateCommandFlagEncodedBytes(flag connectors.CommandSurfaceFlag, value string) error {
+	if flag.MaxBytes <= 0 {
+		return nil
+	}
+	location, name, ok := strings.Cut(strings.TrimSpace(flag.MapsTo), ".")
+	if !ok || name == "" {
+		return nil
+	}
+	encoded := ""
+	switch location {
+	case "path":
+		if name == "path" || name == "ref" {
+			parts := strings.Split(value, "/")
+			for index := range parts {
+				parts[index] = url.PathEscape(parts[index])
+			}
+			encoded = strings.Join(parts, "/")
+		} else {
+			encoded = url.PathEscape(value)
+		}
+	case "query":
+		encoded = url.QueryEscape(value)
+	default:
+		return nil
+	}
+	if len(encoded) > flag.MaxBytes {
+		return fmt.Errorf("flag --%s encoded %s value exceeds byte cap %d", flag.Name, location, flag.MaxBytes)
+	}
+	return nil
 }
 
 // ConfirmationChallengeForCommand reports the typed confirmation a command's

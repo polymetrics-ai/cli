@@ -55,6 +55,12 @@ func (c Connector) PreflightOperationDirectRead(operation, method, path string, 
 	return engine.PreflightOperationDirectRead(ashbyBundle(), operation, method, path, maxBytes, outputPolicy)
 }
 
+// PreflightOperationDirectReadBindings keeps Ashby's native adapter on the
+// same closed command-binding contract as fully declarative connectors.
+func (c Connector) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
+	return engine.PreflightOperationDirectReadBindings(ashbyBundle(), operation, pathFields, queryFields, bodyFields, rawBody)
+}
+
 // ValidateWrite delegates typed Ashby reverse-ETL validation to the generated
 // bundle. The bundle contains closed top-level JSON schemas and fixed endpoint
 // paths; no generic HTTP passthrough is exposed by the native connector.

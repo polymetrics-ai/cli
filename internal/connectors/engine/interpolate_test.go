@@ -127,6 +127,51 @@ func TestInterpolatePathDefaultURLEncode(t *testing.T) {
 	}
 }
 
+func TestInterpolatePathRevalidatesFilteredOutput(t *testing.T) {
+	tests := []struct {
+		name string
+		tmpl string
+		vars Vars
+		want string
+	}{
+		{
+			name: "last path segment cannot create query or fragment",
+			tmpl: "/objects/{{ record.uri | last_path_segment }}",
+			vars: Vars{Record: map[string]any{"uri": "https://provider.example/unsafe?admin=true#fragment"}},
+			want: "/objects/unsafe%3Fadmin%3Dtrue%23fragment",
+		},
+		{
+			name: "join cannot create path separators",
+			tmpl: "/objects/{{ record.parts | join:/ }}",
+			vars: Vars{Record: map[string]any{"parts": []any{"parent", "child"}}},
+			want: "/objects/parent%2Fchild",
+		},
+		{
+			name: "const cannot inject path syntax",
+			tmpl: "/objects/{{ config.ignored | const:../admin?x#y\\z }}",
+			vars: Vars{Config: map[string]string{"ignored": "value"}},
+			want: "/objects/..%2Fadmin%3Fx%23y%5Cz",
+		},
+		{
+			name: "terminal urlencode is not double encoded",
+			tmpl: "/objects/{{ config.id | urlencode }}",
+			vars: Vars{Config: map[string]string{"id": "a/b"}},
+			want: "/objects/a%2Fb",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := InterpolatePath(test.tmpl, test.vars)
+			if err != nil {
+				t.Fatalf("InterpolatePath: %v", err)
+			}
+			if got != test.want {
+				t.Fatalf("InterpolatePath = %q, want %q", got, test.want)
+			}
+		})
+	}
+}
+
 func TestInterpolatePathPreservesIntegerIDsWithoutScientificNotation(t *testing.T) {
 	tests := []struct {
 		name string

@@ -30,6 +30,8 @@ type fakeConnector struct {
 	operationDirectReadReq     connectors.OperationDirectReadRequest
 	operationReadPreflight     operationDirectReadPreflightCall
 	operationReadPreflightErr  error
+	operationReadBindings      operationDirectReadBindingPreflightCall
+	operationReadBindingsErr   error
 	operationJSONVariable      operationStructuredJSONVariablePreflightCall
 	operationJSONVariableErr   error
 	operationDirectWriteReq    connectors.OperationDirectWriteRequest
@@ -73,6 +75,14 @@ type operationDirectReadPreflightCall struct {
 	outputPolicy string
 }
 
+type operationDirectReadBindingPreflightCall struct {
+	operation   string
+	pathFields  []string
+	queryFields []string
+	bodyFields  []string
+	rawBody     bool
+}
+
 type operationStructuredJSONVariablePreflightCall struct {
 	operation string
 	variable  string
@@ -96,6 +106,65 @@ type operationDirectWriteBindingPreflightCall struct {
 	operation  string
 	pathFields []string
 	bodyFields []string
+}
+
+func TestCommandRunnerRejectsDuplicateSingletonTargetsBeforeIO(t *testing.T) {
+	tests := []struct {
+		name string
+		run  func() error
+	}{
+		{
+			name: "ETL duplicate occurrence",
+			run: func() error {
+				cmd := connectors.CommandSurfaceCommand{Path: "records list", Intent: "etl", Flags: []connectors.CommandSurfaceFlag{{Name: "state", Type: "string", MapsTo: "query.state"}}}
+				_, _, err := streamOverrides(cmd, connectors.RuntimeConfig{}, map[string][]string{"state": {"open", "closed"}})
+				return err
+			},
+		},
+		{
+			name: "direct read aliases",
+			run: func() error {
+				cmd := connectors.CommandSurfaceCommand{Path: "records get", Intent: "direct_read", Flags: []connectors.CommandSurfaceFlag{
+					{Name: "id", Type: "string", MapsTo: "query.id"},
+					{Name: "identifier", Type: "string", MapsTo: "query.id"},
+				}}
+				_, _, err := directReadOverrides(cmd, map[string][]string{"id": {"one"}, "identifier": {"two"}})
+				return err
+			},
+		},
+		{
+			name: "direct write canonical header aliases",
+			run: func() error {
+				cmd := connectors.CommandSurfaceCommand{Path: "records update", Intent: "direct_write", Flags: []connectors.CommandSurfaceFlag{
+					{Name: "request-id", Type: "string", MapsTo: "header.X-Request-ID"},
+					{Name: "request-id-alias", Type: "string", MapsTo: "header.x-request-id"},
+				}}
+				_, _, _, _, _, _, err := operationDirectOverrides(cmd, map[string][]string{"request-id": {"one"}, "request-id-alias": {"two"}}, nil)
+				return err
+			},
+		},
+		{
+			name: "reverse ETL duplicate occurrence",
+			run: func() error {
+				cmd := connectors.CommandSurfaceCommand{Path: "records create", Intent: "reverse_etl", Flags: []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "record.name"}}}
+				_, err := recordOverrides(cmd, map[string][]string{"name": {"one", "two"}})
+				return err
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if err := test.run(); err == nil || !strings.Contains(err.Error(), "supplied more than once") {
+				t.Fatalf("duplicate singleton error = %v", err)
+			}
+		})
+	}
+
+	arrayCommand := connectors.CommandSurfaceCommand{Path: "records tag", Intent: "reverse_etl", Flags: []connectors.CommandSurfaceFlag{{Name: "tag", Type: "string_array", MapsTo: "record.tags"}}}
+	record, err := recordOverrides(arrayCommand, map[string][]string{"tag": {"one", "two"}})
+	if err != nil || !reflect.DeepEqual(record["tags"], []string{"one", "two"}) {
+		t.Fatalf("repeatable array = %#v, err %v", record, err)
+	}
 }
 
 type preflightFakeConnector struct {
@@ -187,6 +256,12 @@ func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path str
 		outputPolicy: outputPolicy,
 	}
 	return f.operationReadPreflightErr
+}
+func (f *fakeConnector) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
+	f.operationReadBindings = operationDirectReadBindingPreflightCall{
+		operation: operation, pathFields: pathFields, queryFields: queryFields, bodyFields: bodyFields, rawBody: rawBody,
+	}
+	return f.operationReadBindingsErr
 }
 func (f *fakeConnector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
 	f.operationJSONVariable = operationStructuredJSONVariablePreflightCall{operation: operation, variable: variable}
@@ -2048,6 +2123,62 @@ func TestRunOperationDirectReadPassesDeclaredPlainTextBody(t *testing.T) {
 	}
 	if len(connector.operationDirectReadReq.Body) != 0 {
 		t.Fatalf("Body = %#v, want no JSON fields for raw input", connector.operationDirectReadReq.Body)
+	}
+}
+
+func TestRunOperationDirectReadEnforcesEncodedPathAndQueryCapsBeforeDispatch(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets get", Intent: "direct_read", Availability: "implemented", Operation: "acme.widgets.get", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/widgets/{id}"}},
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "id", Type: "string", MapsTo: "path.id", Required: true, MaxBytes: 6},
+			{Name: "filter", Type: "string", MapsTo: "query.filter", MaxBytes: 6},
+		},
+	}}}}
+
+	for _, testCase := range []struct {
+		name  string
+		flags map[string][]string
+	}{
+		{name: "path", flags: map[string][]string{"id": {"éé"}}},
+		{name: "query", flags: map[string][]string{"id": {"ok"}, "filter": {"éé"}}},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			_, err := Run(context.Background(), connector, Request{Path: []string{"widgets", "get"}, Flags: testCase.flags}, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), "byte cap") {
+				t.Fatalf("Run error = %v, want encoded byte-cap rejection", err)
+			}
+		})
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("OperationDirectRead dispatched rejected input: %+v", connector.operationDirectReadReq)
+	}
+}
+
+func TestOperationDirectReadCommandPreflightsExactBindings(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets search", Intent: "direct_read", Availability: "implemented", Operation: "acme.widgets.search", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/widgets/{tenant}"}},
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "tenant", Type: "string", MapsTo: "path.tenant"},
+			{Name: "cursor", Type: "string", MapsTo: "query.cursor"},
+			{Name: "name", Type: "string", MapsTo: "body.name"},
+			{Name: "trace", Type: "string", MapsTo: "header.X-Trace"},
+		},
+	}}}}
+	if err := Preflight(connector, []string{"widgets", "search"}); err != nil {
+		t.Fatalf("Preflight: %v", err)
+	}
+	want := operationDirectReadBindingPreflightCall{
+		operation: "acme.widgets.search", pathFields: []string{"tenant"}, queryFields: []string{"cursor"}, bodyFields: []string{"name"},
+	}
+	if !reflect.DeepEqual(connector.operationReadBindings, want) {
+		t.Fatalf("binding preflight = %#v, want %#v", connector.operationReadBindings, want)
+	}
+
+	connector.operationReadBindingsErr = errors.New("undeclared query binding")
+	if err := Preflight(connector, []string{"widgets", "search"}); err == nil || !strings.Contains(err.Error(), "bindings are not executable") {
+		t.Fatalf("Preflight error = %v, want closed-binding rejection", err)
 	}
 }
 

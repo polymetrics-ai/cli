@@ -60,13 +60,6 @@ func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.Write
 		return PreparedWrite{}, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
 	warnings := []string{fmt.Sprintf("%s executes a live mutation only after approval; dry run performs no external call", action.Name)}
-	if len(mapped) > 0 {
-		method, path, err := resolveWriteRequestLine(b, action, mapped[0], cfg)
-		if err != nil {
-			return PreparedWrite{}, err
-		}
-		warnings = append(warnings, fmt.Sprintf("resolved request: %s %s", method, path))
-	}
 	requests := make([]PreparedRequest, 0, len(mapped))
 	for index, record := range mapped {
 		prepared, err := prepareDeclarativeRequest(b, action, record, index, cfg, target.RequiresApproval())
@@ -74,6 +67,14 @@ func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.Write
 			return PreparedWrite{}, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: index, Err: redactWriteActionError(err, action, record)}
 		}
 		requests = append(requests, prepared)
+	}
+	if len(requests) > 0 {
+		redactionValues := writeActionRedactionValues(action, mapped[0])
+		for _, secret := range cfg.Secrets {
+			redactionValues = append(redactionValues, secret)
+		}
+		warnings = append(warnings, fmt.Sprintf("resolved request: %s %s",
+			requests[0].Method, publicWritePreviewURL(requests[0].URL, redactionValues)))
 	}
 	return PreparedWrite{
 		Target:              target,
@@ -93,9 +94,32 @@ func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.Write
 			RawSpecDigest:       digestBytes(b.RawSpec),
 			RawOperationsDigest: digestBytes(b.RawOperations),
 		},
-		HookIdentity: hookIdentity,
-		Requests:     requests,
+		HookIdentity:     hookIdentity,
+		Requests:         requests,
+		executionRecords: cloneWriteExecutionRecords(mapped),
 	}, nil
+}
+
+func publicWritePreviewURL(raw string, redactionValues []string) string {
+	parsed, err := url.Parse(raw)
+	if err == nil && parsed.User != nil {
+		username := "redacted"
+		if _, passwordPresent := parsed.User.Password(); passwordPresent {
+			parsed.User = url.UserPassword(username, "redacted")
+		} else {
+			parsed.User = url.User(username)
+		}
+		raw = parsed.String()
+	}
+	return redactWriteLiterals(raw, redactionValues)
+}
+
+func cloneWriteExecutionRecords(records []connectors.Record) []connectors.Record {
+	cloned := make([]connectors.Record, len(records))
+	for index, record := range records {
+		cloned[index] = connectors.Record(copyRecordMap(map[string]any(record)))
+	}
+	return cloned
 }
 
 func prepareDeclarativeRequest(b Bundle, action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (PreparedRequest, error) {

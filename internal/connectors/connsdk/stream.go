@@ -217,7 +217,7 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 
 func (r *Requester) redirectClient(ctx context.Context, base *url.URL, policy *RedirectPolicy, credKeys *[]string) *http.Client {
 	if policy == nil {
-		return r.clientFor(ctx)
+		policy = &RedirectPolicy{MaxHops: maxRedirects, AllowSameOrigin: true}
 	}
 	clone := *r.clientFor(ctx)
 	prior := clone.CheckRedirect

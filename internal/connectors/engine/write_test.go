@@ -892,7 +892,7 @@ func TestValidateWriteRecordSchemaValidPasses(t *testing.T) {
 
 // --- DryRunWrite ---
 
-func TestDryRunWritePreviewResolvedMethodPathPreservesSecretValues(t *testing.T) {
+func TestWritePreviewRedactsResolvedSecretsButDigestBindsThem(t *testing.T) {
 	b := Bundle{
 		Name: "acme",
 		HTTP: HTTPBase{URL: "https://api.example.com/{{ secrets.client_secret }}"},
@@ -923,8 +923,61 @@ func TestDryRunWritePreviewResolvedMethodPathPreservesSecretValues(t *testing.T)
 	if !strings.Contains(joined, "POST") || !strings.Contains(joined, "/customers/cus_1") {
 		t.Fatalf("Warnings = %v, want resolved method+path", preview.Warnings)
 	}
-	if !strings.Contains(joined, "fixture-preview-secret") {
-		t.Fatalf("Warnings = %v, want complete resolved secret value", preview.Warnings)
+	if strings.Contains(joined, "fixture-preview-secret") || !strings.Contains(joined, "redacted") {
+		t.Fatalf("Warnings = %v, want secret masked while ordinary customer ID remains", preview.Warnings)
+	}
+
+	changed, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_customer", Config: connectors.RuntimeConfig{
+		Secrets: map[string]string{"client_secret": "different-preview-secret"},
+	}}, []connectors.Record{{"id": "cus_1", "name": "New Name"}}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite(changed secret): %v", err)
+	}
+	if preview.Digest == changed.Digest {
+		t.Fatal("preview digest did not bind the privately prepared secret-derived target")
+	}
+}
+
+func TestWritePreviewRedactsUserinfoQueryAndDeclaredValuesButPreservesOrdinaryToken(t *testing.T) {
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: "https://{{ secrets.user }}:{{ secrets.password }}@api.example.com"},
+		Writes: []WriteAction{{
+			Name:       "update_customer",
+			Kind:       "update",
+			Method:     http.MethodPost,
+			Path:       "/customers/{{ record.private_id }}/{{ record.token }}",
+			PathFields: []string{"private_id", "token"},
+			RedactFields: []string{
+				"private_id",
+			},
+			Query: map[string]QueryParam{
+				"access": {Template: "{{ secrets.query_secret }}"},
+			},
+		}},
+	}
+	records := []connectors.Record{
+		{"private_id": "private/id", "token": "ordinary-token-42"},
+		{"private_id": "second-private-id", "token": "ordinary-token-43"},
+	}
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_customer", Config: connectors.RuntimeConfig{
+		Secrets: map[string]string{
+			"user":         "credential-user",
+			"password":     "credential-password",
+			"query_secret": "query secret/value",
+		},
+	}}, records, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	joined := strings.Join(preview.Warnings, " | ")
+	for _, secret := range []string{"credential-user", "credential-password", "query secret/value", "query+secret%2Fvalue", "private/id", "private%2Fid"} {
+		if strings.Contains(joined, secret) {
+			t.Fatalf("Warnings = %v, leaked %q", preview.Warnings, secret)
+		}
+	}
+	if !strings.Contains(joined, "ordinary-token-42") {
+		t.Fatalf("Warnings = %v, ordinary provider token-shaped ID was not preserved", preview.Warnings)
 	}
 }
 
@@ -997,7 +1050,7 @@ func TestDryRunWriteDigestBindsCanonicalRequestAndCredentialRevision(t *testing.
 	}
 }
 
-func TestDryRunWritePreviewResolvedPathPreservesConfiguredRecordFields(t *testing.T) {
+func TestDryRunWritePreviewResolvedPathRedactsConfiguredRecordFields(t *testing.T) {
 	b := Bundle{
 		Name: "clinical",
 		HTTP: HTTPBase{URL: "https://api.example.com"},
@@ -1019,15 +1072,12 @@ func TestDryRunWritePreviewResolvedPathPreservesConfiguredRecordFields(t *testin
 		t.Fatalf("DryRunWrite: %v", err)
 	}
 	joined := strings.Join(preview.Warnings, " | ")
-	if !strings.Contains(joined, "patient-raw-uuid") {
-		t.Fatalf("Warnings = %v, want complete record path field", preview.Warnings)
-	}
-	if !strings.Contains(joined, "/patients/patient-raw-uuid") {
-		t.Fatalf("Warnings = %v, want complete resolved request path", preview.Warnings)
+	if strings.Contains(joined, "patient-raw-uuid") || !strings.Contains(joined, "/patients/redacted") {
+		t.Fatalf("Warnings = %v, want configured record path field masked", preview.Warnings)
 	}
 }
 
-func TestDryRunWritePreviewResolvedPathPreservesNestedRecordFields(t *testing.T) {
+func TestDryRunWritePreviewResolvedPathRedactsNestedRecordFields(t *testing.T) {
 	b := Bundle{
 		Name: "clinical",
 		HTTP: HTTPBase{URL: "https://api.example.com"},
@@ -1050,11 +1100,8 @@ func TestDryRunWritePreviewResolvedPathPreservesNestedRecordFields(t *testing.T)
 		t.Fatalf("DryRunWrite: %v", err)
 	}
 	joined := strings.Join(preview.Warnings, " | ")
-	if !strings.Contains(joined, "patient-nested-uuid") {
-		t.Fatalf("Warnings = %v, want complete nested record path field", preview.Warnings)
-	}
-	if !strings.Contains(joined, "/patients/patient-nested-uuid") {
-		t.Fatalf("Warnings = %v, want complete resolved nested request path", preview.Warnings)
+	if strings.Contains(joined, "patient-nested-uuid") || !strings.Contains(joined, "/patients/redacted") {
+		t.Fatalf("Warnings = %v, want nested configured record path field masked", preview.Warnings)
 	}
 	if patient["uuid"] != "patient-nested-uuid" {
 		t.Fatalf("DryRunWrite mutated caller record: %v", patient)

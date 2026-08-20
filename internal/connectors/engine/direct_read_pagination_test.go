@@ -1023,7 +1023,7 @@ func TestOperationDirectReadPOSTReportsAStrategyItCannotUse(t *testing.T) {
 				Path:        "/v2/calls/extensive",
 				ContentType: "application/json",
 				MaxBytes:    1 << 20,
-				BodySchema:  json.RawMessage(`{"type":"object","properties":{"filter":{"type":"object"}}}`),
+				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"filter":{"type":"object","additionalProperties":false,"properties":{}}}}`),
 			},
 		}},
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{

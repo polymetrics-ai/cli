@@ -138,9 +138,12 @@ def schema_from_ref(schemas, ref, depth=0, seen=None):
     if seen is None:
         seen = set()
     if not ref or ref not in schemas:
-        return {"type": "object", "additionalProperties": True}
-    if ref in seen or depth >= 2:
-        return {"type": "object", "additionalProperties": True}
+        return {"type": "object", "additionalProperties": False, "properties": {}}
+    # Recursive discovery types are cut at the cycle boundary, and unusually
+    # deep acyclic shapes are capped at the engine's own structured-body depth.
+    # Neither case may reopen arbitrary JSON properties in a generated command.
+    if ref in seen or depth >= 16:
+        return {"type": "object", "additionalProperties": False, "properties": {}}
     seen = set(seen)
     seen.add(ref)
     return schema_from_discovery(schemas, schemas[ref], depth=depth, seen=seen)
@@ -153,7 +156,11 @@ def schema_from_discovery(schemas, node, depth=0, seen=None):
         return schema_from_ref(schemas, node["$ref"], depth + 1, seen)
     typ = node.get("type")
     if typ == "array":
-        return {"type": "array", "items": schema_from_discovery(schemas, node.get("items", {}), depth + 1, seen)}
+        return {
+            "type": "array",
+            "maxItems": 1024,
+            "items": schema_from_discovery(schemas, node.get("items", {}), depth + 1, seen),
+        }
     if typ == "object" or "properties" in node:
         props = {}
         for key, value in (node.get("properties") or {}).items():

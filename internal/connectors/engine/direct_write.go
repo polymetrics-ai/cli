@@ -618,15 +618,28 @@ func validateOperationDirectWritePathFields(op OperationSpec, pathFields []strin
 }
 
 func validateOperationDirectWritePathParams(op OperationSpec, pathParams map[string]string) error {
-	if len(pathParams) == 0 {
-		return nil
-	}
 	fields := make([]string, 0, len(pathParams))
 	for field := range pathParams {
 		fields = append(fields, field)
 	}
 	sort.Strings(fields)
-	return validateOperationDirectWritePathFields(op, fields)
+	if err := validateOperationDirectWritePathFields(op, fields); err != nil {
+		return err
+	}
+	parameters, err := operationParametersForLocation(op, "path")
+	if err != nil {
+		return err
+	}
+	for _, field := range fields {
+		parameter, declared := parameters[field]
+		if !declared {
+			parameter = OperationParameter{Name: field, In: "path", Type: "string"}
+		}
+		if err := validateOperationParameterWireValue(op, parameter, "path", pathParams[field]); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func operationDirectWriteBodySchemaRoot(op OperationSpec) (map[string]any, error) {
@@ -1500,6 +1513,10 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
+	body, err = applyOperationSensitiveTransform(op, body)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	contentType, format, err := operationDirectWriteContentType(op, body)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -1542,6 +1559,9 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		"operation":     op.ID,
 		"content_type":  contentType,
 		"output_policy": policy,
+	}
+	if err := bindOperationSensitiveTransform(definition, op); err != nil {
+		return preparedOperationDirectWrite{}, err
 	}
 	if singles := operationSingleHeaders(operationHeaders); len(singles) > 0 {
 		definition["headers"] = singles
@@ -1643,6 +1663,10 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
+	variables, err = applyOperationSensitiveTransform(op, variables)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	maxBytes := clampOperationDirectWriteMaxBytes(op.GraphQL.MaxBytes)
 	payload, encodedBody, err := buildGraphQLOperationPayload(op, variables, maxBytes)
 	if err != nil {
@@ -1662,6 +1686,16 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		return preparedOperationDirectWrite{}, err
 	}
 	target := DestructiveTargetForOperation(b.Name, op)
+	definition := map[string]any{
+		"kind":              op.Kind,
+		"operation":         op.ID,
+		"content_type":      "application/json",
+		"output_policy":     policy,
+		"graphql_operation": op.GraphQL.OperationName,
+	}
+	if err := bindOperationSensitiveTransform(definition, op); err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	prepared := PreparedWrite{
 		Target:              target,
 		CredentialRevision:  cfg.CredentialRevision,
@@ -1671,13 +1705,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 		RecordsStaged:       1,
 		Action:              op.ID,
 		Warnings:            []string{fmt.Sprintf("prepared graphql_mutation operation %q (%s)", op.ID, method)},
-		Definition: map[string]any{
-			"kind":              op.Kind,
-			"operation":         op.ID,
-			"content_type":      "application/json",
-			"output_policy":     policy,
-			"graphql_operation": op.GraphQL.OperationName,
-		},
+		Definition:          definition,
 		Requests: []PreparedRequest{{
 			Method:      method,
 			URL:         targetURL,
@@ -1721,6 +1749,9 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 	}
 	if err := validateOperationDirectWriteBaseURLTemplate(b.HTTP.URL); err != nil {
 		return OperationSpec{}, "", fmt.Errorf("declared base URL: %w", err)
+	}
+	if _, _, _, err := operationSensitiveTransform(op); err != nil {
+		return OperationSpec{}, "", err
 	}
 	switch op.Kind {
 	case "rest_write":
@@ -1888,21 +1919,7 @@ func operationDirectWriteQueryParameters(op OperationSpec) (map[string]Operation
 	if op.Kind != "rest_write" || op.REST == nil {
 		return nil, nil
 	}
-	parameters := make(map[string]OperationParameter)
-	for _, parameter := range op.REST.Parameters {
-		if !strings.EqualFold(strings.TrimSpace(parameter.In), "query") {
-			continue
-		}
-		name := parameter.Name
-		if err := safety.ValidateIdentifier(name, "operation query parameter"); err != nil {
-			return nil, fmt.Errorf("operation %q rest.parameters: %w", op.ID, err)
-		}
-		if _, duplicate := parameters[name]; duplicate {
-			return nil, fmt.Errorf("operation %q rest.parameters duplicates query parameter %q", op.ID, name)
-		}
-		parameters[name] = parameter
-	}
-	return parameters, nil
+	return operationParametersForLocation(op, "query")
 }
 
 func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []string) error {
@@ -2003,37 +2020,7 @@ func operationDirectWriteQuery(op OperationSpec, requested map[string]string) (m
 }
 
 func validateOperationDirectWriteQueryValue(op OperationSpec, parameter OperationParameter, value string) error {
-	name := parameter.Name
-	if err := safety.RejectDangerousChars(value, "query parameter "+name); err != nil {
-		return err
-	}
-	switch strings.ToLower(strings.TrimSpace(parameter.Type)) {
-	case "", "string":
-	case "boolean":
-		if _, err := strconv.ParseBool(value); err != nil {
-			return fmt.Errorf("operation %q query parameter %q must be boolean", op.ID, name)
-		}
-	case "integer":
-		if _, err := strconv.ParseInt(value, 10, 64); err != nil {
-			return fmt.Errorf("operation %q query parameter %q must be an integer", op.ID, name)
-		}
-	case "number":
-		number, err := strconv.ParseFloat(value, 64)
-		if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
-			return fmt.Errorf("operation %q query parameter %q must be a number", op.ID, name)
-		}
-	}
-	if len(parameter.Values) == 0 {
-		return nil
-	}
-	values := append([]string(nil), parameter.Values...)
-	sort.Strings(values)
-	for _, allowed := range values {
-		if value == allowed {
-			return nil
-		}
-	}
-	return fmt.Errorf("operation %q query parameter %q must be one of %s", op.ID, name, strings.Join(values, "|"))
+	return validateOperationParameterWireValue(op, parameter, "query", value)
 }
 
 func operationDirectWriteContentType(op OperationSpec, body map[string]any) (contentType, format string, err error) {

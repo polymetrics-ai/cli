@@ -44,6 +44,10 @@ type PreparedWrite struct {
 	Definition          any
 	HookIdentity        string
 	Requests            []PreparedRequest
+	// executionRecords is the immutable, hook-materialized record plan whose
+	// requests were previewed. It is private and deep-cloned during preparation
+	// so caller mutation cannot change approved execution.
+	executionRecords []connectors.Record
 }
 
 func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, error) {

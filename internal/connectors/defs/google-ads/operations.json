@@ -19,7 +19,7 @@
           "properties": {
             "insightsApplicationInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             }
           }
         },
@@ -45,7 +45,7 @@
           "properties": {
             "finalUrlGeneration": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "assetFieldTypes": {
               "type": "array",
@@ -110,11 +110,11 @@
             },
             "productRecontextGeneration": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "freeformGeneration": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             }
           }
         },
@@ -140,7 +140,7 @@
           "properties": {
             "existingGenerationContext": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "advertisingChannelType": {
               "type": "string",
@@ -280,14 +280,14 @@
           "properties": {
             "historicalMetricsOptions": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "language": {
               "type": "string"
             },
             "aggregateMetrics": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "keywordPlanNetwork": {
               "type": "string",
@@ -354,11 +354,11 @@
             },
             "keywordAndUrlSeed": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "urlSeed": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "geoTargetConstants": {
               "type": "array",
@@ -368,22 +368,22 @@
             },
             "aggregateMetrics": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "pageSize": {
               "type": "integer"
             },
             "keywordSeed": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "siteSeed": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "historicalMetricsOptions": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "includeAdultKeywords": {
               "type": "boolean"
@@ -421,18 +421,18 @@
           "properties": {
             "insightsApplicationInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "customerInsightsGroup": {
               "type": "string"
             },
             "audienceDefinition": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "audienceDescription": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             }
           }
         },
@@ -517,15 +517,15 @@
             },
             "seedInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "budgetInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "biddingInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "countryCodes": {
               "type": "array",
@@ -549,14 +549,14 @@
               "type": "array",
               "items": {
                 "type": "object",
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
             "assetGroupInfo": {
               "type": "array",
               "items": {
                 "type": "object",
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
             "languageCodes": {
@@ -688,11 +688,11 @@
           "properties": {
             "insightsApplicationInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "youtubeReachLocation": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "customerInsightsGroup": {
               "type": "string"
@@ -701,7 +701,7 @@
               "type": "array",
               "items": {
                 "type": "object",
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
             "dimensions": {
@@ -831,11 +831,11 @@
             },
             "locationNames": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "geoTargets": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "locale": {
               "type": "string"
@@ -901,7 +901,7 @@
             },
             "reachApplicationInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             }
           },
           "required": [
@@ -930,7 +930,7 @@
           "properties": {
             "reachApplicationInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             }
           }
         },
@@ -959,7 +959,7 @@
             },
             "reachApplicationInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             }
           },
           "required": [
@@ -991,7 +991,7 @@
             },
             "reachApplicationInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "pathQuery": {
               "type": "string"
@@ -1044,7 +1044,7 @@
             },
             "reachApplicationInfo": {
               "type": "object",
-              "additionalProperties": true
+              "additionalProperties": false
             },
             "customerReachGroup": {
               "type": "string"

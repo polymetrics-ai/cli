@@ -3,10 +3,13 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"math"
+	"math/big"
 	"net/url"
 	"reflect"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"unicode"
 )
@@ -599,36 +602,20 @@ func valueIsType(v any, t string) bool {
 }
 
 func isNumber(v any) bool {
-	switch v.(type) {
-	case json.Number, float64, float32, int, int64:
-		return true
-	default:
-		return false
-	}
+	_, ok := exactNumber(v)
+	return ok
 }
 
 func isIntegerNumber(v any) bool {
-	switch n := v.(type) {
-	case json.Number:
-		if _, err := n.Int64(); err == nil {
-			return true
-		}
-		f, err := n.Float64()
-		return err == nil && f == float64(int64(f))
-	case float64:
-		return n == float64(int64(n))
-	case int, int64:
-		return true
-	default:
-		return false
-	}
+	n, ok := exactNumber(v)
+	return ok && n.IsInt()
 }
 
 func enumEquals(v, want any) bool {
-	vn, vok := normalizeNumber(v)
-	wn, wok := normalizeNumber(want)
+	vn, vok := exactNumber(v)
+	wn, wok := exactNumber(want)
 	if vok && wok {
-		return vn == wn
+		return vn.Cmp(wn) == 0
 	}
 	return fmt.Sprint(v) == fmt.Sprint(want) && sameKind(v, want)
 }
@@ -646,22 +633,51 @@ func sameKind(a, b any) bool {
 	}
 }
 
-func normalizeNumber(v any) (float64, bool) {
+func exactNumber(v any) (*big.Rat, bool) {
+	integer := func(value string) (*big.Rat, bool) {
+		n := new(big.Int)
+		if _, ok := n.SetString(value, 10); !ok {
+			return nil, false
+		}
+		return new(big.Rat).SetInt(n), true
+	}
 	switch n := v.(type) {
 	case json.Number:
-		f, err := n.Float64()
-		if err != nil {
-			return 0, false
-		}
-		return f, true
+		r, ok := new(big.Rat).SetString(n.String())
+		return r, ok
 	case float64:
-		return n, true
+		if math.IsNaN(n) || math.IsInf(n, 0) {
+			return nil, false
+		}
+		return new(big.Rat).SetFloat64(n), true
+	case float32:
+		f := float64(n)
+		if math.IsNaN(f) || math.IsInf(f, 0) {
+			return nil, false
+		}
+		return new(big.Rat).SetFloat64(f), true
 	case int:
-		return float64(n), true
+		return integer(strconv.FormatInt(int64(n), 10))
+	case int8:
+		return integer(strconv.FormatInt(int64(n), 10))
+	case int16:
+		return integer(strconv.FormatInt(int64(n), 10))
+	case int32:
+		return integer(strconv.FormatInt(int64(n), 10))
 	case int64:
-		return float64(n), true
+		return integer(strconv.FormatInt(n, 10))
+	case uint:
+		return integer(strconv.FormatUint(uint64(n), 10))
+	case uint8:
+		return integer(strconv.FormatUint(uint64(n), 10))
+	case uint16:
+		return integer(strconv.FormatUint(uint64(n), 10))
+	case uint32:
+		return integer(strconv.FormatUint(uint64(n), 10))
+	case uint64:
+		return integer(strconv.FormatUint(n, 10))
 	default:
-		return 0, false
+		return nil, false
 	}
 }
 

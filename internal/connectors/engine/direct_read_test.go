@@ -570,9 +570,10 @@ func TestOperationDirectReadAppliesDeclaredSensitiveRedactFields(t *testing.T) {
 			OutputPolicy:    "json_redacted",
 			SensitivePolicy: &SensitivePolicySpec{RedactFields: []string{"identifier", "addressFieldValue", "display", "birthdate"}},
 			REST: &RESTOperationSpec{
-				Method:   http.MethodGet,
-				Path:     "/ws/rest/v1/bahmni/search/patient",
-				MaxBytes: 1024,
+				Method:     http.MethodGet,
+				Path:       "/ws/rest/v1/bahmni/search/patient",
+				MaxBytes:   1024,
+				Parameters: []OperationParameter{{Name: "q", In: "query", Type: "string"}},
 			},
 		}},
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
@@ -649,7 +650,7 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 				Path:        "/v2/meetings/integration/status",
 				ContentType: "application/json",
 				MaxBytes:    1024,
-				BodySchema:  json.RawMessage(`{"type":"object","required":["emails"],"properties":{"emails":{"type":"array","items":{"type":"string"}}},"additionalProperties":false}`),
+				BodySchema:  json.RawMessage(`{"type":"object","required":["emails"],"properties":{"emails":{"type":"array","items":{"type":"string"},"maxItems":100}},"additionalProperties":false}`),
 			},
 		}},
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
@@ -1132,7 +1133,7 @@ func TestOperationDirectReadRejectsUndeclaredOrInvalidPlainTextBodiesBeforeNetwo
 			name: "JSON operation cannot opt into raw input",
 			bundle: func() Bundle {
 				b := statusTextReadBundle(srv.URL, "github.markdown", http.MethodPost, "/markdown", "text", "application/json", 4)
-				b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"object"}`)
+				b.Operations[0].REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{}}`)
 				return b
 			},
 			req: func() connectors.OperationDirectReadRequest {
@@ -1221,9 +1222,9 @@ func TestOperationDirectReadBodySchemaMinItems(t *testing.T) {
 				ContentType: "application/json",
 				MaxBytes:    1024,
 				BodySchema: json.RawMessage(`{
-					"type": "object",
+					"type": "object", "additionalProperties": false,
 					"required": ["ids"],
-					"properties": {"ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}}
+					"properties": {"ids": {"type": "array", "minItems": 1, "maxItems": 10, "items": {"type": "string"}}}
 				}`),
 			},
 		}},
@@ -1270,7 +1271,7 @@ func TestOperationDirectReadHTTPErrorKeepsProviderQueryAndBodyPrivate(t *testing
 		HTTP: HTTPBase{URL: srv.URL},
 		Operations: []OperationSpec{{
 			ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
-			REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024},
+			REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024, Parameters: []OperationParameter{{Name: "trace", In: "query", Type: "string"}}},
 		}},
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
 	}
@@ -1404,9 +1405,14 @@ func requiredQueryBundle(srv *httptest.Server, issued *bool) Bundle {
 			Approval:     "none",
 			OutputPolicy: "json_redacted",
 			REST: &RESTOperationSpec{
-				Method:        http.MethodGet,
-				Path:          "/v1/users",
-				MaxBytes:      1024,
+				Method:   http.MethodGet,
+				Path:     "/v1/users",
+				MaxBytes: 1024,
+				Parameters: []OperationParameter{
+					{Name: "email", In: "query", Type: "string"},
+					{Name: "id", In: "query", Type: "string"},
+					{Name: "since", In: "query", Type: "string"},
+				},
 				RequiredQuery: []RequiredQueryGroup{{AnyOf: []string{"email", "id"}}},
 			},
 		}},

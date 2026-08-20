@@ -286,6 +286,14 @@ func noReplayResponseClient(client *http.Client) *http.Client {
 	return strict
 }
 
+func noRedirectResponseClient(client *http.Client) *http.Client {
+	clone := *client
+	clone.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+	return &clone
+}
+
 func disableTransportReplay(req *http.Request, strictWrite bool) {
 	req.GetBody = nil
 	req.Header.Del("Idempotency-Key")
@@ -1150,11 +1158,19 @@ func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, q
 	requesterAttempt := 0
 	route := RateLimitRoute{}
 	costHeader := ""
-	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
+	// Mutation authority is independent of retry eligibility. A provider-
+	// scoped idempotency key may permit another attempt against this exact
+	// URL, but it never authorizes following a redirect or discarding the last
+	// provider response.
+	strictWrite := !isSafeReplayableRead(method)
 	var credKeys []string
 	baseClient := r.redirectClient(ctx, baseURL, r.RedirectPolicy, &credKeys)
 	if strictWrite {
-		baseClient = noReplayResponseClient(baseClient)
+		if r.DisableRetries {
+			baseClient = noReplayResponseClient(baseClient)
+		} else {
+			baseClient = noRedirectResponseClient(baseClient)
+		}
 	}
 	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt, &route, &costHeader)
 	for attempt := 0; attempt < attempts; attempt++ {
@@ -1210,7 +1226,7 @@ func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, q
 			}
 			if attempt < attempts-1 {
 				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
-					return nil, werr
+					return terminal, errors.Join(lastErr, werr)
 				}
 				continue
 			}
@@ -1270,7 +1286,7 @@ func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, q
 		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			lastErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, respBody, observation)
 			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
-				return nil, werr
+				return terminal, errors.Join(lastErr, werr)
 			}
 			continue
 		}

@@ -223,6 +223,13 @@ func resolveExprWithSecretSafety(expr string, vars Vars, urlencodeDefault, allow
 		// urlencode/base64/unix_seconds always have.
 		rawVal = cur
 	}
+	// A path expression always occupies exactly one segment. An explicit
+	// transform changes the value but does not grant authority to introduce
+	// separators, query strings, fragments, or control syntax. Encode the
+	// final transformed value unless the final stage already did so.
+	if urlencodeDefault && filters[len(filters)-1] != "urlencode" {
+		cur = urlencodeSegment(cur)
+	}
 	return cur, nil
 }
 

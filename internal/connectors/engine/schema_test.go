@@ -223,6 +223,27 @@ func TestSchemaValidateInstances(t *testing.T) {
 	}
 }
 
+func TestSchemaEnumExactNumbersBeyondFloatPrecision(t *testing.T) {
+	schema, err := CompileSchema(json.RawMessage(`{"type":"integer","enum":[9007199254740992]}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	if err := schema.Validate(json.Number("9007199254740992.0")); err != nil {
+		t.Fatalf("equivalent exact number rejected: %v", err)
+	}
+	if err := schema.Validate(json.Number("9007199254740993")); err == nil {
+		t.Fatal("distinct integer above 2^53 matched enum through float rounding")
+	}
+
+	exponent, err := CompileSchema(json.RawMessage(`{"type":"number","enum":[1e3]}`))
+	if err != nil {
+		t.Fatalf("CompileSchema exponent: %v", err)
+	}
+	if err := exponent.Validate(json.Number("1000.0")); err != nil {
+		t.Fatalf("equivalent exponent rejected: %v", err)
+	}
+}
+
 func TestSchemaSecretKeys(t *testing.T) {
 	raw := `{
 		"type": "object",

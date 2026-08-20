@@ -437,6 +437,11 @@ type OperationDirectReadRequest struct {
 	Config     RuntimeConfig
 	PathParams map[string]string
 	Query      map[string]string
+	// CommandBindings seals the exact caller-controlled fields declared by the
+	// generated command descriptor. The engine revalidates this set against the
+	// loaded bundle before using it, so legacy descriptors can remain executable
+	// while undeclared direct callers stay closed.
+	CommandBindings *OperationDirectReadBindings
 	// Headers contains only values for exact, provider-declared non-auth
 	// header parameters. The operation engine validates the declaration and
 	// values before constructing a runtime or issuing I/O.
@@ -454,6 +459,16 @@ type OperationDirectReadRequest struct {
 	// Page and PageCursor mirror DirectReadRequest's navigation inputs.
 	Page       int
 	PageCursor string
+}
+
+// OperationDirectReadBindings is the closed command-to-operation projection
+// for one direct read. It contains field names only; values remain in the
+// request maps and are independently type/size validated before dispatch.
+type OperationDirectReadBindings struct {
+	Path    []string
+	Query   []string
+	Body    []string
+	RawBody bool
 }
 
 type DirectReadResult struct {
@@ -623,6 +638,14 @@ type OperationDirectReader interface {
 // kind, endpoint, cap, and output policy.
 type OperationDirectReadPreflighter interface {
 	PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error
+}
+
+// OperationDirectReadBindingPreflighter proves the exact command-owned
+// path/query/body mappings before commandrunner accepts an operation-backed
+// direct read. Endpoint preflight alone cannot prevent an otherwise valid
+// operation from receiving undeclared caller fields.
+type OperationDirectReadBindingPreflighter interface {
+	PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error
 }
 
 // OperationStructuredJSONVariablePreflighter exposes the deliberately narrow

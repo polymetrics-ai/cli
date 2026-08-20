@@ -246,6 +246,10 @@ func (c *Connector) PreflightOperationDirectRead(operation, method, path string,
 	return PreflightOperationDirectRead(c.bundle, operation, method, path, maxBytes, outputPolicy)
 }
 
+func (c *Connector) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
+	return PreflightOperationDirectReadBindings(c.bundle, operation, pathFields, queryFields, bodyFields, rawBody)
+}
+
 // OperationStatusCheck delegates one closed, response-less HEAD operation to
 // the engine. It remains distinct from direct reads so a status declaration
 // cannot gain JSON response behavior through the connector adapter.
@@ -540,6 +544,10 @@ func (b Base) CommandSurface() *connectors.CommandSurface {
 // operation direct-read binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
 	return PreflightOperationDirectRead(b.bundle, operation, method, path, maxBytes, outputPolicy)
+}
+
+func (b Base) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
+	return PreflightOperationDirectReadBindings(b.bundle, operation, pathFields, queryFields, bodyFields, rawBody)
 }
 
 // PreflightOperationDirectWrite validates a native connector's declared
@@ -890,7 +898,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 	for _, cmd := range surface.Commands {
 		flags := make([]connectors.CommandSurfaceFlag, 0, len(cmd.Flags))
 		for _, flag := range cmd.Flags {
-			flags = append(flags, commandSurfaceFlag(flag))
+			flags = append(flags, commandSurfaceOperationFlag(b, cmd, flag))
 		}
 		out.Commands = append(out.Commands, connectors.CommandSurfaceCommand{
 			Path:          cmd.Path,
@@ -970,7 +978,39 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		EnvOnly:    flag.EnvOnly,
 		MaxItems:   flag.MaxItems,
 		MinItems:   flag.MinItems,
+		MaxBytes:   flag.MaxBytes,
 	}
+}
+
+func commandSurfaceOperationFlag(b Bundle, cmd CLICommand, flag CLIFlag) connectors.CommandSurfaceFlag {
+	projected := commandSurfaceFlag(flag)
+	location, name, ok := strings.Cut(strings.TrimSpace(flag.MapsTo), ".")
+	if !ok || (location != "path" && location != "query") || name == "" {
+		return projected
+	}
+	declaredCLIBytes := projected.MaxBytes
+	projected.MaxBytes = defaultOperationParameterMaxBytes
+	if declaredCLIBytes > 0 && declaredCLIBytes < projected.MaxBytes {
+		projected.MaxBytes = declaredCLIBytes
+	}
+	if strings.TrimSpace(cmd.Operation) == "" {
+		return projected
+	}
+	op, err := findOperation(b, cmd.Operation)
+	if err != nil || op.REST == nil {
+		return projected
+	}
+	parameters, err := operationParametersForLocation(op, location)
+	if err != nil {
+		return projected
+	}
+	if parameter, declared := parameters[name]; declared {
+		projected.MaxBytes = operationParameterByteCap(parameter)
+	}
+	if declaredCLIBytes > 0 && declaredCLIBytes < projected.MaxBytes {
+		projected.MaxBytes = declaredCLIBytes
+	}
+	return projected
 }
 
 func commandSurfaceConstraints(constraints []CLIConstraint) []connectors.CommandSurfaceConstraint {

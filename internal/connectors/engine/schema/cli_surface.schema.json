@@ -60,7 +60,8 @@
           "required": { "type": "boolean" },
           "env_only": { "type": "boolean" },
           "max_items": { "type": "integer" },
-          "min_items": { "type": "integer" }
+          "min_items": { "type": "integer" },
+          "max_bytes": { "type": "integer" }
         }
       }
     },
@@ -136,7 +137,8 @@
 				"repeatable": { "type": "boolean" },
                 "env_only": { "type": "boolean" },
                 "max_items": { "type": "integer" },
-                "min_items": { "type": "integer" }
+                "min_items": { "type": "integer" },
+                "max_bytes": { "type": "integer" }
               }
             }
           },

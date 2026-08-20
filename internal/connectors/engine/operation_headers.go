@@ -56,6 +56,19 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 	}
 	seen := make(map[string]struct{})
 	for _, parameter := range operationParameters(op) {
+		location := strings.ToLower(strings.TrimSpace(parameter.In))
+		switch location {
+		case "path", "query":
+			if err := safety.ValidateIdentifier(parameter.Name, "operation "+location+" parameter"); err != nil {
+				return err
+			}
+			if parameter.MaxBytes < 0 || parameter.MaxBytes > maxOperationParameterMaxBytes {
+				return fmt.Errorf("%s parameter %q max_bytes must be omitted or between 1 and %d", location, parameter.Name, maxOperationParameterMaxBytes)
+			}
+		case "header":
+		default:
+			return fmt.Errorf("parameter %q has unsupported location %q", parameter.Name, parameter.In)
+		}
 		if parameter.Repeatable && parameter.In != "header" {
 			return fmt.Errorf("parameter %q repeatable is supported only for request headers", parameter.Name)
 		}

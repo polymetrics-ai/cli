@@ -48,6 +48,53 @@ func TestOperationDirectWriteNoResponseRetainsAttemptIdentity(t *testing.T) {
 	}
 }
 
+func TestSensitiveTransformUnimplementedFailsBeforePreview(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1:1", "graphql_mutation")
+	bundle.Operations[0].SensitivePolicy = &SensitivePolicySpec{
+		InputMode:    "env",
+		Transform:    "github_secret_encryption",
+		ApprovalMode: "typed_confirmation",
+	}
+	request := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	if _, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil); err == nil || !strings.Contains(err.Error(), "not registered") {
+		t.Fatalf("PreviewOperationDirectWrite error = %v, want pre-preview transform refusal", err)
+	}
+}
+
+func TestSensitiveTransformRegisteredExecutionBindsDigest(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1:1", "graphql_mutation")
+	bundle.Operations[0].SensitivePolicy = &SensitivePolicySpec{InputMode: "env", Transform: "none", ApprovalMode: "typed_confirmation"}
+	request := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	definition, ok := prepared.prepared.Definition.(map[string]any)
+	if !ok {
+		t.Fatalf("prepared definition = %#v", prepared.prepared.Definition)
+	}
+	transform, ok := definition["sensitive_transform"].(map[string]any)
+	if !ok || transform["name"] != "none" || transform["version"] != "v1" {
+		t.Fatalf("prepared transform definition = %#v", definition["sensitive_transform"])
+	}
+}
+
 func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *testing.T) {
 	calls := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -1050,6 +1050,7 @@ type CLIFlag struct {
 	// only against the assembled body.
 	MaxItems int `json:"max_items,omitempty"`
 	MinItems int `json:"min_items,omitempty"`
+	MaxBytes int `json:"max_bytes,omitempty"`
 }
 
 // CLIConstraint describes a provider-neutral validation rule over mapped
