@@ -260,6 +260,8 @@ func TestParkedFullAppendRateResumePreservesCheckpointAndBatchSize(t *testing.T)
 func TestParkedFullAppendRateResumeRearmsLatestCheckpoint(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
 	fixture.app.rateParking.Close()
+	wantOutput := json.RawMessage(`{"provider_receipt":"rearmed"}`)
+	fixture.destinationExecutor.output = wantOutput
 	now := time.Date(2026, time.August, 20, 12, 0, 0, 0, time.UTC)
 	firstReset := now.Add(time.Minute)
 	secondReset := now.Add(2 * time.Minute)
@@ -348,6 +350,28 @@ func TestParkedFullAppendRateResumeRearmsLatestCheckpoint(t *testing.T) {
 	}
 	if scheduler.Scheduled() != 1 {
 		t.Fatalf("scheduled rearmed callbacks = %d, want 1", scheduler.Scheduled())
+	}
+	var rearmedAttempt Run
+	parkedRuns := 0
+	for _, run := range fixture.app.state.Runs {
+		if run.Status == string(coordination.RateParkingOutcomeParkedRateLimit) {
+			parkedRuns++
+			if run.ID != parked.ID {
+				t.Fatalf("parked retry attempt = %#v, want original run %q only", run, parked.ID)
+			}
+		}
+		if run.ID != parked.ID {
+			rearmedAttempt = run
+		}
+	}
+	if parkedRuns != 1 {
+		t.Fatalf("parked runs = %d, want original run only", parkedRuns)
+	}
+	if rearmedAttempt.ID == "" || rearmedAttempt.Status != "failed" || rearmedAttempt.Error != coordination.ErrRateLimitRearmed.Error() || rearmedAttempt.CompletedAt.IsZero() {
+		t.Fatalf("rearmed retry attempt = %#v, want terminally recorded failure", rearmedAttempt)
+	}
+	if rearmedAttempt.RecordsRead != 1 || rearmedAttempt.RecordsLoaded != 1 || rearmedAttempt.BatchCount != 1 || !reflect.DeepEqual(rearmedAttempt.DestinationResults, []json.RawMessage{wantOutput}) {
+		t.Fatalf("rearmed retry result = %#v, want retained acknowledged output", rearmedAttempt)
 	}
 
 	now = secondReset

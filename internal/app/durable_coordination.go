@@ -42,6 +42,9 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 		return Run{}, false, nil
 	}
 	resumedRunID, rearming := rateParkingResumeRunID(ctx)
+	if rearming && request.runID == resumedRunID {
+		return Run{}, true, errors.New("rate-limit resume attempt reused parked run ID")
+	}
 	if origin, tagged := synctransport.TransportExecutionOriginOf(runErr); tagged && origin != synctransport.TransportExecutionOriginSource {
 		return Run{}, false, nil
 	}
@@ -88,18 +91,29 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 			return Run{}, true, err
 		}
 	}
+	status := string(coordination.RateParkingOutcomeParkedRateLimit)
+	runError := ""
+	completedAt := time.Time{}
+	if rearming {
+		status = "failed"
+		runError = coordination.ErrRateLimitRearmed.Error()
+		completedAt = time.Now().UTC()
+	}
 	updated, err := a.updateState(func(current state) (state, error) {
 		for index := range current.Runs {
 			if current.Runs[index].ID != request.runID {
 				continue
 			}
-			if current.Runs[index].Status != "running" && current.Runs[index].Status != string(coordination.RateParkingOutcomeParkedRateLimit) {
+			if rearming && current.Runs[index].Status != "running" {
+				return current, fmt.Errorf("rate-limited resume attempt %q has status %q", request.runID, current.Runs[index].Status)
+			}
+			if !rearming && current.Runs[index].Status != "running" && current.Runs[index].Status != string(coordination.RateParkingOutcomeParkedRateLimit) {
 				return current, fmt.Errorf("rate-limited run %q has terminal status %q", request.runID, current.Runs[index].Status)
 			}
 			if planID != "" && current.Runs[index].DeclarativeTypedDestinationPlanID != planID {
 				return current, fmt.Errorf("rate-limited run %q declarative typed destination plan changed", request.runID)
 			}
-			current.Runs[index].Status = string(coordination.RateParkingOutcomeParkedRateLimit)
+			current.Runs[index].Status = status
 			current.Runs[index].RecordsRead = result.RecordsRead
 			current.Runs[index].RecordsTransformed = result.RecordsTransformed
 			current.Runs[index].RecordsLoaded = result.RecordsLoaded
@@ -108,8 +122,8 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 			current.Runs[index].Checkpoint = cloneStringMap(result.Checkpoint)
 			current.Runs[index].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
 			current.Runs[index].DestinationResults = cloneDestinationResults(result.DestinationResults)
-			current.Runs[index].Error = ""
-			current.Runs[index].CompletedAt = time.Time{}
+			current.Runs[index].Error = runError
+			current.Runs[index].CompletedAt = completedAt
 			return current, nil
 		}
 		return current, fmt.Errorf("rate-limited run %q not found", request.runID)
