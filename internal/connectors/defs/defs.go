@@ -3,8 +3,11 @@
 // The production CLI embeds connector identity, specs, read/write declarations,
 // schemas, public docs, and optional command-surface, certification, rate-limit,
 // and native-database policy declarations. It deliberately does not embed
-// API-surface coverage manifests or fixtures/**. Those remain on disk for
-// connectorgen/conformance checks. The
+// API-surface coverage manifests, fixtures/**, or provider source locks. Those
+// remain on disk for connectorgen/conformance checks. The sole source-lock
+// exception is github-operation-source-lock.json: installed GitHub full
+// certification compiles its pinned GraphQL schema from that exact raw file.
+// The
 // generated operation endpoint ledger retains only direct-read method, path,
 // operation kind, and response-cap bindings needed for runtime preflight. In
 // shipped builds, direct-write endpoint validation is derived only from the
@@ -19,5 +22,5 @@ package defs
 
 import "embed"
 
-//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */polling_watermark.json */sync_transport.json */spec.json */streams.json */writes.json */schemas/* */sources/* */docs.md */operations.json */cli_surface.json */certification.json */rate_limits.json */database.json
+//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */polling_watermark.json */sync_transport.json */spec.json */streams.json */writes.json */schemas/* github/sources/github-operation-source-lock.json */docs.md */operations.json */cli_surface.json */certification.json */rate_limits.json */database.json
 var FS embed.FS
