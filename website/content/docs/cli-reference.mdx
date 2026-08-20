@@ -120,7 +120,7 @@ A provider-sourced direct-write command can expose a declared nested object or
 array as a typed `json` flag. Its generated command help and connector manual
 name each accepted flag and its `maps_to=body.<schema-path>` binding. A schema
 path resolves only declared provider object properties and numeric array item
-positions; it is not an open dotted key. The connector declaration exclusively
+positions; it is not an open dotted key. The provider declaration exclusively
 owns the operation, method, route, content type, headers, limits, and nested
 schema. There is no raw-body escape hatch: callers cannot pass a raw body or
 override request metadata, the action, or the connector. Malformed, unknown,

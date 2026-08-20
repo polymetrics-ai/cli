@@ -2282,10 +2282,6 @@ func operationDirectWriteQueryParameters(op OperationSpec) (map[string]Operation
 	return parameters, nil
 }
 
-func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []string) error {
-	return validateOperationDirectWriteQueryFieldsWithAuth(op, queryFields, nil)
-}
-
 func validateOperationDirectWriteQueryFieldsWithAuth(op OperationSpec, queryFields []string, authQueryParameters map[string]struct{}) error {
 	if op.Kind != "rest_write" || op.REST == nil {
 		if len(queryFields) == 0 {

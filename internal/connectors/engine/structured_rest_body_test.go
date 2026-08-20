@@ -1106,8 +1106,18 @@ func TestOperationDirectWriteErrorsDoNotExposeResolvedURLValues(t *testing.T) {
 	if strings.Contains(err.Error(), secret) {
 		t.Fatal("HTTP failure exposed a resolved secret")
 	}
-	if !strings.Contains(err.Error(), "provider failure detail") {
-		t.Fatalf("HTTP failure = %v, want provider response body", err)
+	if !strings.Contains(err.Error(), "provider returned an HTTP error") {
+		t.Fatalf("HTTP failure = %v, want taint-safe provider diagnostic", err)
+	}
+	if strings.Contains(err.Error(), "provider failure detail") {
+		t.Fatalf("HTTP failure = %v, must not expose provider text for a runtime-bound URL", err)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatalf("HTTP failure cause = %T, want HTTPError", err)
+	}
+	if providerErr.Body != "provider failure detail" {
+		t.Fatalf("HTTP failure cause body = %q, want retained provider response", providerErr.Body)
 	}
 }
 
