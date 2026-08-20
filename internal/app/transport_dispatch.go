@@ -169,7 +169,7 @@ func validateClosedTransportBatchSize(source, destination connectors.Connector, 
 // action. Real durable warehouse/apply adapters remain separate foundations;
 // this seam therefore fails closed unless a stage and externally verified
 // transports are registered.
-func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval) (etlExecutionResult, error) {
+func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval, rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope) (etlExecutionResult, error) {
 	emptyResult := etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}
 	if a.transports == nil {
 		return emptyResult, fmt.Errorf("closed transport registry is unavailable")
@@ -210,6 +210,9 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			return emptyResult, err
 		}
 	}
+	if rateParkingResumeCheckpoint != nil && !transportCheckpointEqual(prior.Checkpoint, rateParkingResumeCheckpoint) {
+		return emptyResult, errors.New("rate-limit resume checkpoint changed")
+	}
 	generationID := prior.GenerationID
 	if generationID == 0 || mode.IsOverwrite() {
 		generationID++
@@ -218,7 +221,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	expectedState := cloneStreamState(prior)
 	expectedPresent := priorPresent
 	var committed *synccontract.CheckpointEnvelope
-	transportResult, err := synctransport.NewOrchestrator(a.transports).Run(ctx, synctransport.RunRequest{
+	transportRequest := synctransport.RunRequest{
 		ConnectionID:       conn.ID,
 		Generation:         generationID,
 		Source:             source,
@@ -232,19 +235,20 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			StreamID:          stream.StreamID,
 			PrimaryKey:        append([]string(nil), stream.PrimaryKey...),
 		},
-		Stream:             streamName,
-		DestinationAction:  stream.DestinationAction,
-		CursorField:        stream.CursorField,
-		Mode:               mode.ContractMode,
-		BatchSize:          batchSize,
-		MaxInFlightBatches: maxInFlightBatches,
-		TransformPlanJSON:  stream.TransformPlan,
-		TransformPlanHash:  stream.TransformPlanHash,
-		FastSegments:       &connectionArrowSegmentStore{app: a, connectionID: conn.ID, stream: streamName},
-		Resume:             sourceExpectation,
-		Checkpoint:         prior.Checkpoint,
-		Approval:           approval,
-		Stage:              a.transportStage,
+		Stream:                    streamName,
+		DestinationAction:         stream.DestinationAction,
+		CursorField:               stream.CursorField,
+		Mode:                      mode.ContractMode,
+		BatchSize:                 batchSize,
+		MaxInFlightBatches:        maxInFlightBatches,
+		TransformPlanJSON:         stream.TransformPlan,
+		TransformPlanHash:         stream.TransformPlanHash,
+		FastSegments:              &connectionArrowSegmentStore{app: a, connectionID: conn.ID, stream: streamName},
+		Resume:                    sourceExpectation,
+		Checkpoint:                prior.Checkpoint,
+		RateLimitResumeCheckpoint: rateParkingResumeCheckpoint,
+		Approval:                  approval,
+		Stage:                     a.transportStage,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			interim := checkpoint.Clone()
 			if interim.CommittedAt == nil {
@@ -278,7 +282,8 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			committed = &copy
 			return nil
 		},
-	})
+	}
+	transportResult, err := synctransport.NewOrchestrator(a.transports).Run(ctx, transportRequest)
 	if err != nil {
 		err = sanitizeRuntimeError(err, sourceRuntime, destRuntime)
 	}

@@ -57,6 +57,26 @@ func (r *advancingReadCloser) Read(p []byte) (int, error) {
 	return r.ReadCloser.Read(p)
 }
 
+type partialResponseReadCloser struct {
+	body   []byte
+	err    error
+	closed bool
+}
+
+func (r *partialResponseReadCloser) Read(p []byte) (int, error) {
+	if len(r.body) == 0 {
+		return 0, r.err
+	}
+	n := copy(p, r.body)
+	r.body = r.body[n:]
+	return n, r.err
+}
+
+func (r *partialResponseReadCloser) Close() error {
+	r.closed = true
+	return nil
+}
+
 func primeHTTPConnection(t *testing.T, client *http.Client, baseURL string) {
 	t.Helper()
 	resp, err := client.Get(baseURL + "/prime")
@@ -118,6 +138,37 @@ func TestRequesterRetriesOn429ThenSucceeds(t *testing.T) {
 	}
 	if got := atomic.LoadInt32(&calls); got != 2 {
 		t.Fatalf("calls = %d, want 2", got)
+	}
+}
+
+func TestRequesterRetainsPartialResponseOnBodyReadError(t *testing.T) {
+	readErr := errors.New("injected response read failure")
+	body := &partialResponseReadCloser{body: []byte("provider response prefix"), err: readErr}
+	r := &Requester{
+		BaseURL:        "https://example.invalid",
+		DisableRetries: true,
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			return &http.Response{
+				StatusCode: http.StatusAccepted,
+				Header:     http.Header{"X-Provider-Receipt": {"receipt-one", "receipt-two"}},
+				Body:       body,
+				Request:    req,
+			}, nil
+		})},
+	}
+
+	response, err := r.Do(context.Background(), http.MethodPost, "/writes", nil, map[string]string{"id": "one"})
+	if !errors.Is(err, readErr) {
+		t.Fatalf("Do error = %v, want response read failure", err)
+	}
+	if response == nil || response.Status != http.StatusAccepted || string(response.Body) != "provider response prefix" {
+		t.Fatalf("response = %#v, want captured partial provider response", response)
+	}
+	if got := response.Header.Values("X-Provider-Receipt"); !slices.Equal(got, []string{"receipt-one", "receipt-two"}) {
+		t.Fatalf("provider receipts = %#v, want both values", got)
+	}
+	if !body.closed {
+		t.Fatal("response body was not closed after the read failure")
 	}
 }
 

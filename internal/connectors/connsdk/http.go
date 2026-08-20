@@ -1086,8 +1086,12 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			return captureTerminalResponse(resp, maxBodyBytes, fullURL, route), fmt.Errorf("send request body: %w", bodyErr)
 		}
 
-		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
+		respBody, readErr := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		_ = resp.Body.Close()
+		terminal := &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}
+		if readErr != nil {
+			return terminal, fmt.Errorf("read response body: %w", readErr)
+		}
 
 		// A 401 can mean the credential was invalidated out of band (revoked
 		// grant, password change, scope change) rather than that it was never
@@ -1124,7 +1128,6 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			continue
 		}
 
-		terminal := &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			responseErr := responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
 			if (strictWrite || transportpolicy.IsDestructive(ctx)) && resp.StatusCode >= http.StatusMultipleChoices && resp.StatusCode < http.StatusBadRequest {

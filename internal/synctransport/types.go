@@ -498,9 +498,10 @@ type RunRequest struct {
 	FastSegments FastSegmentStore
 	// ByteCreditCapacity bounds retained Arrow payload bytes. Zero selects the
 	// 512 MiB fast-path default; it is never a run deadline.
-	ByteCreditCapacity int64
-	Resume             synccontract.ResumeExpectation
-	Checkpoint         *synccontract.CheckpointEnvelope
+	ByteCreditCapacity        int64
+	Resume                    synccontract.ResumeExpectation
+	Checkpoint                *synccontract.CheckpointEnvelope
+	RateLimitResumeCheckpoint *synccontract.CheckpointEnvelope `json:"-"`
 	// UnitDeadline bounds a single retryable provider-page fetch or destination
 	// apply/read-back unit. Zero selects the conservative default; it is never
 	// a deadline for the full source-to-destination run.
@@ -561,6 +562,11 @@ func (r RunRequest) validateExecution() error {
 	}
 	if r.MaxInFlightBatches < 0 || r.MaxInFlightBatches > 8 {
 		return fmt.Errorf("transport max in-flight batches must be zero or between 1 and 8")
+	}
+	if r.RateLimitResumeCheckpoint != nil {
+		if err := r.RateLimitResumeCheckpoint.Validate(); err != nil {
+			return fmt.Errorf("rate-limit resume checkpoint: %w", err)
+		}
 	}
 	return nil
 }

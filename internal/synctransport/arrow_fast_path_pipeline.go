@@ -189,7 +189,7 @@ type arrowPipelineProducerResult struct {
 func produceArrowPipeline(ctx context.Context, request RunRequest, source ArrowRangeExtractor, credits *ByteCreditController, work chan<- arrowPipelineBatch) (result arrowPipelineProducerResult) {
 	result.err = source.ExtractArrowRanges(ctx, cloneArrowExtractRequest(ArrowExtractRequest{
 		Connector: request.Source, Runtime: request.SourceRuntime, Stream: request.Stream, CursorField: request.CursorField,
-		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint),
+		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint, request.RateLimitResumeCheckpoint),
 		BatchSize: request.BatchSize, UnitDeadline: request.unitDeadline(), TransformPlanJSON: request.TransformPlanJSON, TransformHash: request.TransformPlanHash,
 	}), func(batch ArrowSourceBatch) (callbackErr error) {
 		defer func() {

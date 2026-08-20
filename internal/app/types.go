@@ -240,8 +240,9 @@ type RunETLRequest struct {
 	// MaxInFlightBatches is an optional ordered Arrow full-overwrite pipeline
 	// bound. Zero means the caller did not select the CLI/app capability
 	// control; admitted fast paths choose their documented default of two.
-	MaxInFlightBatches  int                               `json:"max_in_flight_batches,omitempty"`
-	DestinationApproval synctransport.DestinationApproval `json:"-"`
+	MaxInFlightBatches          int                               `json:"max_in_flight_batches,omitempty"`
+	DestinationApproval         synctransport.DestinationApproval `json:"-"`
+	rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope
 }
 
 type Run struct {
@@ -254,6 +255,7 @@ type Run struct {
 	RecordsTransformed                int               `json:"records_transformed"`
 	RecordsLoaded                     int               `json:"records_loaded"`
 	RecordsFailed                     int               `json:"records_failed"`
+	BatchSize                         int               `json:"batch_size,omitempty"`
 	BatchCount                        int               `json:"batch_count,omitempty"`
 	Checkpoint                        map[string]string `json:"checkpoint,omitempty"`
 	DeclarativeTypedDestinationPlanID string            `json:"declarative_typed_destination_plan_id,omitempty"`

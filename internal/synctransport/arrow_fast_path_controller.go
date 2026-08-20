@@ -84,7 +84,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 	segments := make([]FastSegmentReceipt, 0)
 	err = source.ExtractArrowRanges(ctx, cloneArrowExtractRequest(ArrowExtractRequest{
 		Connector: request.Source, Runtime: request.SourceRuntime, Stream: request.Stream, CursorField: request.CursorField,
-		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint),
+		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint, request.RateLimitResumeCheckpoint),
 		BatchSize: request.BatchSize, UnitDeadline: request.unitDeadline(), TransformPlanJSON: request.TransformPlanJSON, TransformHash: request.TransformPlanHash,
 	}), func(batch ArrowSourceBatch) (callbackErr error) {
 		defer func() {

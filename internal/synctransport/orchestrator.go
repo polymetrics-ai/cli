@@ -38,7 +38,11 @@ func NewOrchestrator(registry *Registry) *Orchestrator {
 // semantics. Full-refresh modes begin at the source origin on every run;
 // incremental modes keep their acknowledged position. Resume still carries
 // source identity and generation independently of this position decision.
-func sourceCheckpointForMode(mode synccontract.Mode, checkpoint *synccontract.CheckpointEnvelope) *synccontract.CheckpointEnvelope {
+func sourceCheckpointForMode(mode synccontract.Mode, checkpoint, rateLimitResumeCheckpoint *synccontract.CheckpointEnvelope) *synccontract.CheckpointEnvelope {
+	if mode == synccontract.ModeFullAppend && rateLimitResumeCheckpoint != nil {
+		resume := rateLimitResumeCheckpoint.Clone()
+		return &resume
+	}
 	switch mode {
 	case synccontract.ModeFullAppend, synccontract.ModeFullOverwrite:
 		return nil
@@ -130,7 +134,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		BatchSize:    request.BatchSize,
 		PrimaryKey:   request.DestinationBinding.PrimaryKey,
 		Resume:       request.Resume,
-		Checkpoint:   sourceCheckpointForMode(request.Mode, request.Checkpoint),
+		Checkpoint:   sourceCheckpointForMode(request.Mode, request.Checkpoint, request.RateLimitResumeCheckpoint),
 		UnitDeadline: request.unitDeadline(),
 		RecordExtraction: func(elapsed time.Duration) {
 			result.ExtractElapsed += elapsed
@@ -368,7 +372,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		BatchSize:    request.BatchSize,
 		PrimaryKey:   request.DestinationBinding.PrimaryKey,
 		Resume:       request.Resume,
-		Checkpoint:   sourceCheckpointForMode(request.Mode, request.Checkpoint),
+		Checkpoint:   sourceCheckpointForMode(request.Mode, request.Checkpoint, request.RateLimitResumeCheckpoint),
 		UnitDeadline: request.unitDeadline(),
 		RecordExtraction: func(elapsed time.Duration) {
 			result.ExtractElapsed += elapsed

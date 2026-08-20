@@ -1345,11 +1345,20 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 			return Run{}, err
 		}
 	}
+	batchSize := req.BatchSize
+	if batchSize <= 0 {
+		batchSize = 1000
+	}
+	var rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope
+	if req.rateParkingResumeCheckpoint != nil {
+		checkpoint := req.rateParkingResumeCheckpoint.Clone()
+		rateParkingResumeCheckpoint = &checkpoint
+	}
 	runID, err := prefixedID("run")
 	if err != nil {
 		return Run{}, err
 	}
-	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
+	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", BatchSize: batchSize, StartedAt: time.Now().UTC()}
 	if _, err := a.beginRun(run); err != nil {
 		return Run{}, fmt.Errorf("start ETL run: %w", err)
 	}
@@ -1388,25 +1397,22 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 			return a.failRun(runID, fmt.Errorf("validate persisted destination mapping for stream %q: %w", req.Stream, err))
 		}
 	}
-	batchSize := req.BatchSize
-	if batchSize <= 0 {
-		batchSize = 1000
-	}
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	dispatchRequest := etlModeDispatchRequest{
-		runID:               runID,
-		connection:          conn,
-		source:              source,
-		sourceRuntime:       sourceRuntime,
-		destination:         destination,
-		destinationRuntime:  destRuntime,
-		sourceExpectation:   sourceExpectation,
-		streamName:          req.Stream,
-		stream:              stream,
-		mode:                mode,
-		batchSize:           batchSize,
-		maxInFlightBatches:  req.MaxInFlightBatches,
-		destinationApproval: req.DestinationApproval,
+		runID:                       runID,
+		connection:                  conn,
+		source:                      source,
+		sourceRuntime:               sourceRuntime,
+		destination:                 destination,
+		destinationRuntime:          destRuntime,
+		sourceExpectation:           sourceExpectation,
+		streamName:                  req.Stream,
+		stream:                      stream,
+		mode:                        mode,
+		batchSize:                   batchSize,
+		maxInFlightBatches:          req.MaxInFlightBatches,
+		destinationApproval:         req.DestinationApproval,
+		rateParkingResumeCheckpoint: rateParkingResumeCheckpoint,
 	}
 	return a.dispatchETLMode(ctx, dispatchRequest)
 }

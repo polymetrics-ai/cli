@@ -189,6 +189,74 @@ func TestRunETLTransportParksSourceRateLimitWithDestinationResults(t *testing.T)
 	}
 }
 
+func TestParkedFullAppendRateResumePreservesCheckpointAndBatchSize(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	t.Cleanup(fixture.app.rateParking.Close)
+	fixture.source.rateLimitScope = "transport-source-rate-limit"
+	first := fixture.sourceExecutor.page
+	second := fixture.sourceExecutor.page
+	second.Records = []connectors.Record{{"id": "2", "provider": "resumed"}}
+	second.CandidateCheckpoint.Position.Primary = synccontract.OpaqueToken("2")
+	second.CandidateCheckpoint.Position.TieBreaker = synccontract.OpaqueToken("2")
+	rateLimited := &connsdk.RateLimitError{
+		HTTPError: &connsdk.HTTPError{Status: http.StatusTooManyRequests, URL: "https://provider.invalid/records"},
+		Source:    connsdk.RateLimitObservationSourceRetryAfter,
+		HasReset:  true,
+		ResetAt:   time.Now().UTC().Add(time.Hour),
+	}
+	var parkedCheckpoint *synccontract.CheckpointEnvelope
+	fixture.sourceExecutor.read = func(_ context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+		switch fixture.sourceExecutor.readCalls {
+		case 1:
+			if request.Checkpoint != nil {
+				return errors.New("initial full-append request unexpectedly used a checkpoint")
+			}
+			if request.BatchSize != 1 {
+				return fmt.Errorf("initial batch size = %d, want 1", request.BatchSize)
+			}
+			if err := emit(first); err != nil {
+				return err
+			}
+			return rateLimited
+		case 2:
+			if request.BatchSize != 1 {
+				return fmt.Errorf("resumed batch size = %d, want 1", request.BatchSize)
+			}
+			if !transportCheckpointEqual(request.Checkpoint, parkedCheckpoint) {
+				return errors.New("resumed full-append request did not use the committed checkpoint")
+			}
+			return emit(second)
+		default:
+			return fmt.Errorf("unexpected source read %d", fixture.sourceExecutor.readCalls)
+		}
+	}
+
+	parkedRun, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	})
+	if !errors.Is(err, coordination.ErrRateLimitParked) {
+		t.Fatalf("initial RunETL() error = %v, want rate-limit parking", err)
+	}
+	if parkedRun.BatchSize != 1 {
+		t.Fatalf("parked run batch size = %d, want 1", parkedRun.BatchSize)
+	}
+	checkpoint := fixture.app.state.StreamStates[streamStateKey(fixture.connection, "records")].Checkpoint.Clone()
+	if checkpoint.CommittedAt == nil || !bytes.Equal(checkpoint.Position.Primary, first.CandidateCheckpoint.Position.Primary) {
+		t.Fatalf("parked checkpoint = %#v, want committed first acknowledged position", checkpoint)
+	}
+	parkedCheckpoint = &checkpoint
+	if err := fixture.app.resumeParkedRateLimitRun(context.Background(), coordination.ParkedRateLimitRun{RunID: parkedRun.ID, Checkpoint: checkpoint}); err != nil {
+		t.Fatalf("resume parked run: %v", err)
+	}
+	if fixture.sourceExecutor.readCalls != 2 || fixture.destinationExecutor.applyCalls != 2 {
+		t.Fatalf("resume calls source=%d destination=%d, want one acknowledged action before and after parking", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls)
+	}
+	original, found := fixture.app.runByID(parkedRun.ID)
+	if !found || original.Status != "resumed" {
+		t.Fatalf("original parked run = %#v, want resumed", original)
+	}
+}
+
 func TestParkRateLimitedRunPersistsOnlyDeclarativeTypedDestinationPlanID(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
 	t.Cleanup(fixture.app.rateParking.Close)
@@ -248,14 +316,25 @@ func TestParkRateLimitedRunPersistsOnlyDeclarativeTypedDestinationPlanID(t *test
 }
 
 func TestParkedRateLimitRunETLRequestUsesOnlyDeclarativePlanID(t *testing.T) {
-	request := parkedRateLimitRunETLRequest(Run{
-		Connection: "typed_connection", Stream: "widgets", DeclarativeTypedDestinationPlanID: "rplan_typed_resume",
-	})
-	if request.Connection != "typed_connection" || request.Stream != "widgets" || request.DestinationApproval.PlanID != "rplan_typed_resume" {
-		t.Fatalf("parked resume request = %#v, want connection, stream, and plan ID", request)
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	checkpoint := fixture.sourceExecutor.page.CandidateCheckpoint
+	request, err := parkedRateLimitRunETLRequest(Run{
+		Connection: "typed_connection", Stream: "widgets", BatchSize: 17, DeclarativeTypedDestinationPlanID: "rplan_typed_resume",
+	}, checkpoint)
+	if err != nil {
+		t.Fatalf("parked resume request: %v", err)
+	}
+	if request.Connection != "typed_connection" || request.Stream != "widgets" || request.BatchSize != 17 || request.DestinationApproval.PlanID != "rplan_typed_resume" {
+		t.Fatalf("parked resume request = %#v, want connection, stream, batch size, and plan ID", request)
+	}
+	if !transportCheckpointEqual(request.rateParkingResumeCheckpoint, &checkpoint) {
+		t.Fatalf("parked resume request checkpoint = %#v, want %#v", request.rateParkingResumeCheckpoint, checkpoint)
 	}
 	if request.DestinationApproval.ApprovalToken != "" || request.DestinationApproval.Confirmation.Kind != "" || request.DestinationApproval.Evidence != nil {
 		t.Fatalf("parked resume request reconstructed approval material: %#v", request.DestinationApproval)
+	}
+	if _, err := parkedRateLimitRunETLRequest(Run{Connection: "typed_connection", Stream: "widgets"}, checkpoint); err == nil {
+		t.Fatal("parked resume request accepted an unavailable effective batch size")
 	}
 }
 
@@ -2823,6 +2902,7 @@ type appTransportSourceExecutor struct {
 	readCalls    int
 	errAfterPage error
 	afterEmit    func()
+	read         func(context.Context, synctransport.SourceRequest, func(synctransport.SourcePage) error) error
 }
 
 func (e *appTransportSourceExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -2832,6 +2912,9 @@ func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, request 
 	e.readCalls++
 	if err := ctx.Err(); err != nil {
 		return err
+	}
+	if e.read != nil {
+		return e.read(ctx, request, emit)
 	}
 	pages := e.pages
 	if len(pages) == 0 {

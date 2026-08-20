@@ -166,7 +166,11 @@ func (a *App) resumeParkedRateLimitRun(ctx context.Context, parked coordination.
 	}
 	if transportCheckpointEqual(&current, &parked.Checkpoint) {
 		resumeCtx := context.WithValue(ctx, rateParkingResumeContextKey{}, true)
-		if _, err := a.RunETL(resumeCtx, parkedRateLimitRunETLRequest(original)); err != nil {
+		request, err := parkedRateLimitRunETLRequest(original, parked.Checkpoint)
+		if err != nil {
+			return err
+		}
+		if _, err := a.RunETL(resumeCtx, request); err != nil {
 			return err
 		}
 	}
@@ -199,12 +203,16 @@ func (a *App) resumeParkedRateLimitRun(ctx context.Context, parked coordination.
 	return err
 }
 
-func parkedRateLimitRunETLRequest(original Run) RunETLRequest {
-	request := RunETLRequest{Connection: original.Connection, Stream: original.Stream}
+func parkedRateLimitRunETLRequest(original Run, checkpoint synccontract.CheckpointEnvelope) (RunETLRequest, error) {
+	if original.BatchSize <= 0 {
+		return RunETLRequest{}, errors.New("parked run effective batch size is unavailable")
+	}
+	resumeCheckpoint := checkpoint.Clone()
+	request := RunETLRequest{Connection: original.Connection, Stream: original.Stream, BatchSize: original.BatchSize, rateParkingResumeCheckpoint: &resumeCheckpoint}
 	if original.DeclarativeTypedDestinationPlanID != "" {
 		request.DestinationApproval.PlanID = original.DeclarativeTypedDestinationPlanID
 	}
-	return request
+	return request, nil
 }
 
 func (a *App) runByID(id string) (Run, bool) {
