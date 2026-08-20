@@ -679,6 +679,10 @@ type OperationDirectWriteBodyMaterializer interface {
 	MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error)
 }
 
+type OperationDirectWriteBodyValueResolver interface {
+	ResolveOperationDirectWriteBodyValue(operation string, body map[string]any, path string) (any, bool, error)
+}
+
 // OperationStructuredJSONBodyPreflighter proves that one named top-level
 // operation body field is a closed, bounded object or array in the operation
 // declaration. It deliberately accepts neither a raw body nor a dotted path:

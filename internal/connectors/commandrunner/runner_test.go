@@ -207,6 +207,10 @@ func (f *fakeConnector) MaterializeOperationDirectWriteBody(operation string, ma
 	}
 	return body, nil
 }
+func (f *fakeConnector) ResolveOperationDirectWriteBodyValue(_ string, body map[string]any, path string) (any, bool, error) {
+	value, present := nestedBodyValue(body, path)
+	return value, present, nil
+}
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
 	return connectors.WritePreview{Action: req.Operation, RecordsStaged: 1}, nil
@@ -2430,6 +2434,64 @@ func TestBuildOperationDirectWriteCommandSupportsDottedStructuredBodyField(t *te
 	settings, ok := command.Record["settings.v1"].(map[string]any)
 	if !ok || settings["enabled"] != true {
 		t.Fatalf("dotted structured body = %#v, want declared provider field", command.Record)
+	}
+}
+
+func TestBuildOperationDirectWriteCommandValidatesDottedStructuredBodyConstraints(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.windows.schedule",
+			Kind:          "rest_write",
+			Summary:       "Schedule one window",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "update",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPatch,
+				Path:        "/windows/{window_id}",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"required":["start.time","end.time"],
+					"properties":{"start.time":{"type":"string"},"end.time":{"type":"string"}}
+				}`),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{Method: http.MethodPatch, Path: "/windows/{window_id}", Operation: &engine.SurfaceOperation{Model: "write"}}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "windows schedule",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.windows.schedule",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPatch, Path: "/windows/{window_id}"}},
+			OutputPolicy: "json",
+			Flags: []engine.CLIFlag{
+				{Name: "window-id", Type: "string", MapsTo: "path.window_id", Required: true},
+				{Name: "start", Type: "string", MapsTo: "body.start.time", Required: true},
+				{Name: "end", Type: "string", MapsTo: "body.end.time", Required: true},
+			},
+			Constraints: []engine.CLIConstraint{{
+				Kind: "order", Left: "body.start.time", Right: "body.end.time", Op: "lt", ValueType: "date-time", Message: "start must precede end",
+			}},
+		}}},
+	}
+	_, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+		Path: []string{"windows", "schedule"},
+		Flags: map[string][]string{
+			"window-id": {"window-1"},
+			"start":     {"2026-08-22T00:00:00Z"},
+			"end":       {"2026-08-21T00:00:00Z"},
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "start must precede end") {
+		t.Fatalf("BuildWriteCommand error = %v, want declared dotted-body constraint rejection", err)
 	}
 }
 

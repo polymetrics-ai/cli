@@ -255,11 +255,18 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		return WriteCommand{}, err
 	}
 	bodyMaterializer := connector.(connectors.OperationDirectWriteBodyMaterializer)
+	bodyValueResolver := connector.(connectors.OperationDirectWriteBodyValueResolver)
 	pathParams, query, body, _, err := operationDirectWriteOverrides(cmd, req.Flags, bodyMaterializer.MaterializeOperationDirectWriteBody)
 	if err != nil {
 		return WriteCommand{}, err
 	}
-	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query, Body: body}); err != nil {
+	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{
+		Query: query,
+		Body:  body,
+		BodyValue: func(path string) (any, bool, error) {
+			return bodyValueResolver.ResolveOperationDirectWriteBodyValue(cmd.Operation, body, path)
+		},
+	}); err != nil {
 		return WriteCommand{}, err
 	}
 	metadata, err := connector.(connectors.OperationDirectWriteMetadataProvider).OperationDirectWriteMetadata(cmd.Operation)
@@ -775,6 +782,9 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	if _, ok := connector.(connectors.OperationDirectWriteBodyMaterializer); !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write body materialization"}
 	}
+	if _, ok := connector.(connectors.OperationDirectWriteBodyValueResolver); !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write body resolution"}
+	}
 	metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write metadata"}
@@ -1027,8 +1037,9 @@ func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg co
 }
 
 type mappedCommandInputs struct {
-	Query map[string]string
-	Body  map[string]any
+	Query     map[string]string
+	Body      map[string]any
+	BodyValue func(string) (any, bool, error)
 }
 
 func validateCommandInputs(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
@@ -1099,7 +1110,15 @@ func validationTargetValue(target string, cfg connectors.RuntimeConfig, inputs m
 		value, present := inputs.Query[key]
 		return strings.TrimSpace(value), present, target, nil
 	case strings.HasPrefix(target, "body."):
-		value, present := nestedBodyValue(inputs.Body, strings.TrimPrefix(target, "body."))
+		path := strings.TrimPrefix(target, "body.")
+		if inputs.BodyValue != nil {
+			value, present, err := inputs.BodyValue(path)
+			if err != nil {
+				return "", false, target, err
+			}
+			return strings.TrimSpace(fmt.Sprint(value)), present, target, nil
+		}
+		value, present := nestedBodyValue(inputs.Body, path)
 		return strings.TrimSpace(fmt.Sprint(value)), present, target, nil
 	case strings.HasPrefix(target, "config."):
 		key := strings.TrimPrefix(target, "config.")

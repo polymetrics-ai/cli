@@ -383,11 +383,14 @@ not a full override by default.
   must cover every allowed position or pair with `items` to constrain the remaining positions. The
   engine additionally refuses a schema deeper than 16 levels, with more than 256 object fields, or
   more than 1024 allowed collection items, and enforces aggregate node and byte limits before it
-  copies or serializes caller values. A command may use `type:"json"` only for one declared,
-  top-level `maps_to:"body.<field>"` object or array. Keep scalar fields as their normal typed
-  flags; dotted JSON traversals and raw `body`, method, path, content-type, action, connector, or
-  header inputs are not legal command targets. Mark a structured field required when it supplies a
-  required schema branch. `connectorgen validate`, runtime preflight, and the shared engine
+  copies or serializes caller values. Each `type:"json"` flag may target one declared object or
+  array node at `maps_to:"body.<schema-path>"`, including a nested node. The schema-path is resolved
+  against the operation schema rather than split as an open dotted key: object segments match
+  declared provider property names, array segments are declared numeric item positions, and the
+  schema determines whether a numeric-looking segment is an object property or array index. Keep
+  scalar fields as their normal typed flags; raw `body`, method, path, content-type, action,
+  connector, or header inputs are not legal command targets. Mark a structured field required when
+  it supplies a required schema branch. `connectorgen validate`, runtime preflight, and the shared engine
   materializer verify the same declaration before I/O, and preview/approval binds the resulting
   canonical payload and declaration-owned headers. Header values are represented by a canonical
   hash rather than rendered in previews or errors, then dispatched without re-resolution after

@@ -109,28 +109,194 @@ func ValidateOperationDirectWriteCLIFlags(op OperationSpec, flags []CLIFlag) err
 		}
 		mappings = append(mappings, structuredRESTBodyCLIFieldMapping{flag: flag, path: resolved})
 	}
-	for _, path := range structuredRESTBodyRequiredMappingPaths(compiled.root, "") {
-		resolved, err := resolveOperationDirectWriteBodySchemaPath(compiled.root, path)
-		if err != nil {
-			return fmt.Errorf("operation %q required body field %q: %w", op.ID, path, err)
-		}
-		if structuredRESTBodyStaticValueAtPath(staticBody, resolved) {
+	coverage := structuredRESTBodyCLICoverageFromValue(staticBody)
+	for _, mapping := range mappings {
+		if !mapping.flag.Required {
 			continue
 		}
-		flag, found := structuredRESTBodyRequiredFlag(resolved, mappings)
-		if !found {
-			return fmt.Errorf("operation %q requires body.%s but no command flag maps to it and rest.body does not provide it", op.ID, path)
-		}
-		if !flag.Required {
-			return fmt.Errorf("operation %q requires body.%s but CLI flag --%s is not required", op.ID, path, flag.Name)
-		}
+		structuredRESTBodyAddCLICoverage(coverage, mapping.path.steps)
 	}
-	return nil
+	return validateStructuredRESTBodyCLILowerBounds(op.ID, compiled.root, coverage, "")
 }
 
 type structuredRESTBodyCLIFieldMapping struct {
 	flag CLIFlag
 	path operationDirectWriteBodyPath
+}
+
+type structuredRESTBodyCLICoverage struct {
+	opaque bool
+	object map[string]*structuredRESTBodyCLICoverage
+	array  map[int]*structuredRESTBodyCLICoverage
+}
+
+func structuredRESTBodyCLICoverageFromValue(value any) *structuredRESTBodyCLICoverage {
+	coverage := &structuredRESTBodyCLICoverage{}
+	switch value := value.(type) {
+	case map[string]any:
+		coverage.object = make(map[string]*structuredRESTBodyCLICoverage, len(value))
+		for _, name := range sortedMapKeys(value) {
+			coverage.object[name] = structuredRESTBodyCLICoverageFromValue(value[name])
+		}
+	case []any:
+		coverage.array = make(map[int]*structuredRESTBodyCLICoverage, len(value))
+		for index, item := range value {
+			coverage.array[index] = structuredRESTBodyCLICoverageFromValue(item)
+		}
+	default:
+		coverage.opaque = true
+	}
+	return coverage
+}
+
+func structuredRESTBodyAddCLICoverage(coverage *structuredRESTBodyCLICoverage, steps []operationDirectWriteBodyPathStep) {
+	if coverage == nil || coverage.opaque {
+		return
+	}
+	if len(steps) == 0 {
+		coverage.opaque = true
+		coverage.object = nil
+		coverage.array = nil
+		return
+	}
+	step := steps[0]
+	if step.array {
+		if coverage.array == nil {
+			coverage.array = make(map[int]*structuredRESTBodyCLICoverage)
+		}
+		child := coverage.array[step.index]
+		if child == nil {
+			child = &structuredRESTBodyCLICoverage{}
+			coverage.array[step.index] = child
+		}
+		structuredRESTBodyAddCLICoverage(child, steps[1:])
+		return
+	}
+	if coverage.object == nil {
+		coverage.object = make(map[string]*structuredRESTBodyCLICoverage)
+	}
+	child := coverage.object[step.key]
+	if child == nil {
+		child = &structuredRESTBodyCLICoverage{}
+		coverage.object[step.key] = child
+	}
+	structuredRESTBodyAddCLICoverage(child, steps[1:])
+}
+
+func validateStructuredRESTBodyCLILowerBounds(operation string, node map[string]any, coverage *structuredRESTBodyCLICoverage, path string) error {
+	if coverage != nil && coverage.opaque {
+		return nil
+	}
+	object, array := operationDirectWriteBodyNodeKinds(node)
+	if object {
+		properties, _ := node["properties"].(map[string]any)
+		minimum, err := structuredRESTBodyObjectMinProperties(node)
+		if err != nil {
+			return fmt.Errorf("operation %q body_schema %s: %w", operation, structuredRESTBodyCoverageLabel(path), err)
+		}
+		present := 0
+		if coverage != nil {
+			present = len(coverage.object)
+		}
+		if present < minimum {
+			return fmt.Errorf("operation %q requires %s to satisfy minProperties %d but only %d declared static or required CLI fields provide it", operation, structuredRESTBodyCoverageLabel(path), minimum, present)
+		}
+		required, _ := node["required"].([]any)
+		requiredNames := make([]string, 0, len(required))
+		for _, rawName := range required {
+			if name, ok := rawName.(string); ok {
+				requiredNames = append(requiredNames, name)
+			}
+		}
+		sort.Strings(requiredNames)
+		for _, name := range requiredNames {
+			childCoverage := (*structuredRESTBodyCLICoverage)(nil)
+			if coverage != nil {
+				childCoverage = coverage.object[name]
+			}
+			childPath := structuredRESTBodyCoveragePath(path, operationDirectWriteBodyPathStep{key: name})
+			if childCoverage == nil {
+				return fmt.Errorf("operation %q requires %s but no required command flag maps to it and rest.body does not provide it", operation, structuredRESTBodyCoverageLabel(childPath))
+			}
+			child, _ := properties[name].(map[string]any)
+			if err := validateStructuredRESTBodyCLILowerBounds(operation, child, childCoverage, childPath); err != nil {
+				return err
+			}
+		}
+		if coverage == nil {
+			return nil
+		}
+		for _, name := range sortedMapKeys(coverage.object) {
+			child, ok := properties[name].(map[string]any)
+			if !ok {
+				continue
+			}
+			if err := validateStructuredRESTBodyCLILowerBounds(operation, child, coverage.object[name], structuredRESTBodyCoveragePath(path, operationDirectWriteBodyPathStep{key: name})); err != nil {
+				return err
+			}
+		}
+	}
+	if array {
+		minimum, err := structuredRESTBodyArrayMinItems(node)
+		if err != nil {
+			return fmt.Errorf("operation %q body_schema %s: %w", operation, structuredRESTBodyCoverageLabel(path), err)
+		}
+		for index := 0; index < minimum; index++ {
+			var childCoverage *structuredRESTBodyCLICoverage
+			if coverage != nil {
+				childCoverage = coverage.array[index]
+			}
+			childPath := structuredRESTBodyCoveragePath(path, operationDirectWriteBodyPathStep{array: true, index: index})
+			if childCoverage == nil {
+				return fmt.Errorf("operation %q requires %s to satisfy minItems %d but no required command flag maps to it and rest.body does not provide it", operation, structuredRESTBodyCoverageLabel(childPath), minimum)
+			}
+			item, err := operationDirectWriteBodyArrayItemSchema(node, index)
+			if err != nil {
+				return fmt.Errorf("operation %q body_schema %s: %w", operation, structuredRESTBodyCoverageLabel(childPath), err)
+			}
+			if err := validateStructuredRESTBodyCLILowerBounds(operation, item, childCoverage, childPath); err != nil {
+				return err
+			}
+		}
+		if coverage == nil {
+			return nil
+		}
+		indices := make([]int, 0, len(coverage.array))
+		for index := range coverage.array {
+			indices = append(indices, index)
+		}
+		sort.Ints(indices)
+		for _, index := range indices {
+			item, err := operationDirectWriteBodyArrayItemSchema(node, index)
+			if err != nil {
+				return fmt.Errorf("operation %q body_schema %s: %w", operation, structuredRESTBodyCoverageLabel(path), err)
+			}
+			if err := validateStructuredRESTBodyCLILowerBounds(operation, item, coverage.array[index], structuredRESTBodyCoveragePath(path, operationDirectWriteBodyPathStep{array: true, index: index})); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func structuredRESTBodyCoveragePath(prefix string, step operationDirectWriteBodyPathStep) string {
+	if step.array {
+		if prefix == "" {
+			return strconv.Itoa(step.index)
+		}
+		return prefix + "." + strconv.Itoa(step.index)
+	}
+	if prefix == "" {
+		return step.key
+	}
+	return prefix + "." + step.key
+}
+
+func structuredRESTBodyCoverageLabel(path string) string {
+	if path == "" {
+		return "body"
+	}
+	return "body." + path
 }
 
 func validateOperationDirectWriteCLIFlagType(op OperationSpec, flag CLIFlag, path string, node map[string]any) error {
@@ -517,6 +683,14 @@ func compileStructuredRESTBodySchema(op OperationSpec) (*structuredRESTBodySchem
 	if maximumNodes > maxStructuredRESTBodyNodes {
 		return nil, structuredRESTBodyFoundationGap(op.ID, "body_schema", fmt.Sprintf("maximum valid body requires %d nodes, exceeding limit %d", maximumNodes, maxStructuredRESTBodyNodes))
 	}
+	minimumBytes, err := structuredRESTBodyMinimumJSONBytes(root)
+	if err != nil {
+		return nil, fmt.Errorf("operation %q body_schema: %w", op.ID, err)
+	}
+	maxBytes := clampOperationDirectWriteMaxBytes(op.REST.MaxBytes)
+	if minimumBytes > maxBytes {
+		return nil, structuredRESTBodyFoundationGap(op.ID, "body_schema", fmt.Sprintf("minimum valid body requires %d bytes, exceeding limit %d", minimumBytes, maxBytes))
+	}
 	fragmentRoot, err := structuredRESTBodyFragmentSchemaRoot(root)
 	if err != nil {
 		return nil, fmt.Errorf("operation %q body_schema: %w", op.ID, err)
@@ -529,7 +703,24 @@ func compileStructuredRESTBodySchema(op OperationSpec) (*structuredRESTBodySchem
 	if err != nil {
 		return nil, fmt.Errorf("operation %q body_schema: compile fragment schema: %w", op.ID, err)
 	}
-	return &structuredRESTBodySchemaCompilation{root: root, schema: sch, fragmentSchema: fragmentSchema}, nil
+	compiled := &structuredRESTBodySchemaCompilation{root: root, schema: sch, fragmentSchema: fragmentSchema}
+	if len(op.REST.Body) != 0 {
+		staticBody, err := canonicalizeStructuredRESTBodyFragment(compiled, op, op.REST.Body, "rest.body")
+		if err != nil {
+			if strings.Contains(err.Error(), "request body too large") {
+				return nil, structuredRESTBodyFoundationGap(op.ID, "rest.body", fmt.Sprintf("minimum fixed body exceeds limit %d", maxBytes))
+			}
+			return nil, err
+		}
+		encoded, err := json.Marshal(staticBody)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q rest.body: encode: %w", op.ID, err)
+		}
+		if len(encoded) > maxBytes {
+			return nil, structuredRESTBodyFoundationGap(op.ID, "rest.body", fmt.Sprintf("minimum fixed body requires %d bytes, exceeding limit %d", len(encoded), maxBytes))
+		}
+	}
+	return compiled, nil
 }
 
 func materializeStructuredRESTBody(op OperationSpec, staticBody, overrides map[string]any) (map[string]any, error) {
@@ -1352,6 +1543,178 @@ func structuredRESTBodyNodeCosts(node map[string]any) (int, int, error) {
 
 func structuredRESTBodyCostAdd(left, right int) int {
 	limit := maxStructuredRESTBodyNodes + 1
+	if left >= limit || right >= limit || left > limit-right {
+		return limit
+	}
+	return left + right
+}
+
+func structuredRESTBodyMinimumJSONBytes(node map[string]any) (int, error) {
+	if rawValues, exists := node["enum"]; exists {
+		values, ok := rawValues.([]any)
+		if !ok || len(values) == 0 {
+			return 0, fmt.Errorf("enum must contain at least one value")
+		}
+		rawNode, err := json.Marshal(node)
+		if err != nil {
+			return 0, err
+		}
+		schema, err := compileStructuredRESTBodySchemaDocument(rawNode)
+		if err != nil {
+			return 0, err
+		}
+		minimum := maxOperationDirectWriteBytes + 1
+		found := false
+		for _, value := range values {
+			if err := schema.Validate(value); err != nil {
+				continue
+			}
+			found = true
+			encoded, err := json.Marshal(value)
+			if err != nil {
+				return 0, err
+			}
+			cost := len(encoded)
+			if cost > maxOperationDirectWriteBytes+1 {
+				cost = maxOperationDirectWriteBytes + 1
+			}
+			if cost < minimum {
+				minimum = cost
+			}
+		}
+		if !found {
+			return 0, fmt.Errorf("enum has no schema-valid value")
+		}
+		return minimum, nil
+	}
+
+	minimum := maxOperationDirectWriteBytes + 1
+	consider := func(value int) {
+		if value < minimum {
+			minimum = value
+		}
+	}
+	if structuredRESTBodyNodeAllowsType(node, "null") {
+		consider(len("null"))
+	}
+	if structuredRESTBodyNodeAllowsType(node, "boolean") {
+		consider(len("false"))
+	}
+	if structuredRESTBodyNodeAllowsType(node, "integer") || structuredRESTBodyNodeAllowsType(node, "number") {
+		consider(1)
+	}
+	if structuredRESTBodyNodeAllowsType(node, "string") {
+		consider(2)
+	}
+	if isObjectType(node) {
+		value, err := structuredRESTBodyMinimumJSONObjectBytes(node)
+		if err != nil {
+			return 0, err
+		}
+		consider(value)
+	}
+	if isArrayType(node) {
+		value, err := structuredRESTBodyMinimumJSONArrayBytes(node)
+		if err != nil {
+			return 0, err
+		}
+		consider(value)
+	}
+	if minimum > maxOperationDirectWriteBytes {
+		return 0, fmt.Errorf("has no supported minimum JSON encoding")
+	}
+	return minimum, nil
+}
+
+func structuredRESTBodyMinimumJSONObjectBytes(node map[string]any) (int, error) {
+	properties, ok := node["properties"].(map[string]any)
+	if !ok {
+		return 0, fmt.Errorf("object has no properties")
+	}
+	required := make(map[string]struct{})
+	if rawRequired, ok := node["required"].([]any); ok {
+		for _, rawName := range rawRequired {
+			name, ok := rawName.(string)
+			if !ok {
+				return 0, fmt.Errorf("required contains a non-string property name")
+			}
+			required[name] = struct{}{}
+		}
+	}
+	minimumProperties, err := structuredRESTBodyObjectMinProperties(node)
+	if err != nil {
+		return 0, err
+	}
+	requiredCosts := make([]int, 0, len(required))
+	optionalCosts := make([]int, 0, len(properties))
+	for _, name := range sortedMapKeys(properties) {
+		child, ok := properties[name].(map[string]any)
+		if !ok {
+			return 0, fmt.Errorf("properties.%s must be a schema object", name)
+		}
+		childCost, err := structuredRESTBodyMinimumJSONBytes(child)
+		if err != nil {
+			return 0, err
+		}
+		encodedName, err := json.Marshal(name)
+		if err != nil {
+			return 0, err
+		}
+		cost := structuredRESTBodyByteCostAdd(len(encodedName)+1, childCost)
+		if _, isRequired := required[name]; isRequired {
+			requiredCosts = append(requiredCosts, cost)
+		} else {
+			optionalCosts = append(optionalCosts, cost)
+		}
+	}
+	if minimumProperties > len(properties) {
+		return 0, fmt.Errorf("minProperties %d exceeds declared properties %d", minimumProperties, len(properties))
+	}
+	minimum := 2
+	for _, cost := range requiredCosts {
+		minimum = structuredRESTBodyByteCostAdd(minimum, cost)
+	}
+	if minimumProperties > len(requiredCosts) {
+		sort.Ints(optionalCosts)
+		for _, cost := range optionalCosts[:minimumProperties-len(requiredCosts)] {
+			minimum = structuredRESTBodyByteCostAdd(minimum, cost)
+		}
+	}
+	fields := len(requiredCosts)
+	if minimumProperties > fields {
+		fields = minimumProperties
+	}
+	if fields > 1 {
+		minimum = structuredRESTBodyByteCostAdd(minimum, fields-1)
+	}
+	return minimum, nil
+}
+
+func structuredRESTBodyMinimumJSONArrayBytes(node map[string]any) (int, error) {
+	minimumItems, err := structuredRESTBodyArrayMinItems(node)
+	if err != nil {
+		return 0, err
+	}
+	minimum := 2
+	for index := 0; index < minimumItems; index++ {
+		item, err := operationDirectWriteBodyArrayItemSchema(node, index)
+		if err != nil {
+			return 0, err
+		}
+		cost, err := structuredRESTBodyMinimumJSONBytes(item)
+		if err != nil {
+			return 0, err
+		}
+		minimum = structuredRESTBodyByteCostAdd(minimum, cost)
+		if index > 0 {
+			minimum = structuredRESTBodyByteCostAdd(minimum, 1)
+		}
+	}
+	return minimum, nil
+}
+
+func structuredRESTBodyByteCostAdd(left, right int) int {
+	limit := maxOperationDirectWriteBytes + 1
 	if left >= limit || right >= limit || left > limit-right {
 		return limit
 	}
