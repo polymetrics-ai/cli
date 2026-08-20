@@ -216,7 +216,7 @@ func (r *Requester) client() *http.Client {
 }
 
 func (r *Requester) clientFor(ctx context.Context) *http.Client {
-	return transportpolicy.HTTPClient(ctx, r.client())
+	return transportpolicy.HTTPClientRetainingRedirectResponse(ctx, r.client())
 }
 
 func isSafeReplayableRead(method string) bool {
@@ -244,6 +244,14 @@ func noReplayClient(client *http.Client) *http.Client {
 	strictTransport.DisableKeepAlives = true
 	clone.Transport = strictTransport
 	return &clone
+}
+
+func noReplayResponseClient(client *http.Client) *http.Client {
+	strict := noReplayClient(client)
+	strict.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+	return strict
 }
 
 func disableTransportReplay(req *http.Request, strictWrite bool) {
@@ -1012,7 +1020,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
 	baseClient := r.clientFor(ctx)
 	if strictWrite {
-		baseClient = noReplayClient(baseClient)
+		baseClient = noReplayResponseClient(baseClient)
 	}
 	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt, &route, &costHeader)
 	for attempt := 0; attempt < attempts; attempt++ {
@@ -1053,15 +1061,24 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		resp, err := client.Do(req)
 		if err != nil {
 			bodyErr := cleanupRequestBody(body)
+			var terminal *Response
+			if resp != nil {
+				var respBody []byte
+				if resp.Body != nil {
+					respBody, _ = io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
+					_ = resp.Body.Close()
+				}
+				terminal = &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}
+			}
 			lastErr = fmt.Errorf("send request: %w", err)
 			if bodyErr != nil {
 				lastErr = fmt.Errorf("send request: %w", bodyErr)
 			}
 			if errors.Is(err, transportpolicy.ErrRedirectRefused) {
-				return nil, lastErr
+				return terminal, lastErr
 			}
 			if isRateLimitAdmissionError(err) {
-				return nil, lastErr
+				return terminal, lastErr
 			}
 			if attempt < attempts-1 {
 				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
@@ -1069,7 +1086,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 				}
 				continue
 			}
-			return nil, lastErr
+			return terminal, lastErr
 		}
 		observation := r.observeRateLimit(ctx, route, resp.StatusCode, resp.Header, costHeader)
 		bodyErr := cleanupRequestBody(body)
@@ -1116,11 +1133,16 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			continue
 		}
 
+		terminal := &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			responseErr := responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			if (strictWrite || transportpolicy.IsDestructive(ctx)) && resp.StatusCode >= http.StatusMultipleChoices && resp.StatusCode < http.StatusBadRequest {
+				responseErr = fmt.Errorf("%w: %w", transportpolicy.ErrRedirectRefused, responseErr)
+			}
+			return terminal, responseErr
 		}
 
-		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}, nil
+		return terminal, nil
 	}
 	if lastErr == nil {
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)

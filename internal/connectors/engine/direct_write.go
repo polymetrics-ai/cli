@@ -137,9 +137,15 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		default:
 			return fmt.Errorf("operation %q has unsupported prepared body format %q", prepared.op.ID, prepared.format)
 		}
+		var responseBody operationDirectWriteResponseBodyResult
+		var responseBodyErr error
+		if response != nil {
+			responseBody, responseBodyErr = operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes, response.Header)
+			result = operationDirectWriteResultFromResponse(b.Name, prepared, response, responseBody)
+		}
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(err, prepared.op.Kind == "graphql_mutation" && !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)
+			message := operationDirectWriteErrorText(err, prepared.redactionValues)
 			if hint != "" {
 				message += ": " + hint
 			}
@@ -148,23 +154,21 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			}
 			return &operationDirectWriteError{operation: prepared.op.ID, message: message, cause: err}
 		}
-		if len(response.Body) > prepared.maxBytes {
-			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
+		if response == nil {
+			return &operationDirectWriteError{operation: prepared.op.ID, message: "provider returned no response"}
 		}
-		body, bodyErr := operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes)
-		result = operationDirectWriteResultFromResponse(b.Name, prepared, response, body)
-		if bodyErr != nil {
-			return &operationDirectWriteError{operation: prepared.op.ID, message: bodyErr.Error(), cause: bodyErr}
+		if responseBodyErr != nil {
+			return &operationDirectWriteError{operation: prepared.op.ID, message: responseBodyErr.Error(), cause: responseBodyErr}
 		}
 		if prepared.op.Kind == "graphql_mutation" {
-			data, metadata, parseErr := graphQLOperationResponseWithRuntimeErrorPolicy(response.Body, prepared.maxBytes, operationRetainsSecretRuntimeContent(prepared.op))
+			data, metadata, parseErr := graphQLOperationResponseWithRuntimeErrorPolicy(response.Body, prepared.maxBytes, true)
 			if parseErr != nil {
-				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response: " + parseErr.Error(), cause: parseErr}
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response is invalid", cause: parseErr}
 			}
 			result.GraphQL = metadata
 			observeGraphQLRateLimit(requestCtx, &requester, response, data)
 			if len(metadata.Errors) != 0 {
-				return &operationDirectWriteError{operation: prepared.op.ID, message: "graphql errors: " + redactOperationDirectWriteErrorText(graphQLErrorSummary(metadata), !operationRetainsSecretRuntimeContent(prepared.op), prepared.redactionValues)}
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "provider GraphQL response contains errors"}
 			}
 			if data == nil {
 				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response has no data"}
@@ -191,37 +195,21 @@ func operationDirectWriteOutputSecretFields(op OperationSpec) []string {
 	return []string{op.SensitivePolicy.ResponseSecretField}
 }
 
-// operationDirectWriteErrorText preserves the established complete REST write
-// diagnostics, but a fixed GraphQL mutation must redact its HTTP error body:
-// unlike a successful GraphQL response it has no errors[] envelope sanitizer
-// and can otherwise echo a caller value in its raw provider body.
-func operationDirectWriteErrorText(err error, redact bool, values []string) string {
+func operationDirectWriteErrorText(err error, values []string) string {
 	var output string
 	var httpErr *connsdk.HTTPError
-	if errors.As(err, &httpErr) {
-		message := strings.TrimSpace(httpErr.Body)
-		if message == "" {
-			message = http.StatusText(httpErr.Status)
-		}
-		output = fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+	if errors.Is(err, transportpolicy.ErrRedirectRefused) {
+		output = transportpolicy.ErrRedirectRefused.Error()
+	} else if errors.As(err, &httpErr) {
+		output = fmt.Sprintf("provider returned HTTP status %d", httpErr.Status)
 	} else {
 		output = err.Error()
 	}
-	return redactOperationDirectWriteErrorText(output, redact, values)
+	return redactOperationDirectWriteErrorText(output, values)
 }
 
-func redactOperationDirectWriteErrorText(text string, redact bool, values []string) string {
-	if !redact && len(values) == 0 {
-		return text
-	}
+func redactOperationDirectWriteErrorText(text string, values []string) string {
 	return safety.RedactErrorText(redactWriteLiterals(text, values))
-}
-
-// operationRetainsSecretRuntimeContent identifies the closed secret-operation
-// path. Its diagnostic output is complete by policy; the declared secret store
-// protects the returned credential at rest rather than deleting runtime fields.
-func operationRetainsSecretRuntimeContent(op OperationSpec) bool {
-	return op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
 }
 
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
@@ -807,7 +795,7 @@ func operationDirectWriteResultFromResponse(connector string, prepared preparedO
 	}
 }
 
-func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (operationDirectWriteResponseBodyResult, error) {
+func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int, headers map[string][]string) (operationDirectWriteResponseBodyResult, error) {
 	if err := validateOperationDirectWriteOutputPolicy(policy); err != nil {
 		return operationDirectWriteResponseBodyResult{}, err
 	}
@@ -822,12 +810,30 @@ func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (
 		result.raw = base64.StdEncoding.EncodeToString(raw)
 		result.encoding = "base64"
 	}
+	if len(raw) > maxBytes {
+		return result, fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(raw), maxBytes)
+	}
+	if !operationDirectWriteResponseDeclaresJSON(policy, headers) {
+		return result, nil
+	}
 	decoded, err := decodeDirectReadBody(raw, maxBytes)
 	if err != nil {
-		return result, fmt.Errorf("operation direct write response is not JSON: %w", err)
+		return result, errors.New("operation direct write response is not JSON")
 	}
 	result.body = decoded
 	return result, nil
+}
+
+func operationDirectWriteResponseDeclaresJSON(policy string, headers map[string][]string) bool {
+	if present, declared := writeProviderResponseContentType(headers); present {
+		return declared
+	}
+	switch policy {
+	case directWritePolicyJSON, directWritePolicyJSONRedacted, directWritePolicyWriteResultRedacted, directWritePolicyGongBoundedInputRedacted, directWritePolicySecretStored:
+		return true
+	default:
+		return false
+	}
 }
 
 // validateOperationResponseSecretContract makes a response carrying a

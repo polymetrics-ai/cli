@@ -625,19 +625,19 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 				t.Fatalf("decode persisted typed destination output: %v", err)
 			}
 			if output.RecordsWritten != 1 || len(output.ProviderResponses) != 1 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[0].Status != http.StatusCreated {
-				t.Fatalf("persisted typed destination output = %#v, want full successful provider result", output)
+				t.Fatal("persisted typed destination output did not retain the full provider result")
 			}
 			if got := output.ProviderResponses[0].Headers["X-Provider-Request-Id"].Values; !reflect.DeepEqual(got, []string{"append-request-1"}) {
-				t.Fatalf("ordinary provider header = %#v, want preserved request ID", got)
+				t.Fatal("ordinary provider header did not retain the request ID")
 			}
 			if got := output.ProviderResponses[0].Headers["Authorization"]; got.Masked || !reflect.DeepEqual(got.Values, []string{"provider-response-secret"}) {
-				t.Fatalf("unconfigured provider header = %#v, want preserved", got)
+				t.Fatal("unconfigured provider header was not preserved")
 			}
-			if got := output.ProviderResponses[0].Headers["X-Echoed-Credential"]; !got.Masked || !reflect.DeepEqual(got.Values, []string{"[masked]"}) {
-				t.Fatalf("configured credential header = %#v, want exact credential replacement", got)
+			if got := output.ProviderResponses[0].Headers["X-Echoed-Credential"]; got.Masked || !reflect.DeepEqual(got.Values, []string{"destination-secret"}) {
+				t.Fatal("provider credential-equal header was not preserved")
 			}
-			if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || got["echoed_secret"] != "[masked]" {
-				t.Fatalf("ordinary provider body fields = %#v, want preserved complete response", got)
+			if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || got["echoed_secret"] != "destination-secret" {
+				t.Fatal("ordinary provider body fields were not preserved")
 			}
 			var rawOutput struct {
 				ProviderResponses []struct {
@@ -645,7 +645,7 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 				} `json:"provider_responses"`
 			}
 			if err := json.Unmarshal(run.DestinationResults[0], &rawOutput); err != nil || string(rawOutput.ProviderResponses[0].Body["large_provider_id"]) != "9007199254740993" {
-				t.Fatalf("large provider result identifier = %s err=%v, want exact JSON number", rawOutput.ProviderResponses[0].Body["large_provider_id"], err)
+				t.Fatal("large provider result identifier was not preserved as an exact JSON number")
 			}
 			persistedApp, err := Open(root)
 			if err != nil {
@@ -663,13 +663,13 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 				t.Fatalf("decode persisted typed destination result: %v", err)
 			}
 			if err := json.Unmarshal(run.DestinationResults[0], &returnedOutput); err != nil || !reflect.DeepEqual(persistedOutput, returnedOutput) {
-				t.Fatalf("persisted typed destination result = %#v err=%v, want returned output %#v", persistedOutput, err, returnedOutput)
+				t.Fatal("persisted typed destination result did not match returned output")
 			}
 			cliEnvelope, err := json.Marshal(struct {
 				Run Run `json:"run"`
 			}{Run: persisted})
-			if err != nil || !bytes.Contains(cliEnvelope, []byte(`"destination_results"`)) || !bytes.Contains(cliEnvelope, []byte(`"paid_tier":"enterprise"`)) || bytes.Contains(cliEnvelope, []byte("destination-secret")) {
-				t.Fatalf("CLI-shaped persisted ETL JSON = %s err=%v, want complete ordinary output and no credential", cliEnvelope, err)
+			if err != nil || !bytes.Contains(cliEnvelope, []byte(`"destination_results"`)) || !bytes.Contains(cliEnvelope, []byte(`"paid_tier":"enterprise"`)) || !bytes.Contains(cliEnvelope, []byte("destination-secret")) {
+				t.Fatal("CLI-shaped persisted ETL JSON did not retain complete provider output")
 			}
 		})
 	}
@@ -895,6 +895,152 @@ func TestDeclarativeTypedDestinationRejectsActionDefinitionDriftBeforePreviewAnd
 	}
 }
 
+func TestDeclarativeTypedDestinationRejectsEffectiveRequestDefinitionDriftBeforePreview(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		requests++
+	}))
+	t.Cleanup(server.Close)
+	name := "typed-effective-definition-drift"
+	requestDefinitionFiles := func(userAgent, providerDefault string) fstest.MapFS {
+		files := declarativeTypedDestinationBundleFS(name, "effective_source", "effective_destination")
+		files[name+"/spec.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["base_url"],"properties":{"base_url":{"type":"string"},"provider_default":{"type":"string","default":%q}}}`, providerDefault))}
+		streams := string(files[name+"/streams.json"].Data)
+		streams = strings.Replace(streams, `"user_agent":"synthetic"`, fmt.Sprintf(`"user_agent":%q`, userAgent), 1)
+		streams = strings.Replace(streams, `"headers":{}`, `"headers":{"X-Definition-Default":"{{ config.provider_default }}"}`, 1)
+		files[name+"/streams.json"] = &fstest.MapFile{Data: []byte(streams)}
+		return files
+	}
+	initialBundle, err := engine.Load(requestDefinitionFiles("synthetic-one", "one"), name)
+	if err != nil {
+		t.Fatalf("load initial request definition: %v", err)
+	}
+	initial := engine.New(initialBundle, nil)
+	initialDigest, err := initial.DeclarativeTypedDestinationActionDigest("apply_widget")
+	if err != nil {
+		t.Fatalf("initial action digest: %v", err)
+	}
+	application.registry.Register(initial)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose initial typed destination: %v", err)
+	}
+	for _, endpoint := range []string{"source", "destination"} {
+		if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: name + "-" + endpoint, Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+			t.Fatalf("add %s credential: %v", endpoint, err)
+		}
+	}
+	connection, err := application.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "typed_effective_definition_drift",
+		Source:      EndpointConfig{Connector: name, Credential: name + "-source"},
+		Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+		Streams: map[string]StreamConfig{"widgets": {
+			SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"}, DestinationAction: "apply_widget",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create typed destination connection: %v", err)
+	}
+	plan, err := application.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
+	if err != nil {
+		t.Fatalf("plan typed destination: %v", err)
+	}
+
+	driftBundle, err := engine.Load(requestDefinitionFiles("synthetic-two", "two"), name)
+	if err != nil {
+		t.Fatalf("load drifted request definition: %v", err)
+	}
+	drifted := engine.New(driftBundle, nil)
+	driftDigest, err := drifted.DeclarativeTypedDestinationActionDigest("apply_widget")
+	if err != nil {
+		t.Fatalf("drifted action digest: %v", err)
+	}
+	if driftDigest == initialDigest {
+		t.Fatal("changed user agent and default preserved the typed action digest")
+	}
+	application.registry.Register(drifted)
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose drifted typed destination: %v", err)
+	}
+	if _, _, err := application.PreviewDeclarativeTypedDestinationTransport(ctx, plan.ID); err == nil || !strings.Contains(err.Error(), "does not bind") {
+		t.Fatalf("preview request-definition drift error = %v, want pre-I/O binding refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("effective definition drift reached provider I/O; requests=%d, want 0", requests)
+	}
+}
+
+func TestDeclarativeTypedDestinationRefusesRedirectsBeforeRetargeting(t *testing.T) {
+	for _, status := range []int{
+		http.StatusMovedPermanently,
+		http.StatusFound,
+		http.StatusSeeOther,
+		http.StatusTemporaryRedirect,
+		http.StatusPermanentRedirect,
+	} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			originCalls := 0
+			targetCalls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/widgets/target":
+					originCalls++
+					http.Redirect(w, r, "/widgets/retargeted", status)
+				case "/widgets/retargeted":
+					targetCalls++
+					w.WriteHeader(http.StatusCreated)
+				default:
+					w.WriteHeader(http.StatusNotFound)
+				}
+			}))
+			defer server.Close()
+
+			name := fmt.Sprintf("typed-redirect-%d", status)
+			files := declarativeTypedDestinationBundleFS(name, "redirect-source", "redirect-destination")
+			writesPath := name + "/writes.json"
+			files[writesPath] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[writesPath].Data), `"risk":`, `"idempotency_key_header":"Idempotency-Key","risk":`, 1))}
+			bundle, err := engine.Load(files, name)
+			if err != nil {
+				t.Fatalf("load typed destination bundle: %v", err)
+			}
+			connector := engine.New(bundle, nil)
+			executor := &declarativeTypedDestinationExecutor{}
+			approval := syntheticTypedDestinationApproval(t, name, "apply_widget")
+			strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+			plan, err := executor.PlanDestination(context.Background(), synctransport.DestinationPlanRequest{
+				Connector: connector, Source: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend, ApplyStrategy: strategy, Approval: approval,
+			})
+			if err != nil {
+				t.Fatalf("PlanDestination: %v", err)
+			}
+			receipt := synctransport.WarehouseReceipt{
+				ID: "typed-redirect-workset", Owner: "typed-redirect-workset", Generation: 1, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+				CheckpointSHA256: "checkpoint", TombstonesSHA256: "tombstones", ManifestSHA256: "manifest", ContentSHA256: "content", ParquetSHA256: "parquet", Records: 1,
+			}
+			_, err = executor.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{
+				ConnectionID: receipt.Owner, Plan: plan, Receipt: receipt,
+				Workset: synctransport.WarehouseWorkset{ID: receipt.ID, Records: []connectors.Record{{"id": "widget-1", "value": "value"}}},
+				Runtime: connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL}},
+				Source:  connector, Destination: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend, Approval: approval,
+			})
+			if err == nil || !strings.Contains(strings.ToLower(err.Error()), "redirect") {
+				t.Fatalf("ApplyDestination error = %v, want redirect refusal", err)
+			}
+			if originCalls != 1 || targetCalls != 0 {
+				t.Fatalf("redirect calls origin=%d target=%d, want 1/0", originCalls, targetCalls)
+			}
+		})
+	}
+}
+
 func TestDeclarativeTypedDestinationApprovalBindsActionDefinition(t *testing.T) {
 	digest := strings.Repeat("a", 64)
 	approval := synctransport.DestinationApproval{Target: connectors.WriteApprovalTarget{Scope: connectors.WriteApprovalScopeProject}}
@@ -936,7 +1082,10 @@ func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(
 				_, _ = w.Write([]byte(`{"provider_id":"first","echo":"destination-secret"}`))
 				return
 			}
-			_, _ = w.Write([]byte(`{"provider_id":"second","echo":"destination-secret"} trailing`))
+			w.Header().Add("X-Provider-Receipt", "receipt-one")
+			w.Header().Add("X-Provider-Receipt", "receipt-two")
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte(`{"provider_id":"second","echo":"destination-secret"}`))
 		default:
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -983,17 +1132,21 @@ func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(
 			Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 		},
 	})
-	if err == nil || !strings.Contains(err.Error(), "trailing") {
-		t.Fatalf("RunETL error = %v, want failed trailing provider response", err)
+	if err == nil || !strings.Contains(err.Error(), "HTTP status 500") {
+		t.Fatalf("RunETL error = %v, want failed provider response", err)
 	}
 	if run.Status != "failed" || run.RecordsLoaded != 0 || posts != 2 || len(run.DestinationResults) != 1 {
-		t.Fatalf("failed partial-result run = %#v posts=%d, want no acknowledgement and one persisted output", run, posts)
+		t.Fatal("failed partial-result run did not retain the expected provider output")
 	}
 	var output struct {
 		RecordsWritten    int `json:"records_written"`
 		RecordsFailed     int `json:"records_failed"`
 		ProviderResponses []struct {
-			RecordIndex  int    `json:"record_index"`
+			RecordIndex int `json:"record_index"`
+			Status      int `json:"status"`
+			Headers     map[string]struct {
+				Values []string `json:"values,omitempty"`
+			} `json:"headers"`
 			Body         any    `json:"body"`
 			BodyEncoding string `json:"body_encoding"`
 		} `json:"provider_responses"`
@@ -1001,12 +1154,17 @@ func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(
 	if err := json.Unmarshal(run.DestinationResults[0], &output); err != nil {
 		t.Fatalf("decode failed partial provider result: %v", err)
 	}
-	if output.RecordsWritten != 1 || output.RecordsFailed != 1 || len(output.ProviderResponses) != 2 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[1].RecordIndex != 1 || output.ProviderResponses[1].BodyEncoding != "text" {
-		t.Fatalf("failed partial provider output = %#v, want ordered first success and second raw failure", output)
+	var secondBody map[string]any
+	secondBodyOK := false
+	if len(output.ProviderResponses) == 2 {
+		secondBody, secondBodyOK = output.ProviderResponses[1].Body.(map[string]any)
+	}
+	if output.RecordsWritten != 1 || output.RecordsFailed != 1 || len(output.ProviderResponses) != 2 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[1].RecordIndex != 1 || output.ProviderResponses[1].Status != http.StatusInternalServerError || output.ProviderResponses[1].BodyEncoding != "" || !reflect.DeepEqual(output.ProviderResponses[1].Headers["X-Provider-Receipt"].Values, []string{"receipt-one", "receipt-two"}) || !secondBodyOK || secondBody["provider_id"] != "second" || secondBody["echo"] != "destination-secret" {
+		t.Fatal("failed partial provider output did not retain ordered results")
 	}
 	serialized, err := json.Marshal(run)
-	if err != nil || bytes.Contains(serialized, []byte("destination-secret")) {
-		t.Fatalf("failed partial provider run leaked configured credential: %s err=%v", serialized, err)
+	if err != nil || !bytes.Contains(serialized, []byte("destination-secret")) {
+		t.Fatal("failed partial provider run did not retain exact provider output")
 	}
 }
 

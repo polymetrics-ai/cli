@@ -712,10 +712,7 @@ func graphQLOperationResponse(raw []byte, maxBytes int) (map[string]any, *connec
 	return graphQLOperationResponseWithRuntimeErrorPolicy(raw, maxBytes, false)
 }
 
-// graphQLOperationResponseWithRuntimeErrorPolicy decodes a bounded GraphQL
-// response. The secret-operation path retains provider error text in full;
-// credentials are protected by its declared encrypted store rather than by
-// removing data from runtime diagnostics.
+// graphQLOperationResponseWithRuntimeErrorPolicy decodes a bounded GraphQL response.
 func graphQLOperationResponseWithRuntimeErrorPolicy(raw []byte, maxBytes int, retainRuntimeErrors bool) (map[string]any, *connectors.GraphQLResponseMetadata, error) {
 	if len(raw) > maxBytes {
 		return nil, nil, fmt.Errorf("GraphQL response too large: %d bytes exceeds limit %d", len(raw), maxBytes)

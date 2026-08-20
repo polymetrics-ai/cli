@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"mime"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -21,6 +22,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/transportpolicy"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -145,7 +147,17 @@ type writeActionRedactedError struct {
 }
 
 func (e *writeActionRedactedError) Error() string {
-	return safety.RedactErrorText(redactWriteLiterals(e.err.Error(), e.values))
+	message := e.err.Error()
+	var httpErr *connsdk.HTTPError
+	if errors.Is(e.err, transportpolicy.ErrRedirectRefused) {
+		message = transportpolicy.ErrRedirectRefused.Error()
+	} else if errors.As(e.err, &httpErr) {
+		message = fmt.Sprintf("provider returned HTTP status %d", httpErr.Status)
+	}
+	if len(e.values) != 0 {
+		message += ": protected request values redacted"
+	}
+	return safety.RedactErrorText(redactWriteLiterals(message, e.values))
 }
 
 func (e *writeActionRedactedError) Unwrap() error {
@@ -153,11 +165,12 @@ func (e *writeActionRedactedError) Unwrap() error {
 }
 
 func redactWriteActionError(err error, action WriteAction, rec connectors.Record) error {
-	if err == nil || len(action.RedactFields) == 0 {
+	if err == nil {
 		return err
 	}
 	values := writeActionRedactionValues(action, rec)
-	if len(values) == 0 {
+	var httpErr *connsdk.HTTPError
+	if len(values) == 0 && !errors.As(err, &httpErr) {
 		return err
 	}
 	return &writeActionRedactedError{err: err, values: values}
@@ -367,6 +380,12 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
 		}
 		response, err := executeWriteRecordWithResponse(ctx, b, action, pinned[0], i, cfg, rt)
+		var responseErr error
+		if response != nil {
+			providerResponse, providerResponseErr := writeProviderResponse(response, i)
+			result.ProviderResponses = append(result.ProviderResponses, providerResponse)
+			responseErr = providerResponseErr
+		}
 		if err != nil {
 			if isMissingOkDelete(action, err) {
 				result.RecordsUnchanged++
@@ -376,15 +395,9 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: redactWriteActionError(err, action, rec)}
 		}
-		if response != nil {
-			providerResponse, responseErr := writeProviderResponse(response, i)
-			result.ProviderResponses = append(result.ProviderResponses, providerResponse)
-			if responseErr != nil {
-				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
-				return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(responseErr, action, rec)}
-			}
-			result.RecordsWritten++
-			continue
+		if responseErr != nil {
+			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(responseErr, action, rec)}
 		}
 		result.RecordsWritten++
 	}
@@ -439,10 +452,10 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 		}
 		resp, err := requester.Do(ctx, method, path, query, payload)
 		if err != nil {
-			return nil, err
+			return resp, err
 		}
 		if err := graphQLErrors(resp.Body); err != nil {
-			return resp, err
+			return resp, errors.New("provider GraphQL response contains errors")
 		}
 		return resp, nil
 	case "none":
@@ -502,6 +515,14 @@ func writeProviderResponse(response *connsdk.Response, recordIndex int) (connect
 		Status:      response.Status,
 		Headers:     writeProviderHeaders(response.Header),
 	}
+	if len(bytes.TrimSpace(response.Body)) == 0 {
+		result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
+		return result, nil
+	}
+	if !writeProviderResponseDeclaresJSON(response.Header) {
+		result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
+		return result, nil
+	}
 	decoder := json.NewDecoder(bytes.NewReader(response.Body))
 	decoder.UseNumber()
 	if err := decoder.Decode(&result.Body); err == nil {
@@ -510,30 +531,14 @@ func writeProviderResponse(response *connsdk.Response, recordIndex int) (connect
 			return result, nil
 		} else if err == nil {
 			result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
-			return result, fmt.Errorf("provider response contains multiple JSON values")
+			return result, errors.New("provider response contains multiple JSON values")
 		} else {
 			result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
-			return result, fmt.Errorf("provider response has trailing data: %w", err)
+			return result, errors.New("provider response has trailing data")
 		}
-	} else if writeProviderResponseDeclaresJSON(response.Header) || writeProviderResponseLooksJSON(response.Body) {
-		result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
-		return result, fmt.Errorf("provider response is not valid JSON: %w", err)
 	}
 	result.Body, result.BodyEncoding = writeProviderRawBody(response.Body)
-	return result, nil
-}
-
-func writeProviderResponseLooksJSON(body []byte) bool {
-	trimmed := bytes.TrimSpace(body)
-	if len(trimmed) == 0 {
-		return false
-	}
-	switch trimmed[0] {
-	case '{', '[', '"', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 't', 'f', 'n':
-		return true
-	default:
-		return false
-	}
+	return result, errors.New("provider response is not valid JSON")
 }
 
 func writeProviderRawBody(body []byte) (any, string) {
@@ -544,17 +549,33 @@ func writeProviderRawBody(body []byte) (any, string) {
 }
 
 func writeProviderResponseDeclaresJSON(headers map[string][]string) bool {
+	_, declared := writeProviderResponseContentType(headers)
+	return declared
+}
+
+func writeProviderResponseContentType(headers map[string][]string) (present, json bool) {
 	for name, values := range headers {
 		if !strings.EqualFold(name, "Content-Type") {
 			continue
 		}
 		for _, value := range values {
-			if strings.Contains(strings.ToLower(value), "json") {
-				return true
+			value = strings.TrimSpace(value)
+			if value == "" {
+				continue
 			}
+			present = true
+			mediaType, _, err := mime.ParseMediaType(value)
+			if err != nil {
+				return present, false
+			}
+			mediaType = strings.ToLower(mediaType)
+			if mediaType != "application/json" && !strings.HasSuffix(mediaType, "+json") {
+				return present, false
+			}
+			json = true
 		}
 	}
-	return false
+	return present, json
 }
 
 func writeProviderHeaders(headers map[string][]string) map[string]connectors.WriteProviderHeader {

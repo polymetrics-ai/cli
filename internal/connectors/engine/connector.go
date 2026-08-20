@@ -563,17 +563,21 @@ func declarativeTypedDestinationActionDigest(b Bundle, actionName string) (strin
 		return "", err
 	}
 	canonical, err := json.Marshal(struct {
-		Connector string            `json:"connector"`
-		BaseURL   string            `json:"base_url"`
-		Headers   map[string]string `json:"headers"`
-		Auth      []AuthSpec        `json:"auth"`
-		Action    any               `json:"action"`
+		Connector     string            `json:"connector"`
+		BaseURL       string            `json:"base_url"`
+		UserAgent     string            `json:"user_agent"`
+		Headers       map[string]string `json:"headers"`
+		Auth          []AuthSpec        `json:"auth"`
+		DefaultConfig map[string]string `json:"default_config"`
+		Action        any               `json:"action"`
 	}{
-		Connector: b.Name,
-		BaseURL:   b.HTTP.URL,
-		Headers:   b.HTTP.Headers,
-		Auth:      b.HTTP.Auth,
-		Action:    canonicalAction,
+		Connector:     b.Name,
+		BaseURL:       b.HTTP.URL,
+		UserAgent:     b.HTTP.UserAgent,
+		Headers:       b.HTTP.Headers,
+		Auth:          b.HTTP.Auth,
+		DefaultConfig: materializeConfigDefaults(b, connectors.RuntimeConfig{}).Config,
+		Action:        canonicalAction,
 	})
 	if err != nil {
 		return "", err

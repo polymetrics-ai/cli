@@ -2,9 +2,11 @@ package engine
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -239,7 +241,7 @@ func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
 		directWritePolicyGongBoundedInputRedacted,
 	} {
 		t.Run(policy, func(t *testing.T) {
-			response, err := operationDirectWriteResponseBody(policy, raw, 1024)
+			response, err := operationDirectWriteResponseBody(policy, raw, 1024, nil)
 			if err != nil {
 				t.Fatalf("operationDirectWriteResponseBody: %v", err)
 			}
@@ -402,10 +404,69 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 	}
 }
 
+func TestOperationDirectWritePreservesExplicitNonJSONResponses(t *testing.T) {
+	for _, tt := range []struct {
+		name        string
+		contentType string
+		body        []byte
+	}{
+		{name: "text begins t", contentType: "text/plain", body: []byte("thanks")},
+		{name: "text begins f", contentType: "text/plain", body: []byte("false")},
+		{name: "text begins n", contentType: "text/plain", body: []byte("null")},
+		{name: "text begins digit", contentType: "text/plain", body: []byte("123")},
+		{name: "text begins brace", contentType: "text/plain", body: []byte(`{"provider":"text"}`)},
+		{name: "text begins bracket", contentType: "text/plain", body: []byte(`["provider","text"]`)},
+		{name: "binary", contentType: "application/octet-stream", body: []byte{0xff, 0x00, 0x7f}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", tt.contentType)
+				_, _ = w.Write(tt.body)
+			}))
+			defer server.Close()
+
+			bundle := Bundle{
+				Name: "acme",
+				HTTP: HTTPBase{URL: server.URL},
+				Operations: []OperationSpec{{
+					ID: "acme.widgets.create", Kind: "rest_write", Summary: "Create one widget", Risk: "medium", Approval: "none", OutputPolicy: directWritePolicyJSON, MutationClass: "create",
+					REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/widgets", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`)},
+				}},
+				Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &SurfaceOperation{Model: "write_action", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "operation metadata is bound by the executor"}}}},
+			}
+			req := connectors.OperationDirectWriteRequest{Operation: "acme.widgets.create", Body: map[string]any{"name": "widget"}}
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			req.PreviewDigest = preview.Digest
+			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("OperationDirectWrite: %v", err)
+			}
+			if !result.ResponseReceived || !result.BodyPresent || result.Body != nil || result.BodyBytes != len(tt.body) {
+				t.Fatalf("non-JSON result = %#v, want raw provider response", result)
+			}
+			if tt.contentType == "text/plain" {
+				if result.BodyRawEncoding != "text" || result.BodyRaw != string(tt.body) {
+					t.Fatalf("text provider response = %#v, want %q", result, tt.body)
+				}
+				return
+			}
+			if result.BodyRawEncoding != "base64" || result.BodyRaw != base64.StdEncoding.EncodeToString(tt.body) {
+				t.Fatalf("binary provider response = %#v, want byte-exact base64", result)
+			}
+		})
+	}
+}
+
 func TestOperationDirectWriteNeverRetriesNonIdempotentFailure(t *testing.T) {
 	calls := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls++
+		w.Header().Add("X-Provider-Receipt", "receipt-one")
+		w.Header().Add("X-Provider-Receipt", "receipt-two")
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(`{"error":"failed","token":"server-token"}`))
 	}))
@@ -452,10 +513,17 @@ func TestOperationDirectWriteNeverRetriesNonIdempotentFailure(t *testing.T) {
 	}
 	req.PreviewDigest = preview.Digest
 
-	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
 		t.Fatal("OperationDirectWrite error = nil, want HTTP 500")
-	} else if !strings.Contains(err.Error(), "server-token") {
-		t.Fatalf("OperationDirectWrite error = %q, want complete response error content", err)
+	} else if strings.Contains(err.Error(), "server-token") {
+		t.Fatal("OperationDirectWrite error leaked a provider body")
+	}
+	if !result.ResponseReceived || result.Status != http.StatusInternalServerError || result.BodyRaw != `{"error":"failed","token":"server-token"}` {
+		t.Fatal("terminal direct-write result did not retain the provider response")
+	}
+	if got := result.Headers["X-Provider-Receipt"].Values; !reflect.DeepEqual(got, []string{"receipt-one", "receipt-two"}) {
+		t.Fatal("terminal direct-write receipt did not retain both provider values")
 	}
 	if calls != 1 {
 		t.Fatalf("non-idempotent write calls = %d, want exactly 1", calls)

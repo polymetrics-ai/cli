@@ -79,6 +79,66 @@ func TestDeclarativeTypedDestinationActionDigestIsCanonicalAndDefinitionBound(t 
 	}
 }
 
+func TestDeclarativeTypedDestinationActionDigestIncludesEffectiveHTTPDefaults(t *testing.T) {
+	compile := func(t *testing.T, baseURL, header string) *Schema {
+		t.Helper()
+		spec, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"properties":{
+				"base_url":{"type":"string","default":` + mustJSONLiteral(t, baseURL) + `},
+				"provider_header":{"type":"string","default":` + mustJSONLiteral(t, header) + `}
+			}
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		return spec
+	}
+	bundle := Bundle{
+		Name: "acme",
+		Spec: compile(t, "https://api-one.example.test", "one"),
+		HTTP: HTTPBase{
+			URL: "{{ config.base_url }}", UserAgent: "acme-agent-one",
+			Headers: map[string]string{"X-Provider": "{{ config.provider_header }}"},
+		},
+		Writes: []WriteAction{{
+			Name: "apply_widget", Method: http.MethodPost, Path: "/widgets", BodyType: "json",
+			RecordSchema: json.RawMessage(`{"type":"object","properties":{"id":{"type":"string"}}}`),
+		}},
+	}
+	baseline, err := declarativeTypedDestinationActionDigest(bundle, "apply_widget")
+	if err != nil {
+		t.Fatalf("baseline action digest: %v", err)
+	}
+	changedAgent := bundle
+	changedAgent.HTTP.UserAgent = "acme-agent-two"
+	agentDigest, err := declarativeTypedDestinationActionDigest(changedAgent, "apply_widget")
+	if err != nil {
+		t.Fatalf("user-agent action digest: %v", err)
+	}
+	if agentDigest == baseline {
+		t.Fatal("changed HTTP user agent preserved action digest")
+	}
+	changedDefaults := bundle
+	changedDefaults.Spec = compile(t, "https://api-two.example.test", "two")
+	defaultDigest, err := declarativeTypedDestinationActionDigest(changedDefaults, "apply_widget")
+	if err != nil {
+		t.Fatalf("default action digest: %v", err)
+	}
+	if defaultDigest == baseline {
+		t.Fatal("changed request defaults preserved action digest")
+	}
+}
+
+func mustJSONLiteral(t *testing.T, value string) string {
+	t.Helper()
+	raw, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("json.Marshal: %v", err)
+	}
+	return string(raw)
+}
+
 // Base itself is NOT asserted against connectors.Connector or
 // connectors.ManifestProvider: per API-CONTRACT.md §2, Tier-3 natives that
 // embed it supply Check/Catalog/Read/Write themselves and are not required to

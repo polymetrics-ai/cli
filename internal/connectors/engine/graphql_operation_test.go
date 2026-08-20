@@ -685,19 +685,25 @@ func TestOperationDirectWriteFailsClosedOnGraphQLErrors(t *testing.T) {
 	req.PreviewDigest = preview.Digest
 	req.Approval = approvedEvidenceForPreview(t, preview)
 	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
-	if err == nil || !strings.Contains(err.Error(), "graphql errors") {
+	if err == nil || !strings.Contains(strings.ToLower(err.Error()), "graphql") {
 		t.Fatalf("OperationDirectWrite error = %v, want GraphQL error rejection", err)
+	}
+	if strings.Contains(err.Error(), "mutation denied") {
+		t.Fatal("OperationDirectWrite error leaked a provider GraphQL detail")
 	}
 	body, ok := result.Body.(map[string]any)
 	if !result.ResponseReceived || !result.BodyPresent || !ok || body["errors"] == nil || result.GraphQL == nil || len(result.GraphQL.Errors) != 1 {
-		t.Fatalf("GraphQL failed-write result = %#v, want complete received envelope and metadata", result)
+		t.Fatal("GraphQL failed-write result did not retain the received envelope and metadata")
+	}
+	if got := result.GraphQL.Errors[0].Message; got != "mutation denied" {
+		t.Fatalf("GraphQL provider error metadata = %q, want exact provider value", got)
 	}
 	if calls != 1 {
 		t.Fatalf("GraphQL error test calls = %d, want exactly one approved request", calls)
 	}
 }
 
-func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
+func TestOperationDirectWriteRetainsTerminalGraphQLHTTPResponse(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calls++
@@ -722,22 +728,22 @@ func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	}
 	req.PreviewDigest = preview.Digest
 	req.Approval = approvedEvidenceForPreview(t, preview)
-	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
 	if err == nil {
-		t.Fatal("OperationDirectWrite error = nil, want redacted GraphQL HTTP error")
+		t.Fatal("OperationDirectWrite error = nil, want GraphQL HTTP error")
 	}
 	if strings.Contains(err.Error(), "fake-test-value") {
-		t.Fatalf("GraphQL HTTP error leaked provider body value: %v", err)
+		t.Fatal("GraphQL HTTP error leaked a provider body value")
 	}
-	if !strings.Contains(err.Error(), "[redacted]") {
-		t.Fatalf("GraphQL HTTP error = %v, want redaction marker", err)
+	if !result.ResponseReceived || result.Status != http.StatusBadRequest || result.BodyRaw != `{"message":"access_token=fake-test-value"}` {
+		t.Fatal("GraphQL terminal response did not retain the complete provider response")
 	}
 	if calls != 1 {
 		t.Fatalf("GraphQL HTTP error calls = %d, want exactly one approved request", calls)
 	}
 }
 
-func TestOperationDirectWriteSecretOperationRetainsProviderErrors(t *testing.T) {
+func TestOperationDirectWriteSecretOperationRetainsProviderResponses(t *testing.T) {
 	const sensitiveValue = "provider-echoed-github-pat"
 	for _, tt := range []struct {
 		name       string
@@ -780,15 +786,15 @@ func TestOperationDirectWriteSecretOperationRetainsProviderErrors(t *testing.T) 
 			}
 			req.PreviewDigest = preview.Digest
 			req.Approval = approvedEvidenceForPreview(t, preview)
-			_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
 			if err == nil {
 				t.Fatal("OperationDirectWrite error = nil, want provider failure")
 			}
-			if !strings.Contains(err.Error(), sensitiveValue) {
-				t.Fatal("OperationDirectWrite did not retain the complete provider error")
+			if strings.Contains(err.Error(), sensitiveValue) {
+				t.Fatal("OperationDirectWrite leaked a provider response through its synthetic error")
 			}
-			if strings.Contains(err.Error(), "redacted") {
-				t.Fatal("OperationDirectWrite redacted a secret-operation provider error")
+			if !result.ResponseReceived || result.BodyRaw != tt.body {
+				t.Fatal("OperationDirectWrite result did not retain the exact provider response")
 			}
 			if calls != 1 {
 				t.Fatalf("provider error calls = %d, want exactly one approved request", calls)

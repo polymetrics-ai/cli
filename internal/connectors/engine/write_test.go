@@ -14,6 +14,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -787,8 +788,11 @@ func TestWriteGraphQLErrorsFailClosed(t *testing.T) {
 	if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
 		t.Fatalf("result = %+v, want 0 written / 1 failed", result)
 	}
-	if !strings.Contains(strings.ToLower(err.Error()), "graphql") || !strings.Contains(err.Error(), "cannot delete issue") {
-		t.Fatalf("error = %q, want GraphQL error details", err.Error())
+	if !strings.Contains(strings.ToLower(err.Error()), "graphql") || strings.Contains(err.Error(), "cannot delete issue") {
+		t.Fatalf("error = %q, want a generic GraphQL failure", err.Error())
+	}
+	if len(result.ProviderResponses) != 1 || result.ProviderResponses[0].Status != http.StatusOK || result.ProviderResponses[0].Body != `{"errors":[{"message":"cannot delete issue"}],"data":{"deleteIssue":null}}` {
+		t.Fatalf("GraphQL failed-write provider result = %#v, want complete response envelope", result.ProviderResponses)
 	}
 }
 
@@ -1224,6 +1228,80 @@ func TestWriteRetainsOrderedProviderResponsesBeforeTrailingJSONFailure(t *testin
 	}
 	if second := result.ProviderResponses[1]; second.RecordIndex != 1 || second.BodyEncoding != "text" || second.Body != `{"provider_id":"second"} trailing` {
 		t.Fatalf("second provider response = %#v, want complete raw trailing response", second)
+	}
+}
+
+func TestWriteRetainsTerminalProviderResponse(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Add("X-Provider-Receipt", "receipt-one")
+		w.Header().Add("X-Provider-Receipt", "receipt-two")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"provider_echo":"client-secret","provider_id":9007199254740993}`))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := newWriteTestBundle(srv, WriteAction{
+		Kind:         "update",
+		Method:       http.MethodPost,
+		Path:         "/widgets/{{ record.id }}",
+		PathFields:   []string{"id"},
+		RedactFields: []string{"token"},
+		Confirm:      "destructive",
+		RecordSchema: json.RawMessage(`{"type":"object","required":["id","token"],"properties":{"id":{"type":"string"},"token":{"type":"string"}}}`),
+	})
+	records := []connectors.Record{{"id": "widget-1", "token": "client-secret"}}
+	result, err := Write(context.Background(), bundle, approvedWriteRequest(t, bundle, "update_widget", records, nil), records, nil)
+	if err == nil {
+		t.Fatal("Write() error = nil, want terminal provider failure")
+	}
+	if strings.Contains(err.Error(), "client-secret") {
+		t.Fatal("Write() error leaked a provider response")
+	}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 1 || len(result.ProviderResponses) != 1 {
+		t.Fatal("terminal write result did not retain one failed response")
+	}
+	provider := result.ProviderResponses[0]
+	if provider.RecordIndex != 0 || provider.Status != http.StatusBadRequest || !reflect.DeepEqual(provider.Headers["X-Provider-Receipt"].Values, []string{"receipt-one", "receipt-two"}) {
+		t.Fatal("terminal provider response did not retain status and receipt")
+	}
+	body, ok := provider.Body.(map[string]any)
+	if !ok || body["provider_echo"] != "client-secret" || body["provider_id"] != json.Number("9007199254740993") {
+		t.Fatal("terminal provider body did not retain exact provider facts")
+	}
+}
+
+func TestWritePreservesExplicitNonJSONProviderResponses(t *testing.T) {
+	for _, testCase := range []struct {
+		name        string
+		contentType string
+		response    []byte
+		body        any
+		encoding    string
+	}{
+		{name: "starts with t", contentType: "text/plain", response: []byte("thanks"), body: "thanks", encoding: "text"},
+		{name: "starts with f", contentType: "text/plain", response: []byte("false"), body: "false", encoding: "text"},
+		{name: "starts with n", contentType: "text/plain", response: []byte("null"), body: "null", encoding: "text"},
+		{name: "starts with digit", contentType: "text/plain", response: []byte("123"), body: "123", encoding: "text"},
+		{name: "starts with brace", contentType: "text/plain", response: []byte(`{"provider":"text"}`), body: `{"provider":"text"}`, encoding: "text"},
+		{name: "starts with bracket", contentType: "text/plain", response: []byte(`["provider","text"]`), body: `["provider","text"]`, encoding: "text"},
+		{name: "json-looking media type", contentType: "application/jsonish", response: []byte(`{"provider":"text"}`), body: `{"provider":"text"}`, encoding: "text"},
+		{name: "binary", contentType: "application/octet-stream", response: []byte{0xff, 0x00, 0x80}, body: base64.StdEncoding.EncodeToString([]byte{0xff, 0x00, 0x80}), encoding: "base64"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", testCase.contentType)
+				_, _ = w.Write(testCase.response)
+			}))
+			t.Cleanup(srv.Close)
+			bundle := newWriteTestBundle(srv, WriteAction{Kind: "update", Method: http.MethodPost, Path: "/widgets/{{ record.id }}", PathFields: []string{"id"}})
+			result, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{{"id": "widget-1"}}, nil)
+			if err != nil {
+				t.Fatalf("Write(): %v", err)
+			}
+			if result.RecordsWritten != 1 || len(result.ProviderResponses) != 1 || result.ProviderResponses[0].BodyEncoding != testCase.encoding || !reflect.DeepEqual(result.ProviderResponses[0].Body, testCase.body) {
+				t.Fatal("non-JSON provider result did not retain raw response bytes")
+			}
+		})
 	}
 }
 

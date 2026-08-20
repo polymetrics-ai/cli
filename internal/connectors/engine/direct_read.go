@@ -133,7 +133,8 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		if errors.As(err, &pageErr) {
 			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read pagination: %w", pageErr.err)
 		}
-		if resp == nil {
+		var providerHTTPError *connsdk.HTTPError
+		if resp == nil || errors.As(err, &providerHTTPError) {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			msg := completeEngineErrorText(err)
 			if hint != "" {
@@ -312,7 +313,8 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		if errors.As(err, &pageErr) {
 			return connectors.DirectReadResult{}, fmt.Errorf("direct read pagination: %w", pageErr.err)
 		}
-		if resp == nil {
+		var providerHTTPError *connsdk.HTTPError
+		if resp == nil || errors.As(err, &providerHTTPError) {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			msg := completeEngineErrorText(err)
 			if hint != "" {

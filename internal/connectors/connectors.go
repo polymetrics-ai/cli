@@ -2,10 +2,8 @@ package connectors
 
 import (
 	"bufio"
-	"bytes"
 	"context"
 	"crypto/sha256"
-	"encoding/base64"
 	"encoding/csv"
 	"encoding/json"
 	"errors"
@@ -480,9 +478,7 @@ type GraphQLResponseMetadata struct {
 	RateLimit   *GraphQLRateLimit    `json:"rate_limit,omitempty"`
 }
 
-// GraphQLResultError intentionally carries only a sanitized, bounded message.
-// Provider extensions and paths may echo caller inputs or internal identifiers,
-// so neither is a CLI response contract.
+// GraphQLResultError reports one provider GraphQL error.
 type GraphQLResultError struct {
 	Message string `json:"message"`
 }
@@ -856,35 +852,16 @@ type WriteProviderHeader struct {
 	Masked bool     `json:"masked,omitempty"`
 }
 
-// SanitizeWriteResultForOutput retains every normal provider result field for
+// SanitizeWriteResultForOutput preserves provider responses exactly for
 // persisted App/CLI output.
-func SanitizeWriteResultForOutput(result WriteResult, secrets map[string]string) WriteResult {
-	clone := result
-	if len(result.ProviderResponses) == 0 {
-		return clone
-	}
-	secretValues := configuredWriteResultSecrets(secrets)
-	clone.ProviderResponses = make([]WriteProviderResponse, len(result.ProviderResponses))
-	for index, response := range result.ProviderResponses {
-		copy := response
-		copy.Headers = sanitizeWriteProviderHeaders(response.Headers, secretValues)
-		copy.Body = redactWriteResultValue(response.Body, secretValues)
-		clone.ProviderResponses[index] = copy
-	}
-	return clone
+func SanitizeWriteResultForOutput(result WriteResult, _ map[string]string) WriteResult {
+	return result
 }
 
-// SanitizeOperationDirectWriteResultForOutput applies the same explicit
-// credential boundary to an already named operation result.
-func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, secrets map[string]string) OperationDirectWriteResult {
-	clone := result
-	secretValues := configuredWriteResultSecrets(secrets)
-	clone.Headers = sanitizeWriteProviderHeaders(result.Headers, secretValues)
-	clone.Body = redactWriteResultValue(result.Body, secretValues)
-	clone.BodyRaw = redactOperationDirectWriteRawBody(result.BodyRaw, result.BodyRawEncoding, secretValues)
-	clone.GraphQL = sanitizeGraphQLResponseMetadata(result.GraphQL, secretValues)
-	clone.OutputSecretFields = nil
-	return clone
+// SanitizeOperationDirectWriteResultForOutput preserves an already named
+// operation result exactly.
+func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, _ map[string]string) OperationDirectWriteResult {
+	return result
 }
 
 func SanitizeWriteErrorForOutput(err error, secrets map[string]string) string {
@@ -916,92 +893,11 @@ func configuredWriteResultSecrets(secrets map[string]string) []string {
 	return values
 }
 
-func sanitizeWriteProviderHeaders(headers map[string]WriteProviderHeader, secretValues []string) map[string]WriteProviderHeader {
-	if len(headers) == 0 {
-		return nil
-	}
-	clone := make(map[string]WriteProviderHeader, len(headers))
-	for name, header := range headers {
-		values := make([]string, len(header.Values))
-		masked := header.Masked
-		for index, value := range header.Values {
-			redacted := redactWriteResultString(value, secretValues)
-			if redacted != value {
-				masked = true
-			}
-			values[index] = redacted
-		}
-		clone[name] = WriteProviderHeader{Values: values, Masked: masked}
-	}
-	return clone
-}
-
-func redactWriteResultValue(value any, secrets []string) any {
-	switch typed := value.(type) {
-	case string:
-		return redactWriteResultString(typed, secrets)
-	case map[string]any:
-		clone := make(map[string]any, len(typed))
-		for key, child := range typed {
-			clone[key] = redactWriteResultValue(child, secrets)
-		}
-		return clone
-	case []any:
-		clone := make([]any, len(typed))
-		for index, child := range typed {
-			clone[index] = redactWriteResultValue(child, secrets)
-		}
-		return clone
-	case []string:
-		clone := make([]string, len(typed))
-		for index, child := range typed {
-			clone[index] = redactWriteResultString(child, secrets)
-		}
-		return clone
-	default:
-		return value
-	}
-}
-
 func redactWriteResultString(value string, secrets []string) string {
 	for _, secret := range secrets {
 		value = strings.ReplaceAll(value, secret, "[masked]")
 	}
 	return value
-}
-
-func redactOperationDirectWriteRawBody(raw, encoding string, secrets []string) string {
-	if raw == "" {
-		return ""
-	}
-	if encoding == "base64" {
-		body, err := base64.StdEncoding.DecodeString(raw)
-		if err != nil {
-			return redactWriteResultString(raw, secrets)
-		}
-		for _, secret := range secrets {
-			body = bytes.ReplaceAll(body, []byte(secret), []byte("[masked]"))
-		}
-		return base64.StdEncoding.EncodeToString(body)
-	}
-	return redactWriteResultString(raw, secrets)
-}
-
-func sanitizeGraphQLResponseMetadata(metadata *GraphQLResponseMetadata, secrets []string) *GraphQLResponseMetadata {
-	if metadata == nil {
-		return nil
-	}
-	clone := *metadata
-	clone.Errors = make([]GraphQLResultError, len(metadata.Errors))
-	for index, item := range metadata.Errors {
-		clone.Errors[index] = GraphQLResultError{Message: redactWriteResultString(item.Message, secrets)}
-	}
-	if metadata.RateLimit != nil {
-		rateLimit := *metadata.RateLimit
-		rateLimit.ResetAt = redactWriteResultString(rateLimit.ResetAt, secrets)
-		clone.RateLimit = &rateLimit
-	}
-	return &clone
 }
 
 type QueryRequest struct {

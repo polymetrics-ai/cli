@@ -12,6 +12,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/connectors/transportpolicy"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/synctransport"
 )
@@ -243,7 +244,7 @@ func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Conte
 	if err := contract.connector.ValidateWrite(ctx, writeRequest, records); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("validate declarative typed destination action %q: %w", writeRequest.Action, err)
 	}
-	result, err := contract.connector.Write(ctx, writeRequest, records)
+	result, err := contract.connector.Write(transportpolicy.MarkDestructive(ctx), writeRequest, records)
 	output, outputErr := json.Marshal(connectors.SanitizeWriteResultForOutput(result, request.Runtime.Secrets))
 	if outputErr != nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("encode declarative typed destination action %q output: %w", writeRequest.Action, outputErr)

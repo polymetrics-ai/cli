@@ -3103,8 +3103,7 @@ func (a *App) finishReverseWrite(planID string, run ReverseRun, result connector
 
 // finishOperationDirectWrite preserves the direct-write error text in its
 // persisted report. Both direct and ordinary typed reverse-ETL results retain
-// complete provider output through their closed result contracts; the only
-// output transformation is explicit credential masking.
+// complete provider output through their closed result contracts.
 func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error) (ReverseRun, error) {
 	return a.finishReverseWriteWithErrorText(planID, run, result, runtime, staged, writeErr, func(err error) string {
 		return connectors.SanitizeWriteErrorForOutput(err, runtime.Secrets)
