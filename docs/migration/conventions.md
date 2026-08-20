@@ -402,9 +402,12 @@ not a full override by default.
   required record field, an undeclared query key, a wrong source (for example `query.*` in place of
   `record.*`), malformed interpolation, and an explicit invalid value still fail before I/O.
   Config, secret, and incremental references retain their established object-form omission/default
-  behavior; they do not satisfy a missing `record.*` reference. The caller cannot provide free-form
+  behavior; they do not satisfy a missing `record.*` reference. Every template expression is
+  validated before the record-absence decision, so an absent record value cannot hide a later invalid
+  or wrong-source reference. The caller cannot provide free-form
   query values: an explicit record value is sent only through its exact declared query entry. Do not
-  use this rule for operation direct writes or as a generic query escape hatch.
+  use this rule for operation direct writes or as a generic query escape hatch. A direct-write
+  `query.<name>` flag may occur once; aliases count as the same source-declared query input.
 - **`api_surface` operation rows are reconciled, never hand-edited**: use
   `go run ./cmd/connectorgen surface-reconcile --check` to derive the current
   result for direct-read operation rows. The tool loads the disk bundle and

@@ -1416,6 +1416,11 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 // may name the exact maps_to value "body", and the engine subsequently admits
 // it only for its declared text/plain root-string contract.
 func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, *string, error) {
+	if cmd.Intent == "direct_write" {
+		if err := validateOperationDirectWriteQueryOccurrences(cmd, flags); err != nil {
+			return nil, nil, nil, nil, err
+		}
+	}
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
@@ -1481,6 +1486,41 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "raw body cannot mix with JSON body fields"}
 	}
 	return pathParams, query, body, rawBody, nil
+}
+
+func validateOperationDirectWriteQueryOccurrences(cmd connectors.CommandSurfaceCommand, flags map[string][]string) error {
+	allowed := make(map[string]connectors.CommandSurfaceFlag, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		allowed[flag.Name] = flag
+	}
+	names := make([]string, 0, len(flags))
+	for name := range flags {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	seen := make(map[string]string)
+	for _, name := range names {
+		values := flags[name]
+		if len(values) == 0 {
+			continue
+		}
+		flag, ok := allowed[name]
+		if !ok {
+			continue
+		}
+		target, isQuery := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "query.")
+		if !isQuery {
+			continue
+		}
+		if len(values) > 1 {
+			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("query parameter %q was supplied more than once via --%s", target, name)}
+		}
+		if previous, duplicate := seen[target]; duplicate {
+			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("query parameter %q was supplied more than once via --%s and --%s", target, previous, name)}
+		}
+		seen[target] = name
+	}
+	return nil
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {
