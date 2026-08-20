@@ -491,3 +491,72 @@ func TestOperationDirectWriteRefusesRedirectReplay(t *testing.T) {
 		t.Fatalf("redirect calls = total %d / followed %d, want exactly 1 / 0", calls, redirectedCalls)
 	}
 }
+
+func TestOperationDirectWriteRejectsUndeclaredRequestBindingsBeforeIO(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		bundle  func(string) Bundle
+		request func() connectors.OperationDirectWriteRequest
+		wantErr string
+	}{
+		{
+			name:   "undeclared path parameter",
+			bundle: structuredRESTBodyBundle,
+			request: func() connectors.OperationDirectWriteRequest {
+				req := structuredRESTBodyRequest()
+				req.PathParams["undeclared"] = "override"
+				return req
+			},
+			wantErr: "not declared by rest.path",
+		},
+		{
+			name: "open scalar nesting",
+			bundle: func(baseURL string) Bundle {
+				bundle := structuredRESTBodyBundle(baseURL)
+				rest := *bundle.Operations[0].REST
+				rest.BodySchema = json.RawMessage(`{"type":"object","properties":{"payload":{}}}`)
+				bundle.Operations[0].REST = &rest
+				return bundle
+			},
+			request: func() connectors.OperationDirectWriteRequest {
+				req := structuredRESTBodyRequest()
+				req.Body = map[string]any{"payload": map[string]any{"undeclared": "value"}}
+				return req
+			},
+			wantErr: "does not permit a nested object",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				calls++
+			}))
+			t.Cleanup(server.Close)
+
+			_, err := OperationDirectWrite(context.Background(), tc.bundle(server.URL), tc.request(), nil)
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("OperationDirectWrite error = %v, want %q", err, tc.wantErr)
+			}
+			if calls != 0 {
+				t.Fatalf("rejected binding reached provider; calls = %d", calls)
+			}
+		})
+	}
+}
+
+func TestPreviewOperationDirectWriteDoesNotExposeSecretFilterValues(t *testing.T) {
+	const secret = "secret-canary-preview"
+	bundle := structuredRESTBodyBundle("https://example.invalid/{{ secrets.token | unix_seconds }}")
+	request := structuredRESTBodyRequest()
+	request.Config.Secrets = map[string]string{"token": secret}
+	_, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil {
+		t.Fatal("PreviewOperationDirectWrite error = nil, want secret filter rejection")
+	}
+	if strings.Contains(err.Error(), secret) {
+		t.Fatalf("PreviewOperationDirectWrite error exposed secret value: %v", err)
+	}
+	if !strings.Contains(err.Error(), "secrets.token") {
+		t.Fatalf("PreviewOperationDirectWrite error = %v, want secret reference", err)
+	}
+}

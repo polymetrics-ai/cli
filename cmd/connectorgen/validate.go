@@ -1036,6 +1036,25 @@ func checkCLISurfaceGraphQLOperationSafety(
 				Message:   fmt.Sprintf("implemented GraphQL mutation command %d (%q) operation %q is not executable: %v", i, cmd.Path, cmd.Operation, err),
 			})
 		}
+		pathFields := make([]string, 0, len(cmd.Flags))
+		bodyFields := make([]string, 0, len(cmd.Flags))
+		for _, flag := range cmd.Flags {
+			mapsTo := strings.TrimSpace(flag.MapsTo)
+			switch {
+			case strings.HasPrefix(mapsTo, "path."):
+				pathFields = append(pathFields, strings.TrimPrefix(mapsTo, "path."))
+			case strings.HasPrefix(mapsTo, "body."):
+				bodyFields = append(bodyFields, strings.TrimPrefix(mapsTo, "body."))
+			}
+		}
+		if err := engine.ValidateOperationDirectWriteMappings(op, pathFields, bodyFields); err != nil {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented GraphQL mutation command %d (%q) operation %q has invalid caller bindings: %v", i, cmd.Path, op.ID, err),
+			})
+		}
 	default:
 		return []Finding{{
 			Connector: b.Name,
@@ -1251,23 +1270,24 @@ func checkCLISurfaceDirectWriteOperationSafety(
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) output_policy %q must match operation policy %q", i, cmd.Path, cmd.OutputPolicy, op.OutputPolicy)})
 	}
 
-	bodyMapped := false
 	queryFields := make([]string, 0, len(cmd.Flags))
+	pathFields := make([]string, 0, len(cmd.Flags))
+	bodyFields := make([]string, 0, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
 		switch {
 		case strings.HasPrefix(mapsTo, "path."):
-			// Typed path bindings are supported by the shared operation shaper.
+			pathFields = append(pathFields, strings.TrimPrefix(mapsTo, "path."))
 		case strings.HasPrefix(mapsTo, "query."):
 			queryFields = append(queryFields, strings.TrimPrefix(mapsTo, "query."))
 		case strings.HasPrefix(mapsTo, "body."):
-			bodyMapped = true
+			bodyFields = append(bodyFields, strings.TrimPrefix(mapsTo, "body."))
 		default:
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
 		}
 	}
-	if bodyMapped && len(op.REST.BodySchema) == 0 {
-		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) maps flags to body but operation %q has no body_schema", i, cmd.Path, op.ID)})
+	if err := engine.ValidateOperationDirectWriteMappings(op, pathFields, bodyFields); err != nil {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q has invalid caller bindings: %v", i, cmd.Path, op.ID, err)})
 	}
 	if len(op.REST.BodySchema) > 0 {
 		findings = append(findings, checkCLISurfaceOperationBodyMappingsForIntent(b, i, cmd, op, "direct write")...)

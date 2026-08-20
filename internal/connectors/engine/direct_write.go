@@ -307,6 +307,335 @@ func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, ou
 	return validateOperationDirectWriteQueryFields(op, queryFields)
 }
 
+func PreflightOperationDirectWriteBindings(b Bundle, operation string, pathFields, bodyFields []string) error {
+	op, _, err := operationDirectWriteSpec(b, operation)
+	if err != nil {
+		return err
+	}
+	return ValidateOperationDirectWriteMappings(op, pathFields, bodyFields)
+}
+
+func ValidateOperationDirectWriteMappings(op OperationSpec, pathFields, bodyFields []string) error {
+	switch op.Kind {
+	case "rest_write":
+		if op.REST == nil {
+			return fmt.Errorf("operation %q has no rest declaration", op.ID)
+		}
+		if err := validateOperationDirectWritePathFields(op, pathFields); err != nil {
+			return err
+		}
+		return validateOperationDirectWriteBodyFields(op, bodyFields)
+	case "graphql_mutation":
+		return validateOperationDirectWriteGraphQLVariableFields(op, pathFields, bodyFields)
+	default:
+		if len(pathFields) == 0 && len(bodyFields) == 0 {
+			return nil
+		}
+		return fmt.Errorf("operation %q does not permit caller path or body fields", op.ID)
+	}
+}
+
+func validateOperationDirectWriteGraphQLVariableFields(op OperationSpec, pathFields, bodyFields []string) error {
+	if len(pathFields) != 0 {
+		return fmt.Errorf("operation %q fixed GraphQL mutation does not accept path fields", op.ID)
+	}
+	if op.GraphQL == nil {
+		return fmt.Errorf("operation %q has no GraphQL declaration", op.ID)
+	}
+	_, root, err := graphQLOperationVariablesSchema(op)
+	if err != nil {
+		return err
+	}
+	properties, ok := root["properties"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("operation %q graphql.variables_schema must declare properties", op.ID)
+	}
+	seen := make(map[string]struct{}, len(bodyFields))
+	for _, field := range bodyFields {
+		if !graphQLNamePattern.MatchString(field) {
+			return fmt.Errorf("operation %q GraphQL variable field %q must be a top-level GraphQL variable", op.ID, field)
+		}
+		if _, duplicate := seen[field]; duplicate {
+			return fmt.Errorf("operation %q maps more than one command flag to GraphQL variable %q", op.ID, field)
+		}
+		seen[field] = struct{}{}
+		if _, declared := properties[field]; !declared {
+			return fmt.Errorf("operation %q GraphQL variable %q is not declared", op.ID, field)
+		}
+	}
+	return nil
+}
+
+func operationDirectWritePathParameterNames(op OperationSpec) (map[string]struct{}, error) {
+	if op.REST == nil {
+		return nil, fmt.Errorf("operation %q has no rest declaration", op.ID)
+	}
+	path := op.REST.Path
+	remaining := surfacePathVarPattern.ReplaceAllString(path, "")
+	if strings.ContainsAny(remaining, "{}") {
+		return nil, fmt.Errorf("operation %q has malformed path template %q", op.ID, path)
+	}
+	names := make(map[string]struct{})
+	for _, match := range surfacePathVarPattern.FindAllStringSubmatch(path, -1) {
+		if len(match) != 2 {
+			continue
+		}
+		name := match[1]
+		if err := safety.ValidateIdentifier(name, "operation path parameter"); err != nil {
+			return nil, fmt.Errorf("operation %q path parameter: %w", op.ID, err)
+		}
+		names[name] = struct{}{}
+	}
+	return names, nil
+}
+
+func validateOperationDirectWritePathFields(op OperationSpec, pathFields []string) error {
+	declared, err := operationDirectWritePathParameterNames(op)
+	if err != nil {
+		return err
+	}
+	seen := make(map[string]struct{}, len(pathFields))
+	for _, field := range pathFields {
+		if err := safety.ValidateIdentifier(field, "operation path field"); err != nil {
+			return fmt.Errorf("operation %q path field: %w", op.ID, err)
+		}
+		if _, duplicate := seen[field]; duplicate {
+			return fmt.Errorf("operation %q maps more than one command flag to path parameter %q", op.ID, field)
+		}
+		seen[field] = struct{}{}
+		if _, ok := declared[field]; !ok {
+			return fmt.Errorf("operation %q path parameter %q is not declared by rest.path", op.ID, field)
+		}
+	}
+	return nil
+}
+
+func validateOperationDirectWritePathParams(op OperationSpec, pathParams map[string]string) error {
+	if len(pathParams) == 0 {
+		return nil
+	}
+	fields := make([]string, 0, len(pathParams))
+	for field := range pathParams {
+		fields = append(fields, field)
+	}
+	sort.Strings(fields)
+	return validateOperationDirectWritePathFields(op, fields)
+}
+
+func operationDirectWriteBodySchemaRoot(op OperationSpec) (map[string]any, error) {
+	if op.REST == nil || len(op.REST.BodySchema) == 0 {
+		return nil, fmt.Errorf("operation %q does not declare body_schema", op.ID)
+	}
+	var root map[string]any
+	if err := json.Unmarshal(op.REST.BodySchema, &root); err != nil {
+		return nil, fmt.Errorf("operation %q body_schema is not an object: %w", op.ID, err)
+	}
+	if root == nil {
+		return nil, fmt.Errorf("operation %q body_schema must be an object", op.ID)
+	}
+	return root, nil
+}
+
+func validateOperationDirectWriteBodyFields(op OperationSpec, bodyFields []string) error {
+	if len(bodyFields) == 0 {
+		return nil
+	}
+	root, err := operationDirectWriteBodySchemaRoot(op)
+	if err != nil {
+		return err
+	}
+	seen := make([]string, 0, len(bodyFields))
+	for _, field := range bodyFields {
+		if _, err := operationDirectWriteBodySchemaPath(root, field); err != nil {
+			return fmt.Errorf("operation %q body field %q: %w", op.ID, field, err)
+		}
+		for _, previous := range seen {
+			if field == previous || strings.HasPrefix(field, previous+".") || strings.HasPrefix(previous, field+".") {
+				return fmt.Errorf("operation %q maps overlapping body fields %q and %q", op.ID, previous, field)
+			}
+		}
+		seen = append(seen, field)
+	}
+	return nil
+}
+
+func operationDirectWriteBodySchemaPath(root map[string]any, path string) (map[string]any, error) {
+	if path == "" {
+		return nil, fmt.Errorf("body field is required")
+	}
+	current := root
+	for _, part := range strings.Split(path, ".") {
+		object, array := operationDirectWriteBodyNodeKinds(current)
+		if object && array {
+			return nil, fmt.Errorf("declared schema is ambiguous at %q", part)
+		}
+		if array {
+			index, err := operationDirectWriteBodyArrayIndex(part)
+			if err != nil {
+				return nil, err
+			}
+			next, err := operationDirectWriteBodyArrayItemSchema(current, index)
+			if err != nil {
+				return nil, err
+			}
+			current = next
+			continue
+		}
+		if !object {
+			return nil, fmt.Errorf("descends into scalar schema at %q", part)
+		}
+		if err := safety.ValidateIdentifier(part, "body field segment"); err != nil {
+			return nil, err
+		}
+		properties, ok := current["properties"].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("does not declare nested body fields at %q", part)
+		}
+		raw, ok := properties[part]
+		if !ok {
+			return nil, fmt.Errorf("additional property %q is not declared", part)
+		}
+		next, ok := raw.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("declared schema for %q must be an object", part)
+		}
+		current = next
+	}
+	return current, nil
+}
+
+func operationDirectWriteBodyNodeKinds(node map[string]any) (object, array bool) {
+	object = isObjectType(node)
+	array = isArrayType(node)
+	if !object {
+		_, object = node["additionalProperties"]
+	}
+	if !array {
+		_, array = node["prefixItems"]
+	}
+	return object, array
+}
+
+func operationDirectWriteBodyArrayIndex(value string) (int, error) {
+	if value == "" {
+		return 0, fmt.Errorf("array body field index is required")
+	}
+	if len(value) > 1 && strings.HasPrefix(value, "0") {
+		return 0, fmt.Errorf("array body field index %q must not have leading zeroes", value)
+	}
+	for _, r := range value {
+		if r < '0' || r > '9' {
+			return 0, fmt.Errorf("array body field index %q must be numeric", value)
+		}
+	}
+	index, err := strconv.Atoi(value)
+	if err != nil {
+		return 0, fmt.Errorf("array body field index %q is invalid", value)
+	}
+	return index, nil
+}
+
+func operationDirectWriteBodyArrayItemSchema(node map[string]any, index int) (map[string]any, error) {
+	if rawMaxItems, ok := node["maxItems"]; ok {
+		maxItems, ok := rawMaxItems.(float64)
+		if !ok || math.Trunc(maxItems) != maxItems || maxItems < 0 {
+			return nil, fmt.Errorf("array body field has invalid maxItems")
+		}
+		if index >= int(maxItems) {
+			return nil, fmt.Errorf("array body field index %d exceeds declared maxItems %.0f", index, maxItems)
+		}
+	}
+	if rawPrefixItems, ok := node["prefixItems"]; ok {
+		prefixItems, ok := rawPrefixItems.([]any)
+		if !ok {
+			return nil, fmt.Errorf("prefixItems must be an array of schema objects")
+		}
+		if index < len(prefixItems) {
+			item, ok := prefixItems[index].(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("prefixItems/%d must be a schema object", index)
+			}
+			return item, nil
+		}
+	}
+	rawItems, ok := node["items"]
+	if !ok {
+		return nil, fmt.Errorf("array body field has no item schema")
+	}
+	items, ok := rawItems.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("array body field items must be a schema object")
+	}
+	return items, nil
+}
+
+func validateOperationDirectWriteBodyOverrides(op OperationSpec, overrides map[string]any) error {
+	if len(overrides) == 0 {
+		return nil
+	}
+	root, err := operationDirectWriteBodySchemaRoot(op)
+	if err != nil {
+		return err
+	}
+	names := make([]string, 0, len(overrides))
+	for name := range overrides {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		node, err := operationDirectWriteBodySchemaPath(root, name)
+		if err != nil {
+			return fmt.Errorf("operation %q body field %q: %w", op.ID, name, err)
+		}
+		if err := validateOperationDirectWriteBodyOverrideValue(node, overrides[name], name); err != nil {
+			return fmt.Errorf("operation %q body field %q: %w", op.ID, name, err)
+		}
+	}
+	return nil
+}
+
+func validateOperationDirectWriteBodyOverrideValue(node map[string]any, value any, path string) error {
+	if value == nil {
+		return nil
+	}
+	objectNode, arrayNode := operationDirectWriteBodyNodeKinds(node)
+	if object, ok := value.(map[string]any); ok {
+		if !objectNode || arrayNode {
+			return fmt.Errorf("does not permit a nested object")
+		}
+		names := make([]string, 0, len(object))
+		for name := range object {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		for _, name := range names {
+			next, err := operationDirectWriteBodySchemaPath(node, name)
+			if err != nil {
+				return err
+			}
+			if err := validateOperationDirectWriteBodyOverrideValue(next, object[name], path+"."+name); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	if values, ok := arrayElements(value); ok {
+		if !arrayNode || objectNode {
+			return fmt.Errorf("does not permit a nested array")
+		}
+		for index, item := range values {
+			next, err := operationDirectWriteBodyArrayItemSchema(node, index)
+			if err != nil {
+				return err
+			}
+			if err := validateOperationDirectWriteBodyOverrideValue(next, item, fmt.Sprintf("%s.%d", path, index)); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 func operationDirectWriteRedactFields(op OperationSpec) []string {
 	if op.SensitivePolicy == nil {
 		return nil
@@ -369,6 +698,9 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	}
 	if op.Kind == "graphql_mutation" {
 		return prepareOperationGraphQLDirectWrite(b, op, method, req)
+	}
+	if err := validateOperationDirectWritePathParams(op, req.PathParams); err != nil {
+		return preparedOperationDirectWrite{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
 	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
@@ -598,6 +930,9 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 		if _, err := operationDirectWriteQueryParameters(op); err != nil {
 			return OperationSpec{}, "", err
 		}
+		if _, _, err := operationDirectWriteContentType(op, map[string]any{"declared": true}); err != nil {
+			return OperationSpec{}, "", err
+		}
 		return op, method, nil
 	case "graphql_mutation":
 		if err := validateGraphQLOperationDirectContract(op, "mutation"); err != nil {
@@ -654,12 +989,35 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 	if op.REST == nil {
 		return nil, nil
 	}
+	structured := operationDirectWriteUsesJSONBody(op) && operationHasStructuredRESTBodyField(op)
+	canonicalOverrides := cloneAnyMap(overrides)
+	if len(canonicalOverrides) > 0 {
+		if len(op.REST.BodySchema) == 0 {
+			return nil, fmt.Errorf("operation %q does not permit caller body fields without body_schema", op.ID)
+		}
+		if operationDirectWriteUsesJSONBody(op) {
+			normalized, err := normalizeStructuredRESTBodyValue(canonicalOverrides, "body")
+			if err != nil {
+				return nil, fmt.Errorf("operation %q: %w", op.ID, err)
+			}
+			var ok bool
+			canonicalOverrides, ok = normalized.(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("operation %q: body must be an object", op.ID)
+			}
+		}
+		if !structured {
+			if err := validateOperationDirectWriteBodyOverrides(op, canonicalOverrides); err != nil {
+				return nil, err
+			}
+		}
+	}
 	body := cloneAnyMap(op.REST.Body)
-	for key, value := range overrides {
+	for key, value := range canonicalOverrides {
 		body[key] = value
 	}
 	if len(op.REST.BodySchema) > 0 {
-		if _, _, err := operationStructuredJSONContentType(op); err == nil && op.REST.Multipart == nil && (operationHasStructuredRESTBodyField(op) || operationHasStructuredRESTBodyValue(body)) {
+		if structured {
 			canonical, err := materializeStructuredRESTBody(op, body)
 			if err != nil {
 				return nil, err
@@ -679,6 +1037,14 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 		return nil, nil
 	}
 	return body, nil
+}
+
+func operationDirectWriteUsesJSONBody(op OperationSpec) bool {
+	if op.REST == nil || op.REST.Multipart != nil {
+		return false
+	}
+	_, _, err := operationStructuredJSONContentType(op)
+	return err == nil
 }
 
 func operationDirectWriteQueryParameters(op OperationSpec) (map[string]OperationParameter, error) {

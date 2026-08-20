@@ -770,6 +770,96 @@ func TestCheckCLISurfaceDirectWriteQueryBindings(t *testing.T) {
 	}
 }
 
+func TestCheckCLISurfaceDirectWriteRequiresDeclaredPathAndBodyMappings(t *testing.T) {
+	batchable := false
+	op := engine.OperationSpec{
+		ID:            "cli-surface.widgets.configure",
+		Kind:          "rest_write",
+		Risk:          "high",
+		Approval:      "plan-preview-confirm-execute",
+		OutputPolicy:  "json",
+		MutationClass: "update",
+		Batchable:     &batchable,
+		REST: &engine.RESTOperationSpec{
+			Method:      "POST",
+			Path:        "/widgets/{id}",
+			ContentType: "application/json",
+			MaxBytes:    1024,
+			BodySchema:  json.RawMessage(`{"type":"object","properties":{"payload":{"type":"object","properties":{"name":{"type":"string"}}}}}`),
+		},
+	}
+	baseCommand := engine.CLICommand{
+		Path:         "widget configure",
+		Intent:       "direct_write",
+		Availability: "implemented",
+		Operation:    op.ID,
+		APISurface:   []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/widgets/{id}"}},
+		OutputPolicy: "json",
+		Flags: []engine.CLIFlag{
+			{Name: "id", Type: "string", MapsTo: "path.id"},
+			{Name: "name", Type: "string", MapsTo: "body.payload.name"},
+		},
+	}
+	for _, tc := range []struct {
+		name   string
+		mutate func(*engine.CLICommand)
+		want   string
+	}{
+		{name: "declared mappings pass"},
+		{
+			name: "undeclared path mapping",
+			mutate: func(command *engine.CLICommand) {
+				command.Flags[0].MapsTo = "path.undeclared"
+			},
+			want: "not declared by rest.path",
+		},
+		{
+			name: "undeclared body mapping",
+			mutate: func(command *engine.CLICommand) {
+				command.Flags[1].MapsTo = "body.payload.undeclared"
+			},
+			want: "additional property",
+		},
+		{
+			name: "open scalar descent",
+			mutate: func(command *engine.CLICommand) {
+				command.Flags[1].MapsTo = "body.payload.name.value"
+			},
+			want: "descends into scalar",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			command := baseCommand
+			command.Flags = append([]engine.CLIFlag(nil), baseCommand.Flags...)
+			if tc.mutate != nil {
+				tc.mutate(&command)
+			}
+			bundle := engine.Bundle{
+				Name:       "cli-surface",
+				Operations: []engine.OperationSpec{op},
+				Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+					Method:    "POST",
+					Path:      "/widgets/{id}",
+					Operation: &engine.SurfaceOperation{Model: "write"},
+				}}},
+			}
+			findings := checkCLISurfaceDirectWriteOperationSafety(bundle, 0, command, op)
+			if tc.want == "" {
+				if len(findings) != 0 {
+					t.Fatalf("findings = %+v, want none", findings)
+				}
+				return
+			}
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, tc.want) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want %q", findings, tc.want)
+		})
+	}
+}
+
 func TestValidate_CLISurfaceDirectWriteStructuredRESTBodyRequiresClosedBoundedDeclaration(t *testing.T) {
 	newBundle := func(bodySchema, mapsTo string) fstest.MapFS {
 		fsys := directWriteCLISurfaceBundleFS()

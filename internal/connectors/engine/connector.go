@@ -287,6 +287,10 @@ func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outpu
 	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy, queryFields...)
 }
 
+func (c *Connector) PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error {
+	return PreflightOperationDirectWriteBindings(c.bundle, operation, pathFields, bodyFields)
+}
+
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	var result connectors.WritePreview
 	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
@@ -496,6 +500,10 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 // operation direct-write binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error {
 	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy, queryFields...)
+}
+
+func (b Base) PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error {
+	return PreflightOperationDirectWriteBindings(b.bundle, operation, pathFields, bodyFields)
 }
 
 // PreflightOperationStructuredJSONBodyField validates a native connector's
