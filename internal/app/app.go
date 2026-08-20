@@ -1354,9 +1354,25 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		checkpoint := req.rateParkingResumeCheckpoint.Clone()
 		rateParkingResumeCheckpoint = &checkpoint
 	}
-	runID, err := prefixedID("run")
-	if err != nil {
-		return Run{}, err
+	runID := req.rateParkingRearmAttemptRunID
+	if runID == "" {
+		var err error
+		runID, err = prefixedID("run")
+		if err != nil {
+			return Run{}, err
+		}
+	} else {
+		parkedRunID, resuming := rateParkingResumeRunID(ctx)
+		if !resuming || parkedRunID == runID {
+			return Run{}, errors.New("rate-limit rearm attempt is not linked to a parked run")
+		}
+		parkedRun, found := a.runByID(parkedRunID)
+		if !found || parkedRun.RateParkingRearmAttemptRunID != runID {
+			return Run{}, errors.New("rate-limit rearm attempt link is unavailable")
+		}
+		if _, found := a.runByID(runID); found {
+			return Run{}, errors.New("rate-limit rearm attempt run already exists")
+		}
 	}
 	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", BatchSize: batchSize, StartedAt: time.Now().UTC()}
 	if _, err := a.beginRun(run); err != nil {

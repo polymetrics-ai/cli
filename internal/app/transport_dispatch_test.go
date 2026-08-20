@@ -388,6 +388,142 @@ func TestParkedFullAppendRateResumeRearmsLatestCheckpoint(t *testing.T) {
 	}
 }
 
+func TestParkedFullAppendRateResumeReconcilesInterruptedRearmAttempt(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	fixture.app.rateParking.Close()
+	now := time.Date(2026, time.August, 20, 13, 0, 0, 0, time.UTC)
+	firstReset := now.Add(time.Minute)
+	secondReset := now.Add(2 * time.Minute)
+	scheduler := &appRateParkingTestScheduler{}
+	parkingStore := coordination.NewMemoryRateParkingStore()
+	fixture.app.rateParking = coordination.NewRateParkingCoordinator(coordination.RateParkingCoordinatorOptions{
+		Store:     parkingStore,
+		Scheduler: scheduler,
+		Now:       func() time.Time { return now },
+		Resume:    fixture.app.resumeParkedRateLimitRun,
+	})
+	if err := fixture.app.rateParking.Start(context.Background()); err != nil {
+		t.Fatalf("start test rate parking: %v", err)
+	}
+	t.Cleanup(fixture.app.rateParking.Close)
+	fixture.source.rateLimitScope = "transport-source-rate-limit"
+	first := fixture.sourceExecutor.page
+	completed := fixture.sourceExecutor.page
+	completed.Records = []connectors.Record{{"id": "3", "provider": "completed"}}
+	completed.CandidateCheckpoint.Position.Primary = synccontract.OpaqueToken("3")
+	completed.CandidateCheckpoint.Position.TieBreaker = synccontract.OpaqueToken("3")
+	rateOne := &connsdk.RateLimitError{
+		HTTPError: &connsdk.HTTPError{Status: http.StatusTooManyRequests, URL: "https://provider.invalid/records"},
+		Source:    connsdk.RateLimitObservationSourceRetryAfter,
+		HasReset:  true,
+		ResetAt:   firstReset,
+	}
+	rateTwo := &connsdk.RateLimitError{
+		HTTPError: &connsdk.HTTPError{Status: http.StatusTooManyRequests, URL: "https://provider.invalid/records"},
+		Source:    connsdk.RateLimitObservationSourceHeaders,
+		HasReset:  true,
+		ResetAt:   secondReset,
+	}
+	var resumedCheckpoint *synccontract.CheckpointEnvelope
+	fixture.sourceExecutor.read = func(_ context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+		switch fixture.sourceExecutor.readCalls {
+		case 1:
+			if request.Checkpoint != nil {
+				return errors.New("initial full-append request unexpectedly used a checkpoint")
+			}
+			if err := emit(first); err != nil {
+				return err
+			}
+			return rateOne
+		case 2:
+			if !transportCheckpointEqual(request.Checkpoint, resumedCheckpoint) {
+				return fmt.Errorf("reconciled resume checkpoint = %#v, want %#v", request.Checkpoint, resumedCheckpoint)
+			}
+			return rateTwo
+		case 3:
+			if !transportCheckpointEqual(request.Checkpoint, resumedCheckpoint) {
+				return fmt.Errorf("rearmed resume checkpoint = %#v, want %#v", request.Checkpoint, resumedCheckpoint)
+			}
+			return emit(completed)
+		default:
+			return fmt.Errorf("unexpected source read %d", fixture.sourceExecutor.readCalls)
+		}
+	}
+
+	parked, err := fixture.app.RunETL(context.Background(), RunETLRequest{
+		Connection: fixture.connection, Stream: "records", BatchSize: 1,
+	})
+	if !errors.Is(err, coordination.ErrRateLimitParked) {
+		t.Fatalf("initial RunETL() error = %v, want rate-limit parking", err)
+	}
+	interruptedCheckpoint := fixture.app.state.StreamStates[streamStateKey(fixture.connection, "records")].Checkpoint.Clone()
+	interruptedCheckpoint.Position.Primary = synccontract.OpaqueToken("2")
+	interruptedCheckpoint.Position.TieBreaker = synccontract.OpaqueToken("2")
+	interruptedCheckpoint.ObservedAt = interruptedCheckpoint.ObservedAt.Add(time.Second)
+	interruptedAt := interruptedCheckpoint.ObservedAt.Add(time.Second)
+	interruptedCheckpoint.CommittedAt = &interruptedAt
+	resumed := interruptedCheckpoint.Clone()
+	resumedCheckpoint = &resumed
+	staleAttemptID, err := prefixedID("run")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := fixture.app.persistRateParkingRearmAttemptLink(parked.ID, staleAttemptID); err != nil {
+		t.Fatalf("persist interrupted rearm link: %v", err)
+	}
+	if _, err := fixture.app.beginRun(Run{
+		ID: staleAttemptID, Type: "etl", Connection: fixture.connection, Stream: "records", Status: "running", BatchSize: 1, StartedAt: time.Now().UTC(),
+	}); err != nil {
+		t.Fatalf("begin interrupted rearm attempt: %v", err)
+	}
+	if _, err := fixture.app.updateState(func(current state) (state, error) {
+		stream := current.StreamStates[streamStateKey(fixture.connection, "records")]
+		stream.Checkpoint = &interruptedCheckpoint
+		stream.LastSuccessfulRunID = staleAttemptID
+		stream.RecordsLoaded = 1
+		stream.UpdatedAt = interruptedAt
+		current.StreamStates[streamStateKey(fixture.connection, "records")] = stream
+		return current, nil
+	}); err != nil {
+		t.Fatalf("persist interrupted checkpoint: %v", err)
+	}
+
+	now = firstReset
+	scheduler.RunThrough(now)
+	records, err := parkingStore.List()
+	if err != nil || len(records) != 1 || records[0].RunID != parked.ID {
+		t.Fatalf("rearmed parking records = %#v, %v; want original run", records, err)
+	}
+	if !records[0].ResetAt.Equal(secondReset) || records[0].Reason != connsdk.RateLimitObservationSourceHeaders || !transportCheckpointEqual(&records[0].Checkpoint, resumedCheckpoint) {
+		t.Fatalf("rearmed parking record = %#v, want interrupted checkpoint and second reset", records[0])
+	}
+	staleAttempt, found := fixture.app.runByID(staleAttemptID)
+	if !found || staleAttempt.Status != "failed" || staleAttempt.Error != rateParkingRearmInterruptedError || staleAttempt.CompletedAt.IsZero() {
+		t.Fatalf("interrupted rearm attempt = %#v, want terminal interruption", staleAttempt)
+	}
+	original, found := fixture.app.runByID(parked.ID)
+	if !found || original.Status != string(coordination.RateParkingOutcomeParkedRateLimit) || original.RateParkingRearmAttemptRunID == "" || original.RateParkingRearmAttemptRunID == staleAttemptID {
+		t.Fatalf("original parked run = %#v, want linked rearmed attempt", original)
+	}
+	rearmedAttempt, found := fixture.app.runByID(original.RateParkingRearmAttemptRunID)
+	if !found || rearmedAttempt.Status != "failed" || rearmedAttempt.Error != coordination.ErrRateLimitRearmed.Error() || rearmedAttempt.CompletedAt.IsZero() {
+		t.Fatalf("rearmed attempt = %#v, want terminal rearm", rearmedAttempt)
+	}
+
+	now = secondReset
+	scheduler.RunThrough(now)
+	if fixture.sourceExecutor.readCalls != 3 || fixture.destinationExecutor.applyCalls != 2 {
+		t.Fatalf("source/apply calls = %d/%d, want 3/2", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls)
+	}
+	if records, err := parkingStore.List(); err != nil || len(records) != 0 {
+		t.Fatalf("parking records after rearmed recovery = %#v, %v; want none", records, err)
+	}
+	original, found = fixture.app.runByID(parked.ID)
+	if !found || original.Status != "resumed" || original.RateParkingRearmAttemptRunID != "" {
+		t.Fatalf("original parked run = %#v, want resumed with cleared rearm link", original)
+	}
+}
+
 func TestParkRateLimitedRunPersistsOnlyDeclarativeTypedDestinationPlanID(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
 	t.Cleanup(fixture.app.rateParking.Close)
