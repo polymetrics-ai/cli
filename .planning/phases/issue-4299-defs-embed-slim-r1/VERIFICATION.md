@@ -1,8 +1,90 @@
 # Verification checklist — issue #4299 definition embed slim
 
-Status: independent-review remediation in progress; focused release and
-installed-binary evidence is complete, with the full repository gates and
-post-push review/check monitoring still required.
+Status: Verify CI toolchain remediation locally complete; post-push latest-run
+monitoring and the documented independent-review handoff remain required.
+
+## Verify CI toolchain remediation — completed local execution
+
+GitHub Verify run `32321756934` failed after reaching the real
+`release-installed-github-certification.sh` gate. The test builds and assembles
+the host `linux/amd64` artifact; Linux target selection deliberately also
+builds its deb/rpm packages, so the assembler correctly refuses to proceed
+without `nfpm` on `PATH`. The existing Verify job ran `make verify` without
+provisioning that pinned tool. The repair must be a red workflow-contract test
+followed by the repository-pinned `nfpm@v2.43.0` setup in that owning job, not a
+target substitution, synthetic archive, or relaxed gate. Results will be
+recorded below after execution.
+
+Completed focused red/green evidence:
+
+```text
+Red:   bash scripts/tests/verify-release-tooling.sh
+       verify release tooling check failed: Verify job must provision pinned nfpm before make verify
+Green: bash scripts/tests/verify-release-tooling.sh
+       verify release tooling: nfpm is provisioned in the owning Verify job
+Green: make release-workflow-check
+       release size budget guard passed
+       release production layout passed
+       installed GitHub certification archive proof passed
+```
+
+The workflow green step installs exactly `nfpm@v2.43.0`, exposes `GOPATH/bin`
+through `GITHUB_PATH` before `make verify`, and directly executes that installed
+binary. The workflow-contract test is included in `release-workflow-check`, so
+a future removal, unpinned version, missing PATH export, or reordering after
+`make verify` fails before the production release proof can silently rely on an
+ambient runner tool.
+
+Post-fix repository validation on 2026-08-20:
+
+```text
+go test -timeout 20m ./...                         PASS
+go vet ./...                                       PASS
+make release-workflow-check                        PASS
+make lint                                           PASS (0 issues)
+make docs-check                                     PASS
+make tidy-check                                     PASS
+make smoke-no-build                                 PASS
+make agent-contract-check                           PASS
+make connectorgen-validate                          PASS (552 connectors, 0 findings)
+make connectorgen-surface-sync                      PASS (552 connectors, 0 changes)
+make github-parity-artifacts-check                  PASS
+make connectorgen-certification-matrix              PASS
+make connectorgen-certification-candidates          PASS
+make connectorgen-certification-sweep               PASS
+make connector-runtime-preflight                    PASS
+make connector-boundary                             PASS (clean; 293 files, 552 connectors)
+make connector-canon-check                          PASS
+scripts/verify-gsd-workflow origin/main             PASS
+```
+
+Changed-workflow validation is layered: the new workflow-contract test parses
+the actual `verify.yml` job and is run both directly and through
+`release-workflow-check`; the existing pinned-build-dependencies validator also
+passed from that gate. No credentials, live provider request, altered source
+lock, connector definition, relaxed release target, fake archive, or ambient
+`nfpm` dependency was used.
+
+## Inline GSD code review — 2026-08-20
+
+The generated `code-review` prompt was executed inline because the repository
+single-worker contract forbids reviewer-role spawning. Reviewed the workflow,
+Makefile wiring, new workflow-contract test, and evidence records together:
+
+- The job-local `nfpm@v2.43.0` installation precedes the only `make verify`
+  step, exports `GOPATH/bin` through GitHub's supported `GITHUB_PATH` channel,
+  and directly invokes the installed binary before the downstream step can use
+  it.
+- The regression test fails closed for missing setup, an unpinned install,
+  missing PATH publication, absent direct executable confirmation, or setup
+  ordered after `make verify`; it is itself wired into the release gate.
+- The actual host Linux archive continues to assemble packages and execute the
+  extracted binary outside the checkout. No failure is hidden by a fallback,
+  skip, allow-failure setting, synthetic asset, or ambient tool.
+- The raw GitHub exception, connector definitions, operation ledgers, command
+  surface, result behavior, and source locks are not in this repair diff.
+
+Result: no actionable finding.
 
 Remediation gates completed locally on 2026-08-20:
 

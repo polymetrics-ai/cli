@@ -3,7 +3,7 @@
   "issue": 4299,
   "branch": "fm/cli-defs-embed-slim-r1",
   "base": "origin/main",
-  "status": "pr_open_pending_automatic_review",
+  "status": "verify_toolchain_remediation_locally_verified_pending_pr_checks",
   "gsd": {
     "doctor": "passed",
     "mode": "manual_inline_fallback",
@@ -22,11 +22,12 @@
     "lazyLoading": "deferred"
   },
   "verification": {
-    "full_test_suite": "passed: go test -timeout 20m ./...",
-    "connector_boundary": "passed: clean, 552 connectors, 0 findings",
-    "generator_checks": "passed",
-    "release_size_guard": "passed",
-    "manual_review": "clean; claude_auto pending for PR #4309"
+    "release_size_guard": "passed: make release-workflow-check includes archive layout, budget, and extracted installed GitHub certification",
+    "verify_toolchain": "passed: Verify job provisions nfpm@v2.43.0 before make verify; workflow-contract red/green evidence recorded",
+    "full_test_suite": "passed after Verify toolchain remediation: go test -timeout 20m ./...",
+    "connector_boundary": "passed after Verify toolchain remediation: clean, 293 files, 552 connectors, 0 findings",
+    "generator_checks": "passed after Verify toolchain remediation",
+    "manual_review": "passed: inline GSD code review found no actionable issue; documented independent-review fallback required after checks"
   },
   "pull_request": {
     "number": 4309,

@@ -150,6 +150,7 @@ pinned-build-dependencies-check:
 release-workflow-check: pinned-build-dependencies-check
 	./scripts/tests/homebrew-release-notify.sh
 	./scripts/tests/release-target-parity.sh
+	./scripts/tests/verify-release-tooling.sh
 	./scripts/tests/release-size-budget.sh
 	./scripts/tests/release-production-layout.sh
 	./scripts/tests/release-installed-github-certification.sh

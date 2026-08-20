@@ -119,3 +119,53 @@ would have let the release verifier reject a freshly produced asset.
 - The PR package workflow now invokes the real verifier on the Linux archive
   and package assets it assembled, after installing the RPM metadata reader
   needed by that verifier.
+
+## PR #4309 Verify CI toolchain remediation
+
+### Planned red/green contract
+
+| Contract | Red evidence | Green assertion | Status |
+| --- | --- | --- | --- |
+| The Verify job owns every tool required by `make verify` | `scripts/tests/verify-release-tooling.sh` failed because the job lacked pinned `nfpm` setup before `make verify` | The job installs `nfpm@v2.43.0`, publishes `GOPATH/bin` with `GITHUB_PATH`, and invokes the exact binary before `make verify` | Green |
+| The installed-binary archive proof stays real | The failed run 32321756934 reached `release-installed-github-certification.sh` and stopped at assembler package selection without `nfpm` | `make release-workflow-check` executed real assembly, verification, size checks, and extracted GitHub certification after tool setup | Green |
+
+### Red
+
+Red: `bash scripts/tests/verify-release-tooling.sh`
+
+```text
+verify release tooling check failed: Verify job must provision pinned nfpm before make verify
+```
+
+The check reads the real `.github/workflows/verify.yml` job. It failed before
+the workflow edit, matching GitHub run `32321756934`: `make verify` entered the
+actual installed-binary proof, whose host `linux/amd64` archive correctly also
+selects Linux packages, and the assembler refused an ambient/missing `nfpm`.
+
+### Green
+
+Green: `bash scripts/tests/verify-release-tooling.sh`
+
+```text
+verify release tooling: nfpm is provisioned in the owning Verify job
+```
+
+The Verify job now installs exactly
+`github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0`, publishes its `GOPATH/bin`
+for the subsequent `make verify` step, and directly runs the installed binary
+before continuing. The workflow-contract test is part of
+`make release-workflow-check`.
+
+Green: `make release-workflow-check`
+
+```text
+verify release tooling: nfpm is provisioned in the owning Verify job
+release size budget guard passed
+release production layout passed
+installed GitHub certification archive proof passed
+```
+
+This is still the real host Linux archive path: it assembles packages through
+the pinned `nfpm` prerequisite, verifies the archive layout and budgets, then
+extracts and executes `pm` outside the checkout. No target, package, archive,
+or installed-binary assertion was skipped or fabricated.

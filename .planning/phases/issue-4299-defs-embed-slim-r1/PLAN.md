@@ -37,6 +37,28 @@
 | A PR cannot miss producer/verifier disagreement | live | `make release-workflow-check` runs the production-layout script and the PR Linux package job runs `verify-release-assets.sh` against its assembled assets. |
 | Installed GitHub certification is actually executable outside checkout | live | The extracted assembled `pm`, running from an initialized temporary project, reports the embedded GraphQL boundary counts `29/2/274` without an adjacent checkout or credentials. |
 
+## Verify CI toolchain remediation Task Delivery Header — 2026-08-20
+
+- Issue: Refs #4299 — perf(defs): stop embedding connector source locks in the shipped binary; PR #4309 Verify-job packaging-tool remediation.
+- Base branch: main (PR #4309 targets `main`; branch head before this slice is `290d005cfcd27ff9faa2520c5bdbf02ea7780eb0`).
+- Merges into: main.
+- Delivery: Update the existing PR #4309 from `fm/cli-defs-embed-slim-r1` with a non-force push only after the latest Verify and package-check runs are terminal and green.
+- Working branch: fm/cli-defs-embed-slim-r1.
+- Task: Make the Verify job hermetically provision the repository-pinned `nfpm` prerequisite before it runs `make verify`, retaining the real Linux production archive and extracted installed-binary certification proof.
+- Verification: First run a workflow-contract test that fails because the current Verify job has no pinned `nfpm` setup. Then add only the owning-job setup, rerun the workflow-contract and real release gates, and run all affected full-repository checks and GitHub validation.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Verify cannot depend on an ambient `nfpm` binary | live | A repository workflow-contract test fails unless the `verify` job installs `github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0`, publishes `GOPATH/bin` through `GITHUB_PATH`, and confirms the exact executable before its `make verify` step. |
+| Installed binary proof remains production-real | live | `make release-workflow-check` runs the current real assembler, real archive verifier/size guard, and extracted installed `pm` certification; no test target or archive is skipped or fabricated. |
+
+### Toolchain remediation TDD plan
+
+| Order | Slice | Red evidence first | Green implementation | Guard |
+| --- | --- | --- | --- | --- |
+| 1 | Verify-job prerequisite | New workflow-contract test fails because the existing `verify` job runs `make verify` without a pinned `nfpm` setup | Provision `nfpm@v2.43.0`, publish `GOPATH/bin`, and run the installed binary before `make verify` | Keep release/package jobs self-contained; do not add an ambient-tool fallback or skip Linux packaging. |
+| 2 | Production regression proof | The failed GitHub run proves the actual host archive path reaches assembler package selection with no `nfpm` | Run release-workflow-check and all prescribed local/CI gates after the targeted configuration green step | Retain real archive layout, package, and installed-binary assertions unchanged. |
+
 ### Remediation TDD plan
 
 | Order | Slice | Red evidence first | Green implementation | Guard |
