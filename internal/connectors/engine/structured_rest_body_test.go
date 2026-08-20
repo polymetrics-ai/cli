@@ -419,13 +419,18 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls++
 		if got := r.URL.Query().Get("api_key"); got != token {
-			t.Errorf("api_key = %q, want preview-bound value", got)
+			t.Error("api_key did not match the preview-bound authentication value")
+		}
+		if got := r.Header.Get("X-Auth"); got != token {
+			t.Error("header did not use the preview-bound authentication query value")
 		}
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"ok":true}`))
 	}))
 	t.Cleanup(server.Close)
 	bundle := structuredRESTBodyBundle(server.URL)
+	bundle.Operations[0].REST.Parameters = append(bundle.Operations[0].REST.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string", Required: true})
+	bundle.HTTP.Headers["X-Auth"] = "{{ query.api_key }}"
 	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "{{ secrets.api_key }}"}}
 	request := structuredRESTBodyRequest()
 	request.Config.Secrets = map[string]string{"api_key": token}
@@ -440,6 +445,9 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	if got := prepared.query.Get("api_key"); got != token {
 		t.Fatalf("prepared api_key = %q, want exact bound value", got)
 	}
+	if got := prepared.prepared.Requests[0].Headers["X-Auth"]; got != token {
+		t.Fatal("prepared header did not bind the final authentication query value")
+	}
 	request.Approval = approvedEvidenceForPreview(t, preview)
 	request.PreviewDigest = preview.Digest
 	if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err != nil {
@@ -447,6 +455,70 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	}
 	if calls != 1 {
 		t.Fatalf("calls = %d, want one bound request", calls)
+	}
+	collision := structuredRESTBodyRequest()
+	collision.Config.Secrets = map[string]string{"api_key": token}
+	collision.Query["api_key"] = "caller-value"
+	if _, err := PreviewOperationDirectWrite(context.Background(), bundle, collision, nil); err == nil || !strings.Contains(err.Error(), "collides") {
+		t.Fatal("caller API key query override did not fail before transport")
+	}
+	if calls != 1 {
+		t.Fatalf("caller API key collision reached provider; calls = %d", calls)
+	}
+}
+
+func TestOperationDirectWriteRedactsNestedStructuredBodyValuesInSystemErrors(t *testing.T) {
+	const token = "nested-sensitive-canary"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatal("decode request body")
+		}
+		targets, ok := body["targets"].([]any)
+		if !ok || len(targets) != 1 {
+			t.Error("provider did not receive the declared nested target")
+		} else if target, ok := targets[0].(map[string]any); !ok || target["token"] != token {
+			t.Error("provider did not receive the reconstituted nested token")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]string{"error": token})
+	}))
+	t.Cleanup(server.Close)
+	bundle := structuredRESTBodyBundle(server.URL)
+	bundle.Operations[0].REST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["targets"],
+		"properties":{"targets":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"object","additionalProperties":false,"required":["id","token"],"properties":{"id":{"type":"string"},"token":{"type":"string"}}}}}
+	}`)
+	bundle.Operations[0].SensitivePolicy = &SensitivePolicySpec{RedactFields: []string{"body.targets.0.token"}}
+	request := structuredRESTBodyRequest()
+	request.Body = map[string]any{"targets": []any{map[string]any{"id": "target-1", "token": token}}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	request.Approval = approvedEvidenceForPreview(t, preview)
+	request.PreviewDigest = preview.Digest
+	_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want provider error")
+	}
+	if strings.Contains(err.Error(), token) {
+		t.Fatal("system-generated direct-write error leaked the nested sensitive value")
+	}
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) {
+		t.Fatal("provider response cause was not retained")
+	}
+	if !strings.Contains(httpErr.Body, token) {
+		t.Fatal("provider response cause lost the echoed provider body")
+	}
+	if calls != 1 {
+		t.Fatalf("calls = %d, want one provider request", calls)
 	}
 }
 
