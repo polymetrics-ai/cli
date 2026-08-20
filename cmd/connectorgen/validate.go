@@ -947,19 +947,27 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 		switch {
 		case cmd.Intent == "reverse_etl" && strings.TrimSpace(cmd.Write) != "" && strings.HasPrefix(flag.MapsTo, "record."):
 			continue
-		case (cmd.Intent == "direct_read" || cmd.Intent == "direct_write") && strings.TrimSpace(cmd.Operation) != "":
+		case cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "":
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
 			operation, found := operations[cmd.Operation]
 			if ok && variable != "" && !strings.Contains(variable, ".") && found {
-				if err := engine.ValidateGraphQLOperationStructuredJSONVariable(operation, variable); err == nil {
+				if err := engine.ValidateOperationStructuredJSONBodyField(operation, variable); err == nil {
 					continue
 				} else {
 					findings = append(findings, Finding{
 						Connector: b.Name,
 						File:      "cli_surface.json",
 						Rule:      ruleCLISurfaceSafety,
-						Message:   fmt.Sprintf("implemented command %d (%q) fixed GraphQL variable --%s is not declared safely: %v", i, cmd.Path, flag.Name, err),
+						Message:   fmt.Sprintf("implemented command %d (%q) operation body field --%s is not declared safely: %v", i, cmd.Path, flag.Name, err),
 					})
+					continue
+				}
+			}
+		case cmd.Intent == "direct_read" && strings.TrimSpace(cmd.Operation) != "":
+			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
+			operation, found := operations[cmd.Operation]
+			if ok && variable != "" && !strings.Contains(variable, ".") && found {
+				if err := engine.ValidateGraphQLOperationStructuredJSONVariable(operation, variable); err == nil {
 					continue
 				}
 			}
@@ -968,7 +976,7 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented command %d (%q) structured JSON flag --%s is allowed only on a declared reverse-ETL record field or fixed GraphQL variable", i, cmd.Path, flag.Name),
+			Message:   fmt.Sprintf("implemented command %d (%q) structured JSON flag --%s is allowed only on a declared reverse-ETL record field, fixed REST body field, or fixed GraphQL variable", i, cmd.Path, flag.Name),
 		})
 	}
 	return findings
@@ -1029,6 +1037,25 @@ func checkCLISurfaceGraphQLOperationSafety(
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceSafety,
 				Message:   fmt.Sprintf("implemented GraphQL mutation command %d (%q) operation %q is not executable: %v", i, cmd.Path, cmd.Operation, err),
+			})
+		}
+		pathFields := make([]string, 0, len(cmd.Flags))
+		bodyFields := make([]string, 0, len(cmd.Flags))
+		for _, flag := range cmd.Flags {
+			mapsTo := strings.TrimSpace(flag.MapsTo)
+			switch {
+			case strings.HasPrefix(mapsTo, "path."):
+				pathFields = append(pathFields, strings.TrimPrefix(mapsTo, "path."))
+			case strings.HasPrefix(mapsTo, "body."):
+				bodyFields = append(bodyFields, strings.TrimPrefix(mapsTo, "body."))
+			}
+		}
+		if err := engine.ValidateOperationDirectWriteMappings(op, pathFields, bodyFields); err != nil {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented GraphQL mutation command %d (%q) operation %q has invalid caller bindings: %v", i, cmd.Path, op.ID, err),
 			})
 		}
 	default:
@@ -1307,24 +1334,74 @@ func checkCLISurfaceDirectWriteOperationSafety(
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) output_policy %q must match operation policy %q", i, cmd.Path, cmd.OutputPolicy, op.OutputPolicy)})
 	}
 
-	bodyMapped := false
+	queryFields := make([]string, 0, len(cmd.Flags))
+	pathFields := make([]string, 0, len(cmd.Flags))
+	bodyFields := make([]string, 0, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
 		switch {
-		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."), strings.HasPrefix(mapsTo, "header."):
-			// Typed path/query bindings are supported by the shared operation
-			// shaper and validated again at command runtime.
+		case strings.HasPrefix(mapsTo, "path."):
+			pathFields = append(pathFields, strings.TrimPrefix(mapsTo, "path."))
+		case strings.HasPrefix(mapsTo, "query."):
+			queryFields = append(queryFields, strings.TrimPrefix(mapsTo, "query."))
+		case strings.HasPrefix(mapsTo, "header."):
+			// Typed declaration-owned headers are validated by the shared operation
+			// shaper before a request can reach the transport.
 		case strings.HasPrefix(mapsTo, "body."):
-			bodyMapped = true
+			bodyFields = append(bodyFields, strings.TrimPrefix(mapsTo, "body."))
 		default:
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
 		}
 	}
-	if bodyMapped && len(op.REST.BodySchema) == 0 {
-		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) maps flags to body but operation %q has no body_schema", i, cmd.Path, op.ID)})
+	if err := engine.ValidateOperationDirectWriteMappings(op, pathFields, bodyFields); err != nil {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q has invalid caller bindings: %v", i, cmd.Path, op.ID, err)})
 	}
-	if len(op.REST.BodySchema) > 0 {
+	if engine.OperationDirectWriteHasStructuredRESTBody(op) {
+		if err := engine.ValidateOperationDirectWriteCLIFlags(op, cmd.Flags); err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q has invalid canonical body projection: %v", i, cmd.Path, op.ID, err)})
+		}
+	} else if len(op.REST.BodySchema) > 0 {
 		findings = append(findings, checkCLISurfaceOperationBodyMappingsForIntent(b, i, cmd, op, "direct write")...)
+	}
+	findings = append(findings, checkCLISurfaceDirectWriteRequiredQueryMappings(b, i, cmd, op)...)
+	if len(cmd.APISurface) == 1 {
+		endpoint := cmd.APISurface[0]
+		if err := engine.PreflightOperationDirectWrite(b, cmd.Operation, endpoint.Method, endpoint.Path, cmd.OutputPolicy, queryFields...); err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q is not executable: %v", i, cmd.Path, cmd.Operation, err)})
+		}
+	}
+	return findings
+}
+
+func checkCLISurfaceDirectWriteRequiredQueryMappings(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	if op.REST == nil {
+		return nil
+	}
+	mapped := make(map[string][]engine.CLIFlag)
+	for _, flag := range cmd.Flags {
+		if name, ok := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "query."); ok {
+			mapped[name] = append(mapped[name], flag)
+		}
+	}
+	var findings []Finding
+	for _, parameter := range op.REST.Parameters {
+		if !parameter.Required || !strings.EqualFold(strings.TrimSpace(parameter.In), "query") {
+			continue
+		}
+		name := parameter.Name
+		if _, fixed := op.REST.Query[name]; fixed {
+			continue
+		}
+		flags := mapped[name]
+		if len(flags) == 0 {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q requires query.%s to be mapped", i, cmd.Path, op.ID, name)})
+			continue
+		}
+		for _, flag := range flags {
+			if !flag.Required {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flag --%s mapped to required query.%s must be required", i, cmd.Path, flag.Name, name)})
+			}
+		}
 	}
 	return findings
 }
@@ -1397,7 +1474,7 @@ func checkCLISurfaceOperationBodyMappingsForIntent(b engine.Bundle, i int, cmd e
 	for _, flag := range cmd.Flags {
 		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
 		if ok && target != "" {
-			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
+			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required, typeName: flag.Type})
 		}
 	}
 	var findings []Finding
@@ -1421,6 +1498,7 @@ type cliBodyFlagMapping struct {
 	target   string
 	name     string
 	required bool
+	typeName string
 }
 
 func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
@@ -1447,6 +1525,13 @@ func commandBodyFlagCoveringRequiredPath(schema *cliRecordSchemaNode, mappedTarg
 	optionalFound := false
 	for _, mapping := range mappedTargets {
 		covers := mapping.target == requiredPath
+		// A declaration-backed JSON flag supplies a whole closed, bounded
+		// object/array, including its required descendants. The separate shared
+		// structured-body validator proves this is not a scalar or arbitrary
+		// object before an implemented command can pass validation.
+		if !covers && mapping.typeName == "json" && dottedPathPrefix(mapping.target, requiredPath) {
+			covers = true
+		}
 		if !covers && err == nil && requiredNode != nil && (requiredNode.isObject() || requiredNode.isArray()) && dottedPathPrefix(requiredPath, mapping.target) {
 			covers = true
 		}

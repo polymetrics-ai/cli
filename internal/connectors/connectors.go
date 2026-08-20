@@ -687,10 +687,31 @@ type OperationDirectWriter interface {
 // OperationDirectWritePreflighter exposes the no-network admission check for
 // a command's exact direct-write binding. A command cannot be executable merely
 // because an operation has compatible metadata: its method, provider-relative
-// path, and output policy must match the fixed declaration that the runtime
-// will dispatch.
+// path, output policy, and query-field bindings must match the fixed
+// declaration that the runtime will dispatch.
 type OperationDirectWritePreflighter interface {
-	PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error
+	PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error
+}
+
+type OperationDirectWriteBindingPreflighter interface {
+	PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error
+}
+
+type OperationDirectWriteBodyMaterializer interface {
+	MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error)
+}
+
+type OperationDirectWriteBodyValueResolver interface {
+	ResolveOperationDirectWriteBodyValue(operation string, body map[string]any, path string) (any, bool, error)
+}
+
+// OperationStructuredJSONBodyPreflighter proves that one named top-level
+// operation body field is a closed, bounded object or array in the operation
+// declaration. It deliberately accepts neither a raw body nor a dotted path:
+// command runners use it before parsing a json flag so source declarations,
+// not callers, own the resulting request structure.
+type OperationStructuredJSONBodyPreflighter interface {
+	PreflightOperationStructuredJSONBodyField(operation, field string) error
 }
 
 // OperationDirectWriteMetadataProvider exposes the plan-safe metadata for a

@@ -370,6 +370,60 @@ not a full override by default.
   so preflight fails closed if a shipped bundle has no matching projection entry. The shared-code boundary guard
   (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
   defs/hooks/native escape hatches.
+- **Structured REST JSON direct writes are a closed operation adoption**: this foundation does not
+  make an endpoint executable by itself. A connector lane may bind a provider-sourced
+  `kind:"rest_write"` operation only when its `rest` declaration fixes the method,
+  connector-relative path, JSON (or SCIM JSON) content type, positive `max_bytes`, and a
+  `body_schema`. The root and every nested object must declare
+  `"additionalProperties": false`; every array must declare `maxItems` and an item schema. A
+  structural node may omit `type` only when its shape is unambiguous: `properties` or
+  `additionalProperties` normalizes it to `object`, while `items` or `prefixItems` normalizes it to
+  `array`. An untyped node with both object and array structure, or a structural declaration that
+  conflicts with its explicit type, is a foundation gap and is rejected before I/O. `prefixItems`
+  must cover every allowed position or pair with `items` to constrain the remaining positions. The
+  engine additionally refuses a schema deeper than 16 levels, with more than 256 object fields, or
+  more than 1024 allowed collection items, and enforces aggregate node and byte limits before it
+  copies or serializes caller values. Each `type:"json"` flag may target one declared object or
+  array node at `maps_to:"body.<schema-path>"`, including a nested node. The schema-path is resolved
+  against the operation schema rather than split as an open dotted key: object segments match
+  declared provider property names, array segments are declared numeric item positions, and the
+  schema determines whether a numeric-looking segment is an object property or array index. Keep
+  scalar fields as their normal typed flags; raw `body`, method, path, content-type, action,
+  connector, or header inputs are not legal command targets. Mark a structured field required when
+  it supplies a required schema branch. `connectorgen validate`, runtime preflight, and the shared engine
+  materializer verify the same declaration before I/O, and preview/approval binds the resulting
+  canonical payload and declaration-owned headers. Header values are represented by a canonical
+  hash rather than rendered in previews or errors, then dispatched without re-resolution after
+  approval. This is also the canonical materializer used by typed-action/reverse-ETL
+  execution; do not add a second request builder. A `path.<name>` mapping must match an exact
+  `{name}` route placeholder, while every scalar or nested `body.<path>` mapping must resolve
+  through declared object properties or array item schemas (including any declared bounds); a caller cannot introduce an
+  open scalar/object branch or replace route metadata. Each adoption must still run `surface-sync`, add
+  provider-source evidence, update its generated help/manual/website surfaces, and prove its own
+  exact request and rejected-input cases. A direct-write `query.<name>` binding must match one
+  exact source-imported `rest.parameters` query row; a provider-fixed `rest.query` value cannot be
+  caller-bound or overridden, and each source-required query parameter must be fixed or mapped to
+  a required command flag.
+- **Write-query optionality is source-locked too**: a legacy `writes.json` action may use the
+  existing object-form `query` entry with `"template":"{{ record.field }}"` and
+  `"omit_when_absent": true` to omit that one parameter when the record does not contain the
+  field. This is the only write-side record-absence exception. A plain-string entry, a missing
+  required record field, an undeclared query key, a wrong source (for example `query.*` in place of
+  `record.*`), malformed interpolation, and an explicit invalid value still fail before I/O.
+  Config, secret, and incremental references retain their established object-form omission/default
+  behavior; they do not satisfy a missing `record.*` reference. Every template expression is
+  validated before the record-absence decision, so an absent record value cannot hide a later invalid
+  or wrong-source reference. Write-query templates use a deterministic delimiter parser: nested,
+  stray, or unbalanced delimiters, empty expressions, and empty filter stages are rejected before
+  resolution. `record.*` may use a dotted record path; every other permitted namespace uses its exact
+  declaration-owned reference shape, and `query.*`, `cursor`, and `fanout.*` are not valid write
+  sources. The validated token stream is also the rendered value, so no accepted delimiter or
+  multiline form can be sent literally; identifiers and resolved/default values reject controls,
+  bidi characters, and other unsafe transport bytes. Filter errors from a `secrets.*` reference
+  identify the reference and filter but never its resolved value. The caller cannot provide free-form
+  query values: an explicit record value is sent only through its exact declared query entry. Do not
+  use this rule for operation direct writes or as a generic query escape hatch. A direct-write
+  `query.<name>` flag may occur once; aliases count as the same source-declared query input.
 - **`api_surface` operation rows are reconciled, never hand-edited**: use
   `go run ./cmd/connectorgen surface-reconcile --check` to derive the current
   result for direct-read operation rows. The tool loads the disk bundle and

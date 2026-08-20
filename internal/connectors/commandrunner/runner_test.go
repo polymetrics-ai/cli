@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 	"testing"
@@ -34,6 +35,9 @@ type fakeConnector struct {
 	operationDirectWriteReq    connectors.OperationDirectWriteRequest
 	operationWritePreflight    operationDirectWritePreflightCall
 	operationWritePreflightErr error
+	operationWriteBindings     operationDirectWriteBindingPreflightCall
+	operationWriteBindingsErr  error
+	operationWriteMaterialize  func(string, map[string]any) (map[string]any, error)
 	directWriteMetadata        connectors.OperationDirectWriteMetadata
 	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
 	statusCheckReq             connectors.OperationStatusCheckRequest
@@ -83,6 +87,12 @@ type operationStatusCheckPreflightCall struct {
 	method       string
 	path         string
 	outputPolicy string
+}
+
+type operationDirectWriteBindingPreflightCall struct {
+	operation  string
+	pathFields []string
+	bodyFields []string
 }
 
 type preflightFakeConnector struct {
@@ -173,7 +183,7 @@ func (f *fakeConnector) PreflightOperationStructuredJSONVariable(operation, vari
 	f.operationJSONVariable = operationStructuredJSONVariablePreflightCall{operation: operation, variable: variable}
 	return f.operationJSONVariableErr
 }
-func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, _ ...string) error {
 	f.operationWritePreflight = operationDirectWritePreflightCall{
 		operation:    operation,
 		method:       method,
@@ -181,6 +191,37 @@ func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, o
 		outputPolicy: outputPolicy,
 	}
 	return f.operationWritePreflightErr
+}
+func (f *fakeConnector) PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error {
+	f.operationWriteBindings = operationDirectWriteBindingPreflightCall{
+		operation:  operation,
+		pathFields: append([]string(nil), pathFields...),
+		bodyFields: append([]string(nil), bodyFields...),
+	}
+	return f.operationWriteBindingsErr
+}
+func (f *fakeConnector) MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error) {
+	if f.operationWriteMaterialize != nil {
+		return f.operationWriteMaterialize(operation, mappings)
+	}
+	body := make(map[string]any, len(mappings))
+	paths := make([]string, 0, len(mappings))
+	for path := range mappings {
+		paths = append(paths, path)
+	}
+	sort.SliceStable(paths, func(left, right int) bool {
+		return bodyMappingPathLess(paths[left], paths[right])
+	})
+	for _, path := range paths {
+		if err := setOperationBodyValue(body, path, mappings[path], false); err != nil {
+			return nil, err
+		}
+	}
+	return body, nil
+}
+func (f *fakeConnector) ResolveOperationDirectWriteBodyValue(_ string, body map[string]any, path string) (any, bool, error) {
+	value, present := nestedBodyValue(body, path)
+	return value, present, nil
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -2164,6 +2205,535 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	}
 }
 
+func TestBuildOperationDirectWriteCommandRejectsDuplicateQueryOccurrencesBeforePreview(t *testing.T) {
+	for _, tc := range []struct {
+		name  string
+		flags []connectors.CommandSurfaceFlag
+		input map[string][]string
+	}{
+		{
+			name: "repeated flag",
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"},
+			},
+			input: map[string][]string{"dry-run": {"true", "false"}},
+		},
+		{
+			name: "aliases target the same query parameter",
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"},
+				{Name: "dry-run-alias", Type: "boolean", MapsTo: "query.dry_run"},
+			},
+			input: map[string][]string{"dry-run": {"true"}, "dry-run-alias": {"false"}},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			connector := &fakeConnector{
+				directWriteMetadata: connectors.OperationDirectWriteMetadata{
+					Operation:    "acme.vote",
+					OutputPolicy: "json_redacted",
+				},
+				surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+					Path:         "vote",
+					Intent:       "direct_write",
+					Availability: "implemented",
+					Operation:    "acme.vote",
+					APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote"}},
+					OutputPolicy: "json_redacted",
+					Flags:        tc.flags,
+				}}},
+			}
+
+			_, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path:    []string{"vote"},
+				Flags:   tc.input,
+				Preview: true,
+			})
+			if err == nil || !strings.Contains(err.Error(), "supplied more than once") || !strings.Contains(err.Error(), "dry_run") {
+				t.Fatalf("BuildWriteCommand error = %v, want duplicate query rejection", err)
+			}
+			if connector.operationDirectWriteReq.Operation != "" {
+				t.Fatalf("duplicate query reached operation preview: %+v", connector.operationDirectWriteReq)
+			}
+		})
+	}
+}
+
+func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.workspaces.create_widget",
+			Kind:          "rest_write",
+			Summary:       "Create one declared widget",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "create",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/workspaces/{workspace_id}/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				Parameters: []engine.OperationParameter{{
+					Name: "dry_run",
+					In:   "query",
+					Type: "boolean",
+				}},
+				BodySchema: json.RawMessage(`{
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["label", "attributes", "targets"],
+					"properties": {
+						"label": {"type": "string"},
+						"attributes": {
+							"type": "object",
+							"additionalProperties": false,
+							"required": ["owner", "active"],
+							"properties": {
+								"owner": {"type": "string"},
+								"active": {"type": "boolean"}
+							}
+						},
+						"targets": {
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 2,
+							"items": {
+								"type": "object",
+								"additionalProperties": false,
+								"required": ["id"],
+								"properties": {"id": {"type": "string"}}
+							}
+						}
+					}
+				}`),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: http.MethodPost,
+			Path:   "/workspaces/{workspace_id}/widgets",
+			Operation: &engine.SurfaceOperation{
+				Model:            "destructive_action",
+				Status:           "blocked",
+				Risk:             "high",
+				BlockedByDefault: true,
+				Reason:           "declared typed write",
+			},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets create",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.workspaces.create_widget",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/workspaces/{workspace_id}/widgets"}},
+			OutputPolicy: "json",
+			Flags: []engine.CLIFlag{
+				{Name: "workspace-id", Type: "string", MapsTo: "path.workspace_id", Required: true},
+				{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"},
+				{Name: "label", Type: "string", MapsTo: "body.label", Required: true},
+				{Name: "attributes", Type: "json", MapsTo: "body.attributes", Required: true},
+				{Name: "targets", Type: "json", MapsTo: "body.targets", Required: true},
+			},
+		}}},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+		Path: []string{"widgets", "create"},
+		Flags: map[string][]string{
+			"workspace-id": {"workspace-1"},
+			"dry-run":      {"true"},
+			"label":        {"fixture widget"},
+			"attributes":   {`{"owner":"owner-1","active":true}`},
+			"targets":      {`[{"id":"target-1"}]`},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if got, want := command.PathParams, map[string]string{"workspace_id": "workspace-1"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("path params = %#v, want %#v", got, want)
+	}
+	if got, want := command.Query, map[string]string{"dry_run": "true"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("query = %#v, want %#v", got, want)
+	}
+	attributes, ok := command.Record["attributes"].(map[string]any)
+	if !ok || attributes["owner"] != "owner-1" || attributes["active"] != true {
+		t.Fatalf("attributes = %#v, want declared nested object", command.Record["attributes"])
+	}
+	targets, ok := command.Record["targets"].([]any)
+	if !ok || len(targets) != 1 {
+		t.Fatalf("targets = %#v, want one declared array entry", command.Record["targets"])
+	}
+
+	baseFlags := map[string][]string{
+		"workspace-id": {"workspace-1"},
+		"dry-run":      {"true"},
+		"label":        {"fixture widget"},
+		"attributes":   {`{"owner":"owner-1","active":true}`},
+		"targets":      {`[{"id":"target-1"}]`},
+	}
+	for _, tc := range []struct {
+		name    string
+		mutate  func(map[string][]string)
+		wantErr string
+	}{
+		{
+			name: "path cannot be supplied by body",
+			mutate: func(flags map[string][]string) {
+				delete(flags, "workspace-id")
+				flags["attributes"] = []string{`{"owner":"owner-1","active":true,"workspace_id":"wrong-namespace"}`}
+			},
+			wantErr: "missing required flag --workspace-id",
+		},
+		{
+			name: "malformed structured body",
+			mutate: func(flags map[string][]string) {
+				flags["attributes"] = []string{`{"owner":`}
+			},
+			wantErr: "invalid JSON for --attributes",
+		},
+		{
+			name: "structured body over flag limit",
+			mutate: func(flags map[string][]string) {
+				flags["attributes"] = []string{`{"owner":"` + strings.Repeat("x", maxStructuredJSONFlagBytes) + `","active":true}`}
+			},
+			wantErr: "structured JSON exceeds",
+		},
+		{
+			name: "raw body is not an escape hatch",
+			mutate: func(flags map[string][]string) {
+				flags["body"] = []string{`{"arbitrary":true}`}
+			},
+			wantErr: "unknown flag --body",
+		},
+		{
+			name: "request metadata is not caller controlled",
+			mutate: func(flags map[string][]string) {
+				flags["method"] = []string{http.MethodDelete}
+			},
+			wantErr: "unknown flag --method",
+		},
+		{
+			name: "other action fields cannot bind",
+			mutate: func(flags map[string][]string) {
+				flags["archive"] = []string{`{"reason":"wrong-action"}`}
+			},
+			wantErr: "unknown flag --archive",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			flags := make(map[string][]string, len(baseFlags))
+			for name, values := range baseFlags {
+				flags[name] = append([]string(nil), values...)
+			}
+			tc.mutate(flags)
+			_, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+				Path:  []string{"widgets", "create"},
+				Flags: flags,
+			})
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("BuildWriteCommand error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+}
+
+func TestBuildOperationDirectWriteCommandSupportsDottedStructuredBodyField(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.widgets.configure",
+			Kind:          "rest_write",
+			Summary:       "Configure one widget",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "update",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPatch,
+				Path:        "/widgets/{widget_id}",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"required":["settings.v1"],
+					"properties":{"settings.v1":{"type":"object","additionalProperties":false,"required":["enabled"],"properties":{"enabled":{"type":"boolean"}}}}
+				}`),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: http.MethodPatch,
+			Path:   "/widgets/{widget_id}",
+			Operation: &engine.SurfaceOperation{
+				Model: "write",
+			},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets configure",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.widgets.configure",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPatch, Path: "/widgets/{widget_id}"}},
+			OutputPolicy: "json",
+			Flags: []engine.CLIFlag{
+				{Name: "widget-id", Type: "string", MapsTo: "path.widget_id", Required: true},
+				{Name: "settings", Type: "json", MapsTo: "body.settings.v1", Required: true},
+			},
+		}}},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+		Path: []string{"widgets", "configure"},
+		Flags: map[string][]string{
+			"widget-id": {"widget-1"},
+			"settings":  {`{"enabled":true}`},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	settings, ok := command.Record["settings.v1"].(map[string]any)
+	if !ok || settings["enabled"] != true {
+		t.Fatalf("dotted structured body = %#v, want declared provider field", command.Record)
+	}
+}
+
+func TestBuildOperationDirectWriteCommandValidatesDottedStructuredBodyConstraints(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.windows.schedule",
+			Kind:          "rest_write",
+			Summary:       "Schedule one window",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "update",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPatch,
+				Path:        "/windows/{window_id}",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"required":["start.time","end.time"],
+					"properties":{"start.time":{"type":"string"},"end.time":{"type":"string"}}
+				}`),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{Method: http.MethodPatch, Path: "/windows/{window_id}", Operation: &engine.SurfaceOperation{Model: "write"}}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "windows schedule",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.windows.schedule",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPatch, Path: "/windows/{window_id}"}},
+			OutputPolicy: "json",
+			Flags: []engine.CLIFlag{
+				{Name: "window-id", Type: "string", MapsTo: "path.window_id", Required: true},
+				{Name: "start", Type: "string", MapsTo: "body.start.time", Required: true},
+				{Name: "end", Type: "string", MapsTo: "body.end.time", Required: true},
+			},
+			Constraints: []engine.CLIConstraint{{
+				Kind: "order", Left: "body.start.time", Right: "body.end.time", Op: "lt", ValueType: "date-time", Message: "start must precede end",
+			}},
+		}}},
+	}
+	_, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+		Path: []string{"windows", "schedule"},
+		Flags: map[string][]string{
+			"window-id": {"window-1"},
+			"start":     {"2026-08-22T00:00:00Z"},
+			"end":       {"2026-08-21T00:00:00Z"},
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "start must precede end") {
+		t.Fatalf("BuildWriteCommand error = %v, want declared dotted-body constraint rejection", err)
+	}
+}
+
+func TestOperationDirectWriteOverridesDelegatesIndexedMappings(t *testing.T) {
+	cmd := connectors.CommandSurfaceCommand{Intent: "direct_write", Availability: "implemented", Path: "widgets create"}
+	flags := make(map[string][]string, 130)
+	for index := 0; index < 130; index++ {
+		name := fmt.Sprintf("target-%d", index)
+		cmd.Flags = append(cmd.Flags, connectors.CommandSurfaceFlag{Name: name, Type: "string", MapsTo: fmt.Sprintf("body.targets.%d.id", index)})
+		flags[name] = []string{fmt.Sprintf("id-%d", index)}
+	}
+
+	var received map[string]any
+	_, _, _, _, body, raw, err := operationDirectWriteOverrides(cmd, flags, func(_ string, mappings map[string]any) (map[string]any, error) {
+		received = make(map[string]any, len(mappings))
+		for path, value := range mappings {
+			received[path] = value
+		}
+		targets := make([]any, 130)
+		for index := range targets {
+			targets[index] = map[string]any{"id": fmt.Sprintf("id-%d", index)}
+		}
+		return map[string]any{"targets": targets}, nil
+	})
+	if err != nil {
+		t.Fatalf("operationDirectWriteOverrides: %v", err)
+	}
+	if raw != nil {
+		t.Fatal("array mappings produced an unexpected raw body")
+	}
+	targets, ok := body["targets"].([]any)
+	if !ok || len(targets) != 130 {
+		t.Fatalf("targets = %#v, want 130 ordered entries", body["targets"])
+	}
+	for _, index := range []int{0, 1, 10, 129} {
+		entry, ok := targets[index].(map[string]any)
+		if !ok || entry["id"] != fmt.Sprintf("id-%d", index) {
+			t.Fatalf("targets[%d] = %#v, want declared index value", index, targets[index])
+		}
+	}
+	if got, want := len(received), 130; got != want {
+		t.Fatalf("materializer mappings = %d, want %d declared indexed inputs", got, want)
+	}
+}
+
+func TestValidateCommandInputsTraversesDirectWriteArrayFields(t *testing.T) {
+	cmd := connectors.CommandSurfaceCommand{Constraints: []connectors.CommandSurfaceConstraint{{
+		Kind:      "order",
+		Left:      "body.targets.0.start",
+		Right:     "body.targets.0.end",
+		Op:        "lt",
+		ValueType: "date-time",
+		Message:   "target start must be before end",
+	}}}
+	err := validateCommandInputs(cmd, connectors.RuntimeConfig{}, mappedCommandInputs{Body: map[string]any{
+		"targets": []any{map[string]any{
+			"start": "2026-08-21T00:00:00Z",
+			"end":   "2026-08-20T00:00:00Z",
+		}},
+	}})
+	if err == nil || !strings.Contains(err.Error(), "target start must be before end") {
+		t.Fatalf("validateCommandInputs error = %v, want nested-array constraint rejection", err)
+	}
+}
+
+func TestBuildOperationDirectWriteCommandRejectsUndeclaredQueryBindings(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.widgets.create",
+			Kind:          "rest_write",
+			Summary:       "Create one widget",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "create",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				Parameters: []engine.OperationParameter{{
+					Name: "dry_run",
+					In:   "query",
+					Type: "boolean",
+				}},
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/widgets",
+			Operation: &engine.SurfaceOperation{Model: "write"},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets create",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.widgets.create",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/widgets"}},
+			OutputPolicy: "json",
+			Flags:        []engine.CLIFlag{{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"}},
+		}}},
+	}
+
+	for _, test := range []struct {
+		name   string
+		mutate func(*engine.Bundle)
+		want   string
+	}{
+		{
+			name: "exact source query binding",
+		},
+		{
+			name: "unknown query binding",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.CLISurface.Commands[0].Flags[0].MapsTo = "query.unknown"
+			},
+			want: "not source-declared",
+		},
+		{
+			name: "duplicate query binding",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.CLISurface.Commands[0].Flags = append(bundle.CLISurface.Commands[0].Flags, engine.CLIFlag{Name: "again", Type: "boolean", MapsTo: "query.dry_run"})
+			},
+			want: "maps more than one command flag",
+		},
+		{
+			name: "fixed query binding",
+			mutate: func(bundle *engine.Bundle) {
+				rest := bundle.Operations[0].REST
+				rest.Query = map[string]string{"dry_run": "true"}
+			},
+			want: "fixed by rest.query",
+		},
+		{
+			name: "required query has no binding",
+			mutate: func(bundle *engine.Bundle) {
+				rest := bundle.Operations[0].REST
+				rest.Parameters = append(rest.Parameters, engine.OperationParameter{Name: "scope", In: "query", Type: "string", Required: true})
+			},
+			want: "requires query parameter",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			testBundle := bundle
+			testBundle.Operations = append([]engine.OperationSpec(nil), bundle.Operations...)
+			testREST := *bundle.Operations[0].REST
+			testREST.Parameters = append([]engine.OperationParameter(nil), testREST.Parameters...)
+			testBundle.Operations[0].REST = &testREST
+			testSurface := *bundle.CLISurface
+			testSurface.Commands = append([]engine.CLICommand(nil), bundle.CLISurface.Commands...)
+			testSurface.Commands[0].Flags = append([]engine.CLIFlag(nil), bundle.CLISurface.Commands[0].Flags...)
+			testBundle.CLISurface = &testSurface
+			if test.mutate != nil {
+				test.mutate(&testBundle)
+			}
+			_, err := BuildWriteCommand(context.Background(), engine.New(testBundle, nil), Request{Path: []string{"widgets", "create"}})
+			if test.want == "" {
+				if err != nil {
+					t.Fatalf("BuildWriteCommand: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("BuildWriteCommand error = %v, want %q", err, test.want)
+			}
+		})
+	}
+}
+
 func TestGitHubUserDraftCommandBuildsFixedGraphQLMutation(t *testing.T) {
 	bundle, err := engine.Load(defs.FS, "github")
 	if err != nil {
@@ -2274,6 +2844,40 @@ func TestPreflightOperationDirectWriteRequiresRuntimeBinding(t *testing.T) {
 		outputPolicy: "json_redacted",
 	}); got != want {
 		t.Fatalf("operation write preflight = %#v, want %#v", got, want)
+	}
+}
+
+func TestPreflightOperationDirectWriteRequiresDeclaredPathAndBodyBindings(t *testing.T) {
+	connector := &fakeConnector{
+		operationWriteBindingsErr: errors.New("body field \"undeclared\" is not declared"),
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:    "acme.vote",
+			OutputPolicy: "json_redacted",
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "vote",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.vote",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote/{id}"}},
+			OutputPolicy: "json_redacted",
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "id", Type: "string", MapsTo: "path.id"},
+				{Name: "payload", Type: "string", MapsTo: "body.payload"},
+			},
+		}}},
+	}
+
+	err := Preflight(connector, []string{"vote"})
+	if err == nil || !strings.Contains(err.Error(), "operation direct write bindings are not executable") {
+		t.Fatalf("Preflight(direct_write) error = %v, want binding rejection", err)
+	}
+	if got, want := connector.operationWriteBindings, (operationDirectWriteBindingPreflightCall{
+		operation:  "acme.vote",
+		pathFields: []string{"id"},
+		bodyFields: []string{"payload"},
+	}); !reflect.DeepEqual(got, want) {
+		t.Fatalf("operation write bindings = %#v, want %#v", got, want)
 	}
 }
 

@@ -16,6 +16,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/coordination"
+	"polymetrics.ai/internal/safety"
 )
 
 // defaultPageSize is used when neither the stream's nor the base pagination
@@ -553,14 +554,22 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	if err != nil {
 		return nil, err
 	}
+	return newRuntimeWithResolvedHTTP(ctx, b, cfg, h, baseURL, headers)
+}
+
+func newRuntimeWithResolvedHTTP(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks, baseURL string, headers map[string]string) (*Runtime, error) {
+	return newRuntimeWithResolvedHTTPBindings(ctx, b, cfg, h, baseURL, headers, b.HTTP.UserAgent, b.HTTP.Auth, b.HTTP.Auth)
+}
+
+func newRuntimeWithResolvedHTTPBindings(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks, baseURL string, headers map[string]string, userAgent string, authSpecs, rateLimitAuthSpecs []AuthSpec) (*Runtime, error) {
 	requester := &connsdk.Requester{
 		BaseURL:                   baseURL,
-		UserAgent:                 b.HTTP.UserAgent,
-		DefaultHeaders:            headers,
+		UserAgent:                 userAgent,
+		DefaultHeaders:            cloneResolvedHeaders(headers),
 		RateLimitEvents:           rateLimitEventSinkFor(cfg.ProjectDir),
 		RateLimitAdmissionTimeout: rateLimitAdmissionTimeoutFor(cfg.ProjectDir),
 	}
-	resolver := newRateLimitResolverWithContext(ctx, b, rateLimitConfigForSelectedAuth(cfg, b.HTTP.Auth, h))
+	resolver := newRateLimitResolverWithContext(ctx, b, rateLimitConfigForSelectedAuth(cfg, rateLimitAuthSpecs, h))
 	budget := cfg.BudgetCoordinator
 	if budget == nil {
 		budget = coordination.NewRateBudgetCoordinator(nil, coordination.RateBudgetCoordinatorOptions{})
@@ -571,9 +580,12 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	// all (e.g. a fully public API, or a test double) — selectAuth itself
 	// requires at least one candidate spec, so that case is handled here
 	// rather than forcing every caller to declare a trivial "none" rule.
-	var auth connsdk.Authenticator
-	if len(b.HTTP.Auth) > 0 {
-		auth, err = selectAuthWithDeclaredRoute(ctx, cfg, b.HTTP.Auth, h, declaredRouteRequester{runtime: authRuntime})
+	var (
+		auth connsdk.Authenticator
+		err  error
+	)
+	if len(authSpecs) > 0 {
+		auth, err = selectAuthWithDeclaredRoute(ctx, cfg, authSpecs, h, declaredRouteRequester{runtime: authRuntime})
 		if err != nil {
 			return nil, fmt.Errorf("engine: %w", err)
 		}
@@ -584,6 +596,17 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 		return nil, err
 	}
 	return &Runtime{Requester: defaultRequester, baseRequester: requester, Bundle: &b, Config: cfg, rateLimits: resolver, budget: budget}, nil
+}
+
+func cloneResolvedHeaders(headers map[string]string) map[string]string {
+	if len(headers) == 0 {
+		return nil
+	}
+	clone := make(map[string]string, len(headers))
+	for name, value := range headers {
+		clone[name] = value
+	}
+	return clone
 }
 
 // NewRuntime builds the bundle-authenticated requester used by a native
@@ -622,6 +645,14 @@ func NewRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 //   - any other interpolation failure (CRLF injection, unknown
 //     namespace/filter) still propagates unchanged.
 func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema) (map[string]string, error) {
+	return resolveHeadersWithInterpolator(headers, cfg, spec, InterpolateHeader)
+}
+
+func resolveDirectWriteHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema) (map[string]string, error) {
+	return resolveHeadersWithInterpolator(headers, cfg, spec, interpolateDeclaredHeader)
+}
+
+func resolveHeadersWithInterpolator(headers map[string]string, cfg connectors.RuntimeConfig, spec *Schema, interpolate func(string, Vars) (string, error)) (map[string]string, error) {
 	if len(headers) == 0 {
 		return nil, nil
 	}
@@ -641,8 +672,14 @@ func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spe
 	}
 
 	out := make(map[string]string, len(headers))
-	for k, tmpl := range headers {
-		val, err := InterpolateHeader(tmpl, requestVars(cfg, nil, ""))
+	names := make([]string, 0, len(headers))
+	for name := range headers {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, k := range names {
+		tmpl := headers[k]
+		val, err := interpolate(tmpl, requestVars(cfg, nil, ""))
 		if err != nil {
 			omit, hardErr := classifyHeaderResolutionError(err, spec, optionalConfigKeys)
 			if hardErr != nil {
@@ -658,7 +695,11 @@ func resolveHeaders(headers map[string]string, cfg connectors.RuntimeConfig, spe
 		}
 		out[k] = val
 	}
-	return out, nil
+	canonical, err := canonicalPreparedRequestHeaders(out)
+	if err != nil {
+		return nil, fmt.Errorf("engine: resolve declared headers: %w", err)
+	}
+	return canonical, nil
 }
 
 // classifyHeaderResolutionError decides, for a single header's interpolation
@@ -762,34 +803,394 @@ func incrementalRequestParamShouldApply(stream StreamSpec, req connectors.ReadRe
 	return connsdk.Cursor(req.State) != ""
 }
 
-// resolveQueryParams resolves every entry of params against vars, applying
-// the SAME per-entry dialect stream.Query has always used (bundle.go's
-// QueryParam doc comment): a plain-string-sourced entry (OmitWhenAbsent
-// false, Default "") hard-errors on any unresolved config/secrets/
-// incremental key; an object-form entry tolerates an unresolved key via
-// OmitWhenAbsent (param dropped, no error) or Default (literal value sent
-// instead of erroring). Shared by buildInitialQuery (stream.Query) and
-// buildCheckQuery (RequestSpec.Query, checkquery-ledger.md) so both surfaces
-// resolve query templates identically by construction, not by convention.
+// resolveQueryParams resolves stream/check query entries with their original
+// per-entry dialect (bundle.go's QueryParam doc comment). It deliberately does
+// not tolerate a missing record value: direct reads have no record input, and
+// broadening this shared path would silently relax those established surfaces.
+// Write actions that opt into the one additional record-only rule use
+// resolveWriteQueryParams below.
 func resolveQueryParams(params map[string]QueryParam, vars Vars) (url.Values, error) {
+	return resolveQueryParamsWithRecordOmission(params, vars, false)
+}
+
+// resolveWriteQueryParams extends the established query dialect only for a
+// declared write action. An object-form query entry may omit an unresolved
+// record.* value when, and only when, that exact entry sets omit_when_absent.
+// It is not a caller-provided query channel: config, secret, incremental,
+// wrong-source, malformed, and required-record behavior remains governed by
+// the existing resolver rules.
+func resolveWriteQueryParams(params map[string]QueryParam, vars Vars) (url.Values, error) {
+	return resolveQueryParamsWithRecordOmission(params, vars, true)
+}
+
+func resolveQueryParamsWithRecordOmission(params map[string]QueryParam, vars Vars, allowOmitRecord bool) (url.Values, error) {
 	q := url.Values{}
-	for k, param := range params {
+	names := make([]string, 0, len(params))
+	for k := range params {
+		names = append(names, k)
+	}
+	sort.Strings(names)
+	for _, k := range names {
+		param := params[k]
+		if allowOmitRecord {
+			val, resolutionErrors, err := materializeWriteQueryTemplate(param.Template, vars)
+			if err != nil {
+				return nil, fmt.Errorf("engine: resolve query %q: %w", k, err)
+			}
+			if len(resolutionErrors) != 0 {
+				for _, resolutionErr := range resolutionErrors {
+					switch {
+					case isUnresolvedRecordPath(resolutionErr):
+						if param.OmitWhenAbsent {
+							continue
+						}
+					case isUnresolvedConfigSecretOrIncremental(resolutionErr):
+						if param.OmitWhenAbsent || param.Default != "" {
+							continue
+						}
+					}
+					return nil, fmt.Errorf("engine: resolve query %q: %w", k, resolutionErr)
+				}
+				firstResolutionErr := resolutionErrors[0]
+				if isUnresolvedRecordPath(firstResolutionErr) || param.OmitWhenAbsent {
+					continue
+				}
+				if err := setResolvedQueryValue(q, k, param.Default); err != nil {
+					return nil, err
+				}
+				continue
+			}
+			if err := setResolvedQueryValue(q, k, val); err != nil {
+				return nil, err
+			}
+			continue
+		}
 		val, err := Interpolate(param.Template, vars)
 		if err != nil {
+			if allowOmitRecord && param.OmitWhenAbsent && isUnresolvedRecordPath(err) {
+				continue
+			}
 			if isUnresolvedConfigSecretOrIncremental(err) {
 				switch {
 				case param.OmitWhenAbsent:
 					continue
 				case param.Default != "":
-					q.Set(k, param.Default)
+					if err := setResolvedQueryValue(q, k, param.Default); err != nil {
+						return nil, err
+					}
 					continue
 				}
 			}
 			return nil, fmt.Errorf("engine: resolve query %q: %w", k, err)
 		}
-		q.Set(k, val)
+		if err := setResolvedQueryValue(q, k, val); err != nil {
+			return nil, err
+		}
 	}
 	return q, nil
+}
+
+func setResolvedQueryValue(q url.Values, name, value string) error {
+	if err := safety.RejectDangerousChars(value, "query parameter "+name); err != nil {
+		return err
+	}
+	q.Set(name, value)
+	return nil
+}
+
+type writeQueryTemplateToken struct {
+	literal    string
+	expression string
+}
+
+func materializeWriteQueryTemplate(template string, vars Vars) (string, []error, error) {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return "", nil, err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		if err := validateWriteQueryExpression(token.expression); err != nil {
+			return "", nil, err
+		}
+	}
+
+	resolutionErrors := make([]error, 0)
+	var out strings.Builder
+	for _, token := range tokens {
+		if token.expression == "" {
+			out.WriteString(token.literal)
+			continue
+		}
+		value, err := resolveWriteQueryExpr(token.expression, vars)
+		if err != nil {
+			resolutionErrors = append(resolutionErrors, err)
+			continue
+		}
+		out.WriteString(value)
+	}
+	return out.String(), resolutionErrors, nil
+}
+
+func interpolateDeclaredHeader(template string, vars Vars) (string, error) {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return "", err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		if err := validateDeclaredHeaderExpression(token.expression); err != nil {
+			return "", err
+		}
+	}
+	var out strings.Builder
+	for _, token := range tokens {
+		if token.expression == "" {
+			out.WriteString(token.literal)
+			continue
+		}
+		value, err := resolveExpr(token.expression, vars, false, false)
+		if err != nil {
+			return "", err
+		}
+		out.WriteString(value)
+	}
+	value := out.String()
+	if strings.ContainsAny(value, "\r\n") {
+		return "", fmt.Errorf("interpolate header: resolved value contains CR/LF")
+	}
+	if err := safety.RejectDangerousChars(value, "interpolate header value"); err != nil {
+		return "", err
+	}
+	return value, nil
+}
+
+func validateDeclaredHeaderTemplate(template string) error {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		if err := validateDeclaredHeaderExpression(token.expression); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func validateDeclaredHeaderExpression(expr string) error {
+	if paths, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
+		if err != nil {
+			return err
+		}
+		for _, path := range paths {
+			if err := validateDeclaredHeaderReference("record." + path); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	parts := strings.Split(expr, "|")
+	ref := strings.TrimSpace(parts[0])
+	if err := validateDeclaredHeaderReference(ref); err != nil {
+		return err
+	}
+	for _, rawFilter := range parts[1:] {
+		filter := strings.TrimSpace(rawFilter)
+		if filter == "" {
+			return fmt.Errorf("interpolate: malformed filter chain")
+		}
+		if !isKnownFilter(filter) {
+			return fmt.Errorf("interpolate: unknown filter %q", filter)
+		}
+	}
+	return nil
+}
+
+func validateDeclaredHeaderReference(ref string) error {
+	if ref == "cursor" {
+		return nil
+	}
+	parts := strings.Split(ref, ".")
+	if len(parts) < 2 {
+		return fmt.Errorf("interpolate: malformed reference %q", ref)
+	}
+	for _, part := range parts {
+		if part == "" || part != strings.TrimSpace(part) {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		if err := safety.ValidateIdentifier(part, "header reference segment"); err != nil {
+			return fmt.Errorf("interpolate: malformed reference %q: %w", ref, err)
+		}
+	}
+	switch parts[0] {
+	case "record":
+		return nil
+	case "config", "secrets", "query":
+		if len(parts) == 2 {
+			return nil
+		}
+	case "incremental":
+		if len(parts) == 2 && knownIncrementalKeys[parts[1]] {
+			return nil
+		}
+	case "fanout":
+		if len(parts) == 2 && knownFanoutKeys[parts[1]] {
+			return nil
+		}
+	default:
+		return fmt.Errorf("interpolate: unknown namespace %q in reference %q", parts[0], ref)
+	}
+	return fmt.Errorf("interpolate: malformed reference %q", ref)
+}
+
+func parseWriteQueryTemplate(template string) ([]writeQueryTemplateToken, error) {
+	tokens := make([]writeQueryTemplateToken, 0)
+	position := 0
+	for position < len(template) {
+		openOffset := strings.Index(template[position:], "{{")
+		closeOffset := strings.Index(template[position:], "}}")
+		if closeOffset >= 0 && (openOffset < 0 || closeOffset < openOffset) {
+			return nil, fmt.Errorf("interpolate: malformed template delimiter: stray closing delimiter")
+		}
+		if openOffset < 0 {
+			literal := template[position:]
+			if err := safety.RejectDangerousChars(literal, "write query template literal"); err != nil {
+				return nil, fmt.Errorf("interpolate: malformed template literal: %w", err)
+			}
+			if literal != "" {
+				tokens = append(tokens, writeQueryTemplateToken{literal: literal})
+			}
+			break
+		}
+		literalEnd := position + openOffset
+		literal := template[position:literalEnd]
+		if err := safety.RejectDangerousChars(literal, "write query template literal"); err != nil {
+			return nil, fmt.Errorf("interpolate: malformed template literal: %w", err)
+		}
+		if literal != "" {
+			tokens = append(tokens, writeQueryTemplateToken{literal: literal})
+		}
+
+		expressionStart := position + openOffset + len("{{")
+		expressionEndOffset := strings.Index(template[expressionStart:], "}}")
+		if expressionEndOffset < 0 {
+			return nil, fmt.Errorf("interpolate: malformed template delimiter: unbalanced opening delimiter")
+		}
+		expressionEnd := expressionStart + expressionEndOffset
+		if strings.Contains(template[expressionStart:expressionEnd], "{{") {
+			return nil, fmt.Errorf("interpolate: malformed template delimiter: nested opening delimiter")
+		}
+		rawExpr := template[expressionStart:expressionEnd]
+		if err := safety.RejectDangerousChars(rawExpr, "write query template expression"); err != nil {
+			return nil, fmt.Errorf("interpolate: malformed template expression: %w", err)
+		}
+		expr := strings.TrimSpace(rawExpr)
+		if expr == "" {
+			return nil, fmt.Errorf("interpolate: malformed template delimiter: empty expression")
+		}
+		tokens = append(tokens, writeQueryTemplateToken{expression: expr})
+		position = expressionEnd + len("}}")
+	}
+	return tokens, nil
+}
+
+func validateWriteQueryExpression(expr string) error {
+	if paths, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
+		if err != nil {
+			return err
+		}
+		for _, path := range paths {
+			if err := validateWriteQueryReferenceSegments("record."+path, strings.Split(path, ".")); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	parts := strings.Split(expr, "|")
+	ref := strings.TrimSpace(parts[0])
+	if ref == "" {
+		return fmt.Errorf("interpolate: malformed reference %q", ref)
+	}
+	if err := validateWriteQueryReference(ref); err != nil {
+		return err
+	}
+	for _, rawFilter := range parts[1:] {
+		filter := strings.TrimSpace(rawFilter)
+		if filter == "" {
+			return fmt.Errorf("interpolate: malformed filter chain")
+		}
+		if !isKnownFilter(filter) {
+			return fmt.Errorf("interpolate: unknown filter %q", filter)
+		}
+	}
+	return nil
+}
+
+func validateWriteQueryReference(ref string) error {
+	if ref == "cursor" {
+		return fmt.Errorf("interpolate: write query does not permit cursor references")
+	}
+	parts := strings.Split(ref, ".")
+	if len(parts) < 2 {
+		return fmt.Errorf("interpolate: malformed reference %q", ref)
+	}
+	if err := validateWriteQueryReferenceSegments(ref, parts); err != nil {
+		return err
+	}
+	switch parts[0] {
+	case "cursor":
+		return fmt.Errorf("interpolate: malformed reference %q", ref)
+	case "record":
+		return nil
+	case "config", "secrets":
+		if len(parts) != 2 {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		return nil
+	case "query":
+		if len(parts) != 2 {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		return fmt.Errorf("interpolate: write query does not permit query references")
+	case "incremental":
+		if len(parts) != 2 {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		if knownIncrementalKeys[parts[1]] {
+			return nil
+		}
+		return fmt.Errorf("interpolate: unknown incremental reference %q", ref)
+	case "fanout":
+		if len(parts) != 2 {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		if knownFanoutKeys[parts[1]] {
+			return fmt.Errorf("interpolate: write query does not permit fanout references")
+		}
+		return fmt.Errorf("interpolate: unknown fanout reference %q", ref)
+	default:
+		return fmt.Errorf("interpolate: unknown namespace %q in reference %q", parts[0], ref)
+	}
+}
+
+func validateWriteQueryReferenceSegments(ref string, parts []string) error {
+	for _, part := range parts {
+		if part == "" || part != strings.TrimSpace(part) {
+			return fmt.Errorf("interpolate: malformed reference %q", ref)
+		}
+		if err := safety.ValidateIdentifier(part, "write query reference segment"); err != nil {
+			return fmt.Errorf("interpolate: malformed reference %q: %w", ref, err)
+		}
+	}
+	return nil
 }
 
 // buildCheckQuery resolves check.query (RequestSpec.Query) against cfg using

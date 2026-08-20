@@ -272,11 +272,31 @@ func (c *Connector) PreflightOperationStructuredJSONVariable(operation, variable
 	return ValidateGraphQLOperationStructuredJSONVariable(op, variable)
 }
 
+// PreflightOperationStructuredJSONBodyField admits one declared top-level
+// structured input for a fixed REST or GraphQL write operation. It resolves no
+// credentials and makes no request; the operation schema remains the only
+// authority for the object or array accepted at that field.
+func (c *Connector) PreflightOperationStructuredJSONBodyField(operation, field string) error {
+	return PreflightOperationStructuredJSONBodyField(c.bundle, operation, field)
+}
+
 // PreflightOperationDirectWrite proves a command's declared binding can reach
 // this connector's typed write executor without resolving credentials or
 // making a network request.
-func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
-	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy)
+func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error {
+	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy, queryFields...)
+}
+
+func (c *Connector) PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error {
+	return PreflightOperationDirectWriteBindings(c.bundle, operation, pathFields, bodyFields)
+}
+
+func (c *Connector) MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error) {
+	return MaterializeOperationDirectWriteBodyMappings(c.bundle, operation, mappings)
+}
+
+func (c *Connector) ResolveOperationDirectWriteBodyValue(operation string, body map[string]any, path string) (any, bool, error) {
+	return ResolveOperationDirectWriteBodyMappingValue(c.bundle, operation, body, path)
 }
 
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
@@ -494,8 +514,26 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 
 // PreflightOperationDirectWrite validates a native connector's declared
 // operation direct-write binding without resolving credentials or network I/O.
-func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
-	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
+func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error {
+	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy, queryFields...)
+}
+
+func (b Base) PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error {
+	return PreflightOperationDirectWriteBindings(b.bundle, operation, pathFields, bodyFields)
+}
+
+func (b Base) MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error) {
+	return MaterializeOperationDirectWriteBodyMappings(b.bundle, operation, mappings)
+}
+
+func (b Base) ResolveOperationDirectWriteBodyValue(operation string, body map[string]any, path string) (any, bool, error) {
+	return ResolveOperationDirectWriteBodyMappingValue(b.bundle, operation, body, path)
+}
+
+// PreflightOperationStructuredJSONBodyField validates a native connector's
+// declaration-owned structured input without resolving credentials or I/O.
+func (b Base) PreflightOperationStructuredJSONBodyField(operation, field string) error {
+	return PreflightOperationStructuredJSONBodyField(b.bundle, operation, field)
 }
 
 // OperationDirectReadMaxBytes returns the bounded response limit for a

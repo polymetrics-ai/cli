@@ -668,11 +668,11 @@ func dynamicValueEncodedLen(v any) int {
 	return len(raw)
 }
 
-// buildWriteQuery resolves action.Query against vars using the IDENTICAL
-// resolveQueryParams semantics stream.Query and check.query use — see that
-// function's doc comment in read.go. vars is the same Vars the path was just
-// interpolated from, so a query template may reference record fields exactly
-// as a path template can.
+// buildWriteQuery resolves action.Query against the same Vars the path just
+// used. It preserves stream/check query semantics while admitting one narrow
+// write-only extension: an exact object-form action query may omit its absent
+// record.* reference when it declares omit_when_absent. No caller can add an
+// undeclared query parameter or change that declaration.
 //
 // A nil/empty Query returns a nil url.Values rather than an empty one: an
 // empty url.Values would still take resolveURL's "len(query) > 0" branch as
@@ -682,7 +682,7 @@ func buildWriteQuery(action WriteAction, vars Vars) (url.Values, error) {
 	if len(action.Query) == 0 {
 		return nil, nil
 	}
-	q, err := resolveQueryParams(action.Query, vars)
+	q, err := resolveWriteQueryParams(action.Query, vars)
 	if err != nil {
 		return nil, fmt.Errorf("engine: write action %q: %w", action.Name, err)
 	}

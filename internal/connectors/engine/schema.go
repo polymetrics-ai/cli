@@ -28,6 +28,7 @@ type schemaNode struct {
 	required             []string
 	properties           map[string]*schemaNode
 	items                *schemaNode
+	prefixItems          []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
 	format               string
@@ -124,20 +125,28 @@ var validTypes = map[string]bool{
 // CompileSchema parses and compiles a draft-07 subset schema document. Unknown
 // keywords are a compile error, keeping bundles honest.
 func CompileSchema(raw json.RawMessage) (*Schema, error) {
+	return compileSchema(raw, false)
+}
+
+func compileStructuredRESTBodySchemaDocument(raw json.RawMessage) (*Schema, error) {
+	return compileSchema(raw, true)
+}
+
+func compileSchema(raw json.RawMessage, allowPrefixItems bool) (*Schema, error) {
 	var m map[string]json.RawMessage
 	if err := json.Unmarshal(raw, &m); err != nil {
 		return nil, fmt.Errorf("compile schema: invalid json: %w", err)
 	}
-	node, err := compileNode(m)
+	node, err := compileNode(m, allowPrefixItems)
 	if err != nil {
 		return nil, err
 	}
 	return &Schema{node: node}, nil
 }
 
-func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
+func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNode, error) {
 	for k := range m {
-		if annotationKeywords[k] || structuralKeywords[k] {
+		if annotationKeywords[k] || structuralKeywords[k] || (allowPrefixItems && k == "prefixItems") {
 			continue
 		}
 		return nil, fmt.Errorf("compile schema: unknown keyword %q", k)
@@ -168,7 +177,7 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		}
 		n.properties = make(map[string]*schemaNode, len(props))
 		for name, sub := range props {
-			child, err := compileNode(sub)
+			child, err := compileNode(sub, allowPrefixItems)
 			if err != nil {
 				return nil, fmt.Errorf("compile schema: properties.%s: %w", name, err)
 			}
@@ -181,11 +190,32 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		if err := json.Unmarshal(raw, &sub); err != nil {
 			return nil, fmt.Errorf("compile schema: items: %w", err)
 		}
-		child, err := compileNode(sub)
+		child, err := compileNode(sub, allowPrefixItems)
 		if err != nil {
 			return nil, fmt.Errorf("compile schema: items: %w", err)
 		}
 		n.items = child
+	}
+
+	if raw, ok := m["prefixItems"]; ok {
+		var subs []map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &subs); err != nil || subs == nil {
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: prefixItems: %w", err)
+			}
+			return nil, fmt.Errorf("compile schema: prefixItems must be an array")
+		}
+		n.prefixItems = make([]*schemaNode, len(subs))
+		for index, sub := range subs {
+			if sub == nil {
+				return nil, fmt.Errorf("compile schema: prefixItems.%d must be a schema object", index)
+			}
+			child, err := compileNode(sub, allowPrefixItems)
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: prefixItems.%d: %w", index, err)
+			}
+			n.prefixItems[index] = child
+		}
 	}
 
 	if raw, ok := m["enum"]; ok {
@@ -426,8 +456,14 @@ func (n *schemaNode) validate(v any, path string) error {
 		if err := n.validateArrayCardinality(len(elems), path); err != nil {
 			return err
 		}
-		if n.items != nil {
-			for i, elem := range elems {
+		for i, elem := range elems {
+			if i < len(n.prefixItems) {
+				if err := n.prefixItems[i].validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
+					return err
+				}
+				continue
+			}
+			if n.items != nil {
 				if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
 					return err
 				}

@@ -431,6 +431,13 @@ func TestSchemaValidateMaxItems(t *testing.T) {
 	}
 }
 
+func TestCompileSchemaRejectsPrefixItemsOutsideStructuredREST(t *testing.T) {
+	_, err := CompileSchema(json.RawMessage(`{"type":"array","prefixItems":[{"type":"string"}]}`))
+	if err == nil || !strings.Contains(err.Error(), "unknown keyword") {
+		t.Fatalf("CompileSchema error = %v, want prefixItems rejection", err)
+	}
+}
+
 func TestSchemaArrayCardinalityIgnoresNonArrays(t *testing.T) {
 	sch, err := CompileSchema(json.RawMessage(`{"minItems":1,"maxItems":2}`))
 	if err != nil {
