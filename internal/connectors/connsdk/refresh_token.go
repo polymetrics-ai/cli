@@ -105,9 +105,10 @@ type OAuth2RefreshToken struct {
 	// TokenURL is the provider's token endpoint. Required.
 	TokenURL string
 	// ClientID and ClientSecret identify the OAuth2 client. Some providers
-	// (public clients) accept an empty secret.
-	ClientID     string
-	ClientSecret string
+	// (public clients) omit the secret.
+	ClientID             string
+	ClientSecret         string
+	ClientSecretRequired bool
 	// RefreshToken is the initial refresh token. Required. On a provider that
 	// rotates, the value actually presented is the most recent one, not this.
 	RefreshToken string
@@ -263,12 +264,26 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 	if err := credential.RequireAuthenticationValue("OAuth2 refresh token", a.refreshToken); err != nil {
 		return "", fmt.Errorf("oauth2 refresh: %w", err)
 	}
+	if a.ClientID != "" {
+		if err := credential.RequireAuthenticationValue("OAuth2 client ID", a.ClientID); err != nil {
+			return "", fmt.Errorf("oauth2 refresh: %w", err)
+		}
+	}
+	if a.ClientSecret != "" || a.ClientSecretRequired {
+		if err := credential.RequireAuthenticationValue("OAuth2 client secret", a.ClientSecret); err != nil {
+			return "", fmt.Errorf("oauth2 refresh: %w", err)
+		}
+	}
 
 	form := url.Values{}
 	form.Set("grant_type", "refresh_token")
 	form.Set("refresh_token", a.refreshToken)
-	form.Set("client_id", a.ClientID)
-	form.Set("client_secret", a.ClientSecret)
+	if a.ClientID != "" {
+		form.Set("client_id", a.ClientID)
+	}
+	if a.ClientSecret != "" {
+		form.Set("client_secret", a.ClientSecret)
+	}
 	if len(a.Scopes) > 0 {
 		form.Set("scope", strings.Join(a.Scopes, " "))
 	}

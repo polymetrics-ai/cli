@@ -134,7 +134,7 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		return connsdk.AuthFunc(func(_ context.Context, _ *http.Request) error { return nil }), nil
 
 	case "bearer":
-		token, err := Interpolate(spec.Token, vars)
+		token, err := interpolateCredential(spec.Token, vars)
 		if err != nil {
 			return nil, fmt.Errorf("bearer: %w", err)
 		}
@@ -144,11 +144,11 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		return connsdk.Bearer(token), nil
 
 	case "basic":
-		username, err := Interpolate(spec.Username, vars)
+		username, err := interpolateCredential(spec.Username, vars)
 		if err != nil {
 			return nil, fmt.Errorf("basic: username: %w", err)
 		}
-		password, err := Interpolate(spec.Password, vars)
+		password, err := interpolateCredential(spec.Password, vars)
 		if err != nil {
 			return nil, fmt.Errorf("basic: password: %w", err)
 		}
@@ -167,7 +167,7 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		return connsdk.BasicWithRequirements(username, password, requireUsername, requirePassword), nil
 
 	case "api_key_header":
-		value, err := Interpolate(spec.Value, vars)
+		value, err := interpolateCredential(spec.Value, vars)
 		if err != nil {
 			return nil, fmt.Errorf("api_key_header: %w", err)
 		}
@@ -177,7 +177,7 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		return connsdk.APIKeyHeader(spec.Header, value, spec.Prefix), nil
 
 	case "api_key_query":
-		value, err := Interpolate(spec.Value, vars)
+		value, err := interpolateCredential(spec.Value, vars)
 		if err != nil {
 			return nil, fmt.Errorf("api_key_query: %w", err)
 		}
@@ -205,11 +205,11 @@ func buildOAuth2ClientCredentials(spec AuthSpec, vars Vars) (connsdk.Authenticat
 	if err != nil {
 		return nil, fmt.Errorf("oauth2_client_credentials: token_url: %w", err)
 	}
-	clientID, err := Interpolate(spec.ClientID, vars)
+	clientID, err := interpolateCredential(spec.ClientID, vars)
 	if err != nil {
 		return nil, fmt.Errorf("oauth2_client_credentials: client_id: %w", err)
 	}
-	clientSecret, err := Interpolate(spec.ClientSecret, vars)
+	clientSecret, err := interpolateCredential(spec.ClientSecret, vars)
 	if err != nil {
 		return nil, fmt.Errorf("oauth2_client_credentials: client_secret: %w", err)
 	}
@@ -294,19 +294,30 @@ func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars V
 	if err != nil {
 		return nil, fmt.Errorf("%s: token_url: %w", mode, err)
 	}
-	clientID, err := Interpolate(spec.ClientID, vars)
+	clientID, err := interpolateCredential(spec.ClientID, vars)
 	if err != nil {
 		return nil, fmt.Errorf("%s: client_id: %w", mode, err)
 	}
-	clientSecret, err := Interpolate(spec.ClientSecret, vars)
-	if err != nil {
-		return nil, fmt.Errorf("%s: client_secret: %w", mode, err)
+	if spec.ClientID != "" {
+		if err := credential.RequirePersistentValue("OAuth2 client ID", clientID); err != nil {
+			return nil, fmt.Errorf("%s: %w", mode, err)
+		}
 	}
-	refreshToken, err := Interpolate(spec.RefreshToken, vars)
+	clientSecret := ""
+	if spec.ClientSecret != "" {
+		clientSecret, err = interpolateCredential(spec.ClientSecret, vars)
+		if err != nil {
+			return nil, fmt.Errorf("%s: client_secret: %w", mode, err)
+		}
+		if err := credential.RequirePersistentValue("OAuth2 client secret", clientSecret); err != nil {
+			return nil, fmt.Errorf("%s: %w", mode, err)
+		}
+	}
+	refreshToken, err := interpolateCredential(spec.RefreshToken, vars)
 	if err != nil {
 		return nil, fmt.Errorf("%s: refresh_token: %w", mode, err)
 	}
-	if err := credential.RequireAuthenticationValue("OAuth2 refresh token", refreshToken); err != nil {
+	if err := credential.RequirePersistentValue("OAuth2 refresh token", refreshToken); err != nil {
 		return nil, fmt.Errorf("%s: %w", mode, err)
 	}
 
@@ -325,12 +336,13 @@ func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars V
 	}
 
 	auth := &connsdk.OAuth2RefreshToken{
-		TokenURL:     tokenURL,
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
-		RefreshToken: refreshToken,
-		Scopes:       scopes,
-		ExtraParams:  extraParams,
+		TokenURL:             tokenURL,
+		ClientID:             clientID,
+		ClientSecret:         clientSecret,
+		ClientSecretRequired: spec.ClientSecret != "",
+		RefreshToken:         refreshToken,
+		Scopes:               scopes,
+		ExtraParams:          extraParams,
 	}
 
 	// Rotation persistence is opt-in and requires BOTH a declared key and a

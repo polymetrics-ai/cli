@@ -16,17 +16,54 @@ import (
 	"polymetrics.ai/internal/credential"
 )
 
-func TestGetRejectsLegacyEmptySecretValue(t *testing.T) {
-	v, err := Init(filepath.Join(t.TempDir(), ".polymetrics"))
-	if err != nil {
-		t.Fatalf("Init() error = %v", err)
-	}
-	writeLegacySecret(t, v, "legacy_empty", map[string]string{"token": ""})
+func TestGetRejectsLegacyTransportOnlySecretValue(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		value string
+	}{
+		{name: "empty", value: ""},
+		{name: "LF only", value: "\n"},
+		{name: "CRLF only", value: "\r\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			v, err := Init(filepath.Join(t.TempDir(), ".polymetrics"))
+			if err != nil {
+				t.Fatalf("Init() error = %v", err)
+			}
+			writeLegacySecret(t, v, "legacy_transport_only", map[string]string{"token": tt.value})
 
-	_, err = v.Get(context.Background(), "legacy_empty")
-	var empty *credential.EmptySecretError
-	if !errors.As(err, &empty) {
-		t.Fatalf("Get() error type = %T, want typed empty-secret classification", err)
+			_, err = v.Get(context.Background(), "legacy_transport_only")
+			var empty *credential.EmptySecretError
+			if !errors.As(err, &empty) {
+				t.Fatalf("Get() error type = %T, want typed empty-secret classification", err)
+			}
+		})
+	}
+}
+
+func TestPutRejectsTransportOnlySecretValue(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		value string
+	}{
+		{name: "empty", value: ""},
+		{name: "LF only", value: "\n"},
+		{name: "CRLF only", value: "\r\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			v, err := Init(filepath.Join(t.TempDir(), ".polymetrics"))
+			if err != nil {
+				t.Fatalf("Init() error = %v", err)
+			}
+			err = v.Put(context.Background(), "transport_only", map[string]string{"token": tt.value})
+			var empty *credential.EmptySecretError
+			if !errors.As(err, &empty) {
+				t.Fatalf("Put() error type = %T, want typed empty-secret classification", err)
+			}
+			if _, err := os.Stat(v.path("transport_only")); !errors.Is(err, os.ErrNotExist) {
+				t.Fatalf("Put() created encrypted persistence: %v", err)
+			}
+		})
 	}
 }
 

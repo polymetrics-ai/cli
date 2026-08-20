@@ -110,6 +110,53 @@ func TestCredentialsAddStdinRejectsEmptyNormalizedSecretBeforePersistence(t *tes
 	}
 }
 
+func TestCredentialsAddFromEnvRejectsTransportOnlySecretBeforePersistence(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		value string
+	}{
+		{name: "empty", value: ""},
+		{name: "LF only", value: "\n"},
+		{name: "CRLF only", value: "\r\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			root := t.TempDir()
+			var stdout, stderr bytes.Buffer
+			if code := cli.Run([]string{"init", "--root", root, "--json"}, &stdout, &stderr); code != 0 {
+				t.Fatalf("init code = %d", code)
+			}
+			t.Setenv("PM_TEST_TRANSPORT_ONLY_CREDENTIAL", tt.value)
+
+			stdout.Reset()
+			stderr.Reset()
+			args := []string{"credentials", "add", "env-transport-only", "--connector", "sample", "--from-env", "token=PM_TEST_TRANSPORT_ONLY_CREDENTIAL", "--root", root, "--json"}
+			if code := cli.Run(args, &stdout, &stderr); code != 3 {
+				t.Fatalf("credentials add code = %d, want validation exit 3", code)
+			}
+			if !strings.Contains(stdout.String(), `"category": "validation"`) {
+				t.Fatal("transport-only environment credential did not produce validation classification")
+			}
+
+			fresh, err := app.Open(root)
+			if err != nil {
+				t.Fatalf("open fresh app: %v", err)
+			}
+			if got := len(fresh.ListCredentials()); got != 0 {
+				t.Fatalf("persisted credential count = %d, want 0", got)
+			}
+			entries, err := os.ReadDir(filepath.Join(root, ".polymetrics", "vault"))
+			if err != nil {
+				t.Fatalf("read vault: %v", err)
+			}
+			for _, entry := range entries {
+				if strings.HasSuffix(entry.Name(), ".enc") {
+					t.Fatal("transport-only environment credential created encrypted persistence")
+				}
+			}
+		})
+	}
+}
+
 func runCLIWithCredentialStdin(t *testing.T, args []string, stdin string, stdout, stderr *bytes.Buffer) int {
 	t.Helper()
 	reader, writer, err := os.Pipe()

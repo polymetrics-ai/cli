@@ -52,7 +52,7 @@ func NormalizeStdin(value string) string {
 // intentionally byte-exact: whitespace is not trimmed or rewritten before
 // encrypted persistence.
 func RequirePersistentValue(field, value string) error {
-	if value == "" {
+	if transportOnlyCredentialValue(value) {
 		return &EmptySecretError{Field: field}
 	}
 	return nil
@@ -78,10 +78,19 @@ func RequirePersistentValues(values map[string]string) error {
 // RequireAuthenticationValue rejects a blank value before a shared auth helper
 // can produce an empty request credential.
 func RequireAuthenticationValue(field, value string) error {
-	if strings.TrimSpace(value) == "" {
+	if transportOnlyCredentialValue(value) {
 		return &EmptySecretError{Field: field}
 	}
 	return nil
+}
+
+func transportOnlyCredentialValue(value string) bool {
+	switch value {
+	case "", "\n", "\r\n":
+		return true
+	default:
+		return false
+	}
 }
 
 // ValidateHTTPHeaderValue rejects credential bytes that HTTP cannot transport
