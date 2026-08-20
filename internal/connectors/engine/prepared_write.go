@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net"
 	"net/url"
+	"sort"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
@@ -22,7 +23,7 @@ type PreparedRequest struct {
 	ContentType string            `json:"content_type,omitempty"`
 	BodyFormat  string            `json:"body_format,omitempty"`
 	Body        string            `json:"body,omitempty"`
-	Headers     map[string]string `json:"headers,omitempty"`
+	Headers     map[string]string `json:"-"`
 }
 
 type PreparedWrite struct {
@@ -88,13 +89,13 @@ func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, erro
 		approvalTarget.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
 	}
 	payload := struct {
-		Version          int                            `json:"version"`
-		ApprovalTarget   connectors.WriteApprovalTarget `json:"approval_target"`
-		RecordsStaged    int                            `json:"records_staged"`
-		Action           string                         `json:"action"`
-		Definition       any                            `json:"definition"`
-		HookIdentity     string                         `json:"hook_identity,omitempty"`
-		PreparedRequests []PreparedRequest              `json:"prepared_requests"`
+		Version          int                               `json:"version"`
+		ApprovalTarget   connectors.WriteApprovalTarget    `json:"approval_target"`
+		RecordsStaged    int                               `json:"records_staged"`
+		Action           string                            `json:"action"`
+		Definition       any                               `json:"definition"`
+		HookIdentity     string                            `json:"hook_identity,omitempty"`
+		PreparedRequests []preparedRequestDigestProjection `json:"prepared_requests"`
 	}{
 		Version:          1,
 		ApprovalTarget:   approvalTarget,
@@ -102,7 +103,7 @@ func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, erro
 		Action:           prepared.Action,
 		Definition:       prepared.Definition,
 		HookIdentity:     prepared.HookIdentity,
-		PreparedRequests: prepared.Requests,
+		PreparedRequests: projectPreparedRequests(prepared.Requests),
 	}
 	raw, err := json.Marshal(payload)
 	if err != nil {
@@ -116,6 +117,59 @@ func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, erro
 		Digest:         hex.EncodeToString(digest[:]),
 		ApprovalTarget: approvalTarget,
 	}, nil
+}
+
+type preparedRequestDigestProjection struct {
+	Method        string   `json:"method"`
+	URL           string   `json:"url"`
+	Target        string   `json:"target,omitempty"`
+	Query         string   `json:"query,omitempty"`
+	ContentType   string   `json:"content_type,omitempty"`
+	BodyFormat    string   `json:"body_format,omitempty"`
+	Body          string   `json:"body,omitempty"`
+	HeaderNames   []string `json:"header_names,omitempty"`
+	HeadersSHA256 string   `json:"headers_sha256,omitempty"`
+}
+
+func projectPreparedRequests(requests []PreparedRequest) []preparedRequestDigestProjection {
+	projected := make([]preparedRequestDigestProjection, len(requests))
+	for index, request := range requests {
+		headerNames, headersSHA256 := preparedRequestHeaderDigest(request.Headers)
+		projected[index] = preparedRequestDigestProjection{
+			Method:        request.Method,
+			URL:           request.URL,
+			Target:        request.Target,
+			Query:         request.Query,
+			ContentType:   request.ContentType,
+			BodyFormat:    request.BodyFormat,
+			Body:          request.Body,
+			HeaderNames:   headerNames,
+			HeadersSHA256: headersSHA256,
+		}
+	}
+	return projected
+}
+
+func preparedRequestHeaderDigest(headers map[string]string) ([]string, string) {
+	if len(headers) == 0 {
+		return nil, ""
+	}
+	names := make([]string, 0, len(headers))
+	for name := range headers {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	payload := make([]struct {
+		Name  string `json:"name"`
+		Value string `json:"value"`
+	}, len(names))
+	for index, name := range names {
+		payload[index].Name = name
+		payload[index].Value = headers[name]
+	}
+	raw, _ := json.Marshal(payload)
+	digest := sha256.Sum256(raw)
+	return names, hex.EncodeToString(digest[:])
 }
 
 func validateFixturePreparedRequests(requests []PreparedRequest, recordsStaged int) error {
@@ -155,29 +209,36 @@ func ExecutePreparedWrite(ctx context.Context, prepared PreparedWrite, evidence 
 
 func digestPreparedTargets(prepared PreparedWrite) (string, error) {
 	targets := make([]struct {
-		Method     string `json:"method"`
-		URL        string `json:"url"`
-		Target     string `json:"target,omitempty"`
-		Query      string `json:"query,omitempty"`
-		BodyFormat string `json:"body_format,omitempty"`
-		Body       string `json:"body,omitempty"`
+		Method        string   `json:"method"`
+		URL           string   `json:"url"`
+		Target        string   `json:"target,omitempty"`
+		Query         string   `json:"query,omitempty"`
+		BodyFormat    string   `json:"body_format,omitempty"`
+		Body          string   `json:"body,omitempty"`
+		HeaderNames   []string `json:"header_names,omitempty"`
+		HeadersSHA256 string   `json:"headers_sha256,omitempty"`
 	}, len(prepared.Requests))
 	for i, request := range prepared.Requests {
+		headerNames, headersSHA256 := preparedRequestHeaderDigest(request.Headers)
 		targets[i].Method = request.Method
 		targets[i].URL = request.URL
 		targets[i].Target = request.Target
 		targets[i].Query = request.Query
 		targets[i].BodyFormat = request.BodyFormat
 		targets[i].Body = request.Body
+		targets[i].HeaderNames = headerNames
+		targets[i].HeadersSHA256 = headersSHA256
 	}
 	if len(targets) == 0 {
 		targets = append(targets, struct {
-			Method     string `json:"method"`
-			URL        string `json:"url"`
-			Target     string `json:"target,omitempty"`
-			Query      string `json:"query,omitempty"`
-			BodyFormat string `json:"body_format,omitempty"`
-			Body       string `json:"body,omitempty"`
+			Method        string   `json:"method"`
+			URL           string   `json:"url"`
+			Target        string   `json:"target,omitempty"`
+			Query         string   `json:"query,omitempty"`
+			BodyFormat    string   `json:"body_format,omitempty"`
+			Body          string   `json:"body,omitempty"`
+			HeaderNames   []string `json:"header_names,omitempty"`
+			HeadersSHA256 string   `json:"headers_sha256,omitempty"`
 		}{Method: prepared.Target.Method, Target: prepared.Target.Connector + "/" + prepared.Target.Operation})
 	}
 	raw, err := json.Marshal(targets)

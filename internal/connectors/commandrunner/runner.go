@@ -1455,7 +1455,18 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 	query := map[string]string{}
 	body := map[string]any{}
 	var rawBody *string
-	for name, values := range flags {
+	type bodyMapping struct {
+		path  string
+		value any
+	}
+	bodyMappings := make([]bodyMapping, 0)
+	names := make([]string, 0, len(flags))
+	for name := range flags {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		values := flags[name]
 		if len(values) == 0 {
 			continue
 		}
@@ -1485,9 +1496,7 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 			query[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "body."):
 			target := strings.TrimPrefix(flag.MapsTo, "body.")
-			if err := setBodyValue(body, target, value); err != nil {
-				return nil, nil, nil, nil, err
-			}
+			bodyMappings = append(bodyMappings, bodyMapping{path: target, value: value})
 		case flag.MapsTo == "body":
 			if cmd.Intent != "direct_read" || flag.Type != "string" {
 				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
@@ -1501,10 +1510,57 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 			return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
 		}
 	}
+	sort.SliceStable(bodyMappings, func(left, right int) bool {
+		return bodyMappingPathLess(bodyMappings[left].path, bodyMappings[right].path)
+	})
+	for _, mapping := range bodyMappings {
+		if err := setOperationBodyValue(body, mapping.path, mapping.value, cmd.Intent == "direct_write"); err != nil {
+			return nil, nil, nil, nil, err
+		}
+	}
 	if rawBody != nil && len(body) != 0 {
 		return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "raw body cannot mix with JSON body fields"}
 	}
 	return pathParams, query, body, rawBody, nil
+}
+
+func bodyMappingPathLess(left, right string) bool {
+	leftParts := strings.Split(left, ".")
+	rightParts := strings.Split(right, ".")
+	limit := len(leftParts)
+	if len(rightParts) < limit {
+		limit = len(rightParts)
+	}
+	for index := 0; index < limit; index++ {
+		leftPart := leftParts[index]
+		rightPart := rightParts[index]
+		if leftPart == rightPart {
+			continue
+		}
+		leftIndex, leftNumeric := bodyMappingArrayIndex(leftPart)
+		rightIndex, rightNumeric := bodyMappingArrayIndex(rightPart)
+		if leftNumeric && rightNumeric {
+			return leftIndex < rightIndex
+		}
+		return leftPart < rightPart
+	}
+	return len(leftParts) < len(rightParts)
+}
+
+func bodyMappingArrayIndex(part string) (uint64, bool) {
+	if part == "" || (len(part) > 1 && strings.HasPrefix(part, "0")) {
+		return 0, false
+	}
+	for _, r := range part {
+		if r < '0' || r > '9' {
+			return 0, false
+		}
+	}
+	index, err := strconv.ParseUint(part, 10, 64)
+	if err != nil {
+		return 0, false
+	}
+	return index, true
 }
 
 func validateOperationDirectWriteQueryOccurrences(cmd connectors.CommandSurfaceCommand, flags map[string][]string) error {
@@ -1543,11 +1599,19 @@ func validateOperationDirectWriteQueryOccurrences(cmd connectors.CommandSurfaceC
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {
+	return setOperationBodyValue(body, path, value, false)
+}
+
+func setOperationBodyValue(body map[string]any, path string, value any, declarationBoundArrays bool) error {
 	parts, err := validateDottedTargetPath(path, "body field")
 	if err != nil {
 		return err
 	}
-	_, err = setDottedValue(body, parts, value, path)
+	maxArrayIndex := maxRecordPathArrayIndex
+	if declarationBoundArrays {
+		maxArrayIndex = 0
+	}
+	_, err = setDottedValue(body, parts, value, path, maxArrayIndex)
 	return err
 }
 
@@ -1561,12 +1625,12 @@ func validateDottedTargetPath(path, field string) ([]string, error) {
 	return parts, nil
 }
 
-func setDottedValue(current any, parts []string, value any, fullPath string) (any, error) {
+func setDottedValue(current any, parts []string, value any, fullPath string, maxArrayIndex int) (any, error) {
 	if len(parts) == 0 {
 		return value, nil
 	}
 	part := parts[0]
-	if index, ok, err := pathArrayIndex(part); err != nil {
+	if index, ok, err := pathArrayIndex(part, maxArrayIndex); err != nil {
 		return nil, err
 	} else if ok {
 		items, ok := current.([]any)
@@ -1585,9 +1649,9 @@ func setDottedValue(current any, parts []string, value any, fullPath string) (an
 		}
 		child := items[index]
 		if child == nil {
-			child = newDottedContainer(parts[1])
+			child = newDottedContainer(parts[1], maxArrayIndex)
 		}
-		updated, err := setDottedValue(child, parts[1:], value, fullPath)
+		updated, err := setDottedValue(child, parts[1:], value, fullPath, maxArrayIndex)
 		if err != nil {
 			return nil, err
 		}
@@ -1605,9 +1669,9 @@ func setDottedValue(current any, parts []string, value any, fullPath string) (an
 	}
 	child, ok := object[part]
 	if !ok {
-		child = newDottedContainer(parts[1])
+		child = newDottedContainer(parts[1], maxArrayIndex)
 	}
-	updated, err := setDottedValue(child, parts[1:], value, fullPath)
+	updated, err := setDottedValue(child, parts[1:], value, fullPath, maxArrayIndex)
 	if err != nil {
 		return nil, err
 	}
@@ -1615,14 +1679,14 @@ func setDottedValue(current any, parts []string, value any, fullPath string) (an
 	return object, nil
 }
 
-func newDottedContainer(nextPart string) any {
-	if _, ok, _ := pathArrayIndex(nextPart); ok {
+func newDottedContainer(nextPart string, maxArrayIndex int) any {
+	if _, ok, _ := pathArrayIndex(nextPart, maxArrayIndex); ok {
 		return []any{}
 	}
 	return map[string]any{}
 }
 
-func pathArrayIndex(part string) (int, bool, error) {
+func pathArrayIndex(part string, maxArrayIndex int) (int, bool, error) {
 	for _, r := range part {
 		if r < '0' || r > '9' {
 			return 0, false, nil
@@ -1635,8 +1699,8 @@ func pathArrayIndex(part string) (int, bool, error) {
 	if err != nil {
 		return 0, false, fmt.Errorf("body field array index %q is invalid", part)
 	}
-	if index > maxRecordPathArrayIndex {
-		return 0, false, fmt.Errorf("body field array index %d exceeds max %d", index, maxRecordPathArrayIndex)
+	if maxArrayIndex > 0 && index > maxArrayIndex {
+		return 0, false, fmt.Errorf("body field array index %d exceeds max %d", index, maxArrayIndex)
 	}
 	return index, true, nil
 }

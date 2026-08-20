@@ -2349,6 +2349,34 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 	}
 }
 
+func TestOperationDirectReadOverridesOrdersDirectWriteArrayMappingsNumerically(t *testing.T) {
+	cmd := connectors.CommandSurfaceCommand{Intent: "direct_write", Availability: "implemented", Path: "widgets create"}
+	flags := make(map[string][]string, 130)
+	for index := 0; index < 130; index++ {
+		name := fmt.Sprintf("target-%d", index)
+		cmd.Flags = append(cmd.Flags, connectors.CommandSurfaceFlag{Name: name, Type: "string", MapsTo: fmt.Sprintf("body.targets.%d.id", index)})
+		flags[name] = []string{fmt.Sprintf("id-%d", index)}
+	}
+
+	_, _, body, raw, err := operationDirectReadOverrides(cmd, flags)
+	if err != nil {
+		t.Fatalf("operationDirectReadOverrides: %v", err)
+	}
+	if raw != nil {
+		t.Fatal("array mappings produced an unexpected raw body")
+	}
+	targets, ok := body["targets"].([]any)
+	if !ok || len(targets) != 130 {
+		t.Fatalf("targets = %#v, want 130 ordered entries", body["targets"])
+	}
+	for _, index := range []int{0, 1, 10, 129} {
+		entry, ok := targets[index].(map[string]any)
+		if !ok || entry["id"] != fmt.Sprintf("id-%d", index) {
+			t.Fatalf("targets[%d] = %#v, want declared index value", index, targets[index])
+		}
+	}
+}
+
 func TestBuildOperationDirectWriteCommandRejectsUndeclaredQueryBindings(t *testing.T) {
 	batchable := false
 	bundle := engine.Bundle{

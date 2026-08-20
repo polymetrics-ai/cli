@@ -283,6 +283,168 @@ func TestOperationDirectWriteStructuredRESTBodyRejectsInvalidInputBeforeIO(t *te
 	}
 }
 
+func TestOperationDirectWriteStructuredRESTBodyStopsAtDeclaredBoundsBeforeIO(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	t.Cleanup(server.Close)
+
+	request := structuredRESTBodyRequest()
+	request.Body["targets"] = make([]any, maxStructuredRESTBodyItems+1)
+	_, err := OperationDirectWrite(context.Background(), structuredRESTBodyBundle(server.URL), request, nil)
+	if err == nil || !strings.Contains(err.Error(), "maxItems") {
+		t.Fatalf("OperationDirectWrite error = %v, want declared array bound", err)
+	}
+	if calls != 0 {
+		t.Fatalf("over-bound body reached transport; calls = %d, want 0", calls)
+	}
+}
+
+func TestOperationDirectWriteBindsResolvedHeadersBeforeApproval(t *testing.T) {
+	const secret = "header-secret-canary"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Header.Get("Authorization") != "Bearer "+secret {
+			t.Fatal("request did not receive the preview-bound declared header")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := structuredRESTBodyBundle(server.URL)
+	bundle.HTTP.Headers = map[string]string{"Authorization": "Bearer {{ secrets.token }}"}
+	request := structuredRESTBodyRequest()
+	request.Config.Secrets = map[string]string{"token": secret}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	raw, err := json.Marshal(prepared.prepared.Requests[0])
+	if err != nil {
+		t.Fatalf("marshal prepared request: %v", err)
+	}
+	if strings.Contains(string(raw), secret) {
+		t.Fatal("prepared request serialization exposed a resolved header secret")
+	}
+
+	request.Approval = approvedEvidenceForPreview(t, preview)
+	request.PreviewDigest = preview.Digest
+	bundle.HTTP.Headers = map[string]string{"Authorization": "Bearer {{ secrets.token | unix_seconds }}"}
+	if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err == nil {
+		t.Fatal("invalid declared header was accepted after preview")
+	}
+	if calls != 0 {
+		t.Fatalf("invalid header consumed approval or reached transport; calls = %d", calls)
+	}
+
+	bundle.HTTP.Headers = map[string]string{"Authorization": "Bearer {{ secrets.token }}"}
+	request.Config.Secrets["token"] = "header-secret-after-preview"
+	if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err == nil || !strings.Contains(strings.ToLower(err.Error()), "preview") {
+		t.Fatalf("changed header OperationDirectWrite error = %v, want preview rejection", err)
+	}
+	if calls != 0 {
+		t.Fatalf("changed header reached transport; calls = %d", calls)
+	}
+
+	request.Config.Secrets["token"] = secret
+	if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err != nil {
+		t.Fatalf("OperationDirectWrite with original bound header: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("calls = %d, want one bound request", calls)
+	}
+}
+
+func TestOperationDirectWriteErrorsDoNotExposeResolvedURLValues(t *testing.T) {
+	const secret = "url-secret-canary"
+	request := structuredRESTBodyRequest()
+	request.Config.Secrets = map[string]string{"token": secret}
+
+	invalid := structuredRESTBodyBundle("http://%zz{{ secrets.token }}")
+	if _, err := PreviewOperationDirectWrite(context.Background(), invalid, request, nil); err == nil {
+		t.Fatal("invalid resolved URL was accepted")
+	} else if strings.Contains(err.Error(), secret) {
+		t.Fatal("invalid URL error exposed a resolved secret")
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte("provider failure detail"))
+	}))
+	t.Cleanup(server.Close)
+	bundle := structuredRESTBodyBundle(server.URL + "/{{ secrets.token }}")
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	request.Approval = approvedEvidenceForPreview(t, preview)
+	request.PreviewDigest = preview.Digest
+	_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil {
+		t.Fatal("provider HTTP failure was accepted")
+	}
+	if strings.Contains(err.Error(), secret) {
+		t.Fatal("HTTP failure exposed a resolved secret")
+	}
+	if !strings.Contains(err.Error(), "provider failure detail") {
+		t.Fatalf("HTTP failure = %v, want provider response body", err)
+	}
+}
+
+func TestValidateOperationDirectWriteCLIFlagsUsesCanonicalStructuredSchema(t *testing.T) {
+	base := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	valid := []CLIFlag{
+		{Name: "label", Type: "string", MapsTo: "body.label", Required: true},
+		{Name: "attributes", Type: "json", MapsTo: "body.attributes", Required: true},
+		{Name: "targets", Type: "json", MapsTo: "body.targets", Required: true},
+	}
+	if err := ValidateOperationDirectWriteCLIFlags(base, valid); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteCLIFlags valid schema: %v", err)
+	}
+
+	wrongType := append([]CLIFlag(nil), valid...)
+	wrongType[1].Type = "string"
+	if err := ValidateOperationDirectWriteCLIFlags(base, wrongType); err == nil || !strings.Contains(err.Error(), "does not match") {
+		t.Fatalf("ValidateOperationDirectWriteCLIFlags wrong object type = %v, want mismatch", err)
+	}
+
+	inferred := base
+	inferredREST := *base.REST
+	inferredREST.BodySchema = json.RawMessage(`{
+		"additionalProperties": false,
+		"required": ["settings"],
+		"properties": {
+			"settings": {"additionalProperties": false, "required": ["enabled"], "properties": {"enabled": {"type": "boolean"}}}
+		}
+	}`)
+	inferred.REST = &inferredREST
+	if err := ValidateOperationDirectWriteCLIFlags(inferred, []CLIFlag{{Name: "settings", Type: "json", MapsTo: "body.settings", Required: true}}); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteCLIFlags inferred object: %v", err)
+	}
+
+	prefix := base
+	prefixREST := *base.REST
+	prefixREST.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["values"],
+		"properties": {
+			"values": {"maxItems": 2, "prefixItems": [{"type": "string"}, {"type": "integer"}], "items": {"type": "string"}}
+		}
+	}`)
+	prefix.REST = &prefixREST
+	if err := ValidateOperationDirectWriteCLIFlags(prefix, []CLIFlag{{Name: "values", Type: "string_array", MapsTo: "body.values", Required: true}}); err == nil || !strings.Contains(err.Error(), "does not match") {
+		t.Fatalf("ValidateOperationDirectWriteCLIFlags prefixItems mismatch = %v, want mismatch", err)
+	}
+}
+
 func TestOperationDirectWriteStructuredRESTBodyRejectsUnconstrainedArrayDeclarationsBeforeIO(t *testing.T) {
 	tests := []struct {
 		name         string

@@ -785,7 +785,7 @@ func TestCheckCLISurfaceDirectWriteRequiresDeclaredPathAndBodyMappings(t *testin
 			Path:        "/widgets/{id}",
 			ContentType: "application/json",
 			MaxBytes:    1024,
-			BodySchema:  json.RawMessage(`{"type":"object","properties":{"payload":{"type":"object","properties":{"name":{"type":"string"}}}}}`),
+			BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"payload":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}`),
 		},
 	}
 	baseCommand := engine.CLICommand{
