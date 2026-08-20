@@ -17,6 +17,12 @@
 
 - Red/green source closure remains in the existing #4302 loader ledger: malformed `rest_status` declarations are refused in `engine.Load` before I/O. This remediation reran `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestBundleLoadRegistersStatusAndTextExportOperations|TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations)$'`, which passed, and added no runtime override or connector-specific route.
 
+### Review remediation — terminal non-2xx status probe
+
+- Red: source-path review confirmed that `OperationStatusCheck` used `Requester.DoLimited`, whose final non-2xx branch returns `nil, HTTPError`; therefore the renderer-only `503` fixture could not be reached by a real declared status command.
+- Green: `Requester.DoStatusCheck` is a bodyless, HEAD-only metadata path that retains normal retry/admission behavior but returns the final response metadata. The engine, runner, and existing CLI renderer now preserve the typed result end to end without changing `DoLimited` or binary-download execution.
+- Green verification: `go test -count=1 -timeout 20m ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/cli -run '^(TestRequesterDoStatusCheckPreservesFinalNon2xxResponse|TestOperationStatusCheckUsesDeclaredHEADWithoutJSONBody|TestOperationStatusCheckPreservesFinalNon2xxStatus|TestRunStatusCheckPreservesFinalNon2xxMetadata|TestWriteConnectorCommandResultPreservesStatusCheckJSON|TestWriteConnectorCommandResultPreservesStatusCheckHumanOutput|TestWriteConnectorCommandResultPreservesBinaryDownloadEnvelope|TestBinaryDownloadPreservesHTTPErrorTextAndLeavesNoFile)$'` — pass.
+
 ## Resource note
 
 - A newer standalone `internal/cli` package run (`73382` → `75699`) was revalidated against the qualified head and found already exited before its explicitly authorized cancellation could be sent. It is superseded and is not used as verification evidence. The older chained run (`57896` → `57973` → `69549`) was preserved and had also exited; its uncaptured terminal result is likewise not claimed as evidence. Subsequent checks are serial and use captured output only.

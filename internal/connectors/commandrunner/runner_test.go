@@ -36,6 +36,11 @@ type fakeConnector struct {
 	operationWritePreflightErr error
 	directWriteMetadata        connectors.OperationDirectWriteMetadata
 	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
+	statusCheckReq             connectors.OperationStatusCheckRequest
+	statusCheckPreflight       operationStatusCheckPreflightCall
+	statusCheckPreflightErr    error
+	statusCheckResult          connectors.OperationStatusCheckResult
+	statusCheckErr             error
 	directReadErr              error
 	ignoresPageNavigation      bool
 	operationDirectReadErr     error
@@ -67,6 +72,13 @@ type operationStructuredJSONVariablePreflightCall struct {
 }
 
 type operationDirectWritePreflightCall struct {
+	operation    string
+	method       string
+	path         string
+	outputPolicy string
+}
+
+type operationStatusCheckPreflightCall struct {
 	operation    string
 	method       string
 	path         string
@@ -198,6 +210,22 @@ func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connector
 		Operation: req.Operation,
 		Record:    connectors.Record{"file_path": "out/artifact", "file_size_bytes": 12},
 	}, nil
+}
+func (f *fakeConnector) OperationStatusCheck(_ context.Context, req connectors.OperationStatusCheckRequest) (connectors.OperationStatusCheckResult, error) {
+	f.statusCheckReq = req
+	if f.statusCheckErr != nil {
+		return connectors.OperationStatusCheckResult{}, f.statusCheckErr
+	}
+	return f.statusCheckResult, nil
+}
+func (f *fakeConnector) PreflightOperationStatusCheck(operation, method, path, outputPolicy string) error {
+	f.statusCheckPreflight = operationStatusCheckPreflightCall{
+		operation:    operation,
+		method:       method,
+		path:         path,
+		outputPolicy: outputPolicy,
+	}
+	return f.statusCheckPreflightErr
 }
 func (f *fakeConnector) Write(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	f.writeReq = req
@@ -2939,6 +2967,59 @@ func TestEveryImplementedCommandPassesRuntimePreflight(t *testing.T) {
 	}
 	b.WriteString("\nEither make the command executable or stop claiming it is implemented.")
 	t.Fatal(b.String())
+}
+
+func TestRunStatusCheckPreservesFinalNon2xxMetadata(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "repository status",
+			Intent:       "status_check",
+			Availability: "implemented",
+			Operation:    "github.repository.status",
+			APISurface: []connectors.CommandSurfaceEndpointRef{
+				{Method: http.MethodHead, Path: "/repos/{owner}/{repo}"},
+			},
+			OutputPolicy: "status",
+		}}},
+		statusCheckResult: connectors.OperationStatusCheckResult{
+			Connector: "github",
+			Operation: "github.repository.status",
+			Method:    http.MethodHead,
+			Path:      "/repos/octo/hello",
+			Status:    http.StatusServiceUnavailable,
+			BodyBytes: 0,
+		},
+	}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path: []string{"repository", "status"},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for status check")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.StatusCheck == nil {
+		t.Fatal("Run result carries no status check")
+	}
+	if result.StatusCheck.Status != http.StatusServiceUnavailable || result.StatusCheck.BodyBytes != 0 {
+		t.Fatalf("status result = %#v, want final 503 metadata", result.StatusCheck)
+	}
+	if result.DirectRead != nil || result.BinaryDownload != nil || result.Count != 0 {
+		t.Fatalf("status check fell through to another result shape: %#v", result)
+	}
+	if got := connector.statusCheckReq.Operation; got != "github.repository.status" {
+		t.Fatalf("status operation = %q, want github.repository.status", got)
+	}
+	if got, want := connector.statusCheckPreflight, (operationStatusCheckPreflightCall{
+		operation:    "github.repository.status",
+		method:       http.MethodHead,
+		path:         "/repos/{owner}/{repo}",
+		outputPolicy: "status",
+	}); got != want {
+		t.Fatalf("status preflight = %#v, want %#v", got, want)
+	}
 }
 
 func binaryDownloadTestConnector() *fakeConnector {

@@ -11,6 +11,10 @@ Manual inline review is the recorded GSD fallback for this single-worker Firstma
 - The test fixture proves a status result with non-empty ETL fields cannot fall through to `ConnectorCommandRead`, and retains non-200/zero-body metadata.
 - The local live declaration and icon alias were removed before review; `git status` contains no proof-only files.
 
+## Review remediation
+
+The renderer-only `503` case did not cover the actual request path: generic `DoLimited` returned an error for every final non-2xx response before commandrunner could construct `StatusCheck`. A dedicated HEAD-only requester path now returns final response metadata for status probes while preserving generic `DoLimited` behavior for binary downloads and other operations. Focused requester, engine, runner, CLI-rendering, and binary-regression tests pass.
+
 ## Result
 
-No actionable implementation, security, or scope findings. Current-head remote review and CI remain a PR-level handoff gate.
+No remaining actionable implementation, security, or scope findings. Current-head remote review and CI remain a PR-level handoff gate.

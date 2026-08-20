@@ -51,7 +51,7 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if cap == 0 {
 		cap = defaultOperationStatusMaxBytes
 	}
-	response, err := requester.DoLimited(requestCtx, http.MethodHead, normalizeDirectReadPathForBaseURL(path, directReadBaseURL(b, cfg)), query, nil, cap)
+	response, err := requester.DoStatusCheck(requestCtx, normalizeDirectReadPathForBaseURL(path, directReadBaseURL(b, cfg)), query, cap)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status %s %s: %w", http.MethodHead, op.REST.Path, err)
 	}
