@@ -3,7 +3,7 @@
 ## Task Delivery Header
 
 - Issue: Refs #4302 — status/export foundation; Refs #4303 — declarative reverse ETL; Refs #4305 — structured REST body; Refs #4306 — source import; Refs #4307 — closed operation runtime.
-- Base branch: `main` at `e62ae21d428f0d27225f9bff564dc2cd797f6b65`.
+- Provisional integration base: `114a67727f2ef60b132054091c73987be4118a9b` (Firstmate-approved clean branch state; preserved parent `9e3cd99b7ebd2ebac2303ad8770e50fee85c92c6`).
 - Merges into: `fm/cli-current-foundations-main-integration-r1 → main`.
 - Delivery: One human-gated rollup PR against `main`, created only by the later no-mistakes stage after this branch has the exact qualified component heads, local production gates, actual-provider qualification, and a complete evidence manifest.
 - Working branch: `fm/cli-current-foundations-main-integration-r1`.
@@ -32,9 +32,9 @@
 1. Confirm the immutable source-import head for #4306 / #4312, then merge it without rewriting its history.
 2. Confirm the immutable closed-runtime head for #4307 / #4311, inspect source-import/runtime overlap, add red tests before any correction, and merge it.
 3. The exact #4302 / #4308 head has Firstmate's terminal qualification; inspect and merge it after #4306 and #4307 without rewriting its history.
-4. Wait for Firstmate's exact published, qualified structured-body head for #4305; do not substitute the visible pre-remediation branch.
-5. Wait for Firstmate's exact published, qualified reverse-ETL head for #4303; do not substitute the currently failing #4304 head.
-6. Compose each newly qualified exact head in the declared dependency order, resolving only with production-shaped red → green → refactor evidence.
+4. Compose the captain-authorized provisional local no-mistakes structured-body head #4305 / `55ddb650aa5594ddd156b0939cb1df6027a31d56` through its preserved merge `0eb98d3844da7b48d0ca27f51ba7deb46d8f5d1b`; do not substitute the older visible branch head.
+5. Compose the captain-authorized provisional local no-mistakes reverse-ETL head #4303 / `e7f474375af969555efd82f684ad6d0b8a26cfc0` through its preserved merge `808896a28873c5f0479fa10e2f798da56f885b5e`; do not substitute the currently failing #4304 head.
+6. Stop at an unpushed composite after focused combined checks and independent-review evidence. Later component commits are additive follow-ups, not substitutions.
 
 ## TDD integration slices
 
@@ -55,7 +55,7 @@
 ## Checkpoints
 
 - [x] Isolated worktree, clean `main` base, no-mistakes daemon health, GSD adapter, skills, base commit, and published-ref intake verified.
-- [ ] All five Firstmate-qualified immutable component heads received and re-read through `gh-axi` (three currently eligible: #4306, #4307, and #4302).
-- [ ] Component history merged in dependency order with conflict probes and red-green-refactor evidence (first three exact inputs composed; #4305 and #4303 pending final heads).
-- [ ] Full local and provider qualifications pass from one final integrated SHA.
-- [ ] Evidence manifest/report is complete, temporary qualification material is removed recoverably, branch is clean, and implementation is committed.
+- [x] All three published heads were re-read through `gh-axi`; #4305/#4303 use the captain-authorized exact local-pipeline provenance recorded in the input manifest.
+- [x] Component history is preserved through exact merge ancestry, with focused red-green-refactor evidence for both shared seams.
+- [ ] Focused local combined checks pass from one provisional composite SHA (in progress).
+- [ ] Independent-review evidence manifest/report is complete, branch is clean, and the checkpoint is committed and unpushed.

@@ -1,13 +1,28 @@
-# Current Foundations Main Integration r1 — Intake Report
+# Current Foundations Main Integration r1 — Provisional Composite
 
-**Base:** `main` / `e62ae21d428f0d27225f9bff564dc2cd797f6b65`.
+**Composite:** `808896a28873c5f0479fa10e2f798da56f885b5e` on `fm/cli-current-foundations-main-integration-r1`.
 
-The base already contains the non-empty credential-input foundation from #4310 and the slim production source-lock embed from #4309. The component pull requests remain open and unmodified.
+**Base:** `114a67727f2ef60b132054091c73987be4118a9b`, whose preserved parent is the existing #4308 integration merge. It already retains the #4310 non-empty credential-input foundation and #4309 source-lock embed.
 
-Remote pull-heads re-read through `gh-axi` and verified against `origin` are recorded in `input-manifest.json`. Eligible inputs are #4312 (`19a32bd0bc08faf217be8f45b39841b5ff589a92`), #4311 (`3c768cade6703426afd2272fbc01bfd60583e04f`), and #4308 (`fe5b8e18788538c4fcce34969da7ff88a7fa66d6`). Firstmate supplied #4308's successful Verify run `32354323284` and its real-provider qualification for that exact SHA. #4305 and #4303 remain held until Firstmate supplies the final published no-mistakes heads; the visible #4304 head has failing checks and is not an input.
+## Exact provenance and ancestry
 
-#4312 and #4311 are composed through preserved merge commits. The #4308 probe exposed a genuine overlap: #4311's typed declaration-owned header retention used the ordinary response path, while #4308's status-only contract must retain a final non-2xx result after retry. The production-shaped red test reproduced the loss as an `http 404` error before final metadata was returned. The merged correction keeps #4311's exact typed request/response header handling and uses #4308's closed `DoStatusCheck` only for declared `rest_status` HEAD operations. Focused engine, connsdk retry, commandrunner, and CLI tests are green. Binary/text GET error handling remains on its ordinary bounded response path; no generic HTTP authority was added.
+The existing published #4312, #4311, and #4308 component heads remain preserved through their prior merge commits recorded in `input-manifest.json`. The captain additionally authorized these exact, provisional local no-mistakes pipeline heads:
 
-The exact #4312, #4311, and #4308 component heads are ancestors of this branch through merge commits `223f7b126eb4039f5c940a3cf233b15d6a18eff6`, `1cb9cdb31c2fc446fe1da0b176b7422f04e81111`, and `9e3cd99b7ebd2ebac2303ad8770e50fee85c92c6` respectively. No component history was copied, rewritten, or mutated.
+| Issue | Exact component head | Local source (read-only) | Preserving merge |
+| --- | --- | --- | --- |
+| #4305 structured bodies | `55ddb650aa5594ddd156b0939cb1df6027a31d56` | `.../e56f7e7b3cf6/01M0DY0HM9HNZVNKJ2J9Z9SCG7` | `0eb98d3844da7b48d0ca27f51ba7deb46d8f5d1b` |
+| #4303 reverse ETL | `e7f474375af969555efd82f684ad6d0b8a26cfc0` | `.../e56f7e7b3cf6/01M0DYNQ9HSJBYS9YQ4MJR4JGR` | `808896a28873c5f0479fa10e2f798da56f885b5e` |
 
-The remaining integration boundary is the outstanding #4305 and #4303 handoff. No older or unpushed head has been substituted.
+Each SHA was fetched directly from the specified local worktree without modifying either worktree. No older remote ref was used as a substitute. The two heads are merge parents of the listed commits, preserving their complete histories.
+
+## Converged overlap
+
+The shared direct-write/requester seam now retains complete typed provider receipts (status, repeatable headers, raw text or base64 body bytes, decoded body, operation, and path) for declared reverse-ETL actions, including terminal errors. Printable diagnostics remain secret-safe. Declaration-owned headers remain typed and preview-bound; structured body, query, and path bindings are materialized together. GraphQL treats omitted or JSON content type as its declared JSON protocol and preserves explicit text/binary results byte-for-byte.
+
+The status-only `HEAD` path continues to return its final terminal 4xx/5xx metadata after normal retry behavior. Ordinary binary/text GET errors retain their existing error/no-output behavior. No generic raw HTTP method, path, header, body, or action authority was added.
+
+## Checkpoint state
+
+Focused combined checks passed from the composite: full `internal/app`, `internal/connectors/engine`, `connsdk`, `commandrunner`, focused persisted reverse/structured/status CLI cases, focused `synctransport`, focused source-import/generator cases, `go build ./cmd/pm`, `connectorgen validate`, `surface-sync --check`, documentation validation through the built binary, `connector-boundary`, and the generated website data test. The exact commands and assertions are in `evidence-manifest.json`.
+
+The composite is intentionally **unpublished**: no push, pull request, merge to `main`, component-PR mutation, or no-mistakes run was performed. `REVIEW-CONVERGENCE.md` is the independent deep-review charter. The machine-readable input/evidence manifests identify the exact inputs, local provenance, and focused command results without credentials. The temporary locally-built `pm` binary was moved recoverably to Trash after the checks.

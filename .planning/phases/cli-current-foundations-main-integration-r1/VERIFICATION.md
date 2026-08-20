@@ -1,13 +1,17 @@
 # Verification Checklist — Current Foundations Main Integration r1
 
+## Provisional-composite boundary (captain direction, 2026-08-20)
+
+This checkpoint is intentionally limited to exact local-pipeline composition, the focused combined behavioral gates below, evidence, and independent deep review. It must remain unpushed. Full `make verify`, real-provider qualification, CI, pull-request creation, and no-mistakes are deferred to the later Firstmate-directed stage; they are not represented as passing here.
+
 ## Required local gates
 
-- [ ] Build the actual installed `pm` binary from the final composed SHA.
-- [ ] Run focused engine, commandrunner, App, CLI, sync-transport, source-import, generator, and regression packages with `-timeout 20m`.
-- [ ] Run `go vet ./...` and `go build ./cmd/pm`.
-- [ ] Run `go run ./cmd/connectorgen validate` and `go run ./cmd/connectorgen surface-sync --check`.
-- [ ] Run generated CLI/help/manual/website and `connector-boundary` gates.
-- [ ] Run full `make verify` once through a completion-tracked command.
+- [x] Build the local `pm` binary from the provisional composed SHA; use it for documentation validation; move it recoverably to Trash afterward.
+- [x] Run focused engine, commandrunner, App, CLI, sync-transport, source-import, generator, and regression packages with `-timeout 20m`.
+- [ ] Run `go vet ./...` (deferred to the later full verifier); `go build ./cmd/pm` passed.
+- [x] Run `go run ./cmd/connectorgen validate` and `go run ./cmd/connectorgen surface-sync --check`.
+- [x] Run generated CLI/help/manual/website and `connector-boundary` gates.
+- [ ] Run full `make verify` once through a completion-tracked command (deferred to the later Firstmate stage).
 
 ## Required real-provider gates
 

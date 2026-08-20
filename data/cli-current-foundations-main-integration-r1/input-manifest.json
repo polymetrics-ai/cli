@@ -4,9 +4,10 @@
   "branch": "fm/cli-current-foundations-main-integration-r1",
   "target_branch": "main",
   "base": {
-    "ref": "refs/heads/main",
-    "sha": "e62ae21d428f0d27225f9bff564dc2cd797f6b65",
-    "verified_remote": true,
+    "ref": "provisional integration base",
+    "sha": "114a67727f2ef60b132054091c73987be4118a9b",
+    "verified_remote": false,
+    "provenance": "Firstmate-approved clean integration branch base; parent is preserved #4308 integration merge 9e3cd99b7ebd2ebac2303ad8770e50fee85c92c6",
     "included_foundations": [
       {
         "pr": 4310,
@@ -66,22 +67,32 @@
     {
       "issue": 4305,
       "branch": "fm/cli-rest-structured-body-r1",
-      "qualification": "pending_final_published_firstmate_head",
-      "state": "not_eligible"
+      "sha": "55ddb650aa5594ddd156b0939cb1df6027a31d56",
+      "source": "Firstmate-supplied local no-mistakes pipeline worktree",
+      "pipeline_worktree": "/Users/karthiksivadas/.no-mistakes/worktrees/e56f7e7b3cf6/01M0DY0HM9HNZVNKJ2J9Z9SCG7",
+      "remote_ref": "not used; older visible branch head explicitly not substituted",
+      "qualification": "captain-approved provisional exact local-pipeline head",
+      "state": "merged_preserved_history_provisional",
+      "integration_merge_commit": "0eb98d3844da7b48d0ca27f51ba7deb46d8f5d1b",
+      "component_head_is_ancestor": true
     },
     {
       "issue": 4303,
       "supersedes_visible_pr": 4304,
-      "visible_remote_ref": "refs/pull/4304/head",
-      "visible_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57",
-      "visible_checks": "15 passed, 3 failed, 6 skipped",
-      "qualification": "pending_final_published_firstmate_head; visible head is explicitly unusable",
-      "state": "not_eligible"
+      "sha": "e7f474375af969555efd82f684ad6d0b8a26cfc0",
+      "source": "Firstmate-supplied local no-mistakes pipeline worktree",
+      "pipeline_worktree": "/Users/karthiksivadas/.no-mistakes/worktrees/e56f7e7b3cf6/01M0DYNQ9HSJBYS9YQ4MJR4JGR",
+      "remote_ref": "not used; older visible pull head explicitly not substituted",
+      "qualification": "captain-approved provisional exact local-pipeline head",
+      "state": "merged_preserved_history_provisional",
+      "integration_merge_commit": "808896a28873c5f0479fa10e2f798da56f885b5e",
+      "component_head_is_ancestor": true
     }
   ],
   "intake": {
     "gh_axi_reread": [4308, 4311, 4312, 4304],
     "remote_ref_verification": "git ls-remote origin",
-    "status": "partial_inputs_only"
+    "local_pipeline_fetch": "git fetch --no-tags <Firstmate-supplied local worktree> <exact SHA>; neither pipeline worktree was modified",
+    "status": "provisional_local_pipeline_composite_ready_for_independent_review"
   }
 }
