@@ -72,3 +72,17 @@ definition-owned boundary remained intact under a fresh run.
 - `make verify` — passed locally. The complete result is retained at `traces/make-verify-rerun-20260820.log`; it includes the full test tree, docs, smoke, lint, generator, certification, connector-boundary, canon, and release-target gates.
 - `git diff --check main...HEAD` — passed.
 - `gh api /repos/polymetrics-ai/cli/pulls/4304 --jq .base.ref` — returned `main`, matching the task delivery header.
+
+## Website generated-data repair
+
+The fresh GitHub `Website Data` check for published head `d814875a9` exposed
+one stale derived documentation artifact: `website/lib/docs.generated.ts`.
+The source MDX was already correct; the artifact had not been regenerated.
+
+- **Red:** GitHub run `32359923322`, job `96397130733`, failed its generated-file check because `website/lib/docs.generated.ts` changed after `npm run gen:website-data`.
+- **Green:** `cd website && pnpm run gen:website-data` regenerated only `lib/docs.generated.ts`; a second run was idempotent.
+- `cd website && pnpm run lint` — passed with 13 pre-existing warnings and no errors.
+- `cd website && pnpm run typecheck` — passed.
+- `cd website && pnpm run test:unit` — passed: 12 files, 80 tests.
+- `cd website && pnpm run test:scripts` — passed: 29 tests.
+- `cd website && pnpm run build` — passed.

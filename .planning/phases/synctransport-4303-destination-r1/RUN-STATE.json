@@ -11,6 +11,7 @@
     "code_review": "clean_inline_manual_fallback",
     "application_dispatch": "passed",
     "complete_result_output": "passed",
-    "revalidation_2026_08_20": "passed_locally"
+    "revalidation_2026_08_20": "passed_locally",
+    "website_generated_data": "repaired_and_verified_locally"
   }
 }

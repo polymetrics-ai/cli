@@ -79,6 +79,11 @@ and independent provider-state label read-back all remained intact.
 - `make verify` passed locally, including the complete Go test tree, docs,
   smoke, lint, generator/certification, connector-boundary, canon, and release
   checks.
+- The fresh Website Data failure identified stale generated documentation, not a
+  runtime or connector defect. `cd website && pnpm run gen:website-data`
+  regenerated `website/lib/docs.generated.ts`; a second run was idempotent.
+  Website lint, typecheck, unit tests, script tests, and production build all
+  passed locally.
 - `go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/cli -run '^TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels$'` passed: add, set, keyed replay, independent API label read-back, acknowledgement, and checkpoint.
 - `git diff --check main...HEAD` passed.
 
@@ -94,3 +99,4 @@ revalidation and review record are in the phase artifacts.
 - `c6f03c937` feat(synctransport): compose typed destinations (Refs #4303)
 - `609f23bb3` feat(synctransport): compose typed reverse-ETL destinations
 - `c8e75083c` docs(synctransport): record destination revalidation (Refs #4303)
+- Generated website-data repair (this commit; Refs #4303)
