@@ -957,7 +957,7 @@ func interpolateDeclaredHeader(template string, vars Vars) (string, error) {
 			out.WriteString(token.literal)
 			continue
 		}
-		value, err := resolveExpr(token.expression, vars, false)
+		value, err := resolveExpr(token.expression, vars, false, false)
 		if err != nil {
 			return "", err
 		}

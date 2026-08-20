@@ -35,3 +35,10 @@
 - Green: `go test -timeout 20m ./internal/connectors/engine -run 'Test(BuildWriteQueryOmitWhenAbsentScopesMissingRecordValuesToTheirDeclaredQuery|WriteActionRecordQueryRejectionsHappenBeforeProviderIO|WriteActionOptionalRecordQueryIsOmittedOrPreservedAtProvider|WriteActionQuery)' -count=1` passed.
 - `buildWriteQuery` now uses a write-only resolver. It omits only an unresolved `record.*` reference whose exact object-form `QueryParam` sets `omit_when_absent`; plain/required entries, an undeclared record key attempting to populate a declared query, wrong sources, malformed values, and all other errors reject before provider I/O.
 - Config, secrets, and incremental omission/default behavior stays in the shared resolver and is regression-tested unchanged. An explicit `record.*` value is transmitted through the declared parameter unchanged.
+
+### 2026-08-21 — CI compiler and generated-website-data repair
+
+- Red: the PR's `verify`, `connector-boundary`, `govulncheck`, native build, and package-binary jobs all stopped before execution with `internal/connectors/engine/read.go:960:53: not enough arguments in call to resolveExpr`. The focused local engine test reproduced the same compiler failure.
+- Root cause: the secret-safe interpolation hardening extended `resolveExpr` with its `allowControlCharacters` argument, while `interpolateDeclaredHeader` retained the obsolete three-argument call.
+- Green: the declaration-bound header path now supplies `false`, preserving its established unsafe-control-character rejection. `go test -timeout 20m ./internal/connectors/engine -run 'TestOperationDirectWriteStructuredRESTBody' -count=1` and the full engine package pass; `go build -trimpath -ldflags='-s -w' ./cmd/pm`, `go vet ./...`, `go run ./cmd/connectorgen boundary . --json`, and `go run golang.org/x/vuln/cmd/govulncheck@latest ./...` also pass.
+- Website generated data: `npm run gen:website-data` updates only `website/lib/docs.generated.ts`; a second generation is stable and website typechecking passes. The tracked payload now includes the existing declaration-bound structured-write documentation.
