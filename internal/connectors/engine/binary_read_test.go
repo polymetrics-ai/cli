@@ -176,6 +176,23 @@ func TestBinaryDownloadRejectsUndeclaredSuccessfulStatusBeforeArtifact(t *testin
 	}
 }
 
+func TestBinaryDownloadRejectsUndeclaredContentTypeParametersBeforeArtifact(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/pdf; profile=unapproved")
+		_, _ = w.Write([]byte("%PDF-1.4"))
+	}))
+	t.Cleanup(srv.Close)
+	b := binaryBundle(srv, &BinaryOperationSpec{ContentTypes: []string{"application/pdf; profile=approved"}})
+	dest := t.TempDir()
+	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil); err == nil || !strings.Contains(err.Error(), "parameters") {
+		t.Fatalf("undeclared content-type parameter error = %v", err)
+	}
+	entries, err := os.ReadDir(dest)
+	if err != nil || len(entries) != 0 {
+		t.Fatalf("undeclared content-type parameters left artifacts: %v / %v", entries, err)
+	}
+}
+
 // TestBinaryDownloadExactLimitSucceeds: exactly at the limit is fine — the
 // read-one-past technique must not create an off-by-one rejection.
 func TestBinaryDownloadExactLimitSucceeds(t *testing.T) {

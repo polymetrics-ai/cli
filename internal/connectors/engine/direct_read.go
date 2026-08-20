@@ -166,7 +166,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if len(redactFields) > 0 {
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
-	responseHeaders, err := operationResponseHeaders(op, resp.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}

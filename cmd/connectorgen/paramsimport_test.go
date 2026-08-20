@@ -223,6 +223,25 @@ func TestParamsImportImportsOnlyBoundedTypedHeaders(t *testing.T) {
 	if err != nil || changed != 0 {
 		t.Fatalf("bounded header re-import changed/err = %d/%v, want 0/nil", changed, err)
 	}
+	operationsPath := filepath.Join(defsDir, "acme", "operations.json")
+	operations, err := os.ReadFile(operationsPath)
+	if err != nil {
+		t.Fatalf("read imported operations: %v", err)
+	}
+	operations = []byte(strings.Replace(string(operations), "\"max_bytes\": 16", "\"max_bytes\": 16, \"repeatable\": true", 1))
+	if err := os.WriteFile(operationsPath, operations, 0o644); err != nil {
+		t.Fatalf("write repeatable operation parameter: %v", err)
+	}
+	changed, _, err = importConnectorParameters(paramsImportOptions{connector: "acme", artifact: artifact, defsDir: defsDir})
+	if err != nil || changed != 0 {
+		t.Fatalf("repeatable header re-import changed/err = %d/%v, want 0/nil", changed, err)
+	}
+	for _, parameter := range importedFixtureParameters(t, defsDir) {
+		if parameter["name"] == "X-Request-Mode" && parameter["repeatable"] == true {
+			return
+		}
+	}
+	t.Fatal("repeatable declaration was not preserved through parameter import")
 }
 
 func TestParamsImportRejectsHeaderOwnedByRuntime(t *testing.T) {

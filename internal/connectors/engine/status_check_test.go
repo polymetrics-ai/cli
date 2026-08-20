@@ -96,6 +96,21 @@ func TestOperationStatusCheckRejectsOversizedMetadataCapBeforeIO(t *testing.T) {
 	}
 }
 
+func TestOperationStatusCheckRejectsMissingMetadataCapBeforeIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
+	t.Cleanup(srv.Close)
+	bundle := statusCheckBundle(srv.URL, http.MethodHead)
+	bundle.Operations[0].REST.MaxBytes = 0
+	_, err := New(bundle, nil).OperationStatusCheck(context.Background(), connectors.OperationStatusCheckRequest{Operation: "acme.tags.status"})
+	if err == nil || !strings.Contains(err.Error(), "cap") {
+		t.Fatalf("OperationStatusCheck error = %v, want bounded-cap refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("requests = %d, want pre-I/O refusal", requests)
+	}
+}
+
 func TestOperationStatusCheckRejectsMissingOrUndeclaredStatusBeforeBodyHandling(t *testing.T) {
 	requests := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {

@@ -1421,6 +1421,34 @@ func TestRequesterDoFormNoBodySendsNoContentType(t *testing.T) {
 	}
 }
 
+func TestRequesterDoStripsOverwrittenAuthHeaderCrossOrigin(t *testing.T) {
+	var sawAccept atomic.Value
+	sawAccept.Store("")
+	cdn := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sawAccept.Store(r.Header.Get("Accept"))
+		_, _ = w.Write([]byte("ok"))
+	}))
+	t.Cleanup(cdn.Close)
+	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, cdn.URL+"/final", http.StatusFound)
+	}))
+	t.Cleanup(origin.Close)
+	r := &Requester{
+		BaseURL: origin.URL,
+		Auth:    customHeaderAuth("Accept", "credential"),
+		RedirectPolicy: &RedirectPolicy{
+			MaxHops:      1,
+			AllowedHosts: []string{strings.TrimPrefix(cdn.URL, "http://")},
+		},
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/start", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got := sawAccept.Load().(string); got != "" {
+		t.Fatalf("cross-origin redirect received overwritten auth header %q", got)
+	}
+}
+
 func TestParseRetryAfterSeconds(t *testing.T) {
 	d, ok := parseRetryAfter("5")
 	if !ok || d != 5*time.Second {

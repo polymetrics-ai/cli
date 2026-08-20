@@ -62,9 +62,6 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 		return connectors.OperationStatusCheckResult{}, err
 	}
 	cap := op.REST.MaxBytes
-	if cap == 0 {
-		cap = defaultOperationStatusMaxBytes
-	}
 	response, err := requester.DoLimited(requestCtx, http.MethodHead, normalizeDirectReadPathForBaseURL(path, directReadBaseURL(b, cfg)), query, nil, cap)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status %s %s: %w", http.MethodHead, op.REST.Path, err)
@@ -72,7 +69,7 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if len(response.Body) > cap {
 		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status response exceeded metadata cap")
 	}
-	responseHeaders, err := operationResponseHeaders(op, response.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, response.Header)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
@@ -101,8 +98,8 @@ func operationStatusCheckSpec(b Bundle, operation string) (OperationSpec, error)
 	if op.Kind != "rest_status" || op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodHead || op.OutputPolicy != "status" {
 		return OperationSpec{}, fmt.Errorf("operation %q is not a declared HEAD status operation", operation)
 	}
-	if op.REST.MaxBytes < 0 || op.REST.MaxBytes > defaultOperationStatusMaxBytes {
-		return OperationSpec{}, fmt.Errorf("operation %q status response cap must be between 0 and %d bytes", operation, defaultOperationStatusMaxBytes)
+	if op.REST.MaxBytes <= 0 || op.REST.MaxBytes > defaultOperationStatusMaxBytes {
+		return OperationSpec{}, fmt.Errorf("operation %q status response cap must be between 1 and %d bytes", operation, defaultOperationStatusMaxBytes)
 	}
 	if len(op.REST.Body) != 0 || len(op.REST.BodySchema) != 0 || strings.TrimSpace(op.REST.ContentType) != "" {
 		return OperationSpec{}, fmt.Errorf("operation %q status check must not declare a request body", operation)

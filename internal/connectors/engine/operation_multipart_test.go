@@ -89,6 +89,9 @@ func TestOperationDirectWriteMetadataRecognizesTypedMultipartRestWrite(t *testin
 	if len(metadata.PayloadFileFields) != 1 || metadata.PayloadFileFields[0] != "media_file_path" {
 		t.Fatalf("multipart payload file fields = %#v, want the declared source path", metadata.PayloadFileFields)
 	}
+	if metadata.PayloadFileMaxBytes["media_file_path"] != 1024 {
+		t.Fatalf("multipart payload file cap = %#v, want declared cap", metadata.PayloadFileMaxBytes)
+	}
 }
 
 func TestBundleLoadRejectsUnsafeMultipartRestWriteContracts(t *testing.T) {
@@ -253,6 +256,17 @@ func TestBundleLoadRejectsUnsafeMultipartRestWriteContracts(t *testing.T) {
 				1,
 			),
 			wantErr: "file part",
+		},
+		{
+			name: "file source must declare media policy",
+			kind: "rest_write",
+			rest: strings.Replace(
+				validMultipartRestWrite,
+				"\"max_bytes\": 1024,\n\t\t\t\t\"content_type\": \"text/plain\",\n\t\t\t\t\"allowed_media_types\": [\"text/plain\"]",
+				"\"max_bytes\": 1024",
+				1,
+			),
+			wantErr: "media policy",
 		},
 		{
 			name:    "legacy file upload does not become an operation executor",

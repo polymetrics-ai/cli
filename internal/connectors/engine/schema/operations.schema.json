@@ -152,6 +152,7 @@
                     "in": { "type": "string", "enum": ["query", "path", "header"] },
                     "type": { "type": "string" },
                     "required": { "type": "boolean" },
+                    "repeatable": { "type": "boolean" },
                     "values": { "type": "array", "items": { "type": "string" } },
                     "summary": { "type": "string" },
                     "schema": { "type": "object" },

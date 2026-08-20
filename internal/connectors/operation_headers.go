@@ -51,4 +51,6 @@ var protectedOperationHeaderNames = map[string]struct{}{
 	"x-api-token": {}, "x-auth-token": {}, "x-authentication-token": {},
 	"x-authorization": {}, "x-client-secret": {}, "x-original-url": {}, "x-real-ip": {},
 	"x-rewrite-url": {}, "x-secret-key": {}, "x-session-token": {}, "x-token": {},
+	"method-override": {}, "x-http-method": {}, "x-http-method-override": {},
+	"x-method": {}, "x-method-override": {}, "x-override-method": {},
 }

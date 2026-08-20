@@ -240,6 +240,7 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 			}
 		}
 		want := importedParameters(doc, parameters, skip)
+		preserveDeclaredHeaderRepeatability(block, want)
 		if err := validateImportedOperationHeaders(want, runtimeHeaders); err != nil {
 			return 0, 0, fmt.Errorf("operation %q: %w", stringField(op, "id"), err)
 		}
@@ -700,6 +701,12 @@ func sameImportedParameter(got *orderedObject, want map[string]any) bool {
 	if required != wantRequired {
 		return false
 	}
+	gotRepeatable, _ := got.get("repeatable")
+	repeatable, _ := gotRepeatable.(bool)
+	wantRepeatable, _ := want["repeatable"].(bool)
+	if repeatable != wantRepeatable {
+		return false
+	}
 	wantValues, _ := want["values"].([]string)
 	gotValues := arrayField(got, "values")
 	if len(gotValues) != len(wantValues) {
@@ -770,6 +777,9 @@ func setImportedField(rest *orderedObject, field string, want []map[string]any) 
 		if required, ok := param["required"].(bool); ok && required {
 			entry.set("required", true)
 		}
+		if repeatable, ok := param["repeatable"].(bool); ok && repeatable {
+			entry.set("repeatable", true)
+		}
 		if values, ok := param["values"].([]string); ok && len(values) > 0 {
 			list := make([]any, 0, len(values))
 			for _, value := range values {
@@ -789,4 +799,35 @@ func setImportedField(rest *orderedObject, field string, want []map[string]any) 
 		entries = append(entries, entry)
 	}
 	rest.set(field, entries)
+}
+
+func preserveDeclaredHeaderRepeatability(rest *orderedObject, want []map[string]any) {
+	repeatable := make(map[string]struct{})
+	for _, raw := range arrayField(rest, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "header" {
+			continue
+		}
+		value, _ := parameter.get("repeatable")
+		if enabled, _ := value.(bool); !enabled {
+			continue
+		}
+		name, err := connectors.CanonicalOperationHeaderName(stringField(parameter, "name"))
+		if err == nil {
+			repeatable[name] = struct{}{}
+		}
+	}
+	for _, parameter := range want {
+		if parameter["in"] != "header" {
+			continue
+		}
+		name, _ := parameter["name"].(string)
+		canonical, err := connectors.CanonicalOperationHeaderName(name)
+		if err != nil {
+			continue
+		}
+		if _, ok := repeatable[canonical]; ok {
+			parameter["repeatable"] = true
+		}
+	}
 }

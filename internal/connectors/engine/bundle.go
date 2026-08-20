@@ -2600,6 +2600,9 @@ func validateOperationMultipartSemantics(i int, op OperationSpec) error {
 			if part.MaxBytes <= 0 {
 				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires a positive max_bytes", i, op.ID, part.Name)
 			}
+			if strings.TrimSpace(part.ContentType) == "" && len(part.AllowedMediaTypes) == 0 {
+				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires declared media policy", i, op.ID, part.Name)
+			}
 		default:
 			return fmt.Errorf("operation %d (%q) rest.multipart part %d has unsupported type %q", i, op.ID, partIndex, part.Type)
 		}
@@ -2748,8 +2751,8 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if op.OutputPolicy != "status" {
 			return fmt.Errorf("operation %d (%q) rest_status output_policy must be status", i, op.ID)
 		}
-		if op.REST.MaxBytes < 0 || op.REST.MaxBytes > 1024 {
-			return fmt.Errorf("operation %d (%q) rest_status max_bytes must be between 0 and 1024", i, op.ID)
+		if op.REST.MaxBytes <= 0 || op.REST.MaxBytes > 1024 {
+			return fmt.Errorf("operation %d (%q) rest_status max_bytes must be between 1 and 1024", i, op.ID)
 		}
 		if len(op.REST.Body) != 0 || len(op.REST.BodySchema) != 0 || strings.TrimSpace(op.REST.ContentType) != "" {
 			return fmt.Errorf("operation %d (%q) rest_status must not declare a request body", i, op.ID)

@@ -915,6 +915,7 @@ func TestOperationDirectReadRejectsHeaderEscapeHatchesBeforeNetwork(t *testing.T
 		{name: "protected API key underscore variant", headers: map[string]string{"X_Api_Key": "forbidden"}, want: "protected"},
 		{name: "protected auth token underscore variant", headers: map[string]string{"x_auth_token": "forbidden"}, want: "protected"},
 		{name: "protected forwarding underscore variant", headers: map[string]string{"x_forwarded_host": "forbidden.test"}, want: "protected"},
+		{name: "protected method override underscore variant", headers: map[string]string{"X_HTTP_Method_Override": "DELETE"}, want: "protected"},
 		{name: "runtime configured header", headers: map[string]string{"x-runtime-header": "caller-override"}, want: "protected"},
 		{name: "CRLF injection", headers: map[string]string{"X-Declared-Tenant": "alpha\r\nX-Escaped: true"}, want: "control character"},
 		{name: "over declared byte cap", headers: map[string]string{"X-Declared-Tenant": "abcdefghx"}, want: "exceeds declared byte cap"},
@@ -978,6 +979,7 @@ func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("X-Request-ID", "req-123")
 		w.Header().Set("X-Provider-Tier", "rare-paid-feature")
+		w.Header().Set("X-Provider-Key", "echoed-credential")
 		w.Header().Set("X-Undeclared-Transport-Metadata", "not-an-output-channel")
 		w.Header().Add("Set-Cookie", "session=transport-secret")
 		_, _ = w.Write([]byte(`{"ordinary":"retained","rare":"retained","paid_tier":"retained","destructive_state":"retained"}`))
@@ -985,7 +987,7 @@ func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(
 	t.Cleanup(srv.Close)
 	bundle := Bundle{
 		Name: "acme",
-		HTTP: HTTPBase{URL: srv.URL},
+		HTTP: HTTPBase{URL: srv.URL, Auth: []AuthSpec{{Mode: "api_key_header", Header: "X-Provider-Key", Value: "fixture-key"}}},
 		Operations: []OperationSpec{{
 			ID: "acme.result", Kind: "rest_read", Summary: "Declared result", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
 			REST: &RESTOperationSpec{
@@ -993,6 +995,7 @@ func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(
 				Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
 					{Name: "X-Request-ID", MaxBytes: 64},
 					{Name: "X-Provider-Tier", MaxBytes: 64},
+					{Name: "X-Provider-Key", MaxBytes: 64},
 					{Name: "Set-Cookie", MaxBytes: 128},
 				}},
 			},
@@ -1016,6 +1019,9 @@ func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(
 	}
 	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !cookie.Redacted || len(cookie.Values) != 0 {
 		t.Fatalf("Set-Cookie = %#v, want presence-preserving redaction marker", cookie)
+	}
+	if providerKey, ok := result.Headers["X-Provider-Key"]; !ok || !providerKey.Redacted || len(providerKey.Values) != 0 {
+		t.Fatalf("X-Provider-Key = %#v, want presence-preserving redaction marker", providerKey)
 	}
 	if _, present := result.Headers["X-Undeclared-Transport-Metadata"]; present {
 		t.Fatalf("headers = %#v, undeclared provider metadata became an output channel", result.Headers)

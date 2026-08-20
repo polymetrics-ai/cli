@@ -56,6 +56,17 @@ test('a binary_download command documents the runtime destination flags', () => 
   assert.equal(destRoot.required, true, '--dest-root must be marked required');
 });
 
+test('a text_export command documents the runtime destination flags', () => {
+  const mapped = mapCLISurface(
+    surfaceWith({
+      intent: 'text_export',
+      flags: [{ name: 'report-id', type: 'string', maps_to: 'path.report_id' }],
+    }),
+  );
+
+  assert.deepEqual(flagNames(mapped), ['report-id', ...sharedFlags.map((flag) => flag.name)]);
+});
+
 test('other intents are left exactly as the bundle declares them', () => {
   const mapped = mapCLISurface(
     surfaceWith({ intent: 'etl', flags: [{ name: 'issue-id', type: 'string' }] }),
@@ -100,6 +111,17 @@ test('declared scalar minima remain in website data', () => {
   );
 
   assert.equal(mapped.commands[0].flags[0].minimum, 1);
+});
+
+test('declared repeatable flags remain in website data', () => {
+  const mapped = mapCLISurface(
+    surfaceWith({
+      intent: 'etl',
+      flags: [{ name: 'header-x-mode', type: 'string', repeatable: true, maps_to: 'header.X-Mode' }],
+    }),
+  );
+
+  assert.equal(mapped.commands[0].flags[0].repeatable, true);
 });
 
 // gen-connector-catalog.mjs re-maps gen-connector-bundles.mjs output, so an

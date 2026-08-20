@@ -154,7 +154,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if len(response.Body) > prepared.maxBytes {
 			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
 		}
-		responseHeaders, err := operationResponseHeaders(prepared.op, response.Header)
+		responseHeaders, err := operationResponseHeaders(b, prepared.op, response.Header)
 		if err != nil {
 			return err
 		}
@@ -280,6 +280,7 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 		OutputPolicy:          op.OutputPolicy,
 		Batchable:             op.IsBatchable(),
 		PayloadFileFields:     operationDirectWritePayloadFileFields(op),
+		PayloadFileMaxBytes:   operationDirectWritePayloadFileMaxBytes(op),
 		RedactFields:          operationDirectWriteRedactFields(op),
 	}, nil
 }
@@ -418,6 +419,27 @@ func operationDirectWritePayloadFileFields(op OperationSpec) []string {
 	}
 	sort.Strings(fields)
 	return fields
+}
+
+func operationDirectWritePayloadFileMaxBytes(op OperationSpec) map[string]int64 {
+	if op.REST == nil || op.REST.Multipart == nil {
+		return nil
+	}
+	maxBytes := make(map[string]int64)
+	for _, part := range op.REST.Multipart.Parts {
+		if part.Type != "file" {
+			continue
+		}
+		field := strings.TrimSpace(part.Field)
+		if field == "" {
+			continue
+		}
+		limit := int64(part.MaxBytes)
+		if current, found := maxBytes[field]; !found || limit < current {
+			maxBytes[field] = limit
+		}
+	}
+	return maxBytes
 }
 
 func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.OperationDirectWriteRequest, _ Hooks) (preparedOperationDirectWrite, error) {

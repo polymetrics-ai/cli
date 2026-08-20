@@ -120,7 +120,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		// Snapshot the header keys auth contributes, so the redirect policy
 		// can strip exactly those on a cross-origin hop without having to
 		// know which scheme any given connector uses.
-		before := headerKeySet(req.Header)
+		before := req.Header.Clone()
 		if r.Auth != nil {
 			if err := r.Auth.Apply(ctx, req); err != nil {
 				return nil, fmt.Errorf("apply auth: %w", err)
@@ -277,19 +277,11 @@ func allowCrossOrigin(next, base *url.URL, opts StreamOptions) error {
 // removes any dependence on that behavior staying true.
 var alwaysSensitiveHeaders = []string{"Authorization", "Www-Authenticate", "Cookie", "Proxy-Authorization"}
 
-func headerKeySet(h http.Header) map[string]bool {
-	out := make(map[string]bool, len(h))
-	for k := range h {
-		out[k] = true
-	}
-	return out
-}
-
 // credentialHeaderKeys returns every header key that must not cross an origin
 // boundary: those the Authenticator added, plus every configured default
 // header (a connector may carry its API key there), plus the always-sensitive
 // set.
-func credentialHeaderKeys(before map[string]bool, after http.Header, defaults map[string]string, defaultValues http.Header) []string {
+func credentialHeaderKeys(before, after http.Header, defaults map[string]string, defaultValues http.Header) []string {
 	seen := map[string]bool{}
 	add := func(k string) {
 		canonical := http.CanonicalHeaderKey(k)
@@ -297,8 +289,9 @@ func credentialHeaderKeys(before map[string]bool, after http.Header, defaults ma
 			seen[canonical] = true
 		}
 	}
-	for k := range after {
-		if !before[k] {
+	beforeValues := canonicalHeaderValues(before)
+	for k, values := range canonicalHeaderValues(after) {
+		if previous, present := beforeValues[k]; !present || !sameHeaderValues(previous, values) {
 			add(k)
 		}
 	}
@@ -316,6 +309,30 @@ func credentialHeaderKeys(before map[string]bool, after http.Header, defaults ma
 		out = append(out, k)
 	}
 	return out
+}
+
+func canonicalHeaderValues(headers http.Header) map[string][]string {
+	values := make(map[string][]string, len(headers))
+	for key, value := range headers {
+		canonical := http.CanonicalHeaderKey(key)
+		if canonical == "" {
+			continue
+		}
+		values[canonical] = append(values[canonical], value...)
+	}
+	return values
+}
+
+func sameHeaderValues(left, right []string) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for i := range left {
+		if left[i] != right[i] {
+			return false
+		}
+	}
+	return true
 }
 
 // stripCredentialHeaders removes every credential-bearing header from a

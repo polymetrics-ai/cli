@@ -321,7 +321,7 @@ func operationResponseSpec(op OperationSpec) *OperationResponseSpec {
 // map, so an endpoint cannot turn response metadata into an arbitrary output
 // channel. Each admitted ordinary value is preserved exactly and a known
 // credential/transport value is represented by an explicit redaction marker.
-func operationResponseHeaders(op OperationSpec, headers http.Header) (map[string]connectors.OperationResponseHeader, error) {
+func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header) (map[string]connectors.OperationResponseHeader, error) {
 	if err := validateOperationResponseContract(op); err != nil {
 		return nil, fmt.Errorf("operation %q response headers: %w", op.ID, err)
 	}
@@ -330,6 +330,7 @@ func operationResponseHeaders(op OperationSpec, headers http.Header) (map[string
 		return nil, nil
 	}
 	result := make(map[string]connectors.OperationResponseHeader, len(response.Headers))
+	runtimeAuthHeaders := operationRuntimeAuthHeaderNames(b.HTTP)
 	for _, declared := range response.Headers {
 		values, present := headers[http.CanonicalHeaderKey(declared.Name)]
 		if !present {
@@ -360,6 +361,10 @@ func operationResponseHeaders(op OperationSpec, headers http.Header) (map[string
 			result[declared.Name] = connectors.OperationResponseHeader{Redacted: true}
 			continue
 		}
+		if _, masked := runtimeAuthHeaders[canonical]; masked {
+			result[declared.Name] = connectors.OperationResponseHeader{Redacted: true}
+			continue
+		}
 		result[declared.Name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
 	}
 	return result, nil
@@ -370,12 +375,17 @@ func operationRuntimeHeaderNames(b Bundle) map[string]struct{} {
 }
 
 func operationRuntimeHeaderNamesForBase(base HTTPBase) map[string]struct{} {
-	protected := make(map[string]struct{}, len(base.Headers)+len(base.Auth))
+	protected := operationRuntimeAuthHeaderNames(base)
 	for name := range base.Headers {
 		if canonical, err := connectors.CanonicalOperationHeaderName(name); err == nil {
 			protected[canonical] = struct{}{}
 		}
 	}
+	return protected
+}
+
+func operationRuntimeAuthHeaderNames(base HTTPBase) map[string]struct{} {
+	protected := make(map[string]struct{}, len(base.Auth))
 	for _, auth := range base.Auth {
 		if name := strings.TrimSpace(auth.Header); name != "" {
 			if canonical, err := connectors.CanonicalOperationHeaderName(name); err == nil {

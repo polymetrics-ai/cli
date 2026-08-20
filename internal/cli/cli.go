@@ -1102,7 +1102,7 @@ func connectorCommandConfirmationHelp(connector connectors.Connector, cmd connec
 // here, so runtime help and the generated manual/skill/website docs cannot
 // document different flags.
 func writeConnectorDownloadFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
-	if cmd.Intent != "binary_download" {
+	if cmd.Intent != "binary_download" && cmd.Intent != "text_export" {
 		return
 	}
 	b.WriteString("\nDOWNLOAD FLAGS\n")
@@ -1135,6 +1135,9 @@ func writeConnectorFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) 
 	}
 	if flag.Required {
 		b.WriteString(" required")
+	}
+	if flag.Repeatable {
+		b.WriteString(" repeatable")
 	}
 	if flag.EnvOnly {
 		fmt.Fprintf(b, " env-only (use --from-env %s=ENV)", strings.TrimLeft(flag.Name, "-"))

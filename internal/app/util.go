@@ -424,7 +424,7 @@ func payloadIdentitiesForConnectorCommand(projectDir string, connector connector
 		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
 	}
 	if metadata.PayloadFileFields != nil {
-		return payloadIdentitiesForDeclaredFields(projectDir, []connectors.Record{record}, metadata.PayloadFileFields)
+		return payloadIdentitiesForDeclaredFieldsWithCaps(projectDir, []connectors.Record{record}, metadata.PayloadFileFields, metadata.PayloadFileMaxBytes)
 	}
 	return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
 }
@@ -433,6 +433,10 @@ func payloadIdentitiesForConnectorCommand(projectDir string, connector connector
 // paths. It never guesses from arbitrary user fields, so multipart support
 // cannot broaden the accepted local-file input surface.
 func payloadIdentitiesForDeclaredFields(projectDir string, records []connectors.Record, declaredFields []string) ([]PayloadIdentity, error) {
+	return payloadIdentitiesForDeclaredFieldsWithCaps(projectDir, records, declaredFields, nil)
+}
+
+func payloadIdentitiesForDeclaredFieldsWithCaps(projectDir string, records []connectors.Record, declaredFields []string, maxBytes map[string]int64) ([]PayloadIdentity, error) {
 	var identities []PayloadIdentity
 	fields := fieldSetSlice(stringSliceSet(declaredFields))
 	for i, record := range records {
@@ -442,7 +446,15 @@ func payloadIdentitiesForDeclaredFields(projectDir string, records []connectors.
 			if !present || !ok || strings.TrimSpace(raw) == "" {
 				continue
 			}
-			identity, err := payloadIdentityForPath(projectDir, i, field, raw)
+			limit := int64(0)
+			if maxBytes != nil {
+				var ok bool
+				limit, ok = maxBytes[field]
+				if !ok || limit <= 0 {
+					return nil, fmt.Errorf("payload identity for %s: missing declared byte cap", field)
+				}
+			}
+			identity, err := payloadIdentityForPathWithCap(projectDir, i, field, raw, limit)
 			if err != nil {
 				return nil, err
 			}
@@ -501,11 +513,15 @@ func isPayloadPathField(name string) bool {
 }
 
 func payloadIdentityForPath(projectDir string, recordIndex int, field, raw string) (PayloadIdentity, error) {
+	return payloadIdentityForPathWithCap(projectDir, recordIndex, field, raw, 0)
+}
+
+func payloadIdentityForPathWithCap(projectDir string, recordIndex int, field, raw string, maxBytes int64) (PayloadIdentity, error) {
 	resolved, err := resolvePayloadPath(projectDir, raw)
 	if err != nil {
 		return PayloadIdentity{}, fmt.Errorf("payload identity for %s: %w", field, err)
 	}
-	contentDigest, info, err := digestPayloadFile(resolved)
+	contentDigest, info, err := digestPayloadFileWithCap(resolved, maxBytes)
 	if err != nil {
 		return PayloadIdentity{}, fmt.Errorf("payload identity for %s: %w", field, err)
 	}
@@ -520,6 +536,10 @@ func payloadIdentityForPath(projectDir string, recordIndex int, field, raw strin
 }
 
 func digestPayloadFile(path string) (string, os.FileInfo, error) {
+	return digestPayloadFileWithCap(path, 0)
+}
+
+func digestPayloadFileWithCap(path string, maxBytes int64) (string, os.FileInfo, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return "", nil, err
@@ -533,9 +553,26 @@ func digestPayloadFile(path string) (string, os.FileInfo, error) {
 	if !before.Mode().IsRegular() {
 		return "", nil, fmt.Errorf("file must be a regular file")
 	}
+	if maxBytes > 0 && before.Size() > maxBytes {
+		return "", nil, fmt.Errorf("payload file exceeds declared byte cap %d", maxBytes)
+	}
 	hash := sha256.New()
-	if _, err := io.Copy(hash, file); err != nil {
+	reader := io.Reader(file)
+	if maxBytes > 0 {
+		reader = io.LimitReader(file, maxBytes)
+	}
+	if _, err := io.Copy(hash, reader); err != nil {
 		return "", nil, err
+	}
+	if maxBytes > 0 {
+		var extra [1]byte
+		n, readErr := file.Read(extra[:])
+		if n > 0 {
+			return "", nil, fmt.Errorf("payload file exceeds declared byte cap %d", maxBytes)
+		}
+		if readErr != nil && readErr != io.EOF {
+			return "", nil, readErr
+		}
 	}
 	after, err := file.Stat()
 	if err != nil {
@@ -543,6 +580,9 @@ func digestPayloadFile(path string) (string, os.FileInfo, error) {
 	}
 	if before.Size() != after.Size() || !before.ModTime().Equal(after.ModTime()) {
 		return "", nil, fmt.Errorf("payload file changed while computing approval identity")
+	}
+	if maxBytes > 0 && after.Size() > maxBytes {
+		return "", nil, fmt.Errorf("payload file exceeds declared byte cap %d", maxBytes)
 	}
 	return hex.EncodeToString(hash.Sum(nil)), after, nil
 }

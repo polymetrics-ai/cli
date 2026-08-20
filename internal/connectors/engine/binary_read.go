@@ -175,7 +175,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if err := validateOperationBinaryResponseMediaType(op, resp.Header); err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	responseHeaders, err := operationResponseHeaders(op, resp.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
@@ -329,21 +329,50 @@ func validateOperationBinaryResponseMediaType(op OperationSpec, headers http.Hea
 	}
 	matched := false
 	for _, declared := range op.Binary.ContentTypes {
-		allowed, _, _ := mime.ParseMediaType(strings.TrimSpace(declared))
+		allowed, declaredParams, _ := mime.ParseMediaType(strings.TrimSpace(declared))
 		allowedParts := strings.Split(allowed, "/")
 		actualParts := strings.Split(mediaType, "/")
-		if len(allowedParts) == 2 && len(actualParts) == 2 && strings.EqualFold(actualParts[0], allowedParts[0]) && (allowedParts[1] == "*" || strings.EqualFold(actualParts[1], allowedParts[1])) {
+		if len(allowedParts) == 2 && len(actualParts) == 2 && strings.EqualFold(actualParts[0], allowedParts[0]) && (allowedParts[1] == "*" || strings.EqualFold(actualParts[1], allowedParts[1])) && operationMediaParametersMatch(declaredParams, params, op.Binary.Charset) {
 			matched = true
 			break
 		}
 	}
 	if !matched {
-		return fmt.Errorf("operation %q response media type %q is not declared", op.ID, mediaType)
-	}
-	if charset := strings.TrimSpace(op.Binary.Charset); charset != "" && !strings.EqualFold(params["charset"], charset) {
-		return fmt.Errorf("operation %q response charset %q does not match declared charset %q", op.ID, params["charset"], charset)
+		return fmt.Errorf("operation %q response media type or parameters %q are not declared", op.ID, headers.Get("Content-Type"))
 	}
 	return nil
+}
+
+func operationMediaParametersMatch(declared, actual map[string]string, charset string) bool {
+	expected := make(map[string]string, len(declared)+1)
+	for name, value := range declared {
+		expected[strings.ToLower(strings.TrimSpace(name))] = value
+	}
+	if charset = strings.TrimSpace(charset); charset != "" {
+		if declaredCharset, present := expected["charset"]; present && !strings.EqualFold(declaredCharset, charset) {
+			return false
+		}
+		expected["charset"] = charset
+	}
+	if len(expected) != len(actual) {
+		return false
+	}
+	for name, value := range actual {
+		expectedValue, present := expected[strings.ToLower(strings.TrimSpace(name))]
+		if !present {
+			return false
+		}
+		if strings.EqualFold(name, "charset") {
+			if !strings.EqualFold(value, expectedValue) {
+				return false
+			}
+			continue
+		}
+		if value != expectedValue {
+			return false
+		}
+	}
+	return true
 }
 
 // redactBinaryDownloadRecord applies the command's declared redact_fields to

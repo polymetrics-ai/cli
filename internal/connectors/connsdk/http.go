@@ -655,8 +655,12 @@ func (r *Requester) doMultipart(ctx context.Context, method, path string, query 
 		return nil, err
 	}
 	defer cleanup()
+	boundary, err := multipartBoundary(prepared)
+	if err != nil {
+		return nil, err
+	}
 	return r.doWithBody(ctx, method, path, query, maxResponseBytes, func() (*requestBody, error) {
-		return multipartBody(prepared)
+		return multipartBody(prepared, boundary)
 	})
 }
 
@@ -885,9 +889,85 @@ func (r *contextReader) Read(p []byte) (int, error) {
 	}
 }
 
-func multipartBody(form MultipartForm) (*requestBody, error) {
+type multipartCountingWriter struct {
+	size int64
+}
+
+func (w *multipartCountingWriter) Write(p []byte) (int, error) {
+	if err := w.add(int64(len(p))); err != nil {
+		return 0, err
+	}
+	return len(p), nil
+}
+
+func (w *multipartCountingWriter) add(n int64) error {
+	if n < 0 || w.size > (1<<63-1)-n {
+		return fmt.Errorf("multipart payload size overflow")
+	}
+	w.size += n
+	return nil
+}
+
+type multipartLimitWriter struct {
+	writer    io.Writer
+	remaining int64
+}
+
+func (w *multipartLimitWriter) Write(p []byte) (int, error) {
+	if int64(len(p)) > w.remaining {
+		return 0, fmt.Errorf("multipart payload too large: exceeds limit")
+	}
+	n, err := w.writer.Write(p)
+	w.remaining -= int64(n)
+	return n, err
+}
+
+func multipartBoundary(form MultipartForm) (string, error) {
+	counter := &multipartCountingWriter{}
+	writer := multipart.NewWriter(counter)
+	keys := make([]string, 0, len(form.Fields))
+	for key := range form.Fields {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		if err := writer.WriteField(key, form.Fields[key]); err != nil {
+			return "", err
+		}
+	}
+	for _, file := range form.Files {
+		if _, err := writer.CreatePart(multipartFileHeader(file)); err != nil {
+			return "", err
+		}
+		info, err := file.stat()
+		if err != nil {
+			return "", fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+		}
+		if err := counter.add(info.Size()); err != nil {
+			return "", err
+		}
+	}
+	if err := writer.Close(); err != nil {
+		return "", err
+	}
+	if form.MaxBytes > 0 && counter.size > form.MaxBytes {
+		return "", fmt.Errorf("multipart payload too large: %d bytes exceeds limit %d", counter.size, form.MaxBytes)
+	}
+	return writer.Boundary(), nil
+}
+
+func multipartBody(form MultipartForm, boundary string) (*requestBody, error) {
 	pr, pw := io.Pipe()
-	mw := multipart.NewWriter(pw)
+	var sink io.Writer = pw
+	if form.MaxBytes > 0 {
+		sink = &multipartLimitWriter{writer: pw, remaining: form.MaxBytes}
+	}
+	mw := multipart.NewWriter(sink)
+	if err := mw.SetBoundary(boundary); err != nil {
+		_ = pr.Close()
+		_ = pw.Close()
+		return nil, err
+	}
 	done := make(chan error, 1)
 	go func() {
 		err := writeMultipartForm(mw, form)
@@ -952,16 +1032,7 @@ func writeMultipartForm(mw *multipart.Writer, form MultipartForm) error {
 }
 
 func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64) (int64, error) {
-	name := file.FileName
-	if strings.TrimSpace(name) == "" {
-		name = filepath.Base(file.sourceName())
-	}
-	header := make(textproto.MIMEHeader)
-	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name=%q; filename=%q`, file.FieldName, name))
-	if file.ContentType != "" {
-		header.Set("Content-Type", file.ContentType)
-	}
-	part, err := mw.CreatePart(header)
+	part, err := mw.CreatePart(multipartFileHeader(file))
 	if err != nil {
 		return 0, err
 	}
@@ -990,6 +1061,19 @@ func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64
 		return written, readErr
 	}
 	return written, nil
+}
+
+func multipartFileHeader(file MultipartFile) textproto.MIMEHeader {
+	name := file.FileName
+	if strings.TrimSpace(name) == "" {
+		name = filepath.Base(file.sourceName())
+	}
+	header := make(textproto.MIMEHeader)
+	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name=%q; filename=%q`, file.FieldName, name))
+	if file.ContentType != "" {
+		header.Set("Content-Type", file.ContentType)
+	}
+	return header
 }
 
 // do is the shared request core for Do/DoForm. payload is the already-encoded
@@ -1057,7 +1141,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			return nil, fmt.Errorf("build request: %w", err)
 		}
 		r.applyHeaders(req, body != nil, contentType)
-		before := headerKeySet(req.Header)
+		before := req.Header.Clone()
 		if r.Auth != nil {
 			if err := r.Auth.Apply(ctx, req); err != nil {
 				_ = cleanupRequestBody(body)

@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync/atomic"
 	"testing"
 )
@@ -150,6 +151,25 @@ func TestRequesterDoMultipartRefusesRootRelativeTraversal(t *testing.T) {
 	}
 	if got := calls.Load(); got != 0 {
 		t.Fatalf("HTTP calls = %d, want the traversal refused before any request", got)
+	}
+}
+
+func TestRequesterDoMultipartRejectsScalarAndFramingOverAggregateCapBeforeRequest(t *testing.T) {
+	var calls atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls.Add(1)
+	}))
+	t.Cleanup(srv.Close)
+	r := &Requester{BaseURL: srv.URL, Sleep: noSleep}
+	_, err := r.DoMultipart(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Fields:   map[string]string{"message": strings.Repeat("x", 128)},
+		MaxBytes: 32,
+	})
+	if err == nil || !strings.Contains(err.Error(), "multipart payload too large") {
+		t.Fatalf("DoMultipart error = %v, want aggregate-cap refusal", err)
+	}
+	if calls.Load() != 0 {
+		t.Fatalf("requests = %d, want scalar/framing cap refusal before I/O", calls.Load())
 	}
 }
 

@@ -7,7 +7,7 @@ import (
 
 func TestOperationKindContractsAlignLoaderAndParameterImport(t *testing.T) {
 	ops := []OperationSpec{
-		{ID: "acme.status", Kind: "rest_status", Summary: "status", Risk: "low", Approval: "none", OutputPolicy: "status", REST: &RESTOperationSpec{Method: "HEAD", Path: "/status"}},
+		{ID: "acme.status", Kind: "rest_status", Summary: "status", Risk: "low", Approval: "none", OutputPolicy: "status", REST: &RESTOperationSpec{Method: "HEAD", Path: "/status", MaxBytes: 1}},
 		{ID: "acme.text", Kind: "text_export", Summary: "export", Risk: "low", Approval: "none", OutputPolicy: "file_manifest", Binary: &BinaryOperationSpec{Method: "GET", Path: "/export", MaxBytes: 1, Accept: "text/csv", ContentTypes: []string{"text/csv"}, Charset: "utf-8", Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}}},
 	}
 	if err := validateOperations(ops); err != nil {
