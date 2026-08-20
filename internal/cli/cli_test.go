@@ -865,6 +865,75 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	}
 }
 
+func TestGitHubCommandSurfacePreservesGraphQLResponseMetadata(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/graphql" {
+			t.Fatalf("request = %s %s, want POST /graphql", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"data": {
+				"repositoryOwner": {
+					"__typename": "User",
+					"login": "octocat",
+					"repositories": {
+						"nodes": [],
+						"pageInfo": {"hasNextPage": false, "endCursor": null}
+					}
+				},
+				"rateLimit": {"limit": 5000, "cost": 1, "remaining": 4999, "resetAt": "2026-08-20T00:00:00Z"}
+			},
+			"errors": [{"message": "partial resolver failure"}]
+		}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "base_url=" + srv.URL,
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"github", "repo", "list",
+		"--credential", "github-local",
+		"--login", "octocat",
+		"--first", "1",
+		"--root", root,
+		"--json",
+	})
+
+	var env struct {
+		Kind     string                              `json:"kind"`
+		Status   int                                 `json:"status"`
+		Response map[string]any                      `json:"response"`
+		GraphQL  *connectors.GraphQLResponseMetadata `json:"graphql"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want successful direct-read envelope", env)
+	}
+	if _, ok := env.Response["repositoryOwner"]; !ok {
+		t.Fatalf("response = %+v, want declared GraphQL data", env.Response)
+	}
+	if env.GraphQL == nil {
+		t.Fatalf("envelope omitted GraphQL metadata: %s", stdout)
+	}
+	if !env.GraphQL.PartialData || len(env.GraphQL.Errors) != 1 || env.GraphQL.Errors[0].Message != "partial resolver failure" {
+		t.Fatalf("graphql metadata = %+v, want bounded partial-data error", env.GraphQL)
+	}
+	if env.GraphQL.RateLimit == nil || env.GraphQL.RateLimit.Limit != 5000 || env.GraphQL.RateLimit.Cost != 1 || env.GraphQL.RateLimit.Remaining != 4999 || env.GraphQL.RateLimit.ResetAt != "2026-08-20T00:00:00Z" {
+		t.Fatalf("graphql rate limit = %+v, want declared rate-limit metadata", env.GraphQL.RateLimit)
+	}
+}
+
 // TestGitHubDirectReadParametersAndPageContextReachWire drives the real CLI,
 // embedded GitHub bundle, command runner, and direct-read executor against a
 // known-larger fixture. It asserts returned records and the server-observed

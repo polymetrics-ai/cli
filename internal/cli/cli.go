@@ -1379,6 +1379,9 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		if directReadPageIsReported(result.DirectRead.Page) {
 			out["page"] = result.DirectRead.Page
 		}
+		if result.DirectRead.GraphQL != nil {
+			out["graphql"] = result.DirectRead.GraphQL
+		}
 		if jsonOut {
 			return writeJSON(stdout, out)
 		}
