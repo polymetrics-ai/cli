@@ -3554,6 +3554,26 @@ func TestValidateFlagMinimumIsOptIn(t *testing.T) {
 	}
 }
 
+func TestValidateFlagMaximumIsOptIn(t *testing.T) {
+	if err := validateFlagValue(connectors.CommandSurfaceFlag{Name: "page-size", Type: "integer"}, "2147483648"); err != nil {
+		t.Fatalf("validateFlagValue without maximum = %v, want unchanged acceptance", err)
+	}
+
+	maximum := 2147483647.0
+	flag := connectors.CommandSurfaceFlag{Name: "page-size", Type: "integer", Maximum: &maximum}
+	if err := validateFlagValue(flag, "2147483647"); err != nil {
+		t.Fatalf("validateFlagValue at maximum = %v, want accepted", err)
+	}
+	err := validateFlagValue(flag, "2147483648")
+	var maximumErr *MaximumFlagError
+	if !errors.As(err, &maximumErr) {
+		t.Fatalf("validateFlagValue above maximum error = %T %v, want MaximumFlagError", err, err)
+	}
+	if maximumErr.Parameter != "page-size" || maximumErr.Maximum != 2147483647 {
+		t.Fatalf("MaximumFlagError = %+v, want page-size maximum 2147483647", maximumErr)
+	}
+}
+
 func TestStreamOverridesConfigMinimumIsOptIn(t *testing.T) {
 	minimum := 1.0
 	tests := []struct {

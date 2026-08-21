@@ -130,6 +130,15 @@ type MinimumFlagError struct {
 	Minimum   float64
 }
 
+type MaximumFlagError struct {
+	Parameter string
+	Maximum   float64
+}
+
+func (e *MaximumFlagError) Error() string {
+	return fmt.Sprintf("invalid --%s: value must be at most %s", e.Parameter, strconv.FormatFloat(e.Maximum, 'f', -1, 64))
+}
+
 func (e *MinimumFlagError) Error() string {
 	return fmt.Sprintf("invalid --%s: value must be at least %s", e.Parameter, strconv.FormatFloat(e.Minimum, 'f', -1, 64))
 }
@@ -1116,7 +1125,7 @@ func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[stri
 
 func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig) error {
 	for _, flag := range cmd.Flags {
-		if flag.Minimum == nil || !strings.HasPrefix(flag.MapsTo, "config.") {
+		if (flag.Minimum == nil && flag.Maximum == nil) || !strings.HasPrefix(flag.MapsTo, "config.") {
 			continue
 		}
 		target := strings.TrimPrefix(flag.MapsTo, "config.")
@@ -1127,7 +1136,7 @@ func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg co
 		if !ok {
 			continue
 		}
-		if err := validateFlagMinimum(flag, value); err != nil {
+		if err := validateFlagNumericRange(flag, value); err != nil {
 			return err
 		}
 	}
@@ -1457,11 +1466,11 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	}
 	switch flag.Type {
 	case "", "string", "boolean", "integer", "number", "string_array":
-		return validateFlagMinimum(flag, value)
+		return validateFlagNumericRange(flag, value)
 	case "enum":
 		for _, allowed := range flag.Values {
 			if value == allowed {
-				return validateFlagMinimum(flag, value)
+				return validateFlagNumericRange(flag, value)
 			}
 		}
 		values := append([]string(nil), flag.Values...)
@@ -1473,6 +1482,13 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
 		}
 	}
+}
+
+func validateFlagNumericRange(flag connectors.CommandSurfaceFlag, value string) error {
+	if err := validateFlagMinimum(flag, value); err != nil {
+		return err
+	}
+	return validateFlagMaximum(flag, value)
 }
 
 func validateFlagMinimum(flag connectors.CommandSurfaceFlag, value string) error {
@@ -1502,6 +1518,37 @@ func validateFlagMinimum(flag connectors.CommandSurfaceFlag, value string) error
 	}
 	if parsed < minimum {
 		return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
+	}
+	return nil
+}
+
+func validateFlagMaximum(flag connectors.CommandSurfaceFlag, value string) error {
+	if flag.Maximum == nil {
+		return nil
+	}
+	maximum := *flag.Maximum
+	if math.IsNaN(maximum) || math.IsInf(maximum, 0) {
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s has invalid maximum", flag.Name)}
+	}
+	var parsed float64
+	switch flag.Type {
+	case "integer":
+		integer, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			return &MaximumFlagError{Parameter: flag.Name, Maximum: maximum}
+		}
+		parsed = float64(integer)
+	case "number":
+		number, err := strconv.ParseFloat(value, 64)
+		if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
+			return &MaximumFlagError{Parameter: flag.Name, Maximum: maximum}
+		}
+		parsed = number
+	default:
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s maximum requires integer or number type", flag.Name)}
+	}
+	if parsed > maximum {
+		return &MaximumFlagError{Parameter: flag.Name, Maximum: maximum}
 	}
 	return nil
 }

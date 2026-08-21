@@ -35,6 +35,7 @@ type CommandSurfaceFlag struct {
 	Format     string
 	AllowEmpty *bool
 	Minimum    *float64
+	Maximum    *float64
 	Required   bool
 	Repeatable bool
 	// EnvOnly requires the CLI to receive this command value through the

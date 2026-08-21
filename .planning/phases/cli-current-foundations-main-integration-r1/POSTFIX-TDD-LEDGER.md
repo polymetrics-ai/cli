@@ -5,7 +5,7 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 | Group | Finding set | Red contract | Green / regression evidence | State |
 | --- | --- | --- | --- | --- |
 | 1 | B01, B02, B03, B09, B12, W01 | `TestGitHubParityGenerationOrderIsCommutative`; `TestSourceProjectionGapOperationsCannotMasqueradeAsImplemented`; `TestGoogleAdsGeneratedPOSTReadsAcceptDeclaredNestedObjects`; v2 projection digest mutation; deleted route/parameter and semantic update/delete surface-sync cases. | `go test -timeout 20m ./cmd/connectorgen`; Node parity-order and combined-ledger checks; `connectorgen validate`; `surface-sync --check`; all six affected source IDs have installed coverage. | green atomic checkpoint pending commit/push |
-| 2 | B04-B08, W02 | No/both GraphQL directions; backward pageInfo; inline secret/result secret; omitted mutation identity; root/nested/list Int32; flag metadata loss. | Generator, engine, commandrunner, CLI, website, skills, and help exact-output suites. | pending |
+| 2 | B04-B08, W02 | `TestGraphQLOperationVariablesRequiresExactlyOnePaginationDirection`; `TestOperationDirectReadBackwardGraphQLPaginationUsesPreviousPageInfo`; `TestGraphQLIntUsesSigned32BitDomain`; `TestGeneratedGraphQLContractsClassifySecretInputsAndBoundedIdentitySelections`; `TestWebsiteFlagProjectionPreservesEverySafetyProperty`; `TestRenderCommandSurfaceCommandRendersSafetyConstraints`. | Focused generator, engine/schema, commandrunner preflight, website, guide/skills, generated GitHub artifacts, source-import, surface-sync, certification-candidate/sweep checks. | red contract recorded; implementation pending |
 | 3 | B13-B14, B17, B19, B24 | Classified secrets versus ordinary IDs/headers; error-bearing direct/native result; status receipt; SQS success/error receipt. | connsdk, engine, commandrunner, native SQS, App, and CLI receipt suites. | pending |
 | 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | pending |
 | 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | pending |
@@ -74,6 +74,87 @@ App/CLI/all-connectors suite is reserved for the final exact SHA.
 - Green: the command now accepts only an existing non-symlink `--cache-dir`, wraps the normal source fetcher at that root, and never changes the connector-owned URL, digest, byte count, or request authority. The focused cache suite passed: `TestSourceImportArtifactCacheColdSlowFetchWritesOnlyVerifiedBytes`, `TestSourceImportArtifactCacheHitVerifiesWithoutNetwork`, `TestSourceImportArtifactCacheRejectsCorruptionAndOnlyRecoversFromVerifiedFetch`, `TestSourceImportCommandUsesExplicitVerifiedCacheRoot`, and `TestSourceImportCommandContractAndMigrationDocumentation`.
 - Live locked GitHub REST source (2026-08-21): a newly empty explicit root at `/Users/karthiksivadas/.treehouse/cli-83d592/57/cli/.source-import-qualification-cache.OHUVcH` completed `go run ./cmd/connectorgen source-import github --cache-dir <root> --check` in `real 9.01` seconds. It created exactly `/Users/karthiksivadas/.treehouse/cli-83d592/57/cli/.source-import-qualification-cache.OHUVcH/80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d.artifact`, with `12,920,264` bytes and SHA-256 `80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d`.
 - Warm live check: the same exact root and immutable file completed the same command in `real 5.50` seconds; byte count and SHA-256 were rechecked and the artifact modification time remained `2026-08-21T10:55:15Z`. This temporary qualification root is inventoried here and must be removed recoverably before the Group 1 commit.
+
+Correction: the cache root and recovery sentinel were deliberately retained outside
+the index until Group 1 remote SHA `d3bf5da0e6a4575628dd76dd94a7522220f9d3df`
+was verified, then moved recoverably to Trash. Neither was committed.
+
+## Group 2 red-contract plan (2026-08-21)
+
+- **GSD/manual fallback:** `scripts/gsd doctor`, the five required command
+  prompts, and `go run ./cmd/agentcontractgen check` were resolved in this
+  single-owner Herdr worktree. The frozen POSTFIX review fixes proceed inline;
+  no specialist owns files or commits in this lane.
+- **Skills:** `golang-how-to`, `golang-cli`, `golang-testing`,
+  `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-lint`, and
+  `golang-documentation` were loaded. CLI help/manual/website parity is part
+  of this group because the generated GraphQL flags and skills change.
+- **B04/B05 red:** a fixed source-backed connection must reject neither/both
+  `first`/`last` and cursor-without-direction before I/O; a `last` page must
+  use `hasPreviousPage`/`startCursor`, reject malformed backward state, and
+  never substitute an unrelated forward cursor.
+- **B06/B07 red:** source-derived query scalar `invitationToken` must be
+  env-only; classified `tempCloneToken` and `verificationToken` must not be
+  selected; bounded `createIssue`/`addComment` selections retain source-owned
+  IDs/URLs plus `clientMutationId`, while ordinary token-count and occurrence
+  IDs remain unchanged. No caller document, selection, or raw-body channel is
+  added.
+- **B08 red:** GraphQL `Int` exact signed-32-bit boundaries must pass and
+  adjacent values must fail in root, nested object, and list variables before
+  any HTTP request.
+- **W02 red:** every safety-relevant flag property (`env_only`, byte/item
+  bounds, repeatability, allow-empty, format, required, values, maps-to, and
+  numeric minimum) must survive website projection and generated skills/help
+  must state env-only and active limits.
+
+### Group 2 observed red evidence
+
+- `go test -timeout 20m ./internal/connectors/engine -run 'Test(GraphQLOperationVariablesRequiresExactlyOnePaginationDirection|OperationDirectReadBackwardGraphQLPaginationUsesPreviousPageInfo|GraphQLIntUsesSigned32BitDomain)$' -count=1` failed as intended: neither direction and cursor-without-direction reached variable validation, mixed direction reported the older non-exact message, backward page state completed from `hasNextPage`, and schema compilation rejected the undeclared `minimum` keyword.
+- `node --test scripts/tests/gen-github-graphql-parity.test.mjs` failed as intended with the complete frozen B06/B07 set: invitation token stayed inline; `tempCloneToken`/`verificationToken` remained selected in the five source-owned fixed documents; and `createIssue`/`addComment` omitted nested provider identity.
+- `node --test website/scripts/cli-surface.test.mjs` failed as intended: website projection dropped `env_only`, `max_bytes`, `min_items`, and `max_items`.
+- `go test -timeout 20m ./internal/connectors -run '^TestRenderCommandSurfaceCommandRendersSafetyConstraints$' -count=1` failed as intended: generated guide text rendered only `--input (required)` and omitted env-only, non-empty, item, and byte constraints.
+
+### Group 2 green evidence
+
+- **B04/B05:** `TestGraphQLOperationVariablesRequiresExactlyOnePaginationDirection`,
+  `TestGraphQLOperationVariablesRejectsMixedPaginationDirections`, and
+  `TestOperationDirectReadBackwardGraphQLPaginationUsesPreviousPageInfo` pass
+  through the real engine. The fixed connection accepts exactly one of
+  `first`/`last`, rejects neither, both, and cursor-without-direction before
+  transport, and derives backward continuation solely from
+  `hasPreviousPage`/`startCursor`.
+- **B06/B07:** `TestGeneratedGraphQLContractsClassifySecretInputsAndBoundedIdentitySelections`
+  passes. Source-declared query invitation tokens are `env_only` and map only
+  to their exact root variable under a source-declared env/redaction policy;
+  no raw document/body or undeclared variable form was added. Classified
+  result tokens are absent from fixed selections. Mutation selections are
+  source-derived, cycle/depth bounded (`3`), field-budget bounded (`64`), and
+  retain `clientMutationId` plus provider IDs/numbers/URLs for `createIssue`
+  and `addComment`.
+- **B08:** `TestGraphQLIntUsesSigned32BitDomain` passes root, nested object,
+  and list values at `[-2147483648, 2147483647]`, and adjacent values reject
+  before I/O. `TestValidateFlagMaximumIsOptIn` proves the generated CLI flag
+  maximum is independently enforced. The schema compiler now keeps exact
+  numeric bounds rather than float-rounded substitutions.
+- **W02:** `TestWebsiteFlagProjectionPreservesEverySafetyProperty` and
+  `TestRenderCommandSurfaceCommandRendersSafetyConstraints` pass. Snake/camel
+  projections retain env-only, byte/item/numeric bounds, repeatability,
+  allow-empty/bare-string, type/values/mapping/format/requiredness; generated
+  guide command lists render active safety qualifiers without hiding the
+  command surface.
+- **Static closure:** the red `TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract`
+  now proves the validator allows only a source-schema-declared scalar
+  `graphql_query` variable with `input_mode=env`, `transform=none`, and exact
+  `redact_fields`, while still refusing an omitted policy. The established
+  typed-secret GraphQL mutation form remains unchanged.
+- **Generation:** `connectorgen validate` reports `552 connector(s)` and zero
+  findings; `surface-sync --check` reports zero drift; GitHub parity artifacts,
+  source-drift, combined-ledger, certification-matrix, certification-candidates,
+  and certification-sweep checks passed. The sweep remains exactly `1616`
+  rows / `1612` CLI commands. `pm docs generate --dir docs/cli`,
+  `pm skills generate --dir docs/skills`, and `pm docs validate --connectors-dir
+  docs/connectors` regenerated/validated the tracked manual and skill surfaces.
 
 ## Group 1 frozen GitHub mutation delta crosswalk
 

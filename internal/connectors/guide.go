@@ -3,6 +3,7 @@ package connectors
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -219,7 +220,7 @@ func commandSurfaceSection(surface *CommandSurface) GuideSection {
 }
 
 func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
-	name := "--" + strings.TrimLeft(flag.Name, "-")
+	name := renderCommandSurfaceFlagName(flag)
 	parts := []string{name}
 	if flag.Type != "" {
 		parts[0] += " (" + flag.Type + ")"
@@ -234,6 +235,53 @@ func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 		parts = append(parts, "maps_to="+flag.MapsTo)
 	}
 	return strings.Join(parts, ": ")
+}
+
+// renderCommandSurfaceFlagName is the concise command-list form. It keeps the
+// safety contract visible without repeating ordinary type/summary/mapping
+// metadata hundreds of times in a generated manual; that complete metadata is
+// still retained in JSON/website projection and in the detailed global flags.
+func renderCommandSurfaceFlagName(flag CommandSurfaceFlag) string {
+	name := "--" + strings.TrimLeft(flag.Name, "-")
+	qualifiers := []string{}
+	if flag.Required {
+		qualifiers = append(qualifiers, "required")
+	}
+	if flag.Repeatable {
+		qualifiers = append(qualifiers, "repeatable")
+	}
+	if flag.EnvOnly {
+		qualifiers = append(qualifiers, "env-only")
+	}
+	if flag.AllowEmpty != nil && !*flag.AllowEmpty {
+		qualifiers = append(qualifiers, "non-empty")
+	}
+	if flag.MinItems > 0 && flag.MaxItems > 0 {
+		qualifiers = append(qualifiers, fmt.Sprintf("%d..%d items", flag.MinItems, flag.MaxItems))
+	} else if flag.MinItems > 0 {
+		qualifiers = append(qualifiers, fmt.Sprintf("min %d items", flag.MinItems))
+	} else if flag.MaxItems > 0 {
+		qualifiers = append(qualifiers, fmt.Sprintf("max %d items", flag.MaxItems))
+	}
+	if flag.MaxBytes > 0 {
+		qualifiers = append(qualifiers, fmt.Sprintf("max %d bytes", flag.MaxBytes))
+	}
+	if flag.Minimum != nil {
+		qualifiers = append(qualifiers, "minimum="+strconv.FormatFloat(*flag.Minimum, 'f', -1, 64))
+	}
+	if flag.Maximum != nil {
+		qualifiers = append(qualifiers, "maximum="+strconv.FormatFloat(*flag.Maximum, 'f', -1, 64))
+	}
+	if flag.Format != "" {
+		qualifiers = append(qualifiers, "format="+flag.Format)
+	}
+	if flag.AllowBareString {
+		qualifiers = append(qualifiers, "allow-bare-string")
+	}
+	if len(qualifiers) > 0 {
+		name += " (" + strings.Join(qualifiers, ", ") + ")"
+	}
+	return name
 }
 
 // commandSurfaceRenderedFlags returns the flags a command actually accepts.
@@ -305,14 +353,7 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if len(rendered) > 0 {
 		flags := make([]string, 0, len(rendered))
 		for _, flag := range rendered {
-			name := "--" + strings.TrimLeft(flag.Name, "-")
-			if flag.Required {
-				name += " (required)"
-			}
-			if flag.Repeatable {
-				name += " (repeatable)"
-			}
-			flags = append(flags, name)
+			flags = append(flags, renderCommandSurfaceFlagName(flag))
 		}
 		line += "; flags: " + strings.Join(flags, ", ")
 	}

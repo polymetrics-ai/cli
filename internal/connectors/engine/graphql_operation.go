@@ -576,13 +576,19 @@ func graphQLOperationVariables(op OperationSpec, supplied map[string]any, page i
 		_, backwardCursor := variables[pagination.BackwardCursorVariable]
 		_, backwardSize := variables[pagination.BackwardPageSizeVariable]
 		if (forwardCursor || forwardSize) && (backwardCursor || backwardSize) {
-			return nil, fmt.Errorf("operation %q mixes forward and backward pagination variables", op.ID)
+			return nil, fmt.Errorf("operation %q requires exactly one pagination direction; mixes forward and backward pagination variables", op.ID)
 		}
 		if forwardCursor {
 			return nil, fmt.Errorf("operation %q GraphQL cursor variable %q must be supplied with --page-cursor", op.ID, pagination.CursorVariable)
 		}
 		if backwardCursor {
 			return nil, fmt.Errorf("operation %q GraphQL cursor variable %q must be supplied with --page-cursor", op.ID, pagination.BackwardCursorVariable)
+		}
+		if pagination.BackwardPageSizeVariable != "" && !forwardSize && !backwardSize {
+			return nil, fmt.Errorf("operation %q requires exactly one pagination direction; provide %q or %q", op.ID, pagination.PageSizeVariable, pagination.BackwardPageSizeVariable)
+		}
+		if pagination.BackwardPageSizeVariable == "" && pagination.PageSizeVariable != "" && !forwardSize {
+			return nil, fmt.Errorf("operation %q requires exactly one pagination direction; provide %q", op.ID, pagination.PageSizeVariable)
 		}
 		if pageCursor != "" {
 			if err := safety.RejectDangerousChars(pageCursor, "page cursor"); err != nil {
@@ -690,7 +696,7 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 		return readResult, fmt.Errorf("operation direct read GraphQL response: %w", err)
 	}
 	observeGraphQLRateLimit(ctx, requester, response, data)
-	page, err := graphQLOperationPage(data, op.GraphQL.Pagination, metadata.PartialData)
+	page, err := graphQLOperationPage(data, op.GraphQL.Pagination, graphQLPaginationDirectionForVariables(op.GraphQL.Pagination, variables), metadata.PartialData)
 	if err != nil {
 		return readResult, fmt.Errorf("operation direct read GraphQL pagination: %w", err)
 	}
@@ -935,7 +941,27 @@ func graphQLInt(value any) (int, bool) {
 	}
 }
 
-func graphQLOperationPage(data map[string]any, pagination *GraphQLOperationPaginationSpec, partial bool) (connectors.DirectReadPage, error) {
+type graphQLPaginationDirection uint8
+
+const (
+	graphQLPaginationDirectionNone graphQLPaginationDirection = iota
+	graphQLPaginationDirectionForward
+	graphQLPaginationDirectionBackward
+)
+
+func graphQLPaginationDirectionForVariables(pagination *GraphQLOperationPaginationSpec, variables map[string]any) graphQLPaginationDirection {
+	if pagination == nil {
+		return graphQLPaginationDirectionNone
+	}
+	if pagination.BackwardPageSizeVariable != "" {
+		if _, backward := variables[pagination.BackwardPageSizeVariable]; backward {
+			return graphQLPaginationDirectionBackward
+		}
+	}
+	return graphQLPaginationDirectionForward
+}
+
+func graphQLOperationPage(data map[string]any, pagination *GraphQLOperationPaginationSpec, direction graphQLPaginationDirection, partial bool) (connectors.DirectReadPage, error) {
 	if pagination == nil {
 		return connectors.DirectReadPage{
 			Strategy: graphQLCursorStrategy,
@@ -971,17 +997,21 @@ func graphQLOperationPage(data map[string]any, pagination *GraphQLOperationPagin
 		}
 		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q has no pageInfo object", pagination.ConnectionPath)
 	}
-	hasMore, ok := pageInfo["hasNextPage"].(bool)
+	hasMoreField, cursorField := "hasNextPage", "endCursor"
+	if direction == graphQLPaginationDirectionBackward {
+		hasMoreField, cursorField = "hasPreviousPage", "startCursor"
+	}
+	hasMore, ok := pageInfo[hasMoreField].(bool)
 	if !ok {
-		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q pageInfo.hasNextPage is not boolean", pagination.ConnectionPath)
+		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q pageInfo.%s is not boolean", pagination.ConnectionPath, hasMoreField)
 	}
 	page := connectors.DirectReadPage{Strategy: graphQLCursorStrategy, Records: len(nodes), HasMore: hasMore, Complete: !hasMore}
 	if !hasMore {
 		return page, nil
 	}
-	next, ok := pageInfo["endCursor"].(string)
+	next, ok := pageInfo[cursorField].(string)
 	if !ok || strings.TrimSpace(next) == "" {
-		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q reports another page without endCursor", pagination.ConnectionPath)
+		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q reports another page without %s", pagination.ConnectionPath, cursorField)
 	}
 	page.NextCursor = next
 	page.Reason = connectors.DirectReadPageReasonMorePages

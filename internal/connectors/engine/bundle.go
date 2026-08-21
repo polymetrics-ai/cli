@@ -1067,6 +1067,7 @@ type CLIFlag struct {
 	Format          string   `json:"format,omitempty"`
 	AllowEmpty      *bool    `json:"allow_empty,omitempty"`
 	Minimum         *float64 `json:"minimum,omitempty"`
+	Maximum         *float64 `json:"maximum,omitempty"`
 	Required        bool     `json:"required,omitempty"`
 	Repeatable      bool     `json:"repeatable,omitempty"`
 	EnvOnly         bool     `json:"env_only,omitempty"`

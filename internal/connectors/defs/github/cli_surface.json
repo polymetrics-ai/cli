@@ -29493,7 +29493,8 @@
           "name": "invitation-token",
           "maps_to": "body.invitationToken",
           "type": "string",
-          "required": true
+          "required": true,
+          "env_only": true
         }
       ],
       "api_surface": [
@@ -29556,7 +29557,8 @@
           "name": "invitation-token",
           "maps_to": "body.invitationToken",
           "type": "string",
-          "required": true
+          "required": true,
+          "env_only": true
         }
       ],
       "api_surface": [
@@ -29607,7 +29609,8 @@
         {
           "name": "invitation-token",
           "maps_to": "body.invitationToken",
-          "type": "string"
+          "type": "string",
+          "env_only": true
         },
         {
           "name": "slug",
@@ -29788,12 +29791,16 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "last",
           "maps_to": "body.last",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "organization-id",
@@ -29832,7 +29839,17 @@
           "path": "/graphql"
         }
       ],
-      "output_policy": "json_redacted"
+      "output_policy": "json_redacted",
+      "constraints": [
+        {
+          "kind": "exactly_one",
+          "fields": [
+            "body.first",
+            "body.last"
+          ],
+          "message": "exactly one GraphQL pagination direction must be provided"
+        }
+      ]
     },
     {
       "path": "graphql query meta",
@@ -30048,12 +30065,16 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "last",
           "maps_to": "body.last",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "query",
@@ -30083,7 +30104,17 @@
           "path": "/graphql"
         }
       ],
-      "output_policy": "json_redacted"
+      "output_policy": "json_redacted",
+      "constraints": [
+        {
+          "kind": "exactly_one",
+          "fields": [
+            "body.first",
+            "body.last"
+          ],
+          "message": "exactly one GraphQL pagination direction must be provided"
+        }
+      ]
     },
     {
       "path": "graphql query security-advisories",
@@ -30111,7 +30142,9 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "identifier",
@@ -30121,7 +30154,9 @@
         {
           "name": "last",
           "maps_to": "body.last",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "order-by",
@@ -30145,7 +30180,17 @@
           "path": "/graphql"
         }
       ],
-      "output_policy": "json_redacted"
+      "output_policy": "json_redacted",
+      "constraints": [
+        {
+          "kind": "exactly_one",
+          "fields": [
+            "body.first",
+            "body.last"
+          ],
+          "message": "exactly one GraphQL pagination direction must be provided"
+        }
+      ]
     },
     {
       "path": "graphql query security-advisory",
@@ -30205,12 +30250,16 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "last",
           "maps_to": "body.last",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "order-by",
@@ -30234,7 +30283,17 @@
           "path": "/graphql"
         }
       ],
-      "output_policy": "json_redacted"
+      "output_policy": "json_redacted",
+      "constraints": [
+        {
+          "kind": "exactly_one",
+          "fields": [
+            "body.first",
+            "body.last"
+          ],
+          "message": "exactly one GraphQL pagination direction must be provided"
+        }
+      ]
     },
     {
       "path": "graphql query sponsorables",
@@ -30284,12 +30343,16 @@
         {
           "name": "first",
           "maps_to": "body.first",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "last",
           "maps_to": "body.last",
-          "type": "integer"
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
         },
         {
           "name": "only-dependencies",
@@ -30313,7 +30376,17 @@
           "path": "/graphql"
         }
       ],
-      "output_policy": "json_redacted"
+      "output_policy": "json_redacted",
+      "constraints": [
+        {
+          "kind": "exactly_one",
+          "fields": [
+            "body.first",
+            "body.last"
+          ],
+          "message": "exactly one GraphQL pagination direction must be provided"
+        }
+      ]
     },
     {
       "path": "graphql query topic",

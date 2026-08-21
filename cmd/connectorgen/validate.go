@@ -886,11 +886,13 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	return findings
 }
 
-// checkCLISurfaceEnvOnlyFlags keeps --from-env a narrow secret-delivery
-// channel rather than a second, untyped source of arbitrary command values.
-// An env_only declaration is permitted only for the complete JSON input of a
-// sensitive fixed GraphQL mutation, where the operation itself declares the
-// corresponding redaction and typed-confirmation contract.
+// checkCLISurfaceEnvOnlyFlags keeps --from-env a narrow declaration-owned
+// secret-delivery channel rather than a second, untyped source of arbitrary
+// command values. Two closed forms are permitted: the complete JSON input of
+// a sensitive fixed GraphQL mutation, or a scalar source-declared variable of
+// a fixed GraphQL query whose operation itself declares env input and exact
+// redaction. The latter is needed for provider invitation tokens, but cannot
+// introduce a raw body/document or an arbitrary query parameter.
 func checkCLISurfaceEnvOnlyFlags(
 	b engine.Bundle,
 	i int,
@@ -904,7 +906,7 @@ func checkCLISurfaceEnvOnlyFlags(
 		}
 		op, found := operations[cmd.Operation]
 		variable, mapsToBody := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "body.")
-		valid := cmd.Availability == "implemented" &&
+		secretMutation := cmd.Availability == "implemented" &&
 			cmd.Intent == "direct_write" &&
 			flag.Type == "json" &&
 			flag.Required &&
@@ -915,17 +917,41 @@ func checkCLISurfaceEnvOnlyFlags(
 			strings.EqualFold(op.SensitivePolicy.InputMode, "env") &&
 			strings.EqualFold(op.SensitivePolicy.ApprovalMode, "typed_confirmation") &&
 			slices.Contains(op.SensitivePolicy.RedactFields, "body."+variable)
-		if valid {
+		sourceQuery := validEnvOnlyGraphQLQueryVariable(cmd, flag, op, variable, mapsToBody)
+		if secretMutation || sourceQuery {
 			continue
 		}
 		findings = append(findings, Finding{
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("command %d (%q) env_only flag --%s must be a required top-level JSON input for an implemented secret GraphQL mutation with env redaction and typed confirmation", i, cmd.Path, flag.Name),
+			Message:   fmt.Sprintf("command %d (%q) env_only flag --%s must be a required top-level JSON input for an implemented secret GraphQL mutation with env redaction and typed confirmation, or a source-declared scalar GraphQL query variable with exact env redaction", i, cmd.Path, flag.Name),
 		})
 	}
 	return findings
+}
+
+func validEnvOnlyGraphQLQueryVariable(cmd engine.CLICommand, flag engine.CLIFlag, op engine.OperationSpec, variable string, mapsToBody bool) bool {
+	if cmd.Availability != "implemented" || cmd.Intent != "direct_read" || flag.Type != "string" || !mapsToBody || variable == "" || strings.Contains(variable, ".") || op.Kind != "graphql_query" || op.GraphQL == nil || op.SensitivePolicy == nil {
+		return false
+	}
+	if !strings.EqualFold(op.SensitivePolicy.InputMode, "env") || !strings.EqualFold(op.SensitivePolicy.Transform, "none") || !slices.Contains(op.SensitivePolicy.RedactFields, "body."+variable) {
+		return false
+	}
+	var variables struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(op.GraphQL.VariablesSchema, &variables); err != nil {
+		return false
+	}
+	property, ok := variables.Properties[variable]
+	if !ok {
+		return false
+	}
+	var schema struct {
+		Type string `json:"type"`
+	}
+	return json.Unmarshal(property, &schema) == nil && schema.Type == "string"
 }
 
 // checkCLISurfaceStructuredJSONFlags keeps the schema vocabulary closed even

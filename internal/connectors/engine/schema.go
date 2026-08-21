@@ -3,6 +3,7 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"math"
 	"math/big"
 	"net/url"
@@ -60,6 +61,11 @@ type schemaNode struct {
 	maxItems    int
 	hasMaxItems bool
 
+	minimum    *big.Rat
+	hasMinimum bool
+	maximum    *big.Rat
+	hasMaximum bool
+
 	// extensions
 	secret      bool     // x-secret
 	primaryKey  []string // x-primary-key (only meaningful at the root)
@@ -101,6 +107,8 @@ var structuralKeywords = map[string]bool{
 	"maxProperties":        true,
 	"minItems":             true,
 	"maxItems":             true,
+	"minimum":              true,
+	"maximum":              true,
 	"additionalProperties": true,
 	"x-secret":             true,
 	"x-primary-key":        true,
@@ -278,6 +286,9 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	if err := compileArrayCardinality(m, n); err != nil {
 		return nil, err
 	}
+	if err := compileNumericRange(m, n); err != nil {
+		return nil, err
+	}
 
 	if raw, ok := m["default"]; ok {
 		var def any
@@ -389,6 +400,61 @@ func compileArrayCardinality(m map[string]json.RawMessage, n *schemaNode) error 
 	return nil
 }
 
+// compileNumericRange keeps numeric provider domains exact. In particular,
+// GraphQL Int is a signed 32-bit value even on a 64-bit host, so float-based
+// range storage would make the declaration's wire contract platform-dependent.
+func compileNumericRange(m map[string]json.RawMessage, n *schemaNode) error {
+	compile := func(keyword string) (*big.Rat, bool, error) {
+		raw, ok := m[keyword]
+		if !ok {
+			return nil, false, nil
+		}
+		decoder := json.NewDecoder(strings.NewReader(string(raw)))
+		decoder.UseNumber()
+		var value any
+		if err := decoder.Decode(&value); err != nil {
+			return nil, false, fmt.Errorf("compile schema: %s: %w", keyword, err)
+		}
+		if err := requireEOF(decoder, "compile schema: "+keyword); err != nil {
+			return nil, false, err
+		}
+		number, ok := value.(json.Number)
+		if !ok {
+			return nil, false, fmt.Errorf("compile schema: %s must be a number", keyword)
+		}
+		rat, ok := exactNumber(number)
+		if !ok {
+			return nil, false, fmt.Errorf("compile schema: %s must be a finite number", keyword)
+		}
+		return rat, true, nil
+	}
+	minimum, hasMinimum, err := compile("minimum")
+	if err != nil {
+		return err
+	}
+	maximum, hasMaximum, err := compile("maximum")
+	if err != nil {
+		return err
+	}
+	if hasMinimum && hasMaximum && maximum.Cmp(minimum) < 0 {
+		return fmt.Errorf("compile schema: maximum %s is below minimum %s", maximum.RatString(), minimum.RatString())
+	}
+	n.minimum, n.hasMinimum = minimum, hasMinimum
+	n.maximum, n.hasMaximum = maximum, hasMaximum
+	return nil
+}
+
+func requireEOF(decoder *json.Decoder, label string) error {
+	var trailing any
+	if err := decoder.Decode(&trailing); err == io.EOF {
+		return nil
+	} else if err == nil {
+		return fmt.Errorf("%s contains multiple JSON values", label)
+	} else {
+		return fmt.Errorf("%s: %w", label, err)
+	}
+}
+
 func compileNonNegativeInt(raw json.RawMessage, keyword string) (int, error) {
 	var v int
 	if err := json.Unmarshal(raw, &v); err != nil {
@@ -442,6 +508,14 @@ func (n *schemaNode) validate(v any, path string) error {
 		}
 		if !matched {
 			return fmt.Errorf("%s: value not in enum %v", displayPath(path), n.enum)
+		}
+	}
+	if number, ok := exactNumber(v); ok {
+		if n.hasMinimum && number.Cmp(n.minimum) < 0 {
+			return fmt.Errorf("%s: minimum %s not satisfied (got %s)", displayPath(path), n.minimum.RatString(), number.RatString())
+		}
+		if n.hasMaximum && number.Cmp(n.maximum) > 0 {
+			return fmt.Errorf("%s: maximum %s exceeded (got %s)", displayPath(path), n.maximum.RatString(), number.RatString())
 		}
 	}
 

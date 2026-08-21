@@ -660,6 +660,36 @@ func TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract(t *
 	if len(findings) != 1 || !strings.Contains(findings[0].Message, "secret GraphQL mutation") {
 		t.Fatalf("env_only without environment redaction contract findings = %+v, want one closed-surface rejection", findings)
 	}
+
+	query := engine.OperationSpec{
+		ID:   "cli-surface.enterprise.invitation",
+		Kind: "graphql_query",
+		GraphQL: &engine.GraphQLOperationSpec{VariablesSchema: json.RawMessage(`{
+			"type":"object","additionalProperties":false,
+			"properties":{"invitationToken":{"type":"string"}}
+		}`)},
+		SensitivePolicy: &engine.SensitivePolicySpec{
+			InputMode:    "env",
+			RedactFields: []string{"body.invitationToken"},
+			Transform:    "none",
+		},
+	}
+	queryCommand := engine.CLICommand{
+		Path:         "graphql query enterprise",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    query.ID,
+		Flags: []engine.CLIFlag{{
+			Name: "invitation-token", Type: "string", MapsTo: "body.invitationToken", EnvOnly: true,
+		}},
+	}
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}); len(findings) != 0 {
+		t.Fatalf("source-declared GraphQL query env_only contract findings = %+v, want none", findings)
+	}
+	query.SensitivePolicy = nil
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}); len(findings) != 1 || !strings.Contains(findings[0].Message, "source-declared scalar GraphQL query") {
+		t.Fatalf("query env_only without declared policy findings = %+v, want closed-surface rejection", findings)
+	}
 }
 
 func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
