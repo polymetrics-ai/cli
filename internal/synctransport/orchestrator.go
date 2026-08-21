@@ -126,6 +126,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 
 	result := Result{}
 	pendingReceipts := make([]WarehouseReceipt, 0)
+	if err := authorizeTransportSource(ctx, request); err != nil {
+		return result, err
+	}
 	err = resolved.Source.ReadTransport(ctx, cloneSourceRequest(SourceRequest{
 		Connector:    request.Source,
 		Runtime:      request.SourceRuntime,
@@ -164,12 +167,6 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		// Extraction has completed when the source gives us a valid bounded page,
 		// independently of whether a later warehouse or destination unit fails.
 		result.RecordsRead += len(page.Records)
-		if request.Approval.AuthorizeNextUnit != nil {
-			if err := request.Approval.AuthorizeNextUnit(ctx); err != nil {
-				return fmt.Errorf("authorize transport unit: %w", err)
-			}
-		}
-
 		// Retain the source-owned candidate for the final commit. The stage and
 		// destination receive defensive payload copies and cannot replace it.
 		candidate := page.CandidateCheckpoint.Clone()
@@ -237,6 +234,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		acknowledgement, err := func() (synccontract.DownstreamAcknowledgement, error) {
 			applyCtx, cancelApply := context.WithTimeout(ctx, request.unitDeadline())
 			defer cancelApply()
+			if err := authorizeDestinationEffect(applyCtx, request.Approval, "apply"); err != nil {
+				return synccontract.DownstreamAcknowledgement{}, err
+			}
 
 			applyStarted := time.Now()
 			acknowledgement, err := resolved.Destination.ApplyDestination(applyCtx, destinationApplyRequest)
@@ -341,6 +341,9 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		TransformPlanHash: request.TransformPlanHash,
 		Approval:          request.Approval,
 	}
+	if err := authorizeDestinationEffect(ctx, request.Approval, "full-overwrite begin"); err != nil {
+		return Result{}, err
+	}
 	session, err := destination.BeginFullOverwrite(ctx, fullRequest)
 	if err != nil {
 		return Result{}, fmt.Errorf("begin destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
@@ -362,6 +365,9 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 
 	var lastCandidate *synccontract.CheckpointEnvelope
 	receipts := make([]WarehouseReceipt, 0)
+	if err := authorizeTransportSource(ctx, request); err != nil {
+		return result, err
+	}
 	err = resolved.Source.ReadTransport(ctx, cloneSourceRequest(SourceRequest{
 		Connector:    request.Source,
 		Runtime:      request.SourceRuntime,
@@ -393,12 +399,6 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 			return fmt.Errorf("full_overwrite source transport page has tombstones")
 		}
 		result.RecordsRead += len(page.Records)
-		if request.Approval.AuthorizeNextUnit != nil {
-			if err := request.Approval.AuthorizeNextUnit(ctx); err != nil {
-				return fmt.Errorf("authorize transport unit: %w", err)
-			}
-		}
-
 		candidate := page.CandidateCheckpoint.Clone()
 		stagePage, err := cloneSourcePage(page)
 		if err != nil {
@@ -442,6 +442,10 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 			return fmt.Errorf("clone destination apply request: %w", err)
 		}
 		applyCtx, cancelApply := context.WithTimeout(ctx, request.unitDeadline())
+		if err := authorizeDestinationEffect(applyCtx, request.Approval, "full-overwrite apply"); err != nil {
+			cancelApply()
+			return err
+		}
 		applyStarted := time.Now()
 		applyErr := session.ApplyFullOverwrite(applyCtx, applyRequest)
 		result.ApplyElapsed += time.Since(applyStarted)
@@ -463,10 +467,8 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 			return result, fmt.Errorf("source transport completed without a full-overwrite checkpoint candidate")
 		}
 	}
-	if request.Approval.AuthorizeNextUnit != nil {
-		if err := request.Approval.AuthorizeNextUnit(ctx); err != nil {
-			return result, fmt.Errorf("authorize full-overwrite publication: %w", err)
-		}
+	if err := authorizeDestinationEffect(ctx, request.Approval, "full-overwrite publication"); err != nil {
+		return result, err
 	}
 	publishCtx, cancelPublish := context.WithTimeout(ctx, request.unitDeadline())
 	publishStarted := time.Now()
@@ -520,6 +522,16 @@ func collectDestinationResult(result *Result, acknowledgement synccontract.Downs
 	if output, ok := DestinationApplyOutput(err); ok {
 		result.DestinationResults = append(result.DestinationResults, append([]byte(nil), output...))
 	}
+}
+
+func authorizeTransportSource(ctx context.Context, request RunRequest) error {
+	if request.SourceAdmission == nil {
+		return nil
+	}
+	if err := request.SourceAdmission(ctx); err != nil {
+		return fmt.Errorf("authorize transport source effect: %w", err)
+	}
+	return nil
 }
 
 func retireCommittedReceipts(ctx context.Context, request RunRequest, receipts []WarehouseReceipt) error {

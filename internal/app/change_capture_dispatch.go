@@ -31,6 +31,7 @@ type warehouseChangeCaptureReceiver struct {
 	finalPath       string
 	stateKey        string
 	generationID    int64
+	workLease       *transportWorkLease
 	expectedState   StreamState
 	expectedPresent bool
 	acknowledgement synccontract.DownstreamAcknowledgement
@@ -40,8 +41,8 @@ type warehouseChangeCaptureReceiver struct {
 	lastCheckpoint  *synccontract.CheckpointEnvelope
 }
 
-func newWarehouseChangeCaptureReceiver(app *App, runID string, connection Connection, streamName string, stream StreamConfig, mode SyncMode, destination connectors.Connector, destinationRuntime connectors.RuntimeConfig) (*warehouseChangeCaptureReceiver, error) {
-	if app == nil || strings.TrimSpace(runID) == "" {
+func newWarehouseChangeCaptureReceiver(app *App, lease *transportWorkLease, runID string, connection Connection, streamName string, stream StreamConfig, mode SyncMode, destination connectors.Connector, destinationRuntime connectors.RuntimeConfig) (*warehouseChangeCaptureReceiver, error) {
+	if app == nil || lease == nil || strings.TrimSpace(runID) == "" {
 		return nil, errors.New("change capture warehouse receiver is unavailable")
 	}
 	dir := localWarehouseDir(destinationRuntime)
@@ -83,8 +84,7 @@ func newWarehouseChangeCaptureReceiver(app *App, runID string, connection Connec
 		return nil, fmt.Errorf("create warehouse tables directory: %w", err)
 	}
 	stateKey := streamStateKey(connection.Name, streamName)
-	prior, present := app.state.StreamStates[stateKey]
-	prior = cloneStreamState(prior)
+	prior := lease.stateForTerminalRun()
 	generationID := prior.GenerationID
 	if generationID == 0 {
 		generationID = 1
@@ -101,14 +101,18 @@ func newWarehouseChangeCaptureReceiver(app *App, runID string, connection Connec
 		finalPath:       finalPath,
 		stateKey:        stateKey,
 		generationID:    generationID,
+		workLease:       lease,
 		expectedState:   prior,
-		expectedPresent: present,
+		expectedPresent: true,
 	}, nil
 }
 
 func (r *warehouseChangeCaptureReceiver) ReceiveCDCTransaction(ctx context.Context, transaction connectors.CDCTransaction) (connectors.CDCTransactionReceipt, error) {
 	if r == nil || r.app == nil {
 		return connectors.CDCTransactionReceipt{}, errors.New("change capture warehouse receiver is unavailable")
+	}
+	if err := r.workLease.renew(ctx); err != nil {
+		return connectors.CDCTransactionReceipt{}, err
 	}
 	if r.receiptPending {
 		return connectors.CDCTransactionReceipt{}, errors.New("change capture checkpoint is still pending for the prior warehouse transaction")
@@ -213,31 +217,26 @@ func (r *warehouseChangeCaptureReceiver) ReceiveCDCTransaction(ctx context.Conte
 	return receipt, nil
 }
 
-func (r *warehouseChangeCaptureReceiver) CommitDurableChangefeedCheckpoint(_ context.Context, candidate synccontract.CheckpointEnvelope) error {
+func (r *warehouseChangeCaptureReceiver) CommitDurableChangefeedCheckpoint(ctx context.Context, candidate synccontract.CheckpointEnvelope) error {
 	if r == nil || !r.receiptPending {
 		return errors.New("change capture checkpoint has no durable warehouse transaction receipt")
 	}
 	var committed synccontract.CheckpointEnvelope
 	err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, r.acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
-		updated := cloneStreamState(r.expectedState)
+		updated, err := r.workLease.commit(ctx, checkpoint)
+		if err != nil {
+			return fmt.Errorf("persist change capture warehouse checkpoint: %w", err)
+		}
 		updated.Connection = r.connection.Name
 		updated.Stream = r.streamName
-		updated.Checkpoint = &checkpoint
 		updated.GenerationID = r.generationID
 		updated.RecordsLoaded = r.records
 		updated.UpdatedAt = r.acknowledgement.AcknowledgedAt
-		if _, err := r.app.updateState(func(current state) (state, error) {
-			currentState, present := current.StreamStates[r.stateKey]
-			if present != r.expectedPresent || (present && !transportStreamStateEqual(currentState, r.expectedState)) {
-				return current, errTransportStreamStateConflict
-			}
-			if current.StreamStates == nil {
-				current.StreamStates = map[string]StreamState{}
-			}
-			current.StreamStates[r.stateKey] = cloneStreamState(updated)
-			return current, nil
-		}); err != nil {
-			return fmt.Errorf("persist change capture warehouse checkpoint: %w", err)
+		// The receipt's checkpoint must remain bound to the same fence while
+		// metadata is refreshed. The second lease mutation is still pre-I/O and
+		// rejects a stale owner rather than recreating the former late CAS.
+		if _, err := r.workLease.mutate(ctx, func(StreamState) (StreamState, error) { return updated, nil }); err != nil {
+			return fmt.Errorf("persist change capture stream metadata: %w", err)
 		}
 		r.expectedState = cloneStreamState(updated)
 		r.expectedPresent = true
@@ -258,6 +257,9 @@ func (r *warehouseChangeCaptureReceiver) RestoreCDCTransactionReceipt(ctx contex
 		return errors.New("change capture warehouse receiver is unavailable")
 	}
 	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if err := r.workLease.renew(ctx); err != nil {
 		return err
 	}
 	if r.receiptPending {
@@ -299,6 +301,7 @@ func (r *warehouseChangeCaptureReceiver) result(completed bool) etlExecutionResu
 	}
 	state := cloneStreamState(r.expectedState)
 	if completed {
+		state = r.workLease.stateForTerminalRun()
 		state.LastSuccessfulRunID = r.runID
 	}
 	result.PendingStreamState = &pendingStreamState{Key: r.stateKey, State: state}
@@ -311,11 +314,16 @@ func (a *App) runWarehouseChangeCapture(ctx context.Context, request etlModeDisp
 		return etlExecutionResult{}, &synccontract.ModeNotExecutableError{Mode: synccontract.ModeChangeCapture, Reason: "source has no matching implemented changefeed executor"}
 	}
 	changefeed := request.source.(connectors.ChangefeedExecutor)
-	receiver, err := newWarehouseChangeCaptureReceiver(a, request.runID, request.connection, request.streamName, request.stream, request.mode, request.destination, request.destinationRuntime)
+	stateKey := streamStateKey(request.connection.Name, request.streamName)
+	workLease, err := a.claimTransportWorkLease(ctx, stateKey, request.connection.Name, request.streamName, request.runID, request.sourceExpectation, false)
 	if err != nil {
 		return etlExecutionResult{}, err
 	}
-	prior := a.state.StreamStates[streamStateKey(request.connection.Name, request.streamName)]
+	receiver, err := newWarehouseChangeCaptureReceiver(a, workLease, request.runID, request.connection, request.streamName, request.stream, request.mode, request.destination, request.destinationRuntime)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	prior := workLease.stateForTerminalRun()
 	err = changefeed.ReadCDC(ctx, connectors.CDCReadRequest{
 		Stream:                     request.streamName,
 		Config:                     request.sourceRuntime,

@@ -418,6 +418,20 @@ type DestinationApproval struct {
 	IssueWriteEvidence func(context.Context) (*connectors.WriteApprovalEvidence, error) `json:"-"`
 }
 
+// authorizeDestinationEffect is the final live authorization boundary before
+// an adapter can mutate or publish external destination state. Earlier checks
+// can avoid unnecessary local work, but cannot substitute for this one after
+// a blocking stage, transform, or shadow run has completed.
+func authorizeDestinationEffect(ctx context.Context, approval DestinationApproval, effect string) error {
+	if approval.AuthorizeNextUnit == nil {
+		return nil
+	}
+	if err := approval.AuthorizeNextUnit(ctx); err != nil {
+		return fmt.Errorf("authorize destination %s: %w", effect, err)
+	}
+	return nil
+}
+
 type DestinationApplyRequest struct {
 	// ConnectionID pins this apply to the connection that owns Receipt. The
 	// destination must not infer ownership from caller-supplied paths.
@@ -509,8 +523,13 @@ type RunRequest struct {
 	// Approval is intentionally carried only in memory from App.RunETL to the
 	// destination apply boundary. It is never written into a stage artifact.
 	Approval DestinationApproval `json:"-"`
-	Stage    WarehouseStage
-	Commit   func(synccontract.CheckpointEnvelope) error
+	// SourceAdmission is an App-owned durable work-fence check. It runs
+	// immediately before a source executor begins physical I/O; it accepts no
+	// route, credential, or provider authority and is intentionally absent from
+	// receipts and generated declarations.
+	SourceAdmission func(context.Context) error `json:"-"`
+	Stage           WarehouseStage
+	Commit          func(synccontract.CheckpointEnvelope) error
 }
 
 type Result struct {
@@ -670,12 +689,34 @@ func cloneRuntimeConfig(runtime connectors.RuntimeConfig) connectors.RuntimeConf
 	clone.Config = cloneStringMap(runtime.Config)
 	clone.Secrets = cloneStringMap(runtime.Secrets)
 	clone.ApprovedPayloadSHA256 = cloneStringMap(runtime.ApprovedPayloadSHA256)
-	if runtime.ResolvedCatalog != nil {
-		catalog := *runtime.ResolvedCatalog
-		catalog.Streams = append([]connectors.Stream(nil), runtime.ResolvedCatalog.Streams...)
-		clone.ResolvedCatalog = &catalog
-	}
+	clone.ResolvedCatalog = cloneCatalog(runtime.ResolvedCatalog)
 	return clone
+}
+
+// cloneCatalog copies every mutable catalog edge before an executor receives a
+// per-call runtime. Catalogs are provider metadata, but adapters may normalize
+// their local view; that normalization must never alter another executor's
+// request or the App-owned discovery result.
+func cloneCatalog(catalog *connectors.Catalog) *connectors.Catalog {
+	if catalog == nil {
+		return nil
+	}
+	clone := *catalog
+	clone.Streams = make([]connectors.Stream, len(catalog.Streams))
+	for index, stream := range catalog.Streams {
+		streamClone := stream
+		streamClone.Fields = append([]connectors.Field(nil), stream.Fields...)
+		streamClone.PrimaryKey = append([]string(nil), stream.PrimaryKey...)
+		streamClone.CursorFields = append([]string(nil), stream.CursorFields...)
+		streamClone.Schema = append(json.RawMessage(nil), stream.Schema...)
+		clone.Streams[index] = streamClone
+	}
+	if catalog.Discovery != nil {
+		discovery := *catalog.Discovery
+		discovery.Failures = append([]connectors.DiscoveryFailure(nil), catalog.Discovery.Failures...)
+		clone.Discovery = &discovery
+	}
+	return &clone
 }
 
 func cloneStringMap(values map[string]string) map[string]string {

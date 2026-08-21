@@ -8,8 +8,8 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 | 2 | B04-B08, W02 | `TestGraphQLOperationVariablesRequiresExactlyOnePaginationDirection`; `TestOperationDirectReadBackwardGraphQLPaginationUsesPreviousPageInfo`; `TestGraphQLIntUsesSigned32BitDomain`; `TestGeneratedGraphQLContractsClassifySecretInputsAndBoundedIdentitySelections`; `TestWebsiteFlagProjectionPreservesEverySafetyProperty`; `TestRenderCommandSurfaceCommandRendersSafetyConstraints`. | Focused generator, engine/schema, commandrunner preflight, website, guide/skills, generated GitHub artifacts, source-import, surface-sync, certification-candidate/sweep checks. | green; remote `0565f3fd6d152b38f2062aac5dd0df29170b6d4e` |
 | 3 | B13-B14, B17, B19, B24 | Classified secrets versus ordinary IDs/headers; error-bearing direct/native result; status receipt; SQS success/error receipt. | connsdk, engine, commandrunner, native SQS, App, and CLI receipt suites. | green; remote `58c86d18bd27e55f334cea37f263dd4cdf7540ee` |
 | 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | green; remote `b0eb22feb7f413d15f747b3f78d62c6c46e314b9` |
-| 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | ready-to-commit |
-| 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | pending |
+| 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | green; remote `2bddbf5387d323a0dbf074074cf43fa2d40b60b5` |
+| 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | green; local atomic boundary pending commit |
 | 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | pending |
 | 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | pending |
 | 9 | B10-B11 | Evidence/certification metadata for another or stale SHA is accepted. | Exact final-SHA evidence, matrix, candidate, and certification checks. | pending |
@@ -379,6 +379,79 @@ generated artifact was included.
 - `go vet ./internal/connectors/engine ./internal/connectors/connsdk`,
   `go build ./cmd/pm`, and `git diff --check` passed. This group changes no
   generated declaration or CLI/manual surface.
+
+## Group 6 red-contract evidence (2026-08-21)
+
+- **B33:** `TestCloneRuntimeConfigDefensivelyCopiesCatalogNestedState` failed
+  before the production correction. Mutating the request clone's catalog field,
+  primary-key/cursor slices, raw schema, and discovery failure changed the
+  caller-owned runtime; its first failure reported the source field renamed to
+  `clone`. This establishes the nested aliasing boundary independently of
+  ordinary record cloning. Arrow request cloning will use the same deep runtime
+  clone and must create a fresh apply request for each segment.
+- **B20:** `TestOrchestratorRevalidatesDestinationAuthorizationImmediatelyBeforeApply`
+  failed with a nil run result after the test revoked authority in the completed
+  warehouse-stage callback. The existing admission happened only before stage,
+  and `ApplyDestination` still executed. This proves the live check was not at
+  the external mutation boundary.
+- **B36:** `TestRequesterRechecksRequestAdmissionBeforeRetry` initially failed
+  to compile because the HTTP request boundary exposed no admission hook at
+  all. The existing cohort wrapper checked only once around an operation, so a
+  retry/page/send could not re-read a durable fence after the first request.
+  `TestAuthCohortFenceIndeterminateCommitCancelsOldLocalEpoch` then failed at
+  its one-second cancellation boundary: a post-rename directory-sync error had
+  already persisted the fence, but `Fence` returned early without cancelling
+  old local admissions.
+- **B26:** `TestTransportTwoAppsFenceBeforeAnySideEffect` first failed under
+  the former late-checkpoint model: the second App reached source/stage/apply
+  before its state CAS could lose. The replacement holds the first owner at
+  its pre-I/O source boundary and proves the contender has exactly zero
+  source, stage, apply, and publication calls.
+- **W06/W07:** the post-rename Create test initially left zero live timers
+  despite one durable parked record, proving memory had returned on an
+  indeterminate write without reloading it. The terminal authorization test
+  initially failed to compile because parking had no closed
+  `needs_reauthorization` outcome or cross-coordinator claim refusal.
+
+## Group 6 focused green evidence (2026-08-21)
+
+- **B20:** ordinary/full-overwrite and Arrow paths call the standing approval
+  exactly once immediately before each apply/publication effect. The prior
+  per-unit regression is now `TestOrchestratorRechecksAuthorizationImmediatelyBeforeEachApplyAndRefusesSecondEffect`: two pages stage, only the first provider apply occurs after the second final check revokes authority. The final-after-stage ordinary, full-overwrite, serial Arrow, and pipeline Arrow tests pass.
+- **B26:** `TestTransportTwoAppsFenceBeforeAnySideEffect` and the ordinary,
+  per-page, full-overwrite, and CDC/restart focused App cohort pass. A durable
+  `ActiveWorkID`/monotonic fence is claimed before source I/O, renewed at each
+  source boundary, and retired only by the matching terminal work owner;
+  terminal/crashed owners are safely replaced while live owners have zero
+  contender effects.
+- **B33:** `TestCloneRuntimeConfigDefensivelyCopiesCatalogNestedState` passes.
+  Runtime catalogs now deep-copy stream fields, keys, cursors, raw schemas and
+  discovery failures; serial and pipeline Arrow calls receive fresh cloned
+  request objects. The focused Arrow clone cohort passes under `-race`.
+- **B36:** retry and redirect request-admission tests pass; auth-cohort
+  indeterminate fence cancellation and the PostgreSQL pre-I/O admission test
+  pass. HTTP sends, redirects, refreshes, PostgreSQL connects/queries, and
+  transaction statements re-check the admitted durable epoch at their physical
+  boundary while cleanup rollback remains available.
+- **W06:** `TestRateParkingCoordinator_ReconcilesPostCommitCreateBeforeReturningUncertainty`, `TestRateParkingCoordinator_ReconcilesEachPostCommitResumeMutation`, and `TestRateParkingCoordinator_ReconcilesPostCommitRearmAndDelete` pass. They inject an indeterminate post-rename outcome after each of Create, Rearm, Claim, BeginResume, MarkResumeCompleted, Complete, and Delete, then assert the exact reloaded record set and one-or-zero correct timer outcome.
+- **W07:** expired and revoked App authorization errors become a secret-free
+  durable `needs_reauthorization` parking outcome. The memory and reopened
+  file-store tests prove no retry timer or second-coordinator claim can revive
+  it; its opaque scope remains blocked until explicit safe cancellation.
+
+### Group 6 atomic closure gates
+
+- `go test -timeout 20m ./internal/coordination -count=1` (`4.276s`),
+  `./internal/connectors/connsdk` (`5.983s`),
+  `./internal/connectors/native/postgres` (`1.471s`), and
+  `./internal/synctransport` (`0.766s`) passed.
+- Focused App work-fence, full-overwrite, CDC recovery, and terminal
+  authorization cohort passed (`6.773s`); the scoped Arrow clone cohort passed
+  under `go test -race` (`1.821s`).
+- `go vet` over every Group 6 package, `go build ./cmd/pm`, and
+  `git diff --check` passed. No declaration or generated-surface source
+  changed, so the final full generator sweep remains reserved for the exact
+  all-group SHA.
 
 ## Group 1 frozen GitHub mutation delta crosswalk
 

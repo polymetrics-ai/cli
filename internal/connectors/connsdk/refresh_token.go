@@ -302,6 +302,9 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Accept", "application/json")
 
+	if err := CheckRequestAdmission(ctx); err != nil {
+		return "", fmt.Errorf("oauth2 refresh: request admission: %w", err)
+	}
 	resp, err := a.httpClient().Do(req)
 	if err != nil {
 		// url.Error embeds the request URL, which may itself carry a query.

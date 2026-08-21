@@ -279,10 +279,14 @@ func (s *managedTargetArrowFullOverwriteRun) publishArrowShadow(ctx context.Cont
 	if err := postgresPreflightDurability(ctx, s.resolved.conn); err != nil {
 		return err
 	}
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return err
+	}
 	tx, err := s.resolved.conn.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return ErrManagedTargetTransportUnavailable
 	}
+	tx = admitPostgresTx(tx)
 	rollback := func() { _ = tx.Rollback(context.WithoutCancel(ctx)) }
 	if _, err := tx.Exec(ctx, "SET LOCAL synchronous_commit = 'on'"); err != nil {
 		rollback()

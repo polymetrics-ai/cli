@@ -629,6 +629,58 @@ func TestOrchestratorArrowFullOverwriteTransformsDurablyBulkAppliesThenCheckpoin
 	}
 }
 
+func TestOrchestratorArrowFullOverwriteRevalidatesAuthorizationBeforeEveryApply(t *testing.T) {
+	for _, maxInFlight := range []int{1, 2} {
+		t.Run(fmt.Sprintf("max-in-flight-%d", maxInFlight), func(t *testing.T) {
+			pair := newTestTransportPair("database", "database")
+			pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+			pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+			pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+			pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
+			if maxInFlight > 1 {
+				pair.source.descriptor.Source.OrderedPipeline = true
+				pair.destination.descriptor.Destination.OrderedPipeline = true
+			}
+			record := testArrowRecord(t, []int64{1}, []string{"open"})
+			source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}, batches: []ArrowSourceBatch{{Record: record, SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: testCheckpoint(pair.source.Name())}}}
+			run := &testArrowFullOverwriteRun{sink: pair.destination.Name()}
+			destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: run}
+			registry := NewRegistry(pair.verifier)
+			if err := registry.RegisterSource(source); err != nil {
+				t.Fatal(err)
+			}
+			if err := registry.RegisterDestination(destination); err != nil {
+				t.Fatal(err)
+			}
+			plan := `{"version":1,"select":[{"source":"id","target":"id","type":"int64"}]}`
+			hash, err := databaseTransformHash(plan)
+			if err != nil {
+				t.Fatal(err)
+			}
+			errAuthorizationRevoked := errors.New("authorization revoked after Arrow segment staging")
+			revoked := false
+			_, err = NewOrchestrator(registry).Run(context.Background(), RunRequest{
+				Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite,
+				BatchSize: 1, MaxInFlightBatches: maxInFlight, TransformPlanJSON: plan, TransformPlanHash: hash,
+				FastSegments: &testFastSegmentStore{afterStore: func() { revoked = true }}, ByteCreditCapacity: 64,
+				Approval: DestinationApproval{AuthorizeNextUnit: func(context.Context) error {
+					if revoked {
+						return errAuthorizationRevoked
+					}
+					return nil
+				}},
+				Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+			})
+			if !errors.Is(err, errAuthorizationRevoked) {
+				t.Fatalf("Run() error = %T %v, want authorization revocation after Arrow staging", err, err)
+			}
+			if run.applyCalls != 0 || run.publishCalls != 0 {
+				t.Fatalf("Arrow apply/publication calls = %d/%d, want 0 after revocation", run.applyCalls, run.publishCalls)
+			}
+		})
+	}
+}
+
 func TestOrchestratorArrowFullOverwriteOverlapsNextExtractionWithPreviousCopy(t *testing.T) {
 	pair := newTestTransportPair("database", "database")
 	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
@@ -1051,7 +1103,7 @@ func TestOrchestratorTimesOutOnlyTheSecondDestinationUnitAndRetainsDurablePhaseC
 	}
 }
 
-func TestOrchestratorRechecksAuthorizationBeforeEachUnitAndRefusesRevocationBeforeSecondStage(t *testing.T) {
+func TestOrchestratorRechecksAuthorizationImmediatelyBeforeEachApplyAndRefusesSecondEffect(t *testing.T) {
 	pair := newTestTransportPair("api", "database")
 	first := testCheckpoint("api")
 	second := testCheckpoint("api")
@@ -1082,11 +1134,75 @@ func TestOrchestratorRechecksAuthorizationBeforeEachUnitAndRefusesRevocationBefo
 	if !errors.Is(err, errAuthorizationRevoked) {
 		t.Fatalf("Run() error = %T %v, want second-unit authorization revocation", err, err)
 	}
-	if authorizationChecks != 2 || stage.calls != 1 || pair.destinationExecutor.applyCalls != 1 {
-		t.Fatalf("authorization/stage/apply calls = %d/%d/%d, want 2/1/1 so revocation stops before second warehouse or PostgreSQL mutation", authorizationChecks, stage.calls, pair.destinationExecutor.applyCalls)
+	if authorizationChecks != 2 || stage.calls != 2 || pair.destinationExecutor.applyCalls != 1 {
+		t.Fatalf("authorization/stage/apply calls = %d/%d/%d, want 2/2/1 so revocation stops immediately before the second destination mutation", authorizationChecks, stage.calls, pair.destinationExecutor.applyCalls)
 	}
-	if result.RecordsRead != 2 || result.RecordsStaged != 1 || result.RecordsApplied != 1 || result.Pages != 1 {
-		t.Fatalf("partial result = %+v, want extracted/staged/applied/pages = 2/1/1/1", result)
+	if result.RecordsRead != 2 || result.RecordsStaged != 2 || result.RecordsApplied != 1 || result.Pages != 1 {
+		t.Fatalf("partial result = %+v, want extracted/staged/applied/pages = 2/2/1/1", result)
+	}
+}
+
+func TestOrchestratorRevalidatesDestinationAuthorizationImmediatelyBeforeApply(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	stage := &testWarehouseStage{}
+	errAuthorizationRevoked := errors.New("authorization revoked after staging")
+	revoked := false
+	stage.afterStage = func() { revoked = true }
+
+	_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+		BatchSize: 10, Stage: stage,
+		Approval: DestinationApproval{AuthorizeNextUnit: func(context.Context) error {
+			if revoked {
+				return errAuthorizationRevoked
+			}
+			return nil
+		}},
+		Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+	})
+	if !errors.Is(err, errAuthorizationRevoked) {
+		t.Fatalf("Run() error = %T %v, want authorization revocation after reopen", err, err)
+	}
+	if stage.calls != 1 || pair.destinationExecutor.applyCalls != 0 {
+		t.Fatalf("stage/apply calls = %d/%d, want staged work and no destination mutation after revocation", stage.calls, pair.destinationExecutor.applyCalls)
+	}
+}
+
+func TestOrchestratorFullOverwriteRevalidatesDestinationAuthorizationImmediatelyBeforeApply(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"replace"}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "replace"}}
+	pair.destinationExecutor.fullOverwrite = &testFullOverwriteRun{sink: pair.destination.Name()}
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	stage := &testWarehouseStage{}
+	errAuthorizationRevoked := errors.New("authorization revoked after full-overwrite staging")
+	revoked := false
+	stage.afterStage = func() { revoked = true }
+
+	_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite,
+		BatchSize: 10, Stage: stage,
+		Approval: DestinationApproval{AuthorizeNextUnit: func(context.Context) error {
+			if revoked {
+				return errAuthorizationRevoked
+			}
+			return nil
+		}},
+		Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+	})
+	if !errors.Is(err, errAuthorizationRevoked) {
+		t.Fatalf("Run() error = %T %v, want authorization revocation after full-overwrite staging", err, err)
+	}
+	if got := len(pair.destinationExecutor.fullOverwrite.ids); got != 0 {
+		t.Fatalf("full-overwrite destination mutations = %d, want 0 after revocation", got)
+	}
+	if pair.destinationExecutor.fullOverwrite.publishCalls != 0 {
+		t.Fatalf("full-overwrite publication calls = %d, want 0 after revocation", pair.destinationExecutor.fullOverwrite.publishCalls)
 	}
 }
 
@@ -1319,6 +1435,75 @@ func TestCloneRecordCopiesRawMessageAndStringMapValuesAtEveryNestingLevel(t *tes
 	}
 	if got := recordLabels["level"]; got != "record" {
 		t.Fatalf("record string map clone mutated source storage: %q", got)
+	}
+}
+
+func TestCloneRuntimeConfigDefensivelyCopiesCatalogNestedState(t *testing.T) {
+	schema := json.RawMessage(`{"type":"object","properties":{"id":{"type":"string"}}}`)
+	runtime := connectors.RuntimeConfig{
+		Config:                map[string]string{"endpoint": "source"},
+		Secrets:               map[string]string{"token": "source"},
+		ApprovedPayloadSHA256: map[string]string{"payload": "source"},
+		ResolvedCatalog: &connectors.Catalog{
+			Connector: "source",
+			Streams: []connectors.Stream{{
+				Name: "records", Fields: []connectors.Field{{Name: "id", Type: "string"}},
+				PrimaryKey: []string{"id"}, CursorFields: []string{"id"}, Schema: schema,
+			}},
+			Discovery: &connectors.DiscoveryStatus{Failures: []connectors.DiscoveryFailure{{Object: "records", Stage: "source", Attempts: 1}}},
+		},
+	}
+
+	clone := cloneRuntimeConfig(runtime)
+	clone.Config["endpoint"] = "clone"
+	clone.Secrets["token"] = "clone"
+	clone.ApprovedPayloadSHA256["payload"] = "clone"
+	clone.ResolvedCatalog.Streams[0].Fields[0].Name = "clone"
+	clone.ResolvedCatalog.Streams[0].PrimaryKey[0] = "clone"
+	clone.ResolvedCatalog.Streams[0].CursorFields[0] = "clone"
+	clone.ResolvedCatalog.Streams[0].Schema[0] = '['
+	clone.ResolvedCatalog.Discovery.Failures[0].Stage = "clone"
+
+	stream := runtime.ResolvedCatalog.Streams[0]
+	if runtime.Config["endpoint"] != "source" || runtime.Secrets["token"] != "source" || runtime.ApprovedPayloadSHA256["payload"] != "source" {
+		t.Fatalf("runtime maps were mutated through clone: %#v", runtime)
+	}
+	if stream.Fields[0].Name != "id" || stream.PrimaryKey[0] != "id" || stream.CursorFields[0] != "id" || string(stream.Schema) != `{"type":"object","properties":{"id":{"type":"string"}}}` {
+		t.Fatalf("catalog stream was mutated through clone: %#v", stream)
+	}
+	if got := runtime.ResolvedCatalog.Discovery.Failures[0].Stage; got != "source" {
+		t.Fatalf("catalog discovery failure was mutated through clone: %q", got)
+	}
+
+	begin := cloneArrowFullOverwriteRunRequest(ArrowFullOverwriteRunRequest{
+		Runtime: runtime, SourceRuntime: runtime, Binding: DestinationBinding{PrimaryKey: []string{"id"}},
+	})
+	firstSegment := cloneArrowBulkApplyRequest(ArrowBulkApplyRequest{
+		Runtime: runtime, SourceRuntime: runtime, Binding: DestinationBinding{PrimaryKey: []string{"id"}},
+	})
+	secondSegment := cloneArrowBulkApplyRequest(ArrowBulkApplyRequest{
+		Runtime: runtime, SourceRuntime: runtime, Binding: DestinationBinding{PrimaryKey: []string{"id"}},
+	})
+	begin.Runtime.ResolvedCatalog.Streams[0].Fields[0].Name = "begin"
+	begin.SourceRuntime.ResolvedCatalog.Discovery.Failures[0].Stage = "begin"
+	begin.Binding.PrimaryKey[0] = "begin"
+	firstSegment.Runtime.ResolvedCatalog.Streams[0].PrimaryKey[0] = "first"
+	firstSegment.SourceRuntime.ResolvedCatalog.Streams[0].CursorFields[0] = "first"
+	firstSegment.Binding.PrimaryKey[0] = "first"
+	if got := secondSegment.Runtime.ResolvedCatalog.Streams[0].PrimaryKey[0]; got != "id" {
+		t.Fatalf("first Arrow segment changed later segment runtime primary key: %q", got)
+	}
+	if got := secondSegment.SourceRuntime.ResolvedCatalog.Streams[0].CursorFields[0]; got != "id" {
+		t.Fatalf("first Arrow segment changed later segment source cursor: %q", got)
+	}
+	if got := secondSegment.Binding.PrimaryKey[0]; got != "id" {
+		t.Fatalf("first Arrow segment changed later segment binding: %q", got)
+	}
+	if got := runtime.ResolvedCatalog.Streams[0].Fields[0].Name; got != "id" {
+		t.Fatalf("Arrow request changed caller catalog field: %q", got)
+	}
+	if got := runtime.ResolvedCatalog.Discovery.Failures[0].Stage; got != "source" {
+		t.Fatalf("Arrow request changed caller discovery failure: %q", got)
 	}
 }
 
@@ -1832,12 +2017,18 @@ func (r *testArrowFullOverwriteRun) AbortArrowFullOverwrite(context.Context) err
 	return nil
 }
 
-type testFastSegmentStore struct{ calls int }
+type testFastSegmentStore struct {
+	calls      int
+	afterStore func()
+}
 
 func (s *testFastSegmentStore) StoreArrowSegment(_ context.Context, request FastSegmentWriteRequest) (FastSegmentReceipt, error) {
 	s.calls++
 	if request.Record == nil || request.SegmentID == "" {
 		return FastSegmentReceipt{}, ErrArrowFastPathInvalid
+	}
+	if s.afterStore != nil {
+		s.afterStore()
 	}
 	return FastSegmentReceipt{
 		ID: request.SegmentID, SchemaHash: "schema", TransformPlanHash: request.TransformPlanHash,

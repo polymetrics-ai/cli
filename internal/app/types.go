@@ -148,13 +148,21 @@ type StreamConfig struct {
 }
 
 type StreamState struct {
-	Connection          string                           `json:"connection"`
-	Stream              string                           `json:"stream"`
-	Checkpoint          *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
-	GenerationID        int64                            `json:"generation_id"`
-	LastSuccessfulRunID string                           `json:"last_successful_run_id,omitempty"`
-	RecordsLoaded       int                              `json:"records_loaded,omitempty"`
-	UpdatedAt           time.Time                        `json:"updated_at"`
+	Connection   string                           `json:"connection"`
+	Stream       string                           `json:"stream"`
+	Checkpoint   *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
+	GenerationID int64                            `json:"generation_id"`
+	// ActiveWorkID and ActiveWorkFence form one durable, connection-and-stream
+	// scoped work lease. They are present only while a source/stage/destination
+	// run owns the stream; effects and checkpoint commits renew the same fence
+	// before touching I/O, and terminal completion clears the work ID without
+	// rewinding the monotonic fence.
+	ActiveWorkID         string     `json:"active_work_id,omitempty"`
+	ActiveWorkFence      int64      `json:"active_work_fence,omitempty"`
+	ActiveWorkLeaseUntil *time.Time `json:"active_work_lease_until,omitempty"`
+	LastSuccessfulRunID  string     `json:"last_successful_run_id,omitempty"`
+	RecordsLoaded        int        `json:"records_loaded,omitempty"`
+	UpdatedAt            time.Time  `json:"updated_at"`
 }
 
 type CreateConnectionRequest struct {

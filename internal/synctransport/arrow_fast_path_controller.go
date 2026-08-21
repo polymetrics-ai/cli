@@ -54,14 +54,16 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 		result.CreditWaitElapsed = time.Duration(snapshot.WaitNanos)
 	}()
 
-	session, err := destination.BeginArrowFullOverwrite(ctx, ArrowFullOverwriteRunRequest{
+	if err := authorizeDestinationEffect(ctx, request.Approval, "Arrow full-overwrite begin"); err != nil {
+		return result, err
+	}
+	session, err := destination.BeginArrowFullOverwrite(ctx, cloneArrowFullOverwriteRunRequest(ArrowFullOverwriteRunRequest{
 		ConnectionID: request.ConnectionID, Generation: request.Generation, Plan: plan,
-		Runtime: cloneRuntimeConfig(request.DestinationRuntime), Source: request.Source,
-		SourceRuntime: cloneRuntimeConfig(request.SourceRuntime),
-		Binding:       DestinationBinding{WorkspaceID: request.DestinationBinding.WorkspaceID, SourceConnectorID: request.DestinationBinding.SourceConnectorID, ConnectionID: request.DestinationBinding.ConnectionID, StreamID: request.DestinationBinding.StreamID, PrimaryKey: append([]string(nil), request.DestinationBinding.PrimaryKey...)},
-		Stream:        request.Stream, BatchSize: request.BatchSize, TransformPlanJSON: request.TransformPlanJSON,
+		Runtime: request.DestinationRuntime, Source: request.Source,
+		SourceRuntime: request.SourceRuntime, Binding: request.DestinationBinding,
+		Stream: request.Stream, BatchSize: request.BatchSize, TransformPlanJSON: request.TransformPlanJSON,
 		TransformPlanHash: request.TransformPlanHash, Approval: request.Approval,
-	})
+	}))
 	if err != nil || isNilInterface(session) {
 		if err == nil {
 			err = ErrArrowFastPathInvalid
@@ -82,6 +84,9 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 
 	var lastCandidate *synccontract.CheckpointEnvelope
 	segments := make([]FastSegmentReceipt, 0)
+	if err := authorizeTransportSource(ctx, request); err != nil {
+		return result, err
+	}
 	err = source.ExtractArrowRanges(ctx, cloneArrowExtractRequest(ArrowExtractRequest{
 		Connector: request.Source, Runtime: request.SourceRuntime, Stream: request.Stream, CursorField: request.CursorField,
 		PrimaryKey: request.DestinationBinding.PrimaryKey, Resume: request.Resume, Checkpoint: sourceCheckpointForMode(request.Mode, request.Checkpoint, request.RateLimitResumeCheckpoint),
@@ -143,12 +148,16 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 				return fmt.Errorf("close Arrow Parquet segment: %w", err)
 			}
 			applyCtx, cancelApply := context.WithTimeout(ctx, request.unitDeadline())
+			if err := authorizeDestinationEffect(applyCtx, request.Approval, "Arrow segment apply"); err != nil {
+				cancelApply()
+				return err
+			}
 			applyStarted := time.Now()
-			applyErr := session.ApplyArrowSegment(applyCtx, ArrowBulkApplyRequest{
+			applyErr := session.ApplyArrowSegment(applyCtx, cloneArrowBulkApplyRequest(ArrowBulkApplyRequest{
 				ConnectionID: request.ConnectionID, Plan: plan, Segment: receipt, Record: record,
 				Runtime: request.DestinationRuntime, Source: request.Source, SourceRuntime: request.SourceRuntime,
 				Binding: request.DestinationBinding, Stream: request.Stream, BatchSize: request.BatchSize, Approval: request.Approval,
-			})
+			}))
 			result.ApplyElapsed += time.Since(applyStarted)
 			cancelApply()
 			if applyErr != nil {
@@ -176,10 +185,8 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 			return result, fmt.Errorf("Arrow source transport completed without a checkpoint candidate")
 		}
 	}
-	if request.Approval.AuthorizeNextUnit != nil {
-		if err := request.Approval.AuthorizeNextUnit(ctx); err != nil {
-			return result, fmt.Errorf("authorize Arrow full-overwrite publication: %w", err)
-		}
+	if err := authorizeDestinationEffect(ctx, request.Approval, "Arrow full-overwrite publication"); err != nil {
+		return result, err
 	}
 	publishCtx, cancelPublish := context.WithTimeout(ctx, request.unitDeadline())
 	publishStarted := time.Now()

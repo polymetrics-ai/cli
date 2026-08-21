@@ -14,6 +14,9 @@ import (
 
 var errTransportStreamStateConflict = errors.New("transport stream state changed in another process")
 
+var errTransportStreamWorkInProgress = errors.New("transport stream work is already owned by another process")
+var errTransportStreamWorkFenceLost = errors.New("transport stream work fence was lost before I/O")
+
 func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	_, sourceDeclared := connectors.SyncTransportDescriptorOf(source)
 	_, destinationDeclared := connectors.SyncTransportDescriptorOf(destination)
@@ -233,7 +236,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
-	prior, priorPresent := a.state.StreamStates[stateKey]
+	prior := a.state.StreamStates[stateKey]
 	prior = cloneStreamState(prior)
 	if prior.Checkpoint != nil {
 		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
@@ -243,13 +246,28 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	if rateParkingResumeCheckpoint != nil && !transportCheckpointEqual(prior.Checkpoint, rateParkingResumeCheckpoint) {
 		return emptyResult, errors.New("rate-limit resume checkpoint changed")
 	}
+	workLease, err := a.claimTransportWorkLease(ctx, stateKey, conn.Name, streamName, runID, sourceExpectation, mode.IsOverwrite())
+	if err != nil {
+		return emptyResult, err
+	}
+	prior = workLease.stateForTerminalRun()
 	generationID := prior.GenerationID
-	if generationID == 0 || mode.IsOverwrite() {
-		generationID++
+
+	// One declaration-owned approval callback now gates every source/stage/
+	// destination unit on the same durable stream fence before it consults the
+	// existing authorization. This preserves the original authorization scope
+	// while making a takeover reject stale effects without connector branches.
+	originalAuthorize := approval.AuthorizeNextUnit
+	approval.AuthorizeNextUnit = func(effectCtx context.Context) error {
+		if err := workLease.renew(effectCtx); err != nil {
+			return err
+		}
+		if originalAuthorize != nil {
+			return originalAuthorize(effectCtx)
+		}
+		return nil
 	}
 
-	expectedState := cloneStreamState(prior)
-	expectedPresent := priorPresent
 	var committed *synccontract.CheckpointEnvelope
 	transportRequest := synctransport.RunRequest{
 		ConnectionID:       conn.ID,
@@ -279,6 +297,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		RateLimitResumeCheckpoint: rateParkingResumeCheckpoint,
 		Approval:                  approval,
 		Stage:                     a.transportStage,
+		SourceAdmission:           workLease.renew,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			interim := checkpoint.Clone()
 			if interim.CommittedAt == nil {
@@ -287,27 +306,10 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			if err := interim.ValidateResume(sourceExpectation); err != nil {
 				return err
 			}
-			interimState := cloneStreamState(expectedState)
-			interimState.Connection = conn.Name
-			interimState.Stream = streamName
-			interimState.Checkpoint = &interim
-			interimState.GenerationID = generationID
-			interimState.UpdatedAt = *interim.CommittedAt
-			if _, err := a.updateState(func(current state) (state, error) {
-				currentState, currentPresent := current.StreamStates[stateKey]
-				if currentPresent != expectedPresent || (currentPresent && !transportStreamStateEqual(currentState, expectedState)) {
-					return current, errTransportStreamStateConflict
-				}
-				if current.StreamStates == nil {
-					current.StreamStates = map[string]StreamState{}
-				}
-				current.StreamStates[stateKey] = cloneStreamState(interimState)
-				return current, nil
-			}); err != nil {
+			_, err := workLease.commit(ctx, interim)
+			if err != nil {
 				return fmt.Errorf("persist acknowledged transport checkpoint: %w", err)
 			}
-			expectedState = cloneStreamState(interimState)
-			expectedPresent = true
 			copy := interim.Clone()
 			committed = &copy
 			return nil
@@ -337,7 +339,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 					return emptyResult, err
 				}
 			}
-			updated := cloneStreamState(prior)
+			updated := workLease.stateForTerminalRun()
 			updated.Connection = conn.Name
 			updated.Stream = streamName
 			updated.GenerationID = generationID
@@ -354,15 +356,14 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		return emptyResult, fmt.Errorf("closed transport completed without a durable committed checkpoint")
 	}
 
-	updated := StreamState{
-		Connection:          conn.Name,
-		Stream:              streamName,
-		Checkpoint:          committed,
-		GenerationID:        generationID,
-		LastSuccessfulRunID: runID,
-		RecordsLoaded:       transportResult.RecordsApplied,
-		UpdatedAt:           *committed.CommittedAt,
-	}
+	updated := workLease.stateForTerminalRun()
+	updated.Connection = conn.Name
+	updated.Stream = streamName
+	updated.Checkpoint = committed
+	updated.GenerationID = generationID
+	updated.LastSuccessfulRunID = runID
+	updated.RecordsLoaded = transportResult.RecordsApplied
+	updated.UpdatedAt = *committed.CommittedAt
 	result := etlExecutionResult{
 		RecordsRead:               transportResult.RecordsRead,
 		RecordsLoaded:             transportResult.RecordsApplied,
@@ -432,6 +433,9 @@ func transportStreamStateEqual(left, right StreamState) bool {
 	if left.Connection != right.Connection ||
 		left.Stream != right.Stream ||
 		left.GenerationID != right.GenerationID ||
+		left.ActiveWorkID != right.ActiveWorkID ||
+		left.ActiveWorkFence != right.ActiveWorkFence ||
+		!transportOptionalTimeEqual(left.ActiveWorkLeaseUntil, right.ActiveWorkLeaseUntil) ||
 		left.LastSuccessfulRunID != right.LastSuccessfulRunID ||
 		left.RecordsLoaded != right.RecordsLoaded ||
 		!left.UpdatedAt.Equal(right.UpdatedAt) {

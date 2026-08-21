@@ -452,9 +452,27 @@ func (e *rateLimitAdmissionError) Unwrap() error {
 	return e.err
 }
 
+// requestAdmissionError marks a durable credential fence separately from a
+// rate-limit admission refusal. It is terminal for the current operation: a
+// retry would only poll the same fenced epoch and must never buy another send.
+type requestAdmissionError struct {
+	err error
+}
+
+func (e *requestAdmissionError) Error() string {
+	return fmt.Sprintf("request admission: %v", e.err)
+}
+
+func (e *requestAdmissionError) Unwrap() error {
+	return e.err
+}
+
 const minimumObservableRateLimitWait = time.Millisecond
 
 func (r *Requester) admitRequesterSend(ctx context.Context, req *http.Request, requesterAttempt *int, route *RateLimitRoute, costHeader *string) error {
+	if err := CheckRequestAdmission(ctx); err != nil {
+		return &requestAdmissionError{err: err}
+	}
 	nextAttempt := *requesterAttempt + 1
 	nextRoute := RateLimitRoute{Method: req.Method, Path: r.rateLimitRoutePath(req.URL), Attempt: nextAttempt}
 	admissionCtx, cancelAdmission := r.rateLimitAdmissionContext(ctx)
@@ -526,9 +544,6 @@ func (r *Requester) rateLimitRoutePath(requestURL *url.URL) string {
 }
 
 func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int, route *RateLimitRoute, costHeader *string) *http.Client {
-	if r.Admission == nil && r.Observer == nil && r.RouteRateLimits == nil && r.RateLimitEvents == nil {
-		return client
-	}
 	clone := *client
 	checkRedirect := clone.CheckRedirect
 	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
@@ -546,6 +561,11 @@ func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterA
 
 func isRateLimitAdmissionError(err error) bool {
 	var admissionErr *rateLimitAdmissionError
+	return errors.As(err, &admissionErr)
+}
+
+func isRequestAdmissionError(err error) bool {
+	var admissionErr *requestAdmissionError
 	return errors.As(err, &admissionErr)
 }
 
@@ -1249,7 +1269,7 @@ func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, q
 		}
 		if err := r.admitRequesterSend(ctx, req, &requesterAttempt, &route, &costHeader); err != nil {
 			_ = cleanupRequestBody(body)
-			return nil, err
+			return lastProviderResponse, errors.Join(lastProviderErr, err)
 		}
 
 		resp, err := client.Do(req)
@@ -1267,7 +1287,7 @@ func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, q
 			if errors.Is(err, transportpolicy.ErrRedirectRefused) {
 				return lastProviderResponse, errors.Join(lastProviderErr, lastErr)
 			}
-			if isRateLimitAdmissionError(err) {
+			if isRateLimitAdmissionError(err) || isRequestAdmissionError(err) {
 				return lastProviderResponse, errors.Join(lastProviderErr, lastErr)
 			}
 			if attempt < attempts-1 {

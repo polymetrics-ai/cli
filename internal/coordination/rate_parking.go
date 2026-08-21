@@ -13,6 +13,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -21,7 +22,8 @@ import (
 type RateParkingOutcome string
 
 const (
-	RateParkingOutcomeParkedRateLimit RateParkingOutcome = "parked_rate_limit"
+	RateParkingOutcomeParkedRateLimit      RateParkingOutcome = "parked_rate_limit"
+	RateParkingOutcomeNeedsReauthorization RateParkingOutcome = "needs_reauthorization"
 )
 
 var (
@@ -30,10 +32,48 @@ var (
 	// provider response detail.
 	ErrRateLimitParked  = errors.New("rate-limited work is parked")
 	ErrRateLimitRearmed = errors.New("rate-limited work was rearmed")
+	// ErrRateLimitNeedsReauthorization is durable terminal state. The caller
+	// must obtain a fresh authorization then explicitly abandon the parked run;
+	// scheduling another retry would only replay a known-invalid approval.
+	ErrRateLimitNeedsReauthorization = errors.New("parked work needs reauthorization")
 
 	errRateParkingUnavailable = errors.New("rate parking coordinator is unavailable")
 	errRateParkingNotStarted  = errors.New("rate parking coordinator is not started")
 )
+
+// NeedsReauthorizationError marks a resumer failure as terminal for the
+// current authorization scope. Its cause remains available to the App while
+// the coordinator persists only the closed, secret-free outcome vocabulary.
+type NeedsReauthorizationError struct{ err error }
+
+func (e *NeedsReauthorizationError) Error() string {
+	if e == nil || e.err == nil {
+		return ErrRateLimitNeedsReauthorization.Error()
+	}
+	return e.err.Error()
+}
+
+func (e *NeedsReauthorizationError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.err
+}
+
+// NeedsReauthorization makes a resumer's expired or revoked authorization
+// failure terminal without teaching coordination about any connector or App
+// error type.
+func NeedsReauthorization(err error) error {
+	if err == nil {
+		err = ErrRateLimitNeedsReauthorization
+	}
+	return &NeedsReauthorizationError{err: err}
+}
+
+func isNeedsReauthorization(err error) bool {
+	var terminal *NeedsReauthorizationError
+	return errors.As(err, &terminal)
+}
 
 // ParkedRateLimitRun is the secret-free durable state required to resume one
 // run. Scope is an already opaque projection and must remain internal to a
@@ -77,6 +117,7 @@ type RateParkingStore interface {
 	Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error)
 	BeginResume(runID, owner string) (ParkedRateLimitRun, error)
 	MarkResumeCompleted(runID, owner string) (ParkedRateLimitRun, error)
+	MarkNeedsReauthorization(runID, owner string) (ParkedRateLimitRun, error)
 	RenewClaim(runID, owner string, until time.Time) (bool, error)
 	ReleaseClaim(runID, owner string) error
 	Complete(runID, owner string) error
@@ -188,6 +229,9 @@ func (s *MemoryRateParkingStore) Claim(runID, owner string, now, until time.Time
 	if !found {
 		return ParkedRateLimitRun{}, false, time.Time{}, ErrRateParkingClaimLost
 	}
+	if record.Run.Outcome == RateParkingOutcomeNeedsReauthorization {
+		return record.Run.Clone(), false, time.Time{}, ErrRateLimitNeedsReauthorization
+	}
 	if now.Before(record.Run.ResetAt) {
 		return record.Run.Clone(), false, record.Run.ResetAt, nil
 	}
@@ -209,6 +253,32 @@ func (s *MemoryRateParkingStore) BeginResume(runID, owner string) (ParkedRateLim
 
 func (s *MemoryRateParkingStore) MarkResumeCompleted(runID, owner string) (ParkedRateLimitRun, error) {
 	return s.updateResumePhase(runID, owner, true)
+}
+
+func (s *MemoryRateParkingStore) MarkNeedsReauthorization(runID, owner string) (ParkedRateLimitRun, error) {
+	if s == nil {
+		return ParkedRateLimitRun{}, errRateParkingUnavailable
+	}
+	if runID == "" {
+		return ParkedRateLimitRun{}, errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	record, found := s.runs[runID]
+	if !found || record.ClaimOwner != owner {
+		return ParkedRateLimitRun{}, ErrRateParkingClaimLost
+	}
+	record.Run.Outcome = RateParkingOutcomeNeedsReauthorization
+	record.ClaimOwner = ""
+	record.ClaimUntil = time.Time{}
+	if err := validateParkedRateLimitRun(record.Run); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	s.runs[runID] = record
+	return record.Run.Clone(), nil
 }
 
 func (s *MemoryRateParkingStore) updateResumePhase(runID, owner string, completed bool) (ParkedRateLimitRun, error) {
@@ -494,6 +564,9 @@ func (c *RateParkingCoordinator) Start(ctx context.Context) error {
 	}
 	due := make([]string, 0, len(c.runs))
 	for runID, run := range c.runs {
+		if run.Outcome == RateParkingOutcomeNeedsReauthorization {
+			continue
+		}
 		if !c.now().Before(run.ResetAt) {
 			due = append(due, runID)
 			continue
@@ -568,6 +641,7 @@ func (c *RateParkingCoordinator) Park(ctx context.Context, request RateParkingRe
 	}
 	persisted, _, err := c.store.Create(run)
 	if err != nil {
+		err = c.reconcileIndeterminateMutationLocked(err)
 		c.mu.Unlock()
 		return ParkedRateLimitRun{}, err
 	}
@@ -605,6 +679,7 @@ func (c *RateParkingCoordinator) Rearm(ctx context.Context, request RateParkingR
 	}
 	persisted, err := c.store.Rearm(run, c.owner, c.now().Add(c.claimTTL))
 	if err != nil {
+		err = c.reconcileIndeterminateMutationLocked(err)
 		c.mu.Unlock()
 		return ParkedRateLimitRun{}, err
 	}
@@ -637,11 +712,17 @@ func (c *RateParkingCoordinator) Admit(scope connectors.RateLimitScopeKey) error
 	if !c.started {
 		return errRateParkingNotStarted
 	}
-	parked, err := c.store.HasScope(scope)
+	runs, err := c.store.List()
 	if err != nil {
 		return errRateParkingUnavailable
 	}
-	if parked {
+	for _, run := range runs {
+		if run.Scope != scope {
+			continue
+		}
+		if run.Outcome == RateParkingOutcomeNeedsReauthorization {
+			return ErrRateLimitNeedsReauthorization
+		}
 		return ErrRateLimitParked
 	}
 	return nil
@@ -663,8 +744,9 @@ func (c *RateParkingCoordinator) Cancel(runID string) error {
 	}
 	delete(c.timers, runID)
 	if err := c.store.Delete(runID, c.now()); err != nil {
+		err = c.reconcileIndeterminateMutationLocked(err)
 		c.mu.Unlock()
-		return errRateParkingUnavailable
+		return err
 	}
 	delete(c.runs, runID)
 	delete(c.resuming, runID)
@@ -673,12 +755,67 @@ func (c *RateParkingCoordinator) Cancel(runID string) error {
 	return nil
 }
 
+// reconcileIndeterminateMutationLocked reloads the durable truth after a
+// file replacement may have committed. Every timer is rebuilt from that exact
+// record set, so an uncertain caller never leaves a stale memory-only park or
+// duplicate callback behind. The caller holds c.mu.
+func (c *RateParkingCoordinator) reconcileIndeterminateMutationLocked(mutationErr error) error {
+	if !statestore.CommitOutcomeForError(mutationErr).MayHaveCommitted() {
+		return mutationErr
+	}
+	if err := c.reloadDurableRunsLocked(); err != nil {
+		return errors.Join(mutationErr, err)
+	}
+	return mutationErr
+}
+
+func (c *RateParkingCoordinator) reloadDurableRunsLocked() error {
+	runs, err := c.store.List()
+	if err != nil {
+		return fmt.Errorf("reload parked rate-limit records: %w", err)
+	}
+	for _, run := range runs {
+		if err := validateParkedRateLimitRun(run); err != nil {
+			return fmt.Errorf("validate reloaded parked rate-limit record: %w", err)
+		}
+	}
+	for _, timer := range c.timers {
+		if timer != nil {
+			timer.Stop()
+		}
+	}
+	c.timers = make(map[string]RateParkingTimer)
+	c.runs = make(map[string]ParkedRateLimitRun, len(runs))
+	for _, run := range runs {
+		c.runs[run.RunID] = run.Clone()
+	}
+	for runID := range c.runs {
+		if _, active := c.resuming[runID]; active {
+			continue
+		}
+		c.scheduleLocked(runID)
+	}
+	return nil
+}
+
+func (c *RateParkingCoordinator) reconcileIndeterminateMutation(mutationErr error) error {
+	if !statestore.CommitOutcomeForError(mutationErr).MayHaveCommitted() {
+		return mutationErr
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.reconcileIndeterminateMutationLocked(mutationErr)
+}
+
 func (c *RateParkingCoordinator) scheduleLocked(runID string) {
 	if _, exists := c.timers[runID]; exists || !c.started {
 		return
 	}
 	run, exists := c.runs[runID]
 	if !exists {
+		return
+	}
+	if run.Outcome == RateParkingOutcomeNeedsReauthorization {
 		return
 	}
 	c.timers[runID] = c.scheduler.Schedule(run.ResetAt, func() { c.resumeDue(runID) })
@@ -697,6 +834,10 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 	defer c.active.Done()
 	run, exists := c.runs[runID]
 	if !exists {
+		c.mu.Unlock()
+		return
+	}
+	if run.Outcome == RateParkingOutcomeNeedsReauthorization {
 		c.mu.Unlock()
 		return
 	}
@@ -722,6 +863,17 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 	expectedRun := run.Clone()
 	claimedRun, claimed, retryAt, err := c.store.Claim(runID, c.owner, c.now(), c.now().Add(c.claimTTL))
 	if err != nil {
+		if errors.Is(err, ErrRateLimitNeedsReauthorization) {
+			c.mu.Lock()
+			reloadErr := c.reloadDurableRunsLocked()
+			c.finishResumeLeaseLocked(runID, lease)
+			c.mu.Unlock()
+			if reloadErr != nil {
+				c.retryResume(runID, lease, c.nextRetryAt(runID), "reload_needs_reauthorization")
+			}
+			return
+		}
+		err = c.reconcileIndeterminateMutation(err)
 		c.retryResume(runID, lease, c.nextRetryAt(runID), "claim")
 		return
 	}
@@ -747,7 +899,10 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 	if !run.ResumeStarted {
 		run, err = c.store.BeginResume(runID, c.owner)
 		if err != nil {
-			_ = c.store.ReleaseClaim(runID, c.owner)
+			_ = c.reconcileIndeterminateMutation(err)
+			if releaseErr := c.store.ReleaseClaim(runID, c.owner); releaseErr != nil {
+				_ = c.reconcileIndeterminateMutation(releaseErr)
+			}
 			c.retryResume(runID, lease, c.nextRetryAt(runID), "begin_reconcile")
 			return
 		}
@@ -777,8 +932,26 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 		c.retryResume(runID, lease, c.nextRetryAt(runID), "claim_renewal")
 		return
 	}
+	if isNeedsReauthorization(resumeErr) {
+		terminal, terminalErr := c.store.MarkNeedsReauthorization(runID, c.owner)
+		if terminalErr != nil {
+			_ = c.reconcileIndeterminateMutation(terminalErr)
+			c.retryResume(runID, lease, c.nextRetryAt(runID), "persist_needs_reauthorization")
+			return
+		}
+		c.mu.Lock()
+		if current, exists := c.runs[runID]; exists && parkedRateLimitRunSameIdentity(current, run) {
+			c.runs[runID] = terminal.Clone()
+		}
+		c.finishResumeLeaseLocked(runID, lease)
+		c.mu.Unlock()
+		return
+	}
 	if resumeErr != nil {
 		releaseErr := c.store.ReleaseClaim(runID, c.owner)
+		if releaseErr != nil {
+			releaseErr = c.reconcileIndeterminateMutation(releaseErr)
+		}
 		retryAt := c.nextRetryAt(runID)
 		if releaseErr != nil {
 			claimDeadline := c.now().Add(c.claimTTL)
@@ -792,6 +965,7 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 	if !run.ResumeCompleted {
 		run, err = c.store.MarkResumeCompleted(runID, c.owner)
 		if err != nil {
+			_ = c.reconcileIndeterminateMutation(err)
 			c.retryResume(runID, lease, c.nextRetryAt(runID), "persist_completion")
 			return
 		}
@@ -804,11 +978,22 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 		c.mu.Unlock()
 		return
 	}
+	c.mu.Unlock()
 	if err := c.store.Complete(runID, c.owner); err != nil {
+		_ = c.reconcileIndeterminateMutation(err)
+		c.mu.Lock()
+		_, stillParked := c.runs[runID]
+		if !stillParked {
+			delete(c.retryCount, runID)
+			c.finishResumeLeaseLocked(runID, lease)
+			c.mu.Unlock()
+			return
+		}
 		c.mu.Unlock()
 		c.retryResume(runID, lease, c.nextRetryAt(runID), "complete")
 		return
 	}
+	c.mu.Lock()
 	delete(c.runs, runID)
 	delete(c.retryCount, runID)
 	c.finishResumeLeaseLocked(runID, lease)
@@ -888,6 +1073,9 @@ func (c *RateParkingCoordinator) renewClaim(ctx context.Context, runID string, d
 		case <-ticker.C:
 			renewed, err := c.store.RenewClaim(runID, c.owner, c.now().Add(c.claimTTL))
 			if err != nil || !renewed {
+				if err != nil {
+					_ = c.reconcileIndeterminateMutation(err)
+				}
 				cancel()
 				result <- true
 				return
@@ -917,7 +1105,7 @@ func validateParkedRateLimitRun(run ParkedRateLimitRun) error {
 	if run.Scope == "" {
 		return errors.New("parked rate-limit scope is unavailable")
 	}
-	if run.Outcome != RateParkingOutcomeParkedRateLimit {
+	if run.Outcome != RateParkingOutcomeParkedRateLimit && run.Outcome != RateParkingOutcomeNeedsReauthorization {
 		return errors.New("parked rate-limit outcome is invalid")
 	}
 	if run.ResetAt.IsZero() {

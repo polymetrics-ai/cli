@@ -185,10 +185,14 @@ func (c Connector) readBootstrapSnapshot(ctx context.Context, conn connConfig, s
 		return postgresCDCSource{}, synccontract.CheckpointEnvelope{}, fmt.Errorf("postgres bootstrap: open snapshot pool: %w", err)
 	}
 	defer pool.Close()
+	if err := checkPostgresRequestAdmission(operationCtx); err != nil {
+		return postgresCDCSource{}, synccontract.CheckpointEnvelope{}, err
+	}
 	tx, err := pool.BeginTx(operationCtx, typedCatalogTransactionOptions())
 	if err != nil {
 		return postgresCDCSource{}, synccontract.CheckpointEnvelope{}, fmt.Errorf("postgres bootstrap: begin imported snapshot: %w", err)
 	}
+	tx = admitPostgresTx(tx)
 	defer func() {
 		rollbackErr := rollbackTypedCatalogSnapshot(operationCtx, tx, resources)
 		if rollbackErr == nil {

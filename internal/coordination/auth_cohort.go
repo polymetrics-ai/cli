@@ -6,6 +6,8 @@ import (
 	"sync"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
+	statestore "polymetrics.ai/internal/state"
 )
 
 var (
@@ -162,7 +164,7 @@ func (r *AuthCohortRuntime) Execute(ctx context.Context, operation func(context.
 	if err := admission.Check(ctx); err != nil {
 		return err
 	}
-	err = operation(admission.Context())
+	err = operation(connsdk.WithRequestAdmission(admission.Context(), admission.Check))
 	if connectors.IsVerifiedAuthenticationFailure(err) {
 		if reportErr := r.coordinator.Report(admission, AuthenticationOutcomeVerifiedInvalid); reportErr != nil && !errors.Is(reportErr, ErrAuthCohortFenced) {
 			return reportErr
@@ -363,8 +365,12 @@ func (c *AuthCohortCoordinator) Report(admission *AuthCohortAdmission, outcome A
 		next.LastFencedEpoch = health.Epoch
 		swapped, err := c.store.CompareAndSwap(admission.cohort, health, next)
 		if err != nil {
+			cancellations := c.cancelIfAdvancedAfterCommitUncertaintyLocked(admission.cohort, health, err)
 			c.mu.Unlock()
-			return errAuthCohortHealthStoreUnavailable
+			for _, cancel := range cancellations {
+				cancel()
+			}
+			return err
 		}
 		if swapped {
 			break
@@ -409,8 +415,12 @@ func (c *AuthCohortCoordinator) Repair(cohort connectors.AuthCohortKey, outcome 
 		repaired.Fenced = false
 		swapped, err := c.store.CompareAndSwap(cohort, health, repaired)
 		if err != nil {
+			cancellations := c.cancelIfAdvancedAfterCommitUncertaintyLocked(cohort, health, err)
 			c.mu.Unlock()
-			return 0, errAuthCohortHealthStoreUnavailable
+			for _, cancel := range cancellations {
+				cancel()
+			}
+			return 0, err
 		}
 		if swapped {
 			break
@@ -445,7 +455,11 @@ func (c *AuthCohortCoordinator) Fence(cohort connectors.AuthCohortKey, outcome A
 			return err
 		}
 		if health.Fenced {
+			cancellations := c.cancellationsLocked(cohort)
 			c.mu.Unlock()
+			for _, cancel := range cancellations {
+				cancel()
+			}
 			return nil
 		}
 		next := health
@@ -453,8 +467,12 @@ func (c *AuthCohortCoordinator) Fence(cohort connectors.AuthCohortKey, outcome A
 		next.LastFencedEpoch = health.Epoch
 		swapped, err := c.store.CompareAndSwap(cohort, health, next)
 		if err != nil {
+			cancellations := c.cancelIfAdvancedAfterCommitUncertaintyLocked(cohort, health, err)
 			c.mu.Unlock()
-			return errAuthCohortHealthStoreUnavailable
+			for _, cancel := range cancellations {
+				cancel()
+			}
+			return err
 		}
 		if swapped {
 			break
@@ -484,6 +502,22 @@ func (a *AuthCohortAdmission) Release() {
 	}
 	c.mu.Unlock()
 	a.cancel()
+}
+
+// cancelIfAdvancedAfterCommitUncertaintyLocked reloads the exact durable
+// cohort after a post-rename/unlock error. If a newer or fenced record is
+// present, every local member belongs to the old epoch and must be cancelled
+// before the uncertain outcome is returned. The caller holds c.mu and invokes
+// the returned cancellation functions only after unlocking.
+func (c *AuthCohortCoordinator) cancelIfAdvancedAfterCommitUncertaintyLocked(cohort connectors.AuthCohortKey, before AuthCohortHealth, commitErr error) []context.CancelFunc {
+	if !statestore.CommitOutcomeForError(commitErr).MayHaveCommitted() {
+		return nil
+	}
+	after, found, err := c.store.Load(cohort)
+	if err != nil || !found || after == before {
+		return nil
+	}
+	return c.cancellationsLocked(cohort)
 }
 
 func (c *AuthCohortCoordinator) healthLocked(cohort connectors.AuthCohortKey) (AuthCohortHealth, error) {

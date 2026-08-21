@@ -230,9 +230,27 @@ func (a *App) startParkedRateLimitRunRearm(ctx context.Context, original Run, ch
 	request.rateParkingRearmAttemptRunID = attemptRunID
 	resumeCtx := context.WithValue(ctx, rateParkingResumeContextKey{}, original.ID)
 	if _, err := a.RunETL(resumeCtx, request); err != nil {
-		return "", err
+		return "", classifyRateParkingResumeError(err)
 	}
 	return attemptRunID, nil
+}
+
+// classifyRateParkingResumeError keeps the coordinator connector-neutral while
+// making a known-invalid, approval-bound authorization terminal for this exact
+// parked scope. All other provider failures retain their retryable semantics.
+func classifyRateParkingResumeError(err error) error {
+	if err == nil {
+		return nil
+	}
+	var expired *AuthorizationExpiredError
+	if errors.As(err, &expired) {
+		return coordination.NeedsReauthorization(err)
+	}
+	var revoked *AuthorizationRevokedError
+	if errors.As(err, &revoked) {
+		return coordination.NeedsReauthorization(err)
+	}
+	return err
 }
 
 func (a *App) persistRateParkingRearmAttemptLink(runID, attemptRunID string) error {

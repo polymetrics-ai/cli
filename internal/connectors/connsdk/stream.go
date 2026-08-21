@@ -144,7 +144,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			if resp != nil {
 				lastProviderErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, streamResponseBody(terminal), RateLimitObservation{})
 			}
-			if isRateLimitAdmissionError(err) {
+			if isRateLimitAdmissionError(err) || isRequestAdmissionError(err) {
 				return terminal, errors.Join(lastProviderErr, lastErr)
 			}
 			if attempt < attempts-1 && !isRedirectPolicyError(err) {

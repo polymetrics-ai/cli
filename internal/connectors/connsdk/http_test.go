@@ -26,6 +26,76 @@ import (
 
 func noSleep(_ context.Context, _ time.Duration) error { return nil }
 
+func TestRequesterRechecksRequestAdmissionBeforeRetry(t *testing.T) {
+	errFenced := errors.New("authentication cohort fenced")
+	sends := 0
+	fenced := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		sends++
+		fenced = true
+		http.Error(w, "retryable provider failure", http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+	checks := 0
+	ctx := WithRequestAdmission(context.Background(), func(context.Context) error {
+		checks++
+		if fenced {
+			return errFenced
+		}
+		return nil
+	})
+
+	response, err := (&Requester{BaseURL: server.URL, MaxRetries: 1, Sleep: noSleep}).Do(ctx, http.MethodGet, "/records", nil, nil)
+	if !errors.Is(err, errFenced) {
+		t.Fatalf("Do() error = %T %v, want request admission fence", err, err)
+	}
+	if sends != 1 || checks != 2 {
+		t.Fatalf("sends/admission checks = %d/%d, want first send and pre-retry fence", sends, checks)
+	}
+	if response == nil || response.Status != http.StatusServiceUnavailable {
+		t.Fatalf("terminal response = %#v, want retained first provider receipt", response)
+	}
+}
+
+func TestRequesterRechecksRequestAdmissionBeforeRedirect(t *testing.T) {
+	errFenced := errors.New("authentication cohort fenced")
+	firstSends, redirectedSends := 0, 0
+	fenced := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/first":
+			firstSends++
+			fenced = true
+			http.Redirect(w, r, "/second", http.StatusFound)
+		case "/second":
+			redirectedSends++
+			w.WriteHeader(http.StatusNoContent)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+	checks := 0
+	ctx := WithRequestAdmission(context.Background(), func(context.Context) error {
+		checks++
+		if fenced {
+			return errFenced
+		}
+		return nil
+	})
+
+	response, err := (&Requester{BaseURL: server.URL, Sleep: noSleep}).Do(ctx, http.MethodGet, "/first", nil, nil)
+	if !errors.Is(err, errFenced) {
+		t.Fatalf("Do() error = %T %v, want request admission fence", err, err)
+	}
+	if firstSends != 1 || redirectedSends != 0 || checks != 2 {
+		t.Fatalf("first/redirected sends and admission checks = %d/%d/%d, want 1/0/2", firstSends, redirectedSends, checks)
+	}
+	if response == nil || response.Status != http.StatusFound {
+		t.Fatalf("terminal response = %#v, want retained redirect provider receipt", response)
+	}
+}
+
 type roundTripperFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
