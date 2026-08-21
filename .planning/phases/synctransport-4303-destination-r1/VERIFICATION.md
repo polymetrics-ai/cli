@@ -76,3 +76,13 @@ definition-owned boundary remained intact under a fresh run.
 - `make verify` — passed locally. The complete result is retained at `traces/make-verify-rerun-20260820.log`; it includes the full test tree, docs, smoke, lint, generator, certification, connector-boundary, canon, and release-target gates.
 - `git diff --check main...HEAD` — passed.
 - `gh api /repos/polymetrics-ai/cli/pulls/4304 --jq .base.ref` — returned `main`, matching the task delivery header.
+
+## Follow-up foundation r1 checklist
+
+- [ ] Action-owned mapping schema and loader validation: three same-source actions, one other connector action, duplicate/malformed/unknown/cross action/source/connector and stale configuration/approval refusals before I/O.
+- [ ] Batch boundaries, partial 2xx/4xx/5xx evidence, stable idempotency, duplicate/reordered records, cancellation, terminal persistence, and resume without replaying acknowledged writes.
+- [ ] Tombstone create/update/delete separation; explicit declaration-owned delete mapping, receipt, read-back, checkpoint, and refusal-before-I/O assertions.
+- [ ] App and real CLI persisted listing/plan/preview/approval/apply/resume tests; no caller override of action, mapping, strategy, body, route, credential revision, evidence, configuration, workset, or approval identity.
+- [ ] `go test -timeout 20m` focused schema/engine/App/CLI/orchestration packages and `go test -race` for changed packages.
+- [ ] `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`, individual `make verify` gates, repository boundary and canon checks, and the full locally permitted verification run.
+- [ ] One post-green tracked-artifact regeneration only; inspect `git diff --check`; record exact command outputs here.
