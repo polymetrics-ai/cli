@@ -1,7 +1,7 @@
 {
   "issue": 277,
   "phase": "cli-twenty-crm-gtm-parity-r1",
-  "status": "blocked_shared_cli_empty_stdin_credential",
+  "status": "blocked_shared_reverse_etl_per_action_source_binding",
   "workflow": [
     "discuss-phase",
     "plan-phase --tdd",
@@ -15,8 +15,8 @@
   "working_branch": "fm/cli-twenty-crm-gtm-parity-r1",
   "foundation_dependency": {
     "issue": 4304,
-    "current_observed_sha": "c6f03c937c1f4e516d339b48e8c2143726179fdf",
-    "required_state": "published persisted multi-action selection with exact per-action bindings",
+    "current_observed_sha": "d814875a902be684cb2a38b94f7a8077f66b70b1",
+    "required_state": "provider-neutral persisted per-action source bindings with exact action-specific input mappings",
     "captain_decision": "all 55 eligible actions remain mandatory; no connector workaround"
   },
   "live_certification_preparation": {
@@ -53,6 +53,20 @@
     "required_change": "reject empty credentials add --value-stdin input after newline normalization and before vault persistence",
     "required_tests": ["non-empty stdin accepted", "empty stdin rejected", "newline-only stdin rejected"],
     "lane_action": "blocked without foundation change or token replacement"
+  },
+  "reconciliation_20260822": {
+    "recovered_branch": "origin/fm/cli-twenty-parity-wave02-r1",
+    "recovery_assessment": "The historical branch has no merge base with current main; only its Twenty subtree was recovered. The current bundle preserves 168 source-locked REST operations: 28 ETL streams, 28 direct reads, and 112 typed reverse-ETL actions; the documented REST inventory has no direct-write or binary transfer operation.",
+    "foundation_merge": "Merged d814875a902be684cb2a38b94f7a8077f66b70b1 normally as 93e6b9d79; GitHub API confirms #4298 base ref fm/cli-reverse-etl-destination-r1 at that SHA.",
+    "mapping_result": "The refreshed foundation persists action selection, but its source binding is indexed only by executor and stream. Twenty's 55 eligible candidates need distinct mappings from the same declarative source, which is not representable connector-locally.",
+    "focused_checks": [
+      "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty: pass",
+      "go test -count=1 -timeout 20m ./internal/app -run persisted-destination-focused-suite: pass",
+      "go run ./cmd/connectorgen validate internal/connectors/defs/twenty: pass",
+      "go run ./cmd/connectorgen surface-sync --check: pass",
+      "go run ./cmd/connectorgen certification-sweep --connector twenty --check: pass (172 rows; 168 CLI commands)"
+    ],
+    "stop_condition": "Needs a provider-neutral per-action source-binding foundation decision; batch-envelope and tombstone workset delivery are separately unassigned shared foundations. No live credential, runtime mutation, or heavy verification was attempted during this low-CPU reconciliation."
   },
   "captain_foundation_gap_ledger": {
     "path": ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-GAPS.json",

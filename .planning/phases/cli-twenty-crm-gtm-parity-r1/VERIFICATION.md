@@ -12,10 +12,15 @@
   `fm/cli-reverse-etl-destination-r1`.
 - [x] Typed-action eligibility red/green evidence is recorded in
   `TDD-LEDGER.md` and covers every action in `writes.json`.
-- [ ] Final #4304 refresh: fetch and normally merge the updated foundation
-  without rewriting history; prove its refreshed SHA is an ancestor; bind all
-  55 required eligible actions (56 record-shaped bindings total); and exercise
-  persisted App/CLI per-action dispatch before final push.
+- [x] #4304 refresh: fetched and normally merged
+  `d814875a902be684cb2a38b94f7a8077f66b70b1` without rewriting history;
+  `git merge-base --is-ancestor` passed and GitHub API read-back confirms #4298
+  now targets that exact branch/SHA.
+- [ ] Provider-neutral per-action source binding: #4304's persisted action
+  selection is insufficient because its one source binding per executor/stream
+  cannot preserve Twenty's 55 distinct candidate mappings. Do not add a
+  connector workaround; await a foundation decision before attempting the 56
+  record-shaped bindings or installed App/CLI proof.
 - [ ] Fresh dedicated-instance certification after that merge: built-binary
   authenticated list/get with pagination, lane-owned create/read-back/update/
   delete/verified cleanup, ETL source, reverse-ETL plan/apply/acknowledgement

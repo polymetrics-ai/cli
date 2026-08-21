@@ -68,7 +68,7 @@
         "rule": "Every action remains implemented and CLI-reachable. Safety, privilege, and destructive classification govern execution and cannot be an ineligibility reason."
       },
       "typed_destination": {
-        "status": "one_action_declared_pending_application_dispatch_and_action_multiplicity",
+        "status": "one_action_bound; refreshed_application_dispatch_lacks_per_action_source_mappings",
         "bound_actions": ["create_companies"],
         "strategy": {"mode": "full_append", "strategy": "append", "action": "create_companies"},
         "input_fields": [{"input": "name", "field": "name"}],
@@ -76,8 +76,8 @@
         "delivery": "keyed, source_ordered, no tombstones",
         "conformance": "twenty_typed_destination/companies_name_append_v1",
         "boundary": "The adapter cannot transport tombstones and cannot form a required batch records array from one source record. Those transport semantic limits do not remove, disable, or reclassify any typed delete or batch CLI command.",
-        "application_dispatch": "Not deployable until the refreshed #4304 foundation proves persisted App/CLI dispatch selects declarative_typed_destination.",
-        "multiplicity_dependency": "write_eligibility.json records 55 record-shaped actions that need the refreshed #4304 persisted per-action selection model. Final acceptance requires 56 record-shaped bindings with exact provider-sourced input fields; no connector workaround is present."
+        "application_dispatch": "#4304 head d814875a902be684cb2a38b94f7a8077f66b70b1 is merged locally and persists a selected action, but its source-binding lookup is one mapping per executor/stream and cannot preserve each selected Twenty action's exact input fields.",
+        "multiplicity_dependency": "write_eligibility.json records 55 record-shaped actions that need provider-neutral per-action source bindings. Final acceptance requires 56 record-shaped bindings with exact provider-sourced input fields; no connector workaround is present."
       }
     },
     "executable_cli": {
@@ -97,6 +97,6 @@
     "documented_operations_accounted_for": 168,
     "declared_or_disabled": "168 declared, 0 disabled",
     "dependency": "PR #4304 / fm/cli-reverse-etl-destination-r1",
-    "verification_contract": "connector-local red/green persisted per-action destination and all-action eligibility tests; connectorgen validation and surface sync; refreshed #4304 ancestor proof plus installed App/CLI dispatch; certification checks; connector boundary; and fresh credentialed built-binary pagination, CRUD cleanup, ETL, reverse-ETL acknowledgement/read-back, and documented-binary proof against the dedicated instance."
+    "verification_contract": "connector-local red/green persisted per-action destination and all-action eligibility tests; the current refreshed #4304 source-binding limitation must first close without a connector workaround; then connectorgen validation and surface sync, ancestor proof plus installed App/CLI dispatch, certification checks, connector boundary, and fresh credentialed built-binary pagination, CRUD cleanup, ETL, reverse-ETL acknowledgement/read-back, and documented-binary proof against the dedicated instance."
   }
 }

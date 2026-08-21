@@ -194,9 +194,10 @@
       },
       "affected_surfaces": ["reverse_etl"],
       "failing_validator_or_runtime_evidence": [
-        "current observed #4304 SHA c6f03c937c1f4e516d339b48e8c2143726179fdf supports one action strategy per sync mode/source mapping",
-        "write_eligibility.json records exactly 55 record-shaped actions pending action mapping multiplicity",
-        "the installed App path has not selected and executed every provider-owned action with its own exact input mapping"
+        "refreshed #4304 SHA d814875a902be684cb2a38b94f7a8077f66b70b1 is a local ancestor and persists a selected action, but DestinationTransportDescriptor.SourceBindingFor is keyed by source executor and stream and returns one shared mapping",
+        "write_eligibility.json records exactly 55 record-shaped actions pending action mapping multiplicity; those candidates require distinct input-to-field pairs from the same declarative_stream_source executor",
+        "go test -count=1 -timeout 20m ./internal/app -run '^Test(PersistedConnectionSelectsDeclarativeTypedDestinationAction|DeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields|DeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite)$' passed, establishing that selection is persisted and invalid mappings fail closed, but its synthetic multi-action fixture deliberately shares one mapping and does not establish per-action bindings",
+        "the installed App path has not selected and executed every provider-owned Twenty action with its own exact input mapping"
       ],
       "missing_provider_neutral_capability": "Persisted multi-action destination selection with independent exact input bindings, delivery facts, acknowledgement, and installed App/CLI dispatch for every named provider action.",
       "fanout": {
@@ -207,23 +208,24 @@
         "cross_connector": {
           "scope": "all declarative typed destinations needing more than one action per mode/source mapping",
           "deduplication_key": "persisted-reverse-etl-action-multiplicity",
-          "status": "owned_by_4304"
+      "status": "published_d814_insufficient_per_action_source_binding"
         }
       },
       "owning_issue_or_lane": {
         "issue": 4304,
         "lane": "fm/cli-reverse-etl-destination-r1",
-        "ownership_status": "open; final published head required"
+    "ownership_status": "published head d814875a902be684cb2a38b94f7a8077f66b70b1 was merged locally and is insufficient; a provider-neutral per-action source-binding capability remains required"
       },
       "status": "open",
       "enabled_for_merge_verdict": false,
       "exact_closure_verification": {
         "required_tests": [
-          "all 55 pending action identities select their own persisted binding",
+      "two actions sharing a source executor and stream but requiring different input mappings select their own persisted bindings",
+      "all 55 pending action identities select their own persisted binding",
           "missing action, mismatched input field, duplicate action, and default-by-mode selection fail before provider I/O",
           "per-action acknowledgement and delivery facts survive App reopen"
         ],
-        "required_twenty_proof": "After a normal merge of the final #4304 head and ancestor proof, the rebuilt installed App/CLI executes each applicable lane-owned provider action through its named binding with provider read-back and cleanup."
+      "required_twenty_proof": "After a normal merge of the provider-neutral per-action source-binding foundation and ancestor proof, the rebuilt installed App/CLI executes each applicable lane-owned provider action through its named binding with provider read-back and cleanup."
       }
     },
     {
@@ -372,7 +374,7 @@
         "binary_upload": {"known_operation_count": 0, "enabled_for_merge_verdict_count": 0, "state": "pending_dynamic_inventory_not_not_applicable"}
       },
       "merge_ready": false,
-      "merge_ready_blocker": "Every known provider operation has at least the non-empty credential foundation gap; the dynamic workspace inventory and all six surfaces remain incomplete."
+    "merge_ready_blocker": "Every known provider operation has at least one open shared foundation gap; the refreshed destination foundation still lacks per-action source bindings, batch-envelope and tombstone delivery remain unassigned, and the dynamic workspace inventory plus all six surfaces remain incomplete."
     }
   }
 }

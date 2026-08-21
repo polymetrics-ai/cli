@@ -45,11 +45,16 @@
    `direct_read`, `direct_write`, `etl`, `reverse_etl`, and executable CLI
    commands. The ledger must account for all 168 published REST operations;
    privileged or destructive operations remain reachable and safety-gated.
-3. After the refreshed #4304 head is merged, bind all 56 record-shaped actions
-   (the existing `create_companies` proof plus all 55 eligible actions) through
-   its persisted per-action selection model. Every binding must retain the
-   provider-owned action name, `full_append`/`append` strategy, exact
-   `input_fields`, delivery/acknowledgement facts, and conformance evidence.
+3. The refreshed #4304 head `d814875a902be684cb2a38b94f7a8077f66b70b1` is
+   merged locally and its PR base was verified through GitHub's API. Its
+   persisted selection does not close Twenty's requirement: the source-binding
+   lookup is one mapping per source executor/stream, while all 56 record-shaped
+   actions require their own exact `input_fields`. Stop the connector lane for
+   a provider-neutral per-action source-binding decision; do not create a
+   connector workaround or alter foundation code here. After that foundation
+   lands, bind all 56 actions with their provider-owned name,
+   `full_append`/`append` strategy, input fields, delivery/acknowledgement
+   facts, and conformance evidence.
    `write_eligibility.json` must give each of the 112 typed actions an explicit
    disposition. A batch array envelope or a tombstone workset may be a semantic
    exclusion; safety, privilege, and destructive classification may not. No

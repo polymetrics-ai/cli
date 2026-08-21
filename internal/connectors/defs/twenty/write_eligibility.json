@@ -4,9 +4,9 @@
   "foundation_dependency": {
     "key": "twenty-action-multiplicity",
     "issue": 4304,
-    "observed_foundation_sha": "c6f03c937c1f4e516d339b48e8c2143726179fdf",
+    "observed_foundation_sha": "d814875a902be684cb2a38b94f7a8077f66b70b1",
     "status": "pending",
-    "reason": "The declarative_typed_destination descriptor permits exactly one action strategy per sync mode and one shared source mapping. It cannot select every independently typed record action with its own exact input mapping. This is a foundation capability gap, not an action exclusion."
+    "reason": "The refreshed declarative_typed_destination descriptor persists an action selection and permits multiple action strategies for one sync mode, but it returns one source binding per executor and stream. It cannot bind every independently typed record action to its own exact input mapping. This is a foundation capability gap, not an action exclusion."
   },
   "actions": [
     {"name":"create_attachments","kind":"create","cli_reachable":true,"disposition":"eligible_pending_foundation_multiplicity","reason_code":"foundation_action_mapping_multiplicity","candidate":{"mode":"full_append","strategy":"append","input_fields":[{"input":"file","field":"file"}]}},

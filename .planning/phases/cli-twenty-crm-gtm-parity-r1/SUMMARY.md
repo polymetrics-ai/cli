@@ -38,21 +38,23 @@ review is requested by opening the non-draft PR.
 
 ## Typed-destination reconciliation
 
-PR #4304's `declarative_typed_destination` foundation is merged into this
-branch and PR #4298 now targets
-`fm/cli-reverse-etl-destination-r1`. `sync_transport.json` is a
+PR #4304's published head `d814875a902be684cb2a38b94f7a8077f66b70b1` is merged
+into this local branch and GitHub API confirms PR #4298 targets
+`fm/cli-reverse-etl-destination-r1` at that exact SHA. `sync_transport.json` is a
 connector-owned declaration: all 28 REST streams are eligible as a bounded
 full-append source and `create_companies` is the only destination action. Its
 closed mapping copies only a company's `name` into the action's `name` field;
 the declaration names durable acknowledgement and never provides a
-caller-selected endpoint or body template. This is not yet an
-application-deployable reverse-ETL path: persisted App/CLI dispatch must be
-supplied and exercised from the refreshed #4304 head before final push.
+caller-selected endpoint or body template. The refreshed foundation persists a
+selected action, but its source-binding lookup has one mapping per executor and
+stream. It cannot preserve Twenty's distinct mappings for the other 55
+record-shaped actions, so this is not an application-deployable all-ops
+reverse-ETL path.
 
 `write_eligibility.json` closes the one-action accounting gap without
 misrepresenting it as complete transport coverage. It records one currently
-bound action, 55 schema-intersecting record actions eligible once #4304 can
-select exact independent action mappings, 28 batch actions whose required
+bound action, 55 schema-intersecting record actions blocked on a
+provider-neutral per-action source-binding capability, 28 batch actions whose required
 `records` array cannot be formed by the single-record contract, and 28 deletes
 whose tombstone workset is incompatible with its no-tombstone delivery.
 These dispositions do not alter CLI reachability: all 112 typed actions remain
