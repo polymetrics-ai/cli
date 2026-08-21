@@ -557,7 +557,7 @@ func TestEndpointRequireSharedErrorSurvivesOperationFormatting(t *testing.T) {
 			path:   "/graphql",
 			bundle: func(baseURL string) Bundle { return graphQLOperationBundle(baseURL, "graphql_query") },
 			run: func(bundle Bundle, cfg connectors.RuntimeConfig) error {
-				_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.widgets.query", Config: cfg, Body: map[string]any{"id": "widget-1"}}, nil)
+				_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.widgets.query", Config: cfg, Body: map[string]any{"id": "widget-1", "first": 1}}, nil)
 				return err
 			},
 		},

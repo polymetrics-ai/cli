@@ -1022,11 +1022,11 @@ func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(
 	if got := result.Headers["X-Provider-Tier"].Values; len(got) != 1 || got[0] != "rare-paid-feature" {
 		t.Fatalf("provider tier header = %#v, want complete declared metadata", got)
 	}
-	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !cookie.Redacted || len(cookie.Values) != 0 {
-		t.Fatalf("Set-Cookie = %#v, want presence-preserving redaction marker", cookie)
+	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !reflect.DeepEqual(cookie.Values, []string{"session=transport-secret"}) {
+		t.Fatalf("Set-Cookie = %#v, want exact internal provider metadata", cookie)
 	}
-	if providerKey, ok := result.Headers["X-Provider-Key"]; !ok || !providerKey.Redacted || len(providerKey.Values) != 0 {
-		t.Fatalf("X-Provider-Key = %#v, want presence-preserving redaction marker", providerKey)
+	if providerKey, ok := result.Headers["X-Provider-Key"]; !ok || !reflect.DeepEqual(providerKey.Values, []string{"echoed-credential"}) {
+		t.Fatalf("X-Provider-Key = %#v, want exact internal provider metadata", providerKey)
 	}
 	if _, present := result.Headers["X-Undeclared-Transport-Metadata"]; present {
 		t.Fatalf("headers = %#v, undeclared provider metadata became an output channel", result.Headers)
@@ -1379,7 +1379,10 @@ func TestDirectReadReceiptPreservesAbsentAndInvalidBodiesAndMasksExactSecrets(t 
 		if result.Receipt == nil || result.Receipt.BodyRawEncoding != "base64" || result.Receipt.BodyBytes != int64(len(raw)) {
 			t.Fatalf("invalid UTF-8 receipt = %#v", result.Receipt)
 		}
-		decoded, decodeErr := base64.StdEncoding.DecodeString(result.Receipt.BodyRaw)
+		// The engine receipt is immutable. Public serialization applies masking
+		// and preserves the binary encoding without exposing raw secret bytes.
+		public := connectors.SanitizeProviderResponseReceiptForOutput(*result.Receipt, map[string]string{"api_token": secret})
+		decoded, decodeErr := base64.StdEncoding.DecodeString(public.BodyRaw)
 		if decodeErr != nil || bytes.Contains(decoded, []byte(secret)) || !bytes.Contains(decoded, []byte("[masked]")) {
 			t.Fatalf("masked invalid UTF-8 receipt = %q, decode err %v", decoded, decodeErr)
 		}

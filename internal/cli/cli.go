@@ -1350,7 +1350,11 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		if errors.As(err, &blocked) {
 			return connectorCommandBlockedError(err)
 		}
-		if (result.DirectRead != nil && result.DirectRead.Receipt != nil) || (result.BinaryDownload != nil && result.BinaryDownload.Receipt != nil) {
+		// An executor may have a post-provider result before it can construct a
+		// receipt (for example, a legacy parser failure). Emit that one bounded
+		// result envelope before the categorized nonzero error instead of
+		// erasing provider status/path evidence at the CLI boundary.
+		if connectorCommandHasPostProviderResult(result) {
 			if outputErr := writeConnectorCommandFailureResult(stdout, stderr, jsonOut, result, rows, err); outputErr != nil {
 				return outputErr
 			}
@@ -1359,6 +1363,10 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		return err
 	}
 	return writeConnectorCommandResult(stdout, stderr, jsonOut, result, rows)
+}
+
+func connectorCommandHasPostProviderResult(result commandrunner.Result) bool {
+	return result.DirectRead != nil || result.BinaryDownload != nil || result.StatusCheck != nil
 }
 
 func writeConnectorCommandResult(stdout, stderr io.Writer, jsonOut bool, result commandrunner.Result, rows []connectors.Record) error {
@@ -1404,6 +1412,10 @@ func writeConnectorCommandResultEnvelope(stdout, stderr io.Writer, jsonOut bool,
 			"status":     result.StatusCheck.Status,
 			"body_bytes": result.StatusCheck.BodyBytes,
 			"headers":    result.StatusCheck.Headers,
+			"receipt":    result.StatusCheck.Receipt,
+		}
+		if executionErr != nil {
+			out["error"] = publicErrorEnvelope(executionErr)
 		}
 		if jsonOut {
 			return writeJSON(stdout, out)

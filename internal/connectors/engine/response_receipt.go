@@ -28,6 +28,10 @@ func providerResponseReceiptFromHTTPError(b Bundle, err error, secrets map[strin
 }
 
 func providerResponseReceipt(b Bundle, status int, headers http.Header, raw []byte, secrets map[string]string) *connectors.ProviderResponseReceipt {
+	// Receipts are internal immutable evidence. Configured and declared secret
+	// masking happens only when commandrunner projects this value for public
+	// output; mutating it here loses the proof needed by retries and App state.
+	_ = secrets
 	receipt := connectors.ProviderResponseReceipt{
 		ResponseReceived: true,
 		Status:           status,
@@ -43,28 +47,18 @@ func providerResponseReceipt(b Bundle, status int, headers http.Header, raw []by
 			receipt.Body = receipt.BodyRaw
 		}
 	}
-	safe := connectors.SanitizeProviderResponseReceiptForOutput(receipt, secrets)
-	return &safe
+	return &receipt
 }
 
 func completeProviderResponseHeaders(b Bundle, headers http.Header) map[string]connectors.OperationResponseHeader {
 	if len(headers) == 0 {
 		return nil
 	}
-	protected := operationRuntimeAuthHeaderNames(b.HTTP)
 	out := make(map[string]connectors.OperationResponseHeader, len(headers))
 	for name, values := range headers {
-		canonical, err := connectors.CanonicalOperationHeaderName(name)
-		if err == nil {
-			if _, masked := maskedOperationResponseHeaderNames[canonical]; masked {
-				out[name] = connectors.OperationResponseHeader{Redacted: true, Masked: true}
-				continue
-			}
-			if _, masked := protected[canonical]; masked {
-				out[name] = connectors.OperationResponseHeader{Redacted: true, Masked: true}
-				continue
-			}
-		}
+		// A response header name is provider-owned metadata, not a secret
+		// classifier. Keep every name/value here; the public projection masks
+		// only values proven to equal configured credential material.
 		out[name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
 	}
 	return out

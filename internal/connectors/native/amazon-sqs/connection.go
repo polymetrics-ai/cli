@@ -164,8 +164,9 @@ func (c Connector) do(ctx context.Context, cfg connectors.RuntimeConfig, form ur
 }
 
 type sqsHTTPResponse struct {
-	status int
-	body   []byte
+	status  int
+	headers http.Header
+	body    []byte
 }
 
 func (c Connector) doQueue(ctx context.Context, cfg connectors.RuntimeConfig, form url.Values, maxBytes int) (sqsHTTPResponse, error) {
@@ -225,17 +226,19 @@ func (c Connector) doEndpoint(ctx context.Context, conn sqsConfig, endpoint stri
 		return sqsHTTPResponse{}, fmt.Errorf("send sqs request: %w", err)
 	}
 	defer func() { _ = resp.Body.Close() }()
+	result := sqsHTTPResponse{status: resp.StatusCode, headers: resp.Header.Clone()}
 	respBody, readErr := io.ReadAll(io.LimitReader(resp.Body, int64(maxBytes)+1))
+	result.body = respBody
 	if readErr != nil {
-		return sqsHTTPResponse{}, fmt.Errorf("read sqs response: %w", readErr)
+		return result, fmt.Errorf("read sqs response: %w", readErr)
 	}
 	if len(respBody) > maxBytes {
-		return sqsHTTPResponse{}, fmt.Errorf("sqs response too large: %d bytes exceeds limit %d", len(respBody), maxBytes)
+		return result, fmt.Errorf("sqs response too large: %d bytes exceeds limit %d", len(respBody), maxBytes)
 	}
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return sqsHTTPResponse{}, sqsStatusError(resp.StatusCode, respBody)
+		return result, sqsStatusError(resp.StatusCode, respBody)
 	}
-	return sqsHTTPResponse{status: resp.StatusCode, body: respBody}, nil
+	return result, nil
 }
 
 func sqsStatusError(statusCode int, body []byte) error {

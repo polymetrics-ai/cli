@@ -4,9 +4,9 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 
 | Group | Finding set | Red contract | Green / regression evidence | State |
 | --- | --- | --- | --- | --- |
-| 1 | B01, B02, B03, B09, B12, W01 | `TestGitHubParityGenerationOrderIsCommutative`; `TestSourceProjectionGapOperationsCannotMasqueradeAsImplemented`; `TestGoogleAdsGeneratedPOSTReadsAcceptDeclaredNestedObjects`; v2 projection digest mutation; deleted route/parameter and semantic update/delete surface-sync cases. | `go test -timeout 20m ./cmd/connectorgen`; Node parity-order and combined-ledger checks; `connectorgen validate`; `surface-sync --check`; all six affected source IDs have installed coverage. | green atomic checkpoint pending commit/push |
-| 2 | B04-B08, W02 | `TestGraphQLOperationVariablesRequiresExactlyOnePaginationDirection`; `TestOperationDirectReadBackwardGraphQLPaginationUsesPreviousPageInfo`; `TestGraphQLIntUsesSigned32BitDomain`; `TestGeneratedGraphQLContractsClassifySecretInputsAndBoundedIdentitySelections`; `TestWebsiteFlagProjectionPreservesEverySafetyProperty`; `TestRenderCommandSurfaceCommandRendersSafetyConstraints`. | Focused generator, engine/schema, commandrunner preflight, website, guide/skills, generated GitHub artifacts, source-import, surface-sync, certification-candidate/sweep checks. | red contract recorded; implementation pending |
-| 3 | B13-B14, B17, B19, B24 | Classified secrets versus ordinary IDs/headers; error-bearing direct/native result; status receipt; SQS success/error receipt. | connsdk, engine, commandrunner, native SQS, App, and CLI receipt suites. | pending |
+| 1 | B01, B02, B03, B09, B12, W01 | `TestGitHubParityGenerationOrderIsCommutative`; `TestSourceProjectionGapOperationsCannotMasqueradeAsImplemented`; `TestGoogleAdsGeneratedPOSTReadsAcceptDeclaredNestedObjects`; v2 projection digest mutation; deleted route/parameter and semantic update/delete surface-sync cases. | `go test -timeout 20m ./cmd/connectorgen`; Node parity-order and combined-ledger checks; `connectorgen validate`; `surface-sync --check`; all six affected source IDs have installed coverage. | green; remote `d3bf5da0e6a4575628dd76dd94a7522220f9d3df` |
+| 2 | B04-B08, W02 | `TestGraphQLOperationVariablesRequiresExactlyOnePaginationDirection`; `TestOperationDirectReadBackwardGraphQLPaginationUsesPreviousPageInfo`; `TestGraphQLIntUsesSigned32BitDomain`; `TestGeneratedGraphQLContractsClassifySecretInputsAndBoundedIdentitySelections`; `TestWebsiteFlagProjectionPreservesEverySafetyProperty`; `TestRenderCommandSurfaceCommandRendersSafetyConstraints`. | Focused generator, engine/schema, commandrunner preflight, website, guide/skills, generated GitHub artifacts, source-import, surface-sync, certification-candidate/sweep checks. | green; remote `0565f3fd6d152b38f2062aac5dd0df29170b6d4e` |
+| 3 | B13-B14, B17, B19, B24 | Classified secrets versus ordinary IDs/headers; error-bearing direct/native result; status receipt; SQS success/error receipt. | connsdk, engine, commandrunner, native SQS, App, and CLI receipt suites. | green; atomic commit pending |
 | 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | pending |
 | 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | pending |
 | 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | pending |
@@ -155,6 +155,58 @@ was verified, then moved recoverably to Trash. Neither was committed.
   rows / `1612` CLI commands. `pm docs generate --dir docs/cli`,
   `pm skills generate --dir docs/skills`, and `pm docs validate --connectors-dir
   docs/connectors` regenerated/validated the tracked manual and skill surfaces.
+
+## Group 3 red-contract plan (2026-08-21)
+
+- **B13/B14:** `TestPublicReceiptProjectionMasksOnlyExactConfiguredAndDeclaredScalars` will drive quote, backslash, `<`, `>`, `&`, non-ASCII, short values (`id`, `token`, `0`, and one character), and encoded configured values through raw and decoded REST receipts. It must prove canonical public JSON has no concrete/proven encoding, while keys (`occurrence_id`, `trained_tokens`), header names (`WWW-Authenticate`), repeatable ordinary values, and the internal receipt remain unchanged. `TestGraphQLErrorMetadataDoesNotKeywordRedactOrdinaryProviderWords` will preserve the ordinary provider message `Unknown token type` and leave exact-value masking to the public result boundary.
+- **B17:** `TestCommandRunnerPreservesLegacyPostProviderResultWithoutReceipt` and `TestAshbyOperationDirectReadPreservesEngineResultOnEnvelopeFailure` will require result-plus-error propagation for legacy, operation, navigation, and Ashby logical-envelope failures.
+- **B19:** `TestOperationStatusCheckPreservesPostResponseFailureResult` will make a declared bounded-header validation error after a received HEAD response retain its operation/status/path/result; receipt and CLI tests then require a bounded complete 204/404/error envelope without body decoding.
+- **B24:** `TestOperationDirectReadPreservesCompleteSQSReceiptOnSuccessAndProviderError` will table-drive ordinary 200 XML and terminal 4xx XML with repeated headers, raw byte count, decoded success body, and a received result on failure. Malformed XML, cap+1, and body-read errors share that same received-response path.
+- **GSD/manual fallback:** the exact same single-owner, no-specialist fallback recorded for Group 2 applies. The red package set is connector output, engine, commandrunner, native Amazon SQS/Ashby, and CLI; no generated surface changes are expected for this behavioral group.
+
+### Group 3 observed red evidence
+
+- TestPublicReceiptProjectionMasksOnlyExactConfiguredScalars initially failed
+  because public sanitization rewrote the provider-owned occurrence_id key to
+  occurrence_[masked]. TestGraphQLErrorMetadataDoesNotKeywordRedactOrdinaryProviderWords
+  initially replaced Unknown token type merely because it contained token.
+- TestCommandRunnerPreservesLegacyPostProviderResultWithoutReceipt,
+  TestOperationStatusCheckPreservesPostResponseFailureResult,
+  TestOperationDirectReadPreservesCompleteSQSReceiptOnSuccessAndProviderError,
+  and TestAshbyOperationDirectReadPreservesEngineResultOnEnvelopeFailure
+  each initially observed a zero result after a received provider response or
+  logical provider-envelope failure.
+- The review-added TestPublicReceiptProjectionPreservesRawJSONBytesWhenNoMaskApplies
+  failed with canonicalized/reordered JSON although the configured credential
+  did not occur. Its opaque-byte companion proves a short configured value
+  does not erase provider bytes that merely contain that substring.
+- The review-added TestRunOmitsResultEnvelopeBeforeProviderResponse initially
+  failed for legacy direct-read, status, and binary transport errors: each
+  returned an empty result envelope even though no provider response existed.
+
+### Group 3 green evidence
+
+- B13/B14: engine receipts retain immutable raw headers/body; the public
+  projection masks only exact configured or declared scalar values, keeps
+  provider map/header identities intact, preserves unmodified JSON/base64
+  bytes byte-for-byte, masks a real longer opaque credential without making a
+  fabricated partial binary, and keeps ordinary GraphQL wording intact.
+- B17/B19/B24: runner results retain legacy/direct/binary/status evidence
+  with a non-nil error, the CLI emits the matching bounded result envelope
+  even without a receipt, status HEAD retains raw metadata without decoding a
+  body, and SQS/Ashby preserve complete provider receipts on ordinary,
+  terminal, malformed, and logical-envelope paths.
+  The runner now omits all three result forms when an executor error occurs
+  before provider response evidence, preserving the fail-before-I/O boundary.
+- Exact focused package gates from this final Group-3 tree passed: connectors
+  (0.615s), engine (10.355s), commandrunner (21.832s), native Amazon SQS
+  (1.245s), native Ashby (1.050s), and the focused App direct-write receipt
+  suite (3.666s). The focused CLI receipt/envelope suite, including the
+  no-receipt result-envelope regression, passed in 1.156s.
+- go build ./cmd/pm and git diff --check passed. This behavioral group changes
+  no connector declaration or generated surface; generator checks remain
+  reserved for their owning source/surface groups and the final exact-SHA
+  combined gate.
 
 ## Group 1 frozen GitHub mutation delta crosswalk
 

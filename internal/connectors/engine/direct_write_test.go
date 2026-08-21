@@ -238,8 +238,8 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	if got := result.Headers["X-Write-Receipt"].Values; len(got) != 1 || got[0] != "receipt-42" {
 		t.Fatalf("write receipt = %#v, want declared provider metadata", got)
 	}
-	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !cookie.Redacted {
-		t.Fatalf("Set-Cookie = %#v, want explicit redaction marker", cookie)
+	if cookie, ok := result.Headers["Set-Cookie"]; !ok || len(cookie.Values) != 1 || cookie.Values[0] != "transport-secret" {
+		t.Fatalf("Set-Cookie = %#v, want exact internal provider metadata", cookie)
 	}
 	body, ok := result.Body.(map[string]any)
 	if !ok {

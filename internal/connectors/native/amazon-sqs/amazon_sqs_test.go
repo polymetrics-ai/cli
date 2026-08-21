@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"runtime"
 	"strconv"
 	"strings"
@@ -622,19 +623,111 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadPreservesCompleteSQSReceiptOnSuccessAndProviderError(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		status     int
+		body       string
+		wantErr    bool
+		wantStatus int
+	}{
+		{
+			name:       "success XML",
+			status:     http.StatusOK,
+			body:       `<ListQueuesResponse><ListQueuesResult><QueueUrl>https://sqs.us-east-1.amazonaws.com/123/orders</QueueUrl></ListQueuesResult></ListQueuesResponse>`,
+			wantStatus: http.StatusOK,
+		},
+		{
+			name:       "terminal provider error XML",
+			status:     http.StatusNotFound,
+			body:       `<ErrorResponse><Error><Code>QueueDoesNotExist</Code><Message>missing</Message></Error><RequestId>request-9007199254740993</RequestId></ErrorResponse>`,
+			wantErr:    true,
+			wantStatus: http.StatusNotFound,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Add("X-Provider-Trace", "first")
+				w.Header().Add("X-Provider-Trace", "second")
+				w.Header().Set("WWW-Authenticate", "Unknown token type")
+				w.WriteHeader(tc.status)
+				_, _ = w.Write([]byte(tc.body))
+			}))
+			t.Cleanup(srv.Close)
+
+			result, err := native.New().OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queues", Config: testRuntimeConfig(srv.URL)})
+			if tc.wantErr && err == nil {
+				t.Fatal("OperationDirectRead error = nil, want received provider error")
+			}
+			if !tc.wantErr && err != nil {
+				t.Fatalf("OperationDirectRead: %v", err)
+			}
+			if result.Status != tc.wantStatus {
+				t.Fatalf("result status = %d, want %d (result=%#v)", result.Status, tc.wantStatus, result)
+			}
+			if result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != tc.wantStatus {
+				t.Fatalf("receipt = %#v, want complete received provider response", result.Receipt)
+			}
+			if got := result.Receipt.Headers["X-Provider-Trace"].Values; !reflect.DeepEqual(got, []string{"first", "second"}) {
+				t.Fatalf("receipt trace headers = %#v, want repeated provider headers", got)
+			}
+			if got := receiptHeaderValues(result.Receipt.Headers, "WWW-Authenticate"); !reflect.DeepEqual(got, []string{"Unknown token type"}) {
+				t.Fatalf("receipt ordinary authentication metadata = %#v, want exact provider value", got)
+			}
+			if result.Receipt.BodyBytes != int64(len(tc.body)) || result.Receipt.BodyRaw != tc.body || result.Receipt.BodyRawEncoding != "text" {
+				t.Fatalf("receipt body metadata = %#v, want exact bounded XML bytes", result.Receipt)
+			}
+			if !tc.wantErr {
+				if got := result.Receipt.Body.(map[string]any)["queue_urls"].([]string); !reflect.DeepEqual(got, []string{"https://sqs.us-east-1.amazonaws.com/123/orders"}) {
+					t.Fatalf("receipt decoded body = %#v, want bounded decoded operation result", result.Receipt.Body)
+				}
+			}
+		})
+	}
+}
+
+func receiptHeaderValues(headers map[string]connectors.OperationResponseHeader, want string) []string {
+	for name, header := range headers {
+		if strings.EqualFold(name, want) {
+			return header.Values
+		}
+	}
+	return nil
+}
+
 func TestOperationDirectReadClampsResponseToLedgerLimit(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte(strings.Repeat("x", (1<<20)+1)))
 	}))
 	defer srv.Close()
 
-	_, err := native.New().OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+	result, err := native.New().OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
 		Operation: "list_queues",
 		Config:    testRuntimeConfig(srv.URL),
 		MaxBytes:  16 << 20,
 	})
 	if err == nil || !strings.Contains(err.Error(), "exceeds limit 1048576") {
 		t.Fatalf("OperationDirectRead response above ledger cap = %v, want 1 MiB cap rejection", err)
+	}
+	if result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != http.StatusOK || result.Receipt.BodyBytes != 1<<20+1 {
+		t.Fatalf("oversized response receipt = %#v, want bounded cap+1 provider evidence", result.Receipt)
+	}
+}
+
+func TestOperationDirectReadPreservesReceiptForMalformedSQSXML(t *testing.T) {
+	const malformed = `<ListQueuesResponse><ListQueuesResult><QueueUrl>unterminated`
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("X-Provider-Trace", "malformed")
+		_, _ = w.Write([]byte(malformed))
+	}))
+	t.Cleanup(srv.Close)
+
+	result, err := native.New().OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queues", Config: testRuntimeConfig(srv.URL)})
+	if err == nil || !strings.Contains(err.Error(), "XML") {
+		t.Fatalf("OperationDirectRead malformed XML error = %v", err)
+	}
+	if result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != http.StatusOK || result.Receipt.BodyRaw != malformed || result.Receipt.BodyBytes != int64(len(malformed)) {
+		t.Fatalf("malformed XML receipt = %#v, want complete bounded provider response", result.Receipt)
 	}
 }
 

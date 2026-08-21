@@ -185,7 +185,6 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		Status:           resp.Status,
 		Headers:          completeProviderResponseHeaders(b, resp.Header),
 	}
-	responseReceipt = connectors.SanitizeProviderResponseReceiptForOutput(responseReceipt, cfg.Secrets)
 	result := BinaryDownloadResult{
 		Connector: b.Name,
 		Operation: op.ID,
@@ -250,7 +249,6 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		BodyBytes:        written,
 		Body:             map[string]any{"file_size_bytes": written, "file_sha256": digest},
 	}
-	receipt = connectors.SanitizeProviderResponseReceiptForOutput(receipt, cfg.Secrets)
 	result.Record = record
 	result.Receipt = &receipt
 	return result, nil

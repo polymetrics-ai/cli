@@ -348,7 +348,7 @@ func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connector
 func (f *fakeConnector) OperationStatusCheck(_ context.Context, req connectors.OperationStatusCheckRequest) (connectors.OperationStatusCheckResult, error) {
 	f.statusCheckReq = req
 	if f.statusCheckErr != nil {
-		return connectors.OperationStatusCheckResult{}, f.statusCheckErr
+		return f.statusCheckResult, f.statusCheckErr
 	}
 	return f.statusCheckResult, nil
 }
@@ -3985,6 +3985,84 @@ func TestRunStatusCheckPreservesFinalNon2xxMetadata(t *testing.T) {
 		outputPolicy: "status",
 	}); got != want {
 		t.Fatalf("status preflight = %#v, want %#v", got, want)
+	}
+}
+
+func TestRunStatusCheckPreservesPostProviderReceiptWithError(t *testing.T) {
+	providerErr := errors.New("provider redirect refused after response")
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "repository status", Intent: "status_check", Availability: "implemented", Operation: "github.repository.status",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodHead, Path: "/repos/{owner}/{repo}"}},
+			OutputPolicy: "status",
+		}}},
+		statusCheckResult: connectors.OperationStatusCheckResult{
+			Connector: "github", Operation: "github.repository.status", Method: http.MethodHead, Path: "/repos/octo/hello", Status: http.StatusTemporaryRedirect,
+			Receipt: &connectors.ProviderResponseReceipt{ResponseReceived: true, Status: http.StatusTemporaryRedirect, Headers: map[string]connectors.OperationResponseHeader{
+				"X-Provider-Trace": {Values: []string{"first", "second"}},
+			}},
+		},
+		statusCheckErr: providerErr,
+	}
+
+	result, err := Run(context.Background(), connector, Request{Path: []string{"repository", "status"}}, func(connectors.Record) error {
+		t.Fatal("emit called for status check")
+		return nil
+	})
+	if err != providerErr {
+		t.Fatalf("Run error = %v, want original provider error %v", err, providerErr)
+	}
+	if result.StatusCheck == nil || result.StatusCheck.Receipt == nil || !result.StatusCheck.Receipt.ResponseReceived || result.StatusCheck.Status != http.StatusTemporaryRedirect {
+		t.Fatalf("Run status result = %#v, want retained terminal provider receipt", result)
+	}
+}
+
+func TestRunOmitsResultEnvelopeBeforeProviderResponse(t *testing.T) {
+	providerErr := errors.New("transport failed before provider response")
+	tests := []struct {
+		name string
+		run  func() (Result, error)
+	}{
+		{
+			name: "legacy direct read",
+			run: func() (Result, error) {
+				connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+					Path: "records lookup", Intent: "direct_read", Availability: "implemented", OutputPolicy: "json_redacted",
+					APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/records/{id}"}},
+					Flags:      []connectors.CommandSurfaceFlag{{Name: "id", Type: "string", MapsTo: "query.id", Required: true}},
+				}}}, directReadErr: providerErr}
+				return Run(context.Background(), connector, Request{Path: []string{"records", "lookup"}, Flags: map[string][]string{"id": {"fixture"}}}, func(connectors.Record) error { return nil })
+			},
+		},
+		{
+			name: "status check",
+			run: func() (Result, error) {
+				connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+					Path: "repository status", Intent: "status_check", Availability: "implemented", Operation: "github.repository.status",
+					APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodHead, Path: "/repos/{owner}/{repo}"}}, OutputPolicy: "status",
+				}}}, statusCheckErr: providerErr}
+				return Run(context.Background(), connector, Request{Path: []string{"repository", "status"}}, func(connectors.Record) error { return nil })
+			},
+		},
+		{
+			name: "binary download",
+			run: func() (Result, error) {
+				connector := binaryDownloadTestConnector()
+				connector.binaryDownloadErr = providerErr
+				return Run(context.Background(), connector, Request{Path: []string{"artifact", "download"}, Flags: map[string][]string{"artifact-id": {"42"}, "archive-format": {"zip"}}, DestRoot: "out"}, func(connectors.Record) error { return nil })
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result, err := test.run()
+			if err != providerErr {
+				t.Fatalf("Run error = %v, want original pre-provider error %v", err, providerErr)
+			}
+			if result.DirectRead != nil || result.BinaryDownload != nil || result.StatusCheck != nil {
+				t.Fatalf("pre-provider error returned a result envelope: %#v", result)
+			}
+		})
 	}
 }
 

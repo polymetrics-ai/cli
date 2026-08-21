@@ -2,12 +2,14 @@ package amazonsqs
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/xml"
 	"fmt"
 	"net/url"
 	"sort"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -31,21 +33,53 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 	if err := applySQSDirectReadPageRequest(req, form); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	result := connectors.DirectReadResult{Connector: c.Name(), Operation: req.Operation, Method: "POST", Path: "SQS." + directReadAction(req.Operation), OutputSecretFields: append([]string(nil), req.RedactFields...)}
 	resp, err := c.doService(ctx, req.Config, form, maxBytes)
+	result.Receipt = sqsDirectReadReceipt(resp)
+	if result.Receipt != nil {
+		result.Status = result.Receipt.Status
+	}
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return result, err
 	}
 	body, err := decodeDirectReadOperation(req.Operation, resp.body)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return result, err
 	}
+	result.Receipt.Body = body
 	page := sqsDirectReadPage(req.Operation, body)
 	redacted := redactDirectBody(body, req.RedactFields)
 	body, ok := redacted.(map[string]any)
 	if !ok {
-		return connectors.DirectReadResult{}, fmt.Errorf("redact sqs direct read %s: unexpected root type %T", req.Operation, redacted)
+		return result, fmt.Errorf("redact sqs direct read %s: unexpected root type %T", req.Operation, redacted)
 	}
-	return connectors.DirectReadResult{Connector: c.Name(), Method: "POST", Path: "SQS." + directReadAction(req.Operation), Status: resp.status, Body: body, Page: page}, nil
+	result.Body = body
+	result.Page = page
+	return result, nil
+}
+
+func sqsDirectReadReceipt(response sqsHTTPResponse) *connectors.ProviderResponseReceipt {
+	if response.status == 0 {
+		return nil
+	}
+	receipt := &connectors.ProviderResponseReceipt{
+		ResponseReceived: true,
+		Status:           response.status,
+		Headers:          make(map[string]connectors.OperationResponseHeader, len(response.headers)),
+		BodyPresent:      len(response.body) != 0,
+		BodyBytes:        int64(len(response.body)),
+	}
+	for name, values := range response.headers {
+		receipt.Headers[name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
+	}
+	if len(response.body) != 0 {
+		if utf8.Valid(response.body) {
+			receipt.BodyRaw, receipt.BodyRawEncoding = string(response.body), "text"
+		} else {
+			receipt.BodyRaw, receipt.BodyRawEncoding = base64.StdEncoding.EncodeToString(response.body), "base64"
+		}
+	}
+	return receipt
 }
 
 // sqsDirectReadPaging declares how each SQS read operation pages, so the page

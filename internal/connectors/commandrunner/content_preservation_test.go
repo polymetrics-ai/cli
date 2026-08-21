@@ -243,6 +243,36 @@ func TestCommandRunnerPreservesTerminalReadReceiptsWithExecutorErrors(t *testing
 	}
 }
 
+func TestCommandRunnerPreservesLegacyPostProviderResultWithoutReceipt(t *testing.T) {
+	providerErr := errors.New("provider returned malformed JSON after receipt parsing")
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "records lookup", Intent: "direct_read", Availability: "implemented", OutputPolicy: "json_redacted",
+			APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/records/{id}"}},
+			Flags:      []connectors.CommandSurfaceFlag{{Name: "id", Type: "string", MapsTo: "query.id", Required: true}},
+		}}},
+		directReadErr: providerErr,
+		directReadResult: &connectors.DirectReadResult{
+			Connector: "github", Method: http.MethodGet, Path: "/records/fixture", Status: http.StatusBadGateway,
+			Body: map[string]any{"occurrence_id": "direct-read-occurrence-9007199254740993"},
+		},
+	}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:  []string{"records", "lookup"},
+		Flags: map[string][]string{"id": {"fixture"}},
+	}, func(connectors.Record) error { return nil })
+	if err != providerErr {
+		t.Fatalf("Run error = %v, want original provider error %v", err, providerErr)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("Run result = %#v, want post-provider direct-read result", result)
+	}
+	if result.DirectRead.Status != http.StatusBadGateway || result.DirectRead.Body.(map[string]any)["occurrence_id"] != "direct-read-occurrence-9007199254740993" {
+		t.Fatalf("retained direct-read result = %#v, want complete provider facts", result.DirectRead)
+	}
+}
+
 func contentErrorConnector(name string) *fakeConnector {
 	flags := []connectors.CommandSurfaceFlag{
 		{Name: "token", Type: "string", MapsTo: "query.token", Required: true},

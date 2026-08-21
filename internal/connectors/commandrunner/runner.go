@@ -633,11 +633,18 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Page:         req.Page,
 		PageCursor:   req.PageCursor,
 	})
+	direct = connectors.SanitizeDirectReadResultForOutput(direct, req.Config.Secrets)
 	if err != nil {
-		return Result{}, err
+		if !directReadHasProviderEvidence(direct) {
+			return Result{}, err
+		}
+		return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
 	}
 	if err := assertDirectReadNavigated(connector, cmd, req, direct); err != nil {
-		return Result{}, err
+		if !directReadHasProviderEvidence(direct) {
+			return Result{}, err
+		}
+		return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
 	}
 	return Result{
 		Connector:  connector.Name(),
@@ -718,14 +725,18 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		Page:         req.Page,
 		PageCursor:   req.PageCursor,
 	})
+	direct = connectors.SanitizeDirectReadResultForOutput(direct, req.Config.Secrets)
 	if err != nil {
-		if direct.Receipt != nil {
-			return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
+		if !directReadHasProviderEvidence(direct) {
+			return Result{}, err
 		}
-		return Result{}, err
+		return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
 	}
 	if err := assertDirectReadNavigated(connector, cmd, req, direct); err != nil {
-		return Result{}, err
+		if !directReadHasProviderEvidence(direct) {
+			return Result{}, err
+		}
+		return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
 }
@@ -2472,11 +2483,12 @@ func runBinaryDownload(ctx context.Context, connector connectors.Connector, cmd 
 		DestRoot:     req.DestRoot,
 		FileName:     req.FileName,
 	})
+	download = connectors.SanitizeOperationBinaryDownloadResultForOutput(download, req.Config.Secrets)
 	if err != nil {
-		if download.Receipt != nil {
-			return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, err
+		if !binaryDownloadHasProviderEvidence(download) {
+			return Result{}, err
 		}
-		return Result{}, err
+		return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, nil
 }
@@ -2512,8 +2524,24 @@ func runStatusCheck(ctx context.Context, connector connectors.Connector, cmd con
 		return Result{}, err
 	}
 	status, err := connector.(connectors.OperationStatusChecker).OperationStatusCheck(ctx, connectors.OperationStatusCheckRequest{Operation: cmd.Operation, Config: req.Config, PathParams: pathParams, Query: query, Headers: headers, HeaderValues: headerValues})
+	status = connectors.SanitizeOperationStatusCheckResultForOutput(status, req.Config.Secrets)
 	if err != nil {
-		return Result{}, err
+		if !statusCheckHasProviderEvidence(status) {
+			return Result{}, err
+		}
+		return Result{Connector: connector.Name(), Command: cmd.Path, StatusCheck: &status}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, StatusCheck: &status}, nil
+}
+
+func directReadHasProviderEvidence(result connectors.DirectReadResult) bool {
+	return result.Status != 0 || (result.Receipt != nil && result.Receipt.ResponseReceived)
+}
+
+func binaryDownloadHasProviderEvidence(result connectors.OperationBinaryDownloadResult) bool {
+	return result.Status != 0 || (result.Receipt != nil && result.Receipt.ResponseReceived)
+}
+
+func statusCheckHasProviderEvidence(result connectors.OperationStatusCheckResult) bool {
+	return result.Status != 0 || (result.Receipt != nil && result.Receipt.ResponseReceived)
 }

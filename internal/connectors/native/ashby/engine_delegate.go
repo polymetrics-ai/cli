@@ -111,10 +111,10 @@ func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, recor
 func (c Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	result, err := engine.OperationDirectRead(ctx, ashbyBundle(), req, nil)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return result, err
 	}
 	if err := ashbyValidateSuccessEnvelopeValue(result.Body); err != nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("ashby direct read: %w", err)
+		return result, fmt.Errorf("ashby direct read: %w", err)
 	}
 	return result, nil
 }

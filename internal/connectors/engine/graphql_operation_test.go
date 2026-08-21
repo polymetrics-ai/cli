@@ -138,6 +138,22 @@ func graphQLMutationWithSensitiveInput(baseURL string) Bundle {
 	return bundle
 }
 
+func TestGraphQLErrorMetadataDoesNotKeywordRedactOrdinaryProviderWords(t *testing.T) {
+	_, metadata, err := graphQLOperationResponse([]byte(`{
+		"data":{"viewer":{"login":"octocat"}},
+		"errors":[{"message":"Unknown token type"}]
+	}`), 1024)
+	if err != nil {
+		t.Fatalf("graphQLOperationResponse: %v", err)
+	}
+	if metadata == nil || len(metadata.Errors) != 1 {
+		t.Fatalf("metadata = %#v, want one provider error", metadata)
+	}
+	if got := metadata.Errors[0].Message; got != "Unknown token type" {
+		t.Fatalf("GraphQL error message = %q, want ordinary provider message unchanged", got)
+	}
+}
+
 type rejectingGraphQLRateLimitClock struct {
 	now   time.Time
 	waits []time.Duration
@@ -708,7 +724,7 @@ func TestOperationDirectReadRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	bundle := graphQLOperationBundle(server.URL, "graphql_query")
 	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
 		Operation: "acme.widgets.query",
-		Body:      map[string]any{"id": "widget-1"},
+		Body:      map[string]any{"id": "widget-1", "first": 1},
 		MaxBytes:  4096,
 	}, nil)
 	if err == nil {

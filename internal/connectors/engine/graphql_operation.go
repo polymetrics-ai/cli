@@ -668,7 +668,7 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	}
 	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, directReadBaseURL(b, cfg))
 	response, err := requester.DoLimited(ctx, http.MethodPost, requestPath, nil, payload, maxBytes)
-	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: http.MethodPost, Path: op.GraphQL.Path}
+	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: http.MethodPost, Path: op.GraphQL.Path, OutputSecretFields: operationDirectReadOutputSecretFields(op)}
 	readResult.Receipt = providerResponseReceiptFromResponse(b, response, cfg.Secrets)
 	if readResult.Receipt == nil && err != nil {
 		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
@@ -821,15 +821,9 @@ func boundedGraphQLErrorMetadata(items []struct {
 }
 
 func sanitizeGraphQLErrorMessage(value string) string {
-	value = strings.TrimSpace(safety.RedactErrorText(value))
+	value = strings.TrimSpace(value)
 	if value == "" {
 		return "provider returned a GraphQL error without a message"
-	}
-	lower := strings.ToLower(value)
-	for _, marker := range []string{"token", "secret", "password", "authorization", "credential", "private key"} {
-		if strings.Contains(lower, marker) {
-			return "provider GraphQL error message redacted"
-		}
 	}
 	value = safety.SanitizeTerminal(value)
 	if utf8.RuneCountInString(value) <= maxGraphQLErrorMessageSize {

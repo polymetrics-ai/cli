@@ -60,11 +60,14 @@ func TestOperationStatusCheckUsesDeclaredHEADWithoutJSONBody(t *testing.T) {
 	if got := result.Headers["X-Provider-Status"].Values; len(got) != 1 || got[0] != "ordinary-metadata" {
 		t.Fatalf("X-Provider-Status = %#v, want declared ordinary metadata", got)
 	}
-	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !cookie.Redacted {
-		t.Fatalf("Set-Cookie = %#v, want explicit redaction marker", cookie)
+	// Engine results are immutable provider evidence. The commandrunner public
+	// boundary compares concrete configured credential values; it must not
+	// classify values from header spelling alone.
+	if cookie, ok := result.Headers["Set-Cookie"]; !ok || len(cookie.Values) != 1 || cookie.Values[0] != "transport-secret" {
+		t.Fatalf("Set-Cookie = %#v, want exact internal provider metadata", cookie)
 	}
-	if token, ok := result.Headers["X-Token"]; !ok || !token.Redacted {
-		t.Fatalf("X-Token = %#v, want explicit redaction marker", token)
+	if token, ok := result.Headers["X-Token"]; !ok || len(token.Values) != 1 || token.Values[0] != "credential-secret" {
+		t.Fatalf("X-Token = %#v, want exact internal provider metadata", token)
 	}
 }
 
@@ -118,6 +121,36 @@ func TestOperationStatusCheckPreservesFinalNon2xxStatus(t *testing.T) {
 	}
 	if result.Status != http.StatusNotFound || result.BodyBytes != 0 || requests != 1 {
 		t.Fatalf("result = %+v, requests = %d", result, requests)
+	}
+}
+
+func TestOperationStatusCheckPreservesPostResponseFailureResult(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodHead {
+			t.Fatalf("method = %s, want HEAD", r.Method)
+		}
+		w.Header().Set("X-Trace", "too-large-for-declaration")
+		w.WriteHeader(http.StatusBadGateway)
+	}))
+	t.Cleanup(srv.Close)
+
+	bundle := statusCheckBundle(srv.URL, http.MethodHead)
+	bundle.Operations[0].REST.Response = &OperationResponseSpec{
+		SuccessStatuses: []string{"200-299"},
+		Headers:         []OperationResponseHeaderSpec{{Name: "X-Trace", MaxBytes: 1}},
+	}
+	result, err := OperationStatusCheck(context.Background(), bundle, connectors.OperationStatusCheckRequest{Operation: "acme.tags.status"}, nil)
+	if err == nil || !strings.Contains(err.Error(), "X-Trace") {
+		t.Fatalf("OperationStatusCheck error = %v, want declared post-response header failure", err)
+	}
+	if result.Operation != "acme.tags.status" || result.Method != http.MethodHead || result.Path != "/v2/tags" || result.Status != http.StatusBadGateway {
+		t.Fatalf("post-response status result = %#v, want complete operation and provider status", result)
+	}
+	if result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != http.StatusBadGateway || result.Receipt.Body != nil {
+		t.Fatalf("post-response receipt = %#v, want bounded raw HEAD metadata without body decode", result.Receipt)
+	}
+	if got := result.Receipt.Headers["X-Trace"].Values; len(got) != 1 || got[0] != "too-large-for-declaration" {
+		t.Fatalf("post-response receipt headers = %#v, want complete provider metadata", result.Receipt.Headers)
 	}
 }
 

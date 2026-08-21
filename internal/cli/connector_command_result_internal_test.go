@@ -278,6 +278,56 @@ func TestWriteConnectorCommandFailureResultPreservesBinaryDownloadErrorEnvelope(
 	}
 }
 
+func TestWriteConnectorCommandFailureResultPreservesStatusReceipt(t *testing.T) {
+	result := commandrunner.Result{
+		Connector: "github-live-qualification",
+		Command:   "dataset status",
+		StatusCheck: &connectors.OperationStatusCheckResult{
+			Operation: "github_live.dataset.status", Method: http.MethodHead, Path: "/locked.csv", Status: http.StatusNotFound,
+			Receipt: &connectors.ProviderResponseReceipt{
+				ResponseReceived: true, Status: http.StatusNotFound, BodyPresent: false, BodyBytes: 0,
+				Headers: map[string]connectors.OperationResponseHeader{"X-Provider-Trace": {Values: []string{"first", "second"}}},
+			},
+		},
+	}
+	var stdout, stderr bytes.Buffer
+	if err := writeConnectorCommandFailureResult(&stdout, &stderr, true, result, nil, errors.New("provider redirect refused")); err != nil {
+		t.Fatalf("writeConnectorCommandFailureResult: %v", err)
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("status failure stderr = %q, want one stdout envelope", stderr.String())
+	}
+	var got struct {
+		Kind    string `json:"kind"`
+		Status  int    `json:"status"`
+		Receipt struct {
+			ResponseReceived bool `json:"response_received"`
+			Status           int  `json:"status"`
+		} `json:"receipt"`
+		Error json.RawMessage `json:"error"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &got); err != nil {
+		t.Fatalf("decode status failure JSON: %v\n%s", err, stdout.String())
+	}
+	if got.Kind != "ConnectorCommandStatusCheck" || got.Status != http.StatusNotFound || !got.Receipt.ResponseReceived || got.Receipt.Status != http.StatusNotFound || len(got.Error) == 0 {
+		t.Fatalf("status failure envelope = %+v", got)
+	}
+}
+
+func TestConnectorCommandFailureEnvelopeRecognizesPostProviderResultWithoutReceipt(t *testing.T) {
+	if !connectorCommandHasPostProviderResult(commandrunner.Result{
+		DirectRead: &connectors.DirectReadResult{
+			Operation: "github.records.lookup", Method: http.MethodGet, Path: "/records/fixture", Status: http.StatusBadGateway,
+			Body: map[string]any{"occurrence_id": "provider-occurrence-9007199254740993"},
+		},
+	}) {
+		t.Fatal("post-provider direct result without receipt was not admitted to the CLI failure envelope")
+	}
+	if connectorCommandHasPostProviderResult(commandrunner.Result{}) {
+		t.Fatal("empty runner result was admitted to the CLI failure envelope")
+	}
+}
+
 func TestWriteConnectorCommandResultPreservesDirectReadReceipt(t *testing.T) {
 	result := commandrunner.Result{
 		Connector: "github-live-qualification",

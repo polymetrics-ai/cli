@@ -140,7 +140,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		pageCursor:      req.PageCursor,
 		pagination:      op.REST.Pagination,
 	})
-	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: method, Path: resolvedPath, Page: pageInfo}
+	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: method, Path: resolvedPath, Page: pageInfo, OutputSecretFields: operationDirectReadOutputSecretFields(op)}
 	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
 	if readResult.Receipt == nil && err != nil {
 		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
@@ -184,6 +184,8 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if len(redactFields) > 0 {
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
+	// Convenience response output is public-facing and may hide configured
+	// credentials, but Receipt remains the immutable pre-projection response.
 	decoded = connectors.SanitizeProviderOutputForOutput(decoded, req.Config.Secrets)
 	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
 	if err != nil {
@@ -487,7 +489,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		page:         req.Page,
 		pageCursor:   req.PageCursor,
 	})
-	readResult := connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Page: pageInfo}
+	readResult := connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Page: pageInfo, OutputSecretFields: append([]string(nil), req.RedactFields...)}
 	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
 	if readResult.Receipt == nil && err != nil {
 		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
@@ -530,6 +532,13 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
 	readResult.Body = body
 	return readResult, nil
+}
+
+func operationDirectReadOutputSecretFields(op OperationSpec) []string {
+	if op.SensitivePolicy == nil {
+		return nil
+	}
+	return append([]string(nil), op.SensitivePolicy.RedactFields...)
 }
 
 func findOperation(b Bundle, id string) (OperationSpec, error) {
