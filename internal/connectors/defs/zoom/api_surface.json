@@ -10364,14 +10364,8 @@
     {
       "method": "PATCH",
       "path": "/v2/meetings/{meetingId}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/meetings.md",
-        "notes": "classification=implementable_now; provider_module=meetings; operation_title=Update a meeting; provider_server=https://api.zoom.us/v2; provider_path=/meetings/{meetingId}; artifact=https://developers.zoom.us/docs/api/meetings.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "write": "zoom_meetings_meetingupdate"
       }
     },
     {
@@ -10450,14 +10444,8 @@
     {
       "method": "POST",
       "path": "/v2/users/{userId}/meetings",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/meetings.md",
-        "notes": "classification=implementable_now; provider_module=meetings; operation_title=Create a meeting; provider_server=https://api.zoom.us/v2; provider_path=/users/{userId}/meetings; artifact=https://developers.zoom.us/docs/api/meetings.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "write": "zoom_meetings_meetingcreate"
       }
     },
     {

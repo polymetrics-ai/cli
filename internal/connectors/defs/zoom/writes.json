@@ -2911,15 +2911,15 @@
       "name": "zoom_contact_center_deleteuserrecordings",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/contact_center/users/{{ record.userId }}/recordings",
+      "path": "/v2/contact_center/users/{{ record.user_id }}/recordings",
       "path_fields": [
-        "userId"
+        "user_id"
       ],
       "body_type": "none",
       "record_schema": {
         "type": "object",
         "properties": {
-          "userId": {
+          "user_id": {
             "type": "string"
           },
           "delete_all_recordings": {
@@ -2928,7 +2928,7 @@
         },
         "additionalProperties": false,
         "required": [
-          "userId"
+          "user_id"
         ]
       },
       "risk": "high: Delete a user's recordings",
@@ -3285,15 +3285,15 @@
       "name": "zoom_contact_center_userdelete",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/contact_center/users/{{ record.userId }}",
+      "path": "/v2/contact_center/users/{{ record.user_id }}",
       "path_fields": [
-        "userId"
+        "user_id"
       ],
       "body_type": "none",
       "record_schema": {
         "type": "object",
         "properties": {
-          "userId": {
+          "user_id": {
             "type": "string"
           },
           "user_identifier_type": {
@@ -3306,7 +3306,7 @@
         },
         "additionalProperties": false,
         "required": [
-          "userId"
+          "user_id"
         ]
       },
       "risk": "high: Delete a user's profile",
@@ -4988,6 +4988,57 @@
       }
     },
     {
+      "name": "zoom_meetings_meetingcreate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/users/{{ record.user_id }}/meetings",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "type": {
+            "type": "integer",
+            "enum": [
+              2
+            ]
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "agenda": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id",
+          "topic",
+          "type",
+          "start_time"
+        ]
+      },
+      "risk": "high: Create a scheduled meeting",
+      "redact_fields": [
+        "user_id"
+      ]
+    },
+    {
       "name": "zoom_meetings_meetingdelete",
       "kind": "delete",
       "method": "DELETE",
@@ -5036,6 +5087,49 @@
       "confirmation": {
         "kind": "destructive"
       }
+    },
+    {
+      "name": "zoom_meetings_meetingupdate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/meetings/{{ record.meeting_id }}",
+      "path_fields": [
+        "meeting_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meeting_id": {
+            "type": "integer"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "agenda": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meeting_id",
+          "topic"
+        ]
+      },
+      "risk": "high: Update a meeting",
+      "redact_fields": [
+        "meeting_id"
+      ]
     },
     {
       "name": "zoom_meetings_meetingpolldelete",
@@ -5847,21 +5941,21 @@
       "name": "zoom_scim2_userscim2delete",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/scim2/Users/{{ record.userId }}",
+      "path": "/scim2/Users/{{ record.user_id }}",
       "path_fields": [
-        "userId"
+        "user_id"
       ],
       "body_type": "none",
       "record_schema": {
         "type": "object",
         "properties": {
-          "userId": {
+          "user_id": {
             "type": "string"
           }
         },
         "additionalProperties": false,
         "required": [
-          "userId"
+          "user_id"
         ]
       },
       "risk": "high: Delete a user",
@@ -6123,15 +6217,15 @@
       "name": "zoom_users_deluservb",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/users/{{ record.userId }}/settings/virtual_backgrounds",
+      "path": "/v2/users/{{ record.user_id }}/settings/virtual_backgrounds",
       "path_fields": [
-        "userId"
+        "user_id"
       ],
       "body_type": "none",
       "record_schema": {
         "type": "object",
         "properties": {
-          "userId": {
+          "user_id": {
             "type": "string"
           },
           "file_ids": {
@@ -6140,7 +6234,7 @@
         },
         "additionalProperties": false,
         "required": [
-          "userId"
+          "user_id"
         ]
       },
       "risk": "high: Delete Virtual Background files",
@@ -6159,15 +6253,15 @@
       "name": "zoom_users_userdelete",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/users/{{ record.userId }}",
+      "path": "/v2/users/{{ record.user_id }}",
       "path_fields": [
-        "userId"
+        "user_id"
       ],
       "body_type": "none",
       "record_schema": {
         "type": "object",
         "properties": {
-          "userId": {
+          "user_id": {
             "type": "string"
           },
           "encrypted_email": {
@@ -6213,7 +6307,7 @@
         },
         "additionalProperties": false,
         "required": [
-          "userId"
+          "user_id"
         ]
       },
       "risk": "high: Delete a user",
@@ -6276,21 +6370,21 @@
       "name": "zoom_users_userpicturedelete",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/users/{{ record.userId }}/picture",
+      "path": "/v2/users/{{ record.user_id }}/picture",
       "path_fields": [
-        "userId"
+        "user_id"
       ],
       "body_type": "none",
       "record_schema": {
         "type": "object",
         "properties": {
-          "userId": {
+          "user_id": {
             "type": "string"
           }
         },
         "additionalProperties": false,
         "required": [
-          "userId"
+          "user_id"
         ]
       },
       "risk": "high: Delete a user's profile picture",
@@ -6335,21 +6429,21 @@
       "name": "zoom_users_userschedulersdelete",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/users/{{ record.userId }}/schedulers",
+      "path": "/v2/users/{{ record.user_id }}/schedulers",
       "path_fields": [
-        "userId"
+        "user_id"
       ],
       "body_type": "none",
       "record_schema": {
         "type": "object",
         "properties": {
-          "userId": {
+          "user_id": {
             "type": "string"
           }
         },
         "additionalProperties": false,
         "required": [
-          "userId"
+          "user_id"
         ]
       },
       "risk": "high: Delete user schedulers",
@@ -6362,21 +6456,21 @@
       "name": "zoom_users_userssotokendelete",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/users/{{ record.userId }}/token",
+      "path": "/v2/users/{{ record.user_id }}/token",
       "path_fields": [
-        "userId"
+        "user_id"
       ],
       "body_type": "none",
       "record_schema": {
         "type": "object",
         "properties": {
-          "userId": {
+          "user_id": {
             "type": "string"
           }
         },
         "additionalProperties": false,
         "required": [
-          "userId"
+          "user_id"
         ]
       },
       "risk": "high: Revoke a user's SSO token",

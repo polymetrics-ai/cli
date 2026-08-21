@@ -29,7 +29,8 @@ coerced in `operations.json`.
 
 Green: the connector-local inventory now contains 1,748 source-backed operation contracts (776
 `rest_read`, 971 `rest_write`, and one `binary_download`) with 311 typed destructive DELETE
-contracts. The two real destination actions run through plan/preview and a loopback HTTP fixture.
+contracts. The two legacy typed write actions retain their plan/preview and loopback fixture
+coverage; this statement is historical and does not certify the new destination template.
 `TestPinnedSourceCrosswalkAccountsForEveryIdentity` proves the 35-document, 1,937-operation lock
 and every 1,911 exact / 26 source-only / two ledger-only identity result.
 `TestDeclarationDispositionAccountsForThePinnedSourceAndLedger` proves the 1,913 ledger rows plus
@@ -42,10 +43,10 @@ internal/connectors/defs --check` pass.
 Red: before `sync_transport.json`, Zoom inspection projected no source role even though the merged
 definition-owned adapter could execute the three existing declared streams.
 
-Green: `TestSourceTransportDeclaresEveryExecutableZoomStream` proves the complete users/meetings/
-webinars source allowlist, declarative executor reference, five source modes, delivery semantics,
-and conformance run. Reverse ETL remains undeclared: `generic-typed-destination-executor` cites
-`internal/app/issue_label_warehouse_transport.go:85-95`; no action binding is invented.
+Green (historical source-only checkpoint): `TestSourceTransportDeclaresEveryExecutableZoomStream`
+proved the complete users/meetings/webinars source allowlist, declarative executor reference, five
+source modes, delivery semantics, and conformance run. The later #4304 continuation adds the closed
+destination declaration and preserves this source assertion.
 
 ## Candidate and live-proof boundary
 
@@ -119,15 +120,78 @@ approved foundation change makes their typed transport possible.
 
 ## Reverse-ETL destination readiness under merge freeze
 
-Red: the prior tests proved runnable source-operation commands, but did not make the complete
-three-way relationship between `cli_surface.json`, `writes.json`, and generated mutation candidates
-an explicit invariant. Removing an action or candidate could therefore leave the future #4303
+Red (historical): the prior tests proved runnable source-operation commands, but did not make the
+complete three-way relationship between `cli_surface.json`, `writes.json`, and generated mutation
+candidates an explicit invariant. Removing an action or candidate could therefore leave the future
 typed-destination input incomplete until a later destination declaration failed closed.
 
 Green: `TestEveryTypedZoomActionHasReverseETLCommandAndCandidate` asserts exact 204-way set equality:
 every implemented reverse-ETL command names one unique typed action, every action has one command
 and one `write_action`/`reverse_plan` candidate, every command address agrees with its action method,
-and all candidates retain the deferred typed-destination classification. The current cohort is 11
-creates, 8 updates, and 185 destructive deletes. The test does not add `destination_transport`, a
-transport binding, source binding, acknowledgement, or conformance evidence; those are #4303 inputs
-that cannot be honestly declared beforehand.
+and all candidates retained the deferred typed-destination classification. The current cohort is 11
+creates, 8 updates, and 185 destructive deletes. The #4304 continuation now supersedes the
+source-only part of this checkpoint with explicit destination and eligibility evidence.
+
+## #4304 production typed destination continuation
+
+Red: after merging #4304, Zoom still declares only a source transport and every generated mutation
+candidate says `generic_typed_destination_executor_deferred`. A connector-local assertion therefore
+fails until a definition-owned destination names an exact typed action, action/source input mapping,
+acknowledgement, delivery facts, conformance evidence, and one strategy per declared mode.
+
+Green: the Zoom bundle declares `declarative_api/declarative_typed_destination` for the existing
+`zoom_users_userssotokendelete` action. The contract binds the already-declared `users` stream's
+`id` to its normalized `user_id` action input (interpolated as provider `{userId}`), is restricted
+to `full_append` / `append`, records keyed/durable acknowledgement
+facts, and remains on the action's existing destructive plan/preview/approval lifecycle. No live
+provider call occurs. Candidate classification changes from the obsolete executor-missing family to
+an explicitly uncertified, fixture-and-live-proof-pending declared transport family; this does not
+make the other 205 typed commands unreachable.
+
+Refactor: replace the stale generic-destination gap with a seven-surface readiness ledger that
+cross-checks the 1,937 source and 1,913 ledger inventory records, committed command/action bindings,
+transport eligibility, and certification limitations. Run generated artifacts and all repository
+gates before push.
+
+## Lane-owned Meeting lifecycle continuation
+
+Manual-GSD fallback: the relaunch supplied an already-dirty connector branch after the production
+need for a reversible lifecycle became explicit. Reconstructing the original pre-edit state would
+manufacture archival Red evidence, so that earlier state is not claimed.
+
+Red: `TestLaneOwnedMeetingLifecycleActionsAreClosedAndReachable` now loads exact source-local
+create/update/delete replay fixtures. It fails only on the existing Meeting delete action before
+I/O: `omit_when_absent` rejects missing optional `record.occurrence_id` despite its declared
+object-form query policy. Create and update also exposed unsupported `minimum` / `minLength` keywords, removed
+from their connector-local schemas rather than worked around in the engine. The delete failure is
+downstream evidence for issue #4305 (`cli-rest-structured-body-r1`), which alone owns the
+declaration-closed shared-engine fix; no shared-engine edit is retained in this branch.
+
+Foundation rehearsal Green: captain-approved exact SHA
+`c3f83cbf6eabbae00219566fb02719ca2d6c480d` passed
+`TestZoomMeetingDeleteOptionalQueryRehearsal` in an isolated detached worktree. The exact Meeting
+DELETE action retained a present optional field and omitted both absent record-derived optional
+query fields through a safety-approved loopback request. See
+[`FOUNDATION-REHEARSAL.md`](FOUNDATION-REHEARSAL.md) for the command and constraints.
+
+Current-branch Red remains: the preserved Zoom branch does not contain that Foundation revision,
+so its connector-local lifecycle test remains an expected pre-I/O RED rather than a promoted
+fixture pass. After Foundation lands on `main`, rerun all three lifecycle fixture request-shape
+checks and then the built-binary lane-owned create/read-back/update/delete-cleanup proof after the
+final #4304 persisted App/CLI dispatch head. The seven-surface and reverse-ETL eligibility ledgers
+continue to account for 714 commands and all 206 typed actions; no certification is promoted by
+the rehearsal.
+
+## Captain-required missing-foundation ledger
+
+Red: `zoom-foundation-gaps.json` names shared limitations only as aggregate counts. It does not
+provide an exact source-locked provider operation row, document hash/revision, fan-out, owner,
+closure command, or merge-readiness state for each affected operation. A missing executor could
+therefore be confused with an ordinary disabled or non-applicable connector row.
+
+Green: `zoom-missing-foundation-gaps.json` has a deduplicated shared catalog plus source-locked
+operation rows and source-module/portfolio rollups. A connector-local test verifies every row's
+provider identity/digest against the pin, every catalog reference, a non-empty capability/owner/
+closure check, exact fan-out, and `merge_ready_enabled=false` for each open row. It also verifies
+that no row calls an open shared gap disabled or non-applicable and that runtime CLI reachability is
+reported separately rather than overwritten.

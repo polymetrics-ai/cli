@@ -9,29 +9,42 @@ Phase: `zoom-full-definition-mapping-r1`
   crosswalked them with the 1,913-row provider ledger.
 - Declared 1,748 source-backed executor contracts: 776 `rest_read`, 971 `rest_write`, and one
   bounded binary-download contract, including 311 destructive DELETE contracts.
-- Added 505 source-backed direct-read commands and 202 new approval-gated no-body scalar write
-  commands. Together with three preserved ETL commands and two existing write actions, Zoom now
-  has 712 runnable commands, 204 typed write actions, and 185 typed guarded deletes.
+- Added 505 source-backed direct-read commands, 202 approval-gated no-body scalar write commands,
+  and two narrow, source-backed JSON Meeting lifecycle actions (create and update). Together with
+  three preserved ETL commands and two existing write actions, Zoom now has 714 runnable commands,
+  206 typed write actions, and 185 typed guarded deletes.
 - Rebuilt connector manuals, catalog/website data, root-help golden transcripts, and the generated
   operation endpoint ledger from the command declarations.
-- Declared the connector-neutral declarative ETL source for users, meetings, and webinars. Reverse
-  ETL has no destination declaration because the only production destination factory remains the
-  GitHub issue-label contract.
-- Generated one bounded authenticated direct-read candidate and 204 typed mutation candidates.
-  The live external-proof run returned HTTP 200 for two Zoom GET exchanges and published one
-  fingerprint-only `observed_operations` evidence record.
-- Added a reverse-ETL merge-freeze readiness guard: all 204 implemented reverse-ETL commands,
-  connector-owned typed actions, and generated mutation candidates form an exact one-to-one set.
-  This is preparation for #4303, not a destination declaration.
-- Recorded a disposition for every 1,913 ledger row and 26 source-only rows. The 1,131 disabled
+- Declared the connector-neutral declarative ETL source for users, meetings, and webinars, plus a
+  closed `declarative_typed_destination` definition. Eight record-driven typed actions are
+  allowlisted from `users.id → user_id`; one is selected by the current `full_append` strategy and
+  seven are explicitly pending the foundation's one-action-per-mode multiplicity support.
+- Generated one bounded authenticated direct-read candidate and 206 typed mutation candidates.
+  Historical observed GET evidence remains explicitly non-certifying; current credentialed proof
+  must be rerun against the final #4304 App/CLI dispatch head.
+- Rehearsed the exact Zoom Meeting DELETE optional-query declaration against captain-approved
+  Foundation SHA `c3f83cbf6eabbae00219566fb02719ca2d6c480d` in an isolated temporary worktree.
+  The synthetic safety-approved loopback request omitted absent optional record fields and retained
+  a present one; no Foundation ancestry, credential, provider call, or certification was added.
+- Added a reverse-ETL eligibility ledger: all 206 implemented reverse-ETL commands, connector-owned
+  typed actions, and generated mutation candidates form an exact one-to-one set; each action has an
+  explicit transport disposition without sacrificing direct CLI reachability.
+- Recorded a disposition for every 1,913 ledger row and 26 source-only rows. The 1,129 disabled
   ledger rows use only `foundation-gap`, `schema-incompatible`, `provider-does-not-expose`, or
   `requires-paid-tier`, with evidence and recovery state.
+- Added the captain-required missing-foundation ledger: 12 deduplicated shared-capability catalog
+  entries and 1,329 exact source-locked gap rows across 1,299 provider operations. Each row has
+  provider document URL/revision/hash, affected surface(s), runtime evidence, an owner or explicit
+  unassigned foundation backlog, closure command, complete fan-out, batch/portfolio rollups, and
+  `merge_ready_enabled: false`. Runtime CLI reachability remains a separate fact and no gap is
+  hidden as disabled or N/A.
 
 ## Honest limits
 
-- This is not provider-wide complete parity. It does not claim a runnable command for JSON-body
-  writes, array-query contracts, file uploads, the bounded Clip download redirect case, paid-tier
-  operations, or source/ledger mismatches.
+- This is not provider-wide complete parity. It does not claim a runnable command for unmodelled
+  JSON-body writes (the two narrow Meeting lifecycle contracts are explicit exceptions), array-query
+  contracts, file uploads, the bounded Clip download redirect case, paid-tier operations, or
+  source/ledger mismatches.
 - No Zoom operation is certified yet. The accepted REST-read live proof lacks an exact operation
   fixture because the shared matrix projects fixtures only for capabilities, not operation kinds;
   `operation-specific-fixture-evidence-projection` records the minimal recovery.
@@ -44,10 +57,16 @@ Phase: `zoom-full-definition-mapping-r1`
   is still hard-wired to fail, the all-stream report aggregates the paid Webinar refusal, and the
   source-only connector receives irrelevant flow/schedule checks. Each foundation gap and its
   minimal recovery is recorded; no partial report is called certification.
-- Reverse-ETL mutations are generated but unassessed/deferred on
-  `generic-typed-destination-executor`; certification must not claim them without that executor,
-  explicit source bindings, acknowledgement, and per-mode apply strategies.
-- The connector deliberately has no `destination_transport` or `transport_binding` while #4303 is
-  in flight. Those fields would imply an executor, acknowledgement, source bindings, and
-  connector-owned evidence that do not yet exist.
+- Reverse-ETL mutations remain unassessed. The connector-local declaration has source bindings,
+  acknowledgement, and an exact strategy, but it has no destination fixture or reversible live
+  proof. The temporary #4304 stacked base and the optional-query rehearsal do not satisfy the
+  required Foundation-on-`main` App/CLI path gate, which must be exercised before any
+  application-level deployability claim.
+- The committed seven-surface ledger accounts for all 1,937 source operations plus two ledger-only
+  identities. This is not provider-wide executable completeness: 1,155 inventory rows remain
+  explicit implementation or technical-contract gaps, and no provider entitlement or destructive
+  classification is presented as a reason to hide an otherwise-modelled command.
 - No auth, engine, generator, certification allowlist, or status code was changed.
+- The later captain hard gate means this remains explicitly **not merge-ready**: open foundation
+  gaps, incomplete all-operation CLI/website reachability, and the missing final six-surface live
+  proof prevent any provider-wide completeness claim.

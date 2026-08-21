@@ -1,7 +1,12 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "connector": "zoom",
   "generated_at": "2026-08-19T11:45:00Z",
+  "operation_row_ledger": {
+    "path": "sources/zoom-missing-foundation-gaps.json",
+    "contract": "Deduplicated provider-neutral catalog plus exact source-locked operation rows, fan-out, source-module batches, and portfolio rollup.",
+    "merge_ready_rule": "Every open operation row has merge_ready_enabled=false; runtime CLI reachability is recorded independently and is never rewritten as disabled or not-applicable."
+  },
   "source_basis": {
     "source_lock": "sources/zoom-operation-source-lock.json",
     "crosswalk": "sources/zoom-operation-crosswalk.json",
@@ -38,9 +43,9 @@
       ],
       "minimal_change": "Retain provider-derived closed request body schemas and admit a typed root JSON input only when that schema validates, without adding a generic raw HTTP body escape hatch.",
       "recoverable": true,
-      "affected_count": 471,
-      "applicable_source_contract_count": 471,
-      "primary_rejection_count": 471
+      "affected_count": 469,
+      "applicable_source_contract_count": 469,
+      "primary_rejection_count": 469
     },
     {
       "id": "rest-query-array-encoding",
@@ -51,9 +56,9 @@
       ],
       "minimal_change": "Carry provider-derived array query serialization and encode only that declared style at the REST transport boundary.",
       "recoverable": true,
-      "affected_count": 25,
-      "applicable_source_contract_count": 25,
-      "primary_rejection_count": 25
+      "affected_count": 32,
+      "applicable_source_contract_count": 32,
+      "primary_rejection_count": 32
     },
     {
       "id": "file-upload-executor",
@@ -80,18 +85,19 @@
       "affected_count": 1,
       "applicable_source_contract_count": 1
     },
-  {
-    "id": "generic-typed-destination-executor",
-      "tracking": null,
+    {
+      "id": "write-optional-record-query",
+      "tracking": "#4305",
       "evidence": [
-        "internal/app/issue_label_warehouse_transport.go:85-95 registers only issueLabelDestinationReference and BuildDestination enforces the GitHub issue-label contract."
+        "internal/connectors/engine/read.go:771-785 resolves write query templates through the shared optional-query helper, while :1338-1348 treats only config, secrets, and incremental references as omittable.",
+        "The documented Zoom Delete a meeting action declares occurrence_id as an optional record-derived query input. The lane-owned fixture fails before I/O when a regular meeting correctly has no occurrence_id."
       ],
-      "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+      "minimal_change": "Permit buildWriteQuery to omit only an unresolved exact record reference when its query entry explicitly sets omit_when_absent and that record path is declared by the action's source-locked record_schema; keep every other missing or invalid input a hard pre-I/O error.",
       "recoverable": true,
-      "affected_count": 204,
-    "applicable_typed_write_actions": 204,
-    "primary_rejection_count": 0
-  },
+      "affected_count": 1,
+      "applicable_source_contract_count": 1,
+      "primary_rejection_count": 1
+    },
     {
       "id": "operation-specific-fixture-evidence-projection",
     "tracking": null,
@@ -137,9 +143,9 @@
       "tracking": null,
       "evidence": [
         "internal/connectors/certify/stages_source.go:690-694 runs flow and schedule round-trips for every full-sweep source stream.",
-        "Zoom declares only a source transport because generic-typed-destination-executor is absent; its full run correctly has no flow manifest, but schedule creation fails instead of recording the absent optional flow/schedule surface as non-applicable."
+        "Zoom declares a narrow source/destination pair, but has no declared flow fixture or schedule round-trip contract; its full run must record that absent optional surface as non-applicable instead of attempting schedule creation."
       ],
-      "minimal_change": "When the connector lacks a declared executable flow or source/destination transport pair, mark flow and schedule round-trip stages non-applicable before invoking schedule creation; retain failures for connectors that do declare the required surface.",
+      "minimal_change": "When a connector lacks a declared executable flow fixture or schedule contract, mark flow and schedule round-trip stages non-applicable before invoking schedule creation; retain failures for connectors that do declare the required surface.",
       "recoverable": true,
       "affected_count": 3,
       "applicable_source_contract_count": 3,

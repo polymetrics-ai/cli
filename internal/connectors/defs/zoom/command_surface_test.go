@@ -19,7 +19,9 @@ import (
 	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/connectors/conformance"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/synccontract"
 )
 
 const zoomBundleName = "zoom"
@@ -128,17 +130,17 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 712 {
-		t.Errorf("executable provider rows = %d, want 712", got)
+	if got := covered; got != 714 {
+		t.Errorf("executable provider rows = %d, want 714", got)
 	}
 	if got := coveredDirectReads; got != 505 {
 		t.Errorf("executable direct-read-backed rows = %d, want 505", got)
 	}
-	if got := coveredWrites; got != 204 {
-		t.Errorf("executable write-backed rows = %d, want 204", got)
+	if got := coveredWrites; got != 206 {
+		t.Errorf("executable write-backed rows = %d, want 206", got)
 	}
-	if got := implementableNow; got != 1134 {
-		t.Errorf("operations still blocked after declared runnable coverage = %d, want 1134", got)
+	if got := implementableNow; got != 1132 {
+		t.Errorf("operations still blocked after declared runnable coverage = %d, want 1132", got)
 	}
 	if got := providerRestricted; got != 13 {
 		t.Errorf("provider-restricted operations = %d, want 13", got)
@@ -323,6 +325,209 @@ func TestPinnedSourceCrosswalkAccountsForEveryIdentity(t *testing.T) {
 	}
 }
 
+// TestMissingFoundationGapRowsAreSourceLockedAndRollUp keeps shared foundation
+// limitations visible as operation-level evidence. It deliberately separates
+// runtime command reachability from merge-readiness: an implemented command is
+// never relabelled disabled merely because its certification or transport
+// foundation is still open, but an open gap cannot promote a merge-ready cell.
+func TestMissingFoundationGapRowsAreSourceLockedAndRollUp(t *testing.T) {
+	type sourceDocument struct {
+		SourceURL string `json:"source_url"`
+		SHA256    string `json:"sha256"`
+	}
+	type sourceOperation struct {
+		ID        string `json:"id"`
+		Module    string `json:"module"`
+		SourceURL string `json:"source_url"`
+	}
+	type gapRow struct {
+		GapID      string   `json:"gap_id"`
+		Connector  string   `json:"connector"`
+		CatalogRef string   `json:"gap_catalog_ref"`
+		Surfaces   []string `json:"affected_surfaces"`
+		Evidence   string   `json:"failing_validator_or_runtime_evidence"`
+		MergeReady bool     `json:"merge_ready_enabled"`
+		RuntimeCLI string   `json:"runtime_cli_reachability"`
+		Website    string   `json:"website_reachability"`
+		Operation  struct {
+			ID     string `json:"id"`
+			Module string `json:"module"`
+		} `json:"provider_operation"`
+		Source struct {
+			URL      string `json:"url"`
+			Revision string `json:"revision"`
+			SHA256   string `json:"sha256"`
+		} `json:"provider_source"`
+	}
+	type catalogGap struct {
+		ID         string `json:"id"`
+		Capability string `json:"missing_provider_neutral_capability"`
+		Status     string `json:"status"`
+		Owner      struct {
+			Issue  *string `json:"issue"`
+			Lane   string  `json:"lane"`
+			Status string  `json:"status"`
+		} `json:"owner"`
+		Closure []string `json:"closure_verification"`
+		Fanout  struct {
+			Connectors  []string `json:"affected_connectors"`
+			Count       int      `json:"affected_operation_count"`
+			OperationID []string `json:"affected_operation_ids"`
+		} `json:"fanout"`
+	}
+	var lock struct {
+		Rest struct {
+			SourceDocuments []sourceDocument  `json:"source_documents"`
+			Operations      []sourceOperation `json:"operations"`
+		} `json:"rest"`
+	}
+	var report struct {
+		Connector  string       `json:"connector"`
+		GapCatalog []catalogGap `json:"gap_catalog"`
+		Rows       []gapRow     `json:"operation_gap_rows"`
+		Rollups    struct {
+			PerBatch []struct {
+				BatchID   string `json:"batch_id"`
+				Connector string `json:"connector"`
+				Rows      int    `json:"open_gap_rows"`
+			} `json:"per_batch"`
+			Portfolio struct {
+				Rows              int      `json:"open_gap_rows"`
+				UniqueOperations  int      `json:"unique_affected_operations"`
+				EnabledOperations int      `json:"merge_ready_enabled_operations"`
+				CatalogOnlyGapIDs []string `json:"catalog_only_open_gap_ids"`
+			} `json:"portfolio"`
+		} `json:"rollups"`
+	}
+	read := func(name string, into any) {
+		t.Helper()
+		raw, err := os.ReadFile(filepath.Join("sources", name))
+		if err != nil {
+			t.Fatalf("read %s: %v", name, err)
+		}
+		if err := json.Unmarshal(raw, into); err != nil {
+			t.Fatalf("decode %s: %v", name, err)
+		}
+	}
+	read("zoom-operation-source-lock.json", &lock)
+	read("zoom-missing-foundation-gaps.json", &report)
+
+	if report.Connector != zoomBundleName {
+		t.Fatalf("gap report connector = %q, want %q", report.Connector, zoomBundleName)
+	}
+	docHash := map[string]string{}
+	for _, document := range lock.Rest.SourceDocuments {
+		docHash[document.SourceURL] = document.SHA256
+	}
+	operationByID := map[string]sourceOperation{}
+	for _, operation := range lock.Rest.Operations {
+		operationByID[operation.ID] = operation
+	}
+	catalogByID := map[string]catalogGap{}
+	for _, gap := range report.GapCatalog {
+		if gap.ID == "" || gap.Capability == "" || gap.Status == "" || gap.Owner.Lane == "" || gap.Owner.Status == "" || len(gap.Closure) == 0 {
+			t.Errorf("gap catalog entry is incomplete: %+v", gap)
+		}
+		if _, duplicate := catalogByID[gap.ID]; duplicate {
+			t.Errorf("gap catalog repeats %q", gap.ID)
+		}
+		catalogByID[gap.ID] = gap
+	}
+	if got := len(catalogByID); got != 12 {
+		t.Fatalf("deduplicated foundation gap catalog = %d, want 12", got)
+	}
+
+	rowsByGap := map[string]map[string]bool{}
+	rowsByModule := map[string]int{}
+	uniqueOperations := map[string]bool{}
+	seenRows := map[string]bool{}
+	for _, row := range report.Rows {
+		key := row.GapID + "\x00" + row.Operation.ID
+		if seenRows[key] {
+			t.Errorf("gap row repeats %s", key)
+		}
+		seenRows[key] = true
+		if row.Connector != zoomBundleName || row.CatalogRef != row.GapID {
+			t.Errorf("gap row has invalid connector/catalog reference: %+v", row)
+		}
+		if _, ok := catalogByID[row.GapID]; !ok {
+			t.Errorf("gap row %s references unknown catalog gap", key)
+		}
+		source, ok := operationByID[row.Operation.ID]
+		if !ok || source.Module != row.Operation.Module || source.SourceURL != row.Source.URL {
+			t.Errorf("gap row %s is not source-locked: %+v", key, row)
+		}
+		if got := docHash[row.Source.URL]; got == "" || got != row.Source.SHA256 || len(row.Source.Revision) == 0 {
+			t.Errorf("gap row %s lacks pinned document revision/hash: %+v", key, row.Source)
+		}
+		if len(row.Surfaces) == 0 || row.Evidence == "" {
+			t.Errorf("gap row %s lacks surfaces or runtime evidence", key)
+		}
+		if row.MergeReady {
+			t.Errorf("open foundation gap row %s is incorrectly merge-ready enabled", key)
+		}
+		if strings.Contains(row.RuntimeCLI, "disabled") || strings.Contains(row.RuntimeCLI, "not_applicable") || strings.Contains(row.Website, "disabled") || strings.Contains(row.Website, "not_applicable") {
+			t.Errorf("gap row %s hides an open foundation gap as disabled/N/A: runtime=%q website=%q", key, row.RuntimeCLI, row.Website)
+		}
+		if rowsByGap[row.GapID] == nil {
+			rowsByGap[row.GapID] = map[string]bool{}
+		}
+		rowsByGap[row.GapID][row.Operation.ID] = true
+		rowsByModule[row.Operation.Module]++
+		uniqueOperations[row.Operation.ID] = true
+	}
+	if got := len(report.Rows); got != 1329 {
+		t.Errorf("operation-level open foundation gap rows = %d, want 1329", got)
+	}
+	if got := len(uniqueOperations); got != 1299 {
+		t.Errorf("unique source operations with an open foundation gap = %d, want 1299", got)
+	}
+	wantFanout := map[string]int{
+		"binary-redirect-origin-contract":                    1,
+		"capability-scoped-live-evidence-publication":        2,
+		"declarative-typed-destination-action-multiplicity":  7,
+		"declarative-typed-destination-app-dispatch":         1,
+		"definition-fixture-conformance-certification-stage": 3,
+		"file-upload-executor":                               34,
+		"operation-specific-fixture-evidence-projection":     776,
+		"rest-query-array-encoding":                          32,
+		"rest-write-root-json-input":                         469,
+		"schedule-roundtrip-source-only-skip":                3,
+		"write-optional-record-query":                        1,
+	}
+	for id, want := range wantFanout {
+		if got := len(rowsByGap[id]); got != want {
+			t.Errorf("gap %s source fan-out = %d, want %d", id, got, want)
+		}
+	}
+	for _, gap := range report.GapCatalog {
+		gotIDs := rowsByGap[gap.ID]
+		if got := len(gotIDs); got != gap.Fanout.Count || got != len(gap.Fanout.OperationID) {
+			t.Errorf("catalog fan-out for %s = rows:%d count:%d ids:%d", gap.ID, got, gap.Fanout.Count, len(gap.Fanout.OperationID))
+		}
+		for _, operationID := range gap.Fanout.OperationID {
+			if !gotIDs[operationID] {
+				t.Errorf("catalog fan-out %s includes unreferenced operation %s", gap.ID, operationID)
+			}
+		}
+	}
+	if got, want := len(report.Rollups.PerBatch), len(rowsByModule); got != want {
+		t.Errorf("per-batch rollups = %d, want %d", got, want)
+	}
+	for _, batch := range report.Rollups.PerBatch {
+		module := strings.TrimPrefix(batch.BatchID, "zoom-source-module/")
+		if batch.Connector != zoomBundleName || module == batch.BatchID || rowsByModule[module] != batch.Rows {
+			t.Errorf("invalid per-batch rollup: %+v", batch)
+		}
+	}
+	if report.Rollups.Portfolio.Rows != len(report.Rows) || report.Rollups.Portfolio.UniqueOperations != len(uniqueOperations) || report.Rollups.Portfolio.EnabledOperations != 0 {
+		t.Errorf("invalid portfolio rollup: %+v", report.Rollups.Portfolio)
+	}
+	if !reflect.DeepEqual(report.Rollups.Portfolio.CatalogOnlyGapIDs, []string{"operation-backed-rest-write-api-surface-coverage"}) {
+		t.Errorf("catalog-only open gaps = %#v, want operation-backed REST write coverage", report.Rollups.Portfolio.CatalogOnlyGapIDs)
+	}
+}
+
 // TestDeclarationDispositionAccountsForThePinnedSourceAndLedger keeps the
 // declare-or-disable audit executable without adding connector-specific
 // generator code outside this bundle. A source-contract inventory declaration
@@ -383,14 +588,14 @@ func TestDeclarationDispositionAccountsForThePinnedSourceAndLedger(t *testing.T)
 	if got := len(report.SourceOnlyDispositions); got != 26 {
 		t.Errorf("source-only records = %d, want 26", got)
 	}
-	if got := report.Summary.DeclaredCurrentBranch; got != 5 {
-		t.Errorf("current declared rows = %d, want 5", got)
+	if got := report.Summary.DeclaredCurrentBranch; got != 7 {
+		t.Errorf("current declared rows = %d, want 7", got)
 	}
 	if got := report.Summary.DeclaredPendingParentIntegration; got != 70 {
 		t.Errorf("parent-pending declarations = %d, want 70", got)
 	}
-	if got := report.Summary.DisabledAPISurfaceRows; got != 1131 {
-		t.Errorf("disabled api surface rows = %d, want 1131", got)
+	if got := report.Summary.DisabledAPISurfaceRows; got != 1129 {
+		t.Errorf("disabled api surface rows = %d, want 1129", got)
 	}
 	if got := report.Summary.DisabledSourceOnlyRows; got != 26 {
 		t.Errorf("disabled source-only rows = %d, want 26", got)
@@ -401,14 +606,14 @@ func TestDeclarationDispositionAccountsForThePinnedSourceAndLedger(t *testing.T)
 	if got := report.Summary.DeleteOperationInventoryEntries; got != 311 {
 		t.Errorf("delete operation inventory entries = %d, want 311", got)
 	}
-	if got := report.Summary.ImplementedPendingCertification; got != 707 {
-		t.Errorf("implemented pending certification rows = %d, want 707", got)
+	if got := report.Summary.ImplementedPendingCertification; got != 709 {
+		t.Errorf("implemented pending certification rows = %d, want 709", got)
 	}
-	if got := report.Summary.RunnableCLICommands; got != 712 {
-		t.Errorf("runnable CLI commands = %d, want 712", got)
+	if got := report.Summary.RunnableCLICommands; got != 714 {
+		t.Errorf("runnable CLI commands = %d, want 714", got)
 	}
-	if got := report.Summary.RunnableWriteActions; got != 204 {
-		t.Errorf("runnable write actions = %d, want 204", got)
+	if got := report.Summary.RunnableWriteActions; got != 206 {
+		t.Errorf("runnable write actions = %d, want 206", got)
 	}
 	if got := report.Summary.RunnableDeleteActions; got != 185 {
 		t.Errorf("runnable delete actions = %d, want 185", got)
@@ -476,8 +681,8 @@ func TestDeclarationDispositionAccountsForThePinnedSourceAndLedger(t *testing.T)
 // never invokes Zoom or resolves a real credential.
 func TestSourceBackedReverseETLActionsUseSanitizedFixtures(t *testing.T) {
 	bundle := loadZoomBundle(t)
-	if got := len(bundle.Writes); got != 204 {
-		t.Fatalf("Zoom typed write actions = %d, want 204", got)
+	if got := len(bundle.Writes); got != 206 {
+		t.Fatalf("Zoom typed write actions = %d, want 206", got)
 	}
 	for _, name := range []string{"update_clinical_note", "create_quality_management_interaction"} {
 		if _, ok := findZoomWriteAction(bundle.Writes, name); !ok {
@@ -624,8 +829,8 @@ func TestEveryTypedZoomActionHasReverseETLCommandAndCandidate(t *testing.T) {
 		}
 		actions[action.Name] = action
 	}
-	if got := len(actions); got != 204 {
-		t.Fatalf("typed Zoom write actions = %d, want 204", got)
+	if got := len(actions); got != 206 {
+		t.Fatalf("typed Zoom write actions = %d, want 206", got)
 	}
 
 	commands := make(map[string]connectors.CommandSurfaceCommand, len(actions))
@@ -714,8 +919,8 @@ func TestEveryTypedZoomActionHasReverseETLCommandAndCandidate(t *testing.T) {
 		if candidate.command != command.Path || candidate.intent != "reverse_etl" || candidate.kind != "write_action" || candidate.executor != "reverse_plan" {
 			t.Errorf("typed action %q candidate = %+v, want command:%q reverse_etl write_action/reverse_plan", name, candidate, command.Path)
 		}
-		if candidate.code != "unassessed" || candidate.family != "generic_typed_destination_executor_deferred" {
-			t.Errorf("typed action %q candidate classification = code:%q family:%q, want deferred generic typed destination", name, candidate.code, candidate.family)
+		if candidate.code != "unassessed" || candidate.family != "declared_typed_destination_proof_pending" {
+			t.Errorf("typed action %q candidate classification = code:%q family:%q, want declared transport awaiting fixture and live proof", name, candidate.code, candidate.family)
 		}
 	}
 }
@@ -845,17 +1050,17 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 
 }
 
-// TestSourceTransportDeclaresEveryExecutableZoomStream keeps the merged
-// definition-owned transport adapter honest: the concrete allowlist is the
-// complete stream surface, not an optimistic wildcard. The existing per-stream
-// fixture execution test below supplies the corresponding source proof.
-func TestSourceTransportDeclaresEveryExecutableZoomStream(t *testing.T) {
+// TestZoomTransportDeclaresTheExecutableSourceAndTypedDestination keeps the
+// definition-selected source and destination adapters honest. The destination
+// is deliberately a single named action with one source-field mapping; it is
+// not a generic provider writer.
+func TestZoomTransportDeclaresTheExecutableSourceAndTypedDestination(t *testing.T) {
 	bundle := loadZoomBundle(t)
 	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil {
 		t.Fatal("Zoom must declare its source sync transport")
 	}
-	if bundle.SyncTransport.Destination != nil {
-		t.Fatal("Zoom has no connector-neutral typed destination executor or action binding to declare")
+	if bundle.SyncTransport.Destination == nil {
+		t.Fatal("Zoom must declare its connector-neutral typed destination")
 	}
 	source := bundle.SyncTransport.Source
 	if got, want := source.Executor.Family, connectors.TransportExecutorFamilyDeclarativeAPI; got != want {
@@ -881,6 +1086,57 @@ func TestSourceTransportDeclaresEveryExecutableZoomStream(t *testing.T) {
 	}
 	if got, want := source.Delivery.Deletes, connectors.DeliveryDeletesUnavailable; got != want {
 		t.Errorf("source transport deletes = %q, want %q", got, want)
+	}
+
+	destination := bundle.SyncTransport.Destination
+	if got, want := destination.Executor.Family, connectors.TransportExecutorFamilyDeclarativeAPI; got != want {
+		t.Errorf("destination transport family = %q, want %q", got, want)
+	}
+	if got, want := destination.Executor.ID, "declarative_typed_destination"; got != want {
+		t.Errorf("destination transport executor = %q, want %q", got, want)
+	}
+	if got, want := destination.EligibleActions, []string{
+		"zoom_contact_center_deleteuserrecordings",
+		"zoom_contact_center_userdelete",
+		"zoom_scim2_userscim2delete",
+		"zoom_users_deluservb",
+		"zoom_users_userdelete",
+		"zoom_users_userpicturedelete",
+		"zoom_users_userschedulersdelete",
+		"zoom_users_userssotokendelete",
+	}; !reflect.DeepEqual(got, want) {
+		t.Errorf("destination eligible actions = %#v, want %#v", got, want)
+	}
+	if got, want := destination.Modes, []synccontract.Mode{synccontract.ModeFullAppend}; !reflect.DeepEqual(got, want) {
+		t.Errorf("destination modes = %#v, want %#v", got, want)
+	}
+	if got, want := destination.Delivery.Idempotency, connectors.DeliveryIdempotencyKeyed; got != want {
+		t.Errorf("destination idempotency = %q, want %q", got, want)
+	}
+	if got, want := destination.Delivery.Ordering, connectors.DeliveryOrderingSource; got != want {
+		t.Errorf("destination ordering = %q, want %q", got, want)
+	}
+	if got, want := destination.Delivery.Deletes, connectors.DeliveryDeletesUnavailable; got != want {
+		t.Errorf("destination tombstone deletes = %q, want %q", got, want)
+	}
+	if got, want := destination.Acknowledgement, connectors.TransportAcknowledgementDurableWarehouse; got != want {
+		t.Errorf("destination acknowledgement = %q, want %q", got, want)
+	}
+	if got, want := destination.Conformance.Suite, "zoom_typed_destination"; got != want {
+		t.Errorf("destination conformance suite = %q, want %q", got, want)
+	}
+	if got, want := destination.Conformance.RunID, "users_sso_token_revoke_v1"; got != want {
+		t.Errorf("destination conformance run = %q, want %q", got, want)
+	}
+	if got, want := destination.ApplyStrategies, []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "zoom_users_userssotokendelete"}}; !reflect.DeepEqual(got, want) {
+		t.Errorf("destination apply strategies = %#v, want %#v", got, want)
+	}
+	if got, want := destination.SourceBindings, []connectors.DestinationSourceBinding{{
+		Executor:        connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyDeclarativeAPI, ID: "declarative_stream_source"},
+		EligibleStreams: []string{"users"},
+		RecordMapping:   connectors.SourceRecordMapping{Kind: connectors.SourceRecordMappingKindInputFields, Inputs: []connectors.SourceRecordInputBinding{{Input: "user_id", Field: "id"}}},
+	}}; !reflect.DeepEqual(got, want) {
+		t.Errorf("destination source bindings = %#v, want %#v", got, want)
 	}
 }
 
@@ -944,8 +1200,8 @@ func TestPinnedCreationCursorsAreProjected(t *testing.T) {
 }
 
 // TestCertificationCandidatesDescribeOneBoundedReadAndDeferWrites proves the
-// definition can generate the one safe live read candidate without pretending
-// that reverse-ETL actions have a connector-neutral destination executor.
+// definition can generate the one safe live read candidate while keeping every
+// typed reverse-ETL candidate explicitly uncertified until fixture and live proof.
 func TestCertificationCandidatesDescribeOneBoundedReadAndDeferWrites(t *testing.T) {
 	bundle := loadZoomBundle(t)
 	if bundle.Certification == nil {
@@ -966,11 +1222,274 @@ func TestCertificationCandidatesDescribeOneBoundedReadAndDeferWrites(t *testing.
 		t.Error("self-read candidate must supply both declared user path flag forms as me")
 	}
 	mutations := bundle.Certification.MutationGeneration
-	if mutations == nil || mutations.Cohort.CommandCount != 204 || !reflect.DeepEqual(mutations.Cohort.Intents, []string{"reverse_etl"}) {
-		t.Fatalf("mutation candidate generation = %+v, want all 204 reverse-ETL actions", mutations)
+	if mutations == nil || mutations.Cohort.CommandCount != 206 || !reflect.DeepEqual(mutations.Cohort.Intents, []string{"reverse_etl"}) {
+		t.Fatalf("mutation candidate generation = %+v, want all 206 reverse-ETL actions", mutations)
 	}
-	if len(mutations.Families) != 1 || mutations.Families[0].ID != "generic_typed_destination_executor_deferred" || mutations.Families[0].Classification.Code != "unassessed" {
-		t.Errorf("mutation candidate containment = %+v, want one explicitly deferred generic-destination family", mutations.Families)
+	if len(mutations.Families) != 1 || mutations.Families[0].ID != "declared_typed_destination_proof_pending" || mutations.Families[0].Classification.Code != "unassessed" {
+		t.Errorf("mutation candidate containment = %+v, want one declared-destination family awaiting fixture and live proof", mutations.Families)
+	}
+}
+
+// TestReverseETLEligibilityDisposesEveryTypedAction keeps destination
+// eligibility separate from direct CLI reachability. A destructive or
+// privileged action stays user-reachable; only an exact source-record mapping
+// or the one-action-per-mode closed destination contract can constrain its
+// transport selection.
+func TestReverseETLEligibilityDisposesEveryTypedAction(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	var ledger struct {
+		Summary struct {
+			TypedActions                          int `json:"typed_actions"`
+			DirectCLIReachable                    int `json:"direct_cli_reachable"`
+			ExactRecordDrivenSourceMappings       int `json:"exact_record_driven_source_mappings"`
+			SelectedByCurrentApplyStrategy        int `json:"selected_by_current_apply_strategy"`
+			PendingDestinationActionMultiplicity  int `json:"pending_destination_action_multiplicity"`
+			DirectCLIOnlyMissingExactSourceFields int `json:"direct_cli_only_missing_exact_source_fields"`
+			DirectCLIOnlyNoSourceKey              int `json:"direct_cli_only_no_source_key"`
+			Certified                             int `json:"certified"`
+		} `json:"summary"`
+		Actions []struct {
+			Action              string `json:"action"`
+			Command             string `json:"command"`
+			ImplementationState string `json:"implementation_state"`
+			Destination         struct {
+				Status                  string `json:"status"`
+				DeclaredEligible        bool   `json:"declared_eligible"`
+				SelectedByApplyStrategy bool   `json:"selected_by_apply_strategy"`
+				SemanticExclusion       string `json:"semantic_exclusion"`
+			} `json:"destination"`
+		} `json:"actions"`
+	}
+	raw, err := os.ReadFile("reverse-etl-eligibility.json")
+	if err != nil {
+		t.Fatalf("read reverse ETL eligibility: %v", err)
+	}
+	if err := json.Unmarshal(raw, &ledger); err != nil {
+		t.Fatalf("decode reverse ETL eligibility: %v", err)
+	}
+
+	if got, want := ledger.Summary.TypedActions, len(bundle.Writes); got != want {
+		t.Fatalf("eligibility typed actions = %d, want %d", got, want)
+	}
+	if got := ledger.Summary.DirectCLIReachable; got != 206 {
+		t.Errorf("directly CLI-reachable actions = %d, want 206", got)
+	}
+	if got := ledger.Summary.ExactRecordDrivenSourceMappings; got != 8 {
+		t.Errorf("exact record-driven source mappings = %d, want 8", got)
+	}
+	if got := ledger.Summary.SelectedByCurrentApplyStrategy; got != 1 {
+		t.Errorf("currently selected destination actions = %d, want 1", got)
+	}
+	if got := ledger.Summary.PendingDestinationActionMultiplicity; got != 7 {
+		t.Errorf("actions pending destination multiplicity = %d, want 7", got)
+	}
+	if got := ledger.Summary.DirectCLIOnlyMissingExactSourceFields; got != 197 {
+		t.Errorf("direct-CLI-only actions missing source fields = %d, want 197", got)
+	}
+	if got := ledger.Summary.DirectCLIOnlyNoSourceKey; got != 1 {
+		t.Errorf("direct-CLI-only actions without source key = %d, want 1", got)
+	}
+	if got := ledger.Summary.Certified; got != 0 {
+		t.Errorf("certified reverse-ETL actions = %d, want 0", got)
+	}
+
+	seen := make(map[string]bool, len(ledger.Actions))
+	selected, multiplicityPending := 0, 0
+	for _, action := range ledger.Actions {
+		if action.Action == "" || action.Command == "" {
+			t.Errorf("eligibility entry is missing action or command: %+v", action)
+			continue
+		}
+		if seen[action.Action] {
+			t.Errorf("eligibility repeats action %q", action.Action)
+		}
+		seen[action.Action] = true
+		if action.ImplementationState != "implemented_user_reachable" {
+			t.Errorf("action %q implementation state = %q, want implemented_user_reachable", action.Action, action.ImplementationState)
+		}
+		switch action.Destination.Status {
+		case "selected_pending_application_dispatch":
+			selected++
+			if !action.Destination.DeclaredEligible || !action.Destination.SelectedByApplyStrategy {
+				t.Errorf("selected action %q lacks declared destination selection", action.Action)
+			}
+		case "eligible_pending_action_multiplicity":
+			multiplicityPending++
+			if !action.Destination.DeclaredEligible || action.Destination.SelectedByApplyStrategy {
+				t.Errorf("multiplicity-pending action %q has invalid selection state", action.Action)
+			}
+		case "direct_cli_only_missing_exact_source_fields", "direct_cli_only_no_source_key":
+			if action.Destination.DeclaredEligible || action.Destination.SemanticExclusion == "" {
+				t.Errorf("direct-only action %q lacks exact semantic exclusion", action.Action)
+			}
+		default:
+			t.Errorf("action %q has unknown destination status %q", action.Action, action.Destination.Status)
+		}
+	}
+	if got, want := len(seen), len(bundle.Writes); got != want {
+		t.Errorf("eligibility action entries = %d, want %d", got, want)
+	}
+	if selected != 1 || multiplicityPending != 7 {
+		t.Errorf("destination selection states selected=%d multiplicity-pending=%d, want 1/7", selected, multiplicityPending)
+	}
+}
+
+// TestLaneOwnedMeetingLifecycleActionsAreClosedAndReachable defines the one
+// reversible provider workflow used by final live certification. It is a
+// narrow typed contract, not a generic JSON writer: a lane-created scheduled
+// meeting can be created, independently read, updated, and deleted.
+func TestLaneOwnedMeetingLifecycleActionsAreClosedAndReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+
+	for _, want := range []struct {
+		name   string
+		method string
+		path   string
+		fields []string
+	}{
+		{name: "zoom_meetings_meetingcreate", method: http.MethodPost, path: "/v2/users/{{ record.user_id }}/meetings", fields: []string{"user_id", "topic", "type", "start_time"}},
+		{name: "zoom_meetings_meetingupdate", method: http.MethodPatch, path: "/v2/meetings/{{ record.meeting_id }}", fields: []string{"meeting_id", "topic"}},
+		{name: "zoom_meetings_meetingdelete", method: http.MethodDelete, path: "/v2/meetings/{{ record.meetingId }}", fields: []string{"meetingId"}},
+	} {
+		action, ok := actions[want.name]
+		if !ok {
+			t.Errorf("missing lane-owned meeting lifecycle action %q", want.name)
+			continue
+		}
+		if action.Method != want.method || action.Path != want.path {
+			t.Errorf("action %q route = %s %s, want %s %s", want.name, action.Method, action.Path, want.method, want.path)
+		}
+		for _, field := range want.fields {
+			if !strings.Contains(string(action.RecordSchema), `"`+field+`"`) {
+				t.Errorf("action %q record schema lacks %q", want.name, field)
+			}
+		}
+	}
+
+	commands := make(map[string]connectors.CommandSurfaceCommand, len(connector.CommandSurface().Commands))
+	for _, command := range connector.CommandSurface().Commands {
+		commands[command.Write] = command
+	}
+	for _, action := range []string{"zoom_meetings_meetingcreate", "zoom_meetings_meetingupdate", "zoom_meetings_meetingdelete"} {
+		command, ok := commands[action]
+		if !ok || command.Intent != "reverse_etl" || command.Availability != "implemented" {
+			t.Errorf("lifecycle action %q command = %+v, want implemented reverse-ETL command", action, command)
+		}
+	}
+
+	checks := make(map[string]conformance.CheckResult)
+	for _, check := range conformance.RunBundle(bundle).Checks {
+		checks[check.Name] = check
+	}
+	for _, action := range []string{"zoom_meetings_meetingcreate", "zoom_meetings_meetingupdate", "zoom_meetings_meetingdelete"} {
+		check, ok := checks["write_request_shape:"+action]
+		if !ok || !check.Passed || check.Skipped {
+			t.Errorf("lifecycle fixture %q conformance = %+v, want passed replay request-shape check", action, check)
+		}
+	}
+}
+
+// TestSevenSurfaceReadinessAccountsForEveryProviderIdentity makes the
+// committed reconciliation ledger the source of truth for source provenance,
+// seven-surface bindings, implementation state, and certification limits.
+func TestSevenSurfaceReadinessAccountsForEveryProviderIdentity(t *testing.T) {
+	var ledger struct {
+		Summary struct {
+			DocumentedSourceOperations          int `json:"documented_source_operations"`
+			ReconciliationRecords               int `json:"reconciliation_records"`
+			DeclaredOperationContracts          int `json:"declared_operation_contracts"`
+			CommandBound                        int `json:"command_bound"`
+			TypedActionBound                    int `json:"typed_action_bound"`
+			ETLBoundStreams                     int `json:"etl_bound_streams"`
+			ReverseETLCommandBound              int `json:"reverse_etl_command_bound"`
+			ReverseETLExactSourceMappings       int `json:"reverse_etl_exact_source_mappings"`
+			ReverseETLSelectedByCurrentStrategy int `json:"reverse_etl_selected_by_current_strategy"`
+			BinaryBoundExecutable               int `json:"binary_bound_executable"`
+			Disabled                            int `json:"disabled"`
+			Uncertified                         int `json:"uncertified"`
+			Certified                           int `json:"certified"`
+		} `json:"summary"`
+		Operations []struct {
+			Identity struct {
+				Method   string `json:"method"`
+				Path     string `json:"path"`
+				SourceID string `json:"source_id"`
+			} `json:"identity"`
+			ProviderSource      json.RawMessage            `json:"provider_source"`
+			ParityClass         string                     `json:"parity_class"`
+			Bindings            json.RawMessage            `json:"bindings"`
+			SevenSurface        map[string]json.RawMessage `json:"seven_surface"`
+			ImplementationState string                     `json:"implementation_state"`
+			Certification       struct {
+				State string          `json:"state"`
+				Gap   json.RawMessage `json:"gap"`
+			} `json:"certification"`
+		} `json:"operations"`
+	}
+	raw, err := os.ReadFile(filepath.Join("sources", "zoom-seven-surface-readiness.json"))
+	if err != nil {
+		t.Fatalf("read seven-surface readiness: %v", err)
+	}
+	if err := json.Unmarshal(raw, &ledger); err != nil {
+		t.Fatalf("decode seven-surface readiness: %v", err)
+	}
+	if ledger.Summary.DocumentedSourceOperations != 1937 || ledger.Summary.ReconciliationRecords != 1939 || len(ledger.Operations) != 1939 {
+		t.Fatalf("readiness identity totals = documented:%d reconciled:%d records:%d, want 1937/1939/1939", ledger.Summary.DocumentedSourceOperations, ledger.Summary.ReconciliationRecords, len(ledger.Operations))
+	}
+	if ledger.Summary.DeclaredOperationContracts != 1748 || ledger.Summary.CommandBound != 714 || ledger.Summary.TypedActionBound != 206 {
+		t.Errorf("readiness declaration totals = contracts:%d commands:%d actions:%d, want 1748/714/206", ledger.Summary.DeclaredOperationContracts, ledger.Summary.CommandBound, ledger.Summary.TypedActionBound)
+	}
+	if ledger.Summary.ETLBoundStreams != 3 || ledger.Summary.ReverseETLCommandBound != 206 || ledger.Summary.ReverseETLExactSourceMappings != 8 || ledger.Summary.ReverseETLSelectedByCurrentStrategy != 1 {
+		t.Errorf("readiness transport totals = ETL:%d reverse commands:%d exact mappings:%d selected:%d, want 3/206/8/1", ledger.Summary.ETLBoundStreams, ledger.Summary.ReverseETLCommandBound, ledger.Summary.ReverseETLExactSourceMappings, ledger.Summary.ReverseETLSelectedByCurrentStrategy)
+	}
+	if ledger.Summary.BinaryBoundExecutable != 0 || ledger.Summary.Disabled != 1155 || ledger.Summary.Uncertified != 1939 || ledger.Summary.Certified != 0 {
+		t.Errorf("readiness availability totals = binary:%d disabled:%d uncertified:%d certified:%d, want 0/1155/1939/0", ledger.Summary.BinaryBoundExecutable, ledger.Summary.Disabled, ledger.Summary.Uncertified, ledger.Summary.Certified)
+	}
+
+	seen, sourced, commands := make(map[string]bool, len(ledger.Operations)), 0, 0
+	for _, operation := range ledger.Operations {
+		key := operation.Identity.Method + " " + operation.Identity.Path
+		if operation.Identity.Method == "" || operation.Identity.Path == "" || operation.ParityClass == "" || operation.ImplementationState == "" {
+			t.Errorf("readiness operation has incomplete identity/state: %+v", operation)
+			continue
+		}
+		if seen[key] {
+			t.Errorf("readiness repeats operation %q", key)
+		}
+		seen[key] = true
+		if len(operation.ProviderSource) == 0 || len(operation.Bindings) == 0 || operation.Certification.State != "uncertified" || len(operation.Certification.Gap) == 0 {
+			t.Errorf("readiness operation %q lacks provenance, binding, or certification gap", key)
+		}
+		if operation.Identity.SourceID != "" {
+			sourced++
+		}
+		if len(operation.SevenSurface) != 7 {
+			t.Errorf("readiness operation %q seven-surface cells = %d, want 7", key, len(operation.SevenSurface))
+		}
+		for _, surface := range []string{"binary_read", "binary_write", "direct_read", "direct_write", "etl", "reverse_etl", "cli_command"} {
+			if len(operation.SevenSurface[surface]) == 0 {
+				t.Errorf("readiness operation %q is missing %s surface", key, surface)
+			}
+		}
+		var binding struct {
+			CLICommand *struct{} `json:"cli_command"`
+		}
+		if err := json.Unmarshal(operation.Bindings, &binding); err != nil {
+			t.Errorf("decode readiness bindings for %q: %v", key, err)
+		} else if binding.CLICommand != nil {
+			commands++
+		}
+	}
+	if got := len(seen); got != 1939 {
+		t.Errorf("unique readiness identities = %d, want 1939", got)
+	}
+	if sourced != 1937 || commands != 714 {
+		t.Errorf("readiness provenance/command counts = %d/%d, want 1937/714", sourced, commands)
 	}
 }
 
@@ -1025,12 +1544,9 @@ func TestRunnableOperationContractsHaveCommands(t *testing.T) {
 	}
 
 	type disposition struct {
-		Method string `json:"method"`
-		Path   string `json:"path"`
-		State  string `json:"state"`
-		Source struct {
-			Prerequisites any `json:"prerequisites"`
-		} `json:"source"`
+		Method    string `json:"method"`
+		Path      string `json:"path"`
+		State     string `json:"state"`
 		Rejection *struct {
 			Reason string `json:"reason"`
 		} `json:"rejection"`
@@ -1049,7 +1565,6 @@ func TestRunnableOperationContractsHaveCommands(t *testing.T) {
 		t.Fatalf("decode declaration disposition: %v", err)
 	}
 
-	paid := make(map[string]bool, len(report.LedgerDispositions))
 	runnable := make(map[string]bool, len(report.LedgerDispositions))
 	for _, row := range report.LedgerDispositions {
 		if row.Rejection != nil && (row.Rejection.Reason == "requires-elevated-scope" || row.Rejection.Reason == "unsafe-to-exercise") {
@@ -1058,8 +1573,6 @@ func TestRunnableOperationContractsHaveCommands(t *testing.T) {
 		if row.Declaration.ID == "" {
 			continue
 		}
-		prerequisites := strings.ToLower(strings.TrimSpace(stringifyZoomPrerequisites(row.Source.Prerequisites)))
-		paid[row.Declaration.ID] = row.Rejection != nil && row.Rejection.Reason == "requires-paid-tier" || zoomPrerequisitesRequirePaidTier(prerequisites)
 		runnable[row.Declaration.ID] = row.State == "implemented-pending-certification"
 	}
 
@@ -1079,12 +1592,6 @@ func TestRunnableOperationContractsHaveCommands(t *testing.T) {
 
 	wantReads, wantWrites, wantDeletes := 0, 0, 0
 	for _, operation := range bundle.Operations {
-		if paid[operation.ID] {
-			if command, ok := commands[operation.ID]; ok && command.Availability == "implemented" {
-				t.Errorf("paid-tier operation %q must not have an implemented command %q", operation.ID, command.Path)
-			}
-			continue
-		}
 		if !runnable[operation.ID] {
 			continue
 		}
@@ -1104,8 +1611,8 @@ func TestRunnableOperationContractsHaveCommands(t *testing.T) {
 	if wantReads != 505 || wantWrites != 202 || wantDeletes != 185 {
 		t.Fatalf("runnable cohort reads=%d writes=%d deletes=%d, want 505/202/185", wantReads, wantWrites, wantDeletes)
 	}
-	if got := len(connector.CommandSurface().Commands); got != 712 {
-		t.Fatalf("Zoom runnable CLI commands = %d, want 712", got)
+	if got := len(connector.CommandSurface().Commands); got != 714 {
+		t.Fatalf("Zoom runnable CLI commands = %d, want 714", got)
 	}
 }
 
@@ -1214,32 +1721,6 @@ func zoomWriteActionName(operationID string) string {
 	name := strings.TrimPrefix(operationID, "zoom.")
 	name = strings.NewReplacer(".", "_", "-", "_").Replace(name)
 	return "zoom_" + name
-}
-
-func stringifyZoomPrerequisites(value any) string {
-	switch typed := value.(type) {
-	case string:
-		return typed
-	case []any:
-		parts := make([]string, 0, len(typed))
-		for _, item := range typed {
-			parts = append(parts, stringifyZoomPrerequisites(item))
-		}
-		return strings.Join(parts, " ")
-	default:
-		return ""
-	}
-}
-
-func zoomPrerequisitesRequirePaidTier(prerequisites string) bool {
-	for _, marker := range []string{
-		"paid", "pro or a higher", "pro or higher", "pro plan", "business", "education", "api plan", "webinar plan", "webinar add-on", "webinar add on", "zoom room license", "zoom rooms license", "licensed user", "licensed or an on-prem license", "video sdk account", "subscription",
-	} {
-		if strings.Contains(prerequisites, marker) {
-			return true
-		}
-	}
-	return false
 }
 
 // TestCoveredStreamCommandsExecuteWithFixtures runs each Wave 1 command

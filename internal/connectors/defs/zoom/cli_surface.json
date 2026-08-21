@@ -24768,7 +24768,7 @@
           "name": "user-id",
           "type": "string",
           "summary": "Zoom path parameter userId.",
-          "maps_to": "record.userId",
+          "maps_to": "record.user_id",
           "required": true,
           "allow_empty": false
         },
@@ -25138,7 +25138,7 @@
           "name": "user-id",
           "type": "string",
           "summary": "Zoom path parameter userId.",
-          "maps_to": "record.userId",
+          "maps_to": "record.user_id",
           "required": true,
           "allow_empty": false
         },
@@ -26899,6 +26899,80 @@
       "notes": "Provider OAuth scopes: meeting:delete:open_app, meeting:delete:open_app:admin, meeting:write, meeting:write:admin. A missing scope is surfaced by Zoom as a provider 403 at runtime."
     },
     {
+      "path": "api meetings meetingcreate",
+      "summary": "Create a scheduled meeting",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "zoom_meetings_meetingcreate",
+      "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/meetings.json?slug=meetings",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom path parameter userId.",
+          "maps_to": "record.user_id",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "topic",
+          "type": "string",
+          "summary": "Meeting topic.",
+          "maps_to": "record.topic",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "type",
+          "type": "integer",
+          "summary": "Scheduled meeting type (2).",
+          "maps_to": "record.type",
+          "required": true,
+          "values": [
+            "2"
+          ]
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "format": "date-time",
+          "summary": "Scheduled meeting start time as RFC3339.",
+          "maps_to": "record.start_time",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "duration",
+          "type": "integer",
+          "summary": "Meeting duration in minutes.",
+          "maps_to": "record.duration"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "Meeting timezone.",
+          "maps_to": "record.timezone",
+          "allow_empty": false
+        },
+        {
+          "name": "agenda",
+          "type": "string",
+          "summary": "Meeting agenda.",
+          "maps_to": "record.agenda",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/users/{userId}/meetings"
+        }
+      ],
+      "notes": "Provider OAuth scopes: meeting:write, meeting:write:admin, meeting:write:meeting, meeting:write:meeting:admin. This narrow typed contract is used only for lane-owned live lifecycle proof."
+    },
+    {
       "path": "api meetings meetingdelete",
       "summary": "Delete a meeting",
       "intent": "reverse_etl",
@@ -26942,6 +27016,68 @@
         }
       ],
       "notes": "Provider OAuth scopes: meeting:delete:meeting, meeting:delete:meeting:admin, meeting:write, meeting:write:admin. A missing scope is surfaced by Zoom as a provider 403 at runtime."
+    },
+    {
+      "path": "api meetings meetingupdate",
+      "summary": "Update a meeting",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "zoom_meetings_meetingupdate",
+      "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/meetings.json?slug=meetings",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "flags": [
+        {
+          "name": "meeting-id",
+          "type": "integer",
+          "summary": "Zoom path parameter meetingId.",
+          "maps_to": "record.meeting_id",
+          "required": true
+        },
+        {
+          "name": "topic",
+          "type": "string",
+          "summary": "Replacement meeting topic.",
+          "maps_to": "record.topic",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "format": "date-time",
+          "summary": "Replacement start time as RFC3339.",
+          "maps_to": "record.start_time",
+          "allow_empty": false
+        },
+        {
+          "name": "duration",
+          "type": "integer",
+          "summary": "Replacement duration in minutes.",
+          "maps_to": "record.duration"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "Replacement timezone.",
+          "maps_to": "record.timezone",
+          "allow_empty": false
+        },
+        {
+          "name": "agenda",
+          "type": "string",
+          "summary": "Replacement meeting agenda.",
+          "maps_to": "record.agenda",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/meetings/{meetingId}"
+        }
+      ],
+      "notes": "Provider OAuth scopes: meeting:update:meeting, meeting:update:meeting:admin, meeting:write, meeting:write:admin. This narrow typed contract is used only for lane-owned live lifecycle proof."
     },
     {
       "path": "api meetings meetingpolldelete",
@@ -27756,7 +27892,7 @@
           "name": "user-id",
           "type": "string",
           "summary": "Zoom path parameter userId.",
-          "maps_to": "record.userId",
+          "maps_to": "record.user_id",
           "required": true,
           "allow_empty": false
         }
@@ -28038,7 +28174,7 @@
           "name": "user-id",
           "type": "string",
           "summary": "Zoom path parameter userId.",
-          "maps_to": "record.userId",
+          "maps_to": "record.user_id",
           "required": true,
           "allow_empty": false
         },
@@ -28072,7 +28208,7 @@
           "name": "user-id",
           "type": "string",
           "summary": "Zoom path parameter userId.",
-          "maps_to": "record.userId",
+          "maps_to": "record.user_id",
           "required": true,
           "allow_empty": false
         },
@@ -28176,7 +28312,7 @@
           "name": "user-id",
           "type": "string",
           "summary": "Zoom path parameter userId.",
-          "maps_to": "record.userId",
+          "maps_to": "record.user_id",
           "required": true,
           "allow_empty": false
         }
@@ -28238,7 +28374,7 @@
           "name": "user-id",
           "type": "string",
           "summary": "Zoom path parameter userId.",
-          "maps_to": "record.userId",
+          "maps_to": "record.user_id",
           "required": true,
           "allow_empty": false
         }
@@ -28265,7 +28401,7 @@
           "name": "user-id",
           "type": "string",
           "summary": "Zoom path parameter userId.",
-          "maps_to": "record.userId",
+          "maps_to": "record.user_id",
           "required": true,
           "allow_empty": false
         }

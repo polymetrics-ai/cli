@@ -88,22 +88,22 @@
   },
   "mutation_generation": {
     "cohort": {
-      "name": "generic_destination_deferred",
-      "command_count": 204,
+      "name": "declared_destination_proof_pending",
+      "command_count": 206,
       "intents": [
         "reverse_etl"
       ]
     },
     "unassessed": {
       "code": "unassessed",
-      "evidence": "no connector-neutral typed destination executor exists; see foundation gap generic-typed-destination-executor"
+      "evidence": "the one declaration-eligible Zoom destination lacks a connector-owned fixture and live create/readback/cleanup proof; all other typed actions remain command-reachable but have no exact source binding"
     },
     "families": [
       {
-        "id": "generic_typed_destination_executor_deferred",
+        "id": "declared_typed_destination_proof_pending",
         "classification": {
           "code": "unassessed",
-          "evidence": "all Zoom reverse-ETL actions are deferred until a connector-neutral typed destination executor can bind a declared action, source bindings, acknowledgement, and per-mode apply strategies"
+          "evidence": "Zoom declares one exact typed destination action with source binding, acknowledgement, and apply strategy, but it has no connector-owned fixture or reversible live create/readback/cleanup proof; the remaining typed actions are independently CLI-reachable and remain outside this exact transport binding"
         },
         "intents": [
           "reverse_etl"

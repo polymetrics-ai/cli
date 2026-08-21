@@ -15,9 +15,9 @@
   "summary": {
     "api_surface_rows": 1913,
     "source_only_rows": 26,
-    "declared_current_branch": 5,
+    "declared_current_branch": 7,
     "declared_pending_parent_integration": 70,
-    "disabled_api_surface_rows": 1131,
+    "disabled_api_surface_rows": 1129,
     "disabled_source_only_rows": 26,
     "operation_inventory_entries": 1748,
     "operation_inventory_by_kind": [
@@ -68,7 +68,7 @@
     "rejected_by_reason": [
       {
         "key": "foundation-gap",
-        "count": 538
+        "count": 536
       },
       {
         "key": "schema-incompatible",
@@ -86,7 +86,7 @@
     "rejected_api_surface_by_reason": [
       {
         "key": "foundation-gap",
-        "count": 538
+        "count": 536
       },
       {
         "key": "schema-incompatible",
@@ -108,7 +108,7 @@
         "restricted_contracts": 396,
         "restricted_delete_contracts": 141,
         "direct_operation_terminal_commands": 0,
-        "alternate_typed_write_actions": 202
+        "alternate_typed_write_actions": 204
       },
       "rest_write_root_json_input": {
         "source_contracts": 471,
@@ -126,17 +126,22 @@
         "source_contracts": 1,
         "terminal_commands": 0
       },
-    "declarative_stream_source_transport": {
-      "existing_streams": 3,
-      "declared_sync_transport": true,
-      "executor": "declarative_api/declarative_stream_source",
-      "conformance": "declarative_stream_transport/zoom_users_meetings_webinars_v1"
-    },
-    "generic_typed_destination_executor": {
-      "typed_write_actions": 204,
-      "declared_destination_transport": false,
-      "foundation_gap": "generic-typed-destination-executor"
-    },
+      "declarative_stream_source_transport": {
+        "existing_streams": 3,
+        "declared_sync_transport": true,
+        "executor": "declarative_api/declarative_stream_source",
+        "conformance": "declarative_stream_transport/zoom_users_meetings_webinars_v1"
+      },
+      "declarative_typed_destination_transport": {
+        "typed_write_actions": 206,
+        "declared_destination_transport": true,
+        "eligible_actions": 8,
+        "selected_action": "zoom_users_userssotokendelete",
+        "pending_action_multiplicity": 7,
+        "source_binding": "users.id -> user_id",
+        "mode": "full_append",
+        "application_dispatch": "pending the updated fm/cli-reverse-etl-destination-r1 head; definition-level validation is not an application-level deployability claim"
+      },
       "operation_specific_fixture_evidence_projection": {
         "operation_rest_read_contracts": 776,
         "live_proven_candidates": 1,
@@ -155,21 +160,21 @@
         "foundation_gap": "capability-scoped-live-evidence-publication"
       },
       "schedule_roundtrip_source_only_skip": {
-        "source_only_streams": 3,
+        "streams_without_a_declared_flow_fixture": 3,
         "foundation_gap": "schedule-roundtrip-source-only-skip"
       }
     },
-    "implemented_pending_certification": 707,
-    "runnable_cli_commands": 712,
-    "runnable_write_actions": 204,
+    "implemented_pending_certification": 709,
+    "runnable_cli_commands": 714,
+    "runnable_write_actions": 206,
     "runnable_delete_actions": 185
   },
   "notes": [
     "An operations.json entry is a source-contract inventory declaration, not an executable terminal command or api_surface coverage claim.",
     "The 70 direct reads owned by Wave 2 remain external until their parent integration; this branch does not duplicate them.",
-    "writes.json contains 204 typed actions, including 185 provider DELETE actions. They are guarded reverse-ETL commands, not invented generic HTTP writes.",
-    "sync_transport.json declares Zoom's three source streams using the connector-neutral declarative_stream_source executor. A Zoom destination transport is not declared because generic-typed-destination-executor remains a foundation gap.",
-    "Runnable-command correction: 505 scalar-parameter reads and 202 no-body writes are implemented pending certification; elevated OAuth scope is runtime metadata, not a disable reason."
+    "writes.json contains 206 typed actions, including 185 provider DELETE actions. They are guarded reverse-ETL commands, not invented generic HTTP writes.",
+    "sync_transport.json declares Zoom's three source streams and eight exact connector-neutral typed destination actions. One full_append strategy selects zoom_users_userssotokendelete; seven source-mappable actions are explicitly pending the one-action-per-mode selection limit. The destination remains implemented-but-uncertified and is not application-level deployable until the updated #4304 persisted-App dispatch integration is merged and exercised.",
+    "Runnable-command correction: 505 scalar-parameter reads, 202 no-body writes, and two narrow Meeting JSON-body lifecycle writes are implemented pending certification; elevated OAuth scope is runtime metadata, not a disable reason."
   ],
   "ledger_dispositions": [
     {
@@ -39124,9 +39129,9 @@
       "path": "/v2/meetings/{meetingId}",
       "api_surface": {
         "model": "sensitive_reverse_etl",
-        "status": "blocked",
+        "status": "implemented",
         "risk": "high",
-        "blocked_by_default": true
+        "blocked_by_default": false
       },
       "source": {
         "source_lock": "sources/zoom-operation-source-lock.json",
@@ -39142,40 +39147,14 @@
         ],
         "prerequisites": []
       },
-      "state": "disabled",
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The pinned operation retains a JSON content type but no root request-body schema. The current CLI cannot safely pass a typed root JSON document to a REST write without inventing a wrapper field.",
-        "foundation_gap": {
-          "id": "operation-backed-rest-write-api-surface-coverage",
-          "tracking": "#4281",
-          "evidence": [
-            "internal/connectors/engine/bundle.go:679-721 only admits covered_by.operations for fixed GraphQL operation kinds, rejecting REST rest_write coverage.",
-            "cmd/connectorgen/validate.go:696-721 repeats the REST operation coverage restriction."
-          ],
-          "minimal_change": "Admit an exact REST rest_write operation identity, method, path, policy, and request-contract binding without treating it as a GraphQL operation."
-        },
-        "evidence": {
-          "source_lock": "sources/zoom-operation-source-lock.json",
-          "crosswalk": "sources/zoom-operation-crosswalk.json",
-          "source_id": "zoom.rest/meetings/meetingUpdate",
-          "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/meetings.json?slug=meetings",
-          "source_location": "paths[\"/meetings/{meetingId}\"].patch",
-          "auth_scopes": [
-            "meeting:update:meeting",
-            "meeting:update:meeting:admin",
-            "meeting:write",
-            "meeting:write:admin"
-          ],
-          "prerequisites": []
-        }
-      },
+      "state": "implemented-pending-certification",
+      "rejection": null,
       "declaration": {
-        "kind": "rest_write",
+        "kind": "write_action",
         "id": "zoom.meetings.meetingupdate",
-        "status": "source-contract inventory only; no terminal command",
-        "mutation_class": "update"
+        "write_action": "zoom_meetings_meetingupdate",
+        "command_path": "api meetings meetingupdate",
+        "certification": "fixture and live evidence pending"
       }
     },
     {
@@ -39470,9 +39449,9 @@
       "path": "/v2/users/{userId}/meetings",
       "api_surface": {
         "model": "sensitive_reverse_etl",
-        "status": "blocked",
+        "status": "implemented",
         "risk": "high",
-        "blocked_by_default": true
+        "blocked_by_default": false
       },
       "source": {
         "source_lock": "sources/zoom-operation-source-lock.json",
@@ -39488,40 +39467,14 @@
         ],
         "prerequisites": "* A meeting's `start_url` value is the URL a host or an alternative host can use to start a meeting. The `start_url` value's expiration time is **two hours** for all regular users.\n* For `custCreate` meeting hosts - users created with the `custCreate` parameter via the [**Create users**](/docs/api/users/#tag/users/POST/users) API - the expiration time of the `start_url` parameter is **90 days** from the generation of the `start_url`.\n* For security reasons, the recommended way to programmatically get the updated `start_url` value after expiry is to call the [**Get a meeting**](/docs/api/meetings/#tag/meetings/GET/meetings/{meetingId}) API. Refer to the `start_url` value in the response.\n* **100 requests per day**. The rate limit is applied against the `userId` of the **meeting host** used to make the request."
       },
-      "state": "disabled",
-      "rejection": {
-        "reason": "foundation-gap",
-        "recoverable": true,
-        "detail": "The pinned operation retains a JSON content type but no root request-body schema. The current CLI cannot safely pass a typed root JSON document to a REST write without inventing a wrapper field.",
-        "foundation_gap": {
-          "id": "operation-backed-rest-write-api-surface-coverage",
-          "tracking": "#4281",
-          "evidence": [
-            "internal/connectors/engine/bundle.go:679-721 only admits covered_by.operations for fixed GraphQL operation kinds, rejecting REST rest_write coverage.",
-            "cmd/connectorgen/validate.go:696-721 repeats the REST operation coverage restriction."
-          ],
-          "minimal_change": "Admit an exact REST rest_write operation identity, method, path, policy, and request-contract binding without treating it as a GraphQL operation."
-        },
-        "evidence": {
-          "source_lock": "sources/zoom-operation-source-lock.json",
-          "crosswalk": "sources/zoom-operation-crosswalk.json",
-          "source_id": "zoom.rest/meetings/meetingCreate",
-          "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/meetings.json?slug=meetings",
-          "source_location": "paths[\"/users/{userId}/meetings\"].post",
-          "auth_scopes": [
-            "meeting:write",
-            "meeting:write:admin",
-            "meeting:write:meeting",
-            "meeting:write:meeting:admin"
-          ],
-          "prerequisites": "* A meeting's `start_url` value is the URL a host or an alternative host can use to start a meeting. The `start_url` value's expiration time is **two hours** for all regular users.\n* For `custCreate` meeting hosts - users created with the `custCreate` parameter via the [**Create users**](/docs/api/users/#tag/users/POST/users) API - the expiration time of the `start_url` parameter is **90 days** from the generation of the `start_url`.\n* For security reasons, the recommended way to programmatically get the updated `start_url` value after expiry is to call the [**Get a meeting**](/docs/api/meetings/#tag/meetings/GET/meetings/{meetingId}) API. Refer to the `start_url` value in the response.\n* **100 requests per day**. The rate limit is applied against the `userId` of the **meeting host** used to make the request."
-        }
-      },
+      "state": "implemented-pending-certification",
+      "rejection": null,
       "declaration": {
-        "kind": "rest_write",
+        "kind": "write_action",
         "id": "zoom.meetings.meetingcreate",
-        "status": "source-contract inventory only; no terminal command",
-        "mutation_class": "create"
+        "write_action": "zoom_meetings_meetingcreate",
+        "command_path": "api meetings meetingcreate",
+        "certification": "fixture and live evidence pending"
       }
     },
     {

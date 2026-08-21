@@ -1052,7 +1052,7 @@
         "sync_mode": "full_append",
         "primitive": "api_write_from_warehouse",
         "applicable": true,
-        "declared": false,
+        "declared": true,
         "implemented": false,
         "fixture_tested": false,
         "live_tested": false,

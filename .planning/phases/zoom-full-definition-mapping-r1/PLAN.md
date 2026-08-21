@@ -6,24 +6,24 @@ Base: `origin/main` at `acb85dc03`
 ## Task Delivery Header
 
 - Issue: Refs #4265 — Zoom connector parity mapping session.
-- Base branch: `main` at `362d7ccf9`.
-- Merges into: `fm/cli-zoom-full-definition-mapping-r1` → `main` through the existing draft parent PR #4285; captain approval remains required for any main merge.
-- Delivery: a committed, locally-verified Zoom command surface, typed write actions, source contracts, source transport declaration, candidate declaration, and exhaustive disposition ledger. Certification proof is imported only for cells that have both an exact fixture and passing live proof; parent merge remains explicitly human-gated.
+- Base branch: `fm/cli-reverse-etl-destination-r1` at `d814875a902be684cb2a38b94f7a8077f66b70b1`.
+- Merges into: `fm/cli-zoom-full-definition-mapping-r1` → `fm/cli-reverse-etl-destination-r1` → `main` through the existing draft PR #4285; captain approval remains required for any main merge.
+- Delivery: a committed, locally-verified Zoom command surface, typed write actions, source and destination transport declarations, candidate declaration, and exhaustive seven-surface readiness ledger. Certification proof is imported only for cells that have both an exact fixture and passing live proof; PR #4285 remains draft and parent merge remains explicitly human-gated.
 - Working branch: `fm/cli-zoom-full-definition-mapping-r1`.
-- Task: pin public provider provenance, crosswalk Zoom's ledger, bind every executable source-backed contract to a runnable command and typed action where applicable, and record every other endpoint as disabled with evidence, a fixed-vocabulary reason, and recovery path.
-- Verification: focused Zoom bundle tests, `connectorgen validate`, `surface-sync --check`, `connector-boundary`, the required non-Zoom certification regression, and `make verify` before pushing.
+- Task: pin public provider provenance, crosswalk Zoom's ledger, bind every executable source-backed contract to a runnable command and typed action where applicable, declare the production typed reverse-ETL destination selected by #4304, and record every other endpoint as disabled only with a precise technical recovery path.
+- Verification: focused Zoom bundle tests, the targeted CI-timeout regression, `connectorgen validate`, generated certification artifacts, `surface-sync --check`, `connector-boundary`, the required non-Zoom certification regression, and `make verify` before pushing.
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
 | Every declared endpoint is tied to the pinned provider source and Zoom ledger | live | The committed crosswalk counts every provider and ledger identity; validation rejects a declaration that lacks a matching ledger endpoint. |
-| Every executable contract is user-reachable | local | `cli_surface.json` has 712 implemented commands bound to exact source contracts and `api_surface` rows; `writes.json` has 204 typed actions including 185 guarded deletes. |
+| Every executable contract is user-reachable | local | `cli_surface.json` has 714 implemented commands bound to exact source contracts and `api_surface` rows; `writes.json` has 206 typed actions including 185 guarded deletes. |
 | All non-delivered operations remain visible and actionable | local | The committed disposition ledger has one state, reason/evidence, and recoverability outcome per Zoom ledger endpoint. |
 | No shared engine/auth/generator code is changed | live | `make connector-boundary` and the changed-path review show only Zoom definitions plus required GSD evidence. |
 
 ## Authoritative inventory
 
-`api_surface.json` has 1,913 endpoints: 712 covered rows on this branch (the preserved three
-streams, two source-backed warehouse actions, 505 direct reads, and 202 newly typed actions) and
+`api_surface.json` has 1,913 endpoints: 714 covered rows on this branch (the preserved three
+streams, two source-backed warehouse actions, 505 direct reads, and 204 typed actions) and
 1,131 explicitly blocked operation rows. Operation models:
 846 direct reads, 684 sensitive reverse-ETL writes, 312 destructive actions, 11 admin reverse-ETL
 writes, one binary read, and 54 deprecated. Methods: 881 GET, 392 POST, 269 PATCH, 52 PUT, and 319
@@ -42,9 +42,23 @@ Every declaration must bind to a real API-surface row. The ledger provides metho
    `mutation_class=delete` and destructive confirmation. Hold body-schema, array-encoding,
    binary, upload, paid-tier, and source-mismatch cases in the disposition ledger; do not infer a
    substitute contract.
-4. Preserve the existing streams and derive only source-backed schemas/fixtures. Declare `sync_transport.json` only for the merged connector-neutral declarative source adapter; do not invent a reverse-ETL destination binding while the factory remains GitHub issue-label-specific.
+4. Preserve the existing streams and derive only source-backed schemas/fixtures. The initial checkpoint declared only the source adapter; the continuation adds a closed, connector-owned typed destination after #4304, never a generic writer.
 5. Generate a bounded direct-read candidate and all typed mutation candidate inventory. Read held OAuth values only at point of use, exchange them in memory, and import only fingerprint-only external proof.
 6. Generate the required declared/blocked/per-class/foundation-gap report. Record a live operation as uncertified when the matrix lacks its exact fixture projection.
+
+### Captain-required missing-foundation ledger continuation
+
+Before a foundation gap can be treated as a dependency, it must have a stable shared gap ID and
+an operation-level, source-locked fan-out. The connector-owned
+`sources/zoom-missing-foundation-gaps.json` therefore keeps one deduplicated gap catalog and one
+row for each affected Zoom provider operation. Each row joins the catalog to preserve the exact
+provider source URL, Next-data revision, document hash, operation identity, affected surface(s),
+runtime/validator evidence, owner, status, and closure verification. It deliberately records
+`merge_ready_enabled=false` for an open foundation gap while keeping any independently implemented
+CLI command's reachability fact separate; a foundation gap must never be relabelled as disabled or
+not-applicable to improve a count. Rollups are by source module batch and the one-connector
+portfolio, with each catalog item listing its complete Zoom operation fan-out. No shared or
+connector-specific workaround is authorized by this evidence work.
 
 ## Source-lock result (2026-08-19)
 
@@ -109,7 +123,7 @@ The implementation passes proceed in dependency order:
 Each pass gets focused no-credential preflight evidence and the command-count/rejection evidence is
 kept in the TDD ledger and verification record before the required full `make verify` gate.
 
-## Reverse-ETL merge-freeze readiness (2026-08-19)
+## Historical pre-#4304 merge-freeze readiness (2026-08-19)
 
 Issue #4303 is the estate-wide merge prerequisite. Its connector-neutral typed destination factory
 must select only a connector-owned named action, explicit source bindings, acknowledgement, per-mode
@@ -121,7 +135,55 @@ implemented Zoom `reverse_etl` command must name exactly one `writes.json` typed
 typed action must have exactly one generated mutation candidate with the same declaration ID. The
 audit currently proves 204 commands, 204 distinct typed actions, and 204 candidates (11 creates,
 8 updates, and 185 destructive deletes). A regression test keeps that future destination input
-complete while `generic-typed-destination-executor` remains the honest availability boundary.
+complete before the typed-destination foundation landed. This remains a useful one-to-one command/action/candidate invariant, not the current availability boundary.
+
+## Relaunch continuation — #4304 typed destination (2026-08-20)
+
+PR #4304 is now the exact stacked base. It was merged into this branch without rewriting
+published history and PR #4285 was retargeted to `fm/cli-reverse-etl-destination-r1` through
+the GitHub API. Its definition-composition factory resolves the former generic executor gap. Its
+persisted App/CLI dispatch integration is still owned by the updated #4304 head and remains a
+named dependency until that head is merged, proven an ancestor, and exercised.
+
+### Exact-SHA optional-query rehearsal (2026-08-22)
+
+Captain-approved Foundation SHA `c3f83cbf6eabbae00219566fb02719ca2d6c480d` was rehearsed only
+in an isolated detached temporary worktree. Its exact Zoom Meeting DELETE declaration emitted a
+fixture-approved loopback request while omitting absent `occurrence_id` and
+`cancel_meeting_reminder` query fields and retaining a present optional value. The full
+SHA-bound evidence is in [`FOUNDATION-REHEARSAL.md`](FOUNDATION-REHEARSAL.md). No Foundation
+ancestry was merged or pushed into the connector branch. The preserved branch stays RED for this
+fixture until Foundation reaches `main`; this rehearsal changes neither certification nor final
+merge readiness.
+
+The Zoom definition declares a truthful production destination template, not a generic writer: the
+existing `users` source stream supplies `id` to normalized `user_id` inputs (interpolated into the
+provider's `{userId}` path parameter) for eight exact record-driven typed actions. The route is
+restricted to `full_append` / `append`, uses the exact declarative source executor, declares durable
+warehouse acknowledgement and keyed replay, and carries its own conformance reference. The current
+closed one-action-per-mode strategy selects `zoom_users_userssotokendelete`; the other seven are
+allowlisted with explicit multiplicity-pending dispositions. All 206 actions remain implemented CLI
+commands with destructive confirmation and reverse-ETL approval as applicable. No live mutation is
+authorized by this declaration.
+
+The continuation also replaces the stale generic-destination deferral with an auditable
+seven-surface readiness ledger. Every documented source or ledger operation carries provider
+provenance, parity classification, command/action binding where declared, source/destination
+transport eligibility, implementation state, certification state, and a recoverable technical gap
+when not enabled. Destructive, privileged, uncommon, binary, or not-live-certified operations stay
+user-reachable whenever their established typed contract exists; only a named contract or executor
+limitation may keep an operation disabled.
+
+Before final delivery, fixture proof is insufficient. The connector additionally exposes the narrow
+source-backed Meeting create/update contracts required for the lane-owned reversible lifecycle.
+After merging the final updated #4304 head and
+proving it is an ancestor, build `pm` and use the registered Zoom secret-store reference only at
+process execution time to prove: authenticated read; a unique lane-owned create/read-back/update/
+delete-cleanup sequence; ETL; reverse-ETL plan/apply/acknowledgement plus independent provider
+read-back; and any documented, safely supported binary round-trip. No pre-existing resource,
+account/security operation, raw secret, token, provider response, or credential identifier may be
+stored in evidence. A missing secret reference or required scope is a keyed blocker, not a reason
+to certify from fixtures.
 
 ## Required skills
 

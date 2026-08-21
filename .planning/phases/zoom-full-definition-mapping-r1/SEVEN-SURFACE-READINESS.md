@@ -1,0 +1,107 @@
+# Zoom seven-surface readiness
+
+Issue: #4265
+Stacked base: `fm/cli-reverse-etl-destination-r1` at `d814875a902be684cb2a38b94f7a8077f66b70b1`; final
+Foundation-on-`main` proof remains pending.
+
+[`sources/zoom-seven-surface-readiness.json`](../../../internal/connectors/defs/zoom/sources/zoom-seven-surface-readiness.json)
+is the committed machine-readable reconciliation ledger. It contains 1,939 records: all 1,937
+source-locked provider operations plus two ledger-only identities. Every record carries its pinned
+provider provenance, parity class, all seven surface cells, any command/action/transport binding,
+implementation state, certification state, and a recoverable gap when it is not implemented.
+
+## Missing-foundation delivery
+
+[`sources/zoom-missing-foundation-gaps.json`](../../../internal/connectors/defs/zoom/sources/zoom-missing-foundation-gaps.json)
+is the captain-required companion ledger. It has one deduplicated catalog of 12 shared gaps and
+1,329 source-locked operation-gap rows across 1,299 provider operations. Every row records the
+exact provider operation, document URL/revision/SHA-256, relevant surface(s), current validator or
+runtime evidence, and an explicit `merge_ready_enabled: false`. The catalog supplies the shared
+provider-neutral capability, issue/lane ownership (or an explicit unassigned foundation backlog),
+status, exact closure commands, and complete operation fan-out. It also rolls up the 29 source
+module batches and the Zoom portfolio.
+
+This is deliberately not a second disabled/N/A inventory. An independently implemented command
+keeps its runtime CLI reachability fact in the row; an open shared gap only blocks merge-readiness
+and certification. The catalog-only REST operation-coverage gap has zero currently unmitigated Zoom
+operations and remains visible rather than being silently dropped. The ledger does not use a
+Zoom-specific executor or a connector-side workaround for any shared gap.
+
+| Measure | Count | Honest status |
+| --- | ---: | --- |
+| Documented source operations | 1,937 | Reconciled; this is the source lock, not a completeness claim. |
+| Reconciliation records | 1,939 | Includes two ledger-only identities. |
+| Declared operation contracts | 1,748 | 776 reads, 971 writes, one binary-read contract. |
+| Command-bound installed-CLI entries | 714 | 505 direct reads, three ETL streams, and 206 reverse-ETL commands, plus capability/transport entries. |
+| Typed write actions / direct CLI reverse-ETL | 206 / 206 | Every typed action is directly user-reachable with existing approval and destructive safeguards. |
+| ETL-bound streams | 3 | Preserved `users`, `meetings`, and `webinars` streams. |
+| Binary read / write contracts | 1 / 34 | Zero executable binary commands: Clip download awaits redirect-origin evidence; uploads await the `file_upload` executor and multipart-policy contract. |
+| Disabled inventory rows | 1,155 | Each preserves a source or declaration-level reason; this lane does not call them provider-complete parity. |
+| Certified operations | 0 | No command is silently certified; every reconciliation record is explicitly uncertified. |
+
+## Reverse-ETL disposition
+
+[`reverse-etl-eligibility.json`](../../../internal/connectors/defs/zoom/reverse-etl-eligibility.json)
+gives all 206 typed actions a disposition. Destructive, privileged, and uncommon actions are not
+made ineligible for those reasons; their existing plan → preview → approval → per-unit authorization
+path remains mandatory.
+
+| Reverse-ETL disposition | Count | Meaning |
+| --- | ---: | --- |
+| Directly CLI-reachable | 206 | All named actions have an implemented reverse-ETL command. |
+| Exact source-record mappings | 8 | The existing `users.id` field maps to normalized action input `user_id`; the provider paths still receive `{userId}`. |
+| Selected by current destination strategy | 1 | `zoom_users_userssotokendelete` is the narrow initial proof action. |
+| Awaiting action multiplicity | 7 | They are source-mappable and allowlisted, but the closed contract selects one action for each mode. A second simultaneous `full_append` strategy would violate the current exact-selection model. |
+| Direct CLI only — missing exact source fields | 197 | The definition has no stream that provides every required action input. No values or body fields are invented. |
+| Direct CLI only — no source key | 1 | A source-record mapping cannot choose an unkeyed action safely. |
+
+The remote #4304 head (`d814875a902be684cb2a38b94f7a8077f66b70b1`) is the temporary stacked base
+of this branch, but the full final application-path proof remains a Foundation dependency. The
+captain-approved optional-query behavior was rehearsed only at non-ancestor SHA
+`c3f83cbf6eabbae00219566fb02719ca2d6c480d`; its evidence is isolated in
+[`FOUNDATION-REHEARSAL.md`](FOUNDATION-REHEARSAL.md). Until the Foundation lands on `main` and the
+installed App/CLI path is exercised, the selected action is **not application-level deployable**.
+No Zoom-specific dispatcher or generic writer is added here.
+
+## Certification boundary
+
+The connector definition validates and the generated certification artifacts are current, but fixture
+proof is insufficient. After the required Foundation revisions land on `main` and are exercised
+through the persisted App/CLI path, certification requires built-binary proof using only the registered
+secret-store reference at process execution time: authenticated read; a unique lane-owned
+create/read-back/update/delete-cleanup flow; ETL; reverse-ETL plan/apply/acknowledgement plus
+independent provider read-back; and a binary round-trip where supported. No pre-existing resource,
+account/security state, or destructive user action may be exercised. Fixture evidence, live proof,
+independent readback, and cleanup remain separate fields in the ledger; none are currently promoted
+to certification.
+
+## Scope
+
+This is a complete reconciliation and explicit eligibility accounting pass, not a claim that all
+documented Zoom operations are executable. The 1,155 inventory-only rows remain visibly accounted
+for with their exact current contract limitation. Provider entitlement, OAuth scope, destructive
+classification, or lack of automated-live safety never turns an already-faithfully-modelled command
+into an unavailable command; they restrict provider execution or certification instead. An operation
+without an authored command/action contract remains an implementation gap, not a fabricated
+foundation gap.
+
+The captain's later hard gate is stricter than this branch's historical accounting: no operation
+with an open foundation-gap row contributes to a merge-ready verdict, and no provider-wide CLI or
+website reachability claim is made until every source operation is mapped, enabled, and proven
+through the required six-surface evidence.
+
+## Reproduction
+
+The ledger is mechanically derived from the committed disposition, CLI surface, sweep, and
+reverse-ETL eligibility records. Its invariants are enforced by:
+
+```bash
+go test -count=1 -timeout 20m ./internal/connectors/defs/zoom \
+  -run '^(TestReverseETLEligibilityDisposesEveryTypedAction|TestSevenSurfaceReadinessAccountsForEveryProviderIdentity)$'
+go run ./cmd/connectorgen validate internal/connectors/defs/zoom --json
+go run ./cmd/connectorgen certification-matrix --connector zoom --check
+go run ./cmd/connectorgen certification-sweep --connector zoom --check
+go run ./cmd/connectorgen certification-candidates --connector zoom --check
+go test -count=1 -timeout 20m ./internal/connectors/defs/zoom \
+  -run '^TestMissingFoundationGapRowsAreSourceLockedAndRollUp$'
+```
