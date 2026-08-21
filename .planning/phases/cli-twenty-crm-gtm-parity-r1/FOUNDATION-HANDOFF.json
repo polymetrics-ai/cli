@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "connector": "twenty",
+  "issue": 277,
+  "handoff_status": "blocked_shared_foundation",
+  "local_checkpoint": "7059fe85ad09bdcf17f262375ebe20c4036a53fa",
+  "acceptance_criteria": "unchanged",
+  "source_traces": {
+    "write_eligibility": {
+      "path": "internal/connectors/defs/twenty/write_eligibility.json",
+      "sha256": "8b9ac70d6f07a44edc708cabaaa9f2c216f14f922440fdef3d2f81b16842b8da"
+    },
+    "writes": {
+      "path": "internal/connectors/defs/twenty/writes.json",
+      "sha256": "5188fe0dea80e93471b476e91c75a33e2b6ca7fc8c9835144b87591acf7535f8"
+    },
+    "sync_transport": {
+      "path": "internal/connectors/defs/twenty/sync_transport.json",
+      "sha256": "d4b10c0d26ce159d8c6c9fb7d2e4c740332adc7e28aeee869f19388eaf51bc58"
+    },
+    "provider_api_revision": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7"
+  },
+  "current_foundation": {
+    "dependency_pr": 4304,
+    "merged_local_head": "d814875a902be684cb2a38b94f7a8077f66b70b1",
+    "contract_locations": [
+      "internal/connectors/sync_transport.go:143",
+      "internal/connectors/sync_transport.go:436",
+      "internal/connectors/sync_transport.go:450",
+      "internal/connectors/sync_transport.go:480",
+      "internal/app/declarative_typed_destination_approval.go:274"
+    ],
+    "limitation": "SourceBindingFor is keyed only by source executor and stream, so one binding is shared by every persisted action selected from that source."
+  },
+  "red_witness": {
+    "test": "TestPerActionSourceBindingFoundationHandoffWitness",
+    "command": "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty -run ^TestPerActionSourceBindingFoundationHandoffWitness$",
+    "happy": "An in-memory declaration can select update_companies and create_companies selection keeps its exact name-to-name mapping.",
+    "bad": "update_companies selection receives the shared name-to-name mapping instead of its required id-to-id plus name-to-name mapping before provider I/O.",
+    "edge": "update_companies is refused when absent from the current declaration rather than defaulting by mode."
+  },
+  "gap_groups": [
+    {
+      "gap_id": "foundation.reverse-etl.persisted-action-multiplicity.v1",
+      "selector": "$.actions[?(@.disposition == 'eligible_pending_foundation_multiplicity')]",
+      "count": 55,
+      "required_capability": "Persisted action-sensitive declaration-owned source bindings with exact schema-validated input mappings."
+    },
+    {
+      "gap_id": "foundation.reverse-etl.array-envelope-delivery.v1",
+      "selector": "$.actions[?(@.disposition == 'semantic_array_envelope_incompatible')]",
+      "count": 28,
+      "required_capability": "Bounded declaration-owned grouping into exact provider array envelopes with per-record accounting."
+    },
+    {
+      "gap_id": "foundation.reverse-etl.tombstone-workset.v1",
+      "selector": "$.actions[?(@.disposition == 'semantic_tombstone_incompatible')]",
+      "count": 28,
+      "required_capability": "Typed tombstone worksets with plan/preview/approval sealing, acknowledgement, and independent absence verification."
+    }
+  ],
+  "verification": {
+    "source_hashes": "pass: snapshot and all three exact gap selectors match write_eligibility.json",
+    "commands": [
+      "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty -run ^TestPerActionSourceBindingFoundationHandoffWitness$: pass",
+      "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty: pass",
+      "go test -count=1 -timeout 20m ./internal/app -run persisted-destination-focused-suite: pass",
+      "go run ./cmd/connectorgen validate internal/connectors/defs/twenty: pass",
+      "go run ./cmd/connectorgen surface-sync --check: pass",
+      "go run ./cmd/connectorgen certification-sweep --connector twenty --check: pass (172 rows; 168 CLI commands)"
+    ]
+  },
+  "scope_constraints": [
+    "No shared engine, application, or generic writer change is included in the Twenty branch.",
+    "All documented operations remain declared and CLI-reachable; no safety, privilege, or destructive classification is an exclusion.",
+    "No credential, runtime/vault state, production data, or live mutation is used by this handoff."
+  ]
+}

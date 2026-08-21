@@ -68,6 +68,23 @@
 5. Record the seven-surface ledger, the exact PR dependency, command results,
    and the API read-back of PR #4298's base.
 
+### Foundation-handoff witness (connector-local only)
+
+Before a foundation lane changes a shared contract, keep a Twenty-local
+behavioral witness that exercises the current public descriptor: extend its
+declaration in memory with `update_companies`, select that action, and show
+that `SourceBindingFor(declarative_stream_source, "companies")` still returns
+the `create_companies` `name` → `name` mapping rather than the required
+`id` → `id`, `name` → `name` mapping. The witness must cover the happy
+selection, the bad mismatch before provider I/O, and the edge case where an
+undeclared action is refused. It must not propose or carry an engine change.
+
+The handoff contains the exact `writes.json`, `write_eligibility.json`, and
+`sync_transport.json` hashes; the descriptor and App call-path source lines;
+the 55/28/28 dependency membership selectors; and closure tests for a separate
+provider-neutral foundation lane. A source hash mismatch is a red ledger
+failure, not a reason to reduce the Twenty acceptance criteria.
+
 ## Captain hard certification gate — dynamic workspace inventory
 
 Static Twenty REST declarations remain necessary provenance but are not final

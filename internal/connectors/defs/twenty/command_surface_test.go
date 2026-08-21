@@ -309,3 +309,90 @@ func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
 		t.Fatalf("tombstone incompatibilities = %d, want 28", got)
 	}
 }
+
+func TestPerActionSourceBindingFoundationHandoffWitness(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS(".."), twentyBundleName)
+	if err != nil {
+		t.Fatalf("load %s bundle: %v", twentyBundleName, err)
+	}
+	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil || bundle.SyncTransport.Destination == nil {
+		t.Fatalf("SyncTransport = %#v, want source and destination", bundle.SyncTransport)
+	}
+
+	var ledger struct {
+		Actions []struct {
+			Name      string `json:"name"`
+			Candidate *struct {
+				InputFields []struct {
+					Input string `json:"input"`
+					Field string `json:"field"`
+				} `json:"input_fields"`
+			} `json:"candidate"`
+		} `json:"actions"`
+	}
+	raw, err := os.ReadFile("write_eligibility.json")
+	if err != nil {
+		t.Fatalf("read write eligibility ledger: %v", err)
+	}
+	if err := json.Unmarshal(raw, &ledger); err != nil {
+		t.Fatalf("decode write eligibility ledger: %v", err)
+	}
+	candidates := make(map[string][]connectors.SourceRecordInputBinding, 2)
+	for _, action := range ledger.Actions {
+		if action.Name != "create_companies" && action.Name != "update_companies" {
+			continue
+		}
+		if action.Candidate == nil {
+			t.Fatalf("%s has no candidate mapping", action.Name)
+		}
+		for _, input := range action.Candidate.InputFields {
+			candidates[action.Name] = append(candidates[action.Name], connectors.SourceRecordInputBinding{Input: input.Input, Field: input.Field})
+		}
+	}
+	if len(candidates["create_companies"]) != 1 || len(candidates["update_companies"]) != 2 {
+		t.Fatalf("company candidate mappings = %#v, want create(name) and update(id,name)", candidates)
+	}
+
+	destination := *bundle.SyncTransport.Destination
+	destination.EligibleActions = append([]string(nil), destination.EligibleActions...)
+	destination.ApplyStrategies = append([]connectors.DestinationApplyStrategy(nil), destination.ApplyStrategies...)
+	destination.EligibleActions = append(destination.EligibleActions, "update_companies")
+	destination.ApplyStrategies = append(destination.ApplyStrategies, connectors.DestinationApplyStrategy{
+		Mode:     destination.ApplyStrategies[0].Mode,
+		Strategy: destination.ApplyStrategies[0].Strategy,
+		Action:   "update_companies",
+	})
+
+	if err := destination.Validate(); err != nil {
+		t.Fatalf("happy multi-action destination declaration = %v, want accepted", err)
+	}
+	if resolved, err := destination.ApplyStrategyForAction(destination.ApplyStrategies[0].Mode, "update_companies"); err != nil || resolved.Action != "update_companies" {
+		t.Fatalf("happy persisted update selection = %#v, %v; want update_companies", resolved, err)
+	}
+	if _, err := bundle.SyncTransport.Destination.ApplyStrategyForAction(destination.ApplyStrategies[0].Mode, "update_companies"); err == nil {
+		t.Fatal("edge undeclared update action unexpectedly resolved from the current declaration")
+	}
+
+	binding, found := destination.SourceBindingFor(bundle.SyncTransport.Source.Executor, "companies")
+	if !found {
+		t.Fatal("source binding for declarative companies stream is absent")
+	}
+	if !sourceInputsMatch(binding.RecordMapping.Inputs, candidates["create_companies"]) {
+		t.Fatalf("create mapping = %#v, want %#v", binding.RecordMapping.Inputs, candidates["create_companies"])
+	}
+	if sourceInputsMatch(binding.RecordMapping.Inputs, candidates["update_companies"]) {
+		t.Fatalf("shared source binding unexpectedly satisfied update mapping %#v", candidates["update_companies"])
+	}
+}
+
+func sourceInputsMatch(got, want []connectors.SourceRecordInputBinding) bool {
+	if len(got) != len(want) {
+		return false
+	}
+	for index := range got {
+		if got[index] != want[index] {
+			return false
+		}
+	}
+	return true
+}

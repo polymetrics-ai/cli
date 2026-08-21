@@ -70,3 +70,8 @@ direct write are truthfully zero. Twenty's GraphQL and Metadata APIs are
 workspace-schema-generated and are not inferred from that REST contract.
 The no-tombstone destination does not weaken CLI reachability: 28 destructive
 delete actions remain implemented, approval-gated, and typed-confirmed.
+
+`FOUNDATION-HANDOFF.{md,json}` now provides the separate foundation lane with
+source hashes, descriptor/App call-path evidence, the 55/28/28 exact
+membership selectors, and a committed connector-local red behavioral witness.
+It preserves the acceptance criteria and makes no shared engine change.

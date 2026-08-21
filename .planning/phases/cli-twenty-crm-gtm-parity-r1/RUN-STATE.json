@@ -68,6 +68,15 @@
     ],
     "stop_condition": "Needs a provider-neutral per-action source-binding foundation decision; batch-envelope and tombstone workset delivery are separately unassigned shared foundations. No live credential, runtime mutation, or heavy verification was attempted during this low-CPU reconciliation."
   },
+  "foundation_handoff": {
+    "status": "ready_for_separate_foundation_lane",
+    "artifacts": [
+      ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-HANDOFF.md",
+      ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-HANDOFF.json"
+    ],
+    "behavioral_witness": "TestPerActionSourceBindingFoundationHandoffWitness records happy persisted selection, bad same-source mapping mismatch before I/O, and undeclared-action edge refusal.",
+    "scope": "No shared engine change, push, live credential use, or runtime/vault change was made by the handoff slice."
+  },
   "captain_foundation_gap_ledger": {
     "path": ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-GAPS.json",
     "status": "open_gaps_block_merge_ready_verdict",

@@ -21,6 +21,10 @@
   cannot preserve Twenty's 55 distinct candidate mappings. Do not add a
   connector workaround; await a foundation decision before attempting the 56
   record-shaped bindings or installed App/CLI proof.
+- [x] Foundation-lane handoff: `FOUNDATION-HANDOFF.{md,json}` source-traces
+  the 55/28/28 membership, the current descriptor/App call path, and the
+  committed red/green behavioral witness. Its source hashes match
+  `FOUNDATION-GAPS.json`; no live credential or runtime action was used.
 - [ ] Fresh dedicated-instance certification after that merge: built-binary
   authenticated list/get with pagination, lane-owned create/read-back/update/
   delete/verified cleanup, ETL source, reverse-ETL plan/apply/acknowledgement
