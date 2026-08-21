@@ -661,6 +661,18 @@ func catalogStatusMessage(status *connectors.DiscoveryStatus) string {
 	}
 }
 
+// shouldPresentETLTerminalRun accepts only the App's durable terminal
+// presentation proof. Successful state updates return the stored terminal run;
+// may-have-committed updates return an exact reload; and a definite no-commit
+// returns Run{}. The accompanying operational error controls the categorized
+// nonzero exit, never whether a durable terminal envelope is emitted.
+func shouldPresentETLTerminalRun(run app.Run) bool {
+	if run.ID == "" || (run.Status != "completed" && run.Status != "failed") || run.CompletedAt.IsZero() {
+		return false
+	}
+	return true
+}
+
 // pmcert:workflow etl
 func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool, cfg config.Config) error {
 	if len(args) == 0 {
@@ -747,24 +759,35 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if err != nil {
 			return err
 		}
-		run, err := a.RunETL(ctx, app.RunETLRequest{
+		run, runErr := a.RunETL(ctx, app.RunETLRequest{
 			Connection:         flags.first("connection"),
 			Stream:             flags.first("stream"),
 			BatchSize:          batchSize,
 			MaxInFlightBatches: maxInFlightBatches,
 		})
-		if err != nil {
-			return err
+		if runErr != nil && !shouldPresentETLTerminalRun(run) {
+			return runErr
 		}
 		runtimeRecorded := false
-		if flags.first("runtime") == "true" {
+		if runErr == nil && flags.first("runtime") == "true" {
 			if err := recordRuntimeETL(ctx, run, cfg); err != nil {
-				return err
+				runErr = err
+			} else {
+				runtimeRecorded = true
 			}
-			runtimeRecorded = true
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": runtimeRecorded})
+			if err := writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": runtimeRecorded}); err != nil {
+				return err
+			}
+			if runErr != nil {
+				return alreadyReportedExecutionError(runErr)
+			}
+			return nil
+		}
+		if runErr != nil {
+			_, _ = fmt.Fprintf(stdout, "ETL run %s ended with status %s; inspect it with pm etl status %s\n", run.ID, run.Status, run.ID)
+			return alreadyReportedExecutionError(runErr)
 		}
 		if runtimeRecorded {
 			_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d runtime_recorded=true\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)

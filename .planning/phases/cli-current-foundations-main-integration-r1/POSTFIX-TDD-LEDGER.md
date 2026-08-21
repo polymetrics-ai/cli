@@ -11,7 +11,7 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 | 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | green; remote `2bddbf5387d323a0dbf074074cf43fa2d40b60b5` |
 | 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | green; remote `51ab7639e30bb2fb5585d853beba6a2550d84def` |
 | 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | green; remote `6084b1c1275b2dbe01fc49aba25785677fd8fd52` |
-| 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | in progress; B37 local-green, remote checkpoint pending |
+| 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | in progress; B37 remote `636cc72e8d6aa2483a7fc7a94d216546008fcef1`; B34/B35 local-green, remote checkpoint pending |
 | 9 | B10-B11 | Evidence/certification metadata for another or stale SHA is accepted. | Exact final-SHA evidence, matrix, candidate, and certification checks. | pending |
 
 ## Group 8 execution plan (2026-08-21)
@@ -97,6 +97,128 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
   `go test -race -timeout 20m ./internal/app ./internal/connectors ./internal/connectors/database ./internal/connectors/native/postgres -run 'Test(CDCRecovery_ReceiptBindsExactWarehouseArtifacts|CDCArtifactManifestRestorationIsStrictAndBounded|CommittedTransactionStagePersistsPrivateArtifactManifestAcrossRestart|PGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint)' -count=1 -v`
   (`app` 40.937s; `connectors` 2.168s; `database` 1.715s;
   `native/postgres` 3.338s), with no data race or failure.
+
+### Group 8 B34/B35 red-contract plan (2026-08-21)
+
+- **Scope and ownership:** the ordinary CLI ETL rendering boundary and the App
+  terminal/reverse-finalization state boundary (`internal/cli/cli.go`,
+  `internal/app/app.go`, and their focused tests).  This parcel must share one
+  exact durable reload outcome; it does not touch the Group-8-C transport,
+  route, or orchestrator files reserved for B38/W08.
+- **B34 red:** `TestCLI_OrdinaryETLFailurePublishesOneTerminalRun` uses the
+  real persisted CLI file-source route.  Source I/O fails after `beginRun`
+  has durably recorded a failed terminal Run.  The nonzero CLI invocation must
+  emit exactly one `ETLRun` JSON envelope equal to that stored terminal run,
+  not an `Error` envelope or an in-memory substitute.
+- **B35 red:** `TestReverseFinalization_DoesNotPublishUnpersistedRun` invokes
+  both regular and direct-write finalizers with a provider partial/error.  A
+  pre-rename state-lock failure must return zero run plus joined operational /
+  persistence error and retain no terminal run; a post-rename directory-sync
+  uncertainty must reload the exact persisted terminal reverse run and plan,
+  preserving the original provider error and the typed persistence outcome.
+
+### Group 8 B34/B35 observed red evidence (2026-08-21)
+
+- `go test -timeout 20m ./internal/app -run
+  '^TestReverseFinalization_DoesNotPublishUnpersistedRun$' -count=1 -v`
+  failed all four frozen cases.  Both regular and direct-write paths returned
+  an in-memory failed `ReverseRun` after the definite pre-rename error; both
+  post-rename directory-sync cases returned only the provider partial-write
+  error, losing the state persistence outcome even though a terminal run and
+  failed plan had reached the store.
+- `go test -timeout 20m ./internal/cli -run
+  '^TestCLI_OrdinaryETLFailurePublishesOneTerminalRun$' -count=1 -v` reached
+  the real missing-file read after a durable failed Run and printed an `Error`
+  JSON envelope instead of the stored `ETLRun` envelope.  The test's initial
+  non-comparable `Run` assertion was corrected to `reflect.DeepEqual` before
+  this behavioral red run; no production behavior changed during that test
+  correction.
+
+### Group 8 B34/B35 package-gate failure set (2026-08-21)
+
+The one completion-tracked package command, `go test -timeout 20m
+./internal/app ./internal/cli -count=1`, exited `1` after `254.915s` for App
+and `804.384s` for CLI.  This complete output is frozen before a correction;
+the exact observed cases and initial dispositions are:
+
+| Exact failing test / case | Observed cause | Required disposition |
+| --- | --- | --- |
+| `TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome/committed_unlock_failure` | The new reload branch shadowed the operational `runErr` with the terminal-state lookup error, so the returned joined error contained only the persistence outcome. | Restore the original operational error to the joined outcome and prove both committed and indeterminate paths with the existing focused App test. |
+| `TestRunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome/indeterminate_directory_sync_failure` | Same shadowing defect; the terminal run was durable but the post-acknowledgement source error was dropped. | Same shared App correction; no test relaxation. |
+| `TestCertifyCLISingleConnectorPassExitsZero` | The two declared `*_deduped` stages are typed **pre-I/O** refusals. The focused persisted-state proof shows each has exactly one durable failed run, so a prior nonterminal/`Error` inference from the scripted fixture was false. | Require a terminal stored/reloaded run before one `ETLRun` is emitted. Assert exact stored `ETLRun` plus categorized exit 1 for both stages; the scripted certification fixture must project the same terminal contract. |
+| `TestFreshBinaryProvider401IsCredentialErrorWithoutWritesOrCheckpointAdvance` | This is a GitHub declared direct-read, not ordinary ETL. It correctly returned the post-provider `ConnectorCommandDirectRead` result with the bounded 401 receipt and categorized nonzero exit; its stale test expected a stand-alone `Error` envelope and hid that provider evidence. | Strengthen the test to assert the retained 401 status/receipt, `auth/credential_error`, secret masking, and unchanged checkpoint/no writes. No B34 production path changes. |
+| `TestReverseETLToGitHubCreatesPullRequestAfterApproval` | The provider test server's create-PR response was accepted as a receipt but the following response binding rejected its implicit `text/plain` media type as not JSON.  The full run therefore exposed a pre-existing declared-response parsing gap, not a B34/B35 terminal reload path. | Reproduce in the focused reverse CLI test and fix the declaration-owned response-body interpretation without changing its closed/bounded route or omitting receipt fields; record the focused proof before any package rerun. |
+
+**Supervisor semantic correction (2026-08-21):** the preceding preliminary
+CLI-envelope dispositions are superseded.  A returned terminal `Run` is the
+App's durable presentation proof: a successful state update returns its stored
+terminal run; a may-have-committed update returns only the exact reload; and a
+definite pre-rename/no-commit result returns `Run{}`.  Consequently ordinary
+source/provider, parked, CDC-failed, and runtime-recorder errors that accompany
+a returned terminal run must emit exactly one `ETLRun` envelope while retaining
+their original categorized nonzero exit.  Only a zero/nonterminal run emits a
+typed `Error` envelope. The focused real-CLI state proof shows both
+certification pre-I/O stages *do* store an exact terminal failed Run, so their
+one-envelope contract is `ETLRun` with exit 1; a zero/nonterminal result would
+instead remain `Error`. The GitHub 401 is instead a post-provider direct-read result
+(not a `Run`) and retains its bounded receipt plus typed inline error rather
+than a stand-alone `Error` envelope.
+
+### Group 8 B34/B35 green evidence and complete failure disposition (2026-08-21)
+
+- **Shared durable outcome:** `reloadExactTerminalState` is the single
+  post-rename/unlock recovery boundary. `completeRunWithAcknowledgedTransportState`,
+  `failRunWithAcknowledgedTransportState`, `failRunWithResult`, and both reverse
+  finalizers either return the exact stored terminal object or return zero on a
+  definite no-commit. The acknowledged failure path now joins the original
+  operational error with the persistence outcome instead of shadowing it with
+  a terminal-lookup error.
+- **Ordinary CLI result rule:** `shouldPresentETLTerminalRun` accepts only a
+  complete, terminal `Run` returned by App. That return is the durable
+  presentation proof: normal persisted source/provider/parked/CDC/runtime
+  errors retain one exact `ETLRun`; may-have-committed results were first
+  reloaded by App; zero or nonterminal values remain the normal typed `Error`
+  path. `alreadyReportedExecutionError` retains the classified nonzero exit
+  without adding a second JSON envelope.
+- **Focused happy/bad/edge green:**
+  `go test -timeout 20m ./internal/app -run
+  'Test(RunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome|ReverseFinalization_DoesNotPublishUnpersistedRun|OrdinaryETLTerminalPersistenceReloadsExactDurableRun)$'
+  passed (`8.325s`). The cases cover definite pre-rename zero state, committed
+  unlock and directory-sync uncertainty with exact reload, ordinary/direct
+  reverse finalization, and preservation of the original source/provider error.
+- **Installed CLI and certification state green:** the focused CLI suite
+  covering ordinary source failure, runtime-recorder failure, provider 401,
+  reverse GitHub approval, and terminal proof passed (`20.769s` before the
+  final certification-state addition). The final production-shaped
+  `TestCLI_CertificationPreIORefusalsPersistExactTerminalRun` passed for both
+  deduped modes (`3.56s`), proving exit `1`, failed terminal `ETLRun`, and
+  byte-for-byte equality with the persisted run. The certification projection
+  `TestSourceStagesAgainstSample` then passed (`1.171s`) with its scripted
+  terminal fixture mirroring that durable contract.
+- **Race/package gate:** the final focused
+  `go test -race -timeout 20m ./internal/app ./internal/cli
+  ./internal/connectors/certify -run
+  'Test(RunETLTransportAcknowledgedFailureReturnsTruthfulPersistenceOutcome|ReverseFinalization_DoesNotPublishUnpersistedRun|OrdinaryETLTerminalPersistenceReloadsExactDurableRun|CLI_OrdinaryETLFailurePublishesOneTerminalRun|ETLTerminalPresentationRequiresDurableUncertainCommit|CLI_OrdinaryETLRuntimeRecorderFailurePublishesTerminalRun|CLI_CertificationPreIORefusalsPersistExactTerminalRun|FreshBinaryProvider401IsCredentialErrorWithoutWritesOrCheckpointAdvance|ReverseETLToGitHubCreatesPullRequestAfterApproval|SourceStagesAgainstSample)$'
+  passed: App `91.422s`, CLI `107.195s`, certification `3.716s`, with no race
+  report. The earlier 792-second broad failure set is fully enumerated above;
+  these focused package gates are the required post-disposition proof, while
+  the next heavyweight all-App/all-CLI run remains reserved for the final
+  exact Group-8 SHA.
+- **Static/generated/help green:** `go vet ./internal/app ./internal/cli
+  ./internal/connectors/certify`, `go build ./cmd/pm`, and `go run
+  ./cmd/connectorgen surface-sync --check` all passed; surface-sync scanned
+  552 connectors and corrected zero fields. The built binary also passed `pm
+  help etl`, `pm etl`, and `pm etl run --help`. No CLI flags, help text,
+  manual/website source, or generated command surface changed, so help/manual/
+  website regeneration is not applicable to this output-boundary correction.
+- **Five-case disposition:** the App committed/unlock and directory-sync cases
+  are fixed by preserving `runErr`; the certification two-stage failure is
+  fixed by terminal-proof presentation backed by persisted state; the GitHub
+  401 now asserts its complete `ConnectorCommandDirectRead` 401 receipt and
+  inline `auth/credential_error`; and the GitHub reverse fixture explicitly
+  declares its JSON response media type, retaining strict declaration-owned
+  response parsing. No route, body authority, operation, provider result, or
+  secret boundary was widened.
 
 ## Group 7 red-contract plan (2026-08-21)
 

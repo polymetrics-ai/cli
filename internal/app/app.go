@@ -653,6 +653,70 @@ func stateStoreCommitMayHaveSucceeded(err error) bool {
 	return statestore.CommitOutcomeForError(err).MayHaveCommitted()
 }
 
+// terminalStateReload is the only way a terminal presentation path may use a
+// state update that reported a post-rename or unlock failure. Its State is a
+// fresh read of the durable file, never the update callback's speculative
+// value.
+type terminalStateReload struct {
+	State            state
+	MayHaveCommitted bool
+}
+
+// reloadExactTerminalState classifies an update result once for ordinary ETL
+// and reverse finalization. A definite no-commit has no terminal result to
+// present. A may-have-committed result must be reloaded before any caller can
+// return it to the CLI or another durable boundary.
+func (a *App) reloadExactTerminalState(persistErr error) (terminalStateReload, error) {
+	if persistErr == nil || !stateStoreCommitMayHaveSucceeded(persistErr) {
+		return terminalStateReload{}, nil
+	}
+	if a == nil || strings.TrimSpace(a.store.Path) == "" {
+		return terminalStateReload{}, errors.New("durable terminal state reload is unavailable")
+	}
+	loaded, err := a.store.LoadReadOnly()
+	if err != nil {
+		return terminalStateReload{}, fmt.Errorf("reload durable terminal state: %w", err)
+	}
+	if err := a.normalizeLoadedState(loaded, false); err != nil {
+		return terminalStateReload{}, fmt.Errorf("normalize reloaded terminal state: %w", err)
+	}
+	a.rememberDeferredState(loaded.Revision)
+	return terminalStateReload{State: a.state, MayHaveCommitted: true}, nil
+}
+
+func terminalETLRunFromState(loaded state, runID string) (Run, error) {
+	for _, run := range loaded.Runs {
+		if run.ID != runID {
+			continue
+		}
+		if (run.Status != "completed" && run.Status != "failed") || run.CompletedAt.IsZero() {
+			return Run{}, fmt.Errorf("durable ETL run %q is not terminal", runID)
+		}
+		return run, nil
+	}
+	return Run{}, fmt.Errorf("durable ETL run %q was not found", runID)
+}
+
+func terminalReverseRunFromState(loaded state, planID, runID string) (ReverseRun, error) {
+	plan, err := reversePlanFromState(loaded, planID)
+	if err != nil {
+		return ReverseRun{}, fmt.Errorf("reload durable reverse plan: %w", err)
+	}
+	if plan.Status != "executed" && plan.Status != "failed" {
+		return ReverseRun{}, fmt.Errorf("durable reverse plan %q is not terminal", planID)
+	}
+	for _, run := range loaded.ReverseRuns {
+		if run.ID != runID {
+			continue
+		}
+		if run.PlanID != planID || (run.Status != "completed" && run.Status != "failed") || run.CompletedAt.IsZero() {
+			return ReverseRun{}, fmt.Errorf("durable reverse run %q is not terminal", runID)
+		}
+		return run, nil
+	}
+	return ReverseRun{}, fmt.Errorf("durable reverse run %q was not found", runID)
+}
+
 func newStateStore(path string) statestore.JSONStore[state] {
 	return statestore.JSONStore[state]{
 		Path: path,
@@ -1691,11 +1755,15 @@ func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etl
 	})
 	if persistErr != nil {
 		if acknowledged != nil && transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
-			for _, run := range updated.Runs {
-				if run.ID == runID {
+			reloaded, reloadErr := a.reloadExactTerminalState(persistErr)
+			if reloadErr == nil {
+				run, runErr := terminalETLRunFromState(reloaded.State, runID)
+				if runErr == nil {
 					return run, persistErr
 				}
+				return Run{}, errors.Join(persistErr, runErr)
 			}
+			return Run{}, errors.Join(persistErr, reloadErr)
 		}
 		return Run{}, persistErr
 	}
@@ -1744,11 +1812,15 @@ func (a *App) failRunWithAcknowledgedTransportState(runID string, result etlExec
 	})
 	if persistErr != nil {
 		if transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
-			for _, run := range updated.Runs {
-				if run.ID == runID {
-					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+			reloaded, reloadErr := a.reloadExactTerminalState(persistErr)
+			if reloadErr == nil {
+				durableRun, terminalErr := terminalETLRunFromState(reloaded.State, runID)
+				if terminalErr == nil {
+					return durableRun, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 				}
+				return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", terminalErr))
 			}
+			return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", errors.Join(persistErr, reloadErr)))
 		}
 		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 	}
@@ -3168,7 +3240,7 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	} else {
 		run.Status = "completed"
 	}
-	updated, persistErr := a.updateState(func(current state) (state, error) {
+	_, persistErr := a.updateState(func(current state) (state, error) {
 		current.ReverseRuns = append(current.ReverseRuns, run)
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
@@ -3179,16 +3251,21 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 		}
 		return current, nil
 	})
-	if persistErr == nil {
-		a.state = updated
-	}
-	if writeErr != nil {
-		return run, writeErr
-	}
 	if persistErr != nil {
-		return ReverseRun{}, persistErr
+		if !stateStoreCommitMayHaveSucceeded(persistErr) {
+			return ReverseRun{}, errors.Join(writeErr, persistErr)
+		}
+		reloaded, reloadErr := a.reloadExactTerminalState(persistErr)
+		if reloadErr != nil {
+			return ReverseRun{}, errors.Join(writeErr, persistErr, reloadErr)
+		}
+		restored, restoreErr := terminalReverseRunFromState(reloaded.State, planID, run.ID)
+		if restoreErr != nil {
+			return ReverseRun{}, errors.Join(writeErr, persistErr, restoreErr)
+		}
+		return restored, errors.Join(writeErr, persistErr)
 	}
-	return run, nil
+	return run, writeErr
 }
 
 type runtimeSecretSanitizedError struct {
@@ -3518,12 +3595,23 @@ func (a *App) failRunWithResult(runID string, result etlExecutionResult, runErr 
 		return current, fmt.Errorf("run %q not found", runID)
 	})
 	if persistErr != nil {
-		if transportStateConflict && (targetAlreadyTerminal || (transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr))) {
-			for _, run := range updated.Runs {
-				if run.ID == runID {
-					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
-				}
+		if transportStateConflict && targetAlreadyTerminal {
+			if run, storedErr := terminalETLRunFromState(updated, runID); storedErr == nil {
+				return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+			} else {
+				return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", errors.Join(persistErr, storedErr)))
 			}
+		}
+		if transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
+			reloaded, reloadErr := a.reloadExactTerminalState(persistErr)
+			if reloadErr != nil {
+				return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", errors.Join(persistErr, reloadErr)))
+			}
+			run, storedErr := terminalETLRunFromState(reloaded.State, runID)
+			if storedErr != nil {
+				return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", errors.Join(persistErr, storedErr)))
+			}
+			return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 		}
 		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 	}
