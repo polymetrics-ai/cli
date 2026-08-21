@@ -190,8 +190,9 @@ SECURITY
   preview warnings preserve the resolved execution request, including fields
   declared in redact_fields. Engine direct-read, operation-direct-read, and binary-
   download executors preserve bounded HTTP URL/query/body diagnostics before
-  downstream rendering. These engine-level guarantees do not establish
-  complete pm CLI output. Credential storage remains encrypted at rest.
+  downstream rendering. Persisted reverse-ETL output retains complete ordinary
+  provider results; only credential values are represented as explicit masked
+  markers. Credential storage remains encrypted at rest.
 
 LEARN MORE
   Run pm reverse --help for this manual.

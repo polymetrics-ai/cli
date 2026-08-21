@@ -268,7 +268,7 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 		wantBody bool
 	}{
 		{name: "json returns complete decoded body", policy: directWritePolicyJSON, wantBody: true},
-		{name: "none intentionally suppresses response body", policy: directWritePolicyNone},
+		{name: "none retains complete response body", policy: directWritePolicyNone, wantBody: true},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			calls := 0
