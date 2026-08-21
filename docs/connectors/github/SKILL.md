@@ -556,7 +556,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: high
 - actions_runners_runner_id_labels_name:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}
-  - required fields: runner_id, name
+  - required fields: name, runner_id
   - risk: high
 - actions_runs_run_id_approve:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/approve
@@ -815,7 +815,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: high
 - environments_environment_name_deployment_branch_policies_branch_policy_id:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}
-  - required fields: environment_name, branch_policy_id
+  - required fields: branch_policy_id, environment_name
   - risk: high
 - environments_environment_name_deployment_branch_policies_branch_policy_id3:
   - endpoint: PUT /repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}
@@ -863,7 +863,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: medium
 - hooks_hook_id_deliveries_delivery_id_attempts:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts
-  - required fields: hook_id, delivery_id
+  - required fields: delivery_id, hook_id
   - risk: medium
 - hooks_hook_id_pings:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/pings
@@ -938,7 +938,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: medium
 - issues_issue_number_dependencies_blocked_by_issue_id:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by/{{ record.issue_id }}
-  - required fields: issue_number, issue_id
+  - required fields: issue_id, issue_number
   - risk: medium
 - issues_issue_number_issue_field_values2:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values
@@ -950,7 +950,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: high
 - issues_issue_number_issue_field_values_issue_field_id:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values/{{ record.issue_field_id }}
-  - required fields: issue_number, issue_field_id
+  - required fields: issue_field_id, issue_number
   - risk: high
 - issues_issue_number_reactions2:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/reactions
@@ -1035,7 +1035,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: medium
 - releases_release_id_reactions_reaction_id:
   - endpoint: DELETE /repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions/{{ record.reaction_id }}
-  - required fields: release_id, reaction_id
+  - required fields: reaction_id, release_id
   - risk: medium
 - secret_scanning_push_protection_bypasses:
   - endpoint: POST /repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/push-protection-bypasses
@@ -1131,7 +1131,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Creates provider-side state: Create an OIDC custom property inclusion for an enterprise.
 - oidc_delete_oidc_custom_property_inclusion_for_enterprise:
   - endpoint: DELETE /enterprises/{{ record.enterprise }}/actions/oidc/customization/properties/repo/{{ record.custom_property_name }}
-  - required fields: enterprise, custom_property_name
+  - required fields: custom_property_name, enterprise
   - risk: Destructive: Delete an OIDC custom property inclusion for an enterprise. Removes provider-side state.
 - code_security_create_configuration_for_enterprise:
   - endpoint: POST /enterprises/{{ record.enterprise }}/code-security/configurations
@@ -1143,11 +1143,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update a custom code security configuration for an enterprise.
 - code_security_delete_configuration_for_enterprise:
   - endpoint: DELETE /enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}
-  - required fields: enterprise, configuration_id
+  - required fields: configuration_id, enterprise
   - risk: Destructive: Delete a code security configuration for an enterprise. Removes provider-side state.
 - code_security_attach_enterprise_configuration:
   - endpoint: POST /enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}/attach
-  - required fields: enterprise, configuration_id, scope
+  - required fields: configuration_id, enterprise, scope
   - risk: Creates provider-side state: Attach an enterprise configuration to repositories.
 - code_security_set_configuration_as_default_for_enterprise:
   - endpoint: PUT /enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}/defaults
@@ -1187,11 +1187,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Creates provider-side state: Bulk remove team members.
 - enterprise_team_memberships_add:
   - endpoint: PUT /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}
-  - required fields: enterprise, username
+  - required fields: enterprise, enterprise-team, username
   - risk: Mutates existing provider-side state: Add team member.
 - enterprise_team_memberships_remove:
   - endpoint: DELETE /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}
-  - required fields: enterprise, username
+  - required fields: enterprise, enterprise-team, username
   - risk: Destructive: Remove team membership. Removes provider-side state.
 - enterprise_team_organizations_bulk_add:
   - endpoint: POST /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/add
@@ -1203,11 +1203,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Creates provider-side state: Remove organization assignments.
 - enterprise_team_organizations_add:
   - endpoint: PUT /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}
-  - required fields: enterprise, org
+  - required fields: enterprise, enterprise-team, org
   - risk: Mutates existing provider-side state: Add an organization assignment.
 - enterprise_team_organizations_delete:
   - endpoint: DELETE /enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}
-  - required fields: enterprise, org
+  - required fields: enterprise, enterprise-team, org
   - risk: Destructive: Delete an organization assignment. Removes provider-side state.
 - enterprise_teams_update:
   - endpoint: PATCH /enterprises/{{ record.enterprise }}/teams/{{ record.team_slug }}
@@ -1239,7 +1239,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update a gist comment.
 - gists_delete_comment:
   - endpoint: DELETE /gists/{{ record.gist_id }}/comments/{{ record.comment_id }}
-  - required fields: gist_id, comment_id
+  - required fields: comment_id, gist_id
   - risk: Destructive: Delete a gist comment. Removes provider-side state.
 - gists_fork:
   - endpoint: POST /gists/{{ record.gist_id }}/forks
@@ -1293,7 +1293,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update a budget for an organization.
 - billing_delete_budget_org:
   - endpoint: DELETE /organizations/{{ record.org }}/settings/billing/budgets/{{ record.budget_id }}
-  - required fields: org, budget_id
+  - required fields: budget_id, org
   - risk: Destructive: Delete a budget for an organization. Removes provider-side state.
 - orgs_update:
   - endpoint: PATCH /orgs/{{ record.org }}
@@ -1309,11 +1309,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Creates provider-side state: Create a GitHub-hosted runner for an organization.
 - actions_delete_custom_image_from_org:
   - endpoint: DELETE /orgs/{{ record.org }}/actions/hosted-runners/images/custom/{{ record.image_definition_id }}
-  - required fields: org, image_definition_id
+  - required fields: image_definition_id, org
   - risk: Destructive: Delete a custom image from the organization. Removes provider-side state.
 - actions_delete_custom_image_version_from_org:
   - endpoint: DELETE /orgs/{{ record.org }}/actions/hosted-runners/images/custom/{{ record.image_definition_id }}/versions/{{ record.version }}
-  - required fields: org, image_definition_id, version
+  - required fields: image_definition_id, org, version
   - risk: Destructive: Delete an image version of custom image from the organization. Removes provider-side state.
 - actions_update_hosted_runner_for_org:
   - endpoint: PATCH /orgs/{{ record.org }}/actions/hosted-runners/{{ record.hosted_runner_id }}
@@ -1321,7 +1321,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update a GitHub-hosted runner for an organization.
 - actions_delete_hosted_runner_for_org:
   - endpoint: DELETE /orgs/{{ record.org }}/actions/hosted-runners/{{ record.hosted_runner_id }}
-  - required fields: org, hosted_runner_id
+  - required fields: hosted_runner_id, org
   - risk: Destructive: Delete a GitHub-hosted runner for an organization. Removes provider-side state.
 - oidc_create_oidc_custom_property_inclusion_for_org:
   - endpoint: POST /orgs/{{ record.org }}/actions/oidc/customization/properties/repo
@@ -1329,7 +1329,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Creates provider-side state: Create an OIDC custom property inclusion for an organization.
 - oidc_delete_oidc_custom_property_inclusion_for_org:
   - endpoint: DELETE /orgs/{{ record.org }}/actions/oidc/customization/properties/repo/{{ record.custom_property_name }}
-  - required fields: org, custom_property_name
+  - required fields: custom_property_name, org
   - risk: Destructive: Delete an OIDC custom property inclusion for an organization. Removes provider-side state.
 - oidc_update_oidc_custom_sub_template_for_org:
   - endpoint: PUT /orgs/{{ record.org }}/actions/oidc/customization/sub
@@ -1405,11 +1405,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set repository access for a self-hosted runner group in an organization.
 - actions_add_repo_access_to_self_hosted_runner_group_in_org:
   - endpoint: PUT /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories/{{ record.repository_id }}
-  - required fields: org, runner_group_id, repository_id
+  - required fields: org, repository_id, runner_group_id
   - risk: Mutates existing provider-side state: Add repository access to a self-hosted runner group in an organization.
 - actions_remove_repo_access_to_self_hosted_runner_group_in_org:
   - endpoint: DELETE /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories/{{ record.repository_id }}
-  - required fields: org, runner_group_id, repository_id
+  - required fields: org, repository_id, runner_group_id
   - risk: Destructive: Remove repository access to a self-hosted runner group in an organization. Removes provider-side state.
 - actions_set_self_hosted_runners_in_group_for_org:
   - endpoint: PUT /orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/runners
@@ -1453,7 +1453,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Destructive: Remove all custom labels from a self-hosted runner for an organization. Removes provider-side state.
 - actions_remove_custom_label_from_self_hosted_runner_for_org:
   - endpoint: DELETE /orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}
-  - required fields: org, runner_id, name
+  - required fields: name, org, runner_id
   - risk: Destructive: Remove a custom label from a self-hosted runner for an organization. Removes provider-side state.
 - actions_create_or_update_org_secret:
   - endpoint: PUT /orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}
@@ -1469,11 +1469,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set selected repositories for an organization secret.
 - actions_add_selected_repo_to_org_secret:
   - endpoint: PUT /orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: org, secret_name, repository_id
+  - required fields: org, repository_id, secret_name
   - risk: Mutates existing provider-side state: Add selected repository to an organization secret.
 - actions_remove_selected_repo_from_org_secret:
   - endpoint: DELETE /orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: org, secret_name, repository_id
+  - required fields: org, repository_id, secret_name
   - risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.
 - actions_create_org_variable:
   - endpoint: POST /orgs/{{ record.org }}/actions/variables
@@ -1485,7 +1485,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update an organization variable.
 - actions_delete_org_variable:
   - endpoint: DELETE /orgs/{{ record.org }}/actions/variables/{{ record.name }}
-  - required fields: org, name
+  - required fields: name, org
   - risk: Destructive: Delete an organization variable. Removes provider-side state.
 - actions_set_selected_repos_for_org_variable:
   - endpoint: PUT /orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories
@@ -1493,11 +1493,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set selected repositories for an organization variable.
 - actions_add_selected_repo_to_org_variable:
   - endpoint: PUT /orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories/{{ record.repository_id }}
-  - required fields: org, name, repository_id
+  - required fields: name, org, repository_id
   - risk: Mutates existing provider-side state: Add selected repository to an organization variable.
 - actions_remove_selected_repo_from_org_variable:
   - endpoint: DELETE /orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories/{{ record.repository_id }}
-  - required fields: org, name, repository_id
+  - required fields: name, org, repository_id
   - risk: Destructive: Remove selected repository from an organization variable. Removes provider-side state.
 - agents_create_or_update_org_secret:
   - endpoint: PUT /orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}
@@ -1513,11 +1513,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set selected repositories for an organization secret.
 - agents_add_selected_repo_to_org_secret:
   - endpoint: PUT /orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: org, secret_name, repository_id
+  - required fields: org, repository_id, secret_name
   - risk: Mutates existing provider-side state: Add selected repository to an organization secret.
 - agents_remove_selected_repo_from_org_secret:
   - endpoint: DELETE /orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: org, secret_name, repository_id
+  - required fields: org, repository_id, secret_name
   - risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.
 - agents_create_org_variable:
   - endpoint: POST /orgs/{{ record.org }}/agents/variables
@@ -1529,7 +1529,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update an organization variable.
 - agents_delete_org_variable:
   - endpoint: DELETE /orgs/{{ record.org }}/agents/variables/{{ record.name }}
-  - required fields: org, name
+  - required fields: name, org
   - risk: Destructive: Delete an organization variable. Removes provider-side state.
 - agents_set_selected_repos_for_org_variable:
   - endpoint: PUT /orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories
@@ -1537,11 +1537,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set selected repositories for an organization variable.
 - agents_add_selected_repo_to_org_variable:
   - endpoint: PUT /orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories/{{ record.repository_id }}
-  - required fields: org, name, repository_id
+  - required fields: name, org, repository_id
   - risk: Mutates existing provider-side state: Add selected repository to an organization variable.
 - agents_remove_selected_repo_from_org_variable:
   - endpoint: DELETE /orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories/{{ record.repository_id }}
-  - required fields: org, name, repository_id
+  - required fields: name, org, repository_id
   - risk: Destructive: Remove selected repository from an organization variable. Removes provider-side state.
 - orgs_create_artifact_deployment_record:
   - endpoint: POST /orgs/{{ record.org }}/artifacts/metadata/deployment-record
@@ -1565,7 +1565,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Destructive: Delete attestations by subject digest. Removes provider-side state.
 - orgs_delete_attestations_by_id:
   - endpoint: DELETE /orgs/{{ record.org }}/attestations/{{ record.attestation_id }}
-  - required fields: org, attestation_id
+  - required fields: attestation_id, org
   - risk: Destructive: Delete attestations by ID. Removes provider-side state.
 - orgs_block_user:
   - endpoint: PUT /orgs/{{ record.org }}/blocks/{{ record.username }}
@@ -1577,12 +1577,12 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Destructive: Unblock a user from an organization. Removes provider-side state.
 - campaigns_update_campaign:
   - endpoint: PATCH /orgs/{{ record.org }}/campaigns/{{ record.campaign_number }}
-  - required fields: org, campaign_number
+  - required fields: campaign_number, org
   - optional fields: contact_link, description, ends_at, managers, name, state, team_managers
   - risk: Mutates existing provider-side state: Update a campaign.
 - campaigns_delete_campaign:
   - endpoint: DELETE /orgs/{{ record.org }}/campaigns/{{ record.campaign_number }}
-  - required fields: org, campaign_number
+  - required fields: campaign_number, org
   - risk: Destructive: Delete a campaign for an organization. Removes provider-side state.
 - code_security_create_configuration:
   - endpoint: POST /orgs/{{ record.org }}/code-security/configurations
@@ -1598,11 +1598,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update a code security configuration.
 - code_security_delete_configuration:
   - endpoint: DELETE /orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}
-  - required fields: org, configuration_id
+  - required fields: configuration_id, org
   - risk: Destructive: Delete a code security configuration. Removes provider-side state.
 - code_security_attach_configuration:
   - endpoint: POST /orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}/attach
-  - required fields: org, configuration_id, scope
+  - required fields: configuration_id, org, scope
   - optional fields: selected_repository_ids
   - risk: Creates provider-side state: Attach a configuration to repositories.
 - code_security_set_configuration_as_default:
@@ -1635,11 +1635,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set selected repositories for an organization secret.
 - codespaces_add_selected_repo_to_org_secret:
   - endpoint: PUT /orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: org, secret_name, repository_id
+  - required fields: org, repository_id, secret_name
   - risk: Mutates existing provider-side state: Add selected repository to an organization secret.
 - codespaces_remove_selected_repo_from_org_secret:
   - endpoint: DELETE /orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: org, secret_name, repository_id
+  - required fields: org, repository_id, secret_name
   - risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.
 - copilot_spaces_create_for_org:
   - endpoint: POST /orgs/{{ record.org }}/copilot-spaces
@@ -1663,7 +1663,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set a collaborator role for an organization Copilot Space.
 - copilot_spaces_remove_collaborator_for_org:
   - endpoint: DELETE /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}
-  - required fields: org, space_number, actor_type, actor_identifier
+  - required fields: actor_identifier, actor_type, org, space_number
   - risk: Destructive: Remove a collaborator from an organization Copilot Space. Removes provider-side state.
 - copilot_spaces_create_resource_for_org:
   - endpoint: POST /orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/resources
@@ -1735,11 +1735,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set selected repositories for an organization secret.
 - dependabot_add_selected_repo_to_org_secret:
   - endpoint: PUT /orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: org, secret_name, repository_id
+  - required fields: org, repository_id, secret_name
   - risk: Mutates existing provider-side state: Add selected repository to an organization secret.
 - dependabot_remove_selected_repo_from_org_secret:
   - endpoint: DELETE /orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: org, secret_name, repository_id
+  - required fields: org, repository_id, secret_name
   - risk: Destructive: Remove selected repository from an organization secret. Removes provider-side state.
 - orgs_create_webhook:
   - endpoint: POST /orgs/{{ record.org }}/hooks
@@ -1751,7 +1751,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update an organization webhook.
 - orgs_delete_webhook:
   - endpoint: DELETE /orgs/{{ record.org }}/hooks/{{ record.hook_id }}
-  - required fields: org, hook_id
+  - required fields: hook_id, org
   - risk: Destructive: Delete an organization webhook. Removes provider-side state.
 - orgs_update_webhook_config_for_org:
   - endpoint: PATCH /orgs/{{ record.org }}/hooks/{{ record.hook_id }}/config
@@ -1759,11 +1759,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update a webhook configuration for an organization.
 - orgs_redeliver_webhook_delivery:
   - endpoint: POST /orgs/{{ record.org }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts
-  - required fields: org, hook_id, delivery_id
+  - required fields: delivery_id, hook_id, org
   - risk: Creates provider-side state: Redeliver a delivery for an organization webhook.
 - orgs_ping_webhook:
   - endpoint: POST /orgs/{{ record.org }}/hooks/{{ record.hook_id }}/pings
-  - required fields: org, hook_id
+  - required fields: hook_id, org
   - risk: Creates provider-side state: Ping an organization webhook.
 - interactions_set_restrictions_for_org:
   - endpoint: PUT /orgs/{{ record.org }}/interaction-limits
@@ -1783,7 +1783,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Creates provider-side state: Create an organization invitation.
 - orgs_cancel_invitation:
   - endpoint: DELETE /orgs/{{ record.org }}/invitations/{{ record.invitation_id }}
-  - required fields: org, invitation_id
+  - required fields: invitation_id, org
   - risk: Destructive: Cancel an organization invitation. Removes provider-side state.
 - orgs_create_issue_field:
   - endpoint: POST /orgs/{{ record.org }}/issue-fields
@@ -1795,7 +1795,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update issue field for an organization.
 - orgs_delete_issue_field:
   - endpoint: DELETE /orgs/{{ record.org }}/issue-fields/{{ record.issue_field_id }}
-  - required fields: org, issue_field_id
+  - required fields: issue_field_id, org
   - risk: Destructive: Delete issue field for an organization. Removes provider-side state.
 - orgs_create_issue_type:
   - endpoint: POST /orgs/{{ record.org }}/issue-types
@@ -1807,7 +1807,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update issue type for an organization.
 - orgs_delete_issue_type:
   - endpoint: DELETE /orgs/{{ record.org }}/issue-types/{{ record.issue_type_id }}
-  - required fields: org, issue_type_id
+  - required fields: issue_type_id, org
   - risk: Destructive: Delete issue type for an organization. Removes provider-side state.
 - orgs_remove_member:
   - endpoint: DELETE /orgs/{{ record.org }}/members/{{ record.username }}
@@ -1815,11 +1815,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Destructive: Remove an organization member. Removes provider-side state.
 - codespaces_delete_from_organization:
   - endpoint: DELETE /orgs/{{ record.org }}/members/{{ record.username }}/codespaces/{{ record.codespace_name }}
-  - required fields: org, username, codespace_name
+  - required fields: codespace_name, org, username
   - risk: Destructive: Delete a codespace from the organization. Removes provider-side state.
 - codespaces_stop_in_organization:
   - endpoint: POST /orgs/{{ record.org }}/members/{{ record.username }}/codespaces/{{ record.codespace_name }}/stop
-  - required fields: org, username, codespace_name
+  - required fields: codespace_name, org, username
   - risk: Creates provider-side state: Stop a codespace for an organization user.
 - orgs_set_membership_for_user:
   - endpoint: PUT /orgs/{{ record.org }}/memberships/{{ record.username }}
@@ -1835,11 +1835,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Creates provider-side state: Start an organization migration.
 - migrations_delete_archive_for_org:
   - endpoint: DELETE /orgs/{{ record.org }}/migrations/{{ record.migration_id }}/archive
-  - required fields: org, migration_id
+  - required fields: migration_id, org
   - risk: Destructive: Delete an organization migration archive. Removes provider-side state.
 - migrations_unlock_repo_for_org:
   - endpoint: DELETE /orgs/{{ record.org }}/migrations/{{ record.migration_id }}/repos/{{ record.repo_name }}/lock
-  - required fields: org, migration_id, repo_name
+  - required fields: migration_id, org, repo_name
   - risk: Destructive: Unlock an organization repository. Removes provider-side state.
 - orgs_revoke_all_org_roles_team:
   - endpoint: DELETE /orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}
@@ -1847,11 +1847,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Destructive: Remove all organization roles for a team. Removes provider-side state.
 - orgs_assign_team_to_org_role:
   - endpoint: PUT /orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}/{{ record.role_id }}
-  - required fields: org, team_slug, role_id
+  - required fields: org, role_id, team_slug
   - risk: Mutates existing provider-side state: Assign an organization role to a team.
 - orgs_revoke_org_role_team:
   - endpoint: DELETE /orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}/{{ record.role_id }}
-  - required fields: org, team_slug, role_id
+  - required fields: org, role_id, team_slug
   - risk: Destructive: Remove an organization role from a team. Removes provider-side state.
 - orgs_revoke_all_org_roles_user:
   - endpoint: DELETE /orgs/{{ record.org }}/organization-roles/users/{{ record.username }}
@@ -1859,11 +1859,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Destructive: Remove all organization roles for a user. Removes provider-side state.
 - orgs_assign_user_to_org_role:
   - endpoint: PUT /orgs/{{ record.org }}/organization-roles/users/{{ record.username }}/{{ record.role_id }}
-  - required fields: org, username, role_id
+  - required fields: org, role_id, username
   - risk: Mutates existing provider-side state: Assign an organization role to a user.
 - orgs_revoke_org_role_user:
   - endpoint: DELETE /orgs/{{ record.org }}/organization-roles/users/{{ record.username }}/{{ record.role_id }}
-  - required fields: org, username, role_id
+  - required fields: org, role_id, username
   - risk: Destructive: Remove an organization role from a user. Removes provider-side state.
 - orgs_convert_member_to_outside_collaborator:
   - endpoint: PUT /orgs/{{ record.org }}/outside_collaborators/{{ record.username }}
@@ -1875,19 +1875,19 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Destructive: Remove outside collaborator from an organization. Removes provider-side state.
 - packages_delete_package_for_org:
   - endpoint: DELETE /orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}
-  - required fields: org, package_type, package_name
+  - required fields: org, package_name, package_type
   - risk: Destructive: Delete a package for an organization. Removes provider-side state.
 - packages_restore_package_for_org:
   - endpoint: POST /orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/restore
-  - required fields: org, package_type, package_name
+  - required fields: org, package_name, package_type
   - risk: Creates provider-side state: Restore a package for an organization.
 - packages_delete_package_version_for_org:
   - endpoint: DELETE /orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}
-  - required fields: org, package_type, package_name, package_version_id
+  - required fields: org, package_name, package_type, package_version_id
   - risk: Destructive: Delete package version for an organization. Removes provider-side state.
 - packages_restore_package_version_for_org:
   - endpoint: POST /orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore
-  - required fields: org, package_type, package_name, package_version_id
+  - required fields: org, package_name, package_type, package_version_id
   - risk: Creates provider-side state: Restore package version for an organization.
 - orgs_review_pat_grant_requests_in_bulk:
   - endpoint: POST /orgs/{{ record.org }}/personal-access-token-requests
@@ -1927,7 +1927,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update project item for organization.
 - projects_delete_item_for_org:
   - endpoint: DELETE /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}
-  - required fields: org, project_number, item_id
+  - required fields: item_id, org, project_number
   - risk: Destructive: Delete project item for organization. Removes provider-side state.
 - projects_create_view_for_org:
   - endpoint: POST /orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/views
@@ -1943,7 +1943,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Create or update a custom property for an organization.
 - orgs_custom_properties_for_repos_delete_organization_definition:
   - endpoint: DELETE /orgs/{{ record.org }}/properties/schema/{{ record.custom_property_name }}
-  - required fields: org, custom_property_name
+  - required fields: custom_property_name, org
   - risk: Destructive: Remove a custom property for an organization. Removes provider-side state.
 - orgs_custom_properties_for_repos_create_or_update_organization_values:
   - endpoint: PATCH /orgs/{{ record.org }}/properties/values
@@ -2019,7 +2019,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update a hosted compute network configuration for an organization.
 - hosted_compute_delete_network_configuration_from_org:
   - endpoint: DELETE /orgs/{{ record.org }}/settings/network-configurations/{{ record.network_configuration_id }}
-  - required fields: org, network_configuration_id
+  - required fields: network_configuration_id, org
   - risk: Destructive: Delete a hosted compute network configuration from an organization. Removes provider-side state.
 - teams_create:
   - endpoint: POST /orgs/{{ record.org }}/teams
@@ -2150,11 +2150,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set selected repositories for a user secret.
 - codespaces_add_repository_for_secret_for_authenticated_user:
   - endpoint: PUT /user/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: secret_name, repository_id
+  - required fields: repository_id, secret_name
   - risk: Mutates existing provider-side state: Add a selected repository to a user secret.
 - codespaces_remove_repository_for_secret_for_authenticated_user:
   - endpoint: DELETE /user/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}
-  - required fields: secret_name, repository_id
+  - required fields: repository_id, secret_name
   - risk: Destructive: Remove a selected repository from a user secret. Removes provider-side state.
 - codespaces_update_for_authenticated_user:
   - endpoint: PATCH /user/codespaces/{{ record.codespace_name }}
@@ -2241,19 +2241,19 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Destructive: Unlock a user repository. Removes provider-side state.
 - packages_delete_package_for_authenticated_user:
   - endpoint: DELETE /user/packages/{{ record.package_type }}/{{ record.package_name }}
-  - required fields: package_type, package_name
+  - required fields: package_name, package_type
   - risk: Destructive: Delete a package for the authenticated user. Removes provider-side state.
 - packages_restore_package_for_authenticated_user:
   - endpoint: POST /user/packages/{{ record.package_type }}/{{ record.package_name }}/restore
-  - required fields: package_type, package_name
+  - required fields: package_name, package_type
   - risk: Creates provider-side state: Restore a package for the authenticated user.
 - packages_delete_package_version_for_authenticated_user:
   - endpoint: DELETE /user/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}
-  - required fields: package_type, package_name, package_version_id
+  - required fields: package_name, package_type, package_version_id
   - risk: Destructive: Delete a package version for the authenticated user. Removes provider-side state.
 - packages_restore_package_version_for_authenticated_user:
   - endpoint: POST /user/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore
-  - required fields: package_type, package_name, package_version_id
+  - required fields: package_name, package_type, package_version_id
   - risk: Creates provider-side state: Restore a package version for the authenticated user.
 - repos_create_for_authenticated_user:
   - endpoint: POST /user/repos
@@ -2295,11 +2295,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Creates provider-side state: Create a view for a user-owned project.
 - users_delete_attestations_by_subject_digest:
   - endpoint: DELETE /users/{{ record.username }}/attestations/digest/{{ record.subject_digest }}
-  - required fields: username, subject_digest
+  - required fields: subject_digest, username
   - risk: Destructive: Delete attestations by subject digest. Removes provider-side state.
 - users_delete_attestations_by_id:
   - endpoint: DELETE /users/{{ record.username }}/attestations/{{ record.attestation_id }}
-  - required fields: username, attestation_id
+  - required fields: attestation_id, username
   - risk: Destructive: Delete attestations by ID. Removes provider-side state.
 - copilot_spaces_create_for_user:
   - endpoint: POST /users/{{ record.username }}/copilot-spaces
@@ -2311,7 +2311,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set a Copilot Space for a user.
 - copilot_spaces_delete_for_user:
   - endpoint: DELETE /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}
-  - required fields: username, space_number
+  - required fields: space_number, username
   - risk: Destructive: Delete a Copilot Space for a user. Removes provider-side state.
 - copilot_spaces_add_collaborator_for_user:
   - endpoint: POST /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/collaborators
@@ -2323,7 +2323,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set a collaborator role for a Copilot Space for a user.
 - copilot_spaces_remove_collaborator_for_user:
   - endpoint: DELETE /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}
-  - required fields: username, space_number, actor_type, actor_identifier
+  - required fields: actor_identifier, actor_type, space_number, username
   - risk: Destructive: Remove a collaborator from a Copilot Space for a user. Removes provider-side state.
 - copilot_spaces_create_resource_for_user:
   - endpoint: POST /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/resources
@@ -2335,23 +2335,23 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Set a resource for a Copilot Space for a user.
 - copilot_spaces_delete_resource_for_user:
   - endpoint: DELETE /users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}
-  - required fields: username, space_number, space_resource_id
+  - required fields: space_number, space_resource_id, username
   - risk: Destructive: Delete a resource from a Copilot Space for a user. Removes provider-side state.
 - packages_delete_package_for_user:
   - endpoint: DELETE /users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}
-  - required fields: username, package_type, package_name
+  - required fields: package_name, package_type, username
   - risk: Destructive: Delete a package for a user. Removes provider-side state.
 - packages_restore_package_for_user:
   - endpoint: POST /users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/restore
-  - required fields: username, package_type, package_name
+  - required fields: package_name, package_type, username
   - risk: Creates provider-side state: Restore a package for a user.
 - packages_delete_package_version_for_user:
   - endpoint: DELETE /users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}
-  - required fields: username, package_type, package_name, package_version_id
+  - required fields: package_name, package_type, package_version_id, username
   - risk: Destructive: Delete package version for a user. Removes provider-side state.
 - packages_restore_package_version_for_user:
   - endpoint: POST /users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore
-  - required fields: username, package_type, package_name, package_version_id
+  - required fields: package_name, package_type, package_version_id, username
   - risk: Creates provider-side state: Restore package version for a user.
 - projects_update_item_for_user:
   - endpoint: PATCH /users/{{ record.username }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}
@@ -2359,7 +2359,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - risk: Mutates existing provider-side state: Update project item for user.
 - projects_delete_item_for_user:
   - endpoint: DELETE /users/{{ record.username }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}
-  - required fields: username, project_number, item_id
+  - required fields: item_id, project_number, username
   - risk: Destructive: Delete project item for user. Removes provider-side state.
 - orgs_attestations_delete_request_by_subject_digests:
   - endpoint: POST /orgs/{{ record.org }}/attestations/delete-request
@@ -2745,15 +2745,15 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - completion - Generate shell completion [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Generates gh-specific shell completion, while connector commands bypass Cobra and expose no shell completion executor contract.
 - Additional Commands
   - api - Make an authenticated GitHub API request [intent=raw_api availability=unsupported_local unsupported local workflow]; notes: Generic authenticated REST/GraphQL dispatch is intentionally prohibited; fixed declared operations are the supported replacement.
-  - api repos remove-collaborator - DELETE /repos/{owner}/{repo}/collaborators/{username} [intent=reverse_etl availability=implemented write=remove_collaborator]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: revokes a collaborator's access to the repository; flags: --username (required)
-  - api repos delete-commit-comment - DELETE /repos/{owner}/{repo}/comments/{comment_id} [intent=reverse_etl availability=implemented write=delete_commit_comment]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: removes a commit comment; flags: --comment-id (required)
-  - api repos delete-an-environment - DELETE /repos/{owner}/{repo}/environments/{environment_name} [intent=reverse_etl availability=implemented write=delete_environment]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: removes a deployment environment and its protection rules; flags: --environment-name (required)
-  - api git delete-ref - DELETE /repos/{owner}/{repo}/git/refs/{ref} [intent=reverse_etl availability=implemented write=delete_ref]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: permanently deletes a branch or tag ref; flags: --ref (required)
-  - api repos delete-webhook - DELETE /repos/{owner}/{repo}/hooks/{hook_id} [intent=reverse_etl availability=implemented write=delete_webhook]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: removes a webhook; the target will stop receiving repository event payloads; flags: --hook-id (required)
-  - api issues delete-comment - DELETE /repos/{owner}/{repo}/issues/comments/{comment_id} [intent=reverse_etl availability=implemented write=delete_issue_comment]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: removes an issue or pull request comment; flags: --comment-id (required)
-  - api issues remove-label - DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name} [intent=reverse_etl availability=implemented write=remove_issue_label]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: removes a single label from an issue or pull request; flags: --issue-number (required), --name (required)
-  - api issues delete-milestone - DELETE /repos/{owner}/{repo}/milestones/{milestone_number} [intent=reverse_etl availability=implemented write=delete_milestone]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: removes repository planning metadata from GitHub; flags: --milestone-number (required)
-  - api pulls delete-review-comment - DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id} [intent=reverse_etl availability=implemented write=delete_review_comment]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: removes a pull request review comment; flags: --comment-id (required)
+  - api repos remove-collaborator - DELETE /repos/{owner}/{repo}/collaborators/{username} [intent=reverse_etl availability=implemented write=remove_collaborator]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: revokes a collaborator's access to the repository; flags: --username (required)
+  - api repos delete-commit-comment - DELETE /repos/{owner}/{repo}/comments/{comment_id} [intent=reverse_etl availability=implemented write=delete_commit_comment]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: removes a commit comment; flags: --comment-id (required)
+  - api repos delete-an-environment - DELETE /repos/{owner}/{repo}/environments/{environment_name} [intent=reverse_etl availability=implemented write=delete_environment]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: removes a deployment environment and its protection rules; flags: --environment-name (required)
+  - api git delete-ref - DELETE /repos/{owner}/{repo}/git/refs/{ref} [intent=reverse_etl availability=implemented write=delete_ref]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: permanently deletes a branch or tag ref; flags: --ref (required)
+  - api repos delete-webhook - DELETE /repos/{owner}/{repo}/hooks/{hook_id} [intent=reverse_etl availability=implemented write=delete_webhook]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: removes a webhook; the target will stop receiving repository event payloads; flags: --hook-id (required)
+  - api issues delete-comment - DELETE /repos/{owner}/{repo}/issues/comments/{comment_id} [intent=reverse_etl availability=implemented write=delete_issue_comment]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: removes an issue or pull request comment; flags: --comment-id (required)
+  - api issues remove-label - DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name} [intent=reverse_etl availability=implemented write=remove_issue_label]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: removes a single label from an issue or pull request; flags: --issue-number (required), --name (required)
+  - api issues delete-milestone - DELETE /repos/{owner}/{repo}/milestones/{milestone_number} [intent=reverse_etl availability=implemented write=delete_milestone]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: removes repository planning metadata from GitHub; flags: --milestone-number (required)
+  - api pulls delete-review-comment - DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id} [intent=reverse_etl availability=implemented write=delete_review_comment]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: removes a pull request review comment; flags: --comment-id (required)
   - search repos - Search repositories [intent=direct_read availability=implemented]; flags: --q (required), --page, --page-cursor
   - search issues - Search issues and pull requests [intent=direct_read availability=implemented]; flags: --q (required), --page, --page-cursor
   - search prs - Search pull requests [intent=direct_read availability=implemented]; notes: Compatibility alias of search issues; uses that declaration-owned provider contract.; flags: --q (required), --page, --page-cursor
@@ -3475,12 +3475,12 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - enterprise-teams create - Create an enterprise team [intent=reverse_etl availability=implemented write=enterprise_teams_create]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create an enterprise team.; flags: --enterprise (required), --name (required), --description, --sync-to-organizations, --organization-selection-type, --group-id, --notification-setting
   - enterprise-team-memberships bulk-add - Bulk add team members [intent=reverse_etl availability=implemented write=enterprise_team_memberships_bulk_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Bulk add team members.; flags: --enterprise (required), --usernames (required)
   - enterprise-team-memberships bulk-remove - Bulk remove team members [intent=reverse_etl availability=implemented write=enterprise_team_memberships_bulk_remove]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Bulk remove team members.; flags: --enterprise (required), --usernames (required)
-  - enterprise-team-memberships add - Add team member [intent=reverse_etl availability=implemented write=enterprise_team_memberships_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add team member.; flags: --enterprise (required), --username (required)
-  - enterprise-team-memberships remove - Remove team membership [intent=reverse_etl availability=implemented write=enterprise_team_memberships_remove]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove team membership. Removes provider-side state.; flags: --enterprise (required), --username (required)
+  - enterprise-team-memberships add - Add team member [intent=reverse_etl availability=implemented write=enterprise_team_memberships_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add team member.; flags: --enterprise (required), --enterprise-team (required), --username (required)
+  - enterprise-team-memberships remove - Remove team membership [intent=reverse_etl availability=implemented write=enterprise_team_memberships_remove]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Remove team membership. Removes provider-side state.; flags: --enterprise (required), --enterprise-team (required), --username (required)
   - enterprise-team-organizations bulk-add - Add organization assignments [intent=reverse_etl availability=implemented write=enterprise_team_organizations_bulk_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Add organization assignments.; flags: --enterprise (required), --organization-slugs (required)
   - enterprise-team-organizations bulk-remove - Remove organization assignments [intent=reverse_etl availability=implemented write=enterprise_team_organizations_bulk_remove]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Remove organization assignments.; flags: --enterprise (required), --organization-slugs (required)
-  - enterprise-team-organizations add - Add an organization assignment [intent=reverse_etl availability=implemented write=enterprise_team_organizations_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add an organization assignment.; flags: --enterprise (required), --org (required)
-  - enterprise-team-organizations delete - Delete an organization assignment [intent=reverse_etl availability=implemented write=enterprise_team_organizations_delete]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization assignment. Removes provider-side state.; flags: --enterprise (required), --org (required)
+  - enterprise-team-organizations add - Add an organization assignment [intent=reverse_etl availability=implemented write=enterprise_team_organizations_add]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Add an organization assignment.; flags: --enterprise (required), --enterprise-team (required), --org (required)
+  - enterprise-team-organizations delete - Delete an organization assignment [intent=reverse_etl availability=implemented write=enterprise_team_organizations_delete]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an organization assignment. Removes provider-side state.; flags: --enterprise (required), --enterprise-team (required), --org (required)
   - enterprise-teams update - Update an enterprise team [intent=reverse_etl availability=implemented write=enterprise_teams_update]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates existing provider-side state: Update an enterprise team.; flags: --enterprise (required), --team-slug (required), --name, --description, --sync-to-organizations, --organization-selection-type, --group-id, --notification-setting
   - enterprise-teams delete - Delete an enterprise team [intent=reverse_etl availability=implemented write=enterprise_teams_delete]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive: Delete an enterprise team. Removes provider-side state.; flags: --enterprise (required), --team-slug (required)
   - gists create - Create a gist [intent=reverse_etl availability=implemented write=gists_create]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Creates provider-side state: Create a gist.; flags: --description, --files (required), --public

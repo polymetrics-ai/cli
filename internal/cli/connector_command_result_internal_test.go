@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strconv"
 	"strings"
@@ -223,6 +224,57 @@ func TestWriteConnectorCommandResultPreservesBinaryDownloadEnvelope(t *testing.T
 	}
 	if !got.Receipt.ResponseReceived || got.Receipt.Status != 200 || !got.Receipt.BodyPresent || got.Receipt.BodyBytes != 48219 || got.Receipt.Body.FileSHA256 != got.Record.FileSHA256 {
 		t.Fatalf("binary download receipt = %+v", got.Receipt)
+	}
+}
+
+func TestWriteConnectorCommandFailureResultPreservesBinaryDownloadErrorEnvelope(t *testing.T) {
+	result := commandrunner.Result{
+		Connector: "youtube-analytics",
+		Command:   "reports download",
+		BinaryDownload: &connectors.OperationBinaryDownloadResult{
+			Operation: "download_report",
+			Method:    http.MethodGet,
+			Path:      "/v1/media/jobs/job_fixture/reports/report_fixture?alt=media",
+			Status:    http.StatusOK,
+			Receipt: &connectors.ProviderResponseReceipt{
+				ResponseReceived: true,
+				Status:           http.StatusOK,
+				BodyPresent:      true,
+				BodyBytes:        9,
+			},
+		},
+	}
+
+	var stdout, stderr bytes.Buffer
+	err := writeConnectorCommandFailureResult(&stdout, &stderr, true, result, nil, errors.New("binary download response too large: exceeds limit 8 bytes"))
+	if err != nil {
+		t.Fatalf("writeConnectorCommandFailureResult: %v", err)
+	}
+	if got := stderr.String(); got != "" {
+		t.Fatalf("binary download error stderr = %q, want empty", got)
+	}
+
+	var got struct {
+		Kind    string `json:"kind"`
+		Receipt struct {
+			ResponseReceived bool  `json:"response_received"`
+			Status           int   `json:"status"`
+			BodyBytes        int64 `json:"body_bytes"`
+		} `json:"receipt"`
+		Error struct {
+			Category string `json:"category"`
+			Code     string `json:"code"`
+			Message  string `json:"message"`
+		} `json:"error"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &got); err != nil {
+		t.Fatalf("decode binary download failure JSON: %v\n%s", err, stdout.String())
+	}
+	if got.Kind != "ConnectorCommandBinaryDownload" || !got.Receipt.ResponseReceived || got.Receipt.Status != http.StatusOK || got.Receipt.BodyBytes != 9 {
+		t.Fatalf("binary download failure receipt = %+v", got)
+	}
+	if got.Error.Category != "internal" || got.Error.Code != "internal_error" || !strings.Contains(got.Error.Message, "too large") {
+		t.Fatalf("binary download failure error = %+v", got.Error)
 	}
 }
 

@@ -185,10 +185,6 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	if err != nil {
 		return ResolvedTransport{}, err
 	}
-	if err := validateDeliveryCompatibility(request.Mode, strategy.Strategy, sourceDescriptor.Delivery, destinationDescriptor.Delivery); err != nil {
-		return ResolvedTransport{}, err
-	}
-
 	r.mu.RLock()
 	source, sourceRegistered := r.sources[sourceDescriptor.Executor]
 	destination, destinationRegistered := r.destinations[destinationDescriptor.Executor]
@@ -205,6 +201,9 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	}
 	if destination.TransportExecutorReference() != destinationDescriptor.Executor {
 		return ResolvedTransport{}, fmt.Errorf("registered destination transport executor does not match destination descriptor")
+	}
+	if err := validateDeliveryCompatibility(request.Mode, strategy.Strategy, sourceDescriptor.Delivery, destinationDescriptor.Delivery); err != nil {
+		return ResolvedTransport{}, err
 	}
 	if isNilInterface(verifier) {
 		return ResolvedTransport{}, fmt.Errorf("external transport conformance verification is unavailable")

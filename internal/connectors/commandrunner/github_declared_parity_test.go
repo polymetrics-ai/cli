@@ -211,8 +211,12 @@ func TestGitHubDeclaredParityProviderContracts(t *testing.T) {
 		if name == "autolinks_autolink_id" {
 			field = "autolink_id"
 		}
-		if got := schema.Properties[field].Type; got != "string" {
-			t.Errorf("github write action %q field %q type = %q, want string", name, field, got)
+		wantType := "string"
+		if name == "autolinks_autolink_id" {
+			wantType = "integer"
+		}
+		if got := schema.Properties[field].Type; got != wantType {
+			t.Errorf("github write action %q field %q type = %q, want %s", name, field, got, wantType)
 		}
 	}
 

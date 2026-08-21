@@ -22472,6 +22472,13 @@
           "max_bytes": 8192
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "maps_to": "record.enterprise-team",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
           "name": "username",
           "summary": "The handle for the GitHub user account.",
           "type": "string",
@@ -22503,6 +22510,13 @@
           "summary": "The slug version of the enterprise name.",
           "type": "string",
           "maps_to": "record.enterprise",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "maps_to": "record.enterprise-team",
           "required": true,
           "max_bytes": 8192
         },
@@ -22608,6 +22622,13 @@
           "max_bytes": 8192
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "maps_to": "record.enterprise-team",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
           "name": "org",
           "summary": "The organization name.",
           "type": "string",
@@ -22639,6 +22660,13 @@
           "summary": "The slug version of the enterprise name.",
           "type": "string",
           "maps_to": "record.enterprise",
+          "required": true,
+          "max_bytes": 8192
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "maps_to": "record.enterprise-team",
           "required": true,
           "max_bytes": 8192
         },
@@ -48204,7 +48232,7 @@
       "write": "remove_collaborator",
       "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
       "risk": "revokes a collaborator's access to the repository",
-      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "api_surface": [
         {
           "method": "DELETE",
@@ -48229,7 +48257,7 @@
       "write": "delete_commit_comment",
       "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
       "risk": "removes a commit comment",
-      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "api_surface": [
         {
           "method": "DELETE",
@@ -48253,7 +48281,7 @@
       "write": "delete_environment",
       "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
       "risk": "removes a deployment environment and its protection rules",
-      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "api_surface": [
         {
           "method": "DELETE",
@@ -48278,7 +48306,7 @@
       "write": "delete_ref",
       "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
       "risk": "permanently deletes a branch or tag ref",
-      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "api_surface": [
         {
           "method": "DELETE",
@@ -48303,7 +48331,7 @@
       "write": "delete_webhook",
       "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
       "risk": "removes a webhook; the target will stop receiving repository event payloads",
-      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "api_surface": [
         {
           "method": "DELETE",
@@ -48327,7 +48355,7 @@
       "write": "delete_issue_comment",
       "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
       "risk": "removes an issue or pull request comment",
-      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "api_surface": [
         {
           "method": "DELETE",
@@ -48351,7 +48379,7 @@
       "write": "remove_issue_label",
       "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
       "risk": "removes a single label from an issue or pull request",
-      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "api_surface": [
         {
           "method": "DELETE",
@@ -48382,7 +48410,7 @@
       "write": "delete_milestone",
       "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
       "risk": "removes repository planning metadata from GitHub",
-      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "api_surface": [
         {
           "method": "DELETE",
@@ -48406,7 +48434,7 @@
       "write": "delete_review_comment",
       "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
       "risk": "removes a pull request review comment",
-      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "api_surface": [
         {
           "method": "DELETE",

@@ -1347,7 +1347,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 			return connectorCommandBlockedError(err)
 		}
 		if (result.DirectRead != nil && result.DirectRead.Receipt != nil) || (result.BinaryDownload != nil && result.BinaryDownload.Receipt != nil) {
-			if outputErr := writeConnectorCommandResult(stdout, stderr, jsonOut, result, rows); outputErr != nil {
+			if outputErr := writeConnectorCommandFailureResult(stdout, stderr, jsonOut, result, rows, err); outputErr != nil {
 				return outputErr
 			}
 			return alreadyReportedExecutionError(err)
@@ -1358,6 +1358,14 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 }
 
 func writeConnectorCommandResult(stdout, stderr io.Writer, jsonOut bool, result commandrunner.Result, rows []connectors.Record) error {
+	return writeConnectorCommandResultEnvelope(stdout, stderr, jsonOut, result, rows, nil)
+}
+
+func writeConnectorCommandFailureResult(stdout, stderr io.Writer, jsonOut bool, result commandrunner.Result, rows []connectors.Record, executionErr error) error {
+	return writeConnectorCommandResultEnvelope(stdout, stderr, jsonOut, result, rows, executionErr)
+}
+
+func writeConnectorCommandResultEnvelope(stdout, stderr io.Writer, jsonOut bool, result commandrunner.Result, rows []connectors.Record, executionErr error) error {
 	if result.BinaryDownload != nil {
 		out := envelope{
 			"kind":      "ConnectorCommandBinaryDownload",
@@ -1370,6 +1378,9 @@ func writeConnectorCommandResult(stdout, stderr io.Writer, jsonOut bool, result 
 			"headers":   result.BinaryDownload.Headers,
 			"record":    result.BinaryDownload.Record,
 			"receipt":   result.BinaryDownload.Receipt,
+		}
+		if executionErr != nil {
+			out["error"] = publicErrorEnvelope(executionErr)
 		}
 		if jsonOut {
 			return writeJSON(stdout, out)
@@ -1413,6 +1424,9 @@ func writeConnectorCommandResult(stdout, stderr io.Writer, jsonOut bool, result 
 			"headers":   result.DirectRead.Headers,
 			"response":  result.DirectRead.Body,
 			"receipt":   result.DirectRead.Receipt,
+		}
+		if executionErr != nil {
+			out["error"] = publicErrorEnvelope(executionErr)
 		}
 		if directReadPageIsReported(result.DirectRead.Page) {
 			out["page"] = result.DirectRead.Page

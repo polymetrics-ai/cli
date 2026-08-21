@@ -1751,7 +1751,7 @@ func validateCanonicalFlagOccurrences(cmd connectors.CommandSurfaceCommand, flag
 		if !ok {
 			continue
 		}
-		target, err := canonicalCommandFlagTarget(flag)
+		target, err := normalizedCommandFlagTarget(flag)
 		if err != nil {
 			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error()}
 		}
@@ -1766,7 +1766,7 @@ func validateCanonicalFlagOccurrences(cmd connectors.CommandSurfaceCommand, flag
 	return nil
 }
 
-func canonicalCommandFlagTarget(flag connectors.CommandSurfaceFlag) (string, error) {
+func normalizedCommandFlagTarget(flag connectors.CommandSurfaceFlag) (string, error) {
 	target := strings.TrimSpace(flag.MapsTo)
 	if target == "" {
 		return "", fmt.Errorf("flag --%s has no request target", flag.Name)

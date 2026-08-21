@@ -117,6 +117,47 @@ func TestSourceProjection_MissingOperationOrFieldFailsValidateAndSurfaceCheck(t 
 	}
 }
 
+func TestSourceProjection_DerivesHyphenatedPathFieldsFromExecutableTemplate(t *testing.T) {
+	bundleDir := t.TempDir()
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, writesPath, `{
+  "schema_version": 1,
+  "actions": [{
+    "name": "team_membership", "kind": "update", "method": "PUT",
+    "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}",
+    "path_fields": ["enterprise", "username"], "body_type": "none",
+    "record_schema": {"type":"object","additionalProperties":false,"properties":{}},
+    "risk": "standard"
+  }]
+}`)
+	writeProjectionFixture(t, cliPath, `{
+  "schema_version": 1,
+  "commands": [{"path":"team membership add","summary":"add","intent":"reverse_etl","availability":"implemented","write":"team_membership","flags":[]}]
+}`)
+	operation := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "team-memberships/add", Method: "put",
+		Path: "/enterprises/{enterprise}/teams/{enterprise-team}/memberships/{username}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{
+			{Name: "enterprise", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "enterprise-team", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "username", Required: true, Schema: map[string]any{"type": "string"}},
+		}},
+	}
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
+	if err != nil {
+		t.Fatalf("project hyphenated path contract: %v", err)
+	}
+	if stats.Writes != 1 || stats.CLI != 1 {
+		t.Fatalf("projection stats = %+v, want one write and CLI repair", stats)
+	}
+	writes := readProjectionFixture(t, writesPath)
+	cli := readProjectionFixture(t, cliPath)
+	if !strings.Contains(writes, `"enterprise-team"`) || !strings.Contains(cli, `"maps_to": "record.enterprise-team"`) {
+		t.Fatalf("hyphenated provider path field was not restored:\nwrites=%s\ncli=%s", writes, cli)
+	}
+}
+
 func TestInstalledReverseActions_CoverProviderRequestContract(t *testing.T) {
 	bundle, descriptor := loadInstalledGitHubSourceProjection(t)
 	if findings := validateSourceExecutableCoverage(bundle, "sources/github-operation-descriptor.json", descriptor); len(findings) != 0 {

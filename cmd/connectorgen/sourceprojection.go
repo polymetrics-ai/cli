@@ -20,7 +20,10 @@ const (
 	sourceProjectionDefaultArrayItems  = 256
 )
 
-var sourceProjectionTemplateRE = regexp.MustCompile(`\{\{\s*(?:config|record)\.([-A-Za-z0-9_]+)\s*\}\}`)
+var (
+	sourceProjectionTemplateRE       = regexp.MustCompile(`\{\{\s*(?:config|record)\.([-A-Za-z0-9_]+)\s*\}\}`)
+	sourceProjectionRecordTemplateRE = regexp.MustCompile(`\{\{\s*record\.([-A-Za-z0-9_]+)\s*\}\}`)
+)
 
 type sourceProjectionStats struct {
 	Writes  int
@@ -33,6 +36,7 @@ func (s sourceProjectionStats) Changed() bool { return s.Writes+s.CLI+s.Missing 
 type sourceActionContract struct {
 	Fields     map[string]any
 	Required   map[string]bool
+	PathFields []string
 	Query      []sourceParameterDescriptor
 	BodyFields []string
 	Binary     bool
@@ -192,10 +196,8 @@ func sourceProjectionActionPropertyCount(action *orderedObject) int {
 func sourceContractForAction(operation sourceOperationDescriptor, action *orderedObject) (sourceActionContract, error) {
 	contract := sourceActionContract{Fields: map[string]any{}, Required: map[string]bool{}}
 	pathFields := map[string]bool{}
-	for _, raw := range arrayField(action, "path_fields") {
-		if name, ok := raw.(string); ok {
-			pathFields[name] = true
-		}
+	for _, match := range sourceProjectionRecordTemplateRE.FindAllStringSubmatch(stringField(action, "path"), -1) {
+		pathFields[match[1]] = true
 	}
 	for _, parameter := range operation.Request.Path {
 		if !pathFields[parameter.Name] {
@@ -207,6 +209,7 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 		}
 		contract.Fields[parameter.Name] = converted
 		contract.Required[parameter.Name] = true
+		contract.PathFields = append(contract.PathFields, parameter.Name)
 	}
 	for _, parameter := range operation.Request.Query {
 		converted, err := sourceProjectionSchema(parameter.Schema)
@@ -253,6 +256,7 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 			contract.BodyFields = append(contract.BodyFields, name)
 		}
 	}
+	sort.Strings(contract.PathFields)
 	sort.Slice(contract.Query, func(i, j int) bool { return contract.Query[i].Name < contract.Query[j].Name })
 	sort.Strings(contract.BodyFields)
 	return contract, nil
@@ -411,6 +415,15 @@ func sourceProjectAction(action *orderedObject, contract sourceActionContract) b
 	schema.set("required", required)
 	schema.set("properties", properties)
 	changed := setOrderedIfDifferent(action, "record_schema", schema)
+	pathFields := make([]any, len(contract.PathFields))
+	for index := range contract.PathFields {
+		pathFields[index] = contract.PathFields[index]
+	}
+	if len(pathFields) == 0 {
+		changed = action.remove("path_fields") || changed
+	} else {
+		changed = setOrderedIfDifferent(action, "path_fields", pathFields) || changed
+	}
 
 	query := newOrderedObject()
 	for _, parameter := range contract.Query {
@@ -505,7 +518,7 @@ func sourceProjectionNewCommand(operation sourceOperationDescriptor, action *ord
 		command.set("source_url", operation.Source.URL)
 	}
 	command.set("risk", stringField(action, "risk"))
-	command.set("approval", "Reverse ETL writes require plan, preview, approval, and execute.")
+	command.set("approval", "Reverse ETL writes require plan, preview, approval, execute.")
 	endpoint := newOrderedObject()
 	endpoint.set("method", strings.ToUpper(operation.Method))
 	endpoint.set("path", operation.Path)
@@ -711,6 +724,7 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICommand, operation sourceOperationDescriptor) bool {
 	actionObject := newOrderedObject()
 	actionObject.set("body_type", action.BodyType)
+	actionObject.set("path", action.Path)
 	if action.BinaryUpload != nil {
 		upload := newOrderedObject()
 		upload.set("source_field", action.BinaryUpload.SourceField)

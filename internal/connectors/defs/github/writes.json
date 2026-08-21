@@ -2520,7 +2520,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2620,7 +2619,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/caches",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2836,7 +2834,6 @@
       "kind": "create",
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/registration-token",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2852,7 +2849,6 @@
       "kind": "create",
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/remove-token",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2963,8 +2959,8 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}",
       "path_fields": [
-        "runner_id",
-        "name"
+        "name",
+        "runner_id"
       ],
       "body_type": "none",
       "record_schema": {
@@ -3339,7 +3335,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -3355,7 +3350,6 @@
       "kind": "update",
       "method": "PUT",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -4263,7 +4257,6 @@
       "kind": "update",
       "method": "PATCH",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/default-setup",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -4346,7 +4339,6 @@
       "kind": "create",
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/sarifs",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -4673,8 +4665,8 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}",
       "path_fields": [
-        "environment_name",
-        "branch_policy_id"
+        "branch_policy_id",
+        "environment_name"
       ],
       "body_type": "none",
       "record_schema": {
@@ -5054,8 +5046,8 @@
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts",
       "path_fields": [
-        "hook_id",
-        "delivery_id"
+        "delivery_id",
+        "hook_id"
       ],
       "body_type": "none",
       "record_schema": {
@@ -5130,7 +5122,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -5146,7 +5137,6 @@
       "kind": "update",
       "method": "PUT",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -5162,7 +5152,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -5259,7 +5248,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -5491,8 +5479,8 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by/{{ record.issue_id }}",
       "path_fields": [
-        "issue_number",
-        "issue_id"
+        "issue_id",
+        "issue_number"
       ],
       "body_type": "none",
       "record_schema": {
@@ -5566,8 +5554,8 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values/{{ record.issue_field_id }}",
       "path_fields": [
-        "issue_number",
-        "issue_field_id"
+        "issue_field_id",
+        "issue_number"
       ],
       "body_type": "none",
       "record_schema": {
@@ -5745,7 +5733,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -5791,7 +5778,6 @@
       "kind": "create",
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/builds",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -5845,7 +5831,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -5861,7 +5846,6 @@
       "kind": "update",
       "method": "PUT",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -6080,8 +6064,8 @@
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
-        "release_id",
-        "reaction_id"
+        "reaction_id",
+        "release_id"
       ],
       "body_type": "none",
       "record_schema": {
@@ -6123,7 +6107,6 @@
       "kind": "create",
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -6314,7 +6297,6 @@
       "kind": "create",
       "method": "POST",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/reports",
-      "path_fields": [],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -6778,7 +6760,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscription",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -6825,7 +6806,6 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -6841,7 +6821,6 @@
       "kind": "update",
       "method": "PUT",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
-      "path_fields": [],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -7612,8 +7591,8 @@
       },
       "risk": "Destructive: Delete an OIDC custom property inclusion for an enterprise. Removes provider-side state.",
       "path_fields": [
-        "enterprise",
-        "custom_property_name"
+        "custom_property_name",
+        "enterprise"
       ],
       "delete": {
         "idempotent": true,
@@ -8064,8 +8043,8 @@
       },
       "risk": "Destructive: Delete a code security configuration for an enterprise. Removes provider-side state.",
       "path_fields": [
-        "enterprise",
-        "configuration_id"
+        "configuration_id",
+        "enterprise"
       ],
       "delete": {
         "idempotent": true,
@@ -8109,8 +8088,8 @@
       },
       "risk": "Creates provider-side state: Attach an enterprise configuration to repositories.",
       "path_fields": [
-        "enterprise",
-        "configuration_id"
+        "configuration_id",
+        "enterprise"
       ],
       "body_fields": [
         "scope"
@@ -8485,10 +8464,15 @@
         "additionalProperties": false,
         "required": [
           "enterprise",
+          "enterprise-team",
           "username"
         ],
         "properties": {
           "enterprise": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "enterprise-team": {
             "maxLength": 8192,
             "type": "string"
           },
@@ -8501,6 +8485,7 @@
       "risk": "Mutates existing provider-side state: Add team member.",
       "path_fields": [
         "enterprise",
+        "enterprise-team",
         "username"
       ]
     },
@@ -8516,10 +8501,15 @@
         "additionalProperties": false,
         "required": [
           "enterprise",
+          "enterprise-team",
           "username"
         ],
         "properties": {
           "enterprise": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "enterprise-team": {
             "maxLength": 8192,
             "type": "string"
           },
@@ -8532,6 +8522,7 @@
       "risk": "Destructive: Remove team membership. Removes provider-side state.",
       "path_fields": [
         "enterprise",
+        "enterprise-team",
         "username"
       ],
       "delete": {
@@ -8613,10 +8604,15 @@
         "additionalProperties": false,
         "required": [
           "enterprise",
+          "enterprise-team",
           "org"
         ],
         "properties": {
           "enterprise": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "enterprise-team": {
             "maxLength": 8192,
             "type": "string"
           },
@@ -8629,6 +8625,7 @@
       "risk": "Mutates existing provider-side state: Add an organization assignment.",
       "path_fields": [
         "enterprise",
+        "enterprise-team",
         "org"
       ]
     },
@@ -8644,10 +8641,15 @@
         "additionalProperties": false,
         "required": [
           "enterprise",
+          "enterprise-team",
           "org"
         ],
         "properties": {
           "enterprise": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "enterprise-team": {
             "maxLength": 8192,
             "type": "string"
           },
@@ -8660,6 +8662,7 @@
       "risk": "Destructive: Delete an organization assignment. Removes provider-side state.",
       "path_fields": [
         "enterprise",
+        "enterprise-team",
         "org"
       ],
       "delete": {
@@ -8936,8 +8939,8 @@
       },
       "risk": "Destructive: Delete a gist comment. Removes provider-side state.",
       "path_fields": [
-        "gist_id",
-        "comment_id"
+        "comment_id",
+        "gist_id"
       ],
       "delete": {
         "idempotent": true,
@@ -9394,8 +9397,8 @@
       },
       "risk": "Destructive: Delete a budget for an organization. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "budget_id"
+        "budget_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -9649,8 +9652,8 @@
       },
       "risk": "Destructive: Delete a custom image from the organization. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "image_definition_id"
+        "image_definition_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -9691,8 +9694,8 @@
       },
       "risk": "Destructive: Delete an image version of custom image from the organization. Removes provider-side state.",
       "path_fields": [
-        "org",
         "image_definition_id",
+        "org",
         "version"
       ],
       "delete": {
@@ -9788,8 +9791,8 @@
       },
       "risk": "Destructive: Delete a GitHub-hosted runner for an organization. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "hosted_runner_id"
+        "hosted_runner_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -9852,8 +9855,8 @@
       },
       "risk": "Destructive: Delete an OIDC custom property inclusion for an organization. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "custom_property_name"
+        "custom_property_name",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -10543,8 +10546,8 @@
       "risk": "Mutates existing provider-side state: Add repository access to a self-hosted runner group in an organization.",
       "path_fields": [
         "org",
-        "runner_group_id",
-        "repository_id"
+        "repository_id",
+        "runner_group_id"
       ]
     },
     {
@@ -10578,8 +10581,8 @@
       "risk": "Destructive: Remove repository access to a self-hosted runner group in an organization. Removes provider-side state.",
       "path_fields": [
         "org",
-        "runner_group_id",
-        "repository_id"
+        "repository_id",
+        "runner_group_id"
       ],
       "delete": {
         "idempotent": true,
@@ -10963,9 +10966,9 @@
       },
       "risk": "Destructive: Remove a custom label from a self-hosted runner for an organization. Removes provider-side state.",
       "path_fields": [
+        "name",
         "org",
-        "runner_id",
-        "name"
+        "runner_id"
       ],
       "delete": {
         "idempotent": true,
@@ -11129,8 +11132,8 @@
       "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
       "path_fields": [
         "org",
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ]
     },
     {
@@ -11165,8 +11168,8 @@
       "risk": "Destructive: Remove selected repository from an organization secret. Removes provider-side state.",
       "path_fields": [
         "org",
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ],
       "delete": {
         "idempotent": true,
@@ -11293,8 +11296,8 @@
       },
       "risk": "Destructive: Delete an organization variable. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "name"
+        "name",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -11369,8 +11372,8 @@
       },
       "risk": "Mutates existing provider-side state: Add selected repository to an organization variable.",
       "path_fields": [
-        "org",
         "name",
+        "org",
         "repository_id"
       ]
     },
@@ -11405,8 +11408,8 @@
       },
       "risk": "Destructive: Remove selected repository from an organization variable. Removes provider-side state.",
       "path_fields": [
-        "org",
         "name",
+        "org",
         "repository_id"
       ],
       "delete": {
@@ -11571,8 +11574,8 @@
       "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
       "path_fields": [
         "org",
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ]
     },
     {
@@ -11607,8 +11610,8 @@
       "risk": "Destructive: Remove selected repository from an organization secret. Removes provider-side state.",
       "path_fields": [
         "org",
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ],
       "delete": {
         "idempotent": true,
@@ -11735,8 +11738,8 @@
       },
       "risk": "Destructive: Delete an organization variable. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "name"
+        "name",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -11811,8 +11814,8 @@
       },
       "risk": "Mutates existing provider-side state: Add selected repository to an organization variable.",
       "path_fields": [
-        "org",
         "name",
+        "org",
         "repository_id"
       ]
     },
@@ -11847,8 +11850,8 @@
       },
       "risk": "Destructive: Remove selected repository from an organization variable. Removes provider-side state.",
       "path_fields": [
-        "org",
         "name",
+        "org",
         "repository_id"
       ],
       "delete": {
@@ -12240,8 +12243,8 @@
       },
       "risk": "Destructive: Delete attestations by ID. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "attestation_id"
+        "attestation_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -12389,8 +12392,8 @@
       },
       "risk": "Mutates existing provider-side state: Update a campaign.",
       "path_fields": [
-        "org",
-        "campaign_number"
+        "campaign_number",
+        "org"
       ],
       "body_fields": [
         "contact_link",
@@ -12428,8 +12431,8 @@
       },
       "risk": "Destructive: Delete a campaign for an organization. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "campaign_number"
+        "campaign_number",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -13023,8 +13026,8 @@
       },
       "risk": "Destructive: Delete a code security configuration. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "configuration_id"
+        "configuration_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -13078,8 +13081,8 @@
       },
       "risk": "Creates provider-side state: Attach a configuration to repositories.",
       "path_fields": [
-        "org",
-        "configuration_id"
+        "configuration_id",
+        "org"
       ],
       "body_fields": [
         "scope",
@@ -13381,8 +13384,8 @@
       "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
       "path_fields": [
         "org",
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ]
     },
     {
@@ -13417,8 +13420,8 @@
       "risk": "Destructive: Remove selected repository from an organization secret. Removes provider-side state.",
       "path_fields": [
         "org",
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ],
       "delete": {
         "idempotent": true,
@@ -13768,10 +13771,10 @@
       },
       "risk": "Destructive: Remove a collaborator from an organization Copilot Space. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "space_number",
+        "actor_identifier",
         "actor_type",
-        "actor_identifier"
+        "org",
+        "space_number"
       ],
       "delete": {
         "idempotent": true,
@@ -14402,8 +14405,8 @@
       "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
       "path_fields": [
         "org",
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ]
     },
     {
@@ -14438,8 +14441,8 @@
       "risk": "Destructive: Remove selected repository from an organization secret. Removes provider-side state.",
       "path_fields": [
         "org",
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ],
       "delete": {
         "idempotent": true,
@@ -14599,8 +14602,8 @@
       },
       "risk": "Destructive: Delete an organization webhook. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "hook_id"
+        "hook_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -14680,9 +14683,9 @@
       },
       "risk": "Creates provider-side state: Redeliver a delivery for an organization webhook.",
       "path_fields": [
-        "org",
+        "delivery_id",
         "hook_id",
-        "delivery_id"
+        "org"
       ]
     },
     {
@@ -14711,8 +14714,8 @@
       },
       "risk": "Creates provider-side state: Ping an organization webhook.",
       "path_fields": [
-        "org",
-        "hook_id"
+        "hook_id",
+        "org"
       ]
     },
     {
@@ -14888,8 +14891,8 @@
       },
       "risk": "Destructive: Cancel an organization invitation. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "invitation_id"
+        "invitation_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -15086,8 +15089,8 @@
       },
       "risk": "Destructive: Delete issue field for an organization. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "issue_field_id"
+        "issue_field_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -15221,8 +15224,8 @@
       },
       "risk": "Destructive: Delete issue type for an organization. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "issue_type_id"
+        "issue_type_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -15300,9 +15303,9 @@
       },
       "risk": "Destructive: Delete a codespace from the organization. Removes provider-side state.",
       "path_fields": [
+        "codespace_name",
         "org",
-        "username",
-        "codespace_name"
+        "username"
       ],
       "delete": {
         "idempotent": true,
@@ -15343,9 +15346,9 @@
       },
       "risk": "Creates provider-side state: Stop a codespace for an organization user.",
       "path_fields": [
+        "codespace_name",
         "org",
-        "username",
-        "codespace_name"
+        "username"
       ]
     },
     {
@@ -15506,8 +15509,8 @@
       },
       "risk": "Destructive: Delete an organization migration archive. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "migration_id"
+        "migration_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -15547,8 +15550,8 @@
       },
       "risk": "Destructive: Unlock an organization repository. Removes provider-side state.",
       "path_fields": [
-        "org",
         "migration_id",
+        "org",
         "repo_name"
       ],
       "delete": {
@@ -15627,8 +15630,8 @@
       "risk": "Mutates existing provider-side state: Assign an organization role to a team.",
       "path_fields": [
         "org",
-        "team_slug",
-        "role_id"
+        "role_id",
+        "team_slug"
       ]
     },
     {
@@ -15663,8 +15666,8 @@
       "risk": "Destructive: Remove an organization role from a team. Removes provider-side state.",
       "path_fields": [
         "org",
-        "team_slug",
-        "role_id"
+        "role_id",
+        "team_slug"
       ],
       "delete": {
         "idempotent": true,
@@ -15742,8 +15745,8 @@
       "risk": "Mutates existing provider-side state: Assign an organization role to a user.",
       "path_fields": [
         "org",
-        "username",
-        "role_id"
+        "role_id",
+        "username"
       ]
     },
     {
@@ -15778,8 +15781,8 @@
       "risk": "Destructive: Remove an organization role from a user. Removes provider-side state.",
       "path_fields": [
         "org",
-        "username",
-        "role_id"
+        "role_id",
+        "username"
       ],
       "delete": {
         "idempotent": true,
@@ -15897,8 +15900,8 @@
       "risk": "Destructive: Delete a package for an organization. Removes provider-side state.",
       "path_fields": [
         "org",
-        "package_type",
-        "package_name"
+        "package_name",
+        "package_type"
       ],
       "delete": {
         "idempotent": true,
@@ -15952,8 +15955,8 @@
       "risk": "Creates provider-side state: Restore a package for an organization.",
       "path_fields": [
         "org",
-        "package_type",
-        "package_name"
+        "package_name",
+        "package_type"
       ],
       "query": {
         "token": {
@@ -16007,8 +16010,8 @@
       "risk": "Destructive: Delete package version for an organization. Removes provider-side state.",
       "path_fields": [
         "org",
-        "package_type",
         "package_name",
+        "package_type",
         "package_version_id"
       ],
       "delete": {
@@ -16063,8 +16066,8 @@
       "risk": "Creates provider-side state: Restore package version for an organization.",
       "path_fields": [
         "org",
-        "package_type",
         "package_name",
+        "package_type",
         "package_version_id"
       ]
     },
@@ -16641,9 +16644,9 @@
       },
       "risk": "Destructive: Delete project item for organization. Removes provider-side state.",
       "path_fields": [
+        "item_id",
         "org",
-        "project_number",
-        "item_id"
+        "project_number"
       ],
       "delete": {
         "idempotent": true,
@@ -16899,8 +16902,8 @@
       },
       "risk": "Destructive: Remove a custom property for an organization. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "custom_property_name"
+        "custom_property_name",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -17872,8 +17875,8 @@
       },
       "risk": "Destructive: Delete a hosted compute network configuration from an organization. Removes provider-side state.",
       "path_fields": [
-        "org",
-        "network_configuration_id"
+        "network_configuration_id",
+        "org"
       ],
       "delete": {
         "idempotent": true,
@@ -19095,8 +19098,8 @@
       },
       "risk": "Mutates existing provider-side state: Add a selected repository to a user secret.",
       "path_fields": [
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ]
     },
     {
@@ -19125,8 +19128,8 @@
       },
       "risk": "Destructive: Remove a selected repository from a user secret. Removes provider-side state.",
       "path_fields": [
-        "secret_name",
-        "repository_id"
+        "repository_id",
+        "secret_name"
       ],
       "delete": {
         "idempotent": true,
@@ -19795,8 +19798,8 @@
       },
       "risk": "Destructive: Delete a package for the authenticated user. Removes provider-side state.",
       "path_fields": [
-        "package_type",
-        "package_name"
+        "package_name",
+        "package_type"
       ],
       "delete": {
         "idempotent": true,
@@ -19844,8 +19847,8 @@
       },
       "risk": "Creates provider-side state: Restore a package for the authenticated user.",
       "path_fields": [
-        "package_type",
-        "package_name"
+        "package_name",
+        "package_type"
       ],
       "query": {
         "token": {
@@ -19893,8 +19896,8 @@
       },
       "risk": "Destructive: Delete a package version for the authenticated user. Removes provider-side state.",
       "path_fields": [
-        "package_type",
         "package_name",
+        "package_type",
         "package_version_id"
       ],
       "delete": {
@@ -19943,8 +19946,8 @@
       },
       "risk": "Creates provider-side state: Restore a package version for the authenticated user.",
       "path_fields": [
-        "package_type",
         "package_name",
+        "package_type",
         "package_version_id"
       ]
     },
@@ -20345,8 +20348,8 @@
       },
       "risk": "Destructive: Delete attestations by subject digest. Removes provider-side state.",
       "path_fields": [
-        "username",
-        "subject_digest"
+        "subject_digest",
+        "username"
       ],
       "delete": {
         "idempotent": true,
@@ -20381,8 +20384,8 @@
       },
       "risk": "Destructive: Delete attestations by ID. Removes provider-side state.",
       "path_fields": [
-        "username",
-        "attestation_id"
+        "attestation_id",
+        "username"
       ],
       "delete": {
         "idempotent": true,
@@ -20581,8 +20584,8 @@
       },
       "risk": "Destructive: Delete a Copilot Space for a user. Removes provider-side state.",
       "path_fields": [
-        "username",
-        "space_number"
+        "space_number",
+        "username"
       ],
       "delete": {
         "idempotent": true,
@@ -20728,10 +20731,10 @@
       },
       "risk": "Destructive: Remove a collaborator from a Copilot Space for a user. Removes provider-side state.",
       "path_fields": [
-        "username",
-        "space_number",
+        "actor_identifier",
         "actor_type",
-        "actor_identifier"
+        "space_number",
+        "username"
       ],
       "delete": {
         "idempotent": true,
@@ -20849,9 +20852,9 @@
       },
       "risk": "Destructive: Delete a resource from a Copilot Space for a user. Removes provider-side state.",
       "path_fields": [
-        "username",
         "space_number",
-        "space_resource_id"
+        "space_resource_id",
+        "username"
       ],
       "delete": {
         "idempotent": true,
@@ -20900,9 +20903,9 @@
       },
       "risk": "Destructive: Delete a package for a user. Removes provider-side state.",
       "path_fields": [
-        "username",
+        "package_name",
         "package_type",
-        "package_name"
+        "username"
       ],
       "delete": {
         "idempotent": true,
@@ -20955,9 +20958,9 @@
       },
       "risk": "Creates provider-side state: Restore a package for a user.",
       "path_fields": [
-        "username",
+        "package_name",
         "package_type",
-        "package_name"
+        "username"
       ],
       "query": {
         "token": {
@@ -21010,10 +21013,10 @@
       },
       "risk": "Destructive: Delete package version for a user. Removes provider-side state.",
       "path_fields": [
-        "username",
-        "package_type",
         "package_name",
-        "package_version_id"
+        "package_type",
+        "package_version_id",
+        "username"
       ],
       "delete": {
         "idempotent": true,
@@ -21066,10 +21069,10 @@
       },
       "risk": "Creates provider-side state: Restore package version for a user.",
       "path_fields": [
-        "username",
-        "package_type",
         "package_name",
-        "package_version_id"
+        "package_type",
+        "package_version_id",
+        "username"
       ]
     },
     {
@@ -21154,9 +21157,9 @@
       },
       "risk": "Destructive: Delete project item for user. Removes provider-side state.",
       "path_fields": [
-        "username",
+        "item_id",
         "project_number",
-        "item_id"
+        "username"
       ],
       "delete": {
         "idempotent": true,

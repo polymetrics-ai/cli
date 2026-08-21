@@ -14480,6 +14480,11 @@
           "required": true
         },
         {
+          "path": "record.enterprise-team",
+          "type": "string",
+          "required": true
+        },
+        {
           "path": "record.username",
           "type": "string",
           "required": true
@@ -14487,6 +14492,7 @@
       ],
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--username"
       ],
       "classification": {
@@ -14533,6 +14539,11 @@
           "required": true
         },
         {
+          "path": "record.enterprise-team",
+          "type": "string",
+          "required": true
+        },
+        {
           "path": "record.username",
           "type": "string",
           "required": true
@@ -14540,6 +14551,7 @@
       ],
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--username"
       ],
       "classification": {
@@ -14586,6 +14598,11 @@
           "required": true
         },
         {
+          "path": "record.enterprise-team",
+          "type": "string",
+          "required": true
+        },
+        {
           "path": "record.org",
           "type": "string",
           "required": true
@@ -14593,6 +14610,7 @@
       ],
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--org"
       ],
       "classification": {
@@ -14639,6 +14657,11 @@
           "required": true
         },
         {
+          "path": "record.enterprise-team",
+          "type": "string",
+          "required": true
+        },
+        {
           "path": "record.org",
           "type": "string",
           "required": true
@@ -14646,6 +14669,7 @@
       ],
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--org"
       ],
       "classification": {

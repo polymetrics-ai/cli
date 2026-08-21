@@ -202,18 +202,27 @@ func writeError(stdout, stderr io.Writer, err error, jsonOut bool) int {
 	if ce.alreadyReported {
 		return exitCodeFor(ce)
 	}
-	message := safety.SanitizeTerminal(safety.RedactErrorText(ce.Error()))
+	public := publicErrorEnvelope(ce)
+	message, _ := public["message"].(string)
 	if jsonOut {
 		_ = writeJSON(stdout, envelope{
 			"api_version": apiVersion,
 			"kind":        "Error",
-			"error": envelope{
-				"category": string(ce.category),
-				"code":     ce.code,
-				"message":  message,
-			},
+			"error":       public,
 		})
 	}
 	_, _ = fmt.Fprintf(stderr, "error: %s\n", message)
 	return exitCodeFor(ce)
+}
+
+func publicErrorEnvelope(err error) envelope {
+	ce := classifyError(err)
+	if ce == nil {
+		return nil
+	}
+	return envelope{
+		"category": string(ce.category),
+		"code":     ce.code,
+		"message":  safety.SanitizeTerminal(safety.RedactErrorText(ce.Error())),
+	}
 }

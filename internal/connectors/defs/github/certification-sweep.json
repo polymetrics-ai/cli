@@ -19832,6 +19832,12 @@
           "maps_to": "record.enterprise"
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.enterprise-team"
+        },
+        {
           "name": "username",
           "type": "string",
           "required": true,
@@ -19845,9 +19851,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --enterprise, --username",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --enterprise, --enterprise-team, --username",
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--username"
       ]
     },
@@ -20016,6 +20023,12 @@
           "maps_to": "record.enterprise"
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.enterprise-team"
+        },
+        {
           "name": "username",
           "type": "string",
           "required": true,
@@ -20029,9 +20042,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --enterprise, --username",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --enterprise, --enterprise-team, --username",
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--username"
       ]
     },
@@ -20051,6 +20065,12 @@
           "maps_to": "record.enterprise"
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.enterprise-team"
+        },
+        {
           "name": "org",
           "type": "string",
           "required": true,
@@ -20064,9 +20084,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --enterprise, --org",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --enterprise, --enterprise-team, --org",
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--org"
       ]
     },
@@ -20156,6 +20177,12 @@
           "maps_to": "record.enterprise"
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.enterprise-team"
+        },
+        {
           "name": "org",
           "type": "string",
           "required": true,
@@ -20169,9 +20196,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --enterprise, --org",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --enterprise, --enterprise-team, --org",
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--org"
       ]
     },
