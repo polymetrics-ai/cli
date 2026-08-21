@@ -1177,3 +1177,21 @@ a raw body, method, path, or header channel.
   declared header credential, nested structured-body redaction, secret-store
   terminal receipt preservation, conditional API-key ownership, and sparse
   array projection.
+
+### Group 9 generated-surface reconciliation proof (2026-08-22)
+
+- **Red:** `TestETLManualAndSkillDescribeDeliveredReconciliationTerminalRun`
+  failed before source changes because the Group 8
+  `delivered_reconciliation_required` contract existed only in previously
+  hand-edited generated `docs/cli/etl.md` and `docs/skills/pm-etl/SKILL.md`.
+  `pm etl`, the closed declarative destination help, and `baseSkillDocs` did
+  not describe the durable terminal `ETLRun`, nonzero exit, durable repair
+  before endpoint resolution, or no-replay boundary. The initial focused run
+  exited 1 in 10.403s with the missing manual status as the complete failure.
+- **Green:** the canonical `internal/cli/docs.go`,
+  `internal/cli/etl_transport.go`, and `internal/cli/skills.go` generators now
+  state the exact persisted terminal result and bounded no-replay repair. The
+  focused test passed in 9.152s after the source correction. The final
+  source/CLI/docs/website/skills/matrix/candidate/sweep generation pass starts
+  from that corrected source; the earlier pre-correction generator output is
+  diagnostic only and is not claimed as final evidence.

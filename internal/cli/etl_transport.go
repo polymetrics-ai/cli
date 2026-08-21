@@ -153,6 +153,17 @@ DESCRIPTION
   the generic orchestrator advances its checkpoint only after the declared
   durable acknowledgement and read-back.
 
+  If a closed transport has already applied, read back, and checkpointed a
+  destination effect but cannot complete local receipt retirement or its
+  declaration-owned approval marker, the persisted run has status
+  delivered_reconciliation_required. Its delivery_reconciliation field names
+  only the bounded local repair; destination_results and the acknowledged
+  checkpoint remain intact. The command exits nonzero with an exact terminal ETLRun.
+  Repeating the same saved connection and stream repairs from durable
+  state before endpoint resolution and never replays source or destination I/O.
+  Missing, malformed, or stale reconciliation evidence is refused rather than
+  falling back to an ordinary route.
+
 SECURITY
   Approval tokens are accepted only through --approval-token-stdin. Callers
   cannot pass a connector, action, URL, method, body, mapping, or evidence.

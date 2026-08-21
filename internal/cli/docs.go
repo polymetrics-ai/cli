@@ -926,6 +926,17 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   they equal configured credential bytes. System-generated plans, logs,
   request diagnostics, and synthetic errors remain secret-taint-safe.
 
+  If a closed transport has already applied, read back, and checkpointed a
+  destination effect but cannot complete local receipt retirement or its
+  declaration-owned approval marker, the persisted run has status
+  delivered_reconciliation_required. Its delivery_reconciliation field names
+  only the bounded local repair; destination_results and the acknowledged
+  checkpoint remain intact. The command exits nonzero with an exact terminal ETLRun.
+  Repeating the same saved connection and stream repairs from durable
+  state before endpoint resolution and never replays source or destination I/O.
+  Missing, malformed, or stale reconciliation evidence is refused rather than
+  falling back to an ordinary route.
+
 DIRECT CONNECTOR COMMANDS
   check
     Calls the connector check operation and returns status=ok on success.
