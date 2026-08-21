@@ -1325,3 +1325,29 @@ a raw body, method, path, or header channel.
   durable reconciliation help/skill contract (1.166s). No further full
   CLI/package command is started before this derived-fixture checkpoint is
   remote verified.
+
+### Group 9 final race gate — frozen failure and focused repair (2026-08-22)
+
+- **Red:** the required race cohort
+  `go test -race -count=1 -timeout 20m ./internal/connectors/connsdk
+  ./internal/connectors/engine ./internal/connectors/commandrunner
+  ./internal/synctransport ./internal/coordination ./internal/app
+  ./internal/connectors/native/amazon-sqs ./internal/connectors/native/postgres`
+  reported one concrete App test-harness race:
+  `TestOpenComposedGitHubCommitsTimesOutOneProviderPageWithoutCancellingTheRunContext`
+  read `providerRequests` while the `httptest` handler wrote it. The affected
+  App package then exhausted its 20-minute required timeout while running
+  `TestRunETLTransportRejectsStaleCheckpointWriter`; this is a consequence of
+  the complete package race run, not a second observed product failure. Every
+  prior package in the same command was race-clean (connsdk 4.580s, engine
+  68.460s, commandrunner 231.173s, synctransport 2.186s, coordination 10.057s,
+  native SQS 8.357s, native PostgreSQL 9.612s).
+- **Green (focused):** replace the unsynchronised counter with `atomic.Int32`
+  and a one-shot request-start channel. The assertion still requires exactly
+  one provider request, now proves it began, retains the bounded-page deadline
+  and the usable outer run context, and never weakens an I/O assertion.
+  `go test -race -count=1 -timeout 20m ./internal/app -run
+  '^TestOpenComposedGitHubCommitsTimesOutOneProviderPageWithoutCancellingTheRunContext$'
+  -v` passed in 18.770s with no race. The required full App race cohort will
+  be rerun as bounded name shards at the final exact SHA so the repository's
+  20-minute per-command limit remains intact.

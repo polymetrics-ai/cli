@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"testing/fstest"
 	"time"
@@ -3080,9 +3081,12 @@ func TestDeclarativeTransport_PageBudgetIsNotEOF(t *testing.T) {
 }
 
 func TestOpenComposedGitHubCommitsTimesOutOneProviderPageWithoutCancellingTheRunContext(t *testing.T) {
-	providerRequests := 0
+	var providerRequests atomic.Int32
+	providerRequestStarted := make(chan struct{})
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
-		providerRequests++
+		if providerRequests.Add(1) == 1 {
+			close(providerRequestStarted)
+		}
 		<-request.Context().Done()
 	}))
 	defer server.Close()
@@ -3126,8 +3130,13 @@ func TestOpenComposedGitHubCommitsTimesOutOneProviderPageWithoutCancellingTheRun
 	if elapsed := time.Since(started); elapsed >= 300*time.Millisecond {
 		t.Fatalf("ReadTransport() elapsed = %s, want a page deadline rather than the one-second run context", elapsed)
 	}
-	if providerRequests != 1 {
-		t.Fatalf("provider requests = %d, want one timed-out fetch", providerRequests)
+	select {
+	case <-providerRequestStarted:
+	case <-time.After(100 * time.Millisecond):
+		t.Fatal("provider request did not begin before the bounded page timeout")
+	}
+	if got := providerRequests.Load(); got != 1 {
+		t.Fatalf("provider requests = %d, want one timed-out fetch", got)
 	}
 	if runCtx.Err() != nil {
 		t.Fatalf("run context = %v, want the timed-out page to leave the run context usable for checkpoint resume", runCtx.Err())
