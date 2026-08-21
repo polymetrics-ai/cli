@@ -1299,3 +1299,29 @@ a raw body, method, path, or header channel.
   reran the same selected names without update; both passed (1.188s). No second
   full CLI/package run occurs until this derived-fixture checkpoint is remote
   verified.
+
+### Group 9 final package gate — third frozen failure set (2026-08-22)
+
+- The final broad rerun at unchanged
+  `be7b06bacf5c3fefea5b4097ef232ad09d3fda53` completed with exactly two
+  product failures: `TestGoldenTranscripts/bare_etl_transport_declarative_typed_destination_manual`
+  and `TestGoldenTranscripts/etl_transport_declarative_typed_destination_leaf_help_manual`.
+  Both are derived transcript views missing the existing source-owned bounded
+  `delivered_reconciliation_required` explanation for the closed declarative
+  typed destination; neither changes command behavior. All other packages
+  passed: connectorgen (166.528s), App (286.297s), engine (17.235s),
+  commandrunner (25.162s), synctransport (3.078s), connsdk (6.125s), native
+  SQS (9.283s), native PostgreSQL (8.688s), database (12.627s), and certify
+  (17.514s). CLI otherwise performed 83 bounded certification invocations;
+  its Redis connection-refused messages are expected isolated negative-test
+  diagnostics, not failing contracts.
+- **Red:** the exact two named transcript subtests; focused no-update
+  reproduction selected precisely those names and failed with precisely those
+  two subtests. **Green:** regenerated only their source-owned views with
+  `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1
+  POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES=bare_etl_transport_declarative_typed_destination_manual,etl_transport_declarative_typed_destination_leaf_help_manual
+  go test -count=1 -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$'`,
+  then reran the exact names without update (1.169s) and reran the source-level
+  durable reconciliation help/skill contract (1.166s). No further full
+  CLI/package command is started before this derived-fixture checkpoint is
+  remote verified.
