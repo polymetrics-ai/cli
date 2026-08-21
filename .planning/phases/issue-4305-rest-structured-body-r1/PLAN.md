@@ -55,6 +55,7 @@
 - Resolved GSD commands: discuss-phase, plan-phase --tdd, execute-phase, verify-work, code-review.
 - Inline/manual fallback: issue #4305 is not in the stale roadmap and the task forbids role spawning.
 - Loaded skills: golang-how-to, golang-cli, golang-testing, golang-error-handling, golang-security, golang-safety, golang-design-patterns, golang-structs-interfaces, and golang-documentation.
+- CI remediation additionally used no-mistakes (active validation-step boundary only), golang-troubleshooting, golang-lint, and golang-continuous-integration; pipeline control remained with the outer executor.
 
 ## Commit checkpoints
 

@@ -137,7 +137,13 @@ func ValidateOperationDirectWriteCLIFlags(op OperationSpec, flags []CLIFlag) err
 		if err := validateOperationDirectWriteCLIFlagType(op, flag, path, resolved.node); err != nil {
 			return err
 		}
+		if err := validateOperationDirectWriteStaticBodyMapping(staticBody, resolved); err != nil {
+			return fmt.Errorf("operation %q CLI flag --%s body field %q: %w", op.ID, flag.Name, path, err)
+		}
 		mappings = append(mappings, structuredRESTBodyCLIFieldMapping{flag: flag, path: resolved})
+	}
+	if err := validateStructuredRESTBodyCLIArrayMappings(op.ID, staticBody, mappings); err != nil {
+		return err
 	}
 	coverage := structuredRESTBodyCLICoverageFromValue(staticBody)
 	for _, mapping := range mappings {
@@ -152,6 +158,103 @@ func ValidateOperationDirectWriteCLIFlags(op OperationSpec, flags []CLIFlag) err
 type structuredRESTBodyCLIFieldMapping struct {
 	flag CLIFlag
 	path operationDirectWriteBodyPath
+}
+
+type structuredRESTBodyCLIArrayProjection struct {
+	prefix  []operationDirectWriteBodyPathStep
+	indices map[int]structuredRESTBodyCLIArrayIndex
+}
+
+type structuredRESTBodyCLIArrayIndex struct {
+	field    string
+	required bool
+}
+
+// validateStructuredRESTBodyCLIArrayMappings rejects a declared flag that
+// would make the generated command synthesize a sparse array. Static rest.body
+// items form the only permitted prefix; every later projected item needs a
+// required, contiguous predecessor.
+func validateStructuredRESTBodyCLIArrayMappings(operation string, staticBody map[string]any, mappings []structuredRESTBodyCLIFieldMapping) error {
+	projections := make([]structuredRESTBodyCLIArrayProjection, 0)
+	for _, mapping := range mappings {
+		for position, step := range mapping.path.steps {
+			if !step.array {
+				continue
+			}
+			prefix := mapping.path.steps[:position]
+			projectionIndex := -1
+			for index := range projections {
+				if structuredRESTBodyCLIPathStepsEqual(projections[index].prefix, prefix) {
+					projectionIndex = index
+					break
+				}
+			}
+			if projectionIndex == -1 {
+				projections = append(projections, structuredRESTBodyCLIArrayProjection{
+					prefix:  append([]operationDirectWriteBodyPathStep(nil), prefix...),
+					indices: make(map[int]structuredRESTBodyCLIArrayIndex),
+				})
+				projectionIndex = len(projections) - 1
+			}
+			previous, exists := projections[projectionIndex].indices[step.index]
+			if !exists || mapping.path.raw < previous.field {
+				previous.field = mapping.path.raw
+			}
+			previous.required = previous.required || mapping.flag.Required
+			projections[projectionIndex].indices[step.index] = previous
+		}
+	}
+	sort.Slice(projections, func(left, right int) bool {
+		return operationDirectWriteBodyPathLess(
+			operationDirectWriteBodyPath{steps: projections[left].prefix},
+			operationDirectWriteBodyPath{steps: projections[right].prefix},
+		)
+	})
+	for _, projection := range projections {
+		indices := make([]int, 0, len(projection.indices))
+		for index := range projection.indices {
+			indices = append(indices, index)
+		}
+		sort.Ints(indices)
+		expected := structuredRESTBodyCLIStaticArrayPrefixLength(staticBody, projection.prefix)
+		for _, index := range indices {
+			if !projection.indices[index].required || index < expected {
+				continue
+			}
+			if index != expected {
+				return fmt.Errorf("operation %q CLI body field %q uses sparse array index %d; rest.body or required CLI mappings must provide every preceding array item", operation, projection.indices[index].field, index)
+			}
+			expected++
+		}
+	}
+	return nil
+}
+
+func structuredRESTBodyCLIPathStepsEqual(left, right []operationDirectWriteBodyPathStep) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for index := range left {
+		if left[index] != right[index] {
+			return false
+		}
+	}
+	return true
+}
+
+func structuredRESTBodyCLIStaticArrayPrefixLength(staticBody map[string]any, prefix []operationDirectWriteBodyPathStep) int {
+	value, found := operationDirectWriteBodyPathValue(staticBody, prefix)
+	if !found {
+		return 0
+	}
+	items, ok := value.([]any)
+	if !ok {
+		return 0
+	}
+	if _, ok := operationDirectWriteStaticBodyScaffold(items); !ok {
+		return 0
+	}
+	return len(items)
 }
 
 type structuredRESTBodyCLICoverage struct {

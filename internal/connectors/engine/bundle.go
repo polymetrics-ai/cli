@@ -349,12 +349,13 @@ type FanOutInto struct {
 	PathVar    string `json:"path_var,omitempty"`
 }
 
-// QueryParam is one stream.Query entry (gap-loop cycle-1 item 3,
+// QueryParam is a declared query entry for streams, checks, or write actions
+// (gap-loop cycle-1 item 3,
 // REVIEW-B.md cross-cutting adjudication 2: the recurring
 // "optional/config-driven query param not expressible" gap — vitally
 // `status`, bitly `size`, calendly `count`/page_size, gmail's two filters,
-// searxng wave0 F6 — met the >=3 recurrence threshold). Declared in
-// streams.json either as a PLAIN STRING (today's exact dialect: `Template`
+// searxng wave0 F6 — met the >=3 recurrence threshold). Declared on a stream,
+// base check, or write action either as a PLAIN STRING (today's exact dialect: `Template`
 // is that string, `OmitWhenAbsent` false, `Default` empty — a template
 // referencing an absent config/secrets key is ALWAYS a hard error, zero
 // migration risk for every existing bundle) or as an OBJECT
@@ -363,6 +364,12 @@ type FanOutInto struct {
 // templating (which would silently convert a mistyped/missing REQUIRED key
 // from a fail-loud error into a silently-unfiltered request, the F4
 // fail-open class the engine deliberately rejects elsewhere).
+//
+// WriteAction.Query preserves that dialect and adds one narrow, write-only
+// case: an object-form entry with OmitWhenAbsent may omit its own unresolved
+// record.* reference. It does not widen caller query input or relax malformed,
+// wrong-source, or required-record failures; resolveWriteQueryParams owns the
+// distinction while retaining the established config/secrets/incremental rules.
 //
 // OmitWhenAbsent and Default are mutually usable but conceptually distinct:
 // OmitWhenAbsent means "leave the param off the request entirely when its
@@ -455,13 +462,12 @@ type WriteAction struct {
 	// intentionally hosted away from the connector's ordinary REST origin.
 	BaseURL    string   `json:"base_url,omitempty"`
 	PathFields []string `json:"path_fields,omitempty"`
-	// Query is the OPTIONAL write-action query-parameter map. It is the
-	// SAME construct (and the same QueryParam type, so the same
-	// bare-string-or-object dialect) that streams.json's stream.Query has
-	// always used — see QueryParam's doc comment — resolved through the
-	// same resolveQueryParams helper read.go already shares between stream
-	// reads and check reads, so all three surfaces resolve query templates
-	// identically by construction rather than by convention.
+	// Query is the OPTIONAL write-action query-parameter map. It uses the
+	// same QueryParam string-or-object dialect as stream and check queries;
+	// see QueryParam's doc comment. Write preparation resolves it through
+	// resolveWriteQueryParams, preserving that dialect and its one
+	// source-locked record.* omission rule without admitting a caller-provided
+	// free-form query channel.
 	//
 	// Absent/empty means the request carries no query string at all, which
 	// is exactly the behavior every write action had before this field

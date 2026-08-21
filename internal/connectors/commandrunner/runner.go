@@ -1385,6 +1385,19 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 			byTarget[target] = flag
 		}
 	}
+	if strings.TrimSpace(cmd.Operation) != "" {
+		metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+		if !ok {
+			return nil, nil, fmt.Errorf("connector %q does not expose direct-write metadata for operation %q", connector.Name(), cmd.Operation)
+		}
+		metadata, err := metadataProvider.OperationDirectWriteMetadata(cmd.Operation)
+		if err != nil {
+			return nil, nil, err
+		}
+		if metadata.StructuredBody {
+			return reconstituteStructuredDirectWriteFields(connector, cmd, byTarget, fields, flags)
+		}
+	}
 	record := connectors.Record{}
 	missing := make([]string, 0, len(fields))
 	for _, field := range fields {
@@ -1414,6 +1427,71 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 		missing = append(missing, unresolved...)
 	}
 	return record, missing, nil
+}
+
+func reconstituteStructuredDirectWriteFields(connector connectors.Connector, cmd connectors.CommandSurfaceCommand, byTarget map[string]connectors.CommandSurfaceFlag, fields []string, flags map[string][]string) (connectors.Record, []string, error) {
+	materializer, ok := connector.(connectors.OperationDirectWriteBodyMaterializer)
+	if !ok {
+		return nil, nil, fmt.Errorf("connector %q does not expose direct-write body materialization", connector.Name())
+	}
+	transformer, ok := connector.(connectors.OperationDirectWriteBodyPlanTransformer)
+	if !ok {
+		return nil, nil, fmt.Errorf("connector %q does not expose direct-write body plan transformation", connector.Name())
+	}
+	mappings := map[string]any{}
+	missing := make([]string, 0)
+	add := func(target string, flag connectors.CommandSurfaceFlag) error {
+		values := flags[flag.Name]
+		if len(values) == 0 {
+			missing = append(missing, "--"+flag.Name)
+			return nil
+		}
+		value, err := coerceRecordFlagValue(flag, values)
+		if err != nil {
+			return err
+		}
+		mappings[target] = value
+		return nil
+	}
+	for _, raw := range fields {
+		target := strings.TrimPrefix(strings.TrimSpace(raw), "body.")
+		if target == "" {
+			continue
+		}
+		if flag, found := byTarget[target]; found {
+			if err := add(target, flag); err != nil {
+				return nil, nil, err
+			}
+			continue
+		}
+		ancestor := ""
+		for candidate := range byTarget {
+			contains, err := transformer.OperationDirectWriteBodyPathContains(cmd.Operation, candidate, target)
+			if err != nil {
+				return nil, nil, err
+			}
+			if contains && (ancestor == "" || len(candidate) > len(ancestor)) {
+				ancestor = candidate
+			}
+		}
+		if ancestor != "" {
+			if err := add(ancestor, byTarget[ancestor]); err != nil {
+				return nil, nil, err
+			}
+			continue
+		}
+		missing = append(missing, target)
+	}
+	if len(mappings) == 0 {
+		sort.Strings(missing)
+		return connectors.Record{}, missing, nil
+	}
+	body, err := materializer.MaterializeOperationDirectWriteBody(cmd.Operation, mappings)
+	if err != nil {
+		return nil, nil, err
+	}
+	sort.Strings(missing)
+	return connectors.Record(body), missing, nil
 }
 
 // reconstituteWithheldSubtree rebuilds a withheld field that no single flag maps

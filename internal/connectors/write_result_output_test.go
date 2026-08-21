@@ -94,6 +94,28 @@ func TestOperationDirectWriteResultOutputMasksConfiguredAndDeclaredSecrets(t *te
 	}
 }
 
+func TestOperationDirectWriteResultOutputMasksDeclaredRequestSensitiveEcho(t *testing.T) {
+	requestSecret := "declaration-owned-request-secret"
+	result := OperationDirectWriteResult{
+		Connector: "fixture", Operation: "fixture.create", Method: "POST", Path: "/fixed", ResponseReceived: true, Status: 400,
+		BodyPresent: true, BodyRaw: `{"error":"declaration-owned-request-secret"}`, BodyRawEncoding: "text",
+		Body:                   map[string]any{"error": requestSecret},
+		RequestSensitiveValues: []string{requestSecret},
+	}
+
+	got := SanitizeOperationDirectWriteResultForOutput(result, nil)
+	encoded, err := json.Marshal(got)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(encoded), requestSecret) {
+		t.Fatalf("public direct-write receipt leaked declared request scalar: %s", encoded)
+	}
+	if result.Body.(map[string]any)["error"] != requestSecret {
+		t.Fatal("sanitizer mutated the immutable internal receipt")
+	}
+}
+
 func TestSanitizeWriteErrorForOutputKeepsSystemDiagnosticsSecretFree(t *testing.T) {
 	credential := "client-secret"
 	output := SanitizeWriteErrorForOutput(errors.New("system diagnostic "+credential), map[string]string{"token": credential})

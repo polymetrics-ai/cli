@@ -1142,3 +1142,38 @@ a raw body, method, path, or header channel.
   The focused red/green check passed in `80.027s`, then the final
   package-wide `go test -timeout 20m ./cmd/connectorgen -count=1` passed in
   `138.887s`; no generated matrix is retained by this pre-merge subcommit.
+
+### Structured-body preserving merge gate — frozen diagnostic failure set (2026-08-22)
+
+- Context: the active non-squash merge of exact PR #4313 head
+  `66b4c3cbea00bf71cfc4082d09cd7f72917e08b5` adds its declaration-bound
+  structured-body contracts to the Group-9 implementation parent. Focused
+  red/green corrections covered nested `body.targets.0.token` withholding,
+  terminal secret-store receipt preservation, conditional API-key query
+  ownership, and sparse array CLI projection before this package gate.
+- Frozen complete failure set from
+  `go test -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner -count=1`:
+  `TestOperationDirectWriteMultipartNeverRetriesOrReplaysRedirect` (both
+  `Too_Many_Requests` and `Internal_Server_Error` cases),
+  `TestOperationDirectWriteNeverRetriesNonIdempotentFailure`,
+  `TestOperationDirectWriteRetainsTerminalGraphQLHTTPResponse`, and
+  `TestOperationDirectWriteSecretOperationRetainsProviderResponses` (its
+  `non_JSON_HTTP_error` case). `internal/connectors/commandrunner` passed in
+  the same command.
+- Cause: the first reconciliation made ordinary provider HTTP bodies printable
+  unconditionally. That contradicted the established secret/multipart/GraphQL
+  public-diagnostic boundary. The repair must distinguish safe ordinary REST
+  diagnostic detail from those existing protected operation classes while
+  retaining the exact typed provider receipt for durable result handling.
+- Green: `operationDirectWritePrintsProviderHTTPBody` now permits printable
+  provider detail only for ordinary fixed REST `json` results, after exact
+  declaration/request/config/credential redaction. Multipart, GraphQL,
+  `json_redacted`, secret-stored, and other redacted contracts retain their
+  complete provider receipt only in the typed result/cause. The full rerun
+  `go test -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner -count=1`
+  passed for engine (14.253s); the independent commandrunner package rerun and
+  `go test -timeout 20m ./internal/app -count=1` also completed green. The
+  focused red/green regressions cover ordinary safe diagnostics, an echoed
+  declared header credential, nested structured-body redaction, secret-store
+  terminal receipt preservation, conditional API-key ownership, and sparse
+  array projection.

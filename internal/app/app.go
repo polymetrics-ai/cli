@@ -2143,11 +2143,14 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		return ReversePlan{}, nil, err
 	}
 	confirmation := confirmationFromChallenge(writeCommand.ConfirmationChallenge)
-	redactFields, err := connectorCommandRedactFields(connector, writeCommand.Operation, writeCommand.Write)
+	redactFields, structuredBody, err := connectorCommandRedactFields(connector, writeCommand.Operation, writeCommand.Write)
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
-	withheldRecord, withheldFields := withholdRecordFields(writeCommand.Record, redactFields)
+	withheldRecord, withheldFields, sample, err := connectorCommandPlanRecords(connector, writeCommand.Operation, structuredBody, writeCommand.Record, writeCommand.RedactedRecord, redactFields)
+	if err != nil {
+		return ReversePlan{}, nil, err
+	}
 	created := time.Now().UTC()
 	expires := created.Add(24 * time.Hour)
 	var planSeal *connectors.WritePlanSeal
@@ -2190,7 +2193,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		RecordCount:                  1,
 		RedactFields:                 redactFields,
 		WithheldFields:               withheldFields,
-		Sample:                       RedactReversePlanRecords([]connectors.Record{cloneRecord(writeCommand.RedactedRecord)}, redactFields),
+		Sample:                       sample,
 		PlanHash:                     planHash,
 		PlanSeal:                     planSeal,
 		CreatedAt:                    created,
@@ -2234,9 +2237,39 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 // owed back, and demanding it would strand the plan behind a precondition its
 // own hash cannot satisfy.
 func (a *App) reconstituteConnectorCommandRecord(plan ReversePlan, writer connectors.Connector, withheldFlags map[string][]string) (connectors.Record, error) {
+	structuredBody := false
+	var resolver connectors.OperationDirectWriteBodyValueResolver
+	var transformer connectors.OperationDirectWriteBodyPlanTransformer
+	if strings.TrimSpace(plan.ConnectorCommandOperation) != "" {
+		metadata, err := connectorCommandDirectWriteMetadata(writer, plan.ConnectorCommandOperation)
+		if err != nil {
+			return nil, err
+		}
+		structuredBody = metadata.StructuredBody
+		if structuredBody {
+			var ok bool
+			resolver, ok = writer.(connectors.OperationDirectWriteBodyValueResolver)
+			if !ok {
+				return nil, fmt.Errorf("connector %q does not expose direct-write body resolution", writer.Name())
+			}
+			transformer, ok = writer.(connectors.OperationDirectWriteBodyPlanTransformer)
+			if !ok {
+				return nil, fmt.Errorf("connector %q does not expose direct-write body plan transformation", writer.Name())
+			}
+		}
+	}
 	pending := make([]string, 0, len(plan.WithheldFields))
 	for _, field := range plan.WithheldFields {
-		if !recordHasField(plan.ConnectorCommandRecord, field) {
+		field = strings.TrimSpace(field)
+		present := recordHasField(plan.ConnectorCommandRecord, field)
+		if structuredBody {
+			_, resolved, err := resolver.ResolveOperationDirectWriteBodyValue(plan.ConnectorCommandOperation, map[string]any(plan.ConnectorCommandRecord), field)
+			if err != nil {
+				return nil, err
+			}
+			present = resolved
+		}
+		if !present {
 			pending = append(pending, strings.TrimSpace(field))
 		}
 	}
@@ -2252,6 +2285,13 @@ func (a *App) reconstituteConnectorCommandRecord(plan ReversePlan, writer connec
 			"reverse plan %q withheld %s from disk; re-supply %s on this command to preview or approve it",
 			plan.ID, strings.Join(pending, ", "), strings.Join(missing, " "),
 		)
+	}
+	if structuredBody {
+		merged, err := transformer.MergeOperationDirectWriteBodyFragments(plan.ConnectorCommandOperation, map[string]any(plan.ConnectorCommandRecord), map[string]any(supplied))
+		if err != nil {
+			return nil, err
+		}
+		return connectors.Record(merged), nil
 	}
 	return mergeRecordFields(plan.ConnectorCommandRecord, supplied), nil
 }
