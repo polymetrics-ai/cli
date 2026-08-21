@@ -1269,3 +1269,33 @@ a raw body, method, path, or header channel.
   fallback remains applicable: this exact continuation has planning, red, and
   green evidence here and no compatible isolated worker may be spawned under
   the canonical single-worker delivery contract.
+
+### Group 9 final package gate — second frozen failure set (2026-08-22)
+
+- The one permitted post-disposition broad rerun of
+  `go test -count=1 -timeout 20m ./cmd/connectorgen ./internal/app
+  ./internal/cli ./internal/connectors/engine ./internal/connectors/commandrunner
+  ./internal/synctransport ./internal/connectors/connsdk
+  ./internal/connectors/native/amazon-sqs ./internal/connectors/native/postgres
+  ./internal/connectors/database ./internal/connectors/certify` completed at
+  unchanged `f59b7cbe35aa723255feebd271e35e8a00b90577`. Its complete product
+  failure set is the two derived transcript cases
+  `TestGoldenTranscripts/bare_etl_manual` and
+  `TestGoldenTranscripts/json_etl_manual`; both omit the exact
+  `delivered_reconciliation_required` manual paragraph already proved at the
+  shared source. A focused no-update reproduction selecting precisely those
+  two names failed with precisely those two subtests and no others. The broad
+  run's remaining packages all passed: connectorgen (173.000s), App (293.485s),
+  engine (20.566s), commandrunner (29.933s), synctransport (9.618s), connsdk
+  (10.145s), native SQS (8.037s), native PostgreSQL (5.105s), database
+  (13.654s), and certify (15.314s); CLI otherwise ran 83 bounded certification
+  command invocations. Redis connection-refused lines were expected isolated
+  negative-test diagnostics, not additional failing contracts.
+- **Red:** the two transcript names above. **Green:** regenerated only those
+  two declaration-derived views from `etlManual` with
+  `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1
+  POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES=bare_etl_manual,json_etl_manual go test
+  -count=1 -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$'` and
+  reran the same selected names without update; both passed (1.188s). No second
+  full CLI/package run occurs until this derived-fixture checkpoint is remote
+  verified.
