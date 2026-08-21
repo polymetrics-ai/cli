@@ -170,13 +170,15 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				return bodyErr
 			}
 			result = connectors.OperationDirectWriteResult{
-				Connector: b.Name,
-				Operation: prepared.op.ID,
-				Method:    prepared.method,
-				Path:      prepared.path,
-				Status:    response.Status,
-				Body:      body,
-				GraphQL:   metadata,
+				Connector:          b.Name,
+				Operation:          prepared.op.ID,
+				Method:             prepared.method,
+				Path:               prepared.path,
+				Status:             response.Status,
+				Headers:            writeProviderHeaders(response.Header),
+				Body:               body,
+				GraphQL:            metadata,
+				OutputSecretFields: operationDirectWriteOutputSecretFields(prepared.op),
 			}
 			return nil
 		}
@@ -190,12 +192,14 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			return err
 		}
 		result = connectors.OperationDirectWriteResult{
-			Connector: b.Name,
-			Operation: prepared.op.ID,
-			Method:    prepared.method,
-			Path:      prepared.path,
-			Status:    response.Status,
-			Body:      body,
+			Connector:          b.Name,
+			Operation:          prepared.op.ID,
+			Method:             prepared.method,
+			Path:               prepared.path,
+			Status:             response.Status,
+			Headers:            writeProviderHeaders(response.Header),
+			Body:               body,
+			OutputSecretFields: operationDirectWriteOutputSecretFields(prepared.op),
 		}
 		return nil
 	})
@@ -203,6 +207,13 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		return connectors.OperationDirectWriteResult{}, err
 	}
 	return result, nil
+}
+
+func operationDirectWriteOutputSecretFields(op OperationSpec) []string {
+	if op.SensitivePolicy == nil || strings.TrimSpace(op.SensitivePolicy.ResponseSecretField) == "" {
+		return nil
+	}
+	return []string{op.SensitivePolicy.ResponseSecretField}
 }
 
 // operationDirectWriteErrorText preserves the established complete REST write
@@ -796,21 +807,20 @@ func validateOperationDirectWriteOutputPolicy(policy string) error {
 }
 
 func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (any, error) {
-	if policy == directWritePolicyNone {
-		return nil, nil
-	}
 	decoded, err := decodeDirectReadBody(raw, maxBytes)
 	if err != nil {
 		return nil, fmt.Errorf("operation direct write response is not JSON: %w", err)
 	}
 	switch policy {
-	case directWritePolicyJSON,
+	case directWritePolicyNone,
+		directWritePolicyJSON,
 		directWritePolicyJSONRedacted,
 		directWritePolicyWriteResultRedacted,
 		directWritePolicyGongBoundedInputRedacted,
 		directWritePolicySecretStored:
-		// The legacy policy names remain valid declaration values, but direct
-		// writes retain their complete decoded response content.
+		// The legacy policy names remain valid declaration values, but they are
+		// not an output-redaction or scope instruction: direct writes retain
+		// their complete decoded response content.
 		return decoded, nil
 	default:
 		return nil, fmt.Errorf("operation direct write output policy %q is not supported", policy)

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -140,6 +141,10 @@ type StreamConfig struct {
 	// binds the persisted closed form into later plans and approvals.
 	TransformPlan     string `json:"transform_plan,omitempty"`
 	TransformPlanHash string `json:"transform_plan_hash,omitempty"`
+	// DestinationAction is a stable action name from the selected destination
+	// definition. It is required only when that destination declares more than
+	// one action for this stream mode; execution receives no action override.
+	DestinationAction string `json:"destination_action,omitempty"`
 }
 
 type StreamState struct {
@@ -256,9 +261,13 @@ type Run struct {
 	// contains counts and elapsed times only, never records, paths, tokens, or
 	// connector configuration.
 	TransportPhaseMeasurement *TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
-	Error                     string                     `json:"error,omitempty"`
-	StartedAt                 time.Time                  `json:"started_at"`
-	CompletedAt               time.Time                  `json:"completed_at,omitempty"`
+	// DestinationResults retains each completed declarative typed destination
+	// action's full provider result. Secret-bearing values have an explicit
+	// masked marker; ordinary provider fields are not filtered by scope or tier.
+	DestinationResults []json.RawMessage `json:"destination_results,omitempty"`
+	Error              string            `json:"error,omitempty"`
+	StartedAt          time.Time         `json:"started_at"`
+	CompletedAt        time.Time         `json:"completed_at,omitempty"`
 }
 
 type TransportPhaseMeasurement struct {
@@ -520,6 +529,10 @@ type ReverseRun struct {
 	RecordsSucceeded int    `json:"records_succeeded"`
 	RecordsFailed    int    `json:"records_failed"`
 	Error            string `json:"error,omitempty"`
+	// DestinationResult retains the complete typed write result for regular
+	// reverse ETL. Credential material is represented as an explicit masked
+	// marker; normal provider fields are retained unchanged.
+	DestinationResult json.RawMessage `json:"destination_result,omitempty"`
 	// OperationDirectWrite is populated only for a successful direct_write
 	// command. Its body is decoded according to the operation output policy.
 	OperationDirectWrite *connectors.OperationDirectWriteResult `json:"operation_direct_write,omitempty"`

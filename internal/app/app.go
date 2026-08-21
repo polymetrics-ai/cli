@@ -1039,6 +1039,32 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if err != nil {
 		return Connection{}, fmt.Errorf("resolve destination: %w", err)
 	}
+	for name, stream := range req.Streams {
+		modeName := stream.SyncMode
+		if modeName == "" {
+			modeName = DefaultUserFacingSyncMode
+		}
+		mode, modeErr := ParseStreamSyncMode(StreamConfig{SyncMode: modeName, LegacyCompatibility: stream.LegacyCompatibility})
+		if modeErr != nil {
+			return Connection{}, modeErr
+		}
+		destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
+		if strings.TrimSpace(stream.DestinationAction) != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
+			return Connection{}, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", name, destination.Name())
+		}
+		if declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
+			if a.transports == nil {
+				return Connection{}, fmt.Errorf("declarative typed destination transport registry is unavailable")
+			}
+			resolved, preflightErr := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: name, Mode: mode.ContractMode, DestinationAction: stream.DestinationAction})
+			if preflightErr != nil {
+				return Connection{}, fmt.Errorf("validate persisted destination action for stream %q: %w", name, preflightErr)
+			}
+			if selectionErr := validateDeclarativeTypedDestinationSelection(source, destination, name, mode.ContractMode, resolved.ApplyStrategy); selectionErr != nil {
+				return Connection{}, fmt.Errorf("validate persisted destination mapping for stream %q: %w", name, selectionErr)
+			}
+		}
+	}
 	materializesWarehouse := false
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok {
 		materializesWarehouse = materializer.MaterializesLocalWarehouse()
@@ -1344,6 +1370,20 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err != nil {
 		return a.failRun(runID, err)
 	}
+	if destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination); declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
+		if a.transports == nil {
+			return a.failRun(runID, fmt.Errorf("declarative typed destination transport registry is unavailable"))
+		}
+		resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+			Source: source, Destination: destination, Stream: req.Stream, Mode: mode.ContractMode, DestinationAction: stream.DestinationAction,
+		})
+		if err != nil {
+			return a.failRun(runID, fmt.Errorf("validate persisted destination action for stream %q: %w", req.Stream, err))
+		}
+		if err := validateDeclarativeTypedDestinationSelection(source, destination, req.Stream, mode.ContractMode, resolved.ApplyStrategy); err != nil {
+			return a.failRun(runID, fmt.Errorf("validate persisted destination mapping for stream %q: %w", req.Stream, err))
+		}
+	}
 	batchSize := req.BatchSize
 	if batchSize <= 0 {
 		batchSize = 1000
@@ -1597,6 +1637,7 @@ func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etl
 			current.Runs[i].BatchCount = result.BatchCount
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
 			current.Runs[i].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
+			current.Runs[i].DestinationResults = cloneDestinationResults(result.DestinationResults)
 			current.Runs[i].CompletedAt = completedAt
 			found = true
 			transitionedInCallback = true
@@ -1663,6 +1704,7 @@ func (a *App) failRunWithAcknowledgedTransportState(runID string, result etlExec
 			current.Runs[i].BatchCount = result.BatchCount
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
 			current.Runs[i].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
+			current.Runs[i].DestinationResults = cloneDestinationResults(result.DestinationResults)
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
 			current.Runs[i].CompletedAt = completedAt
 			transitionedInCallback = true
@@ -2676,7 +2718,7 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	}
 	writeRequest.Approval = evidence
 	result, err := writer.Write(ctx, writeRequest, mapped)
-	return a.finishReverseWrite(plan.ID, run, result, len(mapped), err)
+	return a.finishReverseWrite(plan.ID, run, result, runtime, len(mapped), err)
 }
 
 // runAuthorizedBulkReversePlan is the standing-authorization path. It
@@ -2719,7 +2761,7 @@ func (a *App) runAuthorizedBulkReversePlan(ctx context.Context, plan ReversePlan
 	}
 	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: len(mapped), StartedAt: time.Now().UTC()}
 	result, err := writer.Write(ctx, writeRequest, mapped)
-	return a.finishReverseWrite(plan.ID, run, result, len(mapped), err)
+	return a.finishReverseWrite(plan.ID, run, result, runtime, len(mapped), err)
 }
 
 func (a *App) validateDestructivePreview(ctx context.Context, writer connectors.Connector, plan ReversePlan, request connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
@@ -2809,7 +2851,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 			len(records),
 		)
 	}
-	return a.finishReverseWrite(plan.ID, run, result, len(records), err)
+	return a.finishReverseWrite(plan.ID, run, result, runtime, len(records), err)
 }
 
 func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors.Connector, runtime connectors.RuntimeConfig, plan ReversePlan, record connectors.Record, req RunReverseETLRequest) (ReverseRun, error) {
@@ -2844,9 +2886,10 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 	if writeErr != nil {
 		writeResult = connectors.WriteResult{RecordsFailed: 1}
 	} else {
-		run.OperationDirectWrite = &operationResult
+		safeOperationResult := connectors.SanitizeOperationDirectWriteResultForOutput(operationResult, runtime.Secrets)
+		run.OperationDirectWrite = &safeOperationResult
 	}
-	return a.finishOperationDirectWrite(plan.ID, run, writeResult, 1, writeErr)
+	return a.finishOperationDirectWrite(plan.ID, run, writeResult, runtime, 1, writeErr)
 }
 
 func validateOperationDirectWritePreview(ctx context.Context, writer connectors.OperationDirectWriter, plan ReversePlan, request connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
@@ -3047,23 +3090,30 @@ func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
 	}
 }
 
-func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
-	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
+func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error) (ReverseRun, error) {
+	return a.finishReverseWriteWithErrorText(planID, run, result, runtime, staged, writeErr, func(err error) string {
 		return safety.RedactErrorText(err.Error())
 	})
 }
 
 // finishOperationDirectWrite preserves the direct-write error text in its
-// persisted report. The generic reverse-ETL path deliberately retains its
-// existing rendering behavior; only rest_write has the captain's complete
-// runtime-content policy.
-func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
-	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
+// persisted report. Both direct and ordinary typed reverse-ETL results retain
+// complete provider output through their closed result contracts; the only
+// output transformation is explicit credential masking.
+func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error) (ReverseRun, error) {
+	return a.finishReverseWriteWithErrorText(planID, run, result, runtime, staged, writeErr, func(err error) string {
 		return err.Error()
 	})
 }
 
-func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error, errorText func(error) string) (ReverseRun, error) {
+func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error, errorText func(error) string) (ReverseRun, error) {
+	output, outputErr := json.Marshal(connectors.SanitizeWriteResultForOutput(result, runtime.Secrets))
+	if outputErr != nil && writeErr == nil {
+		writeErr = fmt.Errorf("encode complete reverse destination result: %w", outputErr)
+	}
+	if outputErr == nil {
+		run.DestinationResult = append(json.RawMessage(nil), output...)
+	}
 	run.RecordsSucceeded = result.RecordsWritten
 	run.RecordsFailed = result.RecordsFailed
 	run.CompletedAt = time.Now().UTC()
@@ -3387,6 +3437,7 @@ func (a *App) failRunWithResult(runID string, result etlExecutionResult, runErr 
 			current.Runs[i].BatchCount = result.BatchCount
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
 			current.Runs[i].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
+			current.Runs[i].DestinationResults = cloneDestinationResults(result.DestinationResults)
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
 			current.Runs[i].CompletedAt = completedAt
 			transitionedInCallback = true

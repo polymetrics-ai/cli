@@ -29,7 +29,19 @@ type etlExecutionResult struct {
 	BatchCount                int
 	Checkpoint                map[string]string
 	TransportPhaseMeasurement *TransportPhaseMeasurement
+	DestinationResults        []json.RawMessage
 	PendingStreamState        *pendingStreamState
+}
+
+func cloneDestinationResults(results []json.RawMessage) []json.RawMessage {
+	if len(results) == 0 {
+		return nil
+	}
+	clone := make([]json.RawMessage, len(results))
+	for index, result := range results {
+		clone[index] = append(json.RawMessage(nil), result...)
+	}
+	return clone
 }
 
 func cloneTransportPhaseMeasurement(measurement *TransportPhaseMeasurement) *TransportPhaseMeasurement {

@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
 	"crypto/sha256"
@@ -16,6 +17,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -364,7 +366,8 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
 		}
-		if err := executeWriteRecord(ctx, b, action, pinned[0], i, cfg, rt); err != nil {
+		response, err := executeWriteRecordWithResponse(ctx, b, action, pinned[0], i, cfg, rt)
+		if err != nil {
 			if isMissingOkDelete(action, err) {
 				result.RecordsUnchanged++
 				continue
@@ -372,6 +375,9 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: redactWriteActionError(err, action, rec)}
+		}
+		if response != nil {
+			result.ProviderResponses = append(result.ProviderResponses, writeProviderResponse(response))
 		}
 		result.RecordsWritten++
 	}
@@ -381,11 +387,19 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 // executeWriteRecord performs the single HTTP request for one record: builds
 // the path from path_fields, the body per body_type, and issues Do/DoForm.
 func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime) error {
+	_, err := executeWriteRecordWithResponse(ctx, b, action, rec, recordIndex, cfg, rt)
+	return err
+}
+
+// executeWriteRecordWithResponse is the private result-preserving form used
+// by the named-action executor. The exported connector surface remains the
+// closed WriteAction contract; no caller can provide a route, verb, or body.
+func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime) (*connsdk.Response, error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
 
 	path, err := InterpolatePath(action.Path, vars)
 	if err != nil {
-		return fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
+		return nil, fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
 	method := methodOrDefault(action.Method)
 
@@ -396,66 +410,63 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	// branch passed before write-action query support existed.
 	query, err := buildWriteQuery(action, vars)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	requesterForAction, err := rt.requesterFor(method, action.Path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	requester, err := writeRequester(requesterForAction, action)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	switch bodyTypeOf(action) {
 	case "form":
 		form := buildForm(rec, action.PathFields)
-		_, err := requester.DoForm(ctx, method, path, query, form)
-		return err
+		return requester.DoForm(ctx, method, path, query, form)
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		resp, err := requester.Do(ctx, method, path, query, payload)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		return graphQLErrors(resp.Body)
+		if err := graphQLErrors(resp.Body); err != nil {
+			return resp, err
+		}
+		return resp, nil
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			_, err := requester.Do(ctx, method, path, query, nil)
-			return err
+			return requester.Do(ctx, method, path, query, nil)
 		}
-		_, err := requester.Do(ctx, method, path, query, body)
-		return err
+		return requester.Do(ctx, method, path, query, body)
 	case "json_array":
 		payload, err := buildJSONArrayPayload(action, rec)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		_, err = requester.Do(ctx, method, path, query, payload)
-		return err
+		return requester.Do(ctx, method, path, query, payload)
 	case "multipart":
 		root, err := openMultipartRoot(cfg.ProjectDir)
 		if err != nil {
-			return fmt.Errorf("engine: write action %q: %w", action.Name, err)
+			return nil, fmt.Errorf("engine: write action %q: %w", action.Name, err)
 		}
 		defer func() { _ = root.Close() }()
 		form, err := buildMultipartPayload(action, rec, recordIndex, cfg, root)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		_, err = requester.DoMultipart(ctx, method, path, query, form)
-		return err
+		return requester.DoMultipart(ctx, method, path, query, form)
 	case "base64_upload":
 		payload, err := buildBase64UploadPayload(action, rec, recordIndex, cfg)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		_, err = requester.Do(ctx, method, path, query, payload)
-		return err
+		return requester.Do(ctx, method, path, query, payload)
 	default: // "json" (default)
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
@@ -465,7 +476,7 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		}
 		body, err = applyDynamicFields(action, rec, body)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		var payload any
 		if len(body) > 0 || action.BodyRequired {
@@ -474,9 +485,39 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 			}
 			payload = body
 		}
-		_, err := requester.Do(ctx, method, path, query, payload)
-		return err
+		return requester.Do(ctx, method, path, query, payload)
 	}
+}
+
+func writeProviderResponse(response *connsdk.Response) connectors.WriteProviderResponse {
+	result := connectors.WriteProviderResponse{
+		Status:  response.Status,
+		Headers: writeProviderHeaders(response.Header),
+	}
+	decoder := json.NewDecoder(bytes.NewReader(response.Body))
+	decoder.UseNumber()
+	if decoder.Decode(&result.Body) == nil {
+		return result
+	}
+	if utf8.Valid(response.Body) {
+		result.Body = string(response.Body)
+		result.BodyEncoding = "text"
+		return result
+	}
+	result.Body = base64.StdEncoding.EncodeToString(response.Body)
+	result.BodyEncoding = "base64"
+	return result
+}
+
+func writeProviderHeaders(headers map[string][]string) map[string]connectors.WriteProviderHeader {
+	if len(headers) == 0 {
+		return nil
+	}
+	result := make(map[string]connectors.WriteProviderHeader, len(headers))
+	for name, values := range headers {
+		result[name] = connectors.WriteProviderHeader{Values: append([]string(nil), values...)}
+	}
+	return result
 }
 
 // writeRequester clones the shared requester and permits mutation replay only
