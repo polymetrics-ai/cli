@@ -619,7 +619,7 @@ func TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload(
 	})
 }
 
-func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
+func TestDirectWriteCommandFailureRedactsSecretProviderErrorContent(t *testing.T) {
 	ctx := context.Background()
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -653,11 +653,18 @@ func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
 	if calls != 1 || run.Status != "failed" {
 		t.Fatalf("failed run/calls = %+v/%d, want one failed direct write", run, calls)
 	}
-	if !strings.Contains(err.Error(), "server-token") {
-		t.Fatalf("RunReverseETL error = %q, want complete provider error content", err)
+	if strings.Contains(err.Error(), "server-token") || strings.Contains(run.Error, "server-token") {
+		t.Fatalf("direct-write error exposed provider secret: error=%q persisted=%q", err, run.Error)
 	}
-	if !strings.Contains(run.Error, "server-token") {
-		t.Fatalf("persisted direct-write error = %q, want complete provider error content", run.Error)
+	if !strings.Contains(err.Error(), "provider returned an HTTP error") || !strings.Contains(run.Error, "provider returned an HTTP error") {
+		t.Fatalf("direct-write error = %q / %q, want taint-safe provider diagnostic", err, run.Error)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatal("RunReverseETL error did not retain a provider response cause")
+	}
+	if providerErr.Status != http.StatusInternalServerError || providerErr.Body != `{"error":"fixture failure","token":"server-token"}` {
+		t.Fatalf("provider response cause = %#v, want exact provider failure for internal handling", providerErr)
 	}
 }
 

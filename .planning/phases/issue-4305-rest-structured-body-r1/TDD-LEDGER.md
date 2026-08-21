@@ -42,3 +42,15 @@
 - Root cause: the secret-safe interpolation hardening extended `resolveExpr` with its `allowControlCharacters` argument, while `interpolateDeclaredHeader` retained the obsolete three-argument call.
 - Green: the declaration-bound header path now supplies `false`, preserving its established unsafe-control-character rejection. `go test -timeout 20m ./internal/connectors/engine -run 'TestOperationDirectWriteStructuredRESTBody' -count=1` and the full engine package pass; `go build -trimpath -ldflags='-s -w' ./cmd/pm`, `go vet ./...`, `go run ./cmd/connectorgen boundary . --json`, and `go run golang.org/x/vuln/cmd/govulncheck@latest ./...` also pass.
 - Website generated data: `npm run gen:website-data` updates only `website/lib/docs.generated.ts`; a second generation is stable and website typechecking passes. The tracked payload now includes the existing declaration-bound structured-write documentation.
+
+### 2026-08-21 — CI Verify follow-up red checkpoint
+
+- Red: hosted Verify run `32430447912` failed two deterministic assertions. `TestDirectWriteCommandFailurePreservesErrorContent` expected a provider body containing `server-token` to appear in the public and persisted error, despite the direct-write safety policy deliberately returning the generic HTTP diagnostic for secret-bearing operations. The same run found the four connector-manual golden transcript entries stale after the corrected structured-write documentation changed `maps_to=body.<field>` to the declaration-accurate schema-path wording.
+- Observable contract: a secret-bearing provider response must stay available only through the typed internal `*connsdk.HTTPError` cause while public/persisted diagnostics contain no secret; generated manual variants must exactly match the current connector help.
+- Next green slice: correct the stale app assertion to prove redaction plus typed-cause preservation, then regenerate only `help_connectors`, `bare_connectors_manual`, `json_connectors_manual`, and `connectors_help_github_known_legacy_namespace_help_intercept` from the test harness.
+
+### 2026-08-21 — CI Verify follow-up green checkpoint
+
+- Green: `go test -timeout 20m ./internal/app -count=1` passed in 256.922s and `go test -timeout 20m ./internal/cli -count=1` passed in 561.504s. The app test now asserts the observable safe public/persisted diagnostic and verifies that the exact bounded provider response remains available solely through the typed cause.
+- Green: the four generated transcript entries were refreshed with `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES=help_connectors,bare_connectors_manual,json_connectors_manual,connectors_help_github_known_legacy_namespace_help_intercept go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1`; the full subsequent CLI package run proves the tracked fixture is stable without update mode.
+- Scope: this active no-mistakes CI-step repair did not invoke no-mistakes controls, a CI re-run, a push, or a PR mutation; those remain owned by the outer executor.
