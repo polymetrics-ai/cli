@@ -1763,6 +1763,31 @@ func TestStructuredRESTBodyRejectsUnreachableNodeMinimumAndFloatByteDrift(t *tes
 	}
 }
 
+// TestStructuredRESTBodyMinimumWitnessHonorsMinLength keeps a valid closed
+// declaration reachable. The witness is used only to prove bounded
+// satisfiability during validation; runtime still validates the caller body.
+func TestStructuredRESTBodyMinimumWitnessHonorsMinLength(t *testing.T) {
+	op := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	rest := *op.REST
+	rest.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["name"],
+		"properties":{"name":{"type":"string","minLength":3,"maxLength":8}}
+	}`)
+	op.REST = &rest
+	if err := ValidateOperationDirectWriteMappings(op, nil, nil); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteMappings minLength witness: %v", err)
+	}
+	body, err := materializeStructuredRESTBody(op, nil, map[string]any{"name": "abc"})
+	if err != nil {
+		t.Fatalf("materializeStructuredRESTBody valid minLength: %v", err)
+	}
+	if body["name"] != "abc" {
+		t.Fatalf("materialized name = %#v, want exact caller value", body["name"])
+	}
+}
+
 func TestOperationDirectWriteStrictHeadersAndProviderHeaders(t *testing.T) {
 	request := structuredRESTBodyRequest()
 	request.Config.Secrets = map[string]string{"token": "header-secret-canary"}

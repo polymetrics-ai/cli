@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 type statefulRecordMapper struct{ calls int }
@@ -55,8 +56,8 @@ type recordPinHook struct {
 
 func (h recordPinHook) ConnectorName() string { return "acme" }
 
-func (h recordPinHook) ExecuteWrite(context.Context, WriteAction, connectors.Record, *Runtime) (bool, error) {
-	return h.executes, nil
+func (h recordPinHook) ExecuteWrite(context.Context, WriteAction, connectors.Record, *Runtime) (bool, []*connsdk.Response, error) {
+	return h.executes, nil, nil
 }
 
 func (h recordPinHook) HandlesWriteAction(WriteAction) bool { return h.claims }
@@ -120,8 +121,8 @@ func TestPrepareDeclarativeWriteRefusesDestructiveHookExecutedAction(t *testing.
 	if err == nil {
 		t.Fatal("prepareDeclarativeWrite() prepared a destructive hook-executed action")
 	}
-	if !strings.Contains(err.Error(), "exact prepared-request preview") {
-		t.Fatalf("prepareDeclarativeWrite() error = %v, want the exact-preview refusal", err)
+	if !strings.Contains(err.Error(), "exact prepared-request plan") {
+		t.Fatalf("prepareDeclarativeWrite() error = %v, want the exact-plan refusal", err)
 	}
 }
 

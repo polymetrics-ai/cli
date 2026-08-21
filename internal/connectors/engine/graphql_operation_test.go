@@ -855,6 +855,42 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 	}
 }
 
+// TestPrepareOperationDirectWriteSealsNestedVariablesAndRuntimeMaps proves
+// preparation owns the values its preview binds. A caller may retain and
+// mutate its request/config maps while an approval is pending, but that cannot
+// change the already-prepared GraphQL payload or its auth/config inputs.
+func TestPrepareOperationDirectWriteSealsNestedVariablesAndRuntimeMaps(t *testing.T) {
+	bundle := graphQLOperationBundle("https://example.invalid", "graphql_mutation")
+	op := &bundle.Operations[0]
+	op.GraphQL.Document = "mutation DeleteWidget($input: DeleteWidgetInput!) { deleteWidget(input: $input) { deletedId } }"
+	op.GraphQL.VariablesSchema = json.RawMessage(`{
+		"type":"object","additionalProperties":false,"required":["input"],
+		"properties":{"input":{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}}
+	}`)
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"tenant": "approved-tenant"},
+			Secrets: map[string]string{"api_key": "approved-secret"},
+		},
+		Body: map[string]any{"input": map[string]any{"name": "approved-name"}},
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	req.Body["input"].(map[string]any)["name"] = "mutated-name"
+	req.Config.Config["tenant"] = "mutated-tenant"
+	req.Config.Secrets["api_key"] = "mutated-secret"
+	variables, ok := prepared.body["variables"].(map[string]any)
+	if !ok || variables["input"].(map[string]any)["name"] != "approved-name" {
+		t.Fatalf("prepared variables = %#v, want sealed approved nested input", prepared.body)
+	}
+	if prepared.cfg.Config["tenant"] != "approved-tenant" || prepared.cfg.Secrets["api_key"] != "approved-secret" {
+		t.Fatalf("prepared runtime config = %#v/%#v, want sealed maps", prepared.cfg.Config, prepared.cfg.Secrets)
+	}
+}
+
 func TestOperationDirectWritePreservesExplicitNonJSONGraphQLMutationResponse(t *testing.T) {
 	for _, testCase := range []struct {
 		name        string

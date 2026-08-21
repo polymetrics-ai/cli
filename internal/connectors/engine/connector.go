@@ -1039,8 +1039,8 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		MapsTo:          flag.MapsTo,
 		Format:          flag.Format,
 		AllowEmpty:      cloneBoolPtr(flag.AllowEmpty),
-		Minimum:         cloneFloat64Ptr(flag.Minimum),
-		Maximum:         cloneFloat64Ptr(flag.Maximum),
+		Minimum:         cloneExactNumberPtr(flag.Minimum),
+		Maximum:         cloneExactNumberPtr(flag.Maximum),
 		Required:        flag.Required,
 		Repeatable:      flag.Repeatable,
 		EnvOnly:         flag.EnvOnly,
@@ -1108,7 +1108,7 @@ func cloneBoolPtr(value *bool) *bool {
 	return &out
 }
 
-func cloneFloat64Ptr(value *float64) *float64 {
+func cloneExactNumberPtr(value *connectors.ExactNumber) *connectors.ExactNumber {
 	if value == nil {
 		return nil
 	}

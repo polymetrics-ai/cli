@@ -11,6 +11,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/safety"
 )
 
 // Direct reads used to issue one request with NO page-size parameter and
@@ -170,6 +171,9 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	if err := validateDirectReadPageRequest(mode, w); err != nil {
 		return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
 	}
+	if err := connectors.ValidateDirectReadPageCursor(w.pageCursor); err != nil {
+		return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
+	}
 
 	number := 1
 	reqPath := w.requestPath
@@ -218,7 +222,7 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 			// token IS a URL. A caller can type one, which means it has to
 			// clear the same admission the declared endpoint cleared rather
 			// than becoming a generic authenticated GET.
-			admitted, err := admitDirectReadCursorURL(requester.BaseURL, w.requestPath, w.pageCursor)
+			admitted, err := admitDirectReadCursorURL(requester.BaseURL, w.requestPath, w.pageCursor, spec, strategy, w.query)
 			if err != nil {
 				return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
 			}
@@ -477,7 +481,7 @@ func describeRequestedPage(w directReadWalk) string {
 // the SAME endpoint. allow_cross_host governs a provider-supplied Link header
 // discovered during a walk; it can never widen what a caller may type, so it
 // is deliberately not consulted here.
-func admitDirectReadCursorURL(baseURL, requestPath, cursor string) (string, error) {
+func admitDirectReadCursorURL(baseURL, requestPath, cursor string, spec PaginationSpec, strategy string, callerQuery url.Values) (string, error) {
 	if !isAbsoluteHTTPURL(cursor) {
 		return "", fmt.Errorf("page cursor must be the absolute next-page URL a previous page reported, got %q", cursor)
 	}
@@ -498,7 +502,53 @@ func admitDirectReadCursorURL(baseURL, requestPath, cursor string) (string, erro
 	if directReadPathKey(next.EscapedPath()) != directReadPathKey(target.EscapedPath()) {
 		return "", fmt.Errorf("page cursor %q addresses %q, but this command is admitted only for %q; a page cursor may vary the query, not the endpoint", cursor, directReadPathKey(next.EscapedPath()), directReadPathKey(target.EscapedPath()))
 	}
+	values, err := url.ParseQuery(next.RawQuery)
+	if err != nil {
+		return "", fmt.Errorf("page cursor has invalid query encoding: %w", err)
+	}
+	allowed := cursorURLAllowedQueryKeys(spec, strategy, callerQuery)
+	for name, entries := range values {
+		if _, ok := allowed[name]; !ok {
+			return "", fmt.Errorf("page cursor query parameter %q is not declared by this command's continuation contract", name)
+		}
+		if len(entries) != 1 {
+			return "", fmt.Errorf("page cursor repeats continuation query parameter %q", name)
+		}
+		if err := safety.RejectDangerousChars(name, "page cursor query parameter"); err != nil {
+			return "", err
+		}
+		if err := safety.RejectDangerousChars(entries[0], "page cursor query value"); err != nil {
+			return "", err
+		}
+	}
 	return cursor, nil
+}
+
+// cursorURLAllowedQueryKeys has one source of authority: the fixed command's
+// declared query flags plus the declared pagination controls. Link-header and
+// next-URL pagination use `page` as their provider-owned continuation key
+// when an older source declaration has no explicit CursorParam; this preserves
+// the established closed link-header path without admitting arbitrary query
+// authority.
+func cursorURLAllowedQueryKeys(spec PaginationSpec, strategy string, callerQuery url.Values) map[string]struct{} {
+	allowed := make(map[string]struct{}, len(callerQuery)+4)
+	for name := range callerQuery {
+		allowed[name] = struct{}{}
+	}
+	navigation, size := pagingParamsForStrategy(spec, strategy)
+	for _, name := range append(navigation, size...) {
+		if strings.TrimSpace(name) != "" {
+			allowed[name] = struct{}{}
+		}
+	}
+	if strategy == "link_header" || strategy == "next_url" {
+		name := strings.TrimSpace(spec.CursorParam)
+		if name == "" {
+			name = "page"
+		}
+		allowed[name] = struct{}{}
+	}
+	return allowed
 }
 
 // directReadRequestTarget reproduces connsdk Requester.resolveURL's base+path

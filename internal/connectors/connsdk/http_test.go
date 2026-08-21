@@ -1115,6 +1115,49 @@ func TestRequesterMutationRetryCancellationRetainsLastResponse(t *testing.T) {
 	if resp == nil || resp.Status != http.StatusServiceUnavailable || resp.Header.Get("X-Request-ID") != "terminal-retry-receipt" || string(resp.Body) != "retry later\n" {
 		t.Fatalf("terminal response = %#v, want complete last provider response", resp)
 	}
+	var provider *HTTPError
+	if !errors.As(err, &provider) || provider.Status != http.StatusServiceUnavailable || provider.Header.Get("X-Request-ID") != "terminal-retry-receipt" {
+		t.Fatalf("Do error provider evidence = %#v, want retained 503 HTTPError", provider)
+	}
+}
+
+// TestRequesterRetryTransportFailureRetainsEarlierProviderResponse proves a
+// later no-response transport failure cannot overwrite the bounded provider
+// receipt that caused the retry. Downstream command surfaces need both facts:
+// the provider's 503 metadata and the terminal transport cause.
+func TestRequesterRetryTransportFailureRetainsEarlierProviderResponse(t *testing.T) {
+	transportFailure := errors.New("connection reset after provider retry")
+	calls := 0
+	r := &Requester{
+		BaseURL:    "https://provider.example.invalid",
+		MaxRetries: 1,
+		Sleep: func(context.Context, time.Duration) error {
+			return nil
+		},
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			calls++
+			if calls == 1 {
+				return &http.Response{
+					StatusCode: http.StatusServiceUnavailable,
+					Header:     http.Header{"X-Request-Id": []string{"first-provider-receipt"}},
+					Body:       io.NopCloser(strings.NewReader("retry later")),
+					Request:    req,
+				}, nil
+			}
+			return nil, transportFailure
+		})},
+	}
+	resp, err := r.Do(context.Background(), http.MethodGet, "/widgets", nil, nil)
+	if !errors.Is(err, transportFailure) {
+		t.Fatalf("Do error = %v, want terminal transport failure", err)
+	}
+	var provider *HTTPError
+	if !errors.As(err, &provider) || provider.Status != http.StatusServiceUnavailable || provider.Header.Get("X-Request-ID") != "first-provider-receipt" {
+		t.Fatalf("Do error provider evidence = %#v, want retained first 503 HTTPError", provider)
+	}
+	if resp == nil || resp.Status != http.StatusServiceUnavailable || resp.Header.Get("X-Request-ID") != "first-provider-receipt" || string(resp.Body) != "retry later" {
+		t.Fatalf("terminal response = %#v, want retained first provider response", resp)
+	}
 }
 
 func TestRequesterAdmitsReplayableReadOncePerLogicalAttempt(t *testing.T) {

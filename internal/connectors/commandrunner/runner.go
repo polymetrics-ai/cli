@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"math"
+	"math/big"
 	"net/http"
 	"net/url"
 	"slices"
@@ -127,20 +127,20 @@ type BlockedCommandError struct {
 
 type MinimumFlagError struct {
 	Parameter string
-	Minimum   float64
+	Minimum   connectors.ExactNumber
 }
 
 type MaximumFlagError struct {
 	Parameter string
-	Maximum   float64
+	Maximum   connectors.ExactNumber
 }
 
 func (e *MaximumFlagError) Error() string {
-	return fmt.Sprintf("invalid --%s: value must be at most %s", e.Parameter, strconv.FormatFloat(e.Maximum, 'f', -1, 64))
+	return fmt.Sprintf("invalid --%s: value must be at most %s", e.Parameter, e.Maximum.String())
 }
 
 func (e *MinimumFlagError) Error() string {
-	return fmt.Sprintf("invalid --%s: value must be at least %s", e.Parameter, strconv.FormatFloat(e.Minimum, 'f', -1, 64))
+	return fmt.Sprintf("invalid --%s: value must be at least %s", e.Parameter, e.Minimum.String())
 }
 
 // MissingRequiredFlagError is a caller-correctable command-input refusal.
@@ -333,6 +333,9 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 		return Result{}, err
 	}
 	if cmd.Intent == "direct_read" {
+		if err := connectors.ValidateDirectReadPageCursor(req.PageCursor); err != nil {
+			return Result{}, err
+		}
 		return runDirectRead(ctx, connector, cmd, req)
 	}
 	if cmd.Intent == "binary_download" || cmd.Intent == "text_export" {
@@ -1506,29 +1509,19 @@ func validateFlagMinimum(flag connectors.CommandSurfaceFlag, value string) error
 	if flag.Minimum == nil {
 		return nil
 	}
-	minimum := *flag.Minimum
-	if math.IsNaN(minimum) || math.IsInf(minimum, 0) {
+	minimum, ok := parseExactJSONNumber(flag.Minimum.String())
+	if !ok {
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s has invalid minimum", flag.Name)}
 	}
-	var parsed float64
-	switch flag.Type {
-	case "integer":
-		integer, err := strconv.ParseInt(value, 10, 64)
-		if err != nil {
-			return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
-		}
-		parsed = float64(integer)
-	case "number":
-		number, err := strconv.ParseFloat(value, 64)
-		if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
-			return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
-		}
-		parsed = number
-	default:
+	if flag.Type != "integer" && flag.Type != "number" {
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s minimum requires integer or number type", flag.Name)}
 	}
-	if parsed < minimum {
-		return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
+	parsed, ok := parseExactFlagNumber(flag.Type, value)
+	if !ok {
+		return &MinimumFlagError{Parameter: flag.Name, Minimum: *flag.Minimum}
+	}
+	if parsed.Cmp(minimum) < 0 {
+		return &MinimumFlagError{Parameter: flag.Name, Minimum: *flag.Minimum}
 	}
 	return nil
 }
@@ -1537,31 +1530,36 @@ func validateFlagMaximum(flag connectors.CommandSurfaceFlag, value string) error
 	if flag.Maximum == nil {
 		return nil
 	}
-	maximum := *flag.Maximum
-	if math.IsNaN(maximum) || math.IsInf(maximum, 0) {
+	maximum, ok := parseExactJSONNumber(flag.Maximum.String())
+	if !ok {
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s has invalid maximum", flag.Name)}
 	}
-	var parsed float64
-	switch flag.Type {
-	case "integer":
-		integer, err := strconv.ParseInt(value, 10, 64)
-		if err != nil {
-			return &MaximumFlagError{Parameter: flag.Name, Maximum: maximum}
-		}
-		parsed = float64(integer)
-	case "number":
-		number, err := strconv.ParseFloat(value, 64)
-		if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
-			return &MaximumFlagError{Parameter: flag.Name, Maximum: maximum}
-		}
-		parsed = number
-	default:
+	if flag.Type != "integer" && flag.Type != "number" {
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s maximum requires integer or number type", flag.Name)}
 	}
-	if parsed > maximum {
-		return &MaximumFlagError{Parameter: flag.Name, Maximum: maximum}
+	parsed, ok := parseExactFlagNumber(flag.Type, value)
+	if !ok {
+		return &MaximumFlagError{Parameter: flag.Name, Maximum: *flag.Maximum}
+	}
+	if parsed.Cmp(maximum) > 0 {
+		return &MaximumFlagError{Parameter: flag.Name, Maximum: *flag.Maximum}
 	}
 	return nil
+}
+
+func parseExactFlagNumber(flagType, value string) (*big.Rat, bool) {
+	switch flagType {
+	case "integer":
+		integer, ok := parseExactJSONInteger(value)
+		if !ok {
+			return nil, false
+		}
+		return new(big.Rat).SetInt(integer), true
+	case "number":
+		return parseExactJSONNumber(value)
+	default:
+		return nil, false
+	}
 }
 
 func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error {
@@ -2230,17 +2228,15 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		}
 		return parsed, nil
 	case "integer":
-		parsed, err := strconv.Atoi(value)
-		if err != nil {
+		if _, ok := parseExactJSONInteger(value); !ok {
 			return nil, fmt.Errorf("invalid --%s %q, want integer", flag.Name, value)
 		}
-		return parsed, nil
+		return json.Number(value), nil
 	case "number":
-		parsed, err := strconv.ParseFloat(value, 64)
-		if err != nil || math.IsNaN(parsed) || math.IsInf(parsed, 0) {
+		if _, ok := parseExactJSONNumber(value); !ok {
 			return nil, fmt.Errorf("invalid --%s %q, want finite number", flag.Name, value)
 		}
-		return parsed, nil
+		return json.Number(value), nil
 	case "string_array":
 		out := make([]string, 0)
 		for _, raw := range clean {
@@ -2278,6 +2274,26 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
 		}
 	}
+}
+
+// parseExactJSONNumber accepts exactly one JSON numeric lexeme and represents
+// it as a rational for comparisons. Unlike ParseFloat it preserves provider
+// identifiers and decimal coefficients past 53 bits, including exponent
+// forms, until the sealed JSON encoder sends the same lexeme onward.
+func parseExactJSONNumber(value string) (*big.Rat, bool) {
+	if !json.Valid([]byte(value)) {
+		return nil, false
+	}
+	rational, ok := new(big.Rat).SetString(value)
+	return rational, ok
+}
+
+func parseExactJSONInteger(value string) (*big.Int, bool) {
+	if !json.Valid([]byte(value)) {
+		return nil, false
+	}
+	integer, ok := new(big.Int).SetString(value, 10)
+	return integer, ok
 }
 
 func validateCommandFlagEncodedBytes(flag connectors.CommandSurfaceFlag, value string) error {

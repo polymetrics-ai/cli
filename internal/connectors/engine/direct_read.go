@@ -984,7 +984,7 @@ func bodySchemaHasRootString(raw json.RawMessage) bool {
 func cloneAnyMap(in map[string]any) map[string]any {
 	out := make(map[string]any, len(in))
 	for key, value := range in {
-		out[key] = value
+		out[key] = copyRecordValue(value)
 	}
 	return out
 }

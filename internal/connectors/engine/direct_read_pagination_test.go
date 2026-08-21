@@ -833,6 +833,51 @@ func TestDirectReadRefusesACrossOriginCursorURLEvenWhenCrossHostIsAllowed(t *tes
 	}
 }
 
+// TestDirectReadCursorURLAdmitsOnlyBoundedDeclaredContinuationQuery proves a
+// manually supplied same-origin URL cannot add an undeclared authenticated
+// query control or a duplicate page selector after the normal command binding
+// has finished. The fixture's `page` is the link-header continuation field;
+// `state` is the caller's already-bound query input.
+func TestDirectReadCursorURLAdmitsOnlyBoundedDeclaredContinuationQuery(t *testing.T) {
+	fx, srv := startLinkHeaderFixture(t)
+	b := linkHeaderBundle(srv.URL, false)
+	for _, cursor := range []string{
+		srv.URL + linkHeaderFixturePath + "?page=2&admin=true",
+		srv.URL + linkHeaderFixturePath + "?page=2&page=3",
+		srv.URL + linkHeaderFixturePath + "?page=%0Dforged",
+	} {
+		before := len(fx.requested())
+		_, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+			Method:       http.MethodGet,
+			Path:         linkHeaderFixturePath,
+			Query:        map[string]string{"state": "open"},
+			PageCursor:   cursor,
+			OutputPolicy: "json_redacted",
+		}, nil)
+		if err == nil || !strings.Contains(err.Error(), "page cursor") {
+			t.Fatalf("DirectRead(%q) error = %v, want cursor admission refusal", cursor, err)
+		}
+		if got := len(fx.requested()); got != before {
+			t.Fatalf("refused cursor %q reached provider: requests %d -> %d", cursor, before, got)
+		}
+	}
+
+	oversized := strings.Repeat("x", 16<<10+1)
+	before := len(fx.requested())
+	_, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         linkHeaderFixturePath,
+		PageCursor:   oversized,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "page cursor") {
+		t.Fatalf("DirectRead oversized cursor error = %v, want bounded cursor refusal", err)
+	}
+	if got := len(fx.requested()); got != before {
+		t.Fatalf("oversized cursor reached provider: requests %d -> %d", before, got)
+	}
+}
+
 // TestDirectReadPaginationGuardIsNotReportedAsADecodeFailure covers the
 // diagnosis: the body parsed fine and only the NEXT-page guard fired, so
 // "response is not JSON" would name the wrong thing entirely.

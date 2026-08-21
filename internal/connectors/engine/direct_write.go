@@ -58,6 +58,27 @@ type preparedOperationDirectWrite struct {
 	prepared         PreparedWrite
 }
 
+// sealRuntimeConfig copies every mutable request input a prepared write can
+// consult after approval. Runtime interfaces remain the caller's installed
+// services, but config/secrets and approved file digests are values bound into
+// the preview rather than live aliases.
+func sealRuntimeConfig(cfg connectors.RuntimeConfig) connectors.RuntimeConfig {
+	cloneMap := func(values map[string]string) map[string]string {
+		if len(values) == 0 {
+			return nil
+		}
+		out := make(map[string]string, len(values))
+		for key, value := range values {
+			out[key] = value
+		}
+		return out
+	}
+	cfg.Config = cloneMap(cfg.Config)
+	cfg.Secrets = cloneMap(cfg.Secrets)
+	cfg.ApprovedPayloadSHA256 = cloneMap(cfg.ApprovedPayloadSHA256)
+	return cfg
+}
+
 type operationDirectWriteError struct {
 	operation string
 	message   string
@@ -122,6 +143,14 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		requester := *resolvedRequester
 		requester.DisableRetries = true
+		if len(prepared.prepared.Requests) != 1 {
+			return fmt.Errorf("operation %q prepared request count %d, want exactly one", prepared.op.ID, len(prepared.prepared.Requests))
+		}
+		sealedRequest := prepared.prepared.Requests[0]
+		sealedQuery, queryErr := url.ParseQuery(sealedRequest.Query)
+		if queryErr != nil || sealedQuery.Encode() != sealedRequest.Query {
+			return fmt.Errorf("operation %q prepared query is not canonical", prepared.op.ID)
+		}
 
 		// Crossing this point means the sealed request is about to be submitted.
 		// Record its declaration-owned identity before transport I/O so timeout,
@@ -138,13 +167,13 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		var response *connsdk.Response
 		switch prepared.format {
 		case "form":
-			response, err = requester.DoFormLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.form, prepared.maxBytes)
+			response, err = requester.DoPreparedFormLimited(requestCtx, sealedRequest.Method, prepared.requestPath, sealedQuery, []byte(sealedRequest.Body), prepared.maxBytes)
 		case "json", "none", "graphql":
-			contentType := prepared.contentType
+			contentType := sealedRequest.ContentType
 			if contentType == "" {
 				contentType = "application/json"
 			}
-			response, err = requester.DoJSONLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, contentType, prepared.maxBytes)
+			response, err = requester.DoPreparedJSONLimited(requestCtx, sealedRequest.Method, prepared.requestPath, sealedQuery, []byte(sealedRequest.Body), contentType, prepared.maxBytes)
 		case "multipart":
 			root, rootErr := openMultipartRoot(prepared.cfg.ProjectDir)
 			if rootErr != nil {
@@ -438,7 +467,7 @@ func ApprovedMultipartPayloadSHA256ForOperation(ctx context.Context, b Bundle, r
 	if op.Kind != "rest_write" || op.REST == nil || op.REST.Multipart == nil {
 		return nil, nil
 	}
-	cfg := materializeConfigDefaults(b, req.Config)
+	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	body, err := operationWriteBody(op, req.Body)
 	if err != nil {
 		return nil, err
@@ -1463,7 +1492,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err := validateOperationDirectWritePathParams(op, req.PathParams); err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	cfg := materializeConfigDefaults(b, req.Config)
+	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	identity := operationDirectWriteIdentity(b, op, method)
 	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
 	if err != nil {
@@ -1635,7 +1664,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if len(req.Headers) != 0 || len(req.HeaderValues) != 0 {
 		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q fixed GraphQL mutation does not accept request header overrides", op.ID)
 	}
-	cfg := materializeConfigDefaults(b, req.Config)
+	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	identity := operationDirectWriteIdentity(b, op, method)
 	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
 	if err != nil {

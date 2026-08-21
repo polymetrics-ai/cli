@@ -44,6 +44,10 @@ var protectedOperationHeaderNames = map[string]struct{}{
 	"access-control-request-headers": {}, "access-control-request-method": {},
 	"alt-svc": {}, "alt-used": {}, "api-key": {}, "api-token": {}, "authorization": {},
 	"connection": {}, "cookie": {}, "dnt": {}, "early-data": {}, "expect": {},
+	// Retry/idempotency is owned by the sealed runtime request plan. A
+	// declaration may not publish either provider-conventional spelling until
+	// it can prove the exact preview-bound value survives every retry policy.
+	"idempotency-key": {}, "x-idempotency-key": {},
 	"forwarded": {}, "host": {}, "keep-alive": {}, "max-forwards": {}, "origin": {},
 	"priority": {}, "proxy-authorization": {}, "proxy-connection": {}, "range": {},
 	"referer": {}, "set-cookie": {}, "te": {}, "trailer": {}, "transfer-encoding": {},

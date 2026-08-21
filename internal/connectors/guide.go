@@ -3,7 +3,6 @@ package connectors
 import (
 	"fmt"
 	"sort"
-	"strconv"
 	"strings"
 )
 
@@ -267,10 +266,10 @@ func renderCommandSurfaceFlagName(flag CommandSurfaceFlag) string {
 		qualifiers = append(qualifiers, fmt.Sprintf("max %d bytes", flag.MaxBytes))
 	}
 	if flag.Minimum != nil {
-		qualifiers = append(qualifiers, "minimum="+strconv.FormatFloat(*flag.Minimum, 'f', -1, 64))
+		qualifiers = append(qualifiers, "minimum="+flag.Minimum.String())
 	}
 	if flag.Maximum != nil {
-		qualifiers = append(qualifiers, "maximum="+strconv.FormatFloat(*flag.Maximum, 'f', -1, 64))
+		qualifiers = append(qualifiers, "maximum="+flag.Maximum.String())
 	}
 	if flag.Format != "" {
 		qualifiers = append(qualifiers, "format="+flag.Format)

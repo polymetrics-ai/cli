@@ -903,6 +903,53 @@ func TestApprovedDestructiveWriteRefusesRedirectToUnapprovedTarget(t *testing.T)
 	}
 }
 
+// TestOperationDirectReadRefusesSQSRedirectWithoutForwardingSessionToken pins
+// the native HTTP boundary. SQS direct reads are credentialed POSTs even when
+// they are not classified as destructive, so the ambient client's default
+// redirect behaviour must never forward the session token to another origin.
+func TestOperationDirectReadRefusesSQSRedirectWithoutForwardingSessionToken(t *testing.T) {
+	for _, status := range []int{http.StatusFound, http.StatusTemporaryRedirect} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			var targetCalls atomic.Int32
+			target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				targetCalls.Add(1)
+				if got := r.Header.Get("X-Amz-Security-Token"); got != "" {
+					t.Fatalf("redirect target received session token %q", got)
+				}
+				w.WriteHeader(http.StatusOK)
+			}))
+			defer target.Close()
+
+			initial := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Location", target.URL+"/credential-sink")
+				w.Header().Set("X-Amzn-RequestId", "provider-redirect")
+				w.WriteHeader(status)
+			}))
+			defer initial.Close()
+
+			connector := native.New()
+			cfg := testRuntimeConfig(initial.URL)
+			cfg.Secrets["session_token"] = "session-token-that-must-not-leave-origin"
+			result, err := connector.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+				Operation: "list_queues",
+				Config:    cfg,
+			})
+			if err == nil || !strings.Contains(err.Error(), "status ") {
+				t.Fatalf("OperationDirectRead redirect error = %v, want retained provider status", err)
+			}
+			if result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != status {
+				t.Fatalf("redirect receipt = %#v, want received status %d", result.Receipt, status)
+			}
+			if got := result.Receipt.Headers["X-Amzn-Requestid"].Values; !reflect.DeepEqual(got, []string{"provider-redirect"}) {
+				t.Fatalf("redirect receipt request ID = %#v, want provider response metadata", got)
+			}
+			if got := targetCalls.Load(); got != 0 {
+				t.Fatalf("redirect target calls = %d, want 0", got)
+			}
+		})
+	}
+}
+
 func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	var actions []string
 	var bodies []string
@@ -1803,6 +1850,34 @@ func TestOperationDirectReadRefusesSQSNavigationItCannotHonour(t *testing.T) {
 				t.Fatal("the refused navigation still reached AWS")
 			}
 		})
+	}
+}
+
+// TestOperationDirectReadRefusesUnsafeSQSContinuationBeforeSigning keeps the
+// opaque NextToken bounded and terminal-safe before it is form-encoded and
+// passed into the SigV4 request path.
+func TestOperationDirectReadRefusesUnsafeSQSContinuationBeforeSigning(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits++
+		_, _ = w.Write([]byte(`<ListQueuesResponse><ListQueuesResult></ListQueuesResult></ListQueuesResponse>`))
+	}))
+	defer srv.Close()
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	for _, cursor := range []string{"page\r\nforged", strings.Repeat("x", 16<<10+1)} {
+		before := hits
+		_, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+			Operation:  "list_queues",
+			Config:     cfg,
+			PageCursor: cursor,
+		})
+		if err == nil || !strings.Contains(err.Error(), "page cursor") {
+			t.Fatalf("OperationDirectRead cursor %q error = %v, want pre-I/O cursor refusal", cursor[:min(12, len(cursor))], err)
+		}
+		if hits != before {
+			t.Fatalf("unsafe cursor reached SQS: requests %d -> %d", before, hits)
+		}
 	}
 }
 

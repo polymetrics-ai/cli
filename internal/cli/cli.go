@@ -1776,6 +1776,9 @@ func connectorCommandPage(flags parsedFlags) (int, string, error) {
 		return 0, "", validationErrorf("invalid --page %d, want a positive page number", page)
 	}
 	cursor := flags.first("page-cursor")
+	if err := connectors.ValidateDirectReadPageCursor(cursor); err != nil {
+		return 0, "", validationErrorf("invalid --page-cursor: %v", err)
+	}
 	if raw != "" && cursor != "" {
 		return 0, "", validationErrorf("--page and --page-cursor are mutually exclusive; a connector addresses pages either by number or by cursor")
 	}

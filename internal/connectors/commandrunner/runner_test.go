@@ -1051,11 +1051,11 @@ func TestBuildWriteCommandPlansReopenAndPRSharedCommands(t *testing.T) {
 		resource string
 		record   connectors.Record
 	}{
-		{[]string{"issue", "reopen"}, map[string][]string{"issue-number": {"7"}}, "reopen_issue", "issue", connectors.Record{"issue_number": 7}},
-		{[]string{"pr", "reopen"}, map[string][]string{"pull-number": {"9"}}, "reopen_pull_request", "pr", connectors.Record{"pull_number": 9}},
-		{[]string{"pr", "comment"}, map[string][]string{"pull-number": {"9"}, "body": {"ship it"}}, "comment_issue", "pr", connectors.Record{"issue_number": 9, "body": "ship it"}},
-		{[]string{"pr", "lock"}, map[string][]string{"pull-number": {"9"}}, "lock_issue", "pr", connectors.Record{"issue_number": 9}},
-		{[]string{"pr", "unlock"}, map[string][]string{"pull-number": {"9"}}, "unlock_issue", "pr", connectors.Record{"issue_number": 9}},
+		{[]string{"issue", "reopen"}, map[string][]string{"issue-number": {"7"}}, "reopen_issue", "issue", connectors.Record{"issue_number": json.Number("7")}},
+		{[]string{"pr", "reopen"}, map[string][]string{"pull-number": {"9"}}, "reopen_pull_request", "pr", connectors.Record{"pull_number": json.Number("9")}},
+		{[]string{"pr", "comment"}, map[string][]string{"pull-number": {"9"}, "body": {"ship it"}}, "comment_issue", "pr", connectors.Record{"issue_number": json.Number("9"), "body": "ship it"}},
+		{[]string{"pr", "lock"}, map[string][]string{"pull-number": {"9"}}, "lock_issue", "pr", connectors.Record{"issue_number": json.Number("9")}},
+		{[]string{"pr", "unlock"}, map[string][]string{"pull-number": {"9"}}, "unlock_issue", "pr", connectors.Record{"issue_number": json.Number("9")}},
 	}
 
 	for _, tt := range tests {
@@ -1536,8 +1536,8 @@ func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
 	if !ok {
 		t.Fatalf("record diagnosis = %#v, want nested object", record["diagnosis"])
 	}
-	if diagnosis["nonCoded"] != "Synthetic condition" || record["rank"] != 1 {
-		t.Fatalf("record = %+v, want explicit nested scalar diagnosis and integer rank", record)
+	if diagnosis["nonCoded"] != "Synthetic condition" || record["rank"] != json.Number("1") {
+		t.Fatalf("record = %+v, want explicit nested scalar diagnosis and exact integer lexeme", record)
 	}
 }
 
@@ -2411,8 +2411,8 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	if command.Batchable {
 		t.Fatal("direct write command made batchable:false operation batchable")
 	}
-	if got := command.Record["dir"]; got != 1 {
-		t.Fatalf("typed body dir = %#v (%T), want integer 1", got, got)
+	if got := command.Record["dir"]; got != json.Number("1") {
+		t.Fatalf("typed body dir = %#v (%T), want exact integer lexeme 1", got, got)
 	}
 	if got := command.RedactedRecord["id"]; got != "t3_abc" {
 		t.Fatalf("direct-write preview record id = %#v, want complete input", got)
@@ -3539,7 +3539,7 @@ func TestValidateFlagMinimumIsOptIn(t *testing.T) {
 		t.Fatalf("validateFlagValue without minimum = %v, want unchanged acceptance", err)
 	}
 
-	minimum := 1.0
+	minimum := connectors.ExactNumber("1")
 	flag := connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", Minimum: &minimum}
 	if err := validateFlagValue(flag, "1"); err != nil {
 		t.Fatalf("validateFlagValue at minimum = %v, want accepted", err)
@@ -3549,7 +3549,7 @@ func TestValidateFlagMinimumIsOptIn(t *testing.T) {
 	if !errors.As(err, &minimumErr) {
 		t.Fatalf("validateFlagValue below minimum error = %T %v, want MinimumFlagError", err, err)
 	}
-	if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+	if minimumErr.Parameter != "page-number" || minimumErr.Minimum.String() != "1" {
 		t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
 	}
 }
@@ -3559,7 +3559,7 @@ func TestValidateFlagMaximumIsOptIn(t *testing.T) {
 		t.Fatalf("validateFlagValue without maximum = %v, want unchanged acceptance", err)
 	}
 
-	maximum := 2147483647.0
+	maximum := connectors.ExactNumber("2147483647")
 	flag := connectors.CommandSurfaceFlag{Name: "page-size", Type: "integer", Maximum: &maximum}
 	if err := validateFlagValue(flag, "2147483647"); err != nil {
 		t.Fatalf("validateFlagValue at maximum = %v, want accepted", err)
@@ -3569,13 +3569,60 @@ func TestValidateFlagMaximumIsOptIn(t *testing.T) {
 	if !errors.As(err, &maximumErr) {
 		t.Fatalf("validateFlagValue above maximum error = %T %v, want MaximumFlagError", err, err)
 	}
-	if maximumErr.Parameter != "page-size" || maximumErr.Maximum != 2147483647 {
+	if maximumErr.Parameter != "page-size" || maximumErr.Maximum.String() != "2147483647" {
 		t.Fatalf("MaximumFlagError = %+v, want page-size maximum 2147483647", maximumErr)
 	}
 }
 
+// TestCoerceFlagValuePreservesExactNumericLexemes prevents command binding
+// from changing a provider ID or decimal before the schema, preview digest,
+// and request encoder see it. json.Number is intentional: it carries the
+// caller's validated JSON lexeme without a float64 round trip.
+func TestCoerceFlagValuePreservesExactNumericLexemes(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		flag  connectors.CommandSurfaceFlag
+		value string
+	}{
+		{name: "integer above float precision", flag: connectors.CommandSurfaceFlag{Name: "provider-id", Type: "integer"}, value: "9007199254740993"},
+		{name: "precise decimal", flag: connectors.CommandSurfaceFlag{Name: "ratio", Type: "number"}, value: "0.10000000000000001"},
+		{name: "negative exponent", flag: connectors.CommandSurfaceFlag{Name: "offset", Type: "number"}, value: "-1.25e-3"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := coerceFlagValue(tt.flag, []string{tt.value})
+			if err != nil {
+				t.Fatalf("coerceFlagValue: %v", err)
+			}
+			number, ok := got.(json.Number)
+			if !ok || number.String() != tt.value {
+				t.Fatalf("coerceFlagValue = %#v (%T), want json.Number(%q)", got, got, tt.value)
+			}
+		})
+	}
+}
+
+func TestValidateFlagNumericBoundsUseExactDeclarationLexemes(t *testing.T) {
+	integerMinimum := connectors.ExactNumber("9007199254740993")
+	integer := connectors.CommandSurfaceFlag{Name: "provider-id", Type: "integer", Minimum: &integerMinimum}
+	if err := validateFlagValue(integer, "9007199254740993"); err != nil {
+		t.Fatalf("exact integer minimum: %v", err)
+	}
+	if err := validateFlagValue(integer, "9007199254740992"); err == nil {
+		t.Fatal("adjacent integer below exact minimum was accepted")
+	}
+
+	decimalMinimum := connectors.ExactNumber("0.10000000000000001")
+	decimal := connectors.CommandSurfaceFlag{Name: "ratio", Type: "number", Minimum: &decimalMinimum}
+	if err := validateFlagValue(decimal, "0.10000000000000001"); err != nil {
+		t.Fatalf("exact decimal minimum: %v", err)
+	}
+	if err := validateFlagValue(decimal, "0.1"); err == nil {
+		t.Fatal("decimal below exact minimum was accepted after float rounding")
+	}
+}
+
 func TestStreamOverridesConfigMinimumIsOptIn(t *testing.T) {
-	minimum := 1.0
+	minimum := connectors.ExactNumber("1")
 	tests := []struct {
 		name        string
 		flag        connectors.CommandSurfaceFlag
@@ -3615,7 +3662,7 @@ func TestStreamOverridesConfigMinimumIsOptIn(t *testing.T) {
 				if !errors.As(err, &minimumErr) {
 					t.Fatalf("streamOverrides error = %T %v, want MinimumFlagError", err, err)
 				}
-				if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+				if minimumErr.Parameter != "page-number" || minimumErr.Minimum.String() != "1" {
 					t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
 				}
 				return

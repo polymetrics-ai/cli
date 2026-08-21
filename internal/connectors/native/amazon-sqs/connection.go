@@ -220,9 +220,22 @@ func (c Connector) doEndpoint(ctx context.Context, conn sqsConfig, endpoint stri
 	if client == nil {
 		client = &http.Client{Timeout: 60 * time.Second}
 	}
-	client = transportpolicy.HTTPClient(ctx, client)
+	// SQS always signs a credentialed POST, including operation direct reads.
+	// Treat redirects as a sealed-request boundary rather than inheriting the
+	// ambient client's cross-origin redirect policy. net/http returns the
+	// refused response alongside the redirect error, which is retained below
+	// for the receipt path without touching the Location target.
+	client = transportpolicy.HTTPClient(transportpolicy.MarkDestructive(ctx), client)
 	resp, err := client.Do(req)
 	if err != nil {
+		if resp != nil {
+			result := sqsHTTPResponse{status: resp.StatusCode, headers: resp.Header.Clone()}
+			if resp.Body != nil {
+				result.body, _ = io.ReadAll(io.LimitReader(resp.Body, int64(maxBytes)+1))
+				_ = resp.Body.Close()
+			}
+			return result, errors.Join(sqsStatusError(resp.StatusCode, result.body), fmt.Errorf("send sqs request: %w", err))
+		}
 		return sqsHTTPResponse{}, fmt.Errorf("send sqs request: %w", err)
 	}
 	defer func() { _ = resp.Body.Close() }()

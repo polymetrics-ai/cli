@@ -1813,14 +1813,18 @@ func structuredRESTBodyMinimumJSONStringBytes(node map[string]any) (int, error) 
 func structuredRESTBodyStringWitnessCandidates(node map[string]any) ([]string, error) {
 	pattern, hasPattern := node["pattern"].(string)
 	format, _ := node["format"].(string)
+	minLength, err := structuredRESTBodyStringMinLength(node)
+	if err != nil {
+		return nil, err
+	}
 	if !hasPattern {
 		if _, exists := node["pattern"]; exists {
 			return nil, fmt.Errorf("pattern must be a string")
 		}
 		if format == "uri" {
-			return []string{"x:"}, nil
+			return []string{structuredRESTBodyPadStringWitness("x:", minLength)}, nil
 		}
-		return []string{""}, nil
+		return []string{structuredRESTBodyPadStringWitness("", minLength)}, nil
 	}
 	witness, err := structuredRESTBodyPatternMinimumString(pattern)
 	if err != nil {
@@ -1840,6 +1844,29 @@ func structuredRESTBodyStringWitnessCandidates(node map[string]any) ([]string, e
 		unique = append(unique, candidate)
 	}
 	return unique, nil
+}
+
+// structuredRESTBodyStringMinLength mirrors the shared schema compiler's
+// non-negative integral minLength rule. The structured-body normalizer holds
+// this decoded node as ordinary JSON values, so accept only the exact number
+// shapes json.Unmarshal creates and leave malformed forms to the compiler.
+func structuredRESTBodyStringMinLength(node map[string]any) (int, error) {
+	raw, exists := node["minLength"]
+	if !exists {
+		return 0, nil
+	}
+	value, ok := raw.(float64)
+	if !ok || value < 0 || math.Trunc(value) != value || value > float64(maxOperationDirectWriteBytes) {
+		return 0, fmt.Errorf("minLength must be a bounded non-negative integer")
+	}
+	return int(value), nil
+}
+
+func structuredRESTBodyPadStringWitness(prefix string, minLength int) string {
+	if padding := minLength - utf8.RuneCountInString(prefix); padding > 0 {
+		return prefix + strings.Repeat("x", padding)
+	}
+	return prefix
 }
 
 func structuredRESTBodyPatternMinimumString(pattern string) (string, error) {

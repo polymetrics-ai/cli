@@ -124,6 +124,9 @@ func applySQSDirectReadPageRequest(req connectors.OperationDirectReadRequest, fo
 	case req.PageCursor == "":
 		return nil
 	}
+	if err := connectors.ValidateDirectReadPageCursor(req.PageCursor); err != nil {
+		return err
+	}
 	// The operation also declares its own next_token flag. Two navigation
 	// inputs select two different pages, so the pairing is refused rather than
 	// resolved in favour of one.

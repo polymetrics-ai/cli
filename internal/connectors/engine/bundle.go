@@ -1059,19 +1059,19 @@ type CLICommandGroup struct {
 
 // CLIFlag describes one command or global flag.
 type CLIFlag struct {
-	Name            string   `json:"name"`
-	Type            string   `json:"type"`
-	Summary         string   `json:"summary,omitempty"`
-	Values          []string `json:"values,omitempty"`
-	MapsTo          string   `json:"maps_to,omitempty"`
-	Format          string   `json:"format,omitempty"`
-	AllowEmpty      *bool    `json:"allow_empty,omitempty"`
-	Minimum         *float64 `json:"minimum,omitempty"`
-	Maximum         *float64 `json:"maximum,omitempty"`
-	Required        bool     `json:"required,omitempty"`
-	Repeatable      bool     `json:"repeatable,omitempty"`
-	EnvOnly         bool     `json:"env_only,omitempty"`
-	AllowBareString bool     `json:"allow_bare_string,omitempty"`
+	Name            string                  `json:"name"`
+	Type            string                  `json:"type"`
+	Summary         string                  `json:"summary,omitempty"`
+	Values          []string                `json:"values,omitempty"`
+	MapsTo          string                  `json:"maps_to,omitempty"`
+	Format          string                  `json:"format,omitempty"`
+	AllowEmpty      *bool                   `json:"allow_empty,omitempty"`
+	Minimum         *connectors.ExactNumber `json:"minimum,omitempty"`
+	Maximum         *connectors.ExactNumber `json:"maximum,omitempty"`
+	Required        bool                    `json:"required,omitempty"`
+	Repeatable      bool                    `json:"repeatable,omitempty"`
+	EnvOnly         bool                    `json:"env_only,omitempty"`
+	AllowBareString bool                    `json:"allow_bare_string,omitempty"`
 	// MaxItems/MinItems bound a string_array flag's item count so a bounded
 	// provider-search list can be enforced against the flag the user typed, not
 	// only against the assembled body.

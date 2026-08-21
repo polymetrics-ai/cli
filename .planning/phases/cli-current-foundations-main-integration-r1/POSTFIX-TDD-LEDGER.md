@@ -6,8 +6,8 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 | --- | --- | --- | --- | --- |
 | 1 | B01, B02, B03, B09, B12, W01 | `TestGitHubParityGenerationOrderIsCommutative`; `TestSourceProjectionGapOperationsCannotMasqueradeAsImplemented`; `TestGoogleAdsGeneratedPOSTReadsAcceptDeclaredNestedObjects`; v2 projection digest mutation; deleted route/parameter and semantic update/delete surface-sync cases. | `go test -timeout 20m ./cmd/connectorgen`; Node parity-order and combined-ledger checks; `connectorgen validate`; `surface-sync --check`; all six affected source IDs have installed coverage. | green; remote `d3bf5da0e6a4575628dd76dd94a7522220f9d3df` |
 | 2 | B04-B08, W02 | `TestGraphQLOperationVariablesRequiresExactlyOnePaginationDirection`; `TestOperationDirectReadBackwardGraphQLPaginationUsesPreviousPageInfo`; `TestGraphQLIntUsesSigned32BitDomain`; `TestGeneratedGraphQLContractsClassifySecretInputsAndBoundedIdentitySelections`; `TestWebsiteFlagProjectionPreservesEverySafetyProperty`; `TestRenderCommandSurfaceCommandRendersSafetyConstraints`. | Focused generator, engine/schema, commandrunner preflight, website, guide/skills, generated GitHub artifacts, source-import, surface-sync, certification-candidate/sweep checks. | green; remote `0565f3fd6d152b38f2062aac5dd0df29170b6d4e` |
-| 3 | B13-B14, B17, B19, B24 | Classified secrets versus ordinary IDs/headers; error-bearing direct/native result; status receipt; SQS success/error receipt. | connsdk, engine, commandrunner, native SQS, App, and CLI receipt suites. | green; atomic commit pending |
-| 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | pending |
+| 3 | B13-B14, B17, B19, B24 | Classified secrets versus ordinary IDs/headers; error-bearing direct/native result; status receipt; SQS success/error receipt. | connsdk, engine, commandrunner, native SQS, App, and CLI receipt suites. | green; remote `58c86d18bd27e55f334cea37f263dd4cdf7540ee` |
+| 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | ready-to-commit |
 | 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | pending |
 | 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | pending |
 | 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | pending |
@@ -207,6 +207,129 @@ was verified, then moved recoverably to Trash. Neither was committed.
   no connector declaration or generated surface; generator checks remain
   reserved for their owning source/surface groups and the final exact-SHA
   combined gate.
+
+## Group 4 red-contract plan (2026-08-21)
+
+- **GSD/manual fallback:** this remains the single-owner Herdr lane described
+  for Groups 2 and 3. The frozen review is the plan authority; tests are added
+  and observed red before their owning production correction. No outside
+  worker, component branch, or recovery worktree is modified.
+- **B15:** a handled GitHub/Ashby write must either execute a prepared, sealed
+  ordered request plan or fail before I/O. Mutating the caller record while
+  approval blocks must neither alter the wire bytes nor produce an unpreviewed
+  effect. A compound failure must retain every attempted provider receipt in
+  order and count only completed effects.
+- **B16:** REST, GraphQL, form, and multipart operation writes must dispatch
+  bytes/config/headers sealed at preview. Mutation of nested request/config/
+  secret/digest state or a replaced multipart file after preview must result
+  in the original material or a pre-I/O refusal; no live remarshal/reread is
+  admitted.
+- **B18:** refused 302/307 and terminal 429/503 followed by cancellation must
+  retain the latest typed provider response with bounded metadata while never
+  contacting a redirect target.
+- **B21:** REST and GraphQL command values preserve exact numeric lexemes
+  (including `9007199254740993`, `0.10000000000000001`, negative, and exponent
+  forms) and compare exact declared minima before I/O.
+- **B23/B25:** opaque pagination continuations and native SQS tokens reject
+  unknown/duplicate fields, controls, malformed encoding, and capped-size
+  expansion before authentication/request dispatch; a native SQS 302/307 must
+  not contact the target or forward a session token.
+- **W03/W04:** runtime-owned idempotency headers fail declaration validation
+  rather than silently disappearing; minimum-witness generation produces a
+  valid bounded string for a supported `minLength` schema.
+
+### Group 4 observed red evidence
+
+- **B15:** the frozen review established that `executeApprovedWrite` let
+  `WriteHook.ExecuteWrite` choose physical requests after the preview, so the
+  request set itself was absent from the approval digest even after receipt
+  retention was repaired. Red-first
+  `TestPreparedWriteHookSealsEveryPhysicalRequestAndRetainsTerminalReceipts`
+  initially failed to build with the required plan fields/types absent
+  (`PreparedRequest.Action`, `ResponseBinding`, and
+  `PreparedWriteHookPlan`). The executable red requires two declaration-owned
+  steps in preview order, a bounded first-receipt `id` binding for the second
+  path, caller mutation after planning to remain off both wire bodies, and
+  ordered 201/400 receipts to remain in the terminal result.
+- **B16:** `TestPrepareOperationDirectWriteSealsNestedVariablesAndRuntimeMaps`
+  initially failed with `prepared variables` carrying `mutated-name`; after
+  sealing nested values it then failed with `prepared runtime config =
+  map[tenant:mutated-tenant] / secret:mutated-secret`. Both failures occurred
+  before I/O. The prepared JSON/form dispatch now consumes the digest-bound
+  bytes, while multipart retains its immediate approved-digest revalidation.
+- **B18:** `TestRequesterRetryTransportFailureRetainsEarlierProviderResponse`
+  initially failed because `errors.As` found no `*HTTPError` after the first
+  503 was followed by a transport failure. It now requires both the retained
+  503 response/headers/body and the terminal transport cause. The companion
+  stream redirect/backoff-cancellation tests cover the open-body branch.
+- **B21:** `TestCoerceFlagValuePreservesExactNumericLexemes` observed
+  `9007199254740993` as an `int`, `0.10000000000000001` as `float64(0.1)`, and
+  `-1.25e-3` as `float64(-0.00125)`. Exact `json.Number` transport plus rational
+  bound comparison replaces both conversion paths. The prior focused sweep
+  exposed four stale integer/number expectations; they now assert the exact
+  lexemes rather than reintroducing float coercion.
+- **B23/B25:** the cursor red admitted `admin=true` on a same-origin link URL;
+  the SQS red sent a CR/LF cursor to its endpoint. The redirect red delivered
+  the session token to the redirected target. The added cursor/SQS tests prove
+  pre-I/O refusal, no target contact, a retained redirect receipt, and the
+  original `redirect refused` error identity together.
+- **W03/W04:** `Idempotency-Key` and `X-Idempotency-Key` declaration validation
+  initially returned nil; the minLength witness red returned `cannot prove a
+  schema-valid string witness` for a closed `minLength:3` body. Both have
+  focused green tests in engine.
+
+### Group 4 focused green evidence to date
+
+- `go test -timeout 20m ./internal/connectors/engine -run
+  'Test(PrepareOperationDirectWriteSealsNestedVariablesAndRuntimeMaps|PreparedWriteHookSealsEveryPhysicalRequestAndRetainsTerminalReceipts|LegacyWriteHookClaimIsRefusedBeforeUnpreviewedTransport|OperationHeaderDeclarationsRejectRuntimeOwnedIdempotencyNames|StructuredRESTBodyMinimumWitnessHonorsMinLength|DirectReadCursorURLAdmitsOnlyBoundedDeclaredContinuationQuery)$' -count=1`
+  passed.
+- **B15 closure:** `PreparedWriteHook` now admits only named existing write
+  declarations plus one bounded scalar JSON response field mapped to one
+  earlier-step declared path field. The engine validates every selected action
+  record/body, caps plans at eight physical requests per source record, seals
+  the flattened action/binding/body/header set into the preview digest, and
+  executes the same private ordered plan. A legacy `WriteHook` that claims an
+  action fails before I/O. `TestPreparedWriteHookSealsEveryPhysicalRequestAndRetainsTerminalReceipts`
+  passed against a real two-request server (create `201`, bound update `400`),
+  retaining both complete provider receipts. `TestPreparedWritePlanEnumeratesEveryGitHubCompoundRequest`
+  fixes all eight GitHub compound action variants and their exact declaration
+  identities; `TestGitHubPreparedPlanExecutesOnlyPreviewedStepsAndRetainsTerminalReceipt`
+  drives the real GitHub bundle through `engine.Write`, stops before an
+  unplanned reviewers request after metadata `400`, and retains the create and
+  terminal metadata receipts. Ashby's one-step native envelope route now uses
+  the same plan/receipt boundary and its package suite passes.
+- `go test -timeout 20m ./internal/connectors/connsdk -run
+  'Test(RequesterRetryTransportFailureRetainsEarlierProviderResponse|RequesterMutationRetryCancellationRetainsLastResponse|DoStreamRetainsLastProviderEvidenceAcrossRedirectAndCancelledRetry|DoStreamDisableRetriesRejectsMutationRedirect)$' -count=1`
+  passed.
+- `go test -timeout 20m ./internal/connectors/commandrunner -run
+  'Test(CoerceFlagValueNumber|CoerceFlagValuePreservesExactNumericLexemes|ValidateFlagNumericBoundsUseExactDeclarationLexemes|BuildWriteCommandPlansReopenAndPRSharedCommands|RecordOverridesBuildsExplicitNestedScalarFields|BuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle)$' -count=1`
+  passed.
+- `go test -timeout 20m ./internal/connectors/native/amazon-sqs -run
+  'Test(ApprovedDestructiveWriteRefusesRedirectToUnapprovedTarget|OperationDirectReadRefusesSQSRedirectWithoutForwardingSessionToken|OperationDirectReadRefusesUnsafeSQSContinuationBeforeSigning)$' -count=1`
+  passed.
+
+### Group 4 atomic closure gates (2026-08-21)
+
+- Focused behavioral gates passed from this exact uncommitted tree: engine
+  (`0.993s`), GitHub prepared-plan (`1.052s`), Ashby native write (`1.047s`),
+  connsdk retry/redirect (`0.335s`), commandrunner exact-number/write-plan
+  (`1.035s`), SQS redirect/cursor (`0.935s`), and CLI structured-body/help
+  (`1.160s`).
+- Full affected package gates passed: `internal/connectors` (`0.618s`),
+  `engine` (`8.931s`), `connsdk` (`3.463s`), `commandrunner` (`21.973s`),
+  `hooks/github` (`5.031s`), `native/ashby` (`1.047s`), and
+  `native/amazon-sqs` (`1.287s`).
+- Transport/handler race gates passed: engine sealed-plan/cancellation
+  (`2.132s`) and connsdk retry/stream boundary (`1.341s`) with `-race`.
+- `go vet` over engine, connsdk, commandrunner, GitHub, Ashby, SQS, and CLI;
+  `go build ./cmd/pm`; `connectorgen validate` (552 connectors, zero
+  findings); `connectorgen surface-sync --check` (zero drift); and
+  `git diff --check` all passed. No generated artifact changed in this group.
+
+The B15 planner boundary and the frozen Group-4 package/generator gates are
+now closed. Group 4 is eligible for its one coherent atomic commit after the
+final worktree/diff review; no unrelated recovery, credential, or generated
+artifact is included.
 
 ## Group 1 frozen GitHub mutation delta crosswalk
 
