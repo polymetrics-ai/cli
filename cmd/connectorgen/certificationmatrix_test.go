@@ -168,15 +168,34 @@ func TestCertificationMatrixDoesNotTreatPostgresManagedTransportAsGenericWrite(t
 	}
 }
 
-func TestCertificationMatrixPromotesPostgresChangeCaptureOnlyWithReceiptBackedLiveProof(t *testing.T) {
+func TestCertificationMatrixKeepsPostgresChangeCaptureEvidenceHistoricalWhenSubjectDiffers(t *testing.T) {
 	repoRoot := repoRootForCertificationTest(t)
+	evidence, err := loadAcceptedEvidence(repoRoot, []string{"postgres"})
+	if err != nil {
+		t.Fatalf("loadAcceptedEvidence() error = %v", err)
+	}
+	subject, err := loadCurrentCertificationSubject(repoRoot)
+	if err != nil {
+		t.Fatalf("loadCurrentCertificationSubject() error = %v", err)
+	}
+	live, historical := classifyEvidenceForCertificationSubject(evidence, subject)
+	if got := matchingCapabilityEvidence(live, "postgres", "capability:cdc"); len(got) != 0 {
+		t.Fatalf("PostgreSQL CDC live evidence = %#v, want stale proof excluded from current subject", got)
+	}
+	if got := matchingCapabilityEvidence(historical, "postgres", "capability:cdc"); len(got) != 1 {
+		t.Fatalf("PostgreSQL CDC historical evidence = %#v, want exactly one retained receipt-backed proof", got)
+	}
+	if got := matchingSyncModeEvidence(historical, "postgres", string(synccontract.ModeChangeCapture), "database_read_into_warehouse"); len(got) != 1 {
+		t.Fatalf("PostgreSQL CDC sync evidence = %#v, want exactly one retained historical receipt-backed proof", got)
+	}
+
 	matrix := certificationMatrixForTest(t)
 	cdc, ok := capabilityCellFor(matrix, "postgres", "capability:cdc")
 	if !ok {
 		t.Fatal("postgres CDC cell missing")
 	}
-	if !cdc.Applicable || !cdc.Declared || !cdc.Implemented || !cdc.LiveTested || len(cdc.LiveEvidence) != 1 {
-		t.Fatalf("PostgreSQL CDC cell = %#v, want one declared, implemented, live receipt-backed proof", cdc)
+	if !cdc.Applicable || !cdc.Declared || !cdc.Implemented || cdc.LiveTested || len(cdc.LiveEvidence) != 0 {
+		t.Fatalf("PostgreSQL CDC cell = %#v, want declared implementation with only historical stale proof", cdc)
 	}
 	bundles, err := loadSourceBundlesForConnectors(repoRoot, []string{"postgres"})
 	if err != nil {
@@ -186,26 +205,22 @@ func TestCertificationMatrixPromotesPostgresChangeCaptureOnlyWithReceiptBackedLi
 	if err != nil || len(sources) != 1 {
 		t.Fatalf("matrixConnectorSourcesForNames() = %#v, %v; want PostgreSQL source", sources, err)
 	}
-	evidence, err := loadAcceptedEvidence(repoRoot, []string{"postgres"})
-	if err != nil {
-		t.Fatalf("loadAcceptedEvidence() error = %v", err)
-	}
 	cells, err := buildConnectorSyncModeCells(sources, matrix, []syncModeKind{{ID: string(synccontract.ModeChangeCapture)}}, []syncPrimitive{{
 		ID:                 "database_read_into_warehouse",
 		IntegrationType:    "database",
 		Capability:         "read",
 		WarehouseDirection: "into_warehouse",
-	}}, evidence)
+	}}, live)
 	if err != nil || len(cells) != 1 || len(cells[0].Cells) != 1 {
 		t.Fatalf("buildConnectorSyncModeCells() = %#v, %v; want one PostgreSQL change-capture cell", cells, err)
 	}
 	cell := cells[0].Cells[0]
-	if !cell.Applicable || !cell.Declared || !cell.Implemented || !cell.LiveTested || len(cell.LiveEvidence) != 1 {
-		t.Fatalf("PostgreSQL change-capture cell = %#v, want one declared, implemented, live receipt-backed proof", cell)
+	if !cell.Applicable || !cell.Declared || cell.Implemented || cell.LiveTested || len(cell.LiveEvidence) != 0 {
+		t.Fatalf("PostgreSQL change-capture cell = %#v, want declared route blocked from implementation by historical-only proof", cell)
 	}
 }
 
-func TestPostgresPublishesOnlyGenericCapabilitiesWithMatchingLiveCertification(t *testing.T) {
+func TestPostgresPublishesOnlyGenericCapabilitiesWithCurrentLiveCertification(t *testing.T) {
 	matrix := certificationMatrixForTest(t)
 	bundles, err := loadSourceBundlesForConnectors(repoRootForCertificationTest(t), []string{"postgres"})
 	if err != nil || len(bundles) != 1 {
@@ -221,11 +236,11 @@ func TestPostgresPublishesOnlyGenericCapabilitiesWithMatchingLiveCertification(t
 	}
 	published, found := boolFieldForKind(capabilities, "cdc")
 	if !found || !published {
-		t.Fatalf("PostgreSQL CDC publication = %t, want true with current evidence", published)
+		t.Fatalf("PostgreSQL CDC declaration = %t, want true independently of historical certification", published)
 	}
 	cdc, ok := capabilityCellFor(matrix, "postgres", "capability:cdc")
-	if !ok || !cdc.Declared || !cdc.Implemented || !cdc.LiveTested || len(cdc.LiveEvidence) == 0 {
-		t.Fatalf("PostgreSQL published CDC cell = %#v, want declaration, implementation, and accepted live evidence", cdc)
+	if !ok || !cdc.Declared || !cdc.Implemented || cdc.LiveTested || len(cdc.LiveEvidence) != 0 {
+		t.Fatalf("PostgreSQL published CDC cell = %#v, want declaration and implementation without stale live promotion", cdc)
 	}
 	if capabilities.Query {
 		t.Fatalf("PostgreSQL query publication = true, want concrete false while no query route is certified")

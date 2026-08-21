@@ -1195,3 +1195,77 @@ a raw body, method, path, or header channel.
   source/CLI/docs/website/skills/matrix/candidate/sweep generation pass starts
   from that corrected source; the earlier pre-correction generator output is
   diagnostic only and is not claimed as final evidence.
+
+### Group 9 final package gate — frozen failure set (2026-08-22)
+
+- The completion-tracked unchanged-`ab9cb9cca` foundation package command was
+  `go test -count=1 -timeout 20m ./cmd/connectorgen ./internal/app
+  ./internal/cli ./internal/connectors/engine ./internal/connectors/commandrunner
+  ./internal/synctransport ./internal/connectors/connsdk
+  ./internal/connectors/native/amazon-sqs ./internal/connectors/native/postgres
+  ./internal/connectors/database ./internal/connectors/certify`. It reported
+  exactly four failing contracts before any follow-up correction:
+  `TestCertificationMatrixPromotesPostgresChangeCaptureOnlyWithReceiptBackedLiveProof`,
+  `TestPostgresPublishesOnlyGenericCapabilitiesWithMatchingLiveCertification`,
+  `TestGoldenTranscripts/help_etl`, and
+  `TestGenerateRecordForGitHubLabelIncludesColor`. A focused attempt to select
+  a hypothetical `help_etl_json` transcript was itself refused because no such
+  independently named fixture exists; it is not an additional product failure.
+- The complete disposition is required before another full CLI/package run:
+  the first two tests retained stale PostgreSQL live-proof expectations after
+  the Group 9 subject check correctly made their old binary/protocol proof
+  historical; the ETL transcript was the intended source-help addition not
+  yet captured in the golden fixture; and the label test incorrectly promoted
+  the source-declared optional `color` input to required instead of proving
+  the bounded optional field remains available and its declared override is
+  preserved. All other packages in that command passed: App (312.245s), engine
+  (21.914s), commandrunner (27.698s), synctransport (4.002s), connsdk
+  (11.368s), native SQS (8.191s), native PostgreSQL (1.493s), database
+  (13.815s), and certify otherwise (21.629s). `cmd/connectorgen` failed only
+  the named stale-proof assertions (198.112s); CLI failed only the named
+  golden transcript contract (871.161s).
+
+### Group 9 frozen-failure red/green disposition (2026-08-22)
+
+- **Red:** `TestCertificationMatrixPromotesPostgresChangeCaptureOnlyWithReceiptBackedLiveProof`
+  and `TestPostgresPublishesOnlyGenericCapabilitiesWithMatchingLiveCertification`
+  failed because they treated a persisted PostgreSQL receipt whose binary and
+  proof protocol fingerprint no longer matches the current subject as live.
+  The existing `TestCertificationEvidenceBecomesStaleWhenSubjectChanges`
+  independently mutates every subject component; the focused replacement
+  additionally proves that the exact stale CDC capability and change-capture
+  sync-mode receipts remain retained as historical (one each), contribute no
+  live evidence, leave the declared CDC capability implementation intact, and
+  keep the exact change-capture route unimplemented until current matching
+  proof exists. **Green:** `go test -count=1 -timeout 20m ./cmd/connectorgen
+  -run '^(TestCertificationMatrixKeepsPostgresChangeCaptureEvidenceHistoricalWhenSubjectDiffers|TestPostgresPublishesOnlyGenericCapabilitiesWithCurrentLiveCertification)$'
+  passed (28.759s and 47.409s independently).
+- **Red:** `TestGenerateRecordForGitHubLabelIncludesColor` wrongly required
+  `color`. The pinned immutable GitHub artifact at
+  `80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d`
+  declares exactly `[name]` required while `color` is an optional string.
+  The accepted `writes.json` projection carries that field with
+  `maxLength: 8192`; the declaration-owned certification override supplies
+  `ededed`. **Green:** renamed
+  `TestGenerateRecordForGitHubLabelPreservesOptionalColorOverride` asserts the
+  exact required set, optional typed/bounded field, and declared override;
+  `go test -count=1 -timeout 20m ./internal/connectors/certify -run
+  '^TestGenerateRecordForGitHubLabelPreservesOptionalColorOverride$'` passed
+  (1.366s). This preserves the bounded provider input rather than promoting it
+  to a required field.
+- **Red:** `TestGoldenTranscripts/help_etl` differed because the tested
+  `etlManual` source had gained the Group 8 durable
+  `delivered_reconciliation_required` explanation but the selected generated
+  transcript was stale. **Green:** the fixture was regenerated only through
+  `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1
+  POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES=help_etl go test -count=1 -timeout 20m
+  ./internal/cli -run '^TestGoldenTranscripts$'`; a non-update rerun of the
+  same selected transcript passed (1.218s). The source contract,
+  `TestETLManualAndSkillDescribeDeliveredReconciliationTerminalRun`, tracked
+  skill parity, and tracked manual parity then passed together in 164.581s.
+- Required skills applied for this correction: `golang-how-to`,
+  `golang-testing`, `golang-cli`, `golang-error-handling`, `golang-safety`,
+  `golang-security`, and `golang-documentation`. The existing manual GSD
+  fallback remains applicable: this exact continuation has planning, red, and
+  green evidence here and no compatible isolated worker may be spawned under
+  the canonical single-worker delivery contract.
