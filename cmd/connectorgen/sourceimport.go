@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -6894,11 +6895,12 @@ func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 				return sourceImportOptions{}, fmt.Errorf("%s requires a value", arg)
 			}
 			i++
-			if arg == "--defs" {
+			switch arg {
+			case "--defs":
 				opts.DefsDir = args[i]
-			} else if arg == "--out" {
+			case "--out":
 				opts.Output = args[i]
-			} else {
+			case "--cache-dir":
 				opts.CacheDir = args[i]
 			}
 		default:
@@ -7128,26 +7130,39 @@ func writeSourceImportArtifactCache(path string, raw []byte) error {
 		return fmt.Errorf("create source-import artifact cache file: %w", err)
 	}
 	temporaryPath := temporary.Name()
-	defer os.Remove(temporaryPath)
 	if err := temporary.Chmod(0o600); err != nil {
-		temporary.Close()
-		return fmt.Errorf("set source-import artifact cache permissions: %w", err)
+		return sourceImportArtifactCacheTemporaryFailure("set source-import artifact cache permissions", err, temporary, temporaryPath)
 	}
 	if _, err := temporary.Write(raw); err != nil {
-		temporary.Close()
-		return fmt.Errorf("write source-import artifact cache: %w", err)
+		return sourceImportArtifactCacheTemporaryFailure("write source-import artifact cache", err, temporary, temporaryPath)
 	}
 	if err := temporary.Sync(); err != nil {
-		temporary.Close()
-		return fmt.Errorf("sync source-import artifact cache: %w", err)
+		return sourceImportArtifactCacheTemporaryFailure("sync source-import artifact cache", err, temporary, temporaryPath)
 	}
 	if err := temporary.Close(); err != nil {
-		return fmt.Errorf("close source-import artifact cache: %w", err)
+		return sourceImportArtifactCacheTemporaryFailure("close source-import artifact cache", err, temporary, temporaryPath)
 	}
 	if err := os.Rename(temporaryPath, path); err != nil {
+		if cleanupErr := removeSourceImportArtifactCache(temporaryPath); cleanupErr != nil {
+			return fmt.Errorf("publish source-import artifact cache: %w", errors.Join(err, cleanupErr))
+		}
 		return fmt.Errorf("publish source-import artifact cache: %w", err)
 	}
 	return nil
+}
+
+func sourceImportArtifactCacheTemporaryFailure(operation string, cause error, temporary *os.File, temporaryPath string) error {
+	var cleanupErrs []error
+	if err := temporary.Close(); err != nil && !errors.Is(err, os.ErrClosed) {
+		cleanupErrs = append(cleanupErrs, fmt.Errorf("close source-import artifact cache: %w", err))
+	}
+	if err := removeSourceImportArtifactCache(temporaryPath); err != nil {
+		cleanupErrs = append(cleanupErrs, err)
+	}
+	if len(cleanupErrs) > 0 {
+		return fmt.Errorf("%s: %w", operation, errors.Join(append([]error{cause}, cleanupErrs...)...))
+	}
+	return fmt.Errorf("%s: %w", operation, cause)
 }
 
 func validateSourceImportArtifactBytes(raw []byte, artifact sourceImportArtifact) error {

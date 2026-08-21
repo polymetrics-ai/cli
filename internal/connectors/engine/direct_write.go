@@ -377,17 +377,6 @@ func operationDirectWritePostResponseError(operation string, cause error, respon
 	}
 }
 
-func cloneOperationDirectWriteHeaders(headers http.Header) map[string][]string {
-	if len(headers) == 0 {
-		return nil
-	}
-	clone := make(map[string][]string, len(headers))
-	for name, values := range headers {
-		clone[name] = append([]string(nil), values...)
-	}
-	return clone
-}
-
 // preparedOperationDirectWriteHeaders joins runtime-owned resolved headers and
 // exact operation request headers for the private, digest-bound prepared
 // request. Caller headers have already been checked against the operation

@@ -103,10 +103,3 @@ func validateOperationParameterWireValue(op OperationSpec, parameter OperationPa
 	}
 	return nil
 }
-
-func validateConservativeOperationParameterBytes(location, name, encoded string) error {
-	if len(encoded) > defaultOperationParameterMaxBytes {
-		return fmt.Errorf("%s parameter %q encoded value exceeds byte cap %d", location, name, defaultOperationParameterMaxBytes)
-	}
-	return nil
-}

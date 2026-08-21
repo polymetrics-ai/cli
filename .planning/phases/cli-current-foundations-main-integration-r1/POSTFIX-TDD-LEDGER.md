@@ -1351,3 +1351,63 @@ a raw body, method, path, or header channel.
   -v` passed in 18.770s with no race. The required full App race cohort will
   be rerun as bounded name shards at the final exact SHA so the repository's
   20-minute per-command limit remains intact.
+
+### Group 9 final static gate — frozen lint failure set (2026-08-22)
+
+- The completion-tracked final static command reached `make lint` after
+  `go vet ./...`, `go build -o ./pm ./cmd/pm`, and `make tidy-check` passed.
+  It reported exactly 19 findings before any correction: `errcheck` at
+  `cmd/connectorgen/sourceimport.go:7131,7133,7137,7141` and
+  `internal/connectors/engine/binary_read_test.go:63`; `staticcheck` at
+  `cmd/connectorgen/sourceimport.go:6897` and
+  `internal/connectors/engine/write_prepare.go:250`; and unused helpers
+  `cloneOperationDirectWriteHeaders`, `graphQLErrorSummary`,
+  `validateConservativeOperationParameterBytes`,
+  `structuredRESTBodyRequiredMappingPaths`,
+  `structuredRESTBodyRequiredDescendantPaths`,
+  `structuredRESTBodyStaticValueAtPath`, `structuredRESTBodyRequiredFlag`,
+  `operationHasStructuredRESTBodyValue`,
+  `structuredRESTBodyMinimumJSONObjectBytes`,
+  `structuredRESTBodyMinimumJSONArrayBytes`,
+  `structuredRESTBodyByteCostMultiply`, and `resolveWriteRequestLine`.
+- This is the complete frozen set for this static gate. The corrections must
+  preserve source-lock cleanup and every structured/write execution contract;
+  a helper is removed only after confirming it has no call path, and ignored
+  cleanup errors must be deliberately handled without hiding an earlier
+  failure. The final static/generator suite will be rerun only after every
+  listed item has a focused disposition and `make lint` is green.
+
+### Group 9 final static gate — complete disposition (2026-08-22)
+
+- **Red:** the exact 19-item lint set above. **Green:** the source-lock cache
+  writer now combines its primary failure with every close/remove failure and
+  removes an unpublished temporary only through the existing error-checking
+  removal boundary. A successful close still precedes the atomic rename; a
+  failed rename also reports a failed cleanup. The option parser uses its
+  existing tagged flag switch, the closed response-binding identifier predicate
+  has the equivalent explicit disjunction, and the crash-helper reader returns
+  a typed readiness-write error rather than silently continuing. `go test
+  -count=1 -timeout 20m ./cmd/connectorgen -run
+  'TestSourceImportArtifactCache(ColdSlowFetchWritesOnlyVerifiedBytes|HitVerifiesWithoutNetwork|RejectsCorruptionAndOnlyRecoversFromVerifiedFetch)|TestRunSourceImportUsesIsolatedVerifiedCache'`
+  passed (1.311s); `go test -count=1 -timeout 20m
+  ./internal/connectors/engine -run
+  'TestBinaryDownloadNoOverwritePublicationIsCrashAndRaceSafe|Test.*(StructuredRESTBody|DirectWrite|PreparedWrite)'`
+  passed (1.211s).
+- The twelve removed helper roots were proven to have no production/test caller
+  outside their own unreachable helper subgraphs: direct-write header cloning,
+  GraphQL error summary, conservative parameter cap, write request-line
+  resolution, and the structured-body mapping/static-value/optional-flag/body
+  probe/minimum-wrapper/multiply helpers. Active bounded structured-body
+  validation continues to call the `WithStatic` object and array minimum
+  calculators directly; the focused structured-write and direct-write suite
+  above remains its behavioral proof. This removes no declared operation,
+  bound, response receipt, or generated surface.
+- **Green:** `make lint` reports `0 issues`; the subsequent recorded generator
+  checks passed `connectorgen validate` (552 connectors, 0 findings),
+  `surface-sync --check` (552 scanned, 0 drift), and all 17 GitHub parity and
+  source-drift tests, including the exact 1,525-operation combined ledger.
+  `connectorgen-certification-subject --check` then correctly stopped because
+  its old subject names the pre-correction executable. That stale subject is
+  expected proof invalidation, not a product exception: the final subject and
+  all generated/foundation evidence are regenerated only from this committed
+  implementation parent in the final Group 9 evidence step.

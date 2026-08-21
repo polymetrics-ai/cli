@@ -60,7 +60,9 @@ func (r *crashPublicationReader) Read(p []byte) (int, error) {
 		// io.Copy asks for this second read only after it has written the
 		// first payload into the owned temp, so readiness proves the crash is
 		// at the staged-but-unpublished state rather than before temp I/O.
-		fmt.Fprintln(os.Stdout, "binary-download-staged")
+		if _, err := fmt.Fprintln(os.Stdout, "binary-download-staged"); err != nil {
+			return 0, fmt.Errorf("announce staged binary download: %w", err)
+		}
 	}
 	select {}
 }

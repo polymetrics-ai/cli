@@ -125,22 +125,6 @@ func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, rec
 	return PreviewPreparedWrite(prepared)
 }
 
-// resolveWriteRequestLine interpolates the action's base URL and path against
-// the same complete runtime configuration and record that execution uses.
-func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig) (method, path string, err error) {
-	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
-
-	baseURL, err := Interpolate(writeActionBaseURL(b, action), vars)
-	if err != nil {
-		return "", "", fmt.Errorf("engine: resolve write base url: %w", err)
-	}
-	relPath, err := InterpolatePath(action.Path, vars)
-	if err != nil {
-		return "", "", fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
-	}
-	return methodOrDefault(action.Method), joinURL(baseURL, relPath), nil
-}
-
 func copyRecordMap(src map[string]any) map[string]any {
 	out := make(map[string]any, len(src))
 	for k, v := range src {

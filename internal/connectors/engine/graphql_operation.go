@@ -832,17 +832,6 @@ func sanitizeGraphQLErrorMessage(value string) string {
 	return string([]rune(value)[:maxGraphQLErrorMessageSize]) + "…"
 }
 
-func graphQLErrorSummary(metadata *connectors.GraphQLResponseMetadata) string {
-	if metadata == nil || len(metadata.Errors) == 0 {
-		return ""
-	}
-	parts := make([]string, 0, len(metadata.Errors))
-	for _, item := range metadata.Errors {
-		parts = append(parts, item.Message)
-	}
-	return strings.Join(parts, "; ")
-}
-
 func graphQLRateLimit(data map[string]any) *connectors.GraphQLRateLimit {
 	raw, ok := data["rateLimit"].(map[string]any)
 	if !ok {

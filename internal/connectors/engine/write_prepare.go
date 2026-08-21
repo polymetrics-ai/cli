@@ -247,7 +247,10 @@ func isPreparedWriteBindingField(field string) bool {
 	}
 	for index := 0; index < len(field); index++ {
 		value := field[index]
-		if !(value >= 'a' && value <= 'z' || value >= 'A' && value <= 'Z' || value >= '0' && value <= '9' || value == '_') {
+		if (value < 'a' || value > 'z') &&
+			(value < 'A' || value > 'Z') &&
+			(value < '0' || value > '9') &&
+			value != '_' {
 			return false
 		}
 	}
