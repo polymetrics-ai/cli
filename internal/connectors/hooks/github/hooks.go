@@ -43,6 +43,7 @@ var (
 	_ engine.DeclaredRouteAuthHook    = (*Hooks)(nil)
 	_ engine.RateLimitAuthProfileHook = (*Hooks)(nil)
 	_ engine.WriteHook                = (*Hooks)(nil)
+	_ engine.PreparedWriteHook        = (*Hooks)(nil)
 )
 
 const githubInstallationTokenDeclaredPath = "/app/installations/{installation_id}/access_tokens"
@@ -254,26 +255,34 @@ func githubWriteRequester(rt *engine.Runtime, method, declaredPath string) (*con
 
 // ExecuteWrite: 4 compound actions + label color normalization; anything
 // else returns handled=false (declarative fallback).
-func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, error) {
+func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, []*connsdk.Response, error) {
 	switch action.Name {
 	case "close_issue":
-		return true, closeResource(ctx, rt, "issues", "issue_number", rec)
+		responses, err := closeResource(ctx, rt, "issues", "issue_number", rec)
+		return true, responses, err
 	case "close_pull_request":
-		return true, closeResource(ctx, rt, "pulls", "pull_number", rec)
+		responses, err := closeResource(ctx, rt, "pulls", "pull_number", rec)
+		return true, responses, err
 	case "reopen_issue":
-		return true, reopenResource(ctx, rt, "issues", "issue_number", rec)
+		responses, err := reopenResource(ctx, rt, "issues", "issue_number", rec)
+		return true, responses, err
 	case "reopen_pull_request":
-		return true, reopenResource(ctx, rt, "pulls", "pull_number", rec)
+		responses, err := reopenResource(ctx, rt, "pulls", "pull_number", rec)
+		return true, responses, err
 	case "create_pull_request":
-		return true, createPullRequest(ctx, rt, rec)
+		responses, err := createPullRequest(ctx, rt, rec)
+		return true, responses, err
 	case "update_pull_request":
-		return true, updatePullRequest(ctx, rt, rec)
+		responses, err := updatePullRequest(ctx, rt, rec)
+		return true, responses, err
 	case "create_label":
-		return true, createLabel(ctx, rt, rec)
+		responses, err := createLabel(ctx, rt, rec)
+		return true, responses, err
 	case "update_label":
-		return true, updateLabel(ctx, rt, rec)
+		responses, err := updateLabel(ctx, rt, rec)
+		return true, responses, err
 	default:
-		return false, nil
+		return false, nil, nil
 	}
 }
 
@@ -284,6 +293,143 @@ func (h *Hooks) HandlesWriteAction(action engine.WriteAction) bool {
 	default:
 		return false
 	}
+}
+
+// PrepareWrite translates the small GitHub compound-action vocabulary into
+// ordered references to existing writes.json actions. The hook supplies no
+// route, verb, header, or free-form body: the engine resolves all physical
+// request bytes from those declarations and seals their digest before
+// approval. A create-PR follow-up binds its declared path field only from the
+// preceding create receipt's bounded `number` field.
+func (h *Hooks) PrepareWrite(action engine.WriteAction, records []connectors.Record) (engine.PreparedWriteHookPlan, bool, error) {
+	if !h.HandlesWriteAction(action) {
+		return engine.PreparedWriteHookPlan{}, false, nil
+	}
+	plan := engine.PreparedWriteHookPlan{Records: make([]engine.PreparedWriteHookRecord, len(records))}
+	for index, record := range records {
+		steps, err := githubPreparedWriteSteps(action.Name, record)
+		if err != nil {
+			return engine.PreparedWriteHookPlan{}, true, err
+		}
+		plan.Records[index].Steps = steps
+	}
+	return plan, true, nil
+}
+
+func githubPreparedWriteSteps(action string, rec connectors.Record) ([]engine.PreparedWriteHookStep, error) {
+	step := func(action string, record connectors.Record) engine.PreparedWriteHookStep {
+		return engine.PreparedWriteHookStep{Action: action, Record: record}
+	}
+	boundStep := func(action string, record connectors.Record, target string) engine.PreparedWriteHookStep {
+		return engine.PreparedWriteHookStep{
+			Action: action,
+			Record: record,
+			ResponseBinding: &engine.PreparedWriteResponseBinding{
+				SourceStep:  0,
+				Field:       "number",
+				TargetField: target,
+			},
+		}
+	}
+
+	switch action {
+	case "close_issue":
+		number, err := requiredInt(rec, "issue_number", "number")
+		if err != nil {
+			return nil, err
+		}
+		steps := make([]engine.PreparedWriteHookStep, 0, 2)
+		if comment := optionalString(rec, "comment"); comment != "" {
+			steps = append(steps, step("comment_issue", connectors.Record{"issue_number": number, "body": comment}))
+		}
+		update := connectors.Record{"issue_number": number, "state": "closed"}
+		if reason := optionalString(rec, "state_reason"); reason != "" {
+			update["state_reason"] = reason
+		}
+		return append(steps, step("update_issue", update)), nil
+	case "close_pull_request":
+		number, err := requiredInt(rec, "pull_number", "number")
+		if err != nil {
+			return nil, err
+		}
+		steps := make([]engine.PreparedWriteHookStep, 0, 2)
+		if comment := optionalString(rec, "comment"); comment != "" {
+			steps = append(steps, step("comment_issue", connectors.Record{"issue_number": number, "body": comment}))
+		}
+		return append(steps, step("update_pull_request", connectors.Record{"pull_number": number, "state": "closed"})), nil
+	case "reopen_issue":
+		number, err := requiredInt(rec, "issue_number", "number")
+		if err != nil {
+			return nil, err
+		}
+		return []engine.PreparedWriteHookStep{step("update_issue", connectors.Record{"issue_number": number, "state": "open"})}, nil
+	case "reopen_pull_request":
+		number, err := requiredInt(rec, "pull_number", "number")
+		if err != nil {
+			return nil, err
+		}
+		return []engine.PreparedWriteHookStep{step("update_pull_request", connectors.Record{"pull_number": number, "state": "open"})}, nil
+	case "create_pull_request":
+		steps := []engine.PreparedWriteHookStep{step("create_pull_request", cloneGitHubWriteRecord(rec))}
+		if meta := selectFields(rec, metaFields); len(meta) > 0 {
+			// This value only witnesses update_issue's required path field at
+			// preparation. Engine execution overwrites it from create's receipt.
+			meta["issue_number"] = 0
+			steps = append(steps, boundStep("update_issue", connectors.Record(meta), "issue_number"))
+		}
+		if reviewers := selectFields(rec, reviewerFields); len(reviewers) > 0 {
+			reviewers["pull_number"] = 0
+			steps = append(steps, boundStep("request_reviewers", connectors.Record(reviewers), "pull_number"))
+		}
+		return steps, nil
+	case "update_pull_request":
+		number, err := requiredInt(rec, "pull_number", "number")
+		if err != nil {
+			return nil, err
+		}
+		steps := make([]engine.PreparedWriteHookStep, 0, 3)
+		if core := selectFields(rec, pullCoreFields); len(core) > 0 {
+			core["pull_number"] = number
+			steps = append(steps, step("update_pull_request", connectors.Record(core)))
+		}
+		if meta := selectFields(rec, metaFields); len(meta) > 0 {
+			meta["issue_number"] = number
+			steps = append(steps, step("update_issue", connectors.Record(meta)))
+		}
+		if reviewers := selectFields(rec, reviewerFields); len(reviewers) > 0 {
+			reviewers["pull_number"] = number
+			steps = append(steps, step("request_reviewers", connectors.Record(reviewers)))
+		}
+		return steps, nil
+	case "create_label":
+		name, color := optionalString(rec, "name"), optionalString(rec, "color")
+		if name == "" || color == "" {
+			return nil, fmt.Errorf("name and color are required")
+		}
+		label := cloneGitHubWriteRecord(rec)
+		label["color"] = strings.TrimPrefix(color, "#")
+		return []engine.PreparedWriteHookStep{step("create_label", label)}, nil
+	case "update_label":
+		name := optionalString(rec, "name")
+		if name == "" {
+			return nil, fmt.Errorf("name is required")
+		}
+		label := cloneGitHubWriteRecord(rec)
+		if color := optionalString(rec, "color"); color != "" {
+			label["color"] = strings.TrimPrefix(color, "#")
+		}
+		return []engine.PreparedWriteHookStep{step("update_label", label)}, nil
+	default:
+		return nil, fmt.Errorf("github write hook has no prepared plan for action %q", action)
+	}
+}
+
+func cloneGitHubWriteRecord(rec connectors.Record) connectors.Record {
+	cloned := make(connectors.Record, len(rec))
+	for key, value := range rec {
+		cloned[key] = value
+	}
+	return cloned
 }
 
 // MapWriteRecord pins the one field that distinguishes `repo archive` from
@@ -320,10 +466,10 @@ func pinRepoArchived(rec connectors.Record, archived bool) connectors.Record {
 // createLabel/updateLabel reproduce githubCreateLabelPayload/
 // githubUpdateLabelPayload: a leading "#" on color is stripped
 // (github.go:1120,1133; ledger G3 — update_label's fields are all optional).
-func createLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
+func createLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record) ([]*connsdk.Response, error) {
 	name, color := optionalString(rec, "name"), optionalString(rec, "color")
 	if name == "" || color == "" {
-		return fmt.Errorf("name and color are required")
+		return nil, fmt.Errorf("name and color are required")
 	}
 	payload := map[string]any{"name": name, "color": strings.TrimPrefix(color, "#")}
 	if v := optionalString(rec, "description"); v != "" {
@@ -331,16 +477,16 @@ func createLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record)
 	}
 	requester, err := githubWriteRequester(rt, http.MethodPost, githubLabelDeclaredPath)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = requester.Do(ctx, http.MethodPost, repoPath(rt)+"/labels", nil, payload)
-	return err
+	response, err := requester.Do(ctx, http.MethodPost, repoPath(rt)+"/labels", nil, payload)
+	return responseSlice(response), err
 }
 
-func updateLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
+func updateLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record) ([]*connsdk.Response, error) {
 	name := optionalString(rec, "name")
 	if name == "" {
-		return fmt.Errorf("name is required")
+		return nil, fmt.Errorf("name is required")
 	}
 	payload := map[string]any{}
 	for _, key := range []string{"new_name", "color", "description"} {
@@ -354,10 +500,10 @@ func updateLabel(ctx context.Context, rt *engine.Runtime, rec connectors.Record)
 	path := fmt.Sprintf("%s/labels/%s", repoPath(rt), url.PathEscape(name))
 	requester, err := githubWriteRequester(rt, http.MethodPatch, githubLabelByNameDeclaredPath)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = requester.Do(ctx, http.MethodPatch, path, nil, payload)
-	return err
+	response, err := requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	return responseSlice(response), err
 }
 
 func repoPath(rt *engine.Runtime) string {
@@ -366,14 +512,17 @@ func repoPath(rt *engine.Runtime) string {
 	return "/repos/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
 }
 
-func closeResource(ctx context.Context, rt *engine.Runtime, resource, numberField string, rec connectors.Record) error {
+func closeResource(ctx context.Context, rt *engine.Runtime, resource, numberField string, rec connectors.Record) ([]*connsdk.Response, error) {
 	number, err := requiredInt(rec, numberField, "number")
 	if err != nil {
-		return err
+		return nil, err
 	}
+	var responses []*connsdk.Response
 	if comment := optionalString(rec, "comment"); comment != "" {
-		if err := postComment(ctx, rt, "issues", number, comment); err != nil {
-			return err
+		commentResponses, err := postComment(ctx, rt, "issues", number, comment)
+		responses = append(responses, commentResponses...)
+		if err != nil {
+			return responses, err
 		}
 	}
 	payload := map[string]any{"state": "closed"}
@@ -385,37 +534,37 @@ func closeResource(ctx context.Context, rt *engine.Runtime, resource, numberFiel
 	path := fmt.Sprintf("%s/%s/%d", repoPath(rt), resource, number)
 	declaredPath, err := githubResourceDeclaredPath(resource)
 	if err != nil {
-		return err
+		return responses, err
 	}
 	requester, err := githubWriteRequester(rt, http.MethodPatch, declaredPath)
 	if err != nil {
-		return err
+		return responses, err
 	}
-	_, err = requester.Do(ctx, http.MethodPatch, path, nil, payload)
-	return err
+	response, err := requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	return append(responses, responseSlice(response)...), err
 }
 
 // reopenResource is reopen_issue/reopen_pull_request's shared shape: a
 // state=open PATCH against resource ("issues" or "pulls"). It intentionally
 // sends no state_reason (reopen has no reason surface in gh) and posts no
 // comment, mirroring `gh issue reopen` / `gh pr reopen`.
-func reopenResource(ctx context.Context, rt *engine.Runtime, resource, numberField string, rec connectors.Record) error {
+func reopenResource(ctx context.Context, rt *engine.Runtime, resource, numberField string, rec connectors.Record) ([]*connsdk.Response, error) {
 	number, err := requiredInt(rec, numberField, "number")
 	if err != nil {
-		return err
+		return nil, err
 	}
 	payload := map[string]any{"state": "open"}
 	path := fmt.Sprintf("%s/%s/%d", repoPath(rt), resource, number)
 	declaredPath, err := githubResourceDeclaredPath(resource)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	requester, err := githubWriteRequester(rt, http.MethodPatch, declaredPath)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = requester.Do(ctx, http.MethodPatch, path, nil, payload)
-	return err
+	response, err := requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	return responseSlice(response), err
 }
 
 func githubResourceDeclaredPath(resource string) (string, error) {
@@ -429,7 +578,7 @@ func githubResourceDeclaredPath(resource string) (string, error) {
 	}
 }
 
-func createPullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
+func createPullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.Record) ([]*connsdk.Response, error) {
 	skip := map[string]bool{"labels": true, "assignees": true, "milestone": true, "reviewers": true, "team_reviewers": true}
 	payload := map[string]any{}
 	for k, v := range rec {
@@ -439,76 +588,91 @@ func createPullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.R
 	}
 	requester, err := githubWriteRequester(rt, http.MethodPost, githubPullDeclaredPath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	resp, err := requester.Do(ctx, http.MethodPost, repoPath(rt)+"/pulls", nil, payload)
 	if err != nil {
-		return err
+		return responseSlice(resp), err
 	}
 	var created struct {
 		Number int `json:"number"`
 	}
 	if err := json.Unmarshal(resp.Body, &created); err != nil || created.Number == 0 {
-		return fmt.Errorf("github_app: create_pull_request response missing number: %w", err)
+		return responseSlice(resp), fmt.Errorf("github_app: create_pull_request response missing number: %w", err)
 	}
-	return pullRequestFollowups(ctx, rt, created.Number, rec)
+	followups, err := pullRequestFollowups(ctx, rt, created.Number, rec)
+	return append(responseSlice(resp), followups...), err
 }
 
-func updatePullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
+func updatePullRequest(ctx context.Context, rt *engine.Runtime, rec connectors.Record) ([]*connsdk.Response, error) {
 	number, err := requiredInt(rec, "pull_number", "number")
 	if err != nil {
-		return err
+		return nil, err
 	}
+	var responses []*connsdk.Response
 	if core := selectFields(rec, pullCoreFields); len(core) > 0 {
 		path := fmt.Sprintf("%s/pulls/%d", repoPath(rt), number)
 		requester, err := githubWriteRequester(rt, http.MethodPatch, githubPullByNumberDeclaredPath)
 		if err != nil {
-			return err
+			return responses, err
 		}
-		if _, err := requester.Do(ctx, http.MethodPatch, path, nil, core); err != nil {
-			return err
+		response, err := requester.Do(ctx, http.MethodPatch, path, nil, core)
+		responses = append(responses, responseSlice(response)...)
+		if err != nil {
+			return responses, err
 		}
 	}
-	return pullRequestFollowups(ctx, rt, number, rec)
+	followups, err := pullRequestFollowups(ctx, rt, number, rec)
+	return append(responses, followups...), err
 }
 
 // pullRequestFollowups sends the optional issue-metadata PATCH then the
 // optional reviewers POST.
-func pullRequestFollowups(ctx context.Context, rt *engine.Runtime, number int, rec connectors.Record) error {
+func pullRequestFollowups(ctx context.Context, rt *engine.Runtime, number int, rec connectors.Record) ([]*connsdk.Response, error) {
+	var responses []*connsdk.Response
 	if meta := selectFields(rec, metaFields); len(meta) > 0 {
 		path := fmt.Sprintf("%s/issues/%d", repoPath(rt), number)
 		requester, err := githubWriteRequester(rt, http.MethodPatch, githubIssueDeclaredPath)
 		if err != nil {
-			return err
+			return responses, err
 		}
-		if _, err := requester.Do(ctx, http.MethodPatch, path, nil, meta); err != nil {
-			return err
+		response, err := requester.Do(ctx, http.MethodPatch, path, nil, meta)
+		responses = append(responses, responseSlice(response)...)
+		if err != nil {
+			return responses, err
 		}
 	}
 	reviewers := selectFields(rec, reviewerFields)
 	if len(reviewers) == 0 {
-		return nil
+		return responses, nil
 	}
 	path := fmt.Sprintf("%s/pulls/%d/requested_reviewers", repoPath(rt), number)
 	requester, err := githubWriteRequester(rt, http.MethodPost, githubRequestedReviewersDeclaredPath)
 	if err != nil {
-		return err
+		return responses, err
 	}
-	_, err = requester.Do(ctx, http.MethodPost, path, nil, reviewers)
-	return err
+	response, err := requester.Do(ctx, http.MethodPost, path, nil, reviewers)
+	return append(responses, responseSlice(response)...), err
 }
 
-func postComment(ctx context.Context, rt *engine.Runtime, resource string, number int, body string) error {
+func postComment(ctx context.Context, rt *engine.Runtime, resource string, number int, body string) ([]*connsdk.Response, error) {
 	if resource != "issues" {
-		return fmt.Errorf("github write hook has no declared comment route for resource %q", resource)
+		return nil, fmt.Errorf("github write hook has no declared comment route for resource %q", resource)
 	}
 	path := fmt.Sprintf("%s/%s/%d/comments", repoPath(rt), resource, number)
 	requester, err := githubWriteRequester(rt, http.MethodPost, githubIssueCommentDeclaredPath)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = requester.Do(ctx, http.MethodPost, path, nil, map[string]any{"body": body})
-	return err
+	response, err := requester.Do(ctx, http.MethodPost, path, nil, map[string]any{"body": body})
+	return responseSlice(response), err
+}
+
+func responseSlice(response *connsdk.Response) []*connsdk.Response {
+	if response == nil {
+		return nil
+	}
+	return []*connsdk.Response{response}
 }
 
 func selectFields(rec connectors.Record, keys []string) map[string]any {

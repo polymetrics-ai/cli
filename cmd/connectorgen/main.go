@@ -16,6 +16,10 @@
 //	                           (api_surface, output_policy, flag maps_to,
 //	                           rest.max_bytes) and the compact runtime
 //	                           direct-read endpoint ledger from bundle sources
+//	source-import <connector> --out <path> [--defs <dir>] [--check]
+//	                           verifies a connector-owned source lock and
+//	                           emits canonical provider contracts for later
+//	                           declaration materializers
 //	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
 //	                           derives direct-read api_surface coverage and
 //	                           blocked reasons from runtime preflight
@@ -67,6 +71,10 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runSurfaceSync(args, stdout, stderr)
 	case "params-import":
 		return runParamsImport(args, stdout, stderr)
+	case "source-import":
+		return runSourceImport(args, stdout, stderr)
+	case "evidence-gate":
+		return runEvidenceGate(args, stdout, stderr)
 	case "surface-reconcile":
 		return runSurfaceReconcile(args, stdout, stderr)
 	case "certification-matrix":
@@ -75,6 +83,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runCertificationSweep(args, stdout, stderr)
 	case "certification-candidates":
 		return runCertificationCandidates(args, stdout, stderr)
+	case "certification-subject":
+		return runCertificationSubject(args, stdout, stderr)
 	case "certification-evidence":
 		return runCertificationEvidence(args, stdout, stderr)
 	case "batch":
@@ -111,10 +121,13 @@ func usage() string {
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
 	connectorgen gen
 	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
+	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
+	connectorgen evidence-gate <evidence-manifest.json> <TDD-LEDGER.md> <REVIEW.md>
 	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
 	connectorgen certification-matrix [repo-root] (--connector <name> [--check] | --all | --check)
 	connectorgen certification-sweep [repo-root] --connector <name> [--check]
 	connectorgen certification-candidates [repo-root] --connector <name> [--check]
+	connectorgen certification-subject [repo-root] --pm <built-pm> [--check]
 	connectorgen certification-evidence (transport|change-capture) --connector <name> --report <path> --binary-sha <sha256> --from-env password=<ENV> --run-id <id> --record-prefix <id> [--repo-root <path>]
 	connectorgen certification-evidence report --connector <name> --report <path> --external-proof <path> --record-prefix <id> [--repo-root <path>]
 	connectorgen certification-evidence draft --draft <.tmp/live-certification/drafts/record.json> [--repo-root <path>]

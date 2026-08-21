@@ -96,6 +96,7 @@ func TestSkillsGenerateWritesAgentSkills(t *testing.T) {
 	for _, rel := range []string{
 		"pm-shared/SKILL.md",
 		"pm-github/SKILL.md",
+		"pm-stripe/SKILL.md",
 		"pm-etl/SKILL.md",
 		"recipe-github-prs-to-warehouse/SKILL.md",
 		"skills.md",

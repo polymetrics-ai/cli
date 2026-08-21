@@ -252,8 +252,8 @@ func TestSemanticDirectReadsReturnAshbyResults(t *testing.T) {
 				t.Fatalf("results = %+v, want %s=%v", body["results"], tt.wantField, tt.wantValue)
 			}
 			if tt.operation == "ashby.direct.user.interviewer.settings" {
-				if _, ok := results["apiToken"]; ok || results["apiToken_redacted"] != true {
-					t.Fatalf("results = %+v, want credential field redacted", results)
+				if results["apiToken"] != "synthetic-response-token" {
+					t.Fatalf("results = %+v, want ordinary unclassified field preserved", results)
 				}
 			}
 		})
@@ -1084,6 +1084,40 @@ func TestAshbyResultRecordsRejectsErrorEnvelopes(t *testing.T) {
 	}
 }
 
+func TestAshbyOperationDirectReadPreservesEngineResultOnEnvelopeFailure(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/candidate.search" {
+			t.Fatalf("path = %q, want declared candidate search route", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Add("X-Provider-Trace", "first")
+		w.Header().Add("X-Provider-Trace", "second")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"success":false,"error":"logical failure","requestId":"ashby-occurrence-9007199254740993"}`))
+	}))
+	t.Cleanup(server.Close)
+
+	result, err := New().(connectors.OperationDirectReader).OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "ashby.direct.candidate.search",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+		Body:         map[string]any{"email": "candidate@example.invalid"},
+		OutputPolicy: "json_redacted",
+		MaxBytes:     1024,
+	})
+	if err == nil || !strings.Contains(err.Error(), "success=false") {
+		t.Fatalf("OperationDirectRead error = %v, want logical Ashby envelope failure", err)
+	}
+	if result.Status != http.StatusOK || result.Receipt == nil || !result.Receipt.ResponseReceived {
+		t.Fatalf("OperationDirectRead result = %#v, want retained received provider response", result)
+	}
+	if got := result.Receipt.Headers["X-Provider-Trace"].Values; len(got) != 2 || got[0] != "first" || got[1] != "second" {
+		t.Fatalf("Ashby receipt headers = %#v, want repeatable provider trace", result.Receipt.Headers)
+	}
+}
+
 func TestAshbySiblingPathsRejectCredentialSafeErrorEnvelopes(t *testing.T) {
 	const sensitive = "synthetic-sensitive-response-token"
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -1256,7 +1290,7 @@ func TestOperationDirectReadPreservesNonCredentialIdentityFields(t *testing.T) {
 		body      map[string]any
 		want      map[string]any
 	}{
-		{name: "candidate", operation: "ashby.direct.candidate.search", body: map[string]any{"email": "candidate@example.invalid"}, want: map[string]any{"email": "candidate@example.invalid", "name": "Ada Candidate", "apiToken_redacted": true}},
+		{name: "candidate", operation: "ashby.direct.candidate.search", body: map[string]any{"email": "candidate@example.invalid"}, want: map[string]any{"email": "candidate@example.invalid", "name": "Ada Candidate", "apiToken": "synthetic-response-token"}},
 		{name: "job", operation: "ashby.direct.job.search", body: map[string]any{"title": "Fixture Job"}, want: map[string]any{"requisitionId": "REQ-123"}},
 		{name: "user", operation: "ashby.direct.user.search", body: map[string]any{"email": "user@example.invalid"}, want: map[string]any{"email": "user@example.invalid", "name": "Ada User"}},
 	}
@@ -1462,8 +1496,8 @@ func TestOperationDirectReadPreservesAshbySignedURLs(t *testing.T) {
 			if got := results[tt.field]; got != tt.wantURL {
 				t.Fatalf("results[%s] = %v, want %s", tt.field, got, tt.wantURL)
 			}
-			if _, ok := results["apiToken"]; ok || results["apiToken_redacted"] != true {
-				t.Fatalf("apiToken redaction = %+v, want credential field redacted", results)
+			if results["apiToken"] != "synthetic-response-token" {
+				t.Fatalf("apiToken = %+v, want ordinary unclassified field preserved", results)
 			}
 		})
 	}

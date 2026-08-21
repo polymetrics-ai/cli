@@ -1832,222 +1832,6 @@
       }
     },
     {
-      "gap_row_id": "closed-operation-runtime-f4-binary-upload-approval-digest:gong:gong.rest.post.v2_crm_entities.44",
-      "gap_id": "closed-operation-runtime-f4-binary-upload-approval-digest",
-      "connector": "gong",
-      "batch": "batch-3",
-      "provider_operation": {
-        "source_id": "gong.rest.post.v2_crm_entities.44",
-        "method": "POST",
-        "path": "/v2/crm/entities",
-        "operation_id": "uploadCrmData",
-        "deprecated": false
-      },
-      "source": {
-        "source_lock": "internal/connectors/defs/gong/sources/gong-operation-source-lock.json",
-        "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "source_location": "paths[\"/v2/crm/entities\"].post",
-        "captured_at": "2026-08-19T00:00:00Z",
-        "revision": "sha256:235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
-        "sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
-        "bytes": 453797,
-        "provider_revision": null,
-        "provider_revision_note": "The published source has no immutable provider revision; this source-lock SHA-256 is the exact revision identity."
-      },
-      "affected_surfaces": [
-        "binary_upload",
-        "direct_write",
-        "reverse_etl"
-      ],
-      "failing_evidence": {
-        "kind": "conformance_fixture_replay",
-        "command": "go test -count=1 -timeout 20m ./internal/connectors/conformance -run 'TestConformance/gong|Static'",
-        "location": "internal/connectors/engine/write_prepare.go:288 and internal/connectors/engine/write.go:998",
-        "detail": "A temporary Gong upload_crm_entities fixture reached multipart validation and failed before I/O: multipart file part dataFile is missing its approved payload digest.",
-        "classification": "provider-neutral approval-digest binding absent from the generic fixture/replay path"
-      },
-      "missing_provider_neutral_capability": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute",
-      "owner": {
-        "lane": "cli-closed-operation-runtime-r1",
-        "issue": "https://github.com/polymetrics-ai/cli/issues/4307",
-        "issue_number": 4307,
-        "status": "open",
-        "capability": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute"
-      },
-      "status": "open",
-      "enabled": false,
-      "merge_ready_eligible": false,
-      "declaration": {
-        "write_action": "upload_crm_entities",
-        "action_method": "POST",
-        "action_path": "/crm/entities",
-        "body_type": "multipart",
-        "parity_class": "direct_write",
-        "state": "enabled"
-      },
-      "fanout_ref": "closed-operation-runtime-f4-binary-upload-approval-digest",
-      "closure_verification": {
-        "required_owner_head": {
-          "issue": "https://github.com/polymetrics-ai/cli/issues/4307",
-          "lane": "cli-closed-operation-runtime-r1",
-          "requirement": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute"
-        },
-        "commands": [
-          "go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Test.*(Binary|Multipart)'",
-          "go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run 'TestEveryImplementedCommandPassesRuntimePreflight'",
-          "go run ./cmd/connectorgen validate --json",
-          "go run ./cmd/connectorgen surface-sync --check",
-          "go build ./cmd/pm"
-        ],
-        "exact_operation_assertion": "gong POST /v2/crm/entities is source-bound to one implemented closed operation and the built CLI reaches credential preflight rather than unknown-command, disabled, or an unbound-surface error.",
-        "live_assertion": "With the approved disposable credential reference, use the persisted App path and record bounded non-secret request/result fingerprints plus provider readback where the provider operation mutates state."
-      }
-    },
-    {
-      "gap_row_id": "closed-operation-runtime-f4-binary-upload-approval-digest:gong:gong.rest.post.v2_targets_targetid_assignments.22",
-      "gap_id": "closed-operation-runtime-f4-binary-upload-approval-digest",
-      "connector": "gong",
-      "batch": "batch-3",
-      "provider_operation": {
-        "source_id": "gong.rest.post.v2_targets_targetid_assignments.22",
-        "method": "POST",
-        "path": "/v2/targets/{targetId}/assignments",
-        "operation_id": "uploadAssignments",
-        "deprecated": false
-      },
-      "source": {
-        "source_lock": "internal/connectors/defs/gong/sources/gong-operation-source-lock.json",
-        "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "source_location": "paths[\"/v2/targets/{targetId}/assignments\"].post",
-        "captured_at": "2026-08-19T00:00:00Z",
-        "revision": "sha256:235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
-        "sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
-        "bytes": 453797,
-        "provider_revision": null,
-        "provider_revision_note": "The published source has no immutable provider revision; this source-lock SHA-256 is the exact revision identity."
-      },
-      "affected_surfaces": [
-        "binary_upload",
-        "direct_write",
-        "reverse_etl"
-      ],
-      "failing_evidence": {
-        "kind": "conformance_fixture_replay",
-        "command": "go test -count=1 -timeout 20m ./internal/connectors/conformance -run 'TestConformance/gong|Static'",
-        "location": "internal/connectors/engine/write_prepare.go:288 and internal/connectors/engine/write.go:998",
-        "detail": "A temporary Gong upload_target_assignments fixture reached multipart validation and failed before I/O: multipart file part file is missing its approved payload digest.",
-        "classification": "provider-neutral approval-digest binding absent from the generic fixture/replay path"
-      },
-      "missing_provider_neutral_capability": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute",
-      "owner": {
-        "lane": "cli-closed-operation-runtime-r1",
-        "issue": "https://github.com/polymetrics-ai/cli/issues/4307",
-        "issue_number": 4307,
-        "status": "open",
-        "capability": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute"
-      },
-      "status": "open",
-      "enabled": false,
-      "merge_ready_eligible": false,
-      "declaration": {
-        "write_action": "upload_target_assignments",
-        "action_method": "POST",
-        "action_path": "/targets/{{ record.targetId }}/assignments",
-        "body_type": "multipart",
-        "parity_class": "direct_write",
-        "state": "enabled"
-      },
-      "fanout_ref": "closed-operation-runtime-f4-binary-upload-approval-digest",
-      "closure_verification": {
-        "required_owner_head": {
-          "issue": "https://github.com/polymetrics-ai/cli/issues/4307",
-          "lane": "cli-closed-operation-runtime-r1",
-          "requirement": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute"
-        },
-        "commands": [
-          "go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Test.*(Binary|Multipart)'",
-          "go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run 'TestEveryImplementedCommandPassesRuntimePreflight'",
-          "go run ./cmd/connectorgen validate --json",
-          "go run ./cmd/connectorgen surface-sync --check",
-          "go build ./cmd/pm"
-        ],
-        "exact_operation_assertion": "gong POST /v2/targets/{targetId}/assignments is source-bound to one implemented closed operation and the built CLI reaches credential preflight rather than unknown-command, disabled, or an unbound-surface error.",
-        "live_assertion": "With the approved disposable credential reference, use the persisted App path and record bounded non-secret request/result fingerprints plus provider readback where the provider operation mutates state."
-      }
-    },
-    {
-      "gap_row_id": "closed-operation-runtime-f4-binary-upload-approval-digest:gong:gong.rest.put.v2_calls_id_media.3",
-      "gap_id": "closed-operation-runtime-f4-binary-upload-approval-digest",
-      "connector": "gong",
-      "batch": "batch-3",
-      "provider_operation": {
-        "source_id": "gong.rest.put.v2_calls_id_media.3",
-        "method": "PUT",
-        "path": "/v2/calls/{id}/media",
-        "operation_id": "addCallRecording",
-        "deprecated": false
-      },
-      "source": {
-        "source_lock": "internal/connectors/defs/gong/sources/gong-operation-source-lock.json",
-        "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "source_location": "paths[\"/v2/calls/{id}/media\"].put",
-        "captured_at": "2026-08-19T00:00:00Z",
-        "revision": "sha256:235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
-        "sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
-        "bytes": 453797,
-        "provider_revision": null,
-        "provider_revision_note": "The published source has no immutable provider revision; this source-lock SHA-256 is the exact revision identity."
-      },
-      "affected_surfaces": [
-        "binary_upload",
-        "direct_write",
-        "reverse_etl"
-      ],
-      "failing_evidence": {
-        "kind": "conformance_fixture_replay",
-        "command": "go test -count=1 -timeout 20m ./internal/connectors/conformance -run 'TestConformance/gong|Static'",
-        "location": "internal/connectors/engine/write_prepare.go:288 and internal/connectors/engine/write.go:998",
-        "detail": "A temporary Gong upload_call_media fixture reached multipart validation and failed before I/O: multipart file part mediaFile is missing its approved payload digest.",
-        "classification": "provider-neutral approval-digest binding absent from the generic fixture/replay path"
-      },
-      "missing_provider_neutral_capability": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute",
-      "owner": {
-        "lane": "cli-closed-operation-runtime-r1",
-        "issue": "https://github.com/polymetrics-ai/cli/issues/4307",
-        "issue_number": 4307,
-        "status": "open",
-        "capability": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute"
-      },
-      "status": "open",
-      "enabled": false,
-      "merge_ready_eligible": false,
-      "declaration": {
-        "write_action": "upload_call_media",
-        "action_method": "PUT",
-        "action_path": "/calls/{{ record.id }}/media",
-        "body_type": "multipart",
-        "parity_class": "direct_write",
-        "state": "enabled"
-      },
-      "fanout_ref": "closed-operation-runtime-f4-binary-upload-approval-digest",
-      "closure_verification": {
-        "required_owner_head": {
-          "issue": "https://github.com/polymetrics-ai/cli/issues/4307",
-          "lane": "cli-closed-operation-runtime-r1",
-          "requirement": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute"
-        },
-        "commands": [
-          "go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Test.*(Binary|Multipart)'",
-          "go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run 'TestEveryImplementedCommandPassesRuntimePreflight'",
-          "go run ./cmd/connectorgen validate --json",
-          "go run ./cmd/connectorgen surface-sync --check",
-          "go build ./cmd/pm"
-        ],
-        "exact_operation_assertion": "gong PUT /v2/calls/{id}/media is source-bound to one implemented closed operation and the built CLI reaches credential preflight rather than unknown-command, disabled, or an unbound-surface error.",
-        "live_assertion": "With the approved disposable credential reference, use the persisted App path and record bounded non-secret request/result fingerprints plus provider readback where the provider operation mutates state."
-      }
-    },
-    {
       "gap_row_id": "closed-operation-runtime-f4-binary-upload-approval-digest:xero:xero.rest.post.accounts_accountid_attachments_filename.9",
       "gap_id": "closed-operation-runtime-f4-binary-upload-approval-digest",
       "connector": "xero",
@@ -3818,31 +3602,9 @@
         "capability": "closed declaration-owned binary or multipart upload that binds every approved file payload digest before plan, preview, explicit approval, and execute"
       },
       "affected_connectors": [
-        "gong",
         "xero"
       ],
       "affected_operations": [
-        {
-          "gap_row_id": "closed-operation-runtime-f4-binary-upload-approval-digest:gong:gong.rest.post.v2_crm_entities.44",
-          "connector": "gong",
-          "source_id": "gong.rest.post.v2_crm_entities.44",
-          "method": "POST",
-          "path": "/v2/crm/entities"
-        },
-        {
-          "gap_row_id": "closed-operation-runtime-f4-binary-upload-approval-digest:gong:gong.rest.post.v2_targets_targetid_assignments.22",
-          "connector": "gong",
-          "source_id": "gong.rest.post.v2_targets_targetid_assignments.22",
-          "method": "POST",
-          "path": "/v2/targets/{targetId}/assignments"
-        },
-        {
-          "gap_row_id": "closed-operation-runtime-f4-binary-upload-approval-digest:gong:gong.rest.put.v2_calls_id_media.3",
-          "connector": "gong",
-          "source_id": "gong.rest.put.v2_calls_id_media.3",
-          "method": "PUT",
-          "path": "/v2/calls/{id}/media"
-        },
         {
           "gap_row_id": "closed-operation-runtime-f4-binary-upload-approval-digest:xero:xero.rest.post.accounts_accountid_attachments_filename.9",
           "connector": "xero",
@@ -4037,8 +3799,8 @@
       ],
       "batch": "batch-3",
       "source_operations": 3096,
-      "open_gap_rows": 51,
-      "operations_not_enabled_for_merge_ready": 51,
+      "open_gap_rows": 48,
+      "operations_not_enabled_for_merge_ready": 48,
       "distinct_open_gap_ids": [
         "closed-operation-runtime-f2-binary-download",
         "closed-operation-runtime-f4-binary-upload-approval-digest"
@@ -4050,7 +3812,7 @@
         },
         {
           "gap_id": "closed-operation-runtime-f4-binary-upload-approval-digest",
-          "rows": 25
+          "rows": 22
         }
       ],
       "by_affected_surface": [
@@ -4060,7 +3822,7 @@
         },
         {
           "surface": "binary_upload",
-          "rows": 25
+          "rows": 22
         },
         {
           "surface": "direct_read",
@@ -4068,11 +3830,11 @@
         },
         {
           "surface": "direct_write",
-          "rows": 25
+          "rows": 22
         },
         {
           "surface": "reverse_etl",
-          "rows": 25
+          "rows": 22
         }
       ],
       "open_foundation_gaps_block_merge_ready": true
@@ -4080,8 +3842,8 @@
   ],
   "portfolio_rollup": {
     "source_operations": 5127,
-    "open_gap_rows": 51,
-    "operations_not_enabled_for_merge_ready": 51,
+    "open_gap_rows": 48,
+    "operations_not_enabled_for_merge_ready": 48,
     "distinct_open_gap_ids": [
       "closed-operation-runtime-f2-binary-download",
       "closed-operation-runtime-f4-binary-upload-approval-digest"
@@ -4093,7 +3855,7 @@
       },
       {
         "gap_id": "closed-operation-runtime-f4-binary-upload-approval-digest",
-        "rows": 25
+        "rows": 22
       }
     ],
     "by_affected_surface": [
@@ -4103,7 +3865,7 @@
       },
       {
         "surface": "binary_upload",
-        "rows": 25
+        "rows": 22
       },
       {
         "surface": "direct_read",
@@ -4111,11 +3873,11 @@
       },
       {
         "surface": "direct_write",
-        "rows": 25
+        "rows": 22
       },
       {
         "surface": "reverse_etl",
-        "rows": 25
+        "rows": 22
       }
     ],
     "open_foundation_gaps_block_merge_ready": true

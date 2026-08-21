@@ -340,6 +340,35 @@ func TestSyncBundleDerivesRequiredPathFlagFromRESTParameter(t *testing.T) {
 	}
 }
 
+func TestSyncBundleProviderParameterProjectionIsIdempotent(t *testing.T) {
+	surface := []any{map[string]any{"method": "GET", "path": "/issues/{issue_id}"}}
+	cli, ops := directReadBundle(surface, "json_redacted", "path.issue_id")
+	command := cli.(map[string]any)["commands"].([]any)[0].(map[string]any)
+	command["flags"] = []any{
+		map[string]any{"name": "issue-id", "type": "string", "maps_to": "path.issue_id", "required": false},
+		map[string]any{"name": "state", "type": "string", "maps_to": "query.state"},
+		map[string]any{"name": "header-x-mode", "type": "string", "maps_to": "header.X-Mode"},
+	}
+	rest := ops.(map[string]any)["operations"].([]any)[0].(map[string]any)["rest"].(map[string]any)
+	rest["parameters"] = []any{
+		map[string]any{"name": "issue_id", "in": "path", "type": "string", "required": true},
+		map[string]any{"name": "state", "in": "query", "type": "string", "required": true},
+		map[string]any{"name": "X-Mode", "in": "header", "type": "string", "required": true},
+	}
+	dir := writeSyncBundle(t, cli, ops)
+
+	if _, err := syncBundle(dir, false); err != nil {
+		t.Fatalf("first syncBundle: %v", err)
+	}
+	second, err := syncBundle(dir, true)
+	if err != nil {
+		t.Fatalf("second syncBundle: %v", err)
+	}
+	if second.total() != 0 {
+		t.Fatalf("second sync reports phantom provider-parameter drift: %+v flags=%v", second, readSyncedCommand(t, dir)["flags"])
+	}
+}
+
 // A direct read has exactly one opaque-cursor channel: --page-cursor. Legacy
 // command surfaces predate that contract and can still carry raw provider
 // cursor flags. Keep an explicit size override, but never leave a second

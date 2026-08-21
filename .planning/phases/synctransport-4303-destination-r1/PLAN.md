@@ -5,14 +5,14 @@
 - Merges into: main.
 - Delivery: A pull request from `fm/cli-reverse-etl-destination-r1` to `main`, with local verification, live GitHub parity evidence, generated checks, and review complete.
 - Working branch: fm/cli-reverse-etl-destination-r1
-- Task: Replace the GitHub-only destination registration with a definition-selected, connector-neutral typed-action destination adapter. Prove two synthetic declarations compose through App and the orchestrator, retain GitHub issue-label behavior through the new path, fail closed before I/O, and publish the mechanical declaration contract.
+- Task: Replace the GitHub-only destination registration with a definition-selected, connector-neutral typed-action destination adapter. Prove two synthetic declarations compose through App and the orchestrator, retain GitHub issue-label behavior through the new path, fail closed before I/O, publish the mechanical declaration contract, and make every declared typed action selectable only through a stable persisted connection stream identity.
 - Verification: Targeted red/green tests in `internal/app`, `internal/connectors`, and `internal/synctransport`; the purpose-built real GitHub proof; `go test -timeout 20m` for affected packages plus `internal/cli`; `go vet ./...`; `go build ./cmd/pm`; all `make verify` gates including detached/polled `connector-boundary`; generated/snapshot checks; and an inline code review.
 
 ## GSD execution record
 
 The required adapter was validated with `scripts/gsd doctor`, `scripts/gsd sources` for `discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review`, and generated prompts for the same commands (with `plan-phase --tdd`). `go run ./cmd/agentcontractgen check` passed. This direct-PR worker follows the lifecycle inline because compatible isolated workers are unavailable and the canonical single-worker contract forbids role spawning.
 
-Required skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`, and `golang-documentation`.
+Required skills: `golang-how-to`, `golang-cli`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, and `golang-documentation`.
 
 ## TDD slices
 
@@ -21,6 +21,9 @@ Required skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-inte
 3. **Red/Green — tenancy and refusals:** Add a second synthetic destination with distinct evidence and action metadata. Assert each gets its own evidence admission and action contract; malformed action contract, unknown executor/evidence, wrong source binding/role, and `change_capture` are refused before reads, plans, writes, or read-back.
 4. **Parity/refactor:** Route GitHub’s issue-label contract through the same definition-evidence/factory loop while retaining its specialized typed adapter and provider-state read-back. Delete the bespoke composition branch only after the existing approval, recovery, and real-provider proof pass.
 5. **Documentation/review:** Update the declaration guide with exact typed action and acknowledgement requirements, no-generic-writer boundary, mode/action strategies, source binding constraints, and evidence admission. Run full local verification and record review disposition.
+6. **Red/Green — persisted multi-action dispatch:** Add a production-shaped synthetic connector with two declared actions in one mode and another connector with one. Show the persisted `StreamConfig.destination_action` selects the exact descriptor action through `App.RunETL`; no runtime request selects an action. Reject omitted, foreign, malformed, and cross-connector selections before source or provider I/O. Extend the application command manual to name the `pm etl transport declarative-typed-destination` plan/preview path and `pm etl run --approval-plan …` execute path.
+7. **Red/Green — exact action-schema source fields:** Add cross-connector synthetic snake_case and camelCase actions. Accept an `input_fields` name only when the exact selected action's top-level `record_schema` property exists; reject empty, malformed, unknown/cross-action, runtime-selected, generic/shell/http, and undeclared names before I/O, with no provider-specific branch.
+8. **Red/Green — complete persisted reverse result:** Add a provider-shaped synthetic typed-action response and show the persisted App run and CLI JSON projection retain ordinary response status, headers, nested fields, and tier-specific fields. Provider-returned fields, keys, and values remain verbatim even when equal to configured credential bytes; system-generated plans, logs, request diagnostics, and synthetic errors remain secret-taint-safe.
 
 ## Commit checkpoints
 
@@ -41,14 +44,10 @@ Required skills: `golang-how-to`, `golang-design-patterns`, `golang-structs-inte
 
 ## Completion evidence
 
-- `make verify` passed locally, including the full Go suite, generated parity
-  checks, documentation validation, lint, and connector-boundary.
-- The separately detached-and-polled `make connector-boundary` gate completed
-  cleanly: 552 connectors loaded, 293 files checked, no findings.
-- The opt-in real API proof
-  `TestPMBinaryExecutesLivePostgresWarehouseGitHubIssueLabels` passed with its
-  dedicated proof repository. It independently confirmed add, set, keyed
-  replay, destination read-back, acknowledgement, and checkpoint behavior.
-- The required code-review stage was performed inline because compatible
-  isolated reviewer agents are unavailable and the canonical single-worker
-  contract forbids spawning them. Its clean disposition is in `REVIEW.md`.
+The earlier generic-adapter evidence remains valid. The application-dispatch
+reconciliation is complete: its red/green evidence includes persisted exact
+multi-action selection, selected-action schema spelling, complete verbatim provider output and secret-safe system diagnostics,
+generated CLI documents and transcripts, a clean full `make verify`, and fresh
+inline review. The prior real-provider GitHub proof remains the compatibility
+evidence: this reconciliation keeps its specialized adapter and read-back
+unchanged.

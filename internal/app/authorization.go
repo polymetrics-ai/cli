@@ -126,6 +126,16 @@ func (a *App) AuthorizationScopeForReversePlan(ctx context.Context, planID strin
 		}
 		return a.issueLabelTransportAuthorizationScope(conn, mode, action, plan, prepared), nil
 	}
+	if plan.Mode == reversePlanModeDeclarativeTypedDestinationTransport {
+		prepared, err := a.prepareDeclarativeTypedDestinationTransport(ctx, plan.SourceConnection, plan.TransportStream)
+		if err != nil {
+			return AuthorizationScope{}, err
+		}
+		if err := a.validateDeclarativeTypedDestinationPlan(plan, prepared); err != nil {
+			return AuthorizationScope{}, err
+		}
+		return a.declarativeTypedDestinationAuthorizationScope(prepared, plan), nil
+	}
 	if plan.Mode == reversePlanModeConnectorCommand {
 		return AuthorizationScope{}, errors.New("connector command plans do not have a source-table authorization scope")
 	}

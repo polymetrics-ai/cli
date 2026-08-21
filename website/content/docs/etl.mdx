@@ -11,6 +11,7 @@ The `pm etl` command group has two lanes:
 | Configured syncs | `pm etl run`, `pm etl status` | Production-style extraction from a saved connection into a local table. |
 | Closed GitHub transport | `pm etl transport github-issue-label`, approved `pm etl run` | One fixed two-action GitHub label destination from its definition-declared sources, through durable warehouse reopen and typed cleanup. |
 | Closed PostgreSQL transport | `pm etl transport postgres-managed-target`, approved `pm etl run` | A definition-selected PostgreSQL or API source through the durable warehouse into a managed PostgreSQL target. |
+| Declarative typed destination | `pm etl transport declarative-typed-destination`, approved `pm etl run` | A connection-persisted, definition-selected `writes.json` action through the durable warehouse; never a generic HTTP writer. |
 
 Connector capabilities are inspectable through `pm connectors inspect`. Use the advertised streams, cursors, and primary keys before creating a long-running extraction.
 
@@ -47,13 +48,14 @@ A **connection** is the named pairing of a connector credential and a storage cr
 
 ```bash
 pm connections create <name> \
-  --source <credential>:<credential-name> \
-  --destination <credential>:<credential-name> \
+  --source <connector>:<credential-name> \
+  --destination <connector>:<credential-name> \
   --stream <stream-name> \
   --primary-key <field> \
   --cursor <field> \
   --sync-mode <mode> \
   --table <destination-table> \
+  --destination-action <declared-action> \
   --transform-file transform-plan.json \
   --target-copy-workers <n>
 ```
@@ -160,6 +162,12 @@ The depth is both a retained-batch and byte-credit bound. It preserves receipt
 order and the single publish/read-back/checkpoint barrier; it neither creates
 unordered work nor adds a second COPY worker.
 
+For a `declarative_typed_destination`, `--destination-action` is the one stable
+action identity persisted on the stream. It must name an action the destination
+definition made eligible for the stream's mode; connection creation validates
+that descriptor, source binding, acknowledgement, and conformance evidence
+before any catalog or provider I/O. It is never accepted by `pm etl run`.
+
 For runtime-backed recording:
 
 ```bash
@@ -253,6 +261,58 @@ The cleanup action is the fixed typed `remove_issue_label` inverse. A declared
 GitHub missing-label `404` is accepted as an idempotent cleanup; replaying a
 consumed approval is rejected before another provider request.
 
+## Declarative typed destination transport
+
+`declarative-typed-destination` makes a connector-owned reverse-ETL action
+reachable through the ordinary persisted connection path. The destination must
+declare `declarative_typed_destination` in `sync_transport.json`; the saved
+stream's `destination_action` is the stable identity for one exact eligible
+`writes.json` action. If one connector declares two record-driven destination
+actions for the same mode, each needs its own persisted selection. Declaration
+order never selects a provider action.
+
+```bash
+pm etl transport declarative-typed-destination plan \
+  --connection <name> --stream <stream> --json
+pm etl transport declarative-typed-destination preview <plan-id>
+
+pm etl run --connection <name> --stream <stream> --batch-size <n> \
+  --approval-plan <plan-id> --approval-token-stdin \
+  --confirm destructive --json
+```
+
+The commands do not accept a connector, action, URL, HTTP method, body,
+mapping, or evidence override. Those remain connector JSON behavior. The
+shared application layer validates the sealed descriptor, conformance evidence,
+source allowlist and mapping, approval, workset ownership, durable
+acknowledgement, and read-back. Wrong-mode, missing, malformed, or cross-
+connector declarations fail before provider I/O.
+
+### Complete reverse-ETL result output
+
+For a completed declarative typed destination, `pm etl run --json` and
+`pm etl status --json` include `run.destination_results`. Each item preserves
+the selected named action's record accounting and complete successful provider
+response: status, headers, and body. The CLI does not discard ordinary response
+fields because they are rare, destructive, paid-tier-specific, or unfamiliar.
+
+Provider-returned fields, keys, and values are preserved verbatim, even when
+they equal configured credential bytes. System-generated plans, logs, request
+diagnostics, and synthetic errors remain secret-taint-safe. The same
+preserved-result contract is used by persisted regular reverse-ETL runs
+(`destination_result`) and direct-write run output.
+
+If a closed transport already applied, read back, and checkpointed a provider
+effect but local receipt retirement or a declaration-owned approval marker
+cannot finish, the persisted run is terminal with status
+`delivered_reconciliation_required`. Its `delivery_reconciliation` field names
+only the bounded local repair and its `destination_results` and checkpoint stay
+intact. The nonzero JSON response contains that exact `ETLRun`; repeating the
+same saved connection and stream repairs from durable state before endpoint
+resolution and never replays source or destination I/O. Missing, malformed, or
+stale reconciliation evidence remains refused rather than falling back to an
+ordinary route.
+
 ## Closed PostgreSQL managed-target transport
 
 `postgres-managed-target` is a fixed definition-selected source-to-PostgreSQL
@@ -336,6 +396,7 @@ Agents and scripts should branch on exit codes, not parse stderr text.
 | `4` | Auth error | Surface to a human to add or update credentials. |
 | `5` | Connector error | Inspect the error detail; may be retryable. |
 | `6` | Runtime unavailable | Start the required dependency (DuckDB, Postgres, etc.). |
+| `7` | Policy refusal | Resolve the declared safety or authorization policy; do not retry unchanged. |
 | `1` | Internal error | File a bug report. |
 
 ## Where to go next

@@ -1,37 +1,13 @@
 {
   "schema_version": 2,
   "connector": "gong",
-  "captured_at": "2026-08-19T00:00:00Z",
+  "captured_at": "2026-08-21T22:55:13Z",
   "rest": {
     "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-    "sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
+    "sha256": "294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13",
     "bytes": 453797,
-    "format": "application/json;charset=UTF-8",
-    "inventory_basis": "parsed from the pinned provider machine-readable source artifact",
-    "coverage_confidence": {
-      "level": "complete",
-      "basis": "provider-published OpenAPI document"
-    },
-    "counts": {
-      "total": 69,
-      "by_kind": {
-        "rest": 69
-      },
-      "by_method": {
-        "DELETE": 3,
-        "GET": 29,
-        "PATCH": 1,
-        "POST": 28,
-        "PUT": 8
-      }
-    },
-    "operation_counts": {
-      "DELETE": 3,
-      "GET": 29,
-      "PATCH": 1,
-      "POST": 28,
-      "PUT": 8
-    },
+    "openapi": "3.0.1",
+    "info_version": "V2",
     "operations": [
       {
         "id": "gong.rest.get.v2_calls.1",
@@ -40,8 +16,7 @@
         "path": "/v2/calls",
         "operation_id": "listCalls",
         "deprecated": false,
-        "source_location": "paths[\"/v2/calls\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/calls\"].get"
       },
       {
         "id": "gong.rest.post.v2_calls.2",
@@ -50,8 +25,7 @@
         "path": "/v2/calls",
         "operation_id": "addCall",
         "deprecated": false,
-        "source_location": "paths[\"/v2/calls\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/calls\"].post"
       },
       {
         "id": "gong.rest.put.v2_calls_id_media.3",
@@ -60,8 +34,7 @@
         "path": "/v2/calls/{id}/media",
         "operation_id": "addCallRecording",
         "deprecated": false,
-        "source_location": "paths[\"/v2/calls/{id}/media\"].put",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/calls/{id}/media\"].put"
       },
       {
         "id": "gong.rest.get.v2_calls_id.4",
@@ -70,8 +43,7 @@
         "path": "/v2/calls/{id}",
         "operation_id": "getCall",
         "deprecated": false,
-        "source_location": "paths[\"/v2/calls/{id}\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/calls/{id}\"].get"
       },
       {
         "id": "gong.rest.post.v2_calls_extensive.5",
@@ -80,8 +52,7 @@
         "path": "/v2/calls/extensive",
         "operation_id": "listCallsExtensive",
         "deprecated": false,
-        "source_location": "paths[\"/v2/calls/extensive\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/calls/extensive\"].post"
       },
       {
         "id": "gong.rest.get.v2_permission_profile.6",
@@ -90,8 +61,7 @@
         "path": "/v2/permission-profile",
         "operation_id": "getPermissionProfile",
         "deprecated": false,
-        "source_location": "paths[\"/v2/permission-profile\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/permission-profile\"].get"
       },
       {
         "id": "gong.rest.put.v2_permission_profile.7",
@@ -100,8 +70,7 @@
         "path": "/v2/permission-profile",
         "operation_id": "updatePermissionProfile",
         "deprecated": false,
-        "source_location": "paths[\"/v2/permission-profile\"].put",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/permission-profile\"].put"
       },
       {
         "id": "gong.rest.post.v2_permission_profile.8",
@@ -110,8 +79,7 @@
         "path": "/v2/permission-profile",
         "operation_id": "createPermissionProfile",
         "deprecated": false,
-        "source_location": "paths[\"/v2/permission-profile\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/permission-profile\"].post"
       },
       {
         "id": "gong.rest.put.v2_meetings_meetingid.9",
@@ -120,8 +88,7 @@
         "path": "/v2/meetings/{meetingId}",
         "operation_id": "updateMeeting",
         "deprecated": false,
-        "source_location": "paths[\"/v2/meetings/{meetingId}\"].put",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/meetings/{meetingId}\"].put"
       },
       {
         "id": "gong.rest.delete.v2_meetings_meetingid.10",
@@ -130,8 +97,7 @@
         "path": "/v2/meetings/{meetingId}",
         "operation_id": "deleteMeeting",
         "deprecated": false,
-        "source_location": "paths[\"/v2/meetings/{meetingId}\"].delete",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/meetings/{meetingId}\"].delete"
       },
       {
         "id": "gong.rest.put.v2_customer_engagement_content_viewed.11",
@@ -140,8 +106,7 @@
         "path": "/v2/customer-engagement/content/viewed",
         "operation_id": "contentViewed",
         "deprecated": false,
-        "source_location": "paths[\"/v2/customer-engagement/content/viewed\"].put",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/customer-engagement/content/viewed\"].put"
       },
       {
         "id": "gong.rest.put.v2_customer_engagement_content_shared.12",
@@ -150,8 +115,7 @@
         "path": "/v2/customer-engagement/content/shared",
         "operation_id": "contentShared",
         "deprecated": false,
-        "source_location": "paths[\"/v2/customer-engagement/content/shared\"].put",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/customer-engagement/content/shared\"].put"
       },
       {
         "id": "gong.rest.put.v2_customer_engagement_action.13",
@@ -160,8 +124,7 @@
         "path": "/v2/customer-engagement/action",
         "operation_id": "customAction",
         "deprecated": false,
-        "source_location": "paths[\"/v2/customer-engagement/action\"].put",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/customer-engagement/action\"].put"
       },
       {
         "id": "gong.rest.get.v2_crm_integrations.14",
@@ -170,8 +133,7 @@
         "path": "/v2/crm/integrations",
         "operation_id": "listGenericCrmIntegration",
         "deprecated": false,
-        "source_location": "paths[\"/v2/crm/integrations\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/crm/integrations\"].get"
       },
       {
         "id": "gong.rest.put.v2_crm_integrations.15",
@@ -180,8 +142,7 @@
         "path": "/v2/crm/integrations",
         "operation_id": "registerGenericCrmIntegration",
         "deprecated": false,
-        "source_location": "paths[\"/v2/crm/integrations\"].put",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/crm/integrations\"].put"
       },
       {
         "id": "gong.rest.delete.v2_crm_integrations.16",
@@ -190,8 +151,7 @@
         "path": "/v2/crm/integrations",
         "operation_id": "deleteGenericCrmIntegration",
         "deprecated": false,
-        "source_location": "paths[\"/v2/crm/integrations\"].delete",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/crm/integrations\"].delete"
       },
       {
         "id": "gong.rest.put.v2_calls_users_access.17",
@@ -200,8 +160,7 @@
         "path": "/v2/calls/users-access",
         "operation_id": "addUsersAccessToCalls",
         "deprecated": false,
-        "source_location": "paths[\"/v2/calls/users-access\"].put",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/calls/users-access\"].put"
       },
       {
         "id": "gong.rest.post.v2_calls_users_access.18",
@@ -210,8 +169,7 @@
         "path": "/v2/calls/users-access",
         "operation_id": "getUsersAccessToCalls",
         "deprecated": false,
-        "source_location": "paths[\"/v2/calls/users-access\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/calls/users-access\"].post"
       },
       {
         "id": "gong.rest.delete.v2_calls_users_access.19",
@@ -220,8 +178,7 @@
         "path": "/v2/calls/users-access",
         "operation_id": "deleteUsersAccessToCalls",
         "deprecated": false,
-        "source_location": "paths[\"/v2/calls/users-access\"].delete",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/calls/users-access\"].delete"
       },
       {
         "id": "gong.rest.post.v2_users_extensive.20",
@@ -230,8 +187,7 @@
         "path": "/v2/users/extensive",
         "operation_id": "listMultipleUsers",
         "deprecated": false,
-        "source_location": "paths[\"/v2/users/extensive\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/users/extensive\"].post"
       },
       {
         "id": "gong.rest.post.v2_tasks.21",
@@ -240,8 +196,7 @@
         "path": "/v2/tasks",
         "operation_id": "listTasks",
         "deprecated": false,
-        "source_location": "paths[\"/v2/tasks\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/tasks\"].post"
       },
       {
         "id": "gong.rest.post.v2_targets_targetid_assignments.22",
@@ -250,8 +205,7 @@
         "path": "/v2/targets/{targetId}/assignments",
         "operation_id": "uploadAssignments",
         "deprecated": false,
-        "source_location": "paths[\"/v2/targets/{targetId}/assignments\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/targets/{targetId}/assignments\"].post"
       },
       {
         "id": "gong.rest.post.v2_stats_interaction.23",
@@ -260,8 +214,7 @@
         "path": "/v2/stats/interaction",
         "operation_id": "listInteractionStats",
         "deprecated": false,
-        "source_location": "paths[\"/v2/stats/interaction\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/stats/interaction\"].post"
       },
       {
         "id": "gong.rest.post.v2_stats_activity_scorecards.24",
@@ -270,8 +223,7 @@
         "path": "/v2/stats/activity/scorecards",
         "operation_id": "listAnsweredScorecards",
         "deprecated": false,
-        "source_location": "paths[\"/v2/stats/activity/scorecards\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/stats/activity/scorecards\"].post"
       },
       {
         "id": "gong.rest.post.v2_stats_activity_day_by_day.25",
@@ -280,8 +232,7 @@
         "path": "/v2/stats/activity/day-by-day",
         "operation_id": "listMultipleUsersDayByDayActivity",
         "deprecated": false,
-        "source_location": "paths[\"/v2/stats/activity/day-by-day\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/stats/activity/day-by-day\"].post"
       },
       {
         "id": "gong.rest.post.v2_stats_activity_aggregate.26",
@@ -290,8 +241,7 @@
         "path": "/v2/stats/activity/aggregate",
         "operation_id": "listMultipleUsersAggregateActivity",
         "deprecated": false,
-        "source_location": "paths[\"/v2/stats/activity/aggregate\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/stats/activity/aggregate\"].post"
       },
       {
         "id": "gong.rest.post.v2_stats_activity_aggregate_by_period.27",
@@ -300,8 +250,7 @@
         "path": "/v2/stats/activity/aggregate-by-period",
         "operation_id": "listMultipleUsersAggregateByPeriod",
         "deprecated": false,
-        "source_location": "paths[\"/v2/stats/activity/aggregate-by-period\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/stats/activity/aggregate-by-period\"].post"
       },
       {
         "id": "gong.rest.post.v2_meetings.28",
@@ -310,8 +259,7 @@
         "path": "/v2/meetings",
         "operation_id": "addMeeting",
         "deprecated": false,
-        "source_location": "paths[\"/v2/meetings\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/meetings\"].post"
       },
       {
         "id": "gong.rest.post.v2_meetings_integration_status.29",
@@ -320,8 +268,7 @@
         "path": "/v2/meetings/integration/status",
         "operation_id": "integrationStatus",
         "deprecated": false,
-        "source_location": "paths[\"/v2/meetings/integration/status\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/meetings/integration/status\"].post"
       },
       {
         "id": "gong.rest.post.v2_integration_settings.30",
@@ -330,8 +277,7 @@
         "path": "/v2/integration-settings",
         "operation_id": "integrationSettings",
         "deprecated": false,
-        "source_location": "paths[\"/v2/integration-settings\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/integration-settings\"].post"
       },
       {
         "id": "gong.rest.post.v2_flows_steps.31",
@@ -340,8 +286,7 @@
         "path": "/v2/flows/steps",
         "operation_id": "getFlowSteps",
         "deprecated": false,
-        "source_location": "paths[\"/v2/flows/steps\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows/steps\"].post"
       },
       {
         "id": "gong.rest.post.v2_flows_prospects.32",
@@ -350,8 +295,7 @@
         "path": "/v2/flows/prospects",
         "operation_id": "getProspectsAssignedFlows",
         "deprecated": false,
-        "source_location": "paths[\"/v2/flows/prospects\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows/prospects\"].post"
       },
       {
         "id": "gong.rest.post.v2_flows_prospects_unassign_flows_by_instance_id.33",
@@ -360,8 +304,7 @@
         "path": "/v2/flows/prospects/unassign-flows-by-instance-id",
         "operation_id": "unassignFlows",
         "deprecated": false,
-        "source_location": "paths[\"/v2/flows/prospects/unassign-flows-by-instance-id\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows/prospects/unassign-flows-by-instance-id\"].post"
       },
       {
         "id": "gong.rest.post.v2_flows_prospects_unassign_flows_by_crm_id.34",
@@ -370,8 +313,7 @@
         "path": "/v2/flows/prospects/unassign-flows-by-crm-id",
         "operation_id": "unassignProspectFlows",
         "deprecated": false,
-        "source_location": "paths[\"/v2/flows/prospects/unassign-flows-by-crm-id\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows/prospects/unassign-flows-by-crm-id\"].post"
       },
       {
         "id": "gong.rest.post.v2_flows_prospects_bulk_assignments.35",
@@ -380,8 +322,7 @@
         "path": "/v2/flows/prospects/bulk-assignments",
         "operation_id": "submitFlowProspectsBulkAssignment",
         "deprecated": false,
-        "source_location": "paths[\"/v2/flows/prospects/bulk-assignments\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows/prospects/bulk-assignments\"].post"
       },
       {
         "id": "gong.rest.post.v2_flows_prospects_assign.36",
@@ -390,8 +331,7 @@
         "path": "/v2/flows/prospects/assign",
         "operation_id": "assignProspects",
         "deprecated": false,
-        "source_location": "paths[\"/v2/flows/prospects/assign\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows/prospects/assign\"].post"
       },
       {
         "id": "gong.rest.post.v2_flows_prospects_assign_cool_off_override.37",
@@ -400,8 +340,7 @@
         "path": "/v2/flows/prospects/assign/cool-off-override",
         "operation_id": "assignProspectsCoolOffOverrides",
         "deprecated": true,
-        "source_location": "paths[\"/v2/flows/prospects/assign/cool-off-override\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows/prospects/assign/cool-off-override\"].post"
       },
       {
         "id": "gong.rest.post.v2_digital_interaction.38",
@@ -410,8 +349,7 @@
         "path": "/v2/digital-interaction",
         "operation_id": "addDigitalInteraction",
         "deprecated": false,
-        "source_location": "paths[\"/v2/digital-interaction\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/digital-interaction\"].post"
       },
       {
         "id": "gong.rest.post.v2_data_privacy_erase_data_for_phone_number.39",
@@ -420,8 +358,7 @@
         "path": "/v2/data-privacy/erase-data-for-phone-number",
         "operation_id": "purgePhoneNumber",
         "deprecated": false,
-        "source_location": "paths[\"/v2/data-privacy/erase-data-for-phone-number\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/data-privacy/erase-data-for-phone-number\"].post"
       },
       {
         "id": "gong.rest.post.v2_data_privacy_erase_data_for_email_address.40",
@@ -430,8 +367,7 @@
         "path": "/v2/data-privacy/erase-data-for-email-address",
         "operation_id": "purgeEmailAddress",
         "deprecated": false,
-        "source_location": "paths[\"/v2/data-privacy/erase-data-for-email-address\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/data-privacy/erase-data-for-email-address\"].post"
       },
       {
         "id": "gong.rest.get.v2_crm_entity_schema.41",
@@ -440,8 +376,7 @@
         "path": "/v2/crm/entity-schema",
         "operation_id": "listCrmSchemaFields",
         "deprecated": false,
-        "source_location": "paths[\"/v2/crm/entity-schema\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/crm/entity-schema\"].get"
       },
       {
         "id": "gong.rest.post.v2_crm_entity_schema.42",
@@ -450,8 +385,7 @@
         "path": "/v2/crm/entity-schema",
         "operation_id": "uploadCrmSchemaField",
         "deprecated": false,
-        "source_location": "paths[\"/v2/crm/entity-schema\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/crm/entity-schema\"].post"
       },
       {
         "id": "gong.rest.get.v2_crm_entities.43",
@@ -460,8 +394,7 @@
         "path": "/v2/crm/entities",
         "operation_id": "getCrmObjects",
         "deprecated": false,
-        "source_location": "paths[\"/v2/crm/entities\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/crm/entities\"].get"
       },
       {
         "id": "gong.rest.post.v2_crm_entities.44",
@@ -470,8 +403,7 @@
         "path": "/v2/crm/entities",
         "operation_id": "uploadCrmData",
         "deprecated": false,
-        "source_location": "paths[\"/v2/crm/entities\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/crm/entities\"].post"
       },
       {
         "id": "gong.rest.post.v2_calls_transcript.45",
@@ -480,8 +412,7 @@
         "path": "/v2/calls/transcript",
         "operation_id": "getCallTranscripts",
         "deprecated": false,
-        "source_location": "paths[\"/v2/calls/transcript\"].post",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/calls/transcript\"].post"
       },
       {
         "id": "gong.rest.patch.v2_tasks_taskid.46",
@@ -490,8 +421,7 @@
         "path": "/v2/tasks/{taskId}",
         "operation_id": "updateReminder",
         "deprecated": false,
-        "source_location": "paths[\"/v2/tasks/{taskId}\"].patch",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/tasks/{taskId}\"].patch"
       },
       {
         "id": "gong.rest.get.v2_workspaces.47",
@@ -500,8 +430,7 @@
         "path": "/v2/workspaces",
         "operation_id": "listWorkspaces",
         "deprecated": false,
-        "source_location": "paths[\"/v2/workspaces\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/workspaces\"].get"
       },
       {
         "id": "gong.rest.get.v2_users.48",
@@ -510,8 +439,7 @@
         "path": "/v2/users",
         "operation_id": "listUsers",
         "deprecated": false,
-        "source_location": "paths[\"/v2/users\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/users\"].get"
       },
       {
         "id": "gong.rest.get.v2_users_id.49",
@@ -520,8 +448,7 @@
         "path": "/v2/users/{id}",
         "operation_id": "getUser",
         "deprecated": false,
-        "source_location": "paths[\"/v2/users/{id}\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/users/{id}\"].get"
       },
       {
         "id": "gong.rest.get.v2_users_id_settings_history.50",
@@ -530,8 +457,7 @@
         "path": "/v2/users/{id}/settings-history",
         "operation_id": "getUserHistory",
         "deprecated": false,
-        "source_location": "paths[\"/v2/users/{id}/settings-history\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/users/{id}/settings-history\"].get"
       },
       {
         "id": "gong.rest.get.v2_targets.51",
@@ -540,8 +466,7 @@
         "path": "/v2/targets",
         "operation_id": "listTargetDefinitions",
         "deprecated": false,
-        "source_location": "paths[\"/v2/targets\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/targets\"].get"
       },
       {
         "id": "gong.rest.get.v2_settings_trackers.52",
@@ -550,8 +475,7 @@
         "path": "/v2/settings/trackers",
         "operation_id": "listTrackers",
         "deprecated": false,
-        "source_location": "paths[\"/v2/settings/trackers\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/settings/trackers\"].get"
       },
       {
         "id": "gong.rest.get.v2_settings_scorecards.53",
@@ -560,8 +484,7 @@
         "path": "/v2/settings/scorecards",
         "operation_id": "listScorecards",
         "deprecated": false,
-        "source_location": "paths[\"/v2/settings/scorecards\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/settings/scorecards\"].get"
       },
       {
         "id": "gong.rest.get.v2_settings_briefs.54",
@@ -570,8 +493,7 @@
         "path": "/v2/settings/briefs",
         "operation_id": "listBriefs",
         "deprecated": false,
-        "source_location": "paths[\"/v2/settings/briefs\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/settings/briefs\"].get"
       },
       {
         "id": "gong.rest.get.v2_permission_profile_users.55",
@@ -580,8 +502,7 @@
         "path": "/v2/permission-profile/users",
         "operation_id": "listPermissionProfileUsers",
         "deprecated": false,
-        "source_location": "paths[\"/v2/permission-profile/users\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/permission-profile/users\"].get"
       },
       {
         "id": "gong.rest.get.v2_logs.56",
@@ -590,8 +511,7 @@
         "path": "/v2/logs",
         "operation_id": "listLogs",
         "deprecated": false,
-        "source_location": "paths[\"/v2/logs\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/logs\"].get"
       },
       {
         "id": "gong.rest.get.v2_library_folders.57",
@@ -600,8 +520,7 @@
         "path": "/v2/library/folders",
         "operation_id": "getLibraryStructure",
         "deprecated": false,
-        "source_location": "paths[\"/v2/library/folders\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/library/folders\"].get"
       },
       {
         "id": "gong.rest.get.v2_library_folder_content.58",
@@ -610,8 +529,7 @@
         "path": "/v2/library/folder-content",
         "operation_id": "getCallsInSpecificFolder",
         "deprecated": false,
-        "source_location": "paths[\"/v2/library/folder-content\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/library/folder-content\"].get"
       },
       {
         "id": "gong.rest.get.v2_flows.59",
@@ -620,8 +538,7 @@
         "path": "/v2/flows",
         "operation_id": "listFlows",
         "deprecated": false,
-        "source_location": "paths[\"/v2/flows\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows\"].get"
       },
       {
         "id": "gong.rest.get.v2_flows_prospects_bulk_assignments_id.60",
@@ -630,8 +547,7 @@
         "path": "/v2/flows/prospects/bulk-assignments/{id}",
         "operation_id": "getFlowProspectsBulkAssignment",
         "deprecated": false,
-        "source_location": "paths[\"/v2/flows/prospects/bulk-assignments/{id}\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows/prospects/bulk-assignments/{id}\"].get"
       },
       {
         "id": "gong.rest.get.v2_flows_folders.61",
@@ -640,8 +556,7 @@
         "path": "/v2/flows/folders",
         "operation_id": "listFlowsFolders",
         "deprecated": false,
-        "source_location": "paths[\"/v2/flows/folders\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/flows/folders\"].get"
       },
       {
         "id": "gong.rest.get.v2_entities_get_brief.62",
@@ -650,8 +565,7 @@
         "path": "/v2/entities/get-brief",
         "operation_id": "generateBrief",
         "deprecated": false,
-        "source_location": "paths[\"/v2/entities/get-brief\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/entities/get-brief\"].get"
       },
       {
         "id": "gong.rest.get.v2_entities_ask_entity.63",
@@ -660,8 +574,7 @@
         "path": "/v2/entities/ask-entity",
         "operation_id": "askEntity",
         "deprecated": false,
-        "source_location": "paths[\"/v2/entities/ask-entity\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/entities/ask-entity\"].get"
       },
       {
         "id": "gong.rest.get.v2_data_privacy_data_for_phone_number.64",
@@ -670,8 +583,7 @@
         "path": "/v2/data-privacy/data-for-phone-number",
         "operation_id": "findAllReferencesToPhoneNumber",
         "deprecated": false,
-        "source_location": "paths[\"/v2/data-privacy/data-for-phone-number\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/data-privacy/data-for-phone-number\"].get"
       },
       {
         "id": "gong.rest.get.v2_data_privacy_data_for_email_address.65",
@@ -680,8 +592,7 @@
         "path": "/v2/data-privacy/data-for-email-address",
         "operation_id": "findAllReferencesToEmailAddress",
         "deprecated": false,
-        "source_location": "paths[\"/v2/data-privacy/data-for-email-address\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/data-privacy/data-for-email-address\"].get"
       },
       {
         "id": "gong.rest.get.v2_crm_request_status.66",
@@ -690,8 +601,7 @@
         "path": "/v2/crm/request-status",
         "operation_id": "getRequestStatus",
         "deprecated": false,
-        "source_location": "paths[\"/v2/crm/request-status\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/crm/request-status\"].get"
       },
       {
         "id": "gong.rest.get.v2_coaching.67",
@@ -700,8 +610,7 @@
         "path": "/v2/coaching",
         "operation_id": "listUsers_1",
         "deprecated": false,
-        "source_location": "paths[\"/v2/coaching\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/coaching\"].get"
       },
       {
         "id": "gong.rest.get.v2_call_outcomes.68",
@@ -710,8 +619,7 @@
         "path": "/v2/call-outcomes",
         "operation_id": "listCallOutcomes",
         "deprecated": false,
-        "source_location": "paths[\"/v2/call-outcomes\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/call-outcomes\"].get"
       },
       {
         "id": "gong.rest.get.v2_all_permission_profiles.69",
@@ -720,8 +628,7 @@
         "path": "/v2/all-permission-profiles",
         "operation_id": "listPermissionProfile",
         "deprecated": false,
-        "source_location": "paths[\"/v2/all-permission-profiles\"].get",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
+        "source_location": "paths[\"/v2/all-permission-profiles\"].get"
       }
     ]
   },

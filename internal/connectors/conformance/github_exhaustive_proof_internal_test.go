@@ -135,6 +135,11 @@ func (c *githubProviderCapture) captured() []githubProviderCapturedRequest {
 
 func githubProviderDoubleBundle(b engine.Bundle, baseURL string) engine.Bundle {
 	b.HTTP.URL = baseURL
+	for index := range b.Writes {
+		if b.Writes[index].BaseURL != "" {
+			b.Writes[index].BaseURL = baseURL
+		}
+	}
 	// The provider double deliberately exercises transport and engine request
 	// construction, not GitHub authentication. Removing the bundle's auth
 	// candidates prevents synthetic values from ever being mistaken for a
@@ -324,6 +329,15 @@ func runGitHubWriteProviderDouble(t *testing.T, b engine.Bundle, action engine.W
 	if fixtureErr != nil {
 		cfg = githubProviderDoubleConfig(doubleBundle)
 	}
+	if action.BinaryUpload != nil {
+		cfg.ProjectDir = t.TempDir()
+		fileName := "provider-double-upload.bin"
+		if err := os.WriteFile(filepath.Join(cfg.ProjectDir, fileName), []byte("provider-double"), 0o600); err != nil {
+			row.Reason = err.Error()
+			return row
+		}
+		record[action.BinaryUpload.SourceField] = fileName
+	}
 	request, err := approvedFixtureWriteRequest(context.Background(), doubleBundle, action.Name, cfg, []connectors.Record{record}, engine.HooksFor(doubleBundle.Name))
 	if err != nil {
 		row.Reason = err.Error()
@@ -361,12 +375,15 @@ func valuesFromMap(values map[string][]string) map[string][]string { return valu
 func syntheticGitHubRecord(action engine.WriteAction) connectors.Record {
 	record := connectors.Record{}
 	if len(action.RecordSchema) > 0 {
-		var schema map[string]json.RawMessage
+		var schema struct {
+			Properties map[string]json.RawMessage `json:"properties"`
+			Required   []string                   `json:"required"`
+		}
 		if json.Unmarshal(action.RecordSchema, &schema) == nil {
-			var properties map[string]json.RawMessage
-			_ = json.Unmarshal(schema["properties"], &properties)
-			for name, property := range properties {
-				record[name] = syntheticSchemaValue(property, name)
+			for _, name := range schema.Required {
+				if property, exists := schema.Properties[name]; exists {
+					record[name] = syntheticSchemaValue(property, name)
+				}
 			}
 		}
 	}
@@ -377,11 +394,6 @@ func syntheticGitHubRecord(action engine.WriteAction) connectors.Record {
 	}
 	for _, match := range regexp.MustCompile(`\{\{\s*record\.([^}\s]+)\s*\}\}`).FindAllStringSubmatch(action.Path, -1) {
 		field := match[1]
-		if _, ok := record[field]; !ok {
-			record[field] = syntheticFieldValue(field)
-		}
-	}
-	for _, field := range action.BodyFields {
 		if _, ok := record[field]; !ok {
 			record[field] = syntheticFieldValue(field)
 		}
@@ -417,8 +429,7 @@ func syntheticSchemaValue(raw json.RawMessage, field string) any {
 			return syntheticSchemaValue(union[0], field)
 		}
 	}
-	var kind string
-	_ = json.Unmarshal(schema["type"], &kind)
+	kind := syntheticSchemaType(schema["type"])
 	var format string
 	_ = json.Unmarshal(schema["format"], &format)
 	switch kind {
@@ -438,7 +449,7 @@ func syntheticSchemaValue(raw json.RawMessage, field string) any {
 		if format == "uri" {
 			return "https://provider-double.invalid/resource"
 		}
-		return "provider-double"
+		return syntheticPatternString(schema, field)
 	case "array":
 		var items json.RawMessage
 		if json.Unmarshal(schema["items"], &items) == nil && len(items) > 0 {
@@ -449,11 +460,12 @@ func syntheticSchemaValue(raw json.RawMessage, field string) any {
 		var properties map[string]json.RawMessage
 		_ = json.Unmarshal(schema["properties"], &properties)
 		out := map[string]any{}
-		for name, property := range properties {
-			out[name] = syntheticSchemaValue(property, name)
-		}
-		if len(out) == 0 {
-			out["name"] = "provider-double"
+		var required []string
+		_ = json.Unmarshal(schema["required"], &required)
+		for _, name := range required {
+			if property, exists := properties[name]; exists {
+				out[name] = syntheticSchemaValue(property, name)
+			}
 		}
 		return out
 	default:
@@ -461,29 +473,66 @@ func syntheticSchemaValue(raw json.RawMessage, field string) any {
 	}
 }
 
-// syntheticGraphQLVariables materializes only declaration-owned values for a
-// fixed GraphQL operation.  It deliberately omits the cursor variable: the
-// direct-read executor alone owns that opaque value through page-cursor.
+func syntheticSchemaType(raw json.RawMessage) string {
+	var single string
+	if json.Unmarshal(raw, &single) == nil {
+		return single
+	}
+	var union []string
+	if json.Unmarshal(raw, &union) == nil {
+		for _, candidate := range union {
+			if candidate != "null" {
+				return candidate
+			}
+		}
+	}
+	return ""
+}
+
+func syntheticPatternString(schema map[string]json.RawMessage, _ string) string {
+	fallback := "provider-double"
+	var pattern string
+	if json.Unmarshal(schema["pattern"], &pattern) != nil || pattern == "" {
+		return fallback
+	}
+	compiled, err := regexp.Compile(pattern)
+	if err != nil {
+		return fallback
+	}
+	candidates := []string{
+		fallback,
+		"1.0.0",
+		strings.Repeat("0", 40),
+		strings.Repeat("0", 64),
+		"refs/heads/provider-double",
+		base64.StdEncoding.EncodeToString([]byte("provider-double")),
+	}
+	for _, candidate := range candidates {
+		if compiled.MatchString(candidate) {
+			return candidate
+		}
+	}
+	return fallback
+}
+
+// syntheticGraphQLVariables materializes the operation's required caller
+// inputs only. Pagination variables are optional and owned by the direct-read
+// executor, which prevents a fixture from selecting both directions at once.
 func syntheticGraphQLVariables(operation engine.OperationSpec) (map[string]any, error) {
 	if operation.GraphQL == nil {
 		return nil, fmt.Errorf("GraphQL operation has no declaration")
 	}
 	var root struct {
 		Properties map[string]json.RawMessage `json:"properties"`
+		Required   []string                   `json:"required"`
 	}
 	if err := json.Unmarshal(operation.GraphQL.VariablesSchema, &root); err != nil {
 		return nil, fmt.Errorf("decode fixed GraphQL variables schema: %w", err)
 	}
-	variables := make(map[string]any, len(root.Properties))
-	names := make([]string, 0, len(root.Properties))
-	for name := range root.Properties {
-		names = append(names, name)
-	}
+	variables := make(map[string]any, len(root.Required))
+	names := append([]string(nil), root.Required...)
 	sort.Strings(names)
 	for _, name := range names {
-		if operation.GraphQL.Pagination != nil && name == operation.GraphQL.Pagination.CursorVariable {
-			continue
-		}
 		variables[name] = syntheticGraphQLSchemaValue(root.Properties[name], name)
 	}
 	return variables, nil
@@ -508,8 +557,7 @@ func syntheticGraphQLSchemaValue(raw json.RawMessage, field string) any {
 			return syntheticGraphQLSchemaValue(union[0], field)
 		}
 	}
-	var kind string
-	_ = json.Unmarshal(schema["type"], &kind)
+	kind := syntheticSchemaType(schema["type"])
 	var format string
 	_ = json.Unmarshal(schema["format"], &format)
 	switch kind {
@@ -533,11 +581,10 @@ func syntheticGraphQLSchemaValue(raw json.RawMessage, field string) any {
 	case "object":
 		var properties map[string]json.RawMessage
 		_ = json.Unmarshal(schema["properties"], &properties)
-		out := make(map[string]any, len(properties))
-		names := make([]string, 0, len(properties))
-		for name := range properties {
-			names = append(names, name)
-		}
+		var required []string
+		_ = json.Unmarshal(schema["required"], &required)
+		out := make(map[string]any, len(required))
+		names := append([]string(nil), required...)
 		sort.Strings(names)
 		for _, name := range names {
 			out[name] = syntheticGraphQLSchemaValue(properties[name], name)
@@ -961,7 +1008,8 @@ func runGitHubBinaryProviderDouble(t *testing.T, b engine.Bundle, operation engi
 		return row
 	}
 	body := []byte("provider-double-binary")
-	capture := newGitHubProviderCapture(func(_ *http.Request) (int, string, []byte) { return http.StatusOK, "application/octet-stream", body })
+	contentType := githubBinaryProviderContentType(operation.Binary.ContentTypes)
+	capture := newGitHubProviderCapture(func(_ *http.Request) (int, string, []byte) { return http.StatusOK, contentType, body })
 	defer capture.Close()
 	doubleBundle := githubProviderDoubleBundle(b, capture.URL)
 	temp := t.TempDir()
@@ -986,4 +1034,26 @@ func runGitHubBinaryProviderDouble(t *testing.T, b engine.Bundle, operation engi
 	row.Requests = githubProviderRequestProofs(capture.captured())
 	row.Response = &githubProviderDoubleResponseProof{Status: http.StatusOK, Bytes: len(body), BodySHA256: hashBytes(body)}
 	return row
+}
+
+func githubBinaryProviderContentType(contentTypes []string) string {
+	for _, declared := range contentTypes {
+		mediaType := strings.TrimSpace(strings.SplitN(declared, ";", 2)[0])
+		parts := strings.Split(mediaType, "/")
+		if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+			continue
+		}
+		if parts[1] == "*" {
+			switch parts[0] {
+			case "text":
+				return "text/plain"
+			case "image":
+				return "image/png"
+			default:
+				return parts[0] + "/octet-stream"
+			}
+		}
+		return mediaType
+	}
+	return "application/octet-stream"
 }

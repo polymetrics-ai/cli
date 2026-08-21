@@ -65900,7 +65900,7 @@
   {
     "name": "gong",
     "display_name": "Gong",
-    "description": "Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.",
+    "description": "Reads Gong users, calls, scorecards, targets, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, target assignment CSV uploads, multipart uploads, and top-level array uploads as typed reverse-ETL actions.",
     "integration_type": "api",
     "docs_url": "https://us-66463.app.gong.io/settings/api/documentation",
     "release_stage": "ga",
@@ -66092,14 +66092,14 @@
         "name": "update_meeting",
         "kind": "update",
         "method": "PUT",
-        "path": "/meetings/{meetingId}",
+        "path": "/meetings/{{ record.meetingId }}",
         "risk": "medium: mutates Gong API state; requires reverse ETL approval"
       },
       {
         "name": "delete_meeting",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/meetings/{meetingId}",
+        "path": "/meetings/{{ record.meetingId }}",
         "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
         "confirm": "destructive"
       },
@@ -66240,7 +66240,7 @@
         "name": "upload_call_media",
         "kind": "update",
         "method": "PUT",
-        "path": "/v2/calls/{{ record.id }}/media",
+        "path": "/calls/{{ record.id }}/media",
         "risk": "high: uploads call media from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
         "confirm": "destructive"
       },
@@ -66248,7 +66248,7 @@
         "name": "upload_crm_entities",
         "kind": "create",
         "method": "POST",
-        "path": "/v2/crm/entities",
+        "path": "/crm/entities",
         "risk": "high: uploads CRM data from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
         "confirm": "destructive"
       },
@@ -66256,7 +66256,7 @@
         "name": "upload_crm_entity_schema",
         "kind": "create",
         "method": "POST",
-        "path": "/v2/crm/entity-schema",
+        "path": "/crm/entity-schema",
         "risk": "high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval",
         "confirm": "destructive"
       },
@@ -66264,14 +66264,14 @@
         "name": "upload_target_assignments",
         "kind": "create",
         "method": "POST",
-        "path": "/v2/targets/{{ record.targetId }}/assignments",
+        "path": "/targets/{{ record.targetId }}/assignments",
         "risk": "high: uploads target assignments from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
         "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted",
-      "write": "typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure",
+      "read": "external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and preserve ordinary provider response fields; only concrete configured credential values are masked",
+      "write": "typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, targets, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure",
       "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive; local file upload plans bind a SHA-256 payload identity that is snapshot-verified before network send"
     },
     "icon": {
@@ -66378,11 +66378,555 @@
     ],
     "write_actions": [
       {
+        "name": "mutate_ad_group_criterion_customizers",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/AdGroupCriterionCustomizers:mutate",
+        "risk": "Executes Google Ads API v22 method customers.AdGroupCriterionCustomizers.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_goal_configs",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/CampaignGoalConfigs:mutate",
+        "risk": "Executes Google Ads API v22 method customers.CampaignGoalConfigs.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_customizers",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/CustomerCustomizers:mutate",
+        "risk": "Executes Google Ads API v22 method customers.CustomerCustomizers.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_goals",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/Goals:mutate",
+        "risk": "Executes Google Ads API v22 method customers.Goals.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_account_budget_proposals",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/accountBudgetProposals:mutate",
+        "risk": "Executes Google Ads API v22 method customers.accountBudgetProposals.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_account_links",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/accountLinks:create",
+        "risk": "Executes Google Ads API v22 method customers.accountLinks.create against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_account_links",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/accountLinks:mutate",
+        "risk": "Executes Google Ads API v22 method customers.accountLinks.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_group_ad_labels",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroupAdLabels:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroupAdLabels.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_group_ads",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroupAds:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroupAds.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_group_asset_sets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroupAssetSets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroupAssetSets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_group_assets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroupAssets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroupAssets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_group_bid_modifiers",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroupBidModifiers:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroupBidModifiers.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_group_criteria",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroupCriteria:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroupCriteria.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_group_criterion_labels",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroupCriterionLabels:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroupCriterionLabels.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_group_customizers",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroupCustomizers:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroupCustomizers.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_group_labels",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroupLabels:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroupLabels.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_groups",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adGroups:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adGroups.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ad_parameters",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/adParameters:mutate",
+        "risk": "Executes Google Ads API v22 method customers.adParameters.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_ads",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/ads:mutate",
+        "risk": "Executes Google Ads API v22 method customers.ads.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_asset_group_assets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/assetGroupAssets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.assetGroupAssets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_asset_group_listing_group_filters",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/assetGroupListingGroupFilters:mutate",
+        "risk": "Executes Google Ads API v22 method customers.assetGroupListingGroupFilters.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_asset_group_signals",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/assetGroupSignals:mutate",
+        "risk": "Executes Google Ads API v22 method customers.assetGroupSignals.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_asset_groups",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/assetGroups:mutate",
+        "risk": "Executes Google Ads API v22 method customers.assetGroups.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_asset_set_assets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/assetSetAssets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.assetSetAssets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_asset_sets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/assetSets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.assetSets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_assets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/assets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.assets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_audiences",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/audiences:mutate",
+        "risk": "Executes Google Ads API v22 method customers.audiences.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_batch_jobs",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/batchJobs:mutate",
+        "risk": "Executes Google Ads API v22 method customers.batchJobs.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_bidding_data_exclusions",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/biddingDataExclusions:mutate",
+        "risk": "Executes Google Ads API v22 method customers.biddingDataExclusions.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_bidding_seasonality_adjustments",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/biddingSeasonalityAdjustments:mutate",
+        "risk": "Executes Google Ads API v22 method customers.biddingSeasonalityAdjustments.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_bidding_strategies",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/biddingStrategies:mutate",
+        "risk": "Executes Google Ads API v22 method customers.biddingStrategies.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_billing_setups",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/billingSetups:mutate",
+        "risk": "Executes Google Ads API v22 method customers.billingSetups.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_asset_sets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignAssetSets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignAssetSets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_assets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignAssets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignAssets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_bid_modifiers",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignBidModifiers:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignBidModifiers.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_budgets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignBudgets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignBudgets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_conversion_goals",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignConversionGoals:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignConversionGoals.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_criteria",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignCriteria:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignCriteria.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_customizers",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignCustomizers:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignCustomizers.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_drafts",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignDrafts:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignDrafts.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_groups",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignGroups:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignGroups.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_labels",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignLabels:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignLabels.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "configure_campaign_lifecycle_goals_campaign_lifecycle_goal",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignLifecycleGoal:configureCampaignLifecycleGoals",
+        "risk": "Executes Google Ads API v22 method customers.campaignLifecycleGoal.configureCampaignLifecycleGoals against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaign_shared_sets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaignSharedSets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaignSharedSets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "enable_p_max_brand_guidelines_campaigns",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaigns:enablePMaxBrandGuidelines",
+        "risk": "Executes Google Ads API v22 method customers.campaigns.enablePMaxBrandGuidelines against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_campaigns",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/campaigns:mutate",
+        "risk": "Executes Google Ads API v22 method customers.campaigns.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_conversion_actions",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/conversionActions:mutate",
+        "risk": "Executes Google Ads API v22 method customers.conversionActions.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_conversion_custom_variables",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/conversionCustomVariables:mutate",
+        "risk": "Executes Google Ads API v22 method customers.conversionCustomVariables.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_conversion_goal_campaign_configs",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/conversionGoalCampaignConfigs:mutate",
+        "risk": "Executes Google Ads API v22 method customers.conversionGoalCampaignConfigs.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_conversion_value_rule_sets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/conversionValueRuleSets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.conversionValueRuleSets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_conversion_value_rules",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/conversionValueRules:mutate",
+        "risk": "Executes Google Ads API v22 method customers.conversionValueRules.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_customer_client_customers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}:createCustomerClient",
+        "risk": "Executes Google Ads API v22 method customers.createCustomerClient against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_custom_audiences",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customAudiences:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customAudiences.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_custom_conversion_goals",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customConversionGoals:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customConversionGoals.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_custom_interests",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customInterests:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customInterests.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_asset_sets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerAssetSets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerAssetSets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_assets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerAssets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerAssets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_client_links",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerClientLinks:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerClientLinks.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_conversion_goals",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerConversionGoals:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerConversionGoals.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_labels",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerLabels:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerLabels.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "configure_customer_lifecycle_goals_customer_lifecycle_goal",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerLifecycleGoal:configureCustomerLifecycleGoals",
+        "risk": "Executes Google Ads API v22 method customers.customerLifecycleGoal.configureCustomerLifecycleGoals against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
         "name": "move_manager_link_customer_manager_links",
         "kind": "update",
         "method": "POST",
         "path": "/v22/customers/{{ config.customer_id }}/customerManagerLinks:moveManagerLink",
         "risk": "Executes Google Ads API v22 method customers.customerManagerLinks.moveManagerLink against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_manager_links",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerManagerLinks:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerManagerLinks.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_negative_criteria",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerNegativeCriteria:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerNegativeCriteria.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_sk_ad_network_conversion_value_schemas",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerSkAdNetworkConversionValueSchemas:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerSkAdNetworkConversionValueSchemas.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_user_access_invitations",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerUserAccessInvitations:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerUserAccessInvitations.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customer_user_accesses",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerUserAccesses:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customerUserAccesses.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_customizer_attributes",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customizerAttributes:mutate",
+        "risk": "Executes Google Ads API v22 method customers.customizerAttributes.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_data_links",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/dataLinks:create",
+        "risk": "Executes Google Ads API v22 method customers.dataLinks.create against the configured customer. Review provider-side effects before approval.",
         "confirm": "destructive"
       },
       {
@@ -66402,6 +66946,117 @@
         "confirm": "destructive"
       },
       {
+        "name": "mutate_experiment_arms",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/experimentArms:mutate",
+        "risk": "Executes Google Ads API v22 method customers.experimentArms.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_experiments",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/experiments:mutate",
+        "risk": "Executes Google Ads API v22 method customers.experiments.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_google_ads",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/googleAds:mutate",
+        "risk": "Executes Google Ads API v22 method customers.googleAds.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_keyword_plan_ad_group_keywords",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/keywordPlanAdGroupKeywords:mutate",
+        "risk": "Executes Google Ads API v22 method customers.keywordPlanAdGroupKeywords.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_keyword_plan_ad_groups",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/keywordPlanAdGroups:mutate",
+        "risk": "Executes Google Ads API v22 method customers.keywordPlanAdGroups.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_keyword_plan_campaign_keywords",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/keywordPlanCampaignKeywords:mutate",
+        "risk": "Executes Google Ads API v22 method customers.keywordPlanCampaignKeywords.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_keyword_plan_campaigns",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/keywordPlanCampaigns:mutate",
+        "risk": "Executes Google Ads API v22 method customers.keywordPlanCampaigns.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_keyword_plans",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/keywordPlans:mutate",
+        "risk": "Executes Google Ads API v22 method customers.keywordPlans.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_labels",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/labels:mutate",
+        "risk": "Executes Google Ads API v22 method customers.labels.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "append_lead_conversation_local_services",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/localServices:appendLeadConversation",
+        "risk": "Executes Google Ads API v22 method customers.localServices.appendLeadConversation against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "resolve_multi_party_auth_review",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/multiPartyAuthReview:resolve",
+        "risk": "Executes Google Ads API v22 method customers.multiPartyAuthReview.resolve against the configured customer. Review provider-side effects before approval."
+      },
+      {
+        "name": "mutate_customers",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}:mutate",
+        "risk": "Executes Google Ads API v22 method customers.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_offline_user_data_jobs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/offlineUserDataJobs:create",
+        "risk": "Executes Google Ads API v22 method customers.offlineUserDataJobs.create against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_product_link_invitations",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/productLinkInvitations:create",
+        "risk": "Executes Google Ads API v22 method customers.productLinkInvitations.create against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
         "name": "remove_product_link_invitations",
         "kind": "custom",
         "method": "POST",
@@ -66418,6 +67073,14 @@
         "confirm": "destructive"
       },
       {
+        "name": "create_product_links",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/productLinks:create",
+        "risk": "Executes Google Ads API v22 method customers.productLinks.create against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
         "name": "remove_product_links",
         "kind": "custom",
         "method": "POST",
@@ -66426,11 +67089,123 @@
         "confirm": "destructive"
       },
       {
+        "name": "mutate_recommendation_subscription_recommendation_subscriptions",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/recommendationSubscriptions:mutateRecommendationSubscription",
+        "risk": "Executes Google Ads API v22 method customers.recommendationSubscriptions.mutateRecommendationSubscription against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "apply_recommendations",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/recommendations:apply",
+        "risk": "Executes Google Ads API v22 method customers.recommendations.apply against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "dismiss_recommendations",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/recommendations:dismiss",
+        "risk": "Executes Google Ads API v22 method customers.recommendations.dismiss against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_remarketing_actions",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/remarketingActions:mutate",
+        "risk": "Executes Google Ads API v22 method customers.remarketingActions.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_campaign_automatically_created_asset_customers",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}:removeCampaignAutomaticallyCreatedAsset",
+        "risk": "Executes Google Ads API v22 method customers.removeCampaignAutomaticallyCreatedAsset against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_shared_criteria",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/sharedCriteria:mutate",
+        "risk": "Executes Google Ads API v22 method customers.sharedCriteria.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_shared_sets",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/sharedSets:mutate",
+        "risk": "Executes Google Ads API v22 method customers.sharedSets.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_smart_campaign_settings",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/smartCampaignSettings:mutate",
+        "risk": "Executes Google Ads API v22 method customers.smartCampaignSettings.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
         "name": "start_identity_verification_customers",
         "kind": "custom",
         "method": "POST",
         "path": "/v22/customers/{{ config.customer_id }}:startIdentityVerification",
         "risk": "Executes Google Ads API v22 method customers.startIdentityVerification against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_call_conversions_customers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}:uploadCallConversions",
+        "risk": "Executes Google Ads API v22 method customers.uploadCallConversions against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_click_conversions_customers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}:uploadClickConversions",
+        "risk": "Executes Google Ads API v22 method customers.uploadClickConversions against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_conversion_adjustments_customers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}:uploadConversionAdjustments",
+        "risk": "Executes Google Ads API v22 method customers.uploadConversionAdjustments against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_user_data_customers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}:uploadUserData",
+        "risk": "Executes Google Ads API v22 method customers.uploadUserData against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_user_list_customer_types",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/userListCustomerTypes:mutate",
+        "risk": "Executes Google Ads API v22 method customers.userListCustomerTypes.mutate against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mutate_user_lists",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/userLists:mutate",
+        "risk": "Executes Google Ads API v22 method customers.userLists.mutate against the configured customer. Review provider-side effects before approval.",
         "confirm": "destructive"
       }
     ],

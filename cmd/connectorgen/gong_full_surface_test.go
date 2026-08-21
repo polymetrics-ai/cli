@@ -29,6 +29,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			Write        string   `json:"write"`
 			Operation    string   `json:"operation"`
 			OutputPolicy string   `json:"output_policy"`
+			Risk         string   `json:"risk"`
 			Examples     []string `json:"examples"`
 			Flags        []struct {
 				Name   string `json:"name"`
@@ -110,6 +111,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}{}
 	flagsByPath := map[string]map[string]string{}
 	examplesByPath := map[string][]string{}
+	reverseETLWrites := map[string]string{}
 	for _, cmd := range cli.Commands {
 		commandsByPath[cmd.Path] = struct {
 			intent, availability, stream, write, operation, outputPolicy string
@@ -122,6 +124,24 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		if cmd.Intent == "direct_read" && cmd.Availability != "implemented" {
 			t.Fatalf("direct read command %q availability = %q, want implemented", cmd.Path, cmd.Availability)
 		}
+		if cmd.Intent == "direct_read" && strings.Contains(strings.ToLower(cmd.Risk), "redact") {
+			t.Fatalf("direct read command %q describes provider fields as redacted; ordinary provider output must be preserved", cmd.Path)
+		}
+		if cmd.Intent == "reverse_etl" {
+			if cmd.Availability != "implemented" {
+				t.Fatalf("reverse ETL command %q availability = %q, want implemented after the shared typed-destination foundation", cmd.Path, cmd.Availability)
+			}
+			if cmd.Write == "" {
+				t.Fatalf("reverse ETL command %q is missing its exact write action", cmd.Path)
+			}
+			if previous, exists := reverseETLWrites[cmd.Write]; exists {
+				t.Fatalf("reverse ETL write %q is declared by both %q and %q", cmd.Write, previous, cmd.Path)
+			}
+			reverseETLWrites[cmd.Write] = cmd.Path
+		}
+	}
+	if got, want := len(reverseETLWrites), len(writes.Actions); got != want {
+		t.Fatalf("implemented reverse ETL write bindings = %d, want all %d declared write actions", got, want)
 	}
 	for _, tc := range []struct {
 		path, intent, availability, target string
@@ -130,8 +150,8 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		{path: "workspaces list", intent: "etl", availability: "implemented", target: "workspaces"},
 		{path: "calls get", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "users get", intent: "direct_read", availability: "implemented", target: "json_redacted"},
-		{path: "calls create", intent: "reverse_etl", availability: "partial", target: "add_call"},
-		{path: "privacy erase-phone", intent: "reverse_etl", availability: "partial", target: "purge_phone_number"},
+		{path: "calls create", intent: "reverse_etl", availability: "implemented", target: "add_call"},
+		{path: "privacy erase-phone", intent: "reverse_etl", availability: "implemented", target: "purge_phone_number"},
 		{path: "calls extensive", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "calls transcript", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "meetings integration-status", intent: "direct_read", availability: "implemented", target: "json_redacted"},
@@ -229,6 +249,9 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		rest, sensitivePolicy                             json.RawMessage
 	}{}
 	for _, op := range ops.Operations {
+		if op.Kind == "rest_read" && len(op.SensitivePolicy) > 0 && string(op.SensitivePolicy) != "null" {
+			t.Fatalf("read operation %q declares field redaction; only concrete configured credential values may be masked at output", op.ID)
+		}
 		opsByID[op.ID] = struct {
 			kind, risk, approval, outputPolicy, mutationClass string
 			secretSensitive                                   bool
@@ -254,9 +277,15 @@ func TestGongMetadataEnablesWriteCapability(t *testing.T) {
 			Read  bool `json:"read"`
 			Write bool `json:"write"`
 		} `json:"capabilities"`
+		Risk struct {
+			Read string `json:"read"`
+		} `json:"risk"`
 	}](t, "../../internal/connectors/defs/gong/metadata.json")
 	if !metadata.Capabilities.Read || !metadata.Capabilities.Write {
 		t.Fatalf("Gong capabilities read/write = %t/%t, want true/true", metadata.Capabilities.Read, metadata.Capabilities.Write)
+	}
+	if strings.Contains(strings.ToLower(metadata.Risk.Read), "redact") {
+		t.Fatalf("Gong metadata describes ordinary direct-read output as redacted: %q", metadata.Risk.Read)
 	}
 }
 

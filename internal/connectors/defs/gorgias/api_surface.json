@@ -835,10 +835,14 @@
     {
       "method": "GET",
       "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
-      "covered_by": {
-        "direct_reads": [
-          "files download"
-        ]
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "The provider documents a signed cross-host redirect without a stable exact host allowlist or a bounded final media contract.",
+        "source_url": "https://developers.gorgias.com/reference/download-file",
+        "notes": "named_dependency=a provider-published exact redirect host and final media contract; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
       }
     }
   ]

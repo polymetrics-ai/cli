@@ -13,7 +13,7 @@ All source artifacts were fetched credential-free from their recorded public doc
 | twilio | 197 | 197 | 197 | complete: provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document | 94 | 103 | 47.72 | 32/32 | generic-typed-destination-executor (reverse ETL) |
 | amazon-sqs | 23 | 23 | 23 | complete: provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document | 22 | 1 | 95.65 | 0/0 | generic-typed-destination-executor (reverse ETL) |
 | elasticsearch | 5 | 818 | 845 | complete: provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document | 0 | 845 | 0.00 | 0/72 | generic-typed-destination-executor (reverse ETL) |
-| gong | 69 | 69 | 69 | complete: provider-published OpenAPI document | 57 | 12 | 82.61 | 3/3 | generic-typed-destination-executor (reverse ETL) |
+| gong | 69 | 69 | 69 | complete: provider-published OpenAPI document | 69 | 0 | 100.00 | 3/3 | generic-typed-destination-executor (reverse ETL) |
 | google-ads | 164 | 162 | 163 | complete: provider-published Google Discovery document | 28 | 135 | 17.18 | 0/1 | generic-typed-destination-executor (reverse ETL) |
 | facebook-marketing | 36 | 1446 | 1445 | complete: all current provider-published Facebook Business SDK code-generation API declarations; Graph routes are explicitly documented as object-ID node/edge templates, so totals count named owner-type/method/edge declarations rather than fabricated runtime identifiers | 3 | 1442 | 0.21 | 0/112 | generic-typed-destination-executor (reverse ETL) |
 | linkedin-ads | 10 | 287 | 272 | complete: provider sitemap plus every current LinkedIn Marketing rendered-reference page | 0 | 272 | 0.00 | 0/35 | generic-typed-destination-executor (reverse ETL) |

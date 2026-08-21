@@ -19,14 +19,17 @@ import (
 // scalar cursor or silently replace it with a full scan.
 func (s *StreamState) UnmarshalJSON(data []byte) error {
 	type streamStateWire struct {
-		Connection          string                           `json:"connection"`
-		Stream              string                           `json:"stream"`
-		Checkpoint          *synccontract.CheckpointEnvelope `json:"checkpoint"`
-		LegacyCursor        *string                          `json:"cursor"`
-		GenerationID        int64                            `json:"generation_id"`
-		LastSuccessfulRunID string                           `json:"last_successful_run_id"`
-		RecordsLoaded       int                              `json:"records_loaded"`
-		UpdatedAt           time.Time                        `json:"updated_at"`
+		Connection           string                           `json:"connection"`
+		Stream               string                           `json:"stream"`
+		Checkpoint           *synccontract.CheckpointEnvelope `json:"checkpoint"`
+		LegacyCursor         *string                          `json:"cursor"`
+		GenerationID         int64                            `json:"generation_id"`
+		ActiveWorkID         string                           `json:"active_work_id"`
+		ActiveWorkFence      int64                            `json:"active_work_fence"`
+		ActiveWorkLeaseUntil *time.Time                       `json:"active_work_lease_until"`
+		LastSuccessfulRunID  string                           `json:"last_successful_run_id"`
+		RecordsLoaded        int                              `json:"records_loaded"`
+		UpdatedAt            time.Time                        `json:"updated_at"`
 	}
 	var wire streamStateWire
 	if err := json.Unmarshal(data, &wire); err != nil {
@@ -39,6 +42,8 @@ func (s *StreamState) UnmarshalJSON(data []byte) error {
 		Connection:          wire.Connection,
 		Stream:              wire.Stream,
 		GenerationID:        wire.GenerationID,
+		ActiveWorkID:        wire.ActiveWorkID,
+		ActiveWorkFence:     wire.ActiveWorkFence,
 		LastSuccessfulRunID: wire.LastSuccessfulRunID,
 		RecordsLoaded:       wire.RecordsLoaded,
 		UpdatedAt:           wire.UpdatedAt,
@@ -46,6 +51,10 @@ func (s *StreamState) UnmarshalJSON(data []byte) error {
 	if wire.Checkpoint != nil {
 		checkpoint := wire.Checkpoint.Clone()
 		s.Checkpoint = &checkpoint
+	}
+	if wire.ActiveWorkLeaseUntil != nil {
+		until := wire.ActiveWorkLeaseUntil.UTC()
+		s.ActiveWorkLeaseUntil = &until
 	}
 	if wire.LegacyCursor != nil {
 		s.Checkpoint = &synccontract.CheckpointEnvelope{
@@ -63,6 +72,10 @@ func cloneStreamState(state StreamState) StreamState {
 	if state.Checkpoint != nil {
 		checkpoint := state.Checkpoint.Clone()
 		clone.Checkpoint = &checkpoint
+	}
+	if state.ActiveWorkLeaseUntil != nil {
+		until := state.ActiveWorkLeaseUntil.UTC()
+		clone.ActiveWorkLeaseUntil = &until
 	}
 	return clone
 }

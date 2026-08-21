@@ -1,0 +1,145 @@
+{
+  "schema_version": 2,
+  "integration": "cli-current-foundations-main-integration-r1",
+  "checkpoint": "provisional-unpushed-independent-review",
+  "code_sha": "808896a28873c5f0479fa10e2f798da56f885b5e",
+  "reviewed_sha": "9e5329f34e015e39160bb8e951452bbd071a698a",
+  "base_sha": "114a67727f2ef60b132054091c73987be4118a9b",
+  "component_inputs": {
+    "structured_body": {
+      "issue": 4305,
+      "sha": "55ddb650aa5594ddd156b0939cb1df6027a31d56",
+      "source": "Firstmate-supplied local no-mistakes pipeline worktree",
+      "worktree": "/Users/karthiksivadas/.no-mistakes/worktrees/e56f7e7b3cf6/01M0DY0HM9HNZVNKJ2J9Z9SCG7",
+      "preserving_merge": "0eb98d3844da7b48d0ca27f51ba7deb46d8f5d1b"
+    },
+    "reverse_etl": {
+      "issue": 4303,
+      "sha": "e7f474375af969555efd82f684ad6d0b8a26cfc0",
+      "source": "Firstmate-supplied local no-mistakes pipeline worktree",
+      "worktree": "/Users/karthiksivadas/.no-mistakes/worktrees/e56f7e7b3cf6/01M0DYNQ9HSJBYS9YQ4MJR4JGR",
+      "preserving_merge": "808896a28873c5f0479fa10e2f798da56f885b5e"
+    }
+  },
+  "input_method": "exact SHAs fetched read-only from the supplied local worktrees; older remote references were not used",
+  "focused_checks": [
+    {
+      "command": "go test -timeout 20m ./internal/connectors/connsdk ./internal/connectors/engine",
+      "status": "passed",
+      "assertion": "terminal status/retry semantics, bounded typed direct-write receipts, header/body handling, multipart, GraphQL, scalar/form/SCIM/binary regressions",
+      "tests": ["TestOperationStatusCheckPreservesTerminalNon2xxMetadataAndDeclaredHeaders", "TestDirectWriteCommandBindsStructuredBodyHeadersQueryAndPath"],
+      "modes": ["direct_write.structured_rest", "direct_read.status", "binary_download"]
+    },
+    {
+      "command": "go test -timeout 20m ./internal/app -run '^TestFoundationRollupPreservesMultiActionReverseETLComposition$' -count=1",
+      "status": "passed",
+      "assertion": "persisted App path selects multiple declaration-owned reverse-ETL actions through approval, apply, acknowledgement, and preserved receipts",
+      "tests": ["TestFoundationRollupPreservesMultiActionReverseETLComposition"],
+      "modes": ["reverse_etl.ordinary_per_page"]
+    },
+    {
+      "command": "go test -timeout 20m ./internal/app",
+      "status": "cached",
+      "assertion": "full App package cache observation; retained as cached evidence and not promoted to a fresh passed gate",
+      "tests": ["TestFoundationRollupPreservesMultiActionReverseETLComposition"],
+      "modes": ["app.package.cached"]
+    },
+    {
+      "command": "go test -timeout 20m ./internal/connectors/commandrunner",
+      "status": "passed",
+      "assertion": "closed command preflight and runtime dispatch",
+      "tests": ["TestExecuteDirectWriteCommand", "TestExecuteBinaryDownloadCommand"],
+      "modes": ["direct_write", "binary_download"]
+    },
+    {
+      "command": "go test -timeout 20m ./internal/cli -run '^(TestReverseETLCLIWorkflowIsScriptableAndApprovalBounded|TestStructuredRESTBodyCommandHelpAndManualExposeOnlyDeclaredTypedFields|TestWriteConnectorCommandResultPreservesStatusCheckJSON|TestWriteConnectorCommandResultPreservesDeclaredStatusHeadersForHumanOutput|TestETLTransportBareAndLeafHelpAreContextual|TestDeclarativeTypedDestinationTransportRejectsCallerActionBeforeProjectIO)$' -count=1",
+      "status": "passed",
+      "assertion": "scriptable reverse plan/approval, structured declaration help, status output, and transport help/input rejection",
+      "tests": ["TestReverseETLCLIWorkflowIsScriptableAndApprovalBounded", "TestStructuredRESTBodyCommandHelpAndManualExposeOnlyDeclaredTypedFields", "TestWriteConnectorCommandResultPreservesStatusCheckJSON", "TestWriteConnectorCommandResultPreservesDeclaredStatusHeadersForHumanOutput", "TestETLTransportBareAndLeafHelpAreContextual", "TestDeclarativeTypedDestinationTransportRejectsCallerActionBeforeProjectIO"],
+      "modes": ["reverse_etl.ordinary_per_page", "direct_write.structured_rest", "direct_read.status"]
+    },
+    {
+      "command": "go test -timeout 20m ./internal/synctransport -run '^(TestOrchestratorReadsBackDestinationReceiptBeforeCheckpointCAS|TestTransportFamilyHalfPathConformanceAcknowledgementAndCancellation|TestRegisterDeclaredTransportsRegistersTwoDefinitionOwnedPairs|TestPreflightRejectsClosedAdmissionFailuresBeforeSourceRead)$' -count=1",
+      "status": "passed",
+      "assertion": "destination receipt readback, acknowledgement/cancellation, and closed preflight",
+      "tests": ["TestOrchestratorReadsBackDestinationReceiptBeforeCheckpointCAS", "TestTransportFamilyHalfPathConformanceAcknowledgementAndCancellation", "TestRegisterDeclaredTransportsRegistersTwoDefinitionOwnedPairs", "TestPreflightRejectsClosedAdmissionFailuresBeforeSourceRead"],
+      "modes": ["etl.ordinary_per_page", "reverse_etl.ordinary_per_page"]
+    },
+    {
+      "command": "go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImport.*|TestValidate_CLISurfaceReverseETLRequiresRiskAndApproval|TestValidate_CLISurfaceDirectWriteStructuredRESTBodyRequiresClosedBoundedDeclaration|TestCheckCLISurfaceOperationHeaderMappingsRequiresExactDeclaredHeader|TestSyncBundleDirectWriteDerivesOperationContract)$' -count=1",
+      "status": "passed",
+      "assertion": "bounded source import, reverse-ETL and structured direct-write surface validation, and typed header mappings",
+      "tests": ["TestSourceImportProducesClosedCanonicalDescriptors", "TestValidate_CLISurfaceReverseETLRequiresRiskAndApproval", "TestValidate_CLISurfaceDirectWriteStructuredRESTBodyRequiresClosedBoundedDeclaration", "TestCheckCLISurfaceOperationHeaderMappingsRequiresExactDeclaredHeader", "TestSyncBundleDirectWriteDerivesOperationContract"],
+      "modes": ["source_import", "reverse_etl", "direct_write.structured_rest"]
+    },
+    {
+      "command": "go build ./cmd/pm && go run ./cmd/connectorgen validate && go run ./cmd/connectorgen surface-sync --check",
+      "status": "passed",
+      "assertion": "pm build; 552 connectors, 0 validator findings; 0 generated-surface corrections",
+      "tests": ["build:cmd/pm", "connectorgen:validate", "connectorgen:surface-sync-check"],
+      "modes": ["generated_surfaces.all_connectors"]
+    },
+    {
+      "command": "make docs-check-no-build connector-boundary && node --test website/scripts/gen-docs-data.test.mjs",
+      "status": "passed",
+      "assertion": "built pm validated connector documentation; connector-boundary and generated website data tests completed from the composite",
+      "tests": ["docs-check-no-build", "connector-boundary", "website/scripts/gen-docs-data.test.mjs"],
+      "modes": ["docs", "website", "boundary"]
+    }
+  ],
+  "gate_ledger": [
+    {
+      "id": "INT-01",
+      "status": "passed",
+      "command_indexes": [0],
+      "tests": ["TestDirectWriteCommandBindsStructuredBodyHeadersQueryAndPath"],
+      "modes": ["direct_write.structured_rest"]
+    },
+    {
+      "id": "INT-02",
+      "status": "passed",
+      "command_indexes": [0],
+      "tests": ["TestOperationStatusCheckPreservesTerminalNon2xxMetadataAndDeclaredHeaders"],
+      "modes": ["direct_read.status", "binary_download"]
+    },
+    {
+      "id": "INT-03",
+      "status": "provisional",
+      "reason": "The recorded code SHA predates source projection qualification; no source reachability pass is claimed."
+    },
+    {
+      "id": "INT-04",
+      "status": "passed",
+      "command_indexes": [1],
+      "tests": ["TestFoundationRollupPreservesMultiActionReverseETLComposition"],
+      "modes": ["reverse_etl.ordinary_per_page"]
+    },
+    {
+      "id": "INT-05",
+      "status": "passed",
+      "command_indexes": [0],
+      "tests": ["TestDirectWriteCommandBindsStructuredBodyHeadersQueryAndPath"],
+      "modes": ["direct_write.structured_rest"]
+    },
+    {
+      "id": "INT-06",
+      "status": "deferred",
+      "reason": "The focused commandrunner and CLI boundary cases were not yet recorded at the reviewed SHA."
+    }
+  ],
+  "deferred_gates": [
+    "full make verify",
+    "real-provider qualification",
+    "CI",
+    "no-mistakes",
+    "push and pull-request creation"
+  ],
+  "credential_handling": "no credentials requested, printed, or recorded",
+  "temporary_material": [
+    {
+      "path": "./pm",
+      "purpose": "local build consumed by docs validation",
+      "disposition": "moved recoverably to Trash after focused gates; it was not tracked"
+    }
+  ]
+}

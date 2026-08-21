@@ -1408,7 +1408,7 @@ func batchSurfaceSyncDriftBundleFS(t *testing.T) fstest.MapFS {
 			"risk": "low",
 			"approval": "none",
 			"output_policy": "binary_file_bounded",
-			"binary": { "method": "GET", "path": "/artifacts/{id}", "max_bytes": 1024 }
+			"binary": { "method": "GET", "path": "/artifacts/{id}", "max_bytes": 1024, "content_types": ["application/octet-stream"], "response": {"success_statuses": ["200"]} }
 		}]
 	}`)}
 	return fsys

@@ -13,6 +13,19 @@
         "method": "GET",
         "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/file",
         "max_bytes": 26214400,
+        "content_types": [
+          "application/*",
+          "audio/*",
+          "font/*",
+          "image/*",
+          "text/*",
+          "video/*"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }

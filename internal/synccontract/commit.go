@@ -2,6 +2,7 @@ package synccontract
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -21,6 +22,14 @@ var ErrDurableETLDestinationRequired = errors.New("checkpointed sync requires a 
 type DownstreamAcknowledgement struct {
 	Sink           string    `json:"sink"`
 	AcknowledgedAt time.Time `json:"acknowledged_at"`
+	// Output is connector-owned typed-action output captured after the target
+	// reports durable success; callers cannot supply it through the transport API.
+	Output json.RawMessage `json:"output,omitempty"`
+	// privateReceipt is a bounded, connector-owned continuation from a
+	// successful write to its compulsory read-back. It is intentionally absent
+	// from JSON, diagnostics, persisted run output, and public acknowledgement
+	// accessors; only the in-process destination adapter can consume it.
+	privateReceipt json.RawMessage
 	durable        bool
 }
 
@@ -61,6 +70,43 @@ func NewDurableDownstreamAcknowledgement(sink string, acknowledgedAt time.Time) 
 		return DownstreamAcknowledgement{}, err
 	}
 	return acknowledgement, nil
+}
+
+// WithOutput attaches validated destination evidence to a durable
+// acknowledgement. The durable marker remains private, so this cannot
+// manufacture a checkpoint authority from an untrusted result payload.
+func (a DownstreamAcknowledgement) WithOutput(output json.RawMessage) (DownstreamAcknowledgement, error) {
+	if err := a.validate(); err != nil {
+		return DownstreamAcknowledgement{}, err
+	}
+	if len(output) == 0 || !json.Valid(output) {
+		return DownstreamAcknowledgement{}, fmt.Errorf("durable acknowledgement output must be valid JSON")
+	}
+	a.Output = append(json.RawMessage(nil), output...)
+	return a, nil
+}
+
+// WithPrivateReceipt attaches a small, validated connector-owned receipt for
+// an immediate read-back. Unlike Output it is never serialized. The bound
+// prevents a provider response from becoming an unbounded hidden transport.
+func (a DownstreamAcknowledgement) WithPrivateReceipt(receipt json.RawMessage) (DownstreamAcknowledgement, error) {
+	if err := a.validate(); err != nil {
+		return DownstreamAcknowledgement{}, err
+	}
+	if len(receipt) == 0 || len(receipt) > 8<<10 || !json.Valid(receipt) {
+		return DownstreamAcknowledgement{}, fmt.Errorf("durable acknowledgement private receipt must be valid bounded JSON")
+	}
+	a.privateReceipt = append(json.RawMessage(nil), receipt...)
+	return a, nil
+}
+
+// PrivateReceipt returns a defensive copy for the destination read-back port.
+// It intentionally has no JSON representation and no caller-provided setter.
+func (a DownstreamAcknowledgement) PrivateReceipt() (json.RawMessage, bool) {
+	if len(a.privateReceipt) == 0 {
+		return nil, false
+	}
+	return append(json.RawMessage(nil), a.privateReceipt...), true
 }
 
 func (a DownstreamAcknowledgement) validate() error {

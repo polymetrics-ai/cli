@@ -47,9 +47,10 @@ const (
 // shape, but every actual value is transformed before JSON serialization. The
 // repository salt and the prepared credential values are deliberately absent.
 type embeddedEvidenceProof struct {
-	RedactionStrategy    string `json:"redaction_strategy"`
-	PMBinarySHA256       string `json:"pm_binary_sha256"`
-	PMCommandFingerprint string `json:"pm_command_fingerprint"`
+	RedactionStrategy    string               `json:"redaction_strategy"`
+	PMBinarySHA256       string               `json:"pm_binary_sha256"`
+	PMCommandFingerprint string               `json:"pm_command_fingerprint"`
+	CertificationSubject certificationSubject `json:"certification_subject"`
 	// CredentialFingerprints are the exact prepared credential values, hashed
 	// individually.  They let a local replay compare its credential without
 	// ever writing the value (or an encrypted form of it) to the record.
@@ -153,22 +154,23 @@ type deliveryLimitation struct {
 // PreparedValues carry sensitive material only long enough to derive the
 // publishable proof; they are never JSON fields and are never written directly.
 type completedLiveEvidence struct {
-	SchemaVersion  int
-	Scope          string
-	Connector      string
-	FunctionKind   string
-	WorkflowKind   string
-	SyncMode       string
-	Primitive      string
-	Source         string
-	Destination    string
-	FlowKind       string
-	Provider       string
-	ExecutedAt     string
-	RunID          string
-	PMBinarySHA256 string
-	PMCommand      string
-	Passed         bool
+	SchemaVersion        int
+	Scope                string
+	Connector            string
+	FunctionKind         string
+	WorkflowKind         string
+	SyncMode             string
+	Primitive            string
+	Source               string
+	Destination          string
+	FlowKind             string
+	Provider             string
+	ExecutedAt           string
+	RunID                string
+	PMBinarySHA256       string
+	PMCommand            string
+	CertificationSubject certificationSubject
+	Passed               bool
 
 	RepositorySalt    []byte
 	PreparedValues    []string
@@ -280,6 +282,7 @@ func newProofBearingEvidenceForCredentialScope(completed completedLiveEvidence, 
 		RedactionStrategy:      proofRedactionStrategy,
 		PMBinarySHA256:         completed.PMBinarySHA256,
 		PMCommandFingerprint:   fingerprintText(completed.PMCommand, completed.PreparedValues, completed.RepositorySalt),
+		CertificationSubject:   completed.CertificationSubject,
 		CredentialFingerprints: fingerprintPreparedValues(completed.PreparedValues, completed.RepositorySalt),
 		HTTPExchanges:          make([]certifiedHTTPExchange, 0, len(completed.HTTPExchanges)),
 		DatabaseExchanges:      make([]certifiedDatabaseExchange, 0, len(completed.DatabaseExchanges)),
@@ -355,6 +358,14 @@ func prepareProofBearingEvidence(repoRoot, path string, completed completedLiveE
 		return preparedAcceptedEvidence{}, err
 	}
 	completed.RepositorySalt = salt
+	subject, err := loadCurrentCertificationSubject(repoRoot)
+	if err != nil {
+		return preparedAcceptedEvidence{}, err
+	}
+	if subject.PMBinarySHA256 != completed.PMBinarySHA256 {
+		return preparedAcceptedEvidence{}, fmt.Errorf("completed evidence pm binary does not match current certification subject")
+	}
+	completed.CertificationSubject = subject
 	evidence, err := newProofBearingEvidence(completed)
 	if err != nil {
 		return preparedAcceptedEvidence{}, err
@@ -392,6 +403,7 @@ type importedLiveEvidence struct {
 	RunID                  string
 	PMBinarySHA256         string
 	PMCommandFingerprint   string
+	CertificationSubject   certificationSubject
 	CredentialFingerprints []string
 	HTTPExchanges          []certifiedHTTPExchange
 }
@@ -405,6 +417,7 @@ func newImportedProofBearingEvidence(completed importedLiveEvidence) (acceptedEv
 		RedactionStrategy:      proofRedactionStrategy,
 		PMBinarySHA256:         completed.PMBinarySHA256,
 		PMCommandFingerprint:   completed.PMCommandFingerprint,
+		CertificationSubject:   completed.CertificationSubject,
 		CredentialFingerprints: append([]string(nil), completed.CredentialFingerprints...),
 		HTTPExchanges:          append([]certifiedHTTPExchange(nil), completed.HTTPExchanges...),
 		DatabaseExchanges:      []certifiedDatabaseExchange{},
@@ -440,6 +453,14 @@ func prepareImportedProofBearingEvidence(repoRoot, path string, completed import
 	if err != nil {
 		return preparedAcceptedEvidence{}, err
 	}
+	subject, err := loadCurrentCertificationSubject(repoRoot)
+	if err != nil {
+		return preparedAcceptedEvidence{}, err
+	}
+	if subject.PMBinarySHA256 != completed.PMBinarySHA256 {
+		return preparedAcceptedEvidence{}, fmt.Errorf("imported evidence pm binary does not match current certification subject")
+	}
+	completed.CertificationSubject = subject
 	evidence, err := newImportedProofBearingEvidence(completed)
 	if err != nil {
 		return preparedAcceptedEvidence{}, err
@@ -948,6 +969,14 @@ func validateEmbeddedEvidenceProof(proof embeddedEvidenceProof) error {
 	}
 	if !isSHA256(proof.PMBinarySHA256) {
 		return errors.New("pm_binary_sha256 must be a lowercase SHA-256 digest")
+	}
+	if proof.CertificationSubject.SchemaVersion != 0 {
+		if err := validateCertificationSubject(proof.CertificationSubject); err != nil {
+			return fmt.Errorf("certification_subject: %w", err)
+		}
+		if proof.CertificationSubject.PMBinarySHA256 != proof.PMBinarySHA256 {
+			return errors.New("certification_subject pm binary does not match proof pm_binary_sha256")
+		}
 	}
 	if !isFingerprintSequence(proof.PMCommandFingerprint) {
 		return errors.New("pm_command_fingerprint must contain only fingerprints")

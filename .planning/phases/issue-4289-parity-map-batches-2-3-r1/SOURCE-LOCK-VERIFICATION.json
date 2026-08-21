@@ -239,15 +239,15 @@
         "level": "complete",
         "basis": "provider-published OpenAPI document"
       },
-      "enabled_operations": 57,
-      "disabled_operations": 12,
+      "enabled_operations": 69,
+      "disabled_operations": 0,
       "documented_deletes": 3,
       "enabled_deletes": 3,
       "source_lock": {
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "captured_at": "2026-08-19T00:00:00Z",
+        "captured_at": "2026-08-21T22:55:13Z",
         "bytes": 453797,
-        "sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
+        "sha256": "294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13",
         "verified": "captured public source metadata is complete; remote content is intentionally not refetched"
       }
     },

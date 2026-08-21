@@ -37,6 +37,40 @@ func TestPostgresManagedTargetAuthorizationLifetimeDefaultsAndRejectsOutOfRangeB
 	}
 }
 
+func TestDeclarativeTypedDestinationAuthorization_ReusesWithoutPostEffectFailure(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	const planID = "rplan_reusable_authorization"
+	if _, err := a.updateState(func(current state) (state, error) {
+		current.ReversePlans = append(current.ReversePlans, ReversePlan{
+			ID: planID, Mode: reversePlanModeDeclarativeTypedDestinationTransport,
+			Status: reversePlanStatusApprovalConsumptionUncertain,
+		})
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if err := a.markDeclarativeTypedDestinationPlanExecuted(planID); err != nil {
+		t.Fatalf("first completion marker = %v", err)
+	}
+	if err := a.markDeclarativeTypedDestinationPlanExecuted(planID); err != nil {
+		t.Fatalf("reused authorization post-effect completion marker = %v", err)
+	}
+}
+
+func TestDeclarativeTypedDestinationAuthorization_RejectsChangedOrForeignBindingBeforeIO(t *testing.T) {
+	plan := ReversePlan{TransportBindingSHA256: "approved-binding"}
+	if err := validateDeclarativeTypedDestinationPlanBinding(plan, "changed-binding"); err == nil {
+		t.Fatal("changed or foreign transport binding was accepted")
+	}
+}
+
 func TestPostgresManagedTargetMissingAndConsumedApprovalErrorsAreTyped(t *testing.T) {
 	a := &App{state: state{ReversePlans: []ReversePlan{{
 		ID: "rplan_consumed", Mode: reversePlanModePostgresManagedTarget, Status: "executed",

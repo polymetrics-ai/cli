@@ -1,0 +1,638 @@
+---
+name: pm-pardot
+description: Pardot connector knowledge and safe action guide.
+---
+
+# pm-pardot
+
+## Purpose
+
+Reads and writes documented Salesforce Account Engagement (Pardot) API v5 JSON resources.
+
+## Icon
+
+- id: salesforcepardot
+- asset: icons/salesforcepardot.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developer.salesforce.com/docs/marketing/pardot/overview
+
+## Capabilities
+
+- check=true catalog=true read=true write=true query=false
+- Integration type: api
+
+## Authentication
+
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
+
+## Configuration
+
+- base_url
+- business_unit_id (required)
+- id
+- access_token (secret) (required)
+
+## ETL Streams
+
+- prospects:
+  - primary key: id
+  - cursor: updatedAt
+  - fields: createdAt(string), email(string), firstName(string), id(integer), lastName(string), updatedAt(string)
+- prospect:
+  - primary key: id
+  - fields: createdAt(string), email(string), firstName(string), id(integer), lastName(string), updatedAt(string)
+- campaigns:
+  - primary key: id
+  - cursor: updatedAt
+  - fields: createdAt(string), id(integer), name(string), updatedAt(string)
+- campaign:
+  - primary key: id
+  - fields: createdAt(string), id(integer), name(string), updatedAt(string)
+- lists:
+  - primary key: id
+  - cursor: updatedAt
+  - fields: createdAt(string), id(integer), name(string), updatedAt(string)
+- list:
+  - primary key: id
+  - fields: createdAt(string), id(integer), name(string), updatedAt(string)
+- users:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), email(string), firstName(string), id(integer), isDeleted(boolean), jobTitle(string), lastName(string), role(string), roleName(string), salesforceId(integer), tagReplacementLanguage(string), updatedAt(string), updatedById(integer), username(string)
+- user:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), email(string), firstName(string), id(integer), isDeleted(boolean), jobTitle(string), lastName(string), role(string), roleName(string), salesforceId(integer), tagReplacementLanguage(string), updatedAt(string), updatedById(integer), username(string)
+- custom_fields:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), fieldId(integer), id(integer), isAnalyticsSynced(boolean), isRecordMultipleResponses(boolean), isRequired(boolean), isUseValues(boolean), name(string), salesforceId(integer), type(integer), updatedAt(string), updatedById(integer)
+- custom_field:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), fieldId(integer), id(integer), isAnalyticsSynced(boolean), isRecordMultipleResponses(boolean), isRequired(boolean), isUseValues(boolean), name(string), salesforceId(integer), type(integer), updatedAt(string), updatedById(integer)
+- custom_redirects:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), createdById(integer), destinationUrl(string), folderId(integer), id(integer), isDeleted(boolean), name(string), trackerDomainId(integer), updatedAt(string), updatedById(integer)
+- custom_redirect:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), createdById(integer), destinationUrl(string), folderId(integer), id(integer), isDeleted(boolean), name(string), trackerDomainId(integer), updatedAt(string), updatedById(integer)
+- dynamic_contents:
+  - primary key: id
+  - fields: baseContent(string), basedOn(string), basedOnProspectApiFieldId(integer), createdAt(string), createdById(integer), embedCode(string), embedUrl(string), folderId(integer), id(integer), isDeleted(boolean), name(string), tagReplacementLanguage(string), trackerDomainId(integer), updatedAt(string), updatedById(integer)
+- dynamic_content:
+  - primary key: id
+  - fields: baseContent(string), basedOn(string), basedOnProspectApiFieldId(integer), createdAt(string), createdById(integer), embedCode(string), embedUrl(string), folderId(integer), id(integer), isDeleted(boolean), name(string), tagReplacementLanguage(string), trackerDomainId(integer), updatedAt(string), updatedById(integer)
+- emails:
+  - primary key: id
+  - fields: campaignId(integer), clientType(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), listEmailId(integer), name(string), prospectId(integer), salesforceCmsId(integer), sentAt(string), subject(string), trackerDomainId(integer), type(integer)
+- email:
+  - primary key: id
+  - fields: campaignId(integer), clientType(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), listEmailId(integer), name(string), prospectId(integer), salesforceCmsId(integer), sentAt(string), subject(string), trackerDomainId(integer), type(integer)
+- email_templates:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), createdById(integer), folderId(integer), id(integer), isAutoResponderEmail(boolean), isDeleted(boolean), isDripEmail(boolean), isListEmail(boolean), isOneToOneEmail(boolean), name(string), subject(string), tagReplacementLanguage(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
+- email_template:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), createdById(integer), folderId(integer), id(integer), isAutoResponderEmail(boolean), isDeleted(boolean), isDripEmail(boolean), isListEmail(boolean), isOneToOneEmail(boolean), name(string), subject(string), tagReplacementLanguage(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
+- list_emails:
+  - primary key: id
+  - fields: campaignId(integer), clientType(string), createdAt(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), isDeleted(boolean), isOperational(boolean), isPaused(boolean), isSent(boolean), name(string), sentAt(string), subject(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
+- list_email:
+  - primary key: id
+  - fields: campaignId(integer), clientType(string), createdAt(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), isDeleted(boolean), isOperational(boolean), isPaused(boolean), isSent(boolean), name(string), sentAt(string), subject(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
+- list_email_stats:
+  - primary key: id
+  - fields: campaignId(integer), clientType(string), createdAt(string), createdById(integer), emailTemplateId(integer), folderId(integer), id(integer), isDeleted(boolean), isOperational(boolean), isPaused(boolean), isSent(boolean), name(string), sentAt(string), subject(string), trackerDomainId(integer), type(integer), updatedAt(string), updatedById(integer)
+- files:
+  - primary key: id
+  - fields: bitlyIsPersonalized(string), bitlyShortUrl(string), campaignId(integer), createdAt(string), createdById(integer), folderId(integer), id(integer), isTracked(boolean), name(string), salesforceCmsId(integer), salesforceId(integer), size(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer), url(string), vanityUrl(string), vanityUrlPath(string)
+- file:
+  - primary key: id
+  - fields: bitlyIsPersonalized(string), bitlyShortUrl(string), campaignId(integer), createdAt(string), createdById(integer), folderId(integer), id(integer), isTracked(boolean), name(string), salesforceCmsId(integer), salesforceId(integer), size(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer), url(string), vanityUrl(string), vanityUrlPath(string)
+- folders:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), id(integer), name(string), parentFolderId(integer), path(string), updatedAt(string), updatedById(integer), usePermissions(string)
+- folder:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), id(integer), name(string), parentFolderId(integer), path(string), updatedAt(string), updatedById(integer), usePermissions(string)
+- folder_contents:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), folderId(integer), folderRef(string), id(integer), objectId(integer), objectName(string), objectRef(string), objectType(string), updatedAt(string), updatedById(integer)
+- folder_content:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), folderId(integer), folderRef(string), id(integer), objectId(integer), objectName(string), objectRef(string), objectType(string), updatedAt(string), updatedById(integer)
+- forms:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), createdById(integer), embedCode(string), folderId(integer), id(integer), isDeleted(boolean), isUseRedirectLocation(boolean), layoutTemplateId(integer), name(string), salesforceCmsId(integer), salesforceId(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer), url(string)
+- form:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), createdById(integer), embedCode(string), folderId(integer), id(integer), isDeleted(boolean), isUseRedirectLocation(boolean), layoutTemplateId(integer), name(string), salesforceCmsId(integer), salesforceId(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer), url(string)
+- form_fields:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), cssClasses(string), dataFormat(string), description(string), errorMessage(string), formId(integer), hasDependents(boolean), hasProgressives(boolean), hasValues(boolean), id(integer), isAlwaysDisplay(boolean), isDoNotPrefill(boolean), isMaintainInitialValue(boolean), isRequired(boolean), label(string), prospectApiFieldId(integer), sortOrder(string), type(integer), updatedAt(string), updatedById(integer)
+- form_field:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), cssClasses(string), dataFormat(string), description(string), errorMessage(string), formId(integer), hasDependents(boolean), hasProgressives(boolean), hasValues(boolean), id(integer), isAlwaysDisplay(boolean), isDoNotPrefill(boolean), isMaintainInitialValue(boolean), isRequired(boolean), label(string), prospectApiFieldId(integer), sortOrder(string), type(integer), updatedAt(string), updatedById(integer)
+- form_handlers:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), createdById(integer), embedCode(string), folderId(integer), id(integer), isCookieless(boolean), isDataForwarded(boolean), isDeleted(boolean), name(string), salesforceId(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer)
+- form_handler:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), createdById(integer), embedCode(string), folderId(integer), id(integer), isCookieless(boolean), isDataForwarded(boolean), isDeleted(boolean), name(string), salesforceId(integer), trackerDomainId(integer), updatedAt(string), updatedById(integer)
+- form_handler_fields:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), dataFormat(string), fieldLabel(string), formHandlerId(integer), id(integer), isRequired(boolean), name(string), prospectApiFieldId(integer), updatedAt(string), updatedById(integer)
+- form_handler_field:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), dataFormat(string), fieldLabel(string), formHandlerId(integer), id(integer), isRequired(boolean), name(string), prospectApiFieldId(integer), updatedAt(string), updatedById(integer)
+- landing_pages:
+  - primary key: id
+  - fields: archiveDate(string), campaignId(integer), createdAt(string), createdById(integer), description(string), folderId(integer), formId(integer), id(integer), isDeleted(boolean), isDoNotIndex(boolean), layoutTemplateId(integer), name(string), redirectLocation(string), salesforceCmsId(integer), title(string), trackerDomainId(integer), updatedAt(string), updatedById(integer), vanityUrlPath(string)
+- landing_page:
+  - primary key: id
+  - fields: archiveDate(string), campaignId(integer), createdAt(string), createdById(integer), description(string), folderId(integer), formId(integer), id(integer), isDeleted(boolean), isDoNotIndex(boolean), layoutTemplateId(integer), name(string), redirectLocation(string), salesforceCmsId(integer), title(string), trackerDomainId(integer), updatedAt(string), updatedById(integer), vanityUrlPath(string)
+- layout_templates:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), folderId(integer), formContent(string), id(integer), isDeleted(boolean), isIncludeDefaultCss(boolean), layoutContent(string), name(string), siteSearchContent(string), updatedAt(string), updatedById(integer)
+- layout_template:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), folderId(integer), formContent(string), id(integer), isDeleted(boolean), isIncludeDefaultCss(boolean), layoutContent(string), name(string), siteSearchContent(string), updatedAt(string), updatedById(integer)
+- list_memberships:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), id(integer), isDeleted(boolean), listId(integer), optedOut(boolean), prospectId(integer), updatedAt(string), updatedById(integer)
+- list_membership:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), id(integer), isDeleted(boolean), listId(integer), optedOut(boolean), prospectId(integer), updatedAt(string), updatedById(integer)
+- opportunities:
+  - primary key: id
+  - fields: campaignId(integer), closedAt(string), createdAt(string), createdById(integer), id(integer), isDeleted(boolean), name(string), probability(number), stage(string), status(string), updatedAt(string), updatedById(integer), value(string)
+- opportunity:
+  - primary key: id
+  - fields: campaignId(integer), closedAt(string), createdAt(string), createdById(integer), id(integer), isDeleted(boolean), name(string), probability(number), stage(string), status(string), updatedAt(string), updatedById(integer), value(string)
+- prospect_accounts:
+  - primary key: id
+  - fields: annualRevenue(string), assignedToId(integer), billingCity(string), billingCountry(string), billingState(string), billingZip(string), createdAt(string), createdById(integer), id(integer), isDeleted(boolean), name(string), phone(string), salesforceId(integer), updatedAt(string), updatedById(integer), website(string)
+- prospect_account:
+  - primary key: id
+  - fields: annualRevenue(string), assignedToId(integer), billingCity(string), billingCountry(string), billingState(string), billingZip(string), createdAt(string), createdById(integer), id(integer), isDeleted(boolean), name(string), phone(string), salesforceId(integer), updatedAt(string), updatedById(integer), website(string)
+- tags:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), id(integer), name(string), objectCount(integer), updatedAt(string), updatedById(integer)
+- tag:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), id(integer), name(string), objectCount(integer), updatedAt(string), updatedById(integer)
+- tagged_objects:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), id(integer), objectId(integer), objectName(string), objectType(string), tagId(integer)
+- tagged_object:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), id(integer), objectId(integer), objectName(string), objectType(string), tagId(integer)
+- tracker_domains:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), defaultCampaignId(integer), domain(string), httpsStatus(string), id(integer), isDeleted(boolean), isPrimary(boolean), sslStatus(string), updatedAt(string), updatedById(integer), validatedAt(string), validationStatus(string)
+- tracker_domain:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), defaultCampaignId(integer), domain(string), httpsStatus(string), id(integer), isDeleted(boolean), isPrimary(boolean), sslStatus(string), updatedAt(string), updatedById(integer), validatedAt(string), validationStatus(string)
+- visitors:
+  - primary key: id
+  - fields: campaignId(integer), campaignParameter(string), contentParameter(string), createdAt(string), doNotSell(boolean), hostname(string), id(integer), ipAddress(string), isIdentified(boolean), mediumParameter(string), pageViewCount(integer), prospectId(integer), sourceParameter(string), termParameter(string), updatedAt(string)
+- visitor:
+  - primary key: id
+  - fields: campaignId(integer), campaignParameter(string), contentParameter(string), createdAt(string), doNotSell(boolean), hostname(string), id(integer), ipAddress(string), isIdentified(boolean), mediumParameter(string), pageViewCount(integer), prospectId(integer), sourceParameter(string), termParameter(string), updatedAt(string)
+- visits:
+  - primary key: id
+  - fields: campaignParameter(string), contentParameter(string), createdAt(string), durationInSeconds(integer), firstVisitorPageViewAt(string), id(integer), lastVisitorPageViewAt(string), mediumParameter(string), prospectId(integer), sourceParameter(string), termParameter(string), updatedAt(string), visitorId(integer), visitorPageViewCount(integer)
+- visit:
+  - primary key: id
+  - fields: campaignParameter(string), contentParameter(string), createdAt(string), durationInSeconds(integer), firstVisitorPageViewAt(string), id(integer), lastVisitorPageViewAt(string), mediumParameter(string), prospectId(integer), sourceParameter(string), termParameter(string), updatedAt(string), visitorId(integer), visitorPageViewCount(integer)
+- visitor_activities:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), customRedirectId(integer), details(string), emailId(integer), emailTemplateId(integer), fileId(integer), formHandlerId(integer), formId(integer), id(integer), landingPageId(integer), listEmailId(integer), opportunityId(integer), prospectId(integer), type(integer), typeName(string), updatedAt(string), visitId(integer), visitorId(integer), visitorPageViewId(integer)
+- visitor_activity:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), customRedirectId(integer), details(string), emailId(integer), emailTemplateId(integer), fileId(integer), formHandlerId(integer), formId(integer), id(integer), landingPageId(integer), listEmailId(integer), opportunityId(integer), prospectId(integer), type(integer), typeName(string), updatedAt(string), visitId(integer), visitorId(integer), visitorPageViewId(integer)
+- visitor_page_views:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), durationInSeconds(integer), id(integer), salesforceId(integer), title(string), url(string), visitId(integer), visitorId(integer)
+- visitor_page_view:
+  - primary key: id
+  - fields: campaignId(integer), createdAt(string), durationInSeconds(integer), id(integer), salesforceId(integer), title(string), url(string), visitId(integer), visitorId(integer)
+- engagement_studio_programs:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), description(string), folderId(integer), id(integer), isDeleted(boolean), name(string), recipientListIds(array), salesforceId(integer), status(string), suppressionListIds(array), updatedAt(string), updatedById(integer)
+- engagement_studio_program:
+  - primary key: id
+  - fields: createdAt(string), createdById(integer), description(string), folderId(integer), id(integer), isDeleted(boolean), name(string), recipientListIds(array), salesforceId(integer), status(string), suppressionListIds(array), updatedAt(string), updatedById(integer)
+- lifecycle_stages:
+  - primary key: id
+  - fields: createdAt(string), id(integer), isDeleted(boolean), isLocked(boolean), matchType(string), name(string), position(integer), updatedAt(string)
+- lifecycle_stage:
+  - primary key: id
+  - fields: createdAt(string), id(integer), isDeleted(boolean), isLocked(boolean), matchType(string), name(string), position(integer), updatedAt(string)
+- lifecycle_histories:
+  - primary key: id
+  - fields: createdAt(string), id(integer), lifecycleStageId(integer), prospectId(integer), updatedAt(string)
+- lifecycle_history:
+  - primary key: id
+  - fields: createdAt(string), id(integer), lifecycleStageId(integer), prospectId(integer), updatedAt(string)
+- account:
+  - primary key: id
+  - fields: addressOne(string), addressTwo(string), adminId(integer), apiCallsUsed(string), city(string), company(string), country(string), createdAt(string), createdById(integer), fax(string), id(integer), level(string), maximumDailyApiCalls(string), phone(string), pluginCampaignId(integer), state(string), territory(string), updatedAt(string), updatedById(integer), website(string), zip(string)
+- bulk_actions:
+  - primary key: id
+  - fields: bulkAction(string), count(integer), createdAt(string), createdById(integer), errorCount(integer), errorsRef(string), fileName(string), id(integer), object(string), origin(string), percentComplete(integer), processedCount(integer), status(string), updatedAt(string), updatedById(integer)
+- bulk_action:
+  - primary key: id
+  - fields: bulkAction(string), count(integer), createdAt(string), createdById(integer), errorCount(integer), errorsRef(string), fileName(string), id(integer), object(string), origin(string), percentComplete(integer), processedCount(integer), status(string), updatedAt(string), updatedById(integer)
+- imports:
+  - primary key: id
+  - fields: batchesRef(string), createdAt(string), createdById(integer), createdCount(integer), errorCount(integer), errorRef(string), id(integer), isExpired(boolean), object(string), operation(string), status(string), updatedAt(string), updatedById(integer), updatedCount(integer)
+- import_job:
+  - primary key: id
+  - fields: batchesRef(string), createdAt(string), createdById(integer), createdCount(integer), errorCount(integer), errorRef(string), id(integer), isExpired(boolean), object(string), operation(string), status(string), updatedAt(string), updatedById(integer), updatedCount(integer)
+- external_activities:
+  - primary key: id
+  - fields: activityDate(string), createdAt(string), email(string), extension(string), id(integer), type(integer), updatedAt(string), value(string)
+- external_activity:
+  - primary key: id
+  - fields: activityDate(string), createdAt(string), email(string), extension(string), id(integer), type(integer), updatedAt(string), value(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+
+## Reverse ETL Actions
+
+- create_prospect:
+  - endpoint: POST /api/v5/objects/prospects
+  - risk: POST /api/v5/objects/prospects in Salesforce Account Engagement.
+- update_prospect:
+  - endpoint: PATCH /api/v5/objects/prospects/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/prospects/{{ record.id }} in Salesforce Account Engagement.
+- delete_prospect:
+  - endpoint: DELETE /api/v5/objects/prospects/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement prospect records.
+- upsert_prospect_latest_by_email:
+  - endpoint: POST /api/v5/objects/prospects/do/upsertLatestByEmail
+  - risk: Invokes Pardot upsertLatestByEmail action for prospect.
+- undelete_prospect:
+  - endpoint: POST /api/v5/objects/prospects/do/undelete
+  - risk: Invokes Pardot undelete action for prospect.
+- add_tag_to_prospect:
+  - endpoint: POST /api/v5/objects/prospects/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for prospect.
+- remove_tag_from_prospect:
+  - endpoint: POST /api/v5/objects/prospects/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for prospect.
+- connect_salesforce_campaign:
+  - endpoint: POST /api/v5/objects/campaigns/{{ record.id }}/do/connectSalesforceCampaign
+  - required fields: id
+  - risk: Invokes Pardot connectSalesforceCampaign action for campaign.
+- add_tag_to_campaign:
+  - endpoint: POST /api/v5/objects/campaigns/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for campaign.
+- remove_tag_from_campaign:
+  - endpoint: POST /api/v5/objects/campaigns/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for campaign.
+- create_list:
+  - endpoint: POST /api/v5/objects/lists
+  - risk: POST /api/v5/objects/lists in Salesforce Account Engagement.
+- update_list:
+  - endpoint: PATCH /api/v5/objects/lists/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/lists/{{ record.id }} in Salesforce Account Engagement.
+- delete_list:
+  - endpoint: DELETE /api/v5/objects/lists/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement list records.
+- add_tag_to_list:
+  - endpoint: POST /api/v5/objects/lists/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for list.
+- remove_tag_from_list:
+  - endpoint: POST /api/v5/objects/lists/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for list.
+- add_tag_to_user:
+  - endpoint: POST /api/v5/objects/users/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for user.
+- remove_tag_from_user:
+  - endpoint: POST /api/v5/objects/users/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for user.
+- create_custom_field:
+  - endpoint: POST /api/v5/objects/custom-fields
+  - risk: POST /api/v5/objects/custom-fields in Salesforce Account Engagement.
+- update_custom_field:
+  - endpoint: PATCH /api/v5/objects/custom-fields/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/custom-fields/{{ record.id }} in Salesforce Account Engagement.
+- delete_custom_field:
+  - endpoint: DELETE /api/v5/objects/custom-fields/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement custom_field records.
+- add_tag_to_custom_field:
+  - endpoint: POST /api/v5/objects/custom-fields/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for custom_field.
+- remove_tag_from_custom_field:
+  - endpoint: POST /api/v5/objects/custom-fields/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for custom_field.
+- create_custom_redirect:
+  - endpoint: POST /api/v5/objects/custom-redirects
+  - risk: POST /api/v5/objects/custom-redirects in Salesforce Account Engagement.
+- update_custom_redirect:
+  - endpoint: PATCH /api/v5/objects/custom-redirects/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/custom-redirects/{{ record.id }} in Salesforce Account Engagement.
+- delete_custom_redirect:
+  - endpoint: DELETE /api/v5/objects/custom-redirects/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement custom_redirect records.
+- add_tag_to_custom_redirect:
+  - endpoint: POST /api/v5/objects/custom-redirects/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for custom_redirect.
+- remove_tag_from_custom_redirect:
+  - endpoint: POST /api/v5/objects/custom-redirects/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for custom_redirect.
+- create_dynamic_content:
+  - endpoint: POST /api/v5/objects/dynamic-contents
+  - risk: POST /api/v5/objects/dynamic-contents in Salesforce Account Engagement.
+- add_tag_to_dynamic_content:
+  - endpoint: POST /api/v5/objects/dynamic-contents/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for dynamic_content.
+- remove_tag_from_dynamic_content:
+  - endpoint: POST /api/v5/objects/dynamic-contents/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for dynamic_content.
+- create_email:
+  - endpoint: POST /api/v5/objects/emails
+  - risk: POST /api/v5/objects/emails in Salesforce Account Engagement.
+- add_tag_to_email:
+  - endpoint: POST /api/v5/objects/emails/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for email.
+- remove_tag_from_email:
+  - endpoint: POST /api/v5/objects/emails/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for email.
+- copy_email_to_cms:
+  - endpoint: POST /api/v5/objects/emails/{{ record.id }}/do/copyToCms
+  - required fields: id
+  - risk: Invokes Pardot copyToCms action for email.
+- create_email_template:
+  - endpoint: POST /api/v5/objects/email-templates
+  - risk: POST /api/v5/objects/email-templates in Salesforce Account Engagement.
+- update_email_template:
+  - endpoint: PATCH /api/v5/objects/email-templates/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/email-templates/{{ record.id }} in Salesforce Account Engagement.
+- delete_email_template:
+  - endpoint: DELETE /api/v5/objects/email-templates/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement email_template records.
+- add_tag_to_email_template:
+  - endpoint: POST /api/v5/objects/email-templates/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for email_template.
+- remove_tag_from_email_template:
+  - endpoint: POST /api/v5/objects/email-templates/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for email_template.
+- create_list_email:
+  - endpoint: POST /api/v5/objects/list-emails
+  - risk: POST /api/v5/objects/list-emails in Salesforce Account Engagement.
+- update_file:
+  - endpoint: PATCH /api/v5/objects/files/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/files/{{ record.id }} in Salesforce Account Engagement.
+- delete_file:
+  - endpoint: DELETE /api/v5/objects/files/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement file records.
+- add_tag_to_file:
+  - endpoint: POST /api/v5/objects/files/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for file.
+- remove_tag_from_file:
+  - endpoint: POST /api/v5/objects/files/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for file.
+- copy_file_to_cms:
+  - endpoint: POST /api/v5/objects/files/{{ record.id }}/do/copyToCms
+  - required fields: id
+  - risk: Invokes Pardot copyToCms action for file.
+- create_form:
+  - endpoint: POST /api/v5/objects/forms
+  - risk: POST /api/v5/objects/forms in Salesforce Account Engagement.
+- delete_form:
+  - endpoint: DELETE /api/v5/objects/forms/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement form records.
+- undelete_form:
+  - endpoint: POST /api/v5/objects/forms/do/undelete
+  - risk: Invokes Pardot undelete action for form.
+- reorder_form_fields:
+  - endpoint: POST /api/v5/objects/forms/{{ record.id }}/do/reorderFormFields
+  - required fields: id
+  - risk: Invokes Pardot reorderFormFields action for form.
+- add_tag_to_form:
+  - endpoint: POST /api/v5/objects/forms/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for form.
+- remove_tag_from_form:
+  - endpoint: POST /api/v5/objects/forms/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for form.
+- copy_form_to_cms:
+  - endpoint: POST /api/v5/objects/forms/{{ record.id }}/do/copyToCms
+  - required fields: id
+  - risk: Invokes Pardot copyToCms action for form.
+- create_form_field:
+  - endpoint: POST /api/v5/objects/form-fields
+  - risk: POST /api/v5/objects/form-fields in Salesforce Account Engagement.
+- add_form_field_dependent:
+  - endpoint: POST /api/v5/objects/form-fields/{{ record.id }}/do/addDependent
+  - required fields: id
+  - risk: Invokes Pardot addDependent action for form_field.
+- add_form_field_progressive:
+  - endpoint: POST /api/v5/objects/form-fields/{{ record.id }}/do/addProgressive
+  - required fields: id
+  - risk: Invokes Pardot addProgressive action for form_field.
+- add_form_field_value:
+  - endpoint: POST /api/v5/objects/form-fields/{{ record.id }}/do/addValue
+  - required fields: id
+  - risk: Invokes Pardot addValue action for form_field.
+- reorder_form_field_values:
+  - endpoint: POST /api/v5/objects/form-fields/{{ record.id }}/do/reorderFormFieldValues
+  - required fields: id
+  - risk: Invokes Pardot reorderFormFieldValues action for form_field.
+- add_tag_to_form_field:
+  - endpoint: POST /api/v5/objects/form-fields/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for form_field.
+- remove_tag_from_form_field:
+  - endpoint: POST /api/v5/objects/form-fields/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for form_field.
+- create_form_handler:
+  - endpoint: POST /api/v5/objects/form-handlers
+  - risk: POST /api/v5/objects/form-handlers in Salesforce Account Engagement.
+- update_form_handler:
+  - endpoint: PATCH /api/v5/objects/form-handlers/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/form-handlers/{{ record.id }} in Salesforce Account Engagement.
+- delete_form_handler:
+  - endpoint: DELETE /api/v5/objects/form-handlers/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement form_handler records.
+- add_tag_to_form_handler:
+  - endpoint: POST /api/v5/objects/form-handlers/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for form_handler.
+- remove_tag_from_form_handler:
+  - endpoint: POST /api/v5/objects/form-handlers/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for form_handler.
+- create_form_handler_field:
+  - endpoint: POST /api/v5/objects/form-handler-fields
+  - risk: POST /api/v5/objects/form-handler-fields in Salesforce Account Engagement.
+- update_form_handler_field:
+  - endpoint: PATCH /api/v5/objects/form-handler-fields/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/form-handler-fields/{{ record.id }} in Salesforce Account Engagement.
+- delete_form_handler_field:
+  - endpoint: DELETE /api/v5/objects/form-handler-fields/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement form_handler_field records.
+- create_landing_page:
+  - endpoint: POST /api/v5/objects/landing-pages
+  - risk: POST /api/v5/objects/landing-pages in Salesforce Account Engagement.
+- add_tag_to_landing_page:
+  - endpoint: POST /api/v5/objects/landing-pages/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for landing_page.
+- remove_tag_from_landing_page:
+  - endpoint: POST /api/v5/objects/landing-pages/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for landing_page.
+- copy_landing_page_to_cms:
+  - endpoint: POST /api/v5/objects/landing-pages/{{ record.id }}/do/copyToCms
+  - required fields: id
+  - risk: Invokes Pardot copyToCms action for landing_page.
+- create_layout_template:
+  - endpoint: POST /api/v5/objects/layout-templates
+  - risk: POST /api/v5/objects/layout-templates in Salesforce Account Engagement.
+- update_layout_template:
+  - endpoint: PATCH /api/v5/objects/layout-templates/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/layout-templates/{{ record.id }} in Salesforce Account Engagement.
+- delete_layout_template:
+  - endpoint: DELETE /api/v5/objects/layout-templates/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement layout_template records.
+- add_tag_to_layout_template:
+  - endpoint: POST /api/v5/objects/layout-templates/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for layout_template.
+- remove_tag_from_layout_template:
+  - endpoint: POST /api/v5/objects/layout-templates/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for layout_template.
+- create_list_membership:
+  - endpoint: POST /api/v5/objects/list-memberships
+  - risk: POST /api/v5/objects/list-memberships in Salesforce Account Engagement.
+- update_list_membership:
+  - endpoint: PATCH /api/v5/objects/list-memberships/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/list-memberships/{{ record.id }} in Salesforce Account Engagement.
+- delete_list_membership:
+  - endpoint: DELETE /api/v5/objects/list-memberships/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement list_membership records.
+- add_tag_to_opportunity:
+  - endpoint: POST /api/v5/objects/opportunities/{{ record.id }}/do/addTag
+  - required fields: id
+  - risk: Invokes Pardot addTag action for opportunity.
+- remove_tag_from_opportunity:
+  - endpoint: POST /api/v5/objects/opportunities/{{ record.id }}/do/removeTag
+  - required fields: id
+  - risk: Invokes Pardot removeTag action for opportunity.
+- create_tag:
+  - endpoint: POST /api/v5/objects/tags
+  - risk: POST /api/v5/objects/tags in Salesforce Account Engagement.
+- update_tag:
+  - endpoint: PATCH /api/v5/objects/tags/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/objects/tags/{{ record.id }} in Salesforce Account Engagement.
+- delete_tag:
+  - endpoint: DELETE /api/v5/objects/tags/{{ record.id }}
+  - required fields: id
+  - risk: Deletes Salesforce Account Engagement tag records.
+- merge_tags:
+  - endpoint: POST /api/v5/objects/tags/{{ record.id }}/do/mergeTags
+  - required fields: id
+  - risk: Invokes Pardot mergeTags action for tag.
+- assign_visitor_to_prospect:
+  - endpoint: POST /api/v5/objects/visitors/{{ record.id }}/do/assignToProspect
+  - required fields: id
+  - risk: Invokes Pardot assignToProspect action for visitor.
+- identify_visitor_company:
+  - endpoint: POST /api/v5/objects/visitors/{{ record.id }}/do/identifyCompany
+  - required fields: id
+  - risk: Invokes Pardot identifyCompany action for visitor.
+- update_bulk_action:
+  - endpoint: PATCH /api/v5/bulk-actions/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/bulk-actions/{{ record.id }} in Salesforce Account Engagement.
+- create_import_job:
+  - endpoint: POST /api/v5/imports
+  - risk: POST /api/v5/imports in Salesforce Account Engagement.
+- update_import_job:
+  - endpoint: PATCH /api/v5/imports/{{ record.id }}
+  - required fields: id
+  - risk: PATCH /api/v5/imports/{{ record.id }} in Salesforce Account Engagement.
+- cancel_import:
+  - endpoint: POST /api/v5/imports/{{ record.id }}/do/cancel
+  - required fields: id
+  - risk: Invokes Pardot cancel action for import_job.
+- create_external_activity:
+  - endpoint: POST /api/v5/external-activities
+  - risk: POST /api/v5/external-activities in Salesforce Account Engagement.
+
+## Security
+
+- read risk: external Salesforce Account Engagement (Pardot) API reads of prospect, campaign, marketing asset, visitor, and admin metadata
+- write risk: creates, updates, sends, tags, copies, restores, cancels, and deletes Salesforce Account Engagement records through documented API v5 mutation endpoints
+- approval: reverse ETL writes require plan preview and approval token; destructive delete actions are marked destructive
+- Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Commands
+
+### Inspect as a manual
+
+```bash
+pm connectors inspect pardot
+```
+
+### Inspect as structured JSON
+
+```bash
+pm connectors inspect pardot --json
+```
+
+## Agent Rules
+
+- Run pm connectors inspect pardot before creating credentials or plans.
+- Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+- Never ask the user to paste secret values into chat.
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

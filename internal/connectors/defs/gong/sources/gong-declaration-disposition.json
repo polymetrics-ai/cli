@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "connector": "gong",
-  "generated_at": "2026-08-19T00:00:00Z",
+  "generated_at": "2026-08-21T23:02:31Z",
   "source_basis": {
     "source_lock": "sources/gong-operation-source-lock.json",
     "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-    "source_sha256": "235878d1d51d87e9723200dc84a449b4e2a77a1fc2a2916377130251f2729b54",
+    "source_sha256": "294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13",
     "source_bytes": 453797,
     "operations_found": 69,
     "coverage_confidence": {
@@ -21,9 +21,9 @@
       "level": "complete",
       "basis": "provider-published OpenAPI document"
     },
-    "enabled_operations": 57,
-    "enabled_percent": 82.61,
-    "disabled_operations": 12,
+    "enabled_operations": 69,
+    "enabled_percent": 100,
+    "disabled_operations": 0,
     "documented_deletes": 3,
     "enabled_deletes": 3,
     "parity_class_counts": [
@@ -54,61 +54,29 @@
     ],
     "stream_bindings": 12,
     "writes_actions": 27,
-    "terminal_commands": 57,
+    "terminal_commands": 69,
     "live_certification": "pending",
-    "gap_ids": [
-      "generic-typed-destination-executor"
-    ],
-    "foundation_gaps": [
-      {
-        "id": "generic-typed-destination-executor",
-        "count": 27,
-        "scope": "destination_transport"
-      }
-    ],
-    "rejected_by_reason": [
-      {
-        "key": "declaration-pending",
-        "count": 12
-      }
-    ],
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [],
     "reverse_etl_eligibility": {
-      "state": "foundation-gap",
+      "state": "direct-command-implemented",
       "typed_direct_write_operations": 27,
-      "foundation_gap": {
-        "id": "generic-typed-destination-executor",
-        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-      }
+      "detail": "Each exact direct-write operation has an implemented reverse-ETL command. Warehouse transport declarations are separately not declared and do not make a provider operation unreachable."
     },
     "transport": {
       "contract": "docs/sync-transport-definition.md (PR #4286)",
       "source_transport": {
-        "state": "declaration-pending",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/gong/sync_transport.json is absent.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "state": "not_declared",
+        "detail": "Existing exact ETL stream commands are executable; no separate warehouse transport declaration is claimed."
       },
       "destination_transport": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "generic-typed-destination-executor",
-          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-        }
+        "state": "not_declared",
+        "detail": "Implemented exact reverse-ETL commands use their declaration-owned actions; no separate warehouse transport declaration is claimed."
       }
     },
-    "declaration_pending_ids": [
-      "sync-transport-source-definition-gong"
-    ],
-    "declaration_pending": [
-      {
-        "id": "sync-transport-source-definition-gong",
-        "count": 12
-      }
-    ]
+    "declaration_pending_ids": [],
+    "declaration_pending": []
   },
   "ledger_dispositions": [
     {
@@ -131,25 +99,17 @@
         "operation_id": "listCalls",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/calls.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/calls."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "calls"
+        }
       }
     },
     {
@@ -175,22 +135,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "add_call"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -217,22 +172,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "upload_call_media"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -259,11 +209,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "calls get"
         }
@@ -292,11 +242,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "calls extensive"
         }
@@ -325,11 +275,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "permissions profile get"
         }
@@ -358,22 +308,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "update_permission_profile"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -400,22 +345,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "create_permission_profile"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -442,22 +382,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "update_meeting"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -484,22 +419,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "delete_meeting"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -526,22 +456,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "content_viewed"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -568,22 +493,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "content_shared"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -610,22 +530,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "custom_action"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -649,25 +564,17 @@
         "operation_id": "listGenericCrmIntegration",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/crm/integrations.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/crm/integrations."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "crm_integrations"
+        }
       }
     },
     {
@@ -693,22 +600,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "register_crm_integration"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -735,22 +637,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "delete_crm_integration"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -777,22 +674,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "add_calls_users_access"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -819,11 +711,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "calls users-access get"
         }
@@ -852,22 +744,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "delete_calls_users_access"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -894,11 +781,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "users extensive"
         }
@@ -927,11 +814,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "tasks list"
         }
@@ -960,22 +847,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "upload_target_assignments"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1002,11 +884,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "stats interaction"
         }
@@ -1035,11 +917,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "stats activity-scorecards"
         }
@@ -1068,11 +950,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "stats activity-day-by-day"
         }
@@ -1101,11 +983,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "stats activity-aggregate"
         }
@@ -1134,11 +1016,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "stats activity-aggregate-by-period"
         }
@@ -1167,22 +1049,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "create_meeting"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1209,11 +1086,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "meetings integration-status"
         }
@@ -1242,22 +1119,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "integration_settings"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1284,11 +1156,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "flows steps"
         }
@@ -1317,11 +1189,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "flows prospects"
         }
@@ -1350,22 +1222,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "unassign_flows_by_instance_id"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1392,22 +1259,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "unassign_flows_by_crm_id"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1434,22 +1296,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "submit_flow_prospects_bulk_assignment"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1476,22 +1333,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "assign_prospects"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1518,22 +1370,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "assign_prospects_cool_off_override"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1560,22 +1407,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "add_digital_interaction"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1602,22 +1444,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "purge_phone_number"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1644,22 +1481,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "purge_email_address"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1686,11 +1518,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "crm entity-schema get"
         }
@@ -1719,22 +1551,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "upload_crm_entity_schema"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1761,11 +1588,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "crm entities get"
         }
@@ -1794,22 +1621,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "upload_crm_entities"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1836,11 +1658,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "calls transcript"
         }
@@ -1869,22 +1691,17 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "write": "update_task"
         },
         "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is executable, but reverse ETL still needs a connector-neutral typed destination executor, explicit source binding, acknowledgement, and per-mode apply strategies.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-executor",
-            "evidence": "internal/app/issue_label_warehouse_transport.go:85-95: the only destination DefinitionFactory is issueLabelDestinationReference and BuildDestination enforces issueLabelTransportConnectorContract, so no connector-neutral typed destination can admit these actions.",
-            "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
-          }
+          "state": "direct-command-implemented",
+          "detail": "The exact direct-write operation is available through its implemented declaration-owned reverse-ETL command; destructive operations retain typed confirmation and plan, preview, approval, execute controls."
         }
       }
     },
@@ -1908,25 +1725,17 @@
         "operation_id": "listWorkspaces",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/workspaces.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/workspaces."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "workspaces"
+        }
       }
     },
     {
@@ -1949,25 +1758,17 @@
         "operation_id": "listUsers",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/users.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/users."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "users"
+        }
       }
     },
     {
@@ -1993,11 +1794,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "users get"
         }
@@ -2026,11 +1827,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "users settings-history"
         }
@@ -2059,11 +1860,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "targets list"
         }
@@ -2089,25 +1890,17 @@
         "operation_id": "listTrackers",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/trackers.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/trackers."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "trackers"
+        }
       }
     },
     {
@@ -2130,25 +1923,17 @@
         "operation_id": "listScorecards",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/scorecards.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/scorecards."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "scorecards"
+        }
       }
     },
     {
@@ -2171,25 +1956,17 @@
         "operation_id": "listBriefs",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/briefs.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/settings/briefs."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "briefs"
+        }
       }
     },
     {
@@ -2215,11 +1992,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "permissions profile-users list"
         }
@@ -2248,11 +2025,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "logs list"
         }
@@ -2278,25 +2055,17 @@
         "operation_id": "getLibraryStructure",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/library/folders.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/library/folders."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "library_folders"
+        }
       }
     },
     {
@@ -2322,11 +2091,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "library folder-content list"
         }
@@ -2352,25 +2121,17 @@
         "operation_id": "listFlows",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/flows.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/flows."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "flows"
+        }
       }
     },
     {
@@ -2396,11 +2157,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "flows bulk-assignment get"
         }
@@ -2426,25 +2187,17 @@
         "operation_id": "listFlowsFolders",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/flows/folders.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/flows/folders."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "flow_folders"
+        }
       }
     },
     {
@@ -2470,11 +2223,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "entities get-brief"
         }
@@ -2503,11 +2256,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "entities ask"
         }
@@ -2536,11 +2289,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "privacy find-phone"
         }
@@ -2569,11 +2322,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "privacy find-email"
         }
@@ -2602,11 +2355,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "crm request-status get"
         }
@@ -2635,11 +2388,11 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "enabled; exact connector-local binding",
         "contract": {
           "direct_read": "coaching list"
         }
@@ -2665,25 +2418,17 @@
         "operation_id": "listCallOutcomes",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/call-outcomes.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/call-outcomes."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "call_outcomes"
+        }
       }
     },
     {
@@ -2706,25 +2451,17 @@
         "operation_id": "listPermissionProfile",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "sync-transport-source-definition-gong",
-          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/all-permission-profiles.",
-          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
-        }
+        "evidence": "An exact connector-local stream, direct-read, or write declaration owns this provider operation."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/gong/sync_transport.json is absent for GET /v2/all-permission-profiles."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending sync-transport-source-definition-gong",
-        "contract": null
+        "status": "enabled; exact connector-local binding",
+        "contract": {
+          "stream": "permission_profiles"
+        }
       }
     }
   ]

@@ -47,6 +47,45 @@ func TestSyncTransportDescriptorResolvesDeclaredApplyStrategy(t *testing.T) {
 	}
 }
 
+func TestDestinationTransportDescriptorSelectsPersistedActionWithinMode(t *testing.T) {
+	descriptor := DestinationTransportDescriptor{
+		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyDeclarativeAPI, ID: "declarative_typed_destination"},
+		EligibleActions: []string{"append_widget", "replace_widget"},
+		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
+		Delivery:        closedTestDeliveryGuarantees(),
+		Conformance:     closedTestConformanceReference(),
+		Acknowledgement: TransportAcknowledgementDurableWarehouse,
+		ApplyStrategies: []DestinationApplyStrategy{
+			{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: "append_widget"},
+			{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyReplace, Action: "replace_widget"},
+		},
+	}
+	if err := descriptor.Validate(); err != nil {
+		t.Fatalf("Validate() multi-action descriptor = %v", err)
+	}
+	for action, want := range map[string]ApplyStrategy{
+		"append_widget":  ApplyStrategyAppend,
+		"replace_widget": ApplyStrategyReplace,
+	} {
+		strategy, err := descriptor.ApplyStrategyForAction(synccontract.ModeFullAppend, action)
+		if err != nil || strategy.Action != action || strategy.Strategy != want {
+			t.Fatalf("ApplyStrategyForAction(%q) = (%+v, %v), want exact persisted action and %q", action, strategy, err, want)
+		}
+	}
+	if _, err := descriptor.ApplyStrategyForAction(synccontract.ModeFullAppend, ""); err == nil || !strings.Contains(err.Error(), "persisted action selection") {
+		t.Fatalf("empty multi-action selection error = %v, want closed persisted-selection refusal", err)
+	}
+	if _, err := descriptor.ApplyStrategyForAction(synccontract.ModeFullAppend, "foreign_action"); err == nil || !strings.Contains(err.Error(), "does not declare action") {
+		t.Fatalf("foreign action selection error = %v, want closed action refusal", err)
+	}
+	descriptor.ApplyStrategies = append(descriptor.ApplyStrategies, DestinationApplyStrategy{
+		Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: "append_widget",
+	})
+	if err := descriptor.Validate(); err == nil || !strings.Contains(err.Error(), "duplicate apply strategy action") {
+		t.Fatalf("duplicate mode/action descriptor error = %v, want refusal", err)
+	}
+}
+
 func TestSyncTransportDescriptorRejectsGenericExecutorReference(t *testing.T) {
 	descriptor := SyncTransportDescriptor{Source: &SourceTransportDescriptor{
 		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeAPI, ID: "generic_http"},

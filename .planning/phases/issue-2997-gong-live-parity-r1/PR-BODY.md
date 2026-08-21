@@ -3,39 +3,45 @@
 Refs #2997
 
 This PR is intentionally a draft and is **not merge-ready**. It preserves the Gong certification
-branch and its source-mapping evidence while shared foundations and a disposable credential
-reference remain external dependencies.
+branch and its source-mapping evidence while the remaining source-import URL-policy and disposable
+credential-reference dependencies are resolved.
 
 ### Delivered evidence
 
-- Re-audited Gong's public OpenAPI V2 source: 69 exact method/path/operation-ID rows match the
-  Batch 2/3 immutable source lock.
-- Reconciled the preserved branch with current main, typed destinations, and Batch 2/3 maps.
-- Corrected Gong declaration-relative write paths and its CRM entity-schema fixture; the focused
-  Gong generator, commandrunner, conformance, validation, and full surface-sync gates pass.
-- Added the captain-required machine-readable missing-foundation ledger at
-  `.planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/missing-foundation-gaps.json`.
-  It has stable source-traced rows, source URL/revision/hash, runtime evidence, affected surfaces,
-  closure commands, per-batch and portfolio rollups, and deduplicated shared-gap fan-out.
+- Re-audited Gong's public OpenAPI V2 source: a current 453,797-byte pinned artifact has 69 exact
+  method/path/operation-ID/deprecation rows and matches the committed semantic fingerprint.
+- Merged the exact shared foundation parent
+  `c3f83cbf6eabbae00219566fb02719ca2d6c480d` without discarding the preserved branch.
+- Promoted all 27 named write actions to implemented declaration-owned reverse-ETL commands;
+  corrected array/object flag types and the required CRM schema flag. The three multipart uploads
+  pass focused generic conformance with approval-digest binding.
+- Made output preservation explicit: Gong ordinary provider response fields are retained, with
+  masking only for concrete configured credential values.
+- Regenerated manuals, skills, website data, and the Batch 2/3 map. All 69 source rows are enabled;
+  the missing-foundation ledger has zero Gong rows.
+- In a fresh initialized project with no credentials, the built binary ran every implemented Gong
+  path—30 direct reads, 27 reverse-ETL writes, and 12 ETL streams—to `missing --credential`, with
+  zero unknown, partial, or unbound results and no provider I/O.
 
 ### Current open blockers
 
-- `closed-operation-runtime-f4-binary-upload-approval-digest` is open on #4307. It blocks three
-  exact Gong multipart operations (call media, CRM entities, and target assignments); each row is
-  `enabled: false` and `merge_ready_eligible: false` in the ledger. No connector-specific bypass
-  or unsafe fixture approval is present.
-- The same ledger records the cross-connector F2/F4 fan-out: 51 source-traced Batch 2/3 operations
-  remain non-enabled for merge-ready accounting (26 binary downloads; 25 binary/multipart uploads).
+- The strict `connectorgen source-import` foundation rejects the official fixed Gong OpenAPI URL
+  because it contains the required `?version=` query; the query-free route is 404. This is a
+  provider-neutral URL-policy gap, not a connector-specific bypass. It blocks the scoped
+  source-import/validation/surface-sync proof only; the current 69-row source audit and all
+  independent runtime proofs are recorded in `SOURCE-AUDIT.md`.
 - No approved non-echoing disposable Gong credential reference exists. Live certification has not
   run, and no secret, customer payload, or browser-session substitute has been used.
 
 ### Verification run
 
-- `node .planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/generate-missing-foundation-gaps.mjs --check`
+- Focused Gong surface, commandrunner preflight, and multipart conformance tests with `-timeout 20m`.
 - `node .planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/verify-parity-maps.mjs`
-  → `verified 19 connectors / 5127 documented operations`
-- `go run ./cmd/agentcontractgen check`
-- `git diff --check`
+  → `verified 19 connectors / 5127 documented operations`.
+- Built-binary 69-command credential-free sweep; docs validation; website generated-artifact tests;
+  connector boundary/canon and repository workflow gates are recorded in the phase verification
+  checklist as they complete.
+- `git diff --check`.
 
 The GSD/TDD plan, red/green ledger, verification checklist, and run state are under
 `.planning/phases/issue-2997-gong-live-parity-r1/`. Required skills and the inline GSD fallback

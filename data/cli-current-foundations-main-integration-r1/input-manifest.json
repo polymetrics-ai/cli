@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "integration": "cli-current-foundations-main-integration-r1",
+  "branch": "fm/cli-current-foundations-main-integration-r1",
+  "target_branch": "main",
+  "base": {
+    "ref": "provisional integration base",
+    "sha": "114a67727f2ef60b132054091c73987be4118a9b",
+    "verified_remote": false,
+    "provenance": "Firstmate-approved clean integration branch base; parent is preserved #4308 integration merge 9e3cd99b7ebd2ebac2303ad8770e50fee85c92c6",
+    "included_foundations": [
+      {
+        "pr": 4310,
+        "issue": 4301,
+        "sha": "e62ae21d428f0d27225f9bff564dc2cd797f6b65",
+        "description": "non-empty credential-input foundation"
+      },
+      {
+        "pr": 4309,
+        "issue": 4299,
+        "sha": "484c18cf30cb77244d2e7d2c5194a55338b40209",
+        "description": "slim production source-lock embed"
+      }
+    ]
+  },
+  "composition_order": [4306, 4307, 4302, 4305, 4303],
+  "inputs": [
+    {
+      "issue": 4306,
+      "pr": 4312,
+      "remote_ref": "refs/pull/4312/head",
+      "sha": "19a32bd0bc08faf217be8f45b39841b5ff589a92",
+      "remote_ref_verified": true,
+      "qualification": "firstmate-issued exact published head; remote ref re-read",
+      "state": "merged_preserved_history",
+      "integration_merge_commit": "223f7b126eb4039f5c940a3cf233b15d6a18eff6",
+      "component_head_is_ancestor": true
+    },
+    {
+      "issue": 4307,
+      "pr": 4311,
+      "remote_ref": "refs/pull/4311/head",
+      "sha": "3c768cade6703426afd2272fbc01bfd60583e04f",
+      "remote_ref_verified": true,
+      "qualification": "firstmate-issued exact published head; remote ref re-read",
+      "state": "merged_preserved_history",
+      "integration_merge_commit": "1cb9cdb31c2fc446fe1da0b176b7422f04e81111",
+      "component_head_is_ancestor": true
+    },
+    {
+      "issue": 4302,
+      "pr": 4308,
+      "remote_ref": "refs/pull/4308/head",
+      "sha": "fe5b8e18788538c4fcce34969da7ff88a7fa66d6",
+      "remote_ref_verified": true,
+      "qualification": "firstmate terminal gate: Verify run 32354323284 succeeded; real-provider qualification supplied",
+      "qualification_evidence": {
+        "verify_run": 32354323284,
+        "checks": ["verify", "linux-amd64 native-build", "darwin-arm64 native-build"],
+        "live_assertions": ["HEAD 200", "HEAD 404", "exact text export", "exact binary export", "missing-path error with no artifact"]
+      },
+      "state": "merged_preserved_history_targeted_green",
+      "integration_merge_commit": "9e3cd99b7ebd2ebac2303ad8770e50fee85c92c6",
+      "component_head_is_ancestor": true,
+      "integration_correction": "closed rest_status response path preserves final non-2xx metadata while retaining declaration-owned response headers"
+    },
+    {
+      "issue": 4305,
+      "branch": "fm/cli-rest-structured-body-r1",
+      "sha": "55ddb650aa5594ddd156b0939cb1df6027a31d56",
+      "source": "Firstmate-supplied local no-mistakes pipeline worktree",
+      "pipeline_worktree": "/Users/karthiksivadas/.no-mistakes/worktrees/e56f7e7b3cf6/01M0DY0HM9HNZVNKJ2J9Z9SCG7",
+      "remote_ref": "not used; older visible branch head explicitly not substituted",
+      "qualification": "captain-approved provisional exact local-pipeline head",
+      "state": "merged_preserved_history_provisional",
+      "integration_merge_commit": "0eb98d3844da7b48d0ca27f51ba7deb46d8f5d1b",
+      "component_head_is_ancestor": true
+    },
+    {
+      "issue": 4303,
+      "supersedes_visible_pr": 4304,
+      "sha": "e7f474375af969555efd82f684ad6d0b8a26cfc0",
+      "source": "Firstmate-supplied local no-mistakes pipeline worktree",
+      "pipeline_worktree": "/Users/karthiksivadas/.no-mistakes/worktrees/e56f7e7b3cf6/01M0DYNQ9HSJBYS9YQ4MJR4JGR",
+      "remote_ref": "not used; older visible pull head explicitly not substituted",
+      "qualification": "captain-approved provisional exact local-pipeline head",
+      "state": "merged_preserved_history_provisional",
+      "integration_merge_commit": "808896a28873c5f0479fa10e2f798da56f885b5e",
+      "component_head_is_ancestor": true
+    }
+  ],
+  "intake": {
+    "gh_axi_reread": [4308, 4311, 4312, 4304],
+    "remote_ref_verification": "git ls-remote origin",
+    "local_pipeline_fetch": "git fetch --no-tags <Firstmate-supplied local worktree> <exact SHA>; neither pipeline worktree was modified",
+    "status": "provisional_local_pipeline_composite_ready_for_independent_review"
+  }
+}

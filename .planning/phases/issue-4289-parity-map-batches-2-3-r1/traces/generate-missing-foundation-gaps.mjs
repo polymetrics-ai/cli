@@ -139,18 +139,6 @@ function evidenceFromOperation(operation) {
   };
 }
 
-function multipartEvidence(action) {
-  const filePart = action.multipart?.parts?.find((part) => part.type === "file");
-  if (!filePart) throw new Error(`gong multipart action ${action.name} has no file part`);
-  return {
-    kind: "conformance_fixture_replay",
-    command: "go test -count=1 -timeout 20m ./internal/connectors/conformance -run 'TestConformance/gong|Static'",
-    location: "internal/connectors/engine/write_prepare.go:288 and internal/connectors/engine/write.go:998",
-    detail: `A temporary Gong ${action.name} fixture reached multipart validation and failed before I/O: multipart file part ${filePart.name} is missing its approved payload digest.`,
-    classification: "provider-neutral approval-digest binding absent from the generic fixture/replay path"
-  };
-}
-
 async function rowsForConnector(batch, connector) {
   const lock = await readJSON(definitionFile(connector, `sources/${connector}-operation-source-lock.json`));
   const map = await readJSON(definitionFile(connector, `sources/${connector}-declaration-disposition.json`));
@@ -176,32 +164,6 @@ async function rowsForConnector(batch, connector) {
     }));
   }
 
-  if (connector !== "gong") return { rows, operations: map.summary.operations_found };
-
-  const writes = await readJSON(definitionFile("gong", "writes.json"));
-  const multipartActions = writes.actions.filter((action) => action.body_type === "multipart");
-  if (multipartActions.length !== 3) throw new Error(`gong: expected 3 declared multipart actions, found ${multipartActions.length}`);
-  for (const action of multipartActions) {
-    const disposition = map.ledger_dispositions.find((candidate) => candidate.api_surface?.covered_by?.write === action.name);
-    if (!disposition) throw new Error(`gong: multipart action ${action.name} is not source-bound through api_surface.covered_by.write`);
-    rows.push(row({
-      batch,
-      connector,
-      lock,
-      disposition,
-      gapID: "closed-operation-runtime-f4-binary-upload-approval-digest",
-      affectedSurfaces: ["binary_upload", "direct_write", "reverse_etl"],
-      evidence: multipartEvidence(action),
-      declaration: {
-        write_action: action.name,
-        action_method: action.method,
-        action_path: action.path,
-        body_type: action.body_type,
-        parity_class: disposition.parity_class,
-        state: disposition.state
-      }
-    }));
-  }
   return { rows, operations: map.summary.operations_found };
 }
 

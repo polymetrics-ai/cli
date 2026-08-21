@@ -15,8 +15,9 @@ import (
 )
 
 const (
-	issueLabelTransportCommandSuffix = "-issue-label"
-	maxApprovalTokenStdinBytes       = 4096
+	issueLabelTransportCommandSuffix                = "-issue-label"
+	declarativeTypedDestinationTransportCommandName = "declarative-typed-destination"
+	maxApprovalTokenStdinBytes                      = 4096
 )
 
 const etlTransportHelp = `NAME
@@ -27,6 +28,8 @@ SYNOPSIS
   pm etl transport %s preview <plan-id> [--json]
   pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
   pm etl transport postgres-managed-target preview <plan-id> [--json]
+  pm etl transport declarative-typed-destination plan --connection <name> --stream <stream> [--json]
+  pm etl transport declarative-typed-destination preview <plan-id> [--json]
   pm etl run --connection <name> --stream <stream> --batch-size 1 [--max-in-flight-batches n] --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
   pm etl transport %s cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport %s cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
@@ -123,6 +126,57 @@ EXIT STATUS
   3 validation error
 `
 
+const declarativeTypedDestinationTransportHelp = `NAME
+  pm etl transport declarative-typed-destination - run a connector-declared typed reverse-ETL destination
+
+SYNOPSIS
+  pm etl transport declarative-typed-destination plan --connection <name> --stream <stream> [--json]
+  pm etl transport declarative-typed-destination preview <plan-id> [--json]
+  pm etl run --connection <name> --stream <stream> --batch-size <n> [--max-in-flight-batches n] --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
+
+DESCRIPTION
+  This command selects a destination only when the saved connection's
+  destination descriptor declares declarative_typed_destination. The persisted
+  stream owns the exact eligible writes.json action through destination_action;
+  it is never an argument to this command or pm etl run.
+
+  The connector definition owns the typed action, request method, route,
+  record mapping, source-executor allowlist, acknowledgement, delivery
+  contract, per-mode apply strategy, and conformance evidence. Shared Go only
+  validates and dispatches that sealed declaration through the warehouse
+  workset. It cannot write an arbitrary HTTP request.
+
+  Planning and preview bind one connection, stream, destination_action,
+  source mapping, credential revision, configuration digest, and strategy.
+  The initial approval token becomes a revocable, bounded authorization for
+  that exact shape. Each reopened workset obtains fresh typed write evidence;
+  the generic orchestrator advances its checkpoint only after the declared
+  durable acknowledgement and read-back.
+
+  If a closed transport has already applied, read back, and checkpointed a
+  destination effect but cannot complete local receipt retirement or its
+  declaration-owned approval marker, the persisted run has status
+  delivered_reconciliation_required. Its delivery_reconciliation field names
+  only the bounded local repair; destination_results and the acknowledged
+  checkpoint remain intact. The command exits nonzero with an exact terminal ETLRun.
+  Repeating the same saved connection and stream repairs from durable
+  state before endpoint resolution and never replays source or destination I/O.
+  Missing, malformed, or stale reconciliation evidence is refused rather than
+  falling back to an ordinary route.
+
+SECURITY
+  Approval tokens are accepted only through --approval-token-stdin. Callers
+  cannot pass a connector, action, URL, method, body, mapping, or evidence.
+  A missing declaration, foreign action, wrong source, malformed mapping,
+  unavailable evidence, or unsupported mode is refused before provider I/O.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+  3 validation error
+`
+
 type etlTransportPlanOutput struct {
 	ID                      string                       `json:"id"`
 	Status                  string                       `json:"status"`
@@ -165,11 +219,56 @@ func runETLTransport(ctx context.Context, a *app.App, args []string, stdout io.W
 	if args[0] == "postgres-managed-target" {
 		return runPostgresManagedTargetTransport(ctx, a, args[1:], stdout, jsonOut)
 	}
+	if args[0] == declarativeTypedDestinationTransportCommandName {
+		return runDeclarativeTypedDestinationTransport(ctx, a, args[1:], stdout, jsonOut)
+	}
 	connectorName, ok := parseIssueLabelTransportCommand(args[0])
 	if !ok {
 		return usageErrorf("unknown etl transport %q", args[0])
 	}
 	return runIssueLabelTransport(ctx, a, connectorName, args[1:], stdout, jsonOut)
+}
+
+func runDeclarativeTypedDestinationTransport(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+	command := "etl transport " + declarativeTypedDestinationTransportCommandName
+	if len(args) == 0 || isOnlyTransportHelp(args) {
+		return writeETLTransportManual(stdout, jsonOut, command)
+	}
+	switch args[0] {
+	case "plan":
+		if isOnlyTransportHelp(args[1:]) {
+			return writeETLTransportManual(stdout, jsonOut, command)
+		}
+		flags, err := parseStrictTransportFlags(args[1:], map[string]strictTransportFlagSpec{"connection": {}, "stream": {}})
+		if err != nil {
+			return err
+		}
+		if _, err := issueLabelTransportConnectionIDFromName(flags.value("connection")); err != nil {
+			return err
+		}
+		if strings.TrimSpace(flags.value("stream")) == "" {
+			return validationErrorf("missing --stream")
+		}
+		plan, err := a.PlanDeclarativeTypedDestinationTransport(ctx, flags.value("connection"), flags.value("stream"))
+		if err != nil {
+			return err
+		}
+		return writeDeclarativeTypedDestinationTransportPlan(stdout, jsonOut, plan)
+	case "preview":
+		if len(args) != 2 {
+			return errUsage
+		}
+		if err := validateTransportPlanID(args[1]); err != nil {
+			return err
+		}
+		plan, preview, err := a.PreviewDeclarativeTypedDestinationTransport(ctx, args[1])
+		if err != nil {
+			return err
+		}
+		return writeDeclarativeTypedDestinationTransportPreview(stdout, jsonOut, plan, preview)
+	default:
+		return usageErrorf("unknown declarative typed destination transport command %q", args[0])
+	}
 }
 
 func runPostgresManagedTargetTransport(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
@@ -392,7 +491,10 @@ func parseETLRunTransportApproval(args []string, stdin io.Reader) (synctransport
 	return approval, true, flags, nil
 }
 
-func runApprovedIssueLabelTransportETL(ctx context.Context, a *app.App, flags strictTransportFlags, approval synctransport.DestinationApproval, stdout io.Writer, jsonOut bool) error {
+// runApprovedTransportETL carries an approval only to the persisted App route.
+// It does not select a destination action; App preflight resolves that from the
+// saved stream descriptor before any source or provider I/O.
+func runApprovedTransportETL(ctx context.Context, a *app.App, flags strictTransportFlags, approval synctransport.DestinationApproval, stdout io.Writer, jsonOut bool) error {
 	batchSize, err := parseIntFlag("batch-size", flags.value("batch-size"), 0)
 	if err != nil {
 		return err
@@ -408,11 +510,21 @@ func runApprovedIssueLabelTransportETL(ctx context.Context, a *app.App, flags st
 		MaxInFlightBatches:  maxInFlightBatches,
 		DestinationApproval: approval,
 	})
-	if err != nil {
+	if err != nil && run.ID == "" {
 		return err
 	}
 	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": false})
+		if outputErr := writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": false}); outputErr != nil {
+			return outputErr
+		}
+		if err != nil {
+			return alreadyReportedExecutionError(err)
+		}
+		return nil
+	}
+	if err != nil {
+		_, _ = fmt.Fprintf(stdout, "ETL run %s ended with status %s; inspect it with pm etl status %s\n", run.ID, run.Status, run.ID)
+		return alreadyReportedExecutionError(err)
 	}
 	_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
 	return nil
@@ -494,11 +606,22 @@ func hasTransportApprovalInput(args []string) bool {
 		}
 		key, _, _ := strings.Cut(strings.TrimPrefix(raw, "--"), "=")
 		switch key {
-		case "approval-plan", "approval-token-stdin", "confirm", "approval-token", "approve", "method", "path", "url", "action", "record", "issue", "label", "destination-config":
+		case "approval-plan", "approval-token-stdin", "confirm", "approval-token", "approve", "connector", "action", "destination-action", "destination_action", "method", "path", "url", "route", "verb", "body", "payload", "query", "headers", "header", "mapping", "map", "input-fields", "input_fields", "record", "issue", "label", "evidence", "destination-config", "destination_config", "destination", "credential", "source-config", "source_config", "sql", "shell", "http":
 			return true
 		}
 	}
 	return false
+}
+
+func validateLegacyETLRunFlags(args []string) error {
+	_, err := parseStrictTransportFlags(args, map[string]strictTransportFlagSpec{
+		"connection":            {},
+		"stream":                {},
+		"batch-size":            {},
+		"max-in-flight-batches": {},
+		"runtime":               {allowBare: true},
+	})
+	return err
 }
 
 func readApprovalTokenFromStdin(stdin io.Reader) (string, error) {
@@ -647,6 +770,40 @@ func writeETLTransportPreview(stdout io.Writer, jsonOut bool, plan app.ReversePl
 	return err
 }
 
+func writeDeclarativeTypedDestinationTransportPlan(stdout io.Writer, jsonOut bool, plan app.ReversePlan) error {
+	safe := safeETLTransportPlan(plan)
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "DeclarativeTypedDestinationTransportPlan", "approval_required": true, "plan": safe})
+	}
+	_, _ = fmt.Fprintf(stdout, "Declarative typed destination transport plan %s\n", safe.ID)
+	_, _ = fmt.Fprintf(stdout, "Mode: %s\nAction: %s\nRecords: %d\n", safe.Mode, safe.Action, safe.RecordCount)
+	_, _ = fmt.Fprintln(stdout, "Preview required before an approval token is issued.")
+	_, err := fmt.Fprintln(stdout, "Confirmation required: --confirm destructive")
+	return err
+}
+
+func writeDeclarativeTypedDestinationTransportPreview(stdout io.Writer, jsonOut bool, plan app.ReversePlan, preview connectors.WritePreview) error {
+	safePlan := safeETLTransportPlan(plan)
+	safePreview := etlTransportWritePreviewOutput{RecordsStaged: preview.RecordsStaged, Action: preview.Action, Digest: preview.Digest}
+	if jsonOut {
+		return writeJSON(stdout, envelope{
+			"kind":                  "DeclarativeTypedDestinationTransportPreview",
+			"approval_required":     true,
+			"approval_token_issued": plan.ApprovalToken != "",
+			"plan":                  safePlan,
+			"write_preview":         safePreview,
+		})
+	}
+	_, _ = fmt.Fprintf(stdout, "Declarative typed destination transport preview %s\n", safePlan.ID)
+	_, _ = fmt.Fprintf(stdout, "Mode: %s\nAction: %s\nRecords staged: %d\n", safePlan.Mode, safePlan.Action, safePreview.RecordsStaged)
+	if plan.ApprovalToken == "" {
+		return fmt.Errorf("declarative typed destination transport preview did not issue an approval token")
+	}
+	_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
+	_, err := fmt.Fprintln(stdout, "Confirmation required: --confirm destructive")
+	return err
+}
+
 func writeETLTransportCleanupRun(stdout io.Writer, jsonOut bool, plan app.ReversePlan, result connectors.WriteResult) error {
 	safe := safeETLTransportPlan(plan)
 	if jsonOut {
@@ -680,6 +837,9 @@ func etlTransportManual(command string) (string, error) {
 	if command == "etl transport postgres-managed-target" {
 		return postgresManagedTargetTransportHelp, nil
 	}
+	if command == "etl transport "+declarativeTypedDestinationTransportCommandName {
+		return declarativeTypedDestinationTransportHelp, nil
+	}
 	identity, err := app.DefaultIssueLabelTransportIdentity()
 	if err != nil {
 		return "", fmt.Errorf("resolve closed issue-label transport manual: %w", err)
@@ -711,6 +871,19 @@ func etlTransportManualCommand(args []string) (string, bool) {
 	}
 	if args[1] == "postgres-managed-target" {
 		command := "etl transport postgres-managed-target"
+		if len(args) == 2 || isOnlyTransportHelp(args[2:]) {
+			return command, true
+		}
+		if len(args) == 4 && (args[2] == "plan" || args[2] == "preview") && isHelpArg(args[3]) {
+			return command, true
+		}
+		if len(args) >= 5 && args[2] == "preview" && isHelpArg(args[len(args)-1]) {
+			return command, true
+		}
+		return "", false
+	}
+	if args[1] == declarativeTypedDestinationTransportCommandName {
+		command := "etl transport " + declarativeTypedDestinationTransportCommandName
 		if len(args) == 2 || isOnlyTransportHelp(args[2:]) {
 			return command, true
 		}

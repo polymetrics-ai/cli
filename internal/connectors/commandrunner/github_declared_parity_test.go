@@ -2,6 +2,7 @@ package commandrunner
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -157,54 +158,88 @@ func TestGitHubDeclaredParityProviderContracts(t *testing.T) {
 	if !ok {
 		t.Fatal("github release download operation is not declared")
 	}
+	if releaseDownload.Binary == nil {
+		t.Fatal("github release download has no binary declaration")
+	}
 	if got := releaseDownload.Binary.Accept; got != "application/octet-stream" {
 		t.Errorf("github release download Accept = %q, want application/octet-stream", got)
 	}
-	if got := strings.Join(releaseDownload.Binary.AllowedHosts, ","); got != "release-assets.githubusercontent.com" {
+	if releaseDownload.Binary.Redirect == nil {
+		t.Fatal("github release download has no redirect declaration")
+	}
+	if releaseDownload.Binary.Redirect.MaxHops != 1 || !releaseDownload.Binary.Redirect.AllowSameOrigin {
+		t.Errorf("github release download redirect = %+v, want one same-origin hop", releaseDownload.Binary.Redirect)
+	}
+	if got := strings.Join(releaseDownload.Binary.Redirect.AllowedHosts, ","); got != "release-assets.githubusercontent.com" {
 		t.Errorf("github release download allowed_hosts = %q, want release-assets.githubusercontent.com", got)
 	}
 	artifactDownload, ok := operations["github.actions_artifacts_artifact_id_archive_format"]
 	if !ok {
 		t.Fatal("github Actions artifact download operation is not declared")
 	}
-	if !artifactDownload.Binary.AllowCrossHost {
-		t.Error("github Actions artifact download must allow GitHub's signed cross-host storage redirect")
+	if artifactDownload.Binary == nil || artifactDownload.Binary.Redirect == nil {
+		t.Fatal("github Actions artifact download must declare a redirect policy")
+	}
+	if artifactDownload.Binary.Redirect.MaxHops != 1 || !artifactDownload.Binary.Redirect.AllowSameOrigin {
+		t.Errorf("github Actions artifact download redirect = %+v, want one same-origin hop", artifactDownload.Binary.Redirect)
+	}
+	if got := strings.Join(artifactDownload.Binary.Redirect.AllowedHosts, ","); got != "pipelines.actions.githubusercontent.com" {
+		t.Errorf("github Actions artifact download allowed_hosts = %q, want pipelines.actions.githubusercontent.com", got)
 	}
 	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
 	for _, action := range bundle.Writes {
 		actions[action.Name] = action
 	}
 
-	for _, name := range []string{
-		"autolinks_autolink_id",
-		"actions_workflows_workflow_id_disable",
-		"actions_workflows_workflow_id_enable",
+	for _, tt := range []struct {
+		name  string
+		field string
+		types []string
+	}{
+		{name: "autolinks_autolink_id", field: "autolink_id", types: []string{"integer"}},
+		{name: "actions_workflows_workflow_id_disable", field: "workflow_id", types: []string{"integer", "string"}},
+		{name: "actions_workflows_workflow_id_enable", field: "workflow_id", types: []string{"integer", "string"}},
 	} {
-		action, ok := actions[name]
+		action, ok := actions[tt.name]
 		if !ok {
-			t.Fatalf("github write action %q is not declared", name)
+			t.Fatalf("github write action %q is not declared", tt.name)
 		}
 		var schema struct {
 			Properties map[string]struct {
-				Type string `json:"type"`
+				Type json.RawMessage `json:"type"`
 			} `json:"properties"`
 		}
 		if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
-			t.Fatalf("decode github write action %q schema: %v", name, err)
+			t.Fatalf("decode github write action %q schema: %v", tt.name, err)
 		}
-		field := "workflow_id"
-		if name == "autolinks_autolink_id" {
-			field = "autolink_id"
+		property, ok := schema.Properties[tt.field]
+		if !ok {
+			t.Errorf("github write action %q has no %q property", tt.name, tt.field)
+			continue
 		}
-		if got := schema.Properties[field].Type; got != "string" {
-			t.Errorf("github write action %q field %q type = %q, want string", name, field, got)
+		gotTypes, err := githubDeclaredSchemaTypes(property.Type)
+		if err != nil {
+			t.Errorf("github write action %q field %q has invalid type %s: %v", tt.name, tt.field, property.Type, err)
+			continue
+		}
+		if !reflect.DeepEqual(gotTypes, tt.types) {
+			t.Errorf("github write action %q field %q types = %#v, want %#v", tt.name, tt.field, gotTypes, tt.types)
 		}
 	}
 
-	for _, name := range []string{"actions_variables2", "actions_variables_name3"} {
-		action, ok := actions[name]
+	for _, tt := range []struct {
+		name     string
+		required string
+	}{
+		{name: "actions_variables2", required: "name,value"},
+		// The provider requires `name` structurally in the PATCH path while
+		// both body members are optional. Keep those declaration-owned
+		// requirements distinct instead of promoting the body contract.
+		{name: "actions_variables_name3", required: "name"},
+	} {
+		action, ok := actions[tt.name]
 		if !ok {
-			t.Fatalf("github write action %q is not declared", name)
+			t.Fatalf("github write action %q is not declared", tt.name)
 		}
 		var schema struct {
 			AdditionalProperties *bool                      `json:"additionalProperties"`
@@ -212,16 +247,28 @@ func TestGitHubDeclaredParityProviderContracts(t *testing.T) {
 			Properties           map[string]json.RawMessage `json:"properties"`
 		}
 		if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
-			t.Fatalf("decode github write action %q schema: %v", name, err)
+			t.Fatalf("decode github write action %q schema: %v", tt.name, err)
 		}
 		if schema.AdditionalProperties == nil || *schema.AdditionalProperties {
-			t.Errorf("github write action %q schema must reject undeclared fields", name)
+			t.Errorf("github write action %q schema must reject undeclared fields", tt.name)
 		}
-		if strings.Join(schema.Required, ",") != "name,value" {
-			t.Errorf("github write action %q required = %v, want [name value]", name, schema.Required)
+		if strings.Join(schema.Required, ",") != tt.required {
+			t.Errorf("github write action %q required = %v, want %q", tt.name, schema.Required, tt.required)
 		}
 		if len(schema.Properties) != 2 || schema.Properties["name"] == nil || schema.Properties["value"] == nil {
-			t.Errorf("github write action %q properties = %v, want only name and value", name, schema.Properties)
+			t.Errorf("github write action %q properties = %v, want only name and value", tt.name, schema.Properties)
 		}
 	}
+}
+
+func githubDeclaredSchemaTypes(raw json.RawMessage) ([]string, error) {
+	var single string
+	if err := json.Unmarshal(raw, &single); err == nil {
+		return []string{single}, nil
+	}
+	var multiple []string
+	if err := json.Unmarshal(raw, &multiple); err != nil {
+		return nil, err
+	}
+	return multiple, nil
 }

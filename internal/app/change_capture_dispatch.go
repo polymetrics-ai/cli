@@ -27,10 +27,12 @@ type warehouseChangeCaptureReceiver struct {
 	stream          StreamConfig
 	mode            SyncMode
 	destination     connectors.Connector
+	location        warehouse.Location
 	rawPath         string
 	finalPath       string
 	stateKey        string
 	generationID    int64
+	workLease       *transportWorkLease
 	expectedState   StreamState
 	expectedPresent bool
 	acknowledgement synccontract.DownstreamAcknowledgement
@@ -40,8 +42,113 @@ type warehouseChangeCaptureReceiver struct {
 	lastCheckpoint  *synccontract.CheckpointEnvelope
 }
 
-func newWarehouseChangeCaptureReceiver(app *App, runID string, connection Connection, streamName string, stream StreamConfig, mode SyncMode, destination connectors.Connector, destinationRuntime connectors.RuntimeConfig) (*warehouseChangeCaptureReceiver, error) {
-	if app == nil || strings.TrimSpace(runID) == "" {
+var ErrChangeCaptureArtifactReconciliationRequired = errors.New("change capture warehouse artifact reconciliation is required")
+
+// ChangeCaptureArtifactReconciliationError prevents a recovered CDC receipt
+// from acknowledging source progress unless its private warehouse artifact
+// manifest still proves the exact previously durable artifacts.
+type ChangeCaptureArtifactReconciliationError struct{ Reason string }
+
+func (e *ChangeCaptureArtifactReconciliationError) Error() string {
+	if e == nil || strings.TrimSpace(e.Reason) == "" {
+		return ErrChangeCaptureArtifactReconciliationRequired.Error()
+	}
+	return ErrChangeCaptureArtifactReconciliationRequired.Error() + ": " + e.Reason
+}
+
+func (e *ChangeCaptureArtifactReconciliationError) Unwrap() error {
+	return ErrChangeCaptureArtifactReconciliationRequired
+}
+
+const changeCaptureWarehouseArtifactManifestDirectory = "cdc-receipts"
+
+func changeCaptureWarehouseArtifactManifestPath(location warehouse.Location, stream string, generationID int64, transactionKey string) (string, error) {
+	if generationID <= 0 {
+		return "", errors.New("change capture artifact manifest generation is invalid")
+	}
+	streamPart, err := warehouse.PathComponent("stream", stream)
+	if err != nil {
+		return "", err
+	}
+	if strings.TrimSpace(transactionKey) == "" || len(transactionKey) > 1024 {
+		return "", errors.New("change capture artifact manifest transaction identity is invalid")
+	}
+	transactionDigest := sha256.Sum256([]byte("polymetrics-change-capture-artifact-path-v1\x00" + transactionKey))
+	return filepath.Join(
+		location.ConnectionDir,
+		changeCaptureWarehouseArtifactManifestDirectory,
+		streamPart,
+		fmt.Sprintf("generation-%020d", generationID),
+		hex.EncodeToString(transactionDigest[:])+".json",
+	), nil
+}
+
+func newChangeCaptureArtifactReconciliationError(reason string) error {
+	return &ChangeCaptureArtifactReconciliationError{Reason: reason}
+}
+
+func writeChangeCaptureWarehouseArtifactManifest(path string, manifest connectors.CDCArtifactManifest) error {
+	if err := manifest.Validate(); err != nil {
+		return fmt.Errorf("validate change capture artifact manifest: %w", err)
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
+		return fmt.Errorf("create change capture artifact manifest directory: %w", err)
+	}
+	temporary, err := os.CreateTemp(filepath.Dir(path), ".cdc-artifact-manifest-*")
+	if err != nil {
+		return fmt.Errorf("create change capture artifact manifest: %w", err)
+	}
+	temporaryPath := temporary.Name()
+	removeTemporary := true
+	defer func() {
+		if removeTemporary {
+			_ = os.Remove(temporaryPath)
+		}
+	}()
+	if err := json.NewEncoder(temporary).Encode(manifest); err != nil {
+		_ = temporary.Close()
+		return fmt.Errorf("encode change capture artifact manifest: %w", err)
+	}
+	if err := temporary.Sync(); err != nil {
+		_ = temporary.Close()
+		return fmt.Errorf("sync change capture artifact manifest: %w", err)
+	}
+	if err := temporary.Close(); err != nil {
+		return fmt.Errorf("close change capture artifact manifest: %w", err)
+	}
+	if err := os.Rename(temporaryPath, path); err != nil {
+		return fmt.Errorf("publish change capture artifact manifest: %w", err)
+	}
+	removeTemporary = false
+	return nil
+}
+
+func readChangeCaptureWarehouseArtifactManifest(path string) (connectors.CDCArtifactManifest, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return connectors.CDCArtifactManifest{}, err
+	}
+	defer func() { _ = file.Close() }()
+	decoder := json.NewDecoder(file)
+	decoder.DisallowUnknownFields()
+	var manifest connectors.CDCArtifactManifest
+	if err := decoder.Decode(&manifest); err != nil {
+		return connectors.CDCArtifactManifest{}, fmt.Errorf("decode change capture artifact manifest: %w", err)
+	}
+	if err := decoder.Decode(&struct{}{}); !errors.Is(err, io.EOF) {
+		if err == nil {
+			return connectors.CDCArtifactManifest{}, errors.New("change capture artifact manifest has trailing values")
+		}
+		return connectors.CDCArtifactManifest{}, fmt.Errorf("decode change capture artifact manifest trailing value: %w", err)
+	}
+	if err := manifest.Validate(); err != nil {
+		return connectors.CDCArtifactManifest{}, err
+	}
+	return manifest, nil
+}
+
+func newWarehouseChangeCaptureReceiver(app *App, lease *transportWorkLease, runID string, connection Connection, streamName string, stream StreamConfig, mode SyncMode, destination connectors.Connector, destinationRuntime connectors.RuntimeConfig) (*warehouseChangeCaptureReceiver, error) {
+	if app == nil || lease == nil || strings.TrimSpace(runID) == "" {
 		return nil, errors.New("change capture warehouse receiver is unavailable")
 	}
 	dir := localWarehouseDir(destinationRuntime)
@@ -83,8 +190,7 @@ func newWarehouseChangeCaptureReceiver(app *App, runID string, connection Connec
 		return nil, fmt.Errorf("create warehouse tables directory: %w", err)
 	}
 	stateKey := streamStateKey(connection.Name, streamName)
-	prior, present := app.state.StreamStates[stateKey]
-	prior = cloneStreamState(prior)
+	prior := lease.stateForTerminalRun()
 	generationID := prior.GenerationID
 	if generationID == 0 {
 		generationID = 1
@@ -97,18 +203,23 @@ func newWarehouseChangeCaptureReceiver(app *App, runID string, connection Connec
 		stream:          stream,
 		mode:            mode,
 		destination:     destination,
+		location:        location,
 		rawPath:         rawPath,
 		finalPath:       finalPath,
 		stateKey:        stateKey,
 		generationID:    generationID,
+		workLease:       lease,
 		expectedState:   prior,
-		expectedPresent: present,
+		expectedPresent: true,
 	}, nil
 }
 
 func (r *warehouseChangeCaptureReceiver) ReceiveCDCTransaction(ctx context.Context, transaction connectors.CDCTransaction) (connectors.CDCTransactionReceipt, error) {
 	if r == nil || r.app == nil {
 		return connectors.CDCTransactionReceipt{}, errors.New("change capture warehouse receiver is unavailable")
+	}
+	if err := r.workLease.renew(ctx); err != nil {
+		return connectors.CDCTransactionReceipt{}, err
 	}
 	if r.receiptPending {
 		return connectors.CDCTransactionReceipt{}, errors.New("change capture checkpoint is still pending for the prior warehouse transaction")
@@ -196,10 +307,41 @@ func (r *warehouseChangeCaptureReceiver) ReceiveCDCTransaction(ctx context.Conte
 	if err := syncLocalWarehouseDirectoryChain(filepath.Dir(r.finalPath)); err != nil {
 		return connectors.CDCTransactionReceipt{}, err
 	}
+	rawWALSHA256, _, err := digestPayloadFile(r.rawPath)
+	if err != nil {
+		return connectors.CDCTransactionReceipt{}, fmt.Errorf("digest change capture warehouse raw WAL: %w", err)
+	}
+	finalTableSHA256, _, err := digestPayloadFile(r.finalPath)
+	if err != nil {
+		return connectors.CDCTransactionReceipt{}, fmt.Errorf("digest change capture warehouse final table: %w", err)
+	}
+	manifest, err := connectors.NewCDCArtifactManifest(
+		r.connection.ID,
+		r.streamName,
+		r.generationID,
+		transaction.ID(),
+		transaction.Records(),
+		transaction.ContentDigest(),
+		rawWALSHA256,
+		finalTableSHA256,
+	)
+	if err != nil {
+		return connectors.CDCTransactionReceipt{}, fmt.Errorf("bind change capture warehouse artifacts: %w", err)
+	}
+	manifestPath, err := changeCaptureWarehouseArtifactManifestPath(r.location, r.streamName, r.generationID, transaction.ID())
+	if err != nil {
+		return connectors.CDCTransactionReceipt{}, err
+	}
+	if err := writeChangeCaptureWarehouseArtifactManifest(manifestPath, manifest); err != nil {
+		return connectors.CDCTransactionReceipt{}, err
+	}
+	if err := syncLocalWarehouseDirectoryChain(filepath.Dir(manifestPath)); err != nil {
+		return connectors.CDCTransactionReceipt{}, err
+	}
 
 	durableAt := time.Now().UTC()
 	receiptID := changeCaptureWarehouseReceiptID(r.connection.ID, transaction.ID())
-	receipt, err := connectors.NewCDCTransactionReceipt(receiptID, "warehouse:"+r.connection.ID, durableAt)
+	receipt, err := connectors.NewCDCTransactionReceiptWithArtifactManifest(receiptID, "warehouse:"+r.connection.ID, durableAt, manifest)
 	if err != nil {
 		return connectors.CDCTransactionReceipt{}, err
 	}
@@ -213,31 +355,26 @@ func (r *warehouseChangeCaptureReceiver) ReceiveCDCTransaction(ctx context.Conte
 	return receipt, nil
 }
 
-func (r *warehouseChangeCaptureReceiver) CommitDurableChangefeedCheckpoint(_ context.Context, candidate synccontract.CheckpointEnvelope) error {
+func (r *warehouseChangeCaptureReceiver) CommitDurableChangefeedCheckpoint(ctx context.Context, candidate synccontract.CheckpointEnvelope) error {
 	if r == nil || !r.receiptPending {
 		return errors.New("change capture checkpoint has no durable warehouse transaction receipt")
 	}
 	var committed synccontract.CheckpointEnvelope
 	err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, r.acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
-		updated := cloneStreamState(r.expectedState)
+		updated, err := r.workLease.commit(ctx, checkpoint)
+		if err != nil {
+			return fmt.Errorf("persist change capture warehouse checkpoint: %w", err)
+		}
 		updated.Connection = r.connection.Name
 		updated.Stream = r.streamName
-		updated.Checkpoint = &checkpoint
 		updated.GenerationID = r.generationID
 		updated.RecordsLoaded = r.records
 		updated.UpdatedAt = r.acknowledgement.AcknowledgedAt
-		if _, err := r.app.updateState(func(current state) (state, error) {
-			currentState, present := current.StreamStates[r.stateKey]
-			if present != r.expectedPresent || (present && !transportStreamStateEqual(currentState, r.expectedState)) {
-				return current, errTransportStreamStateConflict
-			}
-			if current.StreamStates == nil {
-				current.StreamStates = map[string]StreamState{}
-			}
-			current.StreamStates[r.stateKey] = cloneStreamState(updated)
-			return current, nil
-		}); err != nil {
-			return fmt.Errorf("persist change capture warehouse checkpoint: %w", err)
+		// The receipt's checkpoint must remain bound to the same fence while
+		// metadata is refreshed. The second lease mutation is still pre-I/O and
+		// rejects a stale owner rather than recreating the former late CAS.
+		if _, err := r.workLease.mutate(ctx, func(StreamState) (StreamState, error) { return updated, nil }); err != nil {
+			return fmt.Errorf("persist change capture stream metadata: %w", err)
 		}
 		r.expectedState = cloneStreamState(updated)
 		r.expectedPresent = true
@@ -260,6 +397,9 @@ func (r *warehouseChangeCaptureReceiver) RestoreCDCTransactionReceipt(ctx contex
 	if err := ctx.Err(); err != nil {
 		return err
 	}
+	if err := r.workLease.renew(ctx); err != nil {
+		return err
+	}
 	if r.receiptPending {
 		return errors.New("change capture checkpoint is still pending for another warehouse transaction")
 	}
@@ -273,14 +413,28 @@ func (r *warehouseChangeCaptureReceiver) RestoreCDCTransactionReceipt(ctx contex
 	if acknowledgement.Sink != "warehouse:"+r.connection.ID {
 		return errors.New("change capture staged receipt names another downstream sink")
 	}
-	for _, path := range []string{r.rawPath, r.finalPath} {
-		info, err := os.Stat(path)
-		if err != nil {
-			return fmt.Errorf("verify recovered change capture warehouse artifact: %w", err)
-		}
-		if !info.Mode().IsRegular() {
-			return errors.New("recovered change capture warehouse artifact is not a regular file")
-		}
+	manifest, err := receipt.ArtifactManifest()
+	if err != nil {
+		return newChangeCaptureArtifactReconciliationError("staged receipt has no valid artifact manifest")
+	}
+	if manifest.ConnectionID != r.connection.ID || manifest.Stream != r.streamName || manifest.GenerationID != r.generationID || manifest.TransactionKey != transactionID {
+		return newChangeCaptureArtifactReconciliationError("staged receipt manifest does not match this connection, stream, generation, and transaction")
+	}
+	manifestPath, err := changeCaptureWarehouseArtifactManifestPath(r.location, r.streamName, r.generationID, transactionID)
+	if err != nil {
+		return newChangeCaptureArtifactReconciliationError("staged receipt manifest path is invalid")
+	}
+	storedManifest, err := readChangeCaptureWarehouseArtifactManifest(manifestPath)
+	if err != nil || storedManifest != manifest {
+		return newChangeCaptureArtifactReconciliationError("durable artifact manifest does not match the staged receipt")
+	}
+	rawWALSHA256, _, err := digestPayloadFile(r.rawPath)
+	if err != nil || rawWALSHA256 != manifest.RawWALSHA256 {
+		return newChangeCaptureArtifactReconciliationError("raw WAL artifact does not match the staged receipt")
+	}
+	finalTableSHA256, _, err := digestPayloadFile(r.finalPath)
+	if err != nil || finalTableSHA256 != manifest.FinalTableSHA256 {
+		return newChangeCaptureArtifactReconciliationError("final table artifact does not match the staged receipt")
 	}
 	r.acknowledgement = acknowledgement
 	r.receiptPending = true
@@ -299,6 +453,7 @@ func (r *warehouseChangeCaptureReceiver) result(completed bool) etlExecutionResu
 	}
 	state := cloneStreamState(r.expectedState)
 	if completed {
+		state = r.workLease.stateForTerminalRun()
 		state.LastSuccessfulRunID = r.runID
 	}
 	result.PendingStreamState = &pendingStreamState{Key: r.stateKey, State: state}
@@ -311,11 +466,16 @@ func (a *App) runWarehouseChangeCapture(ctx context.Context, request etlModeDisp
 		return etlExecutionResult{}, &synccontract.ModeNotExecutableError{Mode: synccontract.ModeChangeCapture, Reason: "source has no matching implemented changefeed executor"}
 	}
 	changefeed := request.source.(connectors.ChangefeedExecutor)
-	receiver, err := newWarehouseChangeCaptureReceiver(a, request.runID, request.connection, request.streamName, request.stream, request.mode, request.destination, request.destinationRuntime)
+	stateKey := streamStateKey(request.connection.Name, request.streamName)
+	workLease, err := a.claimTransportWorkLease(ctx, stateKey, request.connection.Name, request.streamName, request.runID, request.sourceExpectation, false)
 	if err != nil {
 		return etlExecutionResult{}, err
 	}
-	prior := a.state.StreamStates[streamStateKey(request.connection.Name, request.streamName)]
+	receiver, err := newWarehouseChangeCaptureReceiver(a, workLease, request.runID, request.connection, request.streamName, request.stream, request.mode, request.destination, request.destinationRuntime)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	prior := workLease.stateForTerminalRun()
 	err = changefeed.ReadCDC(ctx, connectors.CDCReadRequest{
 		Stream:                     request.streamName,
 		Config:                     request.sourceRuntime,

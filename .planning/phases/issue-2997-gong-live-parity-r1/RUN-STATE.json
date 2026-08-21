@@ -3,11 +3,11 @@
   "branch": "fm/cli-gong-parity-wave01-r1",
   "pull_request": 3552,
   "base_branch": "main",
-  "status": "paused_waiting_shared_multipart_digest_foundation",
+  "status": "executing_credential_free_reconciliation",
   "lifecycle": {
     "discuss_phase": "inline: locked user decisions recorded in PLAN.md",
     "plan_phase_tdd": "inline: PLAN.md and TDD-LEDGER.md created before production edits",
-    "execute_phase": "pending",
+    "execute_phase": "in_progress: source audit, foundation merge, declaration reconciliation, and focused red/green evidence recorded",
     "verify_work": "pending",
     "code_review": "pending"
   },
@@ -20,7 +20,14 @@
     "openapi": "3.0.1",
     "operations": 69,
     "semantic_inventory_matches_batch23_lock": true,
-    "raw_digest_note": "provider serialization is mutable between equivalent retrievals; captured lock is preserved"
+    "sha256": "294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13",
+    "bytes": 453797,
+    "semantic_inventory_sha256": "591484a79221a3993643898feef20050c57ca89a0acee028134c639e1fb99014",
+    "audit_record": "SOURCE-AUDIT.md",
+    "source_import": {
+      "status": "blocked_provider_neutral_url_policy",
+      "detail": "The official fixed source URL requires ?version=, but connectorgen source-import rejects query-bearing artifact URLs before fetch; the query-free official route returns 404."
+    }
   },
   "live_certification": {
     "status": "blocked_external_credential_reference",
@@ -37,14 +44,13 @@
       "binary_upload"
     ],
     "rule": "scope, tier, safety, and destructive metadata require runtime controls and confirmations; they never disable a provider-defined operation",
-    "multipart_dependency": "cli-closed-operation-runtime-r1 F2/F4 approval-digest foundation is open as GitHub issue #4307; no published branch/head is available"
+    "multipart_dependency": "resolved in merged parent c3f83cbf6eabbae00219566fb02719ca2d6c480d; focused Gong multipart conformance passes"
   },
   "missing_foundation_ledger": {
     "path": ".planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/missing-foundation-gaps.json",
-    "status": "open",
-    "gong_gap_id": "closed-operation-runtime-f4-binary-upload-approval-digest",
-    "gong_open_operations": 3,
-    "portfolio_open_operations": 51,
-    "rule": "open gap rows are enabled=false and merge_ready_eligible=false; they remain source-traced and are not reclassified as disabled or not_applicable"
+    "status": "regenerated_after_foundation_merge",
+    "gong_open_operations": 0,
+    "portfolio_open_operations": 48,
+    "rule": "the regenerated ledger retains only unrelated open source-traced gaps; Gong's three formerly F4 multipart rows are closed by the merged generic foundation"
   }
 }

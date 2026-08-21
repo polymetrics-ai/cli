@@ -285,7 +285,7 @@ func executeFreshBinaryGitHubFlowRoundTrip(t *testing.T, target githubFlowRoundT
 	// A provider-verified 401 is invalid credential input, not an internal
 	// program fault. This real binary path also proves the rejection leaves the
 	// provider and durable checkpoint untouched.
-	authRefusalType := assertGitHubFlowTypedRefusal(t, denied, "auth", "credential_error")
+	authRefusalType := assertGitHubFlowTerminalReverseRun(t, denied)
 	assertGitHubFlowProviderCount(t, target.comments, providerCount, "provider authentication refusal")
 	assertGitHubFlowCheckpointUnchanged(t, root, authCheckpointBefore, "provider authentication refusal")
 
@@ -571,6 +571,27 @@ func assertGitHubFlowTypedRefusal(t *testing.T, result githubFlowPMResult, wantC
 		t.Fatalf("refusal code = %q, want %q", envelope.Error.Code, wantCode)
 	}
 	return envelope.Error.Category + "/" + envelope.Error.Code
+}
+
+func assertGitHubFlowTerminalReverseRun(t *testing.T, result githubFlowPMResult) string {
+	t.Helper()
+	if result.code == 0 {
+		t.Fatal("failed reverse run unexpectedly exited zero")
+	}
+	var envelope struct {
+		Kind string `json:"kind"`
+		Run  struct {
+			ID     string `json:"id"`
+			Status string `json:"status"`
+		} `json:"run"`
+	}
+	if err := json.Unmarshal([]byte(result.stdout), &envelope); err != nil {
+		t.Fatalf("decode terminal reverse-run envelope: %v", err)
+	}
+	if envelope.Kind != "ReverseRun" || envelope.Run.ID == "" || envelope.Run.Status != "failed" {
+		t.Fatalf("terminal reverse-run envelope = %#v, want persisted failed run", envelope)
+	}
+	return envelope.Kind + "/" + envelope.Run.Status
 }
 
 func assertGitHubFlowProviderCount(t *testing.T, snapshot func() ([]string, error), want int, stage string) {

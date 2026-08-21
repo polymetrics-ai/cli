@@ -3,10 +3,14 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"math"
 	"os"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"sort"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/defs"
@@ -339,10 +343,10 @@ func TestGitHubFixtureRequiredMutationCohortGeneratesEveryCandidate(t *testing.T
 			t.Fatalf("candidate %q lacks a derived address transport: %#v", candidate.Command, candidate.Address)
 		}
 	}
-	if got, want := len(generated), 865; got != want {
+	if got, want := len(generated), 906; got != want {
 		t.Fatalf("generated mutation candidates = %d, want %d", got, want)
 	}
-	if got, want := byIntent, map[string]int{"direct_write": 283, "reverse_etl": 582}; !reflect.DeepEqual(got, want) {
+	if got, want := byIntent, map[string]int{"direct_write": 283, "reverse_etl": 623}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("generated candidates by intent = %#v, want %#v", got, want)
 	}
 	userDraft, ok := byCommand["projects create-draft-item-for-authenticated-user"]
@@ -359,7 +363,7 @@ func TestGitHubFixtureRequiredMutationCohortGeneratesEveryCandidate(t *testing.T
 	if total := sumMutationClassifications(byClassification); total != len(generated) {
 		t.Fatalf("mutation classification buckets total = %d, want %d", total, len(generated))
 	}
-	if got, want := byFixtureStrategy, map[string]int{"derived_collection_cycle": 494, "named_exception": 371}; !reflect.DeepEqual(got, want) {
+	if got, want := byFixtureStrategy, map[string]int{"derived_collection_cycle": 528, "named_exception": 378}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("mutation fixture provenance = %#v, want %#v", got, want)
 	}
 	committed := committedMutationCandidates(t)
@@ -368,6 +372,271 @@ func TestGitHubFixtureRequiredMutationCohortGeneratesEveryCandidate(t *testing.T
 	}
 	if got, want := committed, generated; !reflect.DeepEqual(got, want) {
 		t.Fatal("committed mutation candidates differ from the declared-surface projection")
+	}
+}
+
+// githubFoundationMutationDelta is the frozen source-identity crosswalk for
+// the 32 commands added by the current-foundations Group-1 projection. The
+// cohort count is evidence only after every entry below proves it is a unique,
+// closed, bounded declaration backed by the immutable GitHub REST artifact.
+var githubFoundationMutationDelta = map[string]string{
+	"api agents set-selected-repos-for-org-secret":   "agents/set-selected-repos-for-org-secret",
+	"api agents set-selected-repos-for-org-variable": "agents/set-selected-repos-for-org-variable",
+	"api agents update-org-variable":                 "agents/update-org-variable",
+	"api code-scanning update-alert":                 "code-scanning/update-alert",
+	"api dependabot update-alert":                    "dependabot/update-alert",
+	"api git create-ref":                             "git/create-ref",
+	"api git update-ref":                             "git/update-ref",
+	"api issues add-assignees":                       "issues/add-assignees",
+	"api issues add-labels":                          "issues/add-labels",
+	"api issues create-milestone":                    "issues/create-milestone",
+	"api issues remove-assignees":                    "issues/remove-assignees",
+	"api issues set-labels":                          "issues/set-labels",
+	"api issues update-comment":                      "issues/update-comment",
+	"api issues update-milestone":                    "issues/update-milestone",
+	"api pulls create-review-comment":                "pulls/create-review-comment",
+	"api pulls dismiss-review":                       "pulls/dismiss-review",
+	"api pulls request-reviewers":                    "pulls/request-reviewers",
+	"api pulls submit-review":                        "pulls/submit-review",
+	"api pulls update-review-comment":                "pulls/update-review-comment",
+	"api repos add-collaborator":                     "repos/add-collaborator",
+	"api repos create-commit-comment":                "repos/create-commit-comment",
+	"api repos create-deployment":                    "repos/create-deployment",
+	"api repos create-or-update-environment":         "repos/create-or-update-environment",
+	"api repos create-or-update-file-contents":       "repos/create-or-update-file-contents",
+	"api repos create-webhook":                       "repos/create-webhook",
+	"api repos delete-file":                          "repos/delete-file",
+	"api repos merge":                                "repos/merge",
+	"api repos replace-all-topics":                   "repos/replace-all-topics",
+	"api repos update-commit-comment":                "repos/update-commit-comment",
+	"api repos update-release-asset":                 "repos/update-release-asset",
+	"api repos update-webhook":                       "repos/update-webhook",
+	"api secret-scanning update-alert":               "secret-scanning/update-alert",
+}
+
+func TestGitHubFoundationMutationDeltaHasUniqueClosedBoundedSourceCrosswalk(t *testing.T) {
+	const (
+		pinnedRESTSHA   = "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d"
+		pinnedRESTBytes = 12920264
+		pinnedRESTURL   = "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json"
+	)
+	if got := len(githubFoundationMutationDelta); got != 32 {
+		t.Fatalf("frozen Group-1 mutation delta = %d, want exactly 32 entries", got)
+	}
+
+	bundle, descriptor := loadInstalledGitHubSourceProjection(t)
+	candidates := mutationCandidatesByCommand(t, committedMutationCandidates(t))
+	commands := map[string]engine.CLICommand{}
+	for _, command := range bundle.CLISurface.Commands {
+		commands[command.Path] = command
+	}
+	actions := map[string]engine.WriteAction{}
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+	sources := map[string]sourceOperationDescriptor{}
+	for _, source := range descriptor.Operations {
+		sources[source.SourceID] = source
+	}
+
+	seenWrites := map[string]bool{}
+	seenSources := map[string]bool{}
+	for commandPath, sourceID := range githubFoundationMutationDelta {
+		candidate, found := candidates[commandPath]
+		if !found {
+			t.Fatalf("frozen Group-1 command %q is absent from the generated candidate artifact", commandPath)
+		}
+		if candidate.Cohort != "fixture_required_mutations" || candidate.Intent != "reverse_etl" || !candidate.Generated || candidate.Declaration.Kind != "write_action" || candidate.Declaration.Executor != "reverse_plan" {
+			t.Fatalf("candidate %q is not the generated reverse-ETL cohort entry: %#v", commandPath, candidate)
+		}
+		command, found := commands[commandPath]
+		if !found || command.Availability != "implemented" || command.Intent != "reverse_etl" || command.Write != candidate.Declaration.ID {
+			t.Fatalf("candidate %q does not resolve to one implemented declaration-owned command: candidate=%#v command=%#v", commandPath, candidate, command)
+		}
+		action, found := actions[candidate.Declaration.ID]
+		if !found || seenWrites[action.Name] {
+			t.Fatalf("candidate %q has missing or aliased write action %q", commandPath, candidate.Declaration.ID)
+		}
+		seenWrites[action.Name] = true
+		source, found := sources[sourceID]
+		if !found || seenSources[sourceID] {
+			t.Fatalf("candidate %q has missing or duplicated immutable source identity %q", commandPath, sourceID)
+		}
+		seenSources[sourceID] = true
+		if !strings.EqualFold(source.Method, candidate.Address.Method) || source.Path != candidate.Address.Path || source.Source.URL != pinnedRESTURL || source.Source.SHA256 != pinnedRESTSHA || source.Source.Bytes != pinnedRESTBytes {
+			t.Fatalf("candidate %q source crosswalk drift: candidate=%#v source=%#v", commandPath, candidate.Address, source)
+		}
+
+		var recordSchema map[string]any
+		if err := json.Unmarshal(action.RecordSchema, &recordSchema); err != nil {
+			t.Fatalf("candidate %q write action %q record schema: %v", commandPath, action.Name, err)
+		}
+		additionalProperties, declared := recordSchema["additionalProperties"].(bool)
+		if !declared || additionalProperties != false {
+			t.Fatalf("candidate %q write action %q must declare additionalProperties false: %s", commandPath, action.Name, action.RecordSchema)
+		}
+		properties, _ := recordSchema["properties"].(map[string]any)
+		flags := map[string]engine.CLIFlag{}
+		for _, flag := range command.Flags {
+			field, recordMapped := strings.CutPrefix(flag.MapsTo, "record.")
+			if !recordMapped {
+				continue
+			}
+			if field == "" || properties[field] == nil {
+				t.Fatalf("candidate %q has a CLI flag outside its closed record declaration: %#v", commandPath, flag)
+			}
+			if err := githubFoundationBoundedRecordFlag(flag, properties[field]); err != nil {
+				t.Fatalf("candidate %q field %q is not runner-bounded: %v", commandPath, field, err)
+			}
+			flags[field] = flag
+		}
+		for field := range properties {
+			if _, found := flags[field]; !found {
+				t.Fatalf("candidate %q declaration-owned field %q is unreachable from the command surface", commandPath, field)
+			}
+		}
+		for _, rawRequired := range githubFoundationRecordSchemaRequired(recordSchema) {
+			if flag, found := flags[rawRequired]; !found || !flag.Required {
+				t.Fatalf("candidate %q required record field %q is not a required CLI flag", commandPath, rawRequired)
+			}
+		}
+	}
+	if len(seenWrites) != 32 || len(seenSources) != 32 {
+		t.Fatalf("frozen Group-1 mutation delta is not one-to-one: writes=%d sources=%d", len(seenWrites), len(seenSources))
+	}
+}
+
+func githubFoundationRecordSchemaRequired(recordSchema map[string]any) []string {
+	rawRequired, _ := recordSchema["required"].([]any)
+	required := make([]string, 0, len(rawRequired))
+	for _, raw := range rawRequired {
+		if field, ok := raw.(string); ok {
+			required = append(required, field)
+		}
+	}
+	sort.Strings(required)
+	return required
+}
+
+func githubFoundationBoundedRecordFlag(flag engine.CLIFlag, schema any) error {
+	switch flag.Type {
+	case "boolean", "integer", "number":
+		// These flags are parsed into a fixed Go scalar before the write
+		// validator runs, so no arbitrary byte sequence reaches the record.
+		return nil
+	case "enum":
+		if len(flag.Values) == 0 {
+			return fmt.Errorf("enum has no finite declared values")
+		}
+		return nil
+	case "string":
+		if flag.MaxBytes <= 0 {
+			return fmt.Errorf("string flag has no runner byte cap")
+		}
+		return githubFoundationFiniteJSONShape(schema, false)
+	case "json":
+		if flag.MaxBytes <= 0 || flag.MaxBytes > sourceProjectionDefaultJSONBytes {
+			return fmt.Errorf("JSON flag byte cap = %d, want 1..%d", flag.MaxBytes, sourceProjectionDefaultJSONBytes)
+		}
+		return githubFoundationFiniteJSONShape(schema, false)
+	case "string_array":
+		if flag.MaxBytes <= 0 || flag.MaxItems <= 0 {
+			return fmt.Errorf("string-array flag requires byte and item caps")
+		}
+		return githubFoundationFiniteJSONShape(schema, false)
+	default:
+		return fmt.Errorf("unsupported record flag type %q", flag.Type)
+	}
+}
+
+func githubFoundationFiniteJSONShape(raw any, allowUntyped bool) error {
+	schema, ok := raw.(map[string]any)
+	if !ok {
+		return fmt.Errorf("schema is %T, want object", raw)
+	}
+	types := githubFoundationSchemaTypes(schema)
+	if len(types) == 0 {
+		if allowUntyped {
+			return nil
+		}
+		return fmt.Errorf("schema has no type")
+	}
+	for _, typeName := range types {
+		switch typeName {
+		case "null", "boolean", "integer", "number":
+			// Parsed scalar values are finite at the runner boundary.
+		case "string":
+			if !githubFoundationPositiveNumber(schema["maxLength"]) {
+				return fmt.Errorf("string schema has no maxLength")
+			}
+		case "array":
+			if !githubFoundationPositiveNumber(schema["maxItems"]) {
+				return fmt.Errorf("array schema has no maxItems")
+			}
+			items, exists := schema["items"]
+			if !exists {
+				return fmt.Errorf("array schema has no items declaration")
+			}
+			if err := githubFoundationFiniteJSONShape(items, true); err != nil {
+				return fmt.Errorf("array items: %w", err)
+			}
+		case "object":
+			additional, declared := schema["additionalProperties"].(bool)
+			switch {
+			case declared && additional:
+				if !githubFoundationPositiveNumber(schema["maxProperties"]) {
+					return fmt.Errorf("dynamic object schema has no maxProperties")
+				}
+			case declared && !additional:
+				properties, _ := schema["properties"].(map[string]any)
+				for _, name := range sortedAnyMapKeys(properties) {
+					if err := githubFoundationFiniteJSONShape(properties[name], false); err != nil {
+						return fmt.Errorf("property %q: %w", name, err)
+					}
+				}
+			default:
+				return fmt.Errorf("object schema does not declare a closed root or maxProperties")
+			}
+		default:
+			return fmt.Errorf("unknown schema type %q", typeName)
+		}
+	}
+	return nil
+}
+
+func githubFoundationSchemaTypes(schema map[string]any) []string {
+	rawTypes, exists := schema["type"]
+	if !exists {
+		return nil
+	}
+	var types []string
+	switch typed := rawTypes.(type) {
+	case string:
+		types = append(types, typed)
+	case []any:
+		for _, rawType := range typed {
+			if typeName, ok := rawType.(string); ok {
+				types = append(types, typeName)
+			}
+		}
+	}
+	sort.Strings(types)
+	return slices.Compact(types)
+}
+
+func githubFoundationPositiveNumber(raw any) bool {
+	switch value := raw.(type) {
+	case float64:
+		return value > 0 && value == math.Trunc(value)
+	case json.Number:
+		integer, err := value.Int64()
+		return err == nil && integer > 0
+	case int:
+		return value > 0
+	case int64:
+		return value > 0
+	default:
+		return false
 	}
 }
 

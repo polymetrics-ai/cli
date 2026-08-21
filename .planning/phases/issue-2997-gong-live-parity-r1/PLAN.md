@@ -52,41 +52,38 @@ credential reference for live certification. It is not safe to invent or request
 
 - Official artifact: `https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=`.
 - Current fetch: OpenAPI `3.0.1`, title `Gong API`, version `V2`; 59 paths and 69 operations:
-  DELETE 3, GET 29, PATCH 1, POST 28, PUT 8.
+  DELETE 3, GET 29, PATCH 1, POST 28, PUT 8. The exact current artifact SHA-256, byte count,
+  semantic fingerprint, six-surface inventory, and provider-neutral source-import dependency are
+  recorded in `SOURCE-AUDIT.md`.
 - The Batch 2/3 lock at
   `internal/connectors/defs/gong/sources/gong-operation-source-lock.json` has the same complete
-  69-row method/path/operation-ID/deprecation inventory. Gong changes JSON serialization between
-  requests while retaining the same bytes/count and semantic inventory, so raw digest drift alone
-  is not a provider-contract change. The lock remains the captured immutable source artifact;
-  this phase records semantic refetch proof rather than replacing it with a nondeterministic hash.
+  69-row method/path/operation-ID/deprecation inventory. The source lock is refreshed to the
+  current exact artifact and normalized to the strict source-import schema; the semantic
+  comparison prevents a serialization-only change from being mistaken for an operation change.
 
 ## Execution slices
 
-1. Reconcile foundations without discarding the preserved branch: merge current `origin/main`,
-   then the published `origin/fm/cli-reverse-etl-destination-r1`, then
-   `origin/fm/cli-map-batch23-r1`; resolve only Gong- and evidence-related conflicts. The named
-   structured-body/source-importer/header-binary foundations are not published in this repository
-   at planning time (`#4305`, `#4306`, and `#4307` return GitHub `NOT_FOUND`) and are recorded as
-   unavailable rather than copied into shared runtime code.
+1. Reconcile foundations without discarding the preserved branch. The exact parent
+   `c3f83cbf6eabbae00219566fb02719ca2d6c480d` is merged without rewriting history and contains
+   the published structured-body, source-importer, typed-header/binary/status/text, and
+   reverse-action binding foundations. Resolve only Gong- and evidence-related conflicts.
 2. Reconcile Gong's `api_surface.json`, source lock/disposition map, `operations.json`,
    `cli_surface.json`, streams, write actions, schemas, fixtures, and generated connector docs
    against the 69-row source inventory. Add only declaration-owned mappings and fixtures.
 3. Add RED tests for every remaining invalid runtime surface—especially missing direct-read exact
    API-surface bindings—then make the connector definitions pass the real runtime preflight and
    prove credential-free built-binary routing.
-4. Add Gong-owned source/destination transport and certification declarations where the merged
-   foundations admit them. Multipart fixture replay is paused on the accepted provider-neutral
-   `cli-closed-operation-runtime-r1` F2/F4 approval-digest requirement; do not add a
-   provider-specific shared-code or fixture bypass. Run plan/preview/approval/execute only through
-   credential-free refusal paths until a disposable credential reference is supplied.
+4. Reconcile Gong-owned source/destination transport and certification declarations where the
+   merged foundations admit them. The three multipart actions are now declaration-owned and
+   focused conformance covers their generic approval-digest path; do not add a provider-specific
+   shared-code or fixture bypass. Run plan/preview/approval/execute only through credential-free
+   refusal paths until a disposable credential reference is supplied.
 5. Run focused gates, repository static gates, generated artifacts, connector boundary, full
    verification where the command timeout permits, a source/diff review, and the no-mistakes
    pipeline when firstmate authorizes its final gate.
-6. Keep Gong's shared-foundation blockers in the Batch 2/3 machine-readable ledger at
-   `.planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/missing-foundation-gaps.json`.
-   Its stable gap rows retain the exact provider source, captured revision/hash, F2/F4 owner,
-   fan-out, status, and closure commands. An open row makes its operation non-enabled for
-   merge-ready accounting; it is not a connector-local exemption.
+6. Regenerate the Batch 2/3 machine-readable missing-foundation ledger after each foundation
+   reconciliation. The closed Gong multipart capability has zero remaining Gong rows; unrelated
+   open portfolio rows remain source-traced and are not a connector-local exemption.
 
 ## Captain hard certification gate
 

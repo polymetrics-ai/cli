@@ -1,9 +1,14 @@
 package engine
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -184,6 +189,15 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 	})
 }
 
+// ReadWithOutcome is the closed transport-source variant of Read. It retains
+// the normal authentication boundary while making a known page budget stop
+// distinguishable from provider exhaustion for a durable continuation.
+func (c *Connector) ReadWithOutcome(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, ReadWithOutcome(admitted, c.bundle, req, c.hooks, emit))
+	})
+}
+
 // RateLimitParkingScope reproduces the declaration-selected policy group for
 // the failed stream. It accepts only connsdk's typed terminal 429 evidence;
 // generic HTTP or string-shaped errors cannot create durable parking state.
@@ -234,11 +248,60 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 	return result, err
 }
 
+// ReadBackDeclarativeDestination performs the connector-owned provider read
+// selected by a destination read-back declaration. Engine-backed connectors
+// bind the opaque operation to an exact declared stream and reuse its bounded
+// read executor; shared App code never learns a provider path or URL.
+func (c *Connector) ReadBackDeclarativeDestination(ctx context.Context, req connectors.DeclarativeTypedDestinationReadBackRequest) ([]connectors.Record, error) {
+	if req.MaxRecords < 1 {
+		return nil, fmt.Errorf("declarative destination read-back requires a positive record bound")
+	}
+	stream, err := findStream(c.bundle, req.Operation)
+	if err != nil {
+		return nil, fmt.Errorf("declarative destination read-back operation %q is not a declared stream", req.Operation)
+	}
+	queryParameter, declared := stream.Query[req.ReceiptLocator.QueryParameter]
+	if !declared {
+		return nil, fmt.Errorf("declarative destination read-back locator query parameter %q is not declared by operation %q", req.ReceiptLocator.QueryParameter, req.Operation)
+	}
+	if queryParameter.Template != "{{ query."+req.ReceiptLocator.QueryParameter+" }}" {
+		return nil, fmt.Errorf("declarative destination read-back locator query parameter %q is not an exact declared query binding", req.ReceiptLocator.QueryParameter)
+	}
+	locators, err := connectors.ParseDeclarativeTypedDestinationReadBackReceipt(req.Receipt, req.ActionDefinitionSHA256, req.ReceiptLocator, req.MaxRecords)
+	if err != nil {
+		return nil, err
+	}
+	records := make([]connectors.Record, 0)
+	for _, locator := range locators {
+		err := c.Read(ctx, connectors.ReadRequest{
+			Stream: req.Operation, Config: req.Runtime, Query: map[string]string{req.ReceiptLocator.QueryParameter: locator}, MaxPages: req.ReceiptLocator.MaxPages,
+		}, func(record connectors.Record) error {
+			if len(records) >= req.MaxRecords {
+				return fmt.Errorf("declarative destination read-back exceeded max_records %d", req.MaxRecords)
+			}
+			copy := make(connectors.Record, len(record))
+			for key, value := range record {
+				copy[key] = value
+			}
+			records = append(records, copy)
+			return nil
+		})
+		if err != nil {
+			return records, err
+		}
+	}
+	return records, nil
+}
+
 // PreflightOperationDirectRead proves a command's declared binding can reach
 // this connector's bounded direct-read executor without resolving credentials
 // or making a network request.
 func (c *Connector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
 	return PreflightOperationDirectRead(c.bundle, operation, method, path, maxBytes, outputPolicy)
+}
+
+func (c *Connector) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
+	return PreflightOperationDirectReadBindings(c.bundle, operation, pathFields, queryFields, bodyFields, rawBody)
 }
 
 // OperationStatusCheck delegates one closed, response-less HEAD operation to
@@ -272,11 +335,31 @@ func (c *Connector) PreflightOperationStructuredJSONVariable(operation, variable
 	return ValidateGraphQLOperationStructuredJSONVariable(op, variable)
 }
 
+// PreflightOperationStructuredJSONBodyField admits one declared top-level
+// structured input for a fixed REST or GraphQL write operation. It resolves no
+// credentials and makes no request; the operation schema remains the only
+// authority for the object or array accepted at that field.
+func (c *Connector) PreflightOperationStructuredJSONBodyField(operation, field string) error {
+	return PreflightOperationStructuredJSONBodyField(c.bundle, operation, field)
+}
+
 // PreflightOperationDirectWrite proves a command's declared binding can reach
 // this connector's typed write executor without resolving credentials or
 // making a network request.
-func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
-	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy)
+func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error {
+	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy, queryFields...)
+}
+
+func (c *Connector) PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error {
+	return PreflightOperationDirectWriteBindings(c.bundle, operation, pathFields, bodyFields)
+}
+
+func (c *Connector) MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error) {
+	return MaterializeOperationDirectWriteBodyMappings(c.bundle, operation, mappings)
+}
+
+func (c *Connector) ResolveOperationDirectWriteBodyValue(operation string, body map[string]any, path string) (any, bool, error) {
+	return ResolveOperationDirectWriteBodyMappingValue(c.bundle, operation, body, path)
 }
 
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
@@ -313,18 +396,25 @@ func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.
 		var err error
 		result, err = OperationBinaryDownload(admitted, c.bundle, BinaryDownloadRequest{
 			Operation: req.Operation, Config: req.Config, PathParams: req.PathParams, Query: req.Query,
-			MaxBytes: req.MaxBytes, DestRoot: req.DestRoot, FileName: req.FileName, RedactFields: req.RedactFields,
+			Headers: req.Headers, HeaderValues: req.HeaderValues, MaxBytes: req.MaxBytes, DestRoot: req.DestRoot, FileName: req.FileName, RedactFields: req.RedactFields,
 		}, c.hooks)
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
 	})
-	if err != nil {
-		return connectors.OperationBinaryDownloadResult{}, err
-	}
-	return connectors.OperationBinaryDownloadResult{
+	publicResult := connectors.OperationBinaryDownloadResult{
 		Connector: result.Connector,
 		Operation: result.Operation,
+		Method:    result.Method,
+		Path:      result.Path,
 		Record:    result.Record,
-	}, nil
+		Status:    result.Status,
+		Headers:   result.Headers,
+		Receipt:   result.Receipt,
+	}
+	return publicResult, err
+}
+
+func (c *Connector) PreflightOperationBinaryDownload(operation, method, path string) error {
+	return PreflightOperationBinaryDownload(c.bundle, operation, method, path)
 }
 
 // InitialState satisfies connectors.StatefulReader by delegating to the
@@ -418,7 +508,61 @@ func (c *Connector) PreflightWriteAction(name string) error {
 	if err != nil {
 		return err
 	}
+	shape, err := InspectRecordSchema(action.RecordSchema)
+	if err != nil {
+		return err
+	}
+	// A closed empty record is executable when the provider operation itself
+	// declares that it consumes no record input. These actions are deliberate
+	// triggers whose target is fully bound by connector configuration (for
+	// example DELETE /repos/{configured owner}/{configured repo}); treating
+	// them as hollow would make a provider-declared operation unreachable.
+	if shape.AdmitsOnlyEmptyObject && writeActionConsumesNoRecord(action) {
+		return nil
+	}
 	return ValidatePromotableRecordSchema(action.RecordSchema)
+}
+
+func writeActionConsumesNoRecord(action WriteAction) bool {
+	if bodyTypeOf(action) != "none" || len(action.PathFields) != 0 || strings.Contains(action.Path, "record.") {
+		return false
+	}
+	for _, param := range action.Query {
+		if strings.Contains(param.Template, "record.") {
+			return false
+		}
+	}
+	return true
+}
+
+// PreflightWriteRecordField proves that one exact, declaration-owned write
+// action exposes a top-level record field. It is intentionally a name check,
+// not a value or request builder: callers cannot use it to add a field to a
+// write action or to select another action at runtime.
+func (c *Connector) PreflightWriteRecordField(actionName, field string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateRecordSchemaField(action.RecordSchema, field)
+}
+
+// PreflightWriteRecordFieldMapping proves a declaration-owned mapping covers
+// the required top-level fields of one exact write action.
+func (c *Connector) PreflightWriteRecordFieldMapping(actionName string, fields []string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateRecordSchemaFieldMapping(action.RecordSchema, fields)
+}
+
+func (c *Connector) DeclarativeTypedDestinationActionDigest(actionName string) (string, error) {
+	return declarativeTypedDestinationActionDigest(c.bundle, actionName)
+}
+
+func (c *Connector) DeclarativeTypedDestinationIdempotencyHeader(actionName string) (string, error) {
+	return declarativeTypedDestinationIdempotencyHeader(c.bundle, actionName)
 }
 
 // PreflightStructuredJSONRecordField makes the concrete write schema the
@@ -431,6 +575,16 @@ func (c *Connector) PreflightStructuredJSONRecordField(actionName, field string)
 		return err
 	}
 	return ValidateStructuredJSONRecordField(action.RecordSchema, field)
+}
+
+// PreflightStructuredJSONRecordStringArm keeps bare command-line text tied to
+// the same named, closed record field as its JSON flag declaration.
+func (c *Connector) PreflightStructuredJSONRecordStringArm(actionName, field string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateStructuredJSONRecordStringArm(action.RecordSchema, field)
 }
 
 // DryRunWrite satisfies connectors.DryRunWriter.
@@ -484,10 +638,113 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 	return PreflightOperationDirectRead(b.bundle, operation, method, path, maxBytes, outputPolicy)
 }
 
+func (b Base) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
+	return PreflightOperationDirectReadBindings(b.bundle, operation, pathFields, queryFields, bodyFields, rawBody)
+}
+
 // PreflightOperationDirectWrite validates a native connector's declared
 // operation direct-write binding without resolving credentials or network I/O.
-func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
-	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
+func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error {
+	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy, queryFields...)
+}
+
+func (b Base) PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error {
+	return PreflightOperationDirectWriteBindings(b.bundle, operation, pathFields, bodyFields)
+}
+
+func (b Base) MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error) {
+	return MaterializeOperationDirectWriteBodyMappings(b.bundle, operation, mappings)
+}
+
+func (b Base) ResolveOperationDirectWriteBodyValue(operation string, body map[string]any, path string) (any, bool, error) {
+	return ResolveOperationDirectWriteBodyMappingValue(b.bundle, operation, body, path)
+}
+
+// PreflightOperationStructuredJSONBodyField validates a native connector's
+// declaration-owned structured input without resolving credentials or I/O.
+func (b Base) PreflightOperationStructuredJSONBodyField(operation, field string) error {
+	return PreflightOperationStructuredJSONBodyField(b.bundle, operation, field)
+}
+
+func (b Base) PreflightWriteRecordFieldMapping(actionName string, fields []string) error {
+	action, err := findWriteAction(b.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateRecordSchemaFieldMapping(action.RecordSchema, fields)
+}
+
+func (b Base) DeclarativeTypedDestinationActionDigest(actionName string) (string, error) {
+	return declarativeTypedDestinationActionDigest(b.bundle, actionName)
+}
+
+func (b Base) DeclarativeTypedDestinationIdempotencyHeader(actionName string) (string, error) {
+	return declarativeTypedDestinationIdempotencyHeader(b.bundle, actionName)
+}
+
+func (b Base) ValidateWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) error {
+	if len(b.bundle.Writes) == 0 {
+		return connectors.ErrUnsupportedOperation
+	}
+	return ValidateWrite(ctx, b.bundle, req, records)
+}
+
+func declarativeTypedDestinationActionDigest(b Bundle, actionName string) (string, error) {
+	action, err := findWriteAction(b, actionName)
+	if err != nil {
+		return "", err
+	}
+	actionJSON, err := json.Marshal(action)
+	if err != nil {
+		return "", err
+	}
+	decoder := json.NewDecoder(bytes.NewReader(actionJSON))
+	decoder.UseNumber()
+	var canonicalAction any
+	if err := decoder.Decode(&canonicalAction); err != nil {
+		return "", err
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return "", fmt.Errorf("action definition contains multiple JSON values")
+		}
+		return "", err
+	}
+	canonical, err := json.Marshal(struct {
+		Connector     string            `json:"connector"`
+		BaseURL       string            `json:"base_url"`
+		UserAgent     string            `json:"user_agent"`
+		Headers       map[string]string `json:"headers"`
+		Auth          []AuthSpec        `json:"auth"`
+		DefaultConfig map[string]string `json:"default_config"`
+		Action        any               `json:"action"`
+	}{
+		Connector:     b.Name,
+		BaseURL:       b.HTTP.URL,
+		UserAgent:     b.HTTP.UserAgent,
+		Headers:       b.HTTP.Headers,
+		Auth:          b.HTTP.Auth,
+		DefaultConfig: materializeConfigDefaults(b, connectors.RuntimeConfig{}).Config,
+		Action:        canonicalAction,
+	})
+	if err != nil {
+		return "", err
+	}
+	sum := sha256.Sum256(canonical)
+	return hex.EncodeToString(sum[:]), nil
+}
+
+func declarativeTypedDestinationIdempotencyHeader(b Bundle, actionName string) (string, error) {
+	action, err := findWriteAction(b, actionName)
+	if err != nil {
+		return "", err
+	}
+	header := strings.TrimSpace(action.IdempotencyKeyHeader)
+	if header == "" {
+		return "", fmt.Errorf("action %q has no provider idempotency key header", actionName)
+	}
+	return header, nil
 }
 
 // OperationDirectReadMaxBytes returns the bounded response limit for a
@@ -749,7 +1006,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 	for _, cmd := range surface.Commands {
 		flags := make([]connectors.CommandSurfaceFlag, 0, len(cmd.Flags))
 		for _, flag := range cmd.Flags {
-			flags = append(flags, commandSurfaceFlag(flag))
+			flags = append(flags, commandSurfaceOperationFlag(b, cmd, flag))
 		}
 		out.Commands = append(out.Commands, connectors.CommandSurfaceCommand{
 			Path:          cmd.Path,
@@ -816,19 +1073,54 @@ func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.Comma
 
 func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 	return connectors.CommandSurfaceFlag{
-		Name:       flag.Name,
-		Type:       flag.Type,
-		Summary:    flag.Summary,
-		Values:     append([]string(nil), flag.Values...),
-		MapsTo:     flag.MapsTo,
-		Format:     flag.Format,
-		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
-		Minimum:    cloneFloat64Ptr(flag.Minimum),
-		Required:   flag.Required,
-		EnvOnly:    flag.EnvOnly,
-		MaxItems:   flag.MaxItems,
-		MinItems:   flag.MinItems,
+		Name:            flag.Name,
+		Type:            flag.Type,
+		Summary:         flag.Summary,
+		Values:          append([]string(nil), flag.Values...),
+		MapsTo:          flag.MapsTo,
+		Format:          flag.Format,
+		AllowEmpty:      cloneBoolPtr(flag.AllowEmpty),
+		Minimum:         cloneExactNumberPtr(flag.Minimum),
+		Maximum:         cloneExactNumberPtr(flag.Maximum),
+		Required:        flag.Required,
+		Repeatable:      flag.Repeatable,
+		EnvOnly:         flag.EnvOnly,
+		AllowBareString: flag.AllowBareString,
+		MaxItems:        flag.MaxItems,
+		MinItems:        flag.MinItems,
+		MaxBytes:        flag.MaxBytes,
 	}
+}
+
+func commandSurfaceOperationFlag(b Bundle, cmd CLICommand, flag CLIFlag) connectors.CommandSurfaceFlag {
+	projected := commandSurfaceFlag(flag)
+	location, name, ok := strings.Cut(strings.TrimSpace(flag.MapsTo), ".")
+	if !ok || (location != "path" && location != "query") || name == "" {
+		return projected
+	}
+	declaredCLIBytes := projected.MaxBytes
+	projected.MaxBytes = defaultOperationParameterMaxBytes
+	if declaredCLIBytes > 0 && declaredCLIBytes < projected.MaxBytes {
+		projected.MaxBytes = declaredCLIBytes
+	}
+	if strings.TrimSpace(cmd.Operation) == "" {
+		return projected
+	}
+	op, err := findOperation(b, cmd.Operation)
+	if err != nil || op.REST == nil {
+		return projected
+	}
+	parameters, err := operationParametersForLocation(op, location)
+	if err != nil {
+		return projected
+	}
+	if parameter, declared := parameters[name]; declared {
+		projected.MaxBytes = operationParameterByteCap(parameter)
+	}
+	if declaredCLIBytes > 0 && declaredCLIBytes < projected.MaxBytes {
+		projected.MaxBytes = declaredCLIBytes
+	}
+	return projected
 }
 
 func commandSurfaceConstraints(constraints []CLIConstraint) []connectors.CommandSurfaceConstraint {
@@ -836,6 +1128,7 @@ func commandSurfaceConstraints(constraints []CLIConstraint) []connectors.Command
 	for _, constraint := range constraints {
 		out = append(out, connectors.CommandSurfaceConstraint{
 			Kind:          constraint.Kind,
+			Fields:        append([]string(nil), constraint.Fields...),
 			Left:          constraint.Left,
 			Right:         constraint.Right,
 			Op:            constraint.Op,
@@ -856,7 +1149,7 @@ func cloneBoolPtr(value *bool) *bool {
 	return &out
 }
 
-func cloneFloat64Ptr(value *float64) *float64 {
+func cloneExactNumberPtr(value *connectors.ExactNumber) *connectors.ExactNumber {
 	if value == nil {
 		return nil
 	}

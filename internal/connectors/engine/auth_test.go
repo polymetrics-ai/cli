@@ -2,12 +2,15 @@ package engine
 
 import (
 	"context"
+	"crypto/sha256"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/credential"
 )
 
 func cfgWith(config, secrets map[string]string) connectors.RuntimeConfig {
@@ -77,6 +80,84 @@ func TestSelectAuthBasic(t *testing.T) {
 	}
 }
 
+func TestSelectAuthAllowsDeclarationAuthorizedBlankBasicPassword(t *testing.T) {
+	const apiKey = "basic-declaration-canary"
+	specs := []AuthSpec{{Mode: "basic", Username: "{{ secrets.api_key }}", Password: ""}}
+	auth, err := selectAuth(context.Background(), cfgWith(nil, map[string]string{"api_key": apiKey}), specs, nil)
+	if err != nil {
+		t.Fatalf("selectAuth() error = %v", err)
+	}
+	req, err := http.NewRequest(http.MethodGet, "https://api.example.com/x", nil)
+	if err != nil {
+		t.Fatalf("new request: %v", err)
+	}
+	applyToRequest(t, auth, req)
+	username, password, ok := req.BasicAuth()
+	wantHash := sha256.Sum256([]byte(apiKey))
+	gotHash := sha256.Sum256([]byte(username))
+	if !ok || len(username) != len(apiKey) || gotHash != wantHash || len(password) != 0 {
+		t.Fatal("basic auth did not preserve the declaration-authorized blank password")
+	}
+}
+
+func TestNewRuntimeRejectsExplicitEmptyRequiredSecretBeforeNoneFallback(t *testing.T) {
+	spec, err := CompileSchema([]byte(`{"type":"object","required":["token"],"properties":{"token":{"type":"string","x-secret":true}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+	bundle := Bundle{
+		Spec: spec,
+		HTTP: HTTPBase{
+			URL: "https://api.example.com",
+			Auth: []AuthSpec{
+				{Mode: "bearer", Token: "{{ secrets.token }}", When: "{{ secrets.token }}"},
+				{Mode: "none"},
+			},
+		},
+	}
+	_, err = newRuntime(context.Background(), bundle, cfgWith(nil, map[string]string{"token": ""}), nil)
+	var empty *credential.EmptySecretError
+	if !errors.As(err, &empty) {
+		t.Fatalf("newRuntime() error type = %T, want typed empty-secret classification", err)
+	}
+}
+
+func TestNewRuntimeAllowsOptionalEmptySecretToSelectNone(t *testing.T) {
+	spec, err := CompileSchema([]byte(`{"type":"object","properties":{"token":{"type":"string","x-secret":true}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+	bundle := Bundle{
+		Spec: spec,
+		HTTP: HTTPBase{
+			URL: "https://api.example.com",
+			Auth: []AuthSpec{
+				{Mode: "bearer", Token: "{{ secrets.token }}", When: "{{ secrets.token }}"},
+				{Mode: "none"},
+			},
+		},
+	}
+	for name, secrets := range map[string]map[string]string{
+		"absent":           nil,
+		"explicitly empty": {"token": ""},
+	} {
+		t.Run(name, func(t *testing.T) {
+			runtime, err := newRuntime(context.Background(), bundle, cfgWith(nil, secrets), nil)
+			if err != nil {
+				t.Fatalf("newRuntime() error = %v", err)
+			}
+			req, err := http.NewRequest(http.MethodGet, "https://api.example.com/x", nil)
+			if err != nil {
+				t.Fatalf("new request: %v", err)
+			}
+			applyToRequest(t, runtime.Requester.Auth, req)
+			if req.Header.Get("Authorization") != "" {
+				t.Fatal("optional empty secret emitted authentication")
+			}
+		})
+	}
+}
+
 func TestSelectAuthAPIKeyHeaderWithPrefix(t *testing.T) {
 	specs := []AuthSpec{
 		{Mode: "api_key_header", Header: "X-API-Key", Prefix: "Token ", Value: "{{ secrets.key }}"},
@@ -110,6 +191,77 @@ func TestSelectAuthAPIKeyQuery(t *testing.T) {
 	applyToRequest(t, auth, req)
 	if got := req.URL.Query().Get("api_key"); got != "abc123" {
 		t.Fatalf("api_key query param = %q, want abc123", got)
+	}
+}
+
+func TestSelectAuthRejectsEmptyRequiredCredential(t *testing.T) {
+	for _, tt := range []struct {
+		name    string
+		spec    AuthSpec
+		config  map[string]string
+		secrets map[string]string
+	}{
+		{
+			name:    "bearer",
+			spec:    AuthSpec{Mode: "bearer", Token: "{{ secrets.token }}"},
+			secrets: map[string]string{"token": ""},
+		},
+		{
+			name:    "basic password",
+			spec:    AuthSpec{Mode: "basic", Username: "{{ config.username }}", Password: "{{ secrets.password }}"},
+			config:  map[string]string{"username": "fixture-user"},
+			secrets: map[string]string{"password": ""},
+		},
+		{
+			name:    "API key header",
+			spec:    AuthSpec{Mode: "api_key_header", Header: "X-API-Key", Prefix: "Token ", Value: "{{ secrets.api_key }}"},
+			secrets: map[string]string{"api_key": ""},
+		},
+		{
+			name:    "API key query",
+			spec:    AuthSpec{Mode: "api_key_query", Param: "api_key", Value: "{{ secrets.api_key }}"},
+			secrets: map[string]string{"api_key": ""},
+		},
+		{
+			name:    "OAuth2 client credentials",
+			spec:    AuthSpec{Mode: "oauth2_client_credentials", TokenURL: "https://example.invalid/token", ClientID: "{{ secrets.client_id }}", ClientSecret: "{{ secrets.client_secret }}"},
+			secrets: map[string]string{"client_id": "synthetic-client-id", "client_secret": ""},
+		},
+		{
+			name:    "OAuth2 refresh token",
+			spec:    AuthSpec{Mode: "oauth2_refresh_token", TokenURL: "https://example.invalid/token", RefreshToken: "{{ secrets.refresh_token }}"},
+			secrets: map[string]string{"refresh_token": ""},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := selectAuth(context.Background(), cfgWith(tt.config, tt.secrets), []AuthSpec{tt.spec}, nil)
+			if err == nil {
+				t.Fatal("selectAuth() accepted an empty required credential")
+			}
+			var empty *credential.EmptySecretError
+			if !errors.As(err, &empty) {
+				t.Fatalf("selectAuth() error is not typed empty-secret classification: %T", err)
+			}
+		})
+	}
+}
+
+func TestSelectAuthOptionalMissingCredentialSelectsNone(t *testing.T) {
+	specs := []AuthSpec{
+		{Mode: "bearer", Token: "{{ secrets.token }}", When: "{{ secrets.token }}"},
+		{Mode: "none"},
+	}
+	auth, err := selectAuth(context.Background(), cfgWith(nil, nil), specs, nil)
+	if err != nil {
+		t.Fatalf("selectAuth() error = %v", err)
+	}
+	req, err := http.NewRequest(http.MethodGet, "https://api.example.com/x", nil)
+	if err != nil {
+		t.Fatalf("new request: %v", err)
+	}
+	applyToRequest(t, auth, req)
+	if got := req.Header.Get("Authorization"); got != "" {
+		t.Fatalf("Authorization header = %q, want no optional auth", got)
 	}
 }
 

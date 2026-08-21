@@ -29,11 +29,14 @@ for (const connector of connectors) {
   const lock = await readJSON(file(connector, `${connector}-operation-source-lock.json`));
   const map = await readJSON(file(connector, `${connector}-declaration-disposition.json`));
   const surface = await readJSON(path.join(root, "internal", "connectors", "defs", connector, "api_surface.json"));
-  const operations = Object.values(lock).flatMap((value) => Array.isArray(value?.operations) ? value.operations : []);
+  const operations = Object.values(lock).flatMap((value) => Array.isArray(value?.operations)
+    ? value.operations.map((operation) => ({ ...operation, source_url: operation.source_url || value.source_url }))
+    : []);
+  const coverageConfidence = lock.rest.coverage_confidence || map.source_basis.coverage_confidence;
   const oldSurface = JSON.parse(execFileSync("git", ["show", `${baselineRevision}:internal/connectors/defs/${connector}/api_surface.json`], { encoding: "utf8" }));
   if (operations.length !== map.ledger_dispositions.length) throw new Error(`${connector}: source inventory ${operations.length} != disposition rows ${map.ledger_dispositions.length}`);
-  if (lock.counts?.total !== operations.length || lock.rest.counts?.total !== operations.length || lock.rest.counts?.by_kind?.rest !== operations.length || !lock.rest.coverage_confidence?.level || !lock.rest.coverage_confidence?.basis) throw new Error(`${connector}: source lock lacks root/rest counts.total, per-kind counts, or coverage confidence`);
-  if (map.source_basis.operations_found !== operations.length || map.summary.operations_found !== operations.length || !map.source_basis.coverage_confidence?.level || map.summary.coverage_confidence?.level !== lock.rest.coverage_confidence.level || "declared_percent" in map.summary) throw new Error(`${connector}: source accounting is self-referential or incomplete`);
+  if (lock.counts?.total !== operations.length || lock.counts?.rest !== operations.length || !coverageConfidence?.level || !coverageConfidence?.basis) throw new Error(`${connector}: source lock and provenance record lack a complete root inventory or coverage confidence`);
+  if (map.source_basis.operations_found !== operations.length || map.summary.operations_found !== operations.length || !map.source_basis.coverage_confidence?.level || map.summary.coverage_confidence?.level !== coverageConfidence.level || "declared_percent" in map.summary) throw new Error(`${connector}: source accounting is self-referential or incomplete`);
   const surfaceKeys = new Set(surface.endpoints.map((endpoint) => `${endpoint.method.toUpperCase()} ${canonicalPath(endpoint.path)}`));
   for (const row of map.ledger_dispositions) {
     const sourceOperation = operations.find((operation) => operation.id === row.source?.source_id && operation.source_location === row.source?.source_location && operation.source_url === row.source?.source_url);
@@ -46,18 +49,26 @@ for (const connector of connectors) {
     if (row.state === "disabled" && row.rejection?.reason !== "declaration-pending") throw new Error(`${connector}: ${row.method} ${row.path} disabled for ${row.rejection?.reason}, not corrected declaration-pending`);
     if (row.foundation?.foundation_gap) throw new Error(`${connector}: ${row.method} ${row.path} puts a transport eligibility gap on the endpoint itself`);
     const eligibility = row.declaration?.reverse_etl_eligibility;
-    if (eligibility && (row.parity_class !== "direct_write" || row.state !== "enabled" || eligibility.state !== "foundation-gap" || eligibility.foundation_gap?.id !== "generic-typed-destination-executor")) throw new Error(`${connector}: ${row.method} ${row.path} has invalid reverse-ETL eligibility metadata`);
+    if (eligibility && (row.parity_class !== "direct_write" || row.state !== "enabled")) throw new Error(`${connector}: ${row.method} ${row.path} has reverse-ETL eligibility on a non-enabled non-write operation`);
+    if (eligibility?.state === "foundation-gap" && eligibility.foundation_gap?.id !== "generic-typed-destination-executor") throw new Error(`${connector}: ${row.method} ${row.path} has an invalid reverse-ETL foundation gap`);
+    if (eligibility && !["foundation-gap", "direct-command-implemented"].includes(eligibility.state)) throw new Error(`${connector}: ${row.method} ${row.path} has an invalid reverse-ETL eligibility state`);
   }
   const classTotal = map.summary.parity_class_counts.reduce((sum, count) => sum + count.count, 0);
   if (classTotal !== operations.length) throw new Error(`${connector}: class total ${classTotal} != ${operations.length}`);
   const reverseETL = map.ledger_dispositions.filter((row) => row.declaration?.reverse_etl_eligibility).length;
   const declarationPending = map.ledger_dispositions.filter((row) => row.state === "disabled").length;
   const rejected = Object.fromEntries(map.summary.rejected_by_reason.map((entry) => [entry.key, entry.count]));
-  if (rejected["foundation-gap"] !== undefined || rejected["declaration-pending"] !== declarationPending) throw new Error(`${connector}: rejection summary mislabels a foundation or declaration-pending row`);
+  if (rejected["foundation-gap"] !== undefined || (declarationPending === 0 ? rejected["declaration-pending"] !== undefined && rejected["declaration-pending"] !== 0 : rejected["declaration-pending"] !== declarationPending)) throw new Error(`${connector}: rejection summary mislabels a foundation or declaration-pending row`);
   const pendingSummary = map.summary.declaration_pending.reduce((sum, entry) => sum + entry.count, 0);
-  if (map.summary.foundation_gaps[0]?.count !== reverseETL || pendingSummary !== declarationPending || map.summary.reverse_etl_eligibility?.typed_direct_write_operations !== reverseETL || map.summary.reverse_etl_eligibility?.foundation_gap?.id !== "generic-typed-destination-executor") throw new Error(`${connector}: gap/declaration summary count drift`);
-  if (map.summary.gap_ids.length !== 1 || map.summary.gap_ids[0] !== "generic-typed-destination-executor") throw new Error(`${connector}: destination foundation gap summary drift`);
-  if (map.summary.transport.source_transport.state !== "declaration-pending" || map.summary.transport.destination_transport.state !== "gap" || map.summary.transport.destination_transport.foundation_gap?.id !== "generic-typed-destination-executor") throw new Error(`${connector}: transport source/destination state does not match the #4286 factory boundary`);
+  if (pendingSummary !== declarationPending || map.summary.reverse_etl_eligibility?.typed_direct_write_operations !== reverseETL) throw new Error(`${connector}: gap/declaration summary count drift`);
+  if (map.summary.foundation_gaps.length === 0) {
+    if (map.summary.gap_ids.length !== 0 || map.summary.reverse_etl_eligibility?.state !== "direct-command-implemented") throw new Error(`${connector}: closed destination foundation summary drift`);
+    if (map.summary.transport.source_transport.state !== "not_declared" || map.summary.transport.destination_transport.state !== "not_declared") throw new Error(`${connector}: closed destination transport declaration state drift`);
+  } else {
+    if (map.summary.foundation_gaps[0]?.count !== reverseETL || map.summary.reverse_etl_eligibility?.foundation_gap?.id !== "generic-typed-destination-executor") throw new Error(`${connector}: destination foundation gap summary drift`);
+    if (map.summary.gap_ids.length !== 1 || map.summary.gap_ids[0] !== "generic-typed-destination-executor") throw new Error(`${connector}: destination foundation gap summary drift`);
+    if (map.summary.transport.source_transport.state !== "declaration-pending" || map.summary.transport.destination_transport.state !== "gap" || map.summary.transport.destination_transport.foundation_gap?.id !== "generic-typed-destination-executor") throw new Error(`${connector}: transport source/destination state does not match the #4286 factory boundary`);
+  }
   // A source lock is a captured immutable input to the map. Provider-hosted
   // discovery documents reorder JSON keys and mutable documentation pages add
   // per-request markup, so refetching would compare a new source revision to
@@ -75,10 +86,10 @@ for (const connector of connectors) {
       baseline_revision: baselineRevision,
       old: oldSurface.endpoints.length,
       new: surface.endpoints.length,
-      basis: lock.rest.coverage_confidence.basis
+      basis: coverageConfidence.basis
     },
     operations_found: operations.length,
-    coverage_confidence: lock.rest.coverage_confidence,
+    coverage_confidence: coverageConfidence,
     enabled_operations: map.summary.enabled_operations,
     disabled_operations: map.summary.disabled_operations,
     documented_deletes: map.summary.documented_deletes,

@@ -1,0 +1,1 @@
+{"openapi":"3.0.3","info":{"title":"invalid","version":"1"},"paths":{"/callbacks":{"post":{"operationId":"callback","callbacks":{"notify":{"{$request.body#/url}":{"post":{"responses":{"200":{"description":"ok"}}}}}},"responses":{"202":{"description":"accepted"}}}}}}

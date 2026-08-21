@@ -22,8 +22,8 @@ func TestGitHubExhaustiveProviderDouble(t *testing.T) {
 		t.Fatalf("provider-double totals = streams=%d writes=%d operations=%d, want source bundle %d/%d/%d",
 			report.Streams, report.WriteActions, report.Operations, len(bundle.Streams), len(bundle.Writes), len(bundle.Operations))
 	}
-	if report.GenericStreams != 23 || report.GenericWrites != 41 {
-		t.Fatalf("generic routes = streams=%d writes=%d, want 23/41", report.GenericStreams, report.GenericWrites)
+	if report.GenericStreams != 23 || report.GenericWrites != 32 {
+		t.Fatalf("generic routes = streams=%d writes=%d, want 23/32", report.GenericStreams, report.GenericWrites)
 	}
 	if report.Failed != 0 {
 		t.Fatalf("provider-double report has %d failed rows: %v", report.Failed, report.Failures)

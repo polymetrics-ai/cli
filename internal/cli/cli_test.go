@@ -480,6 +480,8 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 		"declarative JSON bundles",
 		"write=true/false",
 		"REVERSE ETL WRITE ACTIONS",
+		"DECLARATION-BOUND STRUCTURED WRITE INPUTS",
+		"There is no raw\n  --body flag",
 		"pm connectors catalog --capability write --json",
 		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
 		"legacy_unverified",
@@ -865,6 +867,75 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	}
 }
 
+func TestGitHubCommandSurfacePreservesGraphQLResponseMetadata(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/graphql" {
+			t.Fatalf("request = %s %s, want POST /graphql", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"data": {
+				"repositoryOwner": {
+					"__typename": "User",
+					"login": "octocat",
+					"repositories": {
+						"nodes": [],
+						"pageInfo": {"hasNextPage": false, "endCursor": null}
+					}
+				},
+				"rateLimit": {"limit": 5000, "cost": 1, "remaining": 4999, "resetAt": "2026-08-20T00:00:00Z"}
+			},
+			"errors": [{"message": "partial resolver failure"}]
+		}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "base_url=" + srv.URL,
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"github", "repo", "list",
+		"--credential", "github-local",
+		"--login", "octocat",
+		"--first", "1",
+		"--root", root,
+		"--json",
+	})
+
+	var env struct {
+		Kind     string                              `json:"kind"`
+		Status   int                                 `json:"status"`
+		Response map[string]any                      `json:"response"`
+		GraphQL  *connectors.GraphQLResponseMetadata `json:"graphql"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want successful direct-read envelope", env)
+	}
+	if _, ok := env.Response["repositoryOwner"]; !ok {
+		t.Fatalf("response = %+v, want declared GraphQL data", env.Response)
+	}
+	if env.GraphQL == nil {
+		t.Fatalf("envelope omitted GraphQL metadata: %s", stdout)
+	}
+	if !env.GraphQL.PartialData || len(env.GraphQL.Errors) != 1 || env.GraphQL.Errors[0].Message != "partial resolver failure" {
+		t.Fatalf("graphql metadata = %+v, want bounded partial-data error", env.GraphQL)
+	}
+	if env.GraphQL.RateLimit == nil || env.GraphQL.RateLimit.Limit != 5000 || env.GraphQL.RateLimit.Cost != 1 || env.GraphQL.RateLimit.Remaining != 4999 || env.GraphQL.RateLimit.ResetAt != "2026-08-20T00:00:00Z" {
+		t.Fatalf("graphql rate limit = %+v, want declared rate-limit metadata", env.GraphQL.RateLimit)
+	}
+}
+
 // TestGitHubDirectReadParametersAndPageContextReachWire drives the real CLI,
 // embedded GitHub bundle, command runner, and direct-read executor against a
 // known-larger fixture. It asserts returned records and the server-observed
@@ -1066,6 +1137,17 @@ func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	if strings.Contains(out, "approval_token") || strings.Contains(out, "approval_token_hash") ||
 		strings.Contains(out, "connector_command_record") {
 		t.Fatalf("plan JSON leaked approval or raw command payload:\n%s", out)
+	}
+}
+
+func TestGitHubIssueCreateHelpDescribesDeclaredBareStringArm(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"github", "issue", "create", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("issue create help code = %d stderr=%s stdout=%s", code, stderr.String(), stdout.String())
+	}
+	if got := stdout.String(); !strings.Contains(got, "--title (json or string) required") {
+		t.Fatalf("issue title help = %q, want declared json-or-string syntax", got)
 	}
 }
 

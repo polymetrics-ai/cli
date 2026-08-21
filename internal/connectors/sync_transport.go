@@ -182,8 +182,8 @@ func (m SourceRecordMapping) Validate() error {
 		seenInputs := make(map[string]struct{}, len(m.Inputs))
 		seenFields := make(map[string]struct{}, len(m.Inputs))
 		for _, input := range m.Inputs {
-			if !isConcreteTransportIdentifier(input.Input) || !isConcreteTransportIdentifier(input.Field) {
-				return fmt.Errorf("input_fields source record mapping requires concrete input and field names")
+			if input.Input == "" || input.Field == "" {
+				return fmt.Errorf("input_fields source record mapping requires non-empty input and field names")
 			}
 			if _, duplicate := seenInputs[input.Input]; duplicate {
 				return fmt.Errorf("input_fields source record mapping duplicates input %q", input.Input)
@@ -208,6 +208,106 @@ func (b DestinationSourceBinding) Validate() error {
 		return err
 	}
 	return b.RecordMapping.Validate()
+}
+
+// DestinationReadBackField maps one field in provider state to the
+// corresponding field in the destination record that was written.
+type DestinationReadBackField struct {
+	ProviderField string `json:"provider_field"`
+	ExpectedField string `json:"expected_field"`
+}
+
+// DestinationReceiptLocator is a deliberately small provider-response to
+// provider-read mapping. It allows a declared write response's one top-level
+// scalar field to fill one declared query parameter; it is not a JSONPath,
+// URL, method, header, or generic read capability.
+type DestinationReceiptLocator struct {
+	ResponseIndex  int    `json:"response_index"`
+	BodyField      string `json:"body_field"`
+	QueryParameter string `json:"query_parameter"`
+	MaxValueBytes  int    `json:"max_value_bytes"`
+	MaxPages       int    `json:"max_pages"`
+}
+
+func (l DestinationReceiptLocator) Validate() error {
+	if l.ResponseIndex < 0 || l.ResponseIndex > 1023 {
+		return fmt.Errorf("destination receipt locator response_index must be between 0 and 1023")
+	}
+	if !isConcreteTransportIdentifier(l.BodyField) || !isConcreteTransportIdentifier(l.QueryParameter) {
+		return fmt.Errorf("destination receipt locator requires concrete body_field and query_parameter")
+	}
+	if l.MaxValueBytes < 1 || l.MaxValueBytes > 4096 {
+		return fmt.Errorf("destination receipt locator max_value_bytes must be between 1 and 4096")
+	}
+	if l.MaxPages < 1 || l.MaxPages > 10 {
+		return fmt.Errorf("destination receipt locator max_pages must be between 1 and 10")
+	}
+	return nil
+}
+
+// DestinationReadBackPolicy declares the bounded provider read that proves a
+// typed destination write before its source checkpoint may advance. Operation
+// is interpreted only by the connector that owns the declaration.
+type DestinationReadBackPolicy struct {
+	Operation              string                       `json:"operation"`
+	Identity               []DestinationReadBackField   `json:"identity"`
+	Expected               []DestinationReadBackField   `json:"expected"`
+	MaxRecords             int                          `json:"max_records"`
+	MaxAttempts            int                          `json:"max_attempts"`
+	TimeoutMilliseconds    int                          `json:"timeout_milliseconds"`
+	RetryDelayMilliseconds int                          `json:"retry_delay_milliseconds,omitempty"`
+	ReceiptLocator         DestinationReceiptLocator    `json:"receipt_locator"`
+	Conformance            ConformanceEvidenceReference `json:"conformance"`
+}
+
+func (p DestinationReadBackPolicy) Validate() error {
+	if !isConcreteTransportIdentifier(p.Operation) {
+		return fmt.Errorf("destination read-back requires a concrete operation")
+	}
+	if p.MaxRecords < 1 || p.MaxRecords > 10000 {
+		return fmt.Errorf("destination read-back max_records must be between 1 and 10000")
+	}
+	if p.MaxAttempts < 1 || p.MaxAttempts > 10 {
+		return fmt.Errorf("destination read-back max_attempts must be between 1 and 10")
+	}
+	if p.TimeoutMilliseconds < 1 || p.TimeoutMilliseconds > 60000 {
+		return fmt.Errorf("destination read-back timeout_milliseconds must be between 1 and 60000")
+	}
+	if p.RetryDelayMilliseconds < 0 || p.RetryDelayMilliseconds > 10000 {
+		return fmt.Errorf("destination read-back retry_delay_milliseconds must be between 0 and 10000")
+	}
+	if err := validateDestinationReadBackFields("identity", p.Identity); err != nil {
+		return err
+	}
+	if err := validateDestinationReadBackFields("expected", p.Expected); err != nil {
+		return err
+	}
+	if err := p.ReceiptLocator.Validate(); err != nil {
+		return err
+	}
+	return p.Conformance.Validate()
+}
+
+func validateDestinationReadBackFields(kind string, fields []DestinationReadBackField) error {
+	if len(fields) == 0 {
+		return fmt.Errorf("destination read-back %s fields are required", kind)
+	}
+	provider := make(map[string]struct{}, len(fields))
+	expected := make(map[string]struct{}, len(fields))
+	for _, field := range fields {
+		if strings.TrimSpace(field.ProviderField) == "" || len(field.ProviderField) > 256 || strings.TrimSpace(field.ExpectedField) == "" || len(field.ExpectedField) > 256 {
+			return fmt.Errorf("destination read-back %s fields require concrete provider and expected names", kind)
+		}
+		if _, duplicate := provider[field.ProviderField]; duplicate {
+			return fmt.Errorf("destination read-back %s duplicates provider field %q", kind, field.ProviderField)
+		}
+		if _, duplicate := expected[field.ExpectedField]; duplicate {
+			return fmt.Errorf("destination read-back %s duplicates expected field %q", kind, field.ExpectedField)
+		}
+		provider[field.ProviderField] = struct{}{}
+		expected[field.ExpectedField] = struct{}{}
+	}
+	return nil
 }
 
 // SourceTransportDescriptor is the source side of a connector's transport
@@ -243,6 +343,7 @@ type DestinationTransportDescriptor struct {
 	Acknowledgement   TransportAcknowledgement     `json:"acknowledgement"`
 	ApplyStrategies   []DestinationApplyStrategy   `json:"apply_strategies"`
 	SourceBindings    []DestinationSourceBinding   `json:"source_bindings,omitempty"`
+	ReadBack          *DestinationReadBackPolicy   `json:"read_back,omitempty"`
 }
 
 // SyncTransportDescriptor declares one or both roles a connector can perform.
@@ -379,6 +480,11 @@ func (d DestinationTransportDescriptor) Validate() error {
 	if err := validateDestinationSourceBindings(d.SourceBindings); err != nil {
 		return err
 	}
+	if d.ReadBack != nil {
+		if err := d.ReadBack.Validate(); err != nil {
+			return err
+		}
+	}
 	switch d.Acknowledgement {
 	case TransportAcknowledgementDurableWarehouse, TransportAcknowledgementNone:
 	default:
@@ -386,6 +492,7 @@ func (d DestinationTransportDescriptor) Validate() error {
 	}
 
 	strategies := make(map[synccontract.Mode]struct{}, len(d.ApplyStrategies))
+	strategyActions := make(map[synccontract.Mode]map[string]struct{}, len(d.ApplyStrategies))
 	for _, strategy := range d.ApplyStrategies {
 		if err := strategy.Mode.Validate(); err != nil {
 			return err
@@ -405,9 +512,13 @@ func (d DestinationTransportDescriptor) Validate() error {
 		if !containsTransportName(d.EligibleActions, strategy.Action) {
 			return fmt.Errorf("destination apply strategy action %q is not an eligible action", strategy.Action)
 		}
-		if _, exists := strategies[strategy.Mode]; exists {
-			return fmt.Errorf("destination transport declares duplicate apply strategy for sync mode %q", strategy.Mode)
+		if strategyActions[strategy.Mode] == nil {
+			strategyActions[strategy.Mode] = make(map[string]struct{})
 		}
+		if _, exists := strategyActions[strategy.Mode][strategy.Action]; exists {
+			return fmt.Errorf("destination transport declares duplicate apply strategy action %q for sync mode %q", strategy.Action, strategy.Mode)
+		}
+		strategyActions[strategy.Mode][strategy.Action] = struct{}{}
 		strategies[strategy.Mode] = struct{}{}
 	}
 	for _, mode := range d.Modes {
@@ -469,13 +580,37 @@ func containsSourceTransportStream(streams []string, want string) bool {
 // returns a default, which prevents a legacy `upsert` fallback from appearing
 // in a closed transport path.
 func (d DestinationTransportDescriptor) ApplyStrategyFor(mode synccontract.Mode) (DestinationApplyStrategy, error) {
+	return d.ApplyStrategyForAction(mode, "")
+}
+
+// ApplyStrategyForAction resolves the exact definition-owned action selected
+// by a persisted connection stream. Empty selection is accepted only when the
+// descriptor has exactly one strategy for the mode, preserving existing
+// single-action destinations while refusing an ambiguous multi-action route.
+func (d DestinationTransportDescriptor) ApplyStrategyForAction(mode synccontract.Mode, action string) (DestinationApplyStrategy, error) {
 	if err := d.Validate(); err != nil {
 		return DestinationApplyStrategy{}, err
 	}
+	var candidate DestinationApplyStrategy
+	count := 0
 	for _, strategy := range d.ApplyStrategies {
-		if strategy.Mode == mode {
+		if strategy.Mode != mode {
+			continue
+		}
+		if action != "" && strategy.Action == action {
 			return strategy, nil
 		}
+		candidate = strategy
+		count++
+	}
+	if action != "" {
+		return DestinationApplyStrategy{}, fmt.Errorf("destination transport does not declare action %q for sync mode %q", action, mode)
+	}
+	if count == 1 {
+		return candidate, nil
+	}
+	if count > 1 {
+		return DestinationApplyStrategy{}, fmt.Errorf("destination transport requires a persisted action selection for sync mode %q", mode)
 	}
 	return DestinationApplyStrategy{}, fmt.Errorf("destination transport does not support sync mode %q", mode)
 }

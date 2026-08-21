@@ -4348,13 +4348,6 @@
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
       "flags": [
         {
-          "name": "issue-id-or-key",
-          "type": "string",
-          "summary": "Path parameter issueIdOrKey.",
-          "maps_to": "path.issueIdOrKey",
-          "required": true
-        },
-        {
           "name": "changelog-ids",
           "type": "string_array",
           "summary": "The list of changelog IDs.",
@@ -6530,13 +6523,6 @@
       "operation": "jira.jql_parse_jql_queries",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
       "flags": [
-        {
-          "name": "validation",
-          "type": "string",
-          "summary": "How to validate the JQL query and treat the validation results.",
-          "maps_to": "query.validation",
-          "required": true
-        },
         {
           "name": "queries",
           "type": "string_array",
@@ -10558,15 +10544,7 @@
       "availability": "implemented",
       "operation": "jira.universal_avatar_get_avatar_image_by_type",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "flags": [
-        {
-          "name": "type",
-          "type": "string",
-          "summary": "Path parameter type.",
-          "maps_to": "path.type",
-          "required": true
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -10581,22 +10559,7 @@
       "availability": "implemented",
       "operation": "jira.universal_avatar_get_avatar_image_by_id",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "flags": [
-        {
-          "name": "type",
-          "type": "string",
-          "summary": "Path parameter type.",
-          "maps_to": "path.type",
-          "required": true
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter id.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -10611,22 +10574,7 @@
       "availability": "implemented",
       "operation": "jira.universal_avatar_get_avatar_image_by_owner",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "flags": [
-        {
-          "name": "type",
-          "type": "string",
-          "summary": "Path parameter type.",
-          "maps_to": "path.type",
-          "required": true
-        },
-        {
-          "name": "entity-id",
-          "type": "string",
-          "summary": "Path parameter entityId.",
-          "maps_to": "path.entityId",
-          "required": true
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",

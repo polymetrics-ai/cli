@@ -27,7 +27,7 @@ import (
 
 // maxErrorBody bounds how much of an error response body is captured in HTTPError.
 const maxErrorBody = 8 << 10 // 8 KiB
-const defaultMaxResponseBody = 64 << 20
+const DefaultMaxResponseBody = 64 << 20
 const maxRedirects = 10
 
 // Response is a captured HTTP response with its body already read.
@@ -39,13 +39,42 @@ type Response struct {
 	rateLimitRoute RateLimitRoute
 }
 
+type StatusRange struct {
+	Min int
+	Max int
+}
+
+type UnexpectedStatusError struct {
+	Status int
+}
+
+// ProviderResponseError is the printable-safe typed identity of a non-success
+// provider response. The private HTTPError remains inside the engine for rate
+// and authentication classification; callers receive status without raw URL,
+// headers, or body.
+type ProviderResponseError struct {
+	Status int
+}
+
+func (e *ProviderResponseError) Error() string {
+	return fmt.Sprintf("provider response status %d", e.Status)
+}
+
+func (e *UnexpectedStatusError) Error() string {
+	return fmt.Sprintf("successful response status %d is not declared", e.Status)
+}
+
 // HTTPError is returned when a request completes with a 4xx/5xx status after
-// exhausting retries. The body is truncated and never assumed to be secret-free
-// by callers, but connsdk itself never logs it.
+// exhausting retries. Its body and headers are never assumed to be secret-free
+// by callers, but connsdk itself never logs them.
 type HTTPError struct {
 	Status int
 	URL    string
+	Header http.Header
 	Body   string
+	// RawBody preserves captured response bytes for typed receipt consumers.
+	// Error() never renders it.
+	RawBody []byte
 }
 
 func (e *HTTPError) Error() string {
@@ -154,10 +183,13 @@ type Requester struct {
 	// Auth, when set, is applied to every request before it is sent.
 	Auth Authenticator
 	// UserAgent and DefaultHeaders are applied to every request.
-	UserAgent      string
-	DefaultHeaders map[string]string
+	UserAgent           string
+	DefaultHeaders      map[string]string
+	DefaultHeaderValues http.Header
 	// Accept overrides the Accept header (defaults to application/json).
-	Accept string
+	Accept           string
+	AcceptedStatuses []StatusRange
+	RedirectPolicy   *RedirectPolicy
 
 	// MaxRetries is the number of additional attempts after the first (default 4).
 	MaxRetries int
@@ -216,7 +248,7 @@ func (r *Requester) client() *http.Client {
 }
 
 func (r *Requester) clientFor(ctx context.Context) *http.Client {
-	return transportpolicy.HTTPClient(ctx, r.client())
+	return transportpolicy.HTTPClientRetainingRedirectResponse(ctx, r.client())
 }
 
 func isSafeReplayableRead(method string) bool {
@@ -243,6 +275,22 @@ func noReplayClient(client *http.Client) *http.Client {
 	strictTransport := transport.Clone()
 	strictTransport.DisableKeepAlives = true
 	clone.Transport = strictTransport
+	return &clone
+}
+
+func noReplayResponseClient(client *http.Client) *http.Client {
+	strict := noReplayClient(client)
+	strict.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+	return strict
+}
+
+func noRedirectResponseClient(client *http.Client) *http.Client {
+	clone := *client
+	clone.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
 	return &clone
 }
 
@@ -404,9 +452,27 @@ func (e *rateLimitAdmissionError) Unwrap() error {
 	return e.err
 }
 
+// requestAdmissionError marks a durable credential fence separately from a
+// rate-limit admission refusal. It is terminal for the current operation: a
+// retry would only poll the same fenced epoch and must never buy another send.
+type requestAdmissionError struct {
+	err error
+}
+
+func (e *requestAdmissionError) Error() string {
+	return fmt.Sprintf("request admission: %v", e.err)
+}
+
+func (e *requestAdmissionError) Unwrap() error {
+	return e.err
+}
+
 const minimumObservableRateLimitWait = time.Millisecond
 
 func (r *Requester) admitRequesterSend(ctx context.Context, req *http.Request, requesterAttempt *int, route *RateLimitRoute, costHeader *string) error {
+	if err := CheckRequestAdmission(ctx); err != nil {
+		return &requestAdmissionError{err: err}
+	}
 	nextAttempt := *requesterAttempt + 1
 	nextRoute := RateLimitRoute{Method: req.Method, Path: r.rateLimitRoutePath(req.URL), Attempt: nextAttempt}
 	admissionCtx, cancelAdmission := r.rateLimitAdmissionContext(ctx)
@@ -478,9 +544,6 @@ func (r *Requester) rateLimitRoutePath(requestURL *url.URL) string {
 }
 
 func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int, route *RateLimitRoute, costHeader *string) *http.Client {
-	if r.Admission == nil && r.Observer == nil && r.RouteRateLimits == nil && r.RateLimitEvents == nil {
-		return client
-	}
 	clone := *client
 	checkRedirect := clone.CheckRedirect
 	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
@@ -498,6 +561,11 @@ func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterA
 
 func isRateLimitAdmissionError(err error) bool {
 	var admissionErr *rateLimitAdmissionError
+	return errors.As(err, &admissionErr)
+}
+
+func isRequestAdmissionError(err error) bool {
+	var admissionErr *requestAdmissionError
 	return errors.As(err, &admissionErr)
 }
 
@@ -552,7 +620,7 @@ func (r *Requester) Do(ctx context.Context, method, path string, query url.Value
 			return nil, fmt.Errorf("encode request body: %w", err)
 		}
 	}
-	return r.do(ctx, method, path, query, payload, "application/json", defaultMaxResponseBody)
+	return r.do(ctx, method, path, query, payload, "application/json", DefaultMaxResponseBody)
 }
 
 // DoLimited performs Do while bounding the captured successful response body to
@@ -560,6 +628,15 @@ func (r *Requester) Do(ctx context.Context, method, path string, query url.Value
 // buffering the default 64 MiB response cap.
 func (r *Requester) DoLimited(ctx context.Context, method, path string, query url.Values, body any, maxBodyBytes int) (*Response, error) {
 	return r.DoJSONLimited(ctx, method, path, query, body, "application/json", maxBodyBytes)
+}
+
+// DoStatusCheck executes a bodyless HEAD request and returns the final response
+// metadata even when its status is non-2xx. Transport, request setup, and
+// admission failures still return errors.
+func (r *Requester) DoStatusCheck(ctx context.Context, path string, query url.Values, maxBodyBytes int) (*Response, error) {
+	return r.doWithBodyPolicy(ctx, http.MethodHead, path, query, maxBodyBytes+1, true, func() (*requestBody, error) {
+		return nil, nil
+	})
 }
 
 // DoJSONLimited is the narrow JSON-family counterpart to DoLimited. The
@@ -577,6 +654,18 @@ func (r *Requester) DoJSONLimited(ctx context.Context, method, path string, quer
 	return r.do(ctx, method, path, query, payload, contentType, maxBodyBytes+1)
 }
 
+// DoPreparedJSONLimited sends the exact JSON bytes a closed operation preview
+// already bound. It is deliberately JSON-only: callers cannot select a raw
+// media type, headers, route, or transport policy through this helper. The
+// engine uses it after schema validation and bounded preparation so execution
+// cannot re-marshal caller-owned maps while approval is pending.
+func (r *Requester) DoPreparedJSONLimited(ctx context.Context, method, path string, query url.Values, payload []byte, contentType string, maxBodyBytes int) (*Response, error) {
+	if len(payload) != 0 && !json.Valid(payload) {
+		return nil, errors.New("prepared JSON body is invalid")
+	}
+	return r.do(ctx, method, path, query, append([]byte(nil), payload...), contentType, maxBodyBytes+1)
+}
+
 // DoTextLimited performs a bounded request with one literal text/plain body.
 // It deliberately has no caller-selected media type: operation executors use
 // it only after admitting an explicit text/plain declaration, and it shares
@@ -584,6 +673,16 @@ func (r *Requester) DoJSONLimited(ctx context.Context, method, path string, quer
 // rather than offering a generic raw HTTP escape hatch.
 func (r *Requester) DoTextLimited(ctx context.Context, method, path string, query url.Values, body string, maxBodyBytes int) (*Response, error) {
 	return r.do(ctx, method, path, query, []byte(body), "text/plain", maxBodyBytes+1)
+}
+
+// DoBinaryLimited sends one declaration-owned application/octet-stream body.
+// The media type is fixed here rather than accepted from the caller, keeping
+// this a binary capability instead of a generic raw-request escape hatch.
+func (r *Requester) DoBinaryLimited(ctx context.Context, method, path string, query url.Values, body []byte, maxBodyBytes int) (*Response, error) {
+	if body == nil {
+		body = []byte{}
+	}
+	return r.do(ctx, method, path, query, body, "application/octet-stream", maxBodyBytes+1)
 }
 
 // DoForm performs an HTTP request with an application/x-www-form-urlencoded body,
@@ -597,7 +696,7 @@ func (r *Requester) DoForm(ctx context.Context, method, path string, query, form
 		payload = []byte(form.Encode())
 		contentType = "application/x-www-form-urlencoded"
 	}
-	return r.do(ctx, method, path, query, payload, contentType, defaultMaxResponseBody)
+	return r.do(ctx, method, path, query, payload, contentType, DefaultMaxResponseBody)
 }
 
 // DoFormLimited performs DoForm while bounding the captured successful
@@ -614,11 +713,25 @@ func (r *Requester) DoFormLimited(ctx context.Context, method, path string, quer
 	return r.do(ctx, method, path, query, payload, contentType, maxBodyBytes+1)
 }
 
+// DoPreparedFormLimited sends the exact canonical form body a closed
+// operation preview already bound. Form parsing and re-encoding must agree so
+// this remains a typed form capability rather than a raw-body escape hatch.
+func (r *Requester) DoPreparedFormLimited(ctx context.Context, method, path string, query url.Values, payload []byte, maxBodyBytes int) (*Response, error) {
+	if len(payload) == 0 {
+		return r.do(ctx, method, path, query, nil, "", maxBodyBytes+1)
+	}
+	form, err := url.ParseQuery(string(payload))
+	if err != nil || form.Encode() != string(payload) {
+		return nil, errors.New("prepared form body is not canonical")
+	}
+	return r.do(ctx, method, path, query, append([]byte(nil), payload...), "application/x-www-form-urlencoded", maxBodyBytes+1)
+}
+
 // DoMultipart performs an HTTP request with a multipart/form-data body. File
 // parts are opened for each retry attempt, so callers may use it with the same
 // retry policy as JSON/form requests without reusing a consumed reader.
 func (r *Requester) DoMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm) (*Response, error) {
-	return r.doMultipart(ctx, method, path, query, form, defaultMaxResponseBody)
+	return r.doMultipart(ctx, method, path, query, form, DefaultMaxResponseBody)
 }
 
 // DoMultipartLimited performs DoMultipart while bounding a successful response
@@ -639,8 +752,12 @@ func (r *Requester) doMultipart(ctx context.Context, method, path string, query 
 		return nil, err
 	}
 	defer cleanup()
+	boundary, err := multipartBoundary(prepared)
+	if err != nil {
+		return nil, err
+	}
 	return r.doWithBody(ctx, method, path, query, maxResponseBytes, func() (*requestBody, error) {
-		return multipartBody(prepared)
+		return multipartBody(prepared, boundary)
 	})
 }
 
@@ -869,9 +986,85 @@ func (r *contextReader) Read(p []byte) (int, error) {
 	}
 }
 
-func multipartBody(form MultipartForm) (*requestBody, error) {
+type multipartCountingWriter struct {
+	size int64
+}
+
+func (w *multipartCountingWriter) Write(p []byte) (int, error) {
+	if err := w.add(int64(len(p))); err != nil {
+		return 0, err
+	}
+	return len(p), nil
+}
+
+func (w *multipartCountingWriter) add(n int64) error {
+	if n < 0 || w.size > (1<<63-1)-n {
+		return fmt.Errorf("multipart payload size overflow")
+	}
+	w.size += n
+	return nil
+}
+
+type multipartLimitWriter struct {
+	writer    io.Writer
+	remaining int64
+}
+
+func (w *multipartLimitWriter) Write(p []byte) (int, error) {
+	if int64(len(p)) > w.remaining {
+		return 0, fmt.Errorf("multipart payload too large: exceeds limit")
+	}
+	n, err := w.writer.Write(p)
+	w.remaining -= int64(n)
+	return n, err
+}
+
+func multipartBoundary(form MultipartForm) (string, error) {
+	counter := &multipartCountingWriter{}
+	writer := multipart.NewWriter(counter)
+	keys := make([]string, 0, len(form.Fields))
+	for key := range form.Fields {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		if err := writer.WriteField(key, form.Fields[key]); err != nil {
+			return "", err
+		}
+	}
+	for _, file := range form.Files {
+		if _, err := writer.CreatePart(multipartFileHeader(file)); err != nil {
+			return "", err
+		}
+		info, err := file.stat()
+		if err != nil {
+			return "", fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+		}
+		if err := counter.add(info.Size()); err != nil {
+			return "", err
+		}
+	}
+	if err := writer.Close(); err != nil {
+		return "", err
+	}
+	if form.MaxBytes > 0 && counter.size > form.MaxBytes {
+		return "", fmt.Errorf("multipart payload too large: %d bytes exceeds limit %d", counter.size, form.MaxBytes)
+	}
+	return writer.Boundary(), nil
+}
+
+func multipartBody(form MultipartForm, boundary string) (*requestBody, error) {
 	pr, pw := io.Pipe()
-	mw := multipart.NewWriter(pw)
+	var sink io.Writer = pw
+	if form.MaxBytes > 0 {
+		sink = &multipartLimitWriter{writer: pw, remaining: form.MaxBytes}
+	}
+	mw := multipart.NewWriter(sink)
+	if err := mw.SetBoundary(boundary); err != nil {
+		_ = pr.Close()
+		_ = pw.Close()
+		return nil, err
+	}
 	done := make(chan error, 1)
 	go func() {
 		err := writeMultipartForm(mw, form)
@@ -936,16 +1129,7 @@ func writeMultipartForm(mw *multipart.Writer, form MultipartForm) error {
 }
 
 func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64) (int64, error) {
-	name := file.FileName
-	if strings.TrimSpace(name) == "" {
-		name = filepath.Base(file.sourceName())
-	}
-	header := make(textproto.MIMEHeader)
-	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name=%q; filename=%q`, file.FieldName, name))
-	if file.ContentType != "" {
-		header.Set("Content-Type", file.ContentType)
-	}
-	part, err := mw.CreatePart(header)
+	part, err := mw.CreatePart(multipartFileHeader(file))
 	if err != nil {
 		return 0, err
 	}
@@ -976,6 +1160,19 @@ func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64
 	return written, nil
 }
 
+func multipartFileHeader(file MultipartFile) textproto.MIMEHeader {
+	name := file.FileName
+	if strings.TrimSpace(name) == "" {
+		name = filepath.Base(file.sourceName())
+	}
+	header := make(textproto.MIMEHeader)
+	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name=%q; filename=%q`, file.FieldName, name))
+	if file.ContentType != "" {
+		header.Set("Content-Type", file.ContentType)
+	}
+	return header
+}
+
 // do is the shared request core for Do/DoForm. payload is the already-encoded
 // body (nil for none) and contentType is the Content-Type to set when a body is
 // present.
@@ -989,12 +1186,20 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 }
 
 func (r *Requester) doWithBody(ctx context.Context, method, path string, query url.Values, maxBodyBytes int, bodyFactory func() (*requestBody, error)) (*Response, error) {
+	return r.doWithBodyPolicy(ctx, method, path, query, maxBodyBytes, false, bodyFactory)
+}
+
+func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, query url.Values, maxBodyBytes int, returnFinalStatus bool, bodyFactory func() (*requestBody, error)) (*Response, error) {
 	fullURL, err := r.resolveURL(path, query)
 	if err != nil {
 		return nil, err
 	}
 	if maxBodyBytes <= 0 {
-		maxBodyBytes = defaultMaxResponseBody
+		maxBodyBytes = DefaultMaxResponseBody
+	}
+	baseURL, err := url.Parse(fullURL)
+	if err != nil {
+		return nil, fmt.Errorf("parse url %q: %w", fullURL, err)
 	}
 
 	attempts := r.maxRetries() + 1
@@ -1002,6 +1207,12 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		attempts = 1
 	}
 	var lastErr error
+	// A retry terminal cause (cancellation, a later dial failure, or a refused
+	// redirect) must not erase the most recent provider response. Keep both the
+	// bounded receipt and its typed error independently of the latest transport
+	// failure so callers can publish one complete terminal receipt.
+	var lastProviderResponse *Response
+	var lastProviderErr error
 	// reauthAttempted bounds the 401-refresh path to ONCE per request. It is
 	// set before the refresh is attempted (see below), so a provider that keeps
 	// returning 401 terminates with that 401 instead of being hammered.
@@ -1009,15 +1220,24 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	requesterAttempt := 0
 	route := RateLimitRoute{}
 	costHeader := ""
-	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
-	baseClient := r.clientFor(ctx)
+	// Mutation authority is independent of retry eligibility. A provider-
+	// scoped idempotency key may permit another attempt against this exact
+	// URL, but it never authorizes following a redirect or discarding the last
+	// provider response.
+	strictWrite := !isSafeReplayableRead(method)
+	var credKeys []string
+	baseClient := r.redirectClient(ctx, baseURL, r.RedirectPolicy, &credKeys)
 	if strictWrite {
-		baseClient = noReplayClient(baseClient)
+		if r.DisableRetries {
+			baseClient = noReplayResponseClient(baseClient)
+		} else {
+			baseClient = noRedirectResponseClient(baseClient)
+		}
 	}
 	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt, &route, &costHeader)
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
-			return nil, err
+			return lastProviderResponse, errors.Join(lastProviderErr, err)
 		}
 
 		body, err := bodyFactory()
@@ -1036,50 +1256,75 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			return nil, fmt.Errorf("build request: %w", err)
 		}
 		r.applyHeaders(req, body != nil, contentType)
+		before := req.Header.Clone()
 		if r.Auth != nil {
 			if err := r.Auth.Apply(ctx, req); err != nil {
 				_ = cleanupRequestBody(body)
 				return nil, fmt.Errorf("apply auth: %w", err)
 			}
 		}
+		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders, r.DefaultHeaderValues)
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
 		if err := r.admitRequesterSend(ctx, req, &requesterAttempt, &route, &costHeader); err != nil {
 			_ = cleanupRequestBody(body)
-			return nil, err
+			return lastProviderResponse, errors.Join(lastProviderErr, err)
 		}
 
 		resp, err := client.Do(req)
 		if err != nil {
 			bodyErr := cleanupRequestBody(body)
+			terminal := captureTerminalResponse(resp, maxBodyBytes, fullURL, route)
 			lastErr = fmt.Errorf("send request: %w", err)
 			if bodyErr != nil {
-				lastErr = fmt.Errorf("send request: %w", bodyErr)
+				lastErr = errors.Join(lastErr, fmt.Errorf("send request body: %w", bodyErr))
+			}
+			if terminal != nil {
+				lastProviderResponse = terminal
+				lastProviderErr = responseHTTPError(terminal.Status, fullURL, terminal.Header, terminal.Body, RateLimitObservation{})
 			}
 			if errors.Is(err, transportpolicy.ErrRedirectRefused) {
-				return nil, lastErr
+				return lastProviderResponse, errors.Join(lastProviderErr, lastErr)
 			}
-			if isRateLimitAdmissionError(err) {
-				return nil, lastErr
+			if isRateLimitAdmissionError(err) || isRequestAdmissionError(err) {
+				return lastProviderResponse, errors.Join(lastProviderErr, lastErr)
 			}
 			if attempt < attempts-1 {
 				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
-					return nil, werr
+					return lastProviderResponse, errors.Join(lastProviderErr, lastErr, werr)
 				}
 				continue
 			}
-			return nil, lastErr
+			return lastProviderResponse, errors.Join(lastProviderErr, lastErr)
 		}
 		observation := r.observeRateLimit(ctx, route, resp.StatusCode, resp.Header, costHeader)
 		bodyErr := cleanupRequestBody(body)
 		if bodyErr != nil {
-			_ = resp.Body.Close()
-			return nil, fmt.Errorf("send request body: %w", bodyErr)
+			return captureTerminalResponse(resp, maxBodyBytes, fullURL, route), fmt.Errorf("send request body: %w", bodyErr)
 		}
 
-		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
+		respBody, readErr := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		_ = resp.Body.Close()
+		terminal := &Response{Status: resp.StatusCode, Header: resp.Header.Clone(), Body: respBody, requestURL: fullURL, rateLimitRoute: route}
+		if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
+			lastProviderResponse = terminal
+			lastProviderErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, respBody, observation)
+		}
+		if resp.StatusCode >= 200 && resp.StatusCode < 300 && !r.acceptsSuccessfulStatus(resp.StatusCode) {
+			statusErr := &UnexpectedStatusError{Status: resp.StatusCode}
+			if readErr != nil {
+				return terminal, errors.Join(statusErr, fmt.Errorf("read response body: %w", readErr))
+			}
+			return terminal, statusErr
+		}
+		if readErr != nil {
+			readBodyErr := fmt.Errorf("read response body: %w", readErr)
+			if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
+				return terminal, errors.Join(requesterResponseStatusError(ctx, strictWrite, resp.StatusCode, fullURL, resp.Header, respBody, observation), readBodyErr)
+			}
+			return terminal, readBodyErr
+		}
 
 		// A 401 can mean the credential was invalidated out of band (revoked
 		// grant, password change, scope change) rather than that it was never
@@ -1095,7 +1340,8 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 				// buy a second one.
 				reauthAttempted = true
 				if err := refresher.RefreshAuth(ctx, req); err == nil {
-					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Header: resp.Header.Clone(), Body: string(respBody), RawBody: append([]byte(nil), respBody...)}
+					lastProviderErr = lastErr
 					// The reauth retry does not spend the transient-failure
 					// budget, so a MaxRetries:0 requester still gets its one
 					// post-refresh attempt. Bounded by reauthAttempted, which
@@ -1109,23 +1355,59 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 
 		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
-			lastErr = responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, respBody, observation)
+			lastProviderErr = lastErr
 			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
-				return nil, werr
+				return lastProviderResponse, errors.Join(lastProviderErr, werr)
 			}
 			continue
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			if returnFinalStatus {
+				return terminal, nil
+			}
+			statusErr := requesterResponseStatusError(ctx, strictWrite, resp.StatusCode, fullURL, resp.Header, respBody, observation)
+			// Status-only checks intentionally retain their final non-2xx
+			// response. Destructive declared writes additionally need the typed
+			// provider response for result preservation. Ordinary binary/text GET
+			// callers keep their established nil-response error semantics.
+			if strictWrite || transportpolicy.IsDestructive(ctx) {
+				return terminal, statusErr
+			}
+			return nil, statusErr
 		}
 
-		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL, rateLimitRoute: route}, nil
+		return terminal, nil
 	}
 	if lastErr == nil {
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)
 	}
-	return nil, lastErr
+	return lastProviderResponse, errors.Join(lastProviderErr, lastErr)
+}
+
+func (r *Requester) acceptsSuccessfulStatus(status int) bool {
+	if len(r.AcceptedStatuses) == 0 {
+		return true
+	}
+	for _, allowed := range r.AcceptedStatuses {
+		if status >= allowed.Min && status <= allowed.Max {
+			return true
+		}
+	}
+	return false
+}
+
+func captureTerminalResponse(resp *http.Response, maxBodyBytes int, fullURL string, route RateLimitRoute) *Response {
+	if resp == nil {
+		return nil
+	}
+	var body []byte
+	if resp.Body != nil {
+		body, _ = io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
+		_ = resp.Body.Close()
+	}
+	return &Response{Status: resp.StatusCode, Header: resp.Header, Body: body, requestURL: fullURL, rateLimitRoute: route}
 }
 
 func cleanupRequestBody(body *requestBody) error {
@@ -1171,6 +1453,11 @@ func (r *Requester) applyHeaders(req *http.Request, hasBody bool, contentType st
 	}
 	for k, v := range r.DefaultHeaders {
 		req.Header.Set(k, v)
+	}
+	for k, values := range r.DefaultHeaderValues {
+		for _, value := range values {
+			req.Header.Add(k, value)
+		}
 	}
 }
 
@@ -1226,8 +1513,8 @@ func (r *Requester) fullJitter(cap time.Duration) time.Duration {
 	return delay
 }
 
-func responseHTTPError(status int, requestURL string, body []byte, observation RateLimitObservation) error {
-	httpErr := &HTTPError{Status: status, URL: requestURL, Body: truncate(body)}
+func responseHTTPError(status int, requestURL string, header http.Header, body []byte, observation RateLimitObservation) error {
+	httpErr := &HTTPError{Status: status, URL: requestURL, Header: header.Clone(), Body: string(body), RawBody: append([]byte(nil), body...)}
 	if status != http.StatusTooManyRequests {
 		return httpErr
 	}
@@ -1240,6 +1527,13 @@ func responseHTTPError(status int, requestURL string, body []byte, observation R
 		HasReset:        observation.HasReset,
 		ResetAtAbsolute: observation.ResetAtAbsolute,
 	}
+}
+func requesterResponseStatusError(ctx context.Context, strictWrite bool, status int, requestURL string, header http.Header, body []byte, observation RateLimitObservation) error {
+	responseErr := responseHTTPError(status, requestURL, header, body, observation)
+	if (strictWrite || transportpolicy.IsDestructive(ctx)) && status >= http.StatusMultipleChoices && status < http.StatusBadRequest {
+		return fmt.Errorf("%w: %w", transportpolicy.ErrRedirectRefused, responseErr)
+	}
+	return responseErr
 }
 
 func truncate(body []byte) string {

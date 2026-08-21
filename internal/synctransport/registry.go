@@ -70,6 +70,20 @@ func (r *Registry) RegisterDestination(executor DestinationExecutor) error {
 	return nil
 }
 
+// RegisteredDestination returns the exact executor selected by a declaration
+// without performing mode-specific preflight. App uses this only to determine
+// whether a declared pair selects one of its closed transport routes; all
+// executable selections still pass through Preflight before I/O.
+func (r *Registry) RegisteredDestination(reference connectors.TransportExecutorReference) (DestinationExecutor, bool) {
+	if r == nil {
+		return nil, false
+	}
+	r.mu.RLock()
+	executor, found := r.destinations[reference]
+	r.mu.RUnlock()
+	return executor, found && !isNilInterface(executor)
+}
+
 // ResolvedTransport is the immutable result of a successful runtime
 // preflight. It contains no provider records and no self-reported evidence.
 type ResolvedTransport struct {
@@ -95,6 +109,20 @@ type DestinationSourceIneligibleError struct {
 	Destination    string
 	SourceExecutor connectors.TransportExecutorReference
 	Stream         string
+}
+
+// DestinationExecutorUnregisteredError is a declaration-owned preflight
+// refusal. It lets App preserve the exact closed-route failure instead of
+// treating an incomplete declared destination as an absent legacy route.
+type DestinationExecutorUnregisteredError struct {
+	Executor connectors.TransportExecutorReference
+}
+
+func (e *DestinationExecutorUnregisteredError) Error() string {
+	if e == nil {
+		return "declared destination transport executor is not registered"
+	}
+	return fmt.Sprintf("destination transport executor %q is not registered", e.Executor.ID)
 }
 
 func (e *DestinationSourceIneligibleError) Error() string {
@@ -167,11 +195,10 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	if destinationDescriptor.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
 		return ResolvedTransport{}, fmt.Errorf("destination transport requires durable warehouse acknowledgement")
 	}
-	strategy, err := destinationDescriptor.ApplyStrategyFor(request.Mode)
+	strategy, err := destinationDescriptor.ApplyStrategyForAction(request.Mode, request.DestinationAction)
 	if err != nil {
 		return ResolvedTransport{}, err
 	}
-
 	r.mu.RLock()
 	source, sourceRegistered := r.sources[sourceDescriptor.Executor]
 	destination, destinationRegistered := r.destinations[destinationDescriptor.Executor]
@@ -181,13 +208,16 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 		return ResolvedTransport{}, fmt.Errorf("source transport executor %q is not registered", sourceDescriptor.Executor.ID)
 	}
 	if !destinationRegistered || isNilInterface(destination) {
-		return ResolvedTransport{}, fmt.Errorf("destination transport executor %q is not registered", destinationDescriptor.Executor.ID)
+		return ResolvedTransport{}, &DestinationExecutorUnregisteredError{Executor: destinationDescriptor.Executor}
 	}
 	if source.TransportExecutorReference() != sourceDescriptor.Executor {
 		return ResolvedTransport{}, fmt.Errorf("registered source transport executor does not match source descriptor")
 	}
 	if destination.TransportExecutorReference() != destinationDescriptor.Executor {
 		return ResolvedTransport{}, fmt.Errorf("registered destination transport executor does not match destination descriptor")
+	}
+	if err := validateDeliveryCompatibility(request.Mode, strategy.Strategy, sourceDescriptor.Delivery, destinationDescriptor.Delivery); err != nil {
+		return ResolvedTransport{}, err
 	}
 	if isNilInterface(verifier) {
 		return ResolvedTransport{}, fmt.Errorf("external transport conformance verification is unavailable")
@@ -216,6 +246,36 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 		DestinationDescriptor: *destinationDescriptor,
 		ApplyStrategy:         strategy,
 	}, nil
+}
+
+func validateDeliveryCompatibility(mode synccontract.Mode, strategy connectors.ApplyStrategy, source, destination connectors.DeliveryGuarantees) error {
+	wantStrategy := map[synccontract.Mode]connectors.ApplyStrategy{
+		synccontract.ModeFullOverwrite:            connectors.ApplyStrategyReplace,
+		synccontract.ModeFullAppend:               connectors.ApplyStrategyAppend,
+		synccontract.ModeIncrementalAppend:        connectors.ApplyStrategyAppend,
+		synccontract.ModeIncrementalUpsert:        connectors.ApplyStrategyMerge,
+		synccontract.ModeIncrementalDedupe:        connectors.ApplyStrategyDedupe,
+		synccontract.ModeIncrementalDedupeHistory: connectors.ApplyStrategyDedupeHistory,
+		synccontract.ModeChangeCapture:            connectors.ApplyStrategyChangeApply,
+	}[mode]
+	if wantStrategy == "" || strategy != wantStrategy {
+		return fmt.Errorf("transport sync mode %q requires apply strategy %q, got %q", mode, wantStrategy, strategy)
+	}
+	if source.Idempotency == connectors.DeliveryIdempotencyNone {
+		return fmt.Errorf("transport sync mode %q cannot replay a source declaring no idempotency", mode)
+	}
+	if destination.Idempotency != connectors.DeliveryIdempotencyKeyed {
+		return fmt.Errorf("transport sync mode %q requires keyed destination idempotency", mode)
+	}
+	if mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory || mode == synccontract.ModeChangeCapture {
+		if source.Ordering != connectors.DeliveryOrderingSource || destination.Ordering != connectors.DeliveryOrderingSource {
+			return fmt.Errorf("transport sync mode %q requires source-ordered delivery at both endpoints", mode)
+		}
+	}
+	if mode == synccontract.ModeChangeCapture && (source.Deletes != connectors.DeliveryDeletesTombstone || destination.Deletes != connectors.DeliveryDeletesTombstone) {
+		return fmt.Errorf("transport change_capture requires tombstone delivery at both endpoints")
+	}
+	return nil
 }
 
 func containsMode(modes []synccontract.Mode, want synccontract.Mode) bool {

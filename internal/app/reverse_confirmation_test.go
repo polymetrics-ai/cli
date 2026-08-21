@@ -424,8 +424,8 @@ func TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice(t *testing.T) {
 		SourceTable:           "repo_deletes",
 		DestinationConnector:  "github",
 		DestinationCredential: "github-local",
-		Action:                "repo",
-		Mappings:              map[string]string{"id": "id"},
+		Action:                "delete_ref",
+		Mappings:              map[string]string{"id": "ref"},
 		Limit:                 1,
 	})
 	if err != nil {
@@ -1171,8 +1171,8 @@ func setupGitHubGenericDestructivePlan(t *testing.T, ctx context.Context, baseUR
 		SourceTable:           "repo_deletes",
 		DestinationConnector:  "github",
 		DestinationCredential: "github-local",
-		Action:                "repo",
-		Mappings:              map[string]string{"id": "id"},
+		Action:                "delete_ref",
+		Mappings:              map[string]string{"id": "ref"},
 	})
 	if err != nil {
 		t.Fatalf("PlanReverseETL(repo) error = %v", err)
