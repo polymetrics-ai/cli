@@ -5264,12 +5264,6 @@
       "operation": "preview_invoice",
       "flags": [
         {
-          "name": "account-id",
-          "type": "string",
-          "summary": "Path parameter `account_id`.",
-          "maps_to": "path.account_id"
-        },
-        {
           "name": "currency",
           "type": "string",
           "summary": "3-letter ISO 4217 currency code.",
@@ -5302,14 +5296,7 @@
       "intent": "binary_download",
       "availability": "implemented",
       "operation": "get_invoice_pdf",
-      "flags": [
-        {
-          "name": "invoice-id",
-          "type": "string",
-          "summary": "Path parameter `invoice_id`.",
-          "maps_to": "path.invoice_id"
-        }
-      ],
+      "flags": [],
       "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_invoice_pdf",
       "api_surface": [
         {
@@ -5328,14 +5315,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "get_preview_renewal",
-      "flags": [
-        {
-          "name": "subscription-id",
-          "type": "string",
-          "summary": "Path parameter `subscription_id`.",
-          "maps_to": "path.subscription_id"
-        }
-      ],
+      "flags": [],
       "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_preview_renewal",
       "output_policy": "json_redacted",
       "redact_fields": [
@@ -5361,14 +5341,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "preview_subscription_change",
-      "flags": [
-        {
-          "name": "subscription-id",
-          "type": "string",
-          "summary": "Path parameter `subscription_id`.",
-          "maps_to": "path.subscription_id"
-        }
-      ],
+      "flags": [],
       "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_subscription_change",
       "output_policy": "json_redacted",
       "redact_fields": [
@@ -5453,14 +5426,7 @@
       "intent": "binary_download",
       "availability": "implemented",
       "operation": "get_export_files",
-      "flags": [
-        {
-          "name": "export-date",
-          "type": "string",
-          "summary": "Path parameter `export_date`.",
-          "maps_to": "path.export_date"
-        }
-      ],
+      "flags": [],
       "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_files",
       "api_surface": [
         {

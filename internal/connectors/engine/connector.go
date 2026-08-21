@@ -552,6 +552,16 @@ func (c *Connector) PreflightStructuredJSONRecordField(actionName, field string)
 	return ValidateStructuredJSONRecordField(action.RecordSchema, field)
 }
 
+// PreflightStructuredJSONRecordStringArm keeps bare command-line text tied to
+// the same named, closed record field as its JSON flag declaration.
+func (c *Connector) PreflightStructuredJSONRecordStringArm(actionName, field string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateStructuredJSONRecordStringArm(action.RecordSchema, field)
+}
+
 // DryRunWrite satisfies connectors.DryRunWriter.
 func (c *Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
 	if len(c.bundle.Writes) == 0 {
@@ -1022,20 +1032,21 @@ func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.Comma
 
 func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 	return connectors.CommandSurfaceFlag{
-		Name:       flag.Name,
-		Type:       flag.Type,
-		Summary:    flag.Summary,
-		Values:     append([]string(nil), flag.Values...),
-		MapsTo:     flag.MapsTo,
-		Format:     flag.Format,
-		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
-		Minimum:    cloneFloat64Ptr(flag.Minimum),
-		Required:   flag.Required,
-		Repeatable: flag.Repeatable,
-		EnvOnly:    flag.EnvOnly,
-		MaxItems:   flag.MaxItems,
-		MinItems:   flag.MinItems,
-		MaxBytes:   flag.MaxBytes,
+		Name:            flag.Name,
+		Type:            flag.Type,
+		Summary:         flag.Summary,
+		Values:          append([]string(nil), flag.Values...),
+		MapsTo:          flag.MapsTo,
+		Format:          flag.Format,
+		AllowEmpty:      cloneBoolPtr(flag.AllowEmpty),
+		Minimum:         cloneFloat64Ptr(flag.Minimum),
+		Required:        flag.Required,
+		Repeatable:      flag.Repeatable,
+		EnvOnly:         flag.EnvOnly,
+		AllowBareString: flag.AllowBareString,
+		MaxItems:        flag.MaxItems,
+		MinItems:        flag.MinItems,
+		MaxBytes:        flag.MaxBytes,
 	}
 }
 
@@ -1075,6 +1086,7 @@ func commandSurfaceConstraints(constraints []CLIConstraint) []connectors.Command
 	for _, constraint := range constraints {
 		out = append(out, connectors.CommandSurfaceConstraint{
 			Kind:          constraint.Kind,
+			Fields:        append([]string(nil), constraint.Fields...),
 			Left:          constraint.Left,
 			Right:         constraint.Right,
 			Op:            constraint.Op,

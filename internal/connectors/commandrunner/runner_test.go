@@ -34,6 +34,8 @@ type fakeConnector struct {
 	operationReadBindingsErr   error
 	operationJSONVariable      operationStructuredJSONVariablePreflightCall
 	operationJSONVariableErr   error
+	operationJSONBodyField     operationStructuredJSONVariablePreflightCall
+	operationJSONBodyFieldErr  error
 	operationDirectWriteReq    connectors.OperationDirectWriteRequest
 	operationWritePreflight    operationDirectWritePreflightCall
 	operationWritePreflightErr error
@@ -266,6 +268,10 @@ func (f *fakeConnector) PreflightOperationDirectReadBindings(operation string, p
 func (f *fakeConnector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
 	f.operationJSONVariable = operationStructuredJSONVariablePreflightCall{operation: operation, variable: variable}
 	return f.operationJSONVariableErr
+}
+func (f *fakeConnector) PreflightOperationStructuredJSONBodyField(operation, field string) error {
+	f.operationJSONBodyField = operationStructuredJSONVariablePreflightCall{operation: operation, variable: field}
+	return f.operationJSONBodyFieldErr
 }
 func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, _ ...string) error {
 	f.operationWritePreflight = operationDirectWritePreflightCall{
@@ -1535,6 +1541,37 @@ func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
 	}
 }
 
+func TestRecordOverridesRejectsDeclaredStringByteCapBeforeWriteValidation(t *testing.T) {
+	command := connectors.CommandSurfaceCommand{
+		Path: "records create", Intent: "reverse_etl", Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{{Name: "summary", Type: "string", MapsTo: "record.summary", MaxBytes: 4}},
+	}
+	_, err := recordOverrides(command, map[string][]string{"summary": {"12345"}})
+	if err == nil || !strings.Contains(err.Error(), "byte cap 4") {
+		t.Fatalf("recordOverrides error = %v, want declared record string byte-cap refusal", err)
+	}
+}
+
+func TestRecordOverridesBareStringUnionRemainsBoundedAndRejectsMalformedContainers(t *testing.T) {
+	command := connectors.CommandSurfaceCommand{
+		Path: "records create", Intent: "reverse_etl", Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{{Name: "title", Type: "json", MapsTo: "record.title", AllowBareString: true, MaxBytes: 8}},
+	}
+	record, err := recordOverrides(command, map[string][]string{"title": {"Shipped"}})
+	if err != nil {
+		t.Fatalf("bare declared string arm: %v", err)
+	}
+	if got := record["title"]; got != "Shipped" {
+		t.Fatalf("bare title = %#v, want ordinary string", got)
+	}
+	if _, err := recordOverrides(command, map[string][]string{"title": {"{"}}); err == nil || !strings.Contains(err.Error(), "invalid JSON for --title") {
+		t.Fatalf("malformed JSON container error = %v, want syntax refusal", err)
+	}
+	if _, err := recordOverrides(command, map[string][]string{"title": {"123456789"}}); err == nil || !strings.Contains(err.Error(), "exceeds 8 bytes") {
+		t.Fatalf("oversized bare title error = %v, want byte-bound refusal", err)
+	}
+}
+
 func TestRecordOverridesBuildsExplicitNestedArrayObjectFields(t *testing.T) {
 	record, err := recordOverrides(connectors.CommandSurfaceCommand{
 		Path:         "patients create",
@@ -2043,7 +2080,7 @@ func TestRunOperationDirectReadPreservesDeclaredRepeatableHeaderValues(t *testin
 	}
 }
 
-func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable(t *testing.T) {
+func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredBodyField(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 		Path:         "graphql query widgets",
 		Intent:       "direct_read",
@@ -2066,7 +2103,7 @@ func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable(t 
 	if err != nil {
 		t.Fatalf("Run: %v", err)
 	}
-	if got, want := connector.operationJSONVariable, (operationStructuredJSONVariablePreflightCall{operation: "github.graphql.query.widgets", variable: "input"}); got != want {
+	if got, want := connector.operationJSONBodyField, (operationStructuredJSONVariablePreflightCall{operation: "github.graphql.query.widgets", variable: "input"}); got != want {
 		t.Fatalf("structured JSON preflight = %#v, want %#v", got, want)
 	}
 	input, ok := connector.operationDirectReadReq.Body["input"].(map[string]any)
@@ -2078,13 +2115,58 @@ func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable(t 
 		t.Fatalf("typed GraphQL ids = %#v, want one declared item", input["ids"])
 	}
 
-	connector.operationJSONVariableErr = errors.New("variable is not a closed object or array")
+	connector.operationJSONBodyFieldErr = errors.New("variable is not a closed object or array")
 	_, err = Run(context.Background(), connector, Request{
 		Path:  []string{"graphql", "query", "widgets"},
 		Flags: map[string][]string{"input": {`{"ids":["widget-2"]}`}},
 	}, func(connectors.Record) error { return nil })
 	if err == nil || !strings.Contains(err.Error(), "closed object or array") {
-		t.Fatalf("Run rejected GraphQL variable = %v, want declaration-owned preflight rejection", err)
+		t.Fatalf("Run rejected GraphQL body field = %v, want declaration-owned preflight rejection", err)
+	}
+}
+
+func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredRESTBodyField(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "customers generate-keyword-ideas",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "google_ads.customers.generate.keyword.ideas",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/v22/customers/{customer_id}:generateKeywordIdeas"}},
+		OutputPolicy: "json_redacted",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "keyword-seed", Type: "json", Required: true, MapsTo: "body.keywordSeed"},
+		},
+	}}}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"customers", "generate-keyword-ideas"},
+		Flags: map[string][]string{"keyword-seed": {`{"keywords":["trail running shoes"]}`}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if got, want := connector.operationJSONBodyField, (operationStructuredJSONVariablePreflightCall{operation: "google_ads.customers.generate.keyword.ideas", variable: "keywordSeed"}); got != want {
+		t.Fatalf("structured REST body preflight = %#v, want %#v", got, want)
+	}
+	seed, ok := connector.operationDirectReadReq.Body["keywordSeed"].(map[string]any)
+	if !ok {
+		t.Fatalf("typed REST seed = %#v, want object", connector.operationDirectReadReq.Body["keywordSeed"])
+	}
+	keywords, ok := seed["keywords"].([]any)
+	if !ok || len(keywords) != 1 || keywords[0] != "trail running shoes" {
+		t.Fatalf("typed REST keywords = %#v, want one declared item", seed["keywords"])
+	}
+
+	connector.operationJSONBodyFieldErr = errors.New("keywordSeed is not a closed bounded object")
+	_, err = Run(context.Background(), connector, Request{
+		Path:  []string{"customers", "generate-keyword-ideas"},
+		Flags: map[string][]string{"keyword-seed": {`{"keywords":["trail running shoes"]}`}},
+	}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "closed bounded object") {
+		t.Fatalf("Run rejected REST body field = %v, want declaration-owned preflight rejection", err)
 	}
 }
 
@@ -2585,6 +2667,52 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 	}
 }
 
+func TestBuildWriteCommandPreservesDeclaredScalarUnionJSONFlag(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "acme",
+		Writes: []engine.WriteAction{{
+			Name: "update_item", Method: http.MethodPatch, Path: "/items",
+			RecordSchema: json.RawMessage(`{
+				"type":"object","additionalProperties":false,"required":["choice"],
+				"properties":{"choice":{"type":["string","integer","null"]}}
+			}`),
+			Risk: "standard",
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "items update", Intent: "reverse_etl", Availability: "implemented", Write: "update_item",
+			Flags: []engine.CLIFlag{{Name: "choice", Type: "json", MapsTo: "record.choice", Required: true, MaxBytes: 8}},
+		}}},
+	}
+	connector := engine.New(bundle, nil)
+	for _, testCase := range []struct {
+		name, value string
+		want        any
+		wantErr     string
+	}{
+		{name: "integer arm", value: `17`, want: json.Number("17")},
+		{name: "string arm", value: `"yes"`, want: "yes"},
+		{name: "per-flag byte cap", value: `"too-long"`, wantErr: "structured JSON exceeds 8 bytes"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			command, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path: []string{"items", "update"}, Flags: map[string][]string{"choice": {testCase.value}},
+			})
+			if testCase.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), testCase.wantErr) {
+					t.Fatalf("BuildWriteCommand error = %v, want %q", err, testCase.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("BuildWriteCommand: %v", err)
+			}
+			if got := command.Record["choice"]; !reflect.DeepEqual(got, testCase.want) {
+				t.Fatalf("choice = %#v (%T), want %#v (%T)", got, got, testCase.want, testCase.want)
+			}
+		})
+	}
+}
+
 func TestBuildOperationDirectWriteCommandSupportsDottedStructuredBodyField(t *testing.T) {
 	batchable := false
 	bundle := engine.Bundle{
@@ -2766,6 +2894,36 @@ func TestValidateCommandInputsTraversesDirectWriteArrayFields(t *testing.T) {
 	}})
 	if err == nil || !strings.Contains(err.Error(), "target start must be before end") {
 		t.Fatalf("validateCommandInputs error = %v, want nested-array constraint rejection", err)
+	}
+}
+
+func TestCLICommandExactlyOneConstraint(t *testing.T) {
+	cmd := connectors.CommandSurfaceCommand{Constraints: []connectors.CommandSurfaceConstraint{{
+		Kind:    "exactly_one",
+		Fields:  []string{"body.keywordAndUrlSeed", "body.urlSeed", "body.keywordSeed", "body.siteSeed"},
+		Message: "exactly one keyword seed must be provided",
+	}}}
+
+	tests := []struct {
+		name    string
+		body    map[string]any
+		wantErr bool
+	}{
+		{name: "none", body: map[string]any{}, wantErr: true},
+		{name: "one", body: map[string]any{"keywordSeed": map[string]any{"keywords": []any{"shoes"}}}},
+		{name: "alternate", body: map[string]any{"urlSeed": map[string]any{"url": "https://example.com"}}},
+		{name: "two", body: map[string]any{"keywordSeed": map[string]any{"keywords": []any{"shoes"}}, "urlSeed": map[string]any{"url": "https://example.com"}}, wantErr: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateCommandInputs(cmd, connectors.RuntimeConfig{}, mappedCommandInputs{Body: tt.body})
+			if tt.wantErr && (err == nil || !strings.Contains(err.Error(), "exactly one keyword seed")) {
+				t.Fatalf("validateCommandInputs error = %v, want exactly-one rejection", err)
+			}
+			if !tt.wantErr && err != nil {
+				t.Fatalf("validateCommandInputs: %v", err)
+			}
+		})
 	}
 }
 

@@ -452,6 +452,23 @@ func TestSchemaValidateMaxItems(t *testing.T) {
 	}
 }
 
+func TestSchemaValidateMaxProperties(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{"type":"object","maxProperties":2}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	if err := sch.Validate(map[string]any{"one": true, "two": true}); err != nil {
+		t.Fatalf("at limit: unexpected error: %v", err)
+	}
+	err = sch.Validate(map[string]any{"one": true, "two": true, "three": true})
+	if err == nil {
+		t.Fatal("over limit: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "maxProperties") {
+		t.Fatalf("over limit: error should name maxProperties, got %v", err)
+	}
+}
+
 func TestCompileSchemaRejectsPrefixItemsOutsideStructuredREST(t *testing.T) {
 	_, err := CompileSchema(json.RawMessage(`{"type":"array","prefixItems":[{"type":"string"}]}`))
 	if err == nil || !strings.Contains(err.Error(), "unknown keyword") {

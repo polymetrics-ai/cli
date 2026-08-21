@@ -1140,6 +1140,17 @@ func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	}
 }
 
+func TestGitHubIssueCreateHelpDescribesDeclaredBareStringArm(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"github", "issue", "create", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("issue create help code = %d stderr=%s stdout=%s", code, stderr.String(), stdout.String())
+	}
+	if got := stdout.String(); !strings.Contains(got, "--title (json or string) required") {
+		t.Fatalf("issue title help = %q, want declared json-or-string syntax", got)
+	}
+}
+
 func TestGitHubCommandSurfaceIssueDeleteReachesCredentialResolution(t *testing.T) {
 	root := t.TempDir()
 	runCLI(t, []string{"init", "--root", root, "--json"})

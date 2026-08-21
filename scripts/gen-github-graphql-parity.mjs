@@ -659,9 +659,13 @@ export function mergeGitHubGraphQLParityArtifacts(bundle, generated) {
   const transport = {
     ...generated.transport,
     covered_by: {
-      operations: [...new Set([...supplementalTransportOperations, ...generated.transport.covered_by.operations])],
+      operations: uniqueSorted([...supplementalTransportOperations, ...generated.transport.covered_by.operations]),
     },
   };
+  const by = (key) => (left, right) => String(key(left)).localeCompare(String(key(right)));
+  const operationOrder = by((operation) => operation?.id || "");
+  const commandOrder = by((command) => `${command?.path || ""}\u0000${command?.operation || command?.write || ""}`);
+  const endpointOrder = by((endpoint) => `${String(endpoint?.method || "").toUpperCase()}\u0000${endpoint?.path || ""}\u0000${JSON.stringify(endpoint?.covered_by || {})}`);
   return {
     operations: {
       ...operations,
@@ -670,10 +674,16 @@ export function mergeGitHubGraphQLParityArtifacts(bundle, generated) {
           (operation) => !generatedOperation(operation) && !OBSOLETE_GRAPHQL_OPERATION_IDS.has(operation?.id),
         ),
         ...generated.operations,
-      ],
+      ].sort(operationOrder),
     },
-    cli: { ...cli, commands: [...requireArray(cli.commands, "GitHub CLI commands").filter((command) => !generatedCommand(command)), ...generated.commands] },
-    surface: { ...surface, endpoints: [...requireArray(surface.endpoints, "GitHub API endpoints").filter((endpoint) => !generatedTransport(endpoint)), transport] },
+    cli: {
+      ...cli,
+      commands: [...requireArray(cli.commands, "GitHub CLI commands").filter((command) => !generatedCommand(command)), ...generated.commands].sort(commandOrder),
+    },
+    surface: {
+      ...surface,
+      endpoints: [...requireArray(surface.endpoints, "GitHub API endpoints").filter((endpoint) => !generatedTransport(endpoint)), transport].sort(endpointOrder),
+    },
   };
 }
 

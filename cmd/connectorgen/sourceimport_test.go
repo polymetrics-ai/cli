@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestSourceImportProducesClosedCanonicalDescriptors(t *testing.T) {
@@ -95,6 +96,43 @@ func TestSourceImportProducesClosedCanonicalDescriptors(t *testing.T) {
 	}
 }
 
+func TestSourceImportAcceptsStringScalarUnionPathWireContract(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3",
+  "info":{"title":"fixture","version":"1"},
+  "paths":{
+    "/workflows/{workflow_id}":{
+      "get":{
+        "operationId":"workflows/get",
+        "parameters":[{
+          "name":"workflow_id","in":"path","required":true,
+          "schema":{"oneOf":[{"type":"integer"},{"type":"string"}]}
+        }],
+        "responses":{"200":{"description":"ok"}}
+      }
+    }
+  }
+}`)
+	result := importInlineSourceResult(t, artifact, defaultSourceImportLimits())
+	if len(result.Operations) != 1 {
+		t.Fatalf("operations = %d, want 1", len(result.Operations))
+	}
+	operation := result.Operations[0]
+	if len(operation.Runtime.Gaps) != 0 || operation.Runtime.MergeBlocked {
+		t.Fatalf("string-or-integer path union must remain a closed textual wire contract, got runtime=%+v", operation.Runtime)
+	}
+	parameter := operation.Request.Path[0]
+	schema, ok := parameter.Schema.(map[string]any)
+	if !ok {
+		t.Fatalf("path schema = %#v, want preserved source object", parameter.Schema)
+	}
+	arms, _ := schema["oneOf"].([]any)
+	if len(arms) != 2 {
+		t.Fatalf("path union arms = %#v, want exact two-arm source contract", schema)
+	}
+}
+
 func TestSourceImport_CheckedInGitHubLockCoversRESTAndGraphQL(t *testing.T) {
 	t.Parallel()
 	raw, err := os.ReadFile(filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"))
@@ -122,6 +160,26 @@ func TestSourceImport_CheckedInGitHubLockCoversRESTAndGraphQL(t *testing.T) {
 	}
 }
 
+func TestSourceImport_CheckedInGitHubProjectionDigestIsCanonical(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var lock sourceImportLock
+	if err := decodeSourceStrictJSON(raw, &lock); err != nil {
+		t.Fatal(err)
+	}
+	projection, err := canonicalSourceGraphQLProjection(lock.GraphQL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	digest := sha256.Sum256(projection)
+	wantDigest := hex.EncodeToString(digest[:])
+	if lock.GraphQL.ProjectionSHA256 != wantDigest || lock.GraphQL.ProjectionBytes != int64(len(projection)) {
+		t.Fatalf("checked-in GraphQL projection pin = %s/%d, want %s/%d", lock.GraphQL.ProjectionSHA256, lock.GraphQL.ProjectionBytes, wantDigest, len(projection))
+	}
+}
+
 func TestSourceImportVersion2UsesEmbeddedLockedGraphQLProjection(t *testing.T) {
 	t.Parallel()
 	rest := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"operationId":"items/list","responses":{"200":{"description":"ok"}}}}}}`)
@@ -132,6 +190,7 @@ func TestSourceImportVersion2UsesEmbeddedLockedGraphQLProjection(t *testing.T) {
 		QueryFields:          []sourceGraphQLField{{Root: "Query", Name: "viewer", Line: 7, Signature: "viewer: User", ReturnType: sourceGraphQLTypeRef{Kind: "OBJECT", Name: "User"}}},
 		TypeSystem:           sourceGraphQLTypeSystem{Enums: []sourceGraphQLNamedType{}, InputObjects: []sourceGraphQLNamedType{}, Interfaces: []sourceGraphQLNamedType{}, Objects: []sourceGraphQLNamedType{}, Scalars: []string{}, Unions: []sourceGraphQLNamedType{}},
 	}
+	lock = sourceImportTestWithProjectionDigest(t, lock)
 	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
 		if sourceURL != lock.Rest.SourceURL {
 			t.Fatalf("version 2 import fetched unversioned GraphQL URL %q", sourceURL)
@@ -141,9 +200,58 @@ func TestSourceImportVersion2UsesEmbeddedLockedGraphQLProjection(t *testing.T) {
 	if err != nil {
 		t.Fatalf("version 2 import: %v", err)
 	}
-	if len(result.Operations) != 2 || result.Operations[1].GraphQL == nil || result.Operations[1].Source.SHA256 != lock.GraphQL.SHA256 {
+	if len(result.Operations) != 2 || result.Operations[1].GraphQL == nil || result.Operations[1].Source.SHA256 != lock.GraphQL.ProjectionSHA256 || result.Operations[1].Source.Bytes != lock.GraphQL.ProjectionBytes {
 		t.Fatalf("embedded GraphQL projection = %#v", result.Operations)
 	}
+}
+
+func TestSourceImportVersion2RejectsEmbeddedGraphQLProjectionDigestDrift(t *testing.T) {
+	rest := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"operationId":"items/list","responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/rest.json", rest)
+	lock.SchemaVersion = 2
+	lock.GraphQL = sourceImportGraphQL{
+		sourceImportArtifact: sourceImportArtifact{SourceURL: "https://fixtures.polymetrics.invalid/unversioned.graphql", SHA256: strings.Repeat("a", 64), Bytes: 128},
+		QueryFields:          []sourceGraphQLField{{Root: "Query", Name: "viewer", Line: 7, Signature: "viewer: User", ReturnType: sourceGraphQLTypeRef{Kind: "OBJECT", Name: "User"}}},
+		TypeSystem:           sourceGraphQLTypeSystem{Enums: []sourceGraphQLNamedType{}, InputObjects: []sourceGraphQLNamedType{}, Interfaces: []sourceGraphQLNamedType{}, Objects: []sourceGraphQLNamedType{}, Scalars: []string{}, Unions: []sourceGraphQLNamedType{}},
+	}
+	lock = sourceImportTestWithProjectionDigest(t, lock)
+	lock.GraphQL.QueryFields[0].Signature = "viewer: Organization"
+	_, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return rest, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "GraphQL projection") {
+		t.Fatalf("embedded projection drift error = %v, want authenticated projection refusal", err)
+	}
+}
+
+func sourceImportTestWithProjectionDigest(t *testing.T, lock sourceImportLock) sourceImportLock {
+	t.Helper()
+	projection, err := json.Marshal(map[string]any{
+		"query_fields":    lock.GraphQL.QueryFields,
+		"mutation_fields": lock.GraphQL.MutationFields,
+		"type_system":     lock.GraphQL.TypeSystem,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	digest := sha256.Sum256(projection)
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document map[string]any
+	if err := json.Unmarshal(raw, &document); err != nil {
+		t.Fatal(err)
+	}
+	graphql := document["graphql"].(map[string]any)
+	graphql["projection_sha256"] = hex.EncodeToString(digest[:])
+	graphql["projection_bytes"] = len(projection)
+	raw, err = json.Marshal(document)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(raw, &lock); err != nil {
+		t.Fatal(err)
+	}
+	return lock
 }
 
 func TestSourceImport_RejectsUnknownSectionAndIndependentIndexOverflow(t *testing.T) {
@@ -195,6 +303,7 @@ func TestSourceImportImportsLockedRESTAndGraphQLIdentities(t *testing.T) {
 		MutationFields:       []sourceGraphQLField{{Root: "Mutation", Name: "updateWidget", Line: 2, Signature: "updateWidget(input: String!): Boolean", Arguments: []sourceGraphQLArgument{{Name: "input", Type: sourceGraphQLTypeRef{Kind: "named", Name: "String", NonNull: true}}}, ReturnType: sourceGraphQLTypeRef{Kind: "named", Name: "Boolean"}}},
 		TypeSystem:           sourceGraphQLTypeSystem{Enums: []sourceGraphQLNamedType{}, InputObjects: []sourceGraphQLNamedType{}, Interfaces: []sourceGraphQLNamedType{}, Objects: []sourceGraphQLNamedType{}, Scalars: []string{"Boolean", "String"}, Unions: []sourceGraphQLNamedType{}},
 	}
+	lock = sourceImportTestWithProjectionDigest(t, lock)
 	lock.Counts = sourceImportCounts{REST: 2, GraphQLQuery: 1, GraphQLMutation: 1, Total: 4}
 	fetcher := sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
 		switch sourceURL {
@@ -299,6 +408,9 @@ func TestSourceImportRejectsUnsafeArtifactDestinations(t *testing.T) {
 	if err := newSourceImportHTTPClient(publicLookup).CheckRedirect(&http.Request{URL: redirectURL}, nil); err == nil {
 		t.Fatal("source importer accepted a redirect")
 	}
+	if got := newSourceImportHTTPClient(publicLookup).Timeout; got != defaultSourceImportFetchTimeout {
+		t.Fatalf("source importer cold fetch timeout = %s, want %s", got, defaultSourceImportFetchTimeout)
+	}
 }
 
 func TestSourceImportProjectsSwaggerBodiesPathOverridesAndAuthGroups(t *testing.T) {
@@ -384,6 +496,102 @@ func TestSourceImportRejectsArtifactDriftAndSizeBeforeParsing(t *testing.T) {
 	}
 }
 
+func TestSourceImportArtifactCacheColdSlowFetchWritesOnlyVerifiedBytes(t *testing.T) {
+	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", raw)
+	cacheDir := t.TempDir()
+	calls := 0
+	fetcher := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(ctx context.Context, sourceURL string) ([]byte, error) {
+		calls++
+		if sourceURL != lock.Rest.SourceURL {
+			t.Fatalf("cold fetch source URL = %q, want %q", sourceURL, lock.Rest.SourceURL)
+		}
+		select {
+		case <-time.After(20 * time.Millisecond):
+			return raw, nil
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		}
+	}), cacheDir, defaultSourceImportLimits())
+
+	if _, err := importSourceLock(context.Background(), lock, fetcher, defaultSourceImportLimits()); err != nil {
+		t.Fatalf("cold slow source import: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("cold fetch calls = %d, want 1", calls)
+	}
+	cachePath, err := sourceImportArtifactCachePath(cacheDir, lock.Rest.sourceImportArtifact)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, err := os.ReadFile(cachePath); err != nil || !bytes.Equal(got, raw) {
+		t.Fatalf("verified cache content = %q, read error = %v; want locked artifact", got, err)
+	}
+}
+
+func TestSourceImportArtifactCacheHitVerifiesWithoutNetwork(t *testing.T) {
+	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", raw)
+	cacheDir := t.TempDir()
+	seed := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return raw, nil
+	}), cacheDir, defaultSourceImportLimits())
+	if _, err := importSourceLock(context.Background(), lock, seed, defaultSourceImportLimits()); err != nil {
+		t.Fatalf("seed verified artifact cache: %v", err)
+	}
+	networkCalls := 0
+	hit := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		networkCalls++
+		return nil, fmt.Errorf("network must not run for a verified cache hit")
+	}), cacheDir, defaultSourceImportLimits())
+	if _, err := importSourceLock(context.Background(), lock, hit, defaultSourceImportLimits()); err != nil {
+		t.Fatalf("verified cache import: %v", err)
+	}
+	if networkCalls != 0 {
+		t.Fatalf("verified cache hit made %d network calls", networkCalls)
+	}
+}
+
+func TestSourceImportArtifactCacheRejectsCorruptionAndOnlyRecoversFromVerifiedFetch(t *testing.T) {
+	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", raw)
+	cacheDir := t.TempDir()
+	cachePath, err := sourceImportArtifactCachePath(cacheDir, lock.Rest.sourceImportArtifact)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Dir(cachePath), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(cachePath, []byte("corrupt cache"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	freshCalls := 0
+	recovering := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		freshCalls++
+		return raw, nil
+	}), cacheDir, defaultSourceImportLimits())
+	if _, err := importSourceLock(context.Background(), lock, recovering, defaultSourceImportLimits()); err != nil {
+		t.Fatalf("recover corrupt cache with pinned source: %v", err)
+	}
+	if freshCalls != 1 {
+		t.Fatalf("corrupt cache recovery calls = %d, want one fresh fetch", freshCalls)
+	}
+	if got, err := os.ReadFile(cachePath); err != nil || !bytes.Equal(got, raw) {
+		t.Fatalf("recovered cache content = %q, read error = %v; want locked artifact", got, err)
+	}
+
+	if err := os.WriteFile(cachePath, []byte("corrupt cache again"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	unavailable := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return nil, fmt.Errorf("source unavailable")
+	}), cacheDir, defaultSourceImportLimits())
+	if _, err := importSourceLock(context.Background(), lock, unavailable, defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "source unavailable") {
+		t.Fatalf("corrupt cache with unavailable source error = %v, want source failure", err)
+	}
+}
+
 func TestSourceImportCommandContractAndMigrationDocumentation(t *testing.T) {
 	t.Parallel()
 	var stdout, stderr bytes.Buffer
@@ -395,7 +603,7 @@ func TestSourceImportCommandContractAndMigrationDocumentation(t *testing.T) {
 			t.Fatalf("source-import help exposes %s: %s", forbidden, stdout.String())
 		}
 	}
-	if !strings.Contains(stdout.String(), "source-import <connector>") || !strings.Contains(stdout.String(), "source-lock") {
+	if !strings.Contains(stdout.String(), "source-import <connector>") || !strings.Contains(stdout.String(), "source-lock") || !strings.Contains(stdout.String(), "--cache-dir <dir>") {
 		t.Fatalf("source-import help is incomplete: %s", stdout.String())
 	}
 	stdout.Reset()
@@ -407,7 +615,7 @@ func TestSourceImportCommandContractAndMigrationDocumentation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read migration conventions: %v", err)
 	}
-	if !strings.Contains(string(docs), "connectorgen source-import") || !strings.Contains(string(docs), "source-lock refresh") {
+	if !strings.Contains(string(docs), "connectorgen source-import") || !strings.Contains(string(docs), "source-lock refresh") || !strings.Contains(string(docs), "non-symlink cache root") {
 		t.Fatalf("migration conventions lack source-import adoption contract")
 	}
 }
@@ -454,6 +662,53 @@ func TestSourceImportCommandUsesOnlyConnectorOwnedLockAndCheckMode(t *testing.T)
 
 	if _, err := loadConnectorSourceImportLock(defsRoot, "beta"); err == nil {
 		t.Fatal("missing beta connector-owned lock was accepted")
+	}
+}
+
+func TestSourceImportCommandUsesExplicitVerifiedCacheRoot(t *testing.T) {
+	defsRoot := t.TempDir()
+	lockPath := filepath.Join(defsRoot, "alpha", "sources", "alpha-operation-source-lock.json")
+	if err := os.MkdirAll(filepath.Dir(lockPath), 0o755); err != nil {
+		t.Fatalf("create fixture lock directory: %v", err)
+	}
+	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", raw)
+	lockRaw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatalf("marshal fixture lock: %v", err)
+	}
+	if err := os.WriteFile(lockPath, lockRaw, 0o644); err != nil {
+		t.Fatalf("write fixture lock: %v", err)
+	}
+	cacheDir := t.TempDir()
+	outPath := filepath.Join(t.TempDir(), "alpha-descriptors.json")
+	args := []string{"source-import", "alpha", "--defs", defsRoot, "--out", outPath, "--cache-dir", cacheDir}
+	var stdout, stderr bytes.Buffer
+	calls := 0
+	fetcher := sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		calls++
+		return raw, nil
+	})
+	if exit := runSourceImportWithFetcher(args, &stdout, &stderr, fetcher); exit != 0 {
+		t.Fatalf("cold source-import exit = %d, stderr = %s", exit, stderr.String())
+	}
+	if calls != 1 {
+		t.Fatalf("cold source-import fetch calls = %d, want 1", calls)
+	}
+	cachePath, err := sourceImportArtifactCachePath(cacheDir, lock.Rest.sourceImportArtifact)
+	if err != nil {
+		t.Fatalf("cache path: %v", err)
+	}
+	if cached, err := os.ReadFile(cachePath); err != nil || !bytes.Equal(cached, raw) {
+		t.Fatalf("isolated cache contents = %q, read error = %v", cached, err)
+	}
+	stdout.Reset()
+	stderr.Reset()
+	if exit := runSourceImportWithFetcher(append(args, "--check"), &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		t.Fatal("warm cache verification unexpectedly fetched from network")
+		return nil, nil
+	})); exit != 0 {
+		t.Fatalf("warm source-import check exit = %d, stderr = %s", exit, stderr.String())
 	}
 }
 

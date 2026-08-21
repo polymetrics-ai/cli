@@ -729,31 +729,26 @@ func positiveNumber(v any) bool {
 	return err == nil && f > 0
 }
 
-// deriveCommandParameterFlags adds a flag for every parameter the operation
-// declares that the command does not already expose, and returns how many it
-// added.
-//
-// It only ever ADDS. A flag the bundle already declares is left exactly as
-// authored, because an author may have given it a better summary or a narrower
-// type than the provider specification carries; the derivation exists to close
-// the gap where a parameter has no flag at all, not to overwrite judgement.
+// deriveCommandParameterFlags synchronizes provider-owned flag semantics from
+// the operation declaration. Human-authored prose and flags without a
+// path/query/header mapping remain authored; source-owned type, bounds,
+// requiredness, repeatability, values, location, and deletion do not drift.
 //
 // Paging parameters never arrive here: params-import excludes them, because
 // paging is answered by the connector's declared pagination spec through
 // --page/--page-cursor.
 func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
-	params := arrayField(rest, "parameters")
-	if len(params) == 0 {
+	// An absent block means this operation has not been through the immutable
+	// provider-parameter importer, so this synchronizer has no source-owned
+	// authority over its existing command flags. An explicitly present empty
+	// block is different: params-import verified the provider exposes no caller
+	// parameters and stale path/query/header flags must be removed.
+	if _, declared := rest.get("parameters"); !declared {
 		return 0
 	}
-	declared := map[string]bool{}
-	for _, raw := range arrayField(cmd, "flags") {
-		if flag, ok := raw.(*orderedObject); ok {
-			declared[normalizedDerivedFlagName(stringField(flag, "name"))] = true
-		}
-	}
-	flags := append([]any(nil), arrayField(cmd, "flags")...)
-	added := 0
+	params := arrayField(rest, "parameters")
+	wanted := map[string]*orderedObject{}
+	order := make([]string, 0, len(params))
 	for _, raw := range params {
 		param, ok := raw.(*orderedObject)
 		if !ok {
@@ -765,13 +760,19 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 			continue
 		}
 		flagName := strings.ReplaceAll(name, "_", "-")
+		if location == "path" && stringField(param, "cli_name") != "" {
+			// A declaration can name a safe runtime path placeholder differently
+			// from the provider's resource identity. The alias remains closed:
+			// maps_to still names the exact provider path parameter below.
+			flagName = stringField(param, "cli_name")
+		}
 		if location == "header" {
 			// Header names are case-insensitive and may overlap a path/query
 			// parameter. The generated CLI flag carries its location explicitly,
 			// while maps_to remains the exact provider header name.
 			flagName = "header-" + strings.ToLower(strings.ReplaceAll(name, "_", "-"))
 		}
-		if name == "" || declared[normalizedDerivedFlagName(flagName)] {
+		if name == "" {
 			continue
 		}
 		flag := newOrderedObject()
@@ -783,21 +784,92 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 		if values := arrayField(param, "values"); len(values) > 0 {
 			flag.set("values", append([]any(nil), values...))
 		}
-		if required, _ := param.get("required"); required == true {
+		// Path requiredness is deliberately synchronized by
+		// deriveRequiredPathFlagRequiredness below. Keeping that one owner lets
+		// surface-sync distinguish an absent required marker from a corrected
+		// false one, and prevents parameter-semantic reconciliation from
+		// silently swallowing that accounting boundary.
+		if required, _ := param.get("required"); required == true && location != "path" {
 			flag.set("required", true)
 		}
 		if repeatable, _ := param.get("repeatable"); location == "header" && repeatable == true {
 			flag.set("repeatable", true)
 		}
+		if maxBytes, present := param.get("max_bytes"); present {
+			flag.set("max_bytes", maxBytes)
+		}
 		flag.set("maps_to", location+"."+name)
-		flags = append(flags, flag)
-		declared[normalizedDerivedFlagName(flagName)] = true
-		added++
+		key := normalizedDerivedFlagName(flagName)
+		wanted[key] = flag
+		order = append(order, key)
 	}
-	if added > 0 {
+
+	changes := 0
+	flags := make([]any, 0, len(arrayField(cmd, "flags"))+len(wanted))
+	seen := map[string]bool{}
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			flags = append(flags, raw)
+			continue
+		}
+		key := normalizedDerivedFlagName(stringField(flag, "name"))
+		derived, exists := wanted[key]
+		mapping := stringField(flag, "maps_to")
+		providerOwned := strings.HasPrefix(mapping, "query.") || strings.HasPrefix(mapping, "path.") || strings.HasPrefix(mapping, "header.")
+		if !exists {
+			if providerOwned {
+				changes++
+				continue
+			}
+			flags = append(flags, flag)
+			continue
+		}
+		seen[key] = true
+		if summary := stringField(flag, "summary"); summary != "" {
+			derived.set("summary", summary)
+		}
+		// Existing requiredness is an accounting boundary: a new source-owned
+		// flag receives the provider's required marker, while an existing flag
+		// leaves an absent/false marker for the location-specific synchronizer
+		// to classify as a fill or correction. This preserves the established
+		// direct-read query contract and gives path/header repair one owner.
+		if sourceRequired, _ := derived.get("required"); sourceRequired == true {
+			if required, present := flag.get("required"); !present {
+				derived.remove("required")
+			} else if required == false {
+				derived.set("required", false)
+			}
+		}
+		// Preserve path requiredness exactly until the dedicated path
+		// synchronizer accounts for it. That includes an already-correct true:
+		// dropping it here and immediately adding it back below leaves files
+		// unchanged but reports phantom generator drift on every --check.
+		// False and absent markers still flow to the same synchronizer, which
+		// records their correction/fill once and makes the next pass a no-op.
+		if strings.HasPrefix(mapping, "path.") {
+			if required, present := flag.get("required"); present && required == false {
+				derived.set("required", false)
+			} else if present && required == true {
+				derived.set("required", true)
+			}
+		}
+		if !orderedSemanticEqual(flag, derived) {
+			changes++
+		}
+		flags = append(flags, derived)
+	}
+	for _, key := range order {
+		if seen[key] {
+			continue
+		}
+		flags = append(flags, wanted[key])
+		changes++
+	}
+	if changes > 0 {
 		cmd.set("flags", flags)
 	}
-	return added
+	return changes
 }
 
 func normalizedDerivedFlagName(name string) string {

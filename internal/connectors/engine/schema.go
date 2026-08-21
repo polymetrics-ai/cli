@@ -41,6 +41,8 @@ type schemaNode struct {
 	hasMaxLength         bool
 	minProperties        int
 	hasMinProperties     bool
+	maxProperties        int
+	hasMaxProperties     bool
 	additionalProperties bool // true unless explicitly set to false
 	hasAdditionalProps   bool
 
@@ -96,6 +98,7 @@ var structuralKeywords = map[string]bool{
 	"minLength":            true,
 	"maxLength":            true,
 	"minProperties":        true,
+	"maxProperties":        true,
 	"minItems":             true,
 	"maxItems":             true,
 	"additionalProperties": true,
@@ -253,12 +256,23 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	}
 
 	if raw, ok := m["minProperties"]; ok {
-		var mp int
-		if err := json.Unmarshal(raw, &mp); err != nil {
-			return nil, fmt.Errorf("compile schema: minProperties: %w", err)
+		mp, err := compileNonNegativeInt(raw, "minProperties")
+		if err != nil {
+			return nil, err
 		}
 		n.minProperties = mp
 		n.hasMinProperties = true
+	}
+	if raw, ok := m["maxProperties"]; ok {
+		mp, err := compileNonNegativeInt(raw, "maxProperties")
+		if err != nil {
+			return nil, err
+		}
+		n.maxProperties = mp
+		n.hasMaxProperties = true
+	}
+	if n.hasMinProperties && n.hasMaxProperties && n.maxProperties < n.minProperties {
+		return nil, fmt.Errorf("compile schema: maxProperties %d is below minProperties %d", n.maxProperties, n.minProperties)
 	}
 
 	if err := compileArrayCardinality(m, n); err != nil {
@@ -500,6 +514,9 @@ func (n *schemaNode) validateArrayCardinality(count int, path string) error {
 func (n *schemaNode) validateObject(obj map[string]any, path string) error {
 	if n.hasMinProperties && len(obj) < n.minProperties {
 		return fmt.Errorf("%s: minProperties %d not satisfied (got %d)", displayPath(path), n.minProperties, len(obj))
+	}
+	if n.hasMaxProperties && len(obj) > n.maxProperties {
+		return fmt.Errorf("%s: maxProperties %d exceeded (got %d)", displayPath(path), n.maxProperties, len(obj))
 	}
 
 	for _, req := range n.required {

@@ -88,10 +88,41 @@ test("preserves fixed supplemental GraphQL operations on the shared transport", 
     (endpoint) => endpoint.method === "POST" && endpoint.path === "/graphql",
   );
 
-  assert.deepEqual(transport.covered_by.operations, [
-    "github.repo.list",
-    ...generated.operations.map((operation) => operation.id),
-  ]);
+  assert.deepEqual(
+    transport.covered_by.operations,
+    ["github.repo.list", ...generated.operations.map((operation) => operation.id)].sort(),
+  );
+});
+
+test("TestGitHubParityGenerationOrderIsCommutative", async () => {
+  const lock = await miniLock();
+  const generated = buildGitHubGraphQLParityArtifacts({ lock, bundle: emptyBundle() });
+  const restOperations = [
+    { id: "github.rest.z", kind: "rest_read" },
+    { id: "github.rest.a", kind: "rest_read" },
+  ];
+  const restCommands = [
+    { path: "zeta read", operation: restOperations[0].id },
+    { path: "alpha read", operation: restOperations[1].id },
+  ];
+  const restEndpoints = [
+    { method: "GET", path: "/zeta", covered_by: { direct_read: "zeta read" } },
+    { method: "GET", path: "/alpha", covered_by: { direct_read: "alpha read" } },
+  ];
+  const left = emptyBundle();
+  left.operations.operations = restOperations;
+  left.cli.commands = restCommands;
+  left.surface.endpoints = restEndpoints;
+  const right = emptyBundle();
+  right.operations.operations = [...generated.operations, ...restOperations].reverse();
+  right.cli.commands = [...generated.commands, ...restCommands].reverse();
+  right.surface.endpoints = [generated.transport, ...restEndpoints].reverse();
+
+  assert.deepEqual(
+    mergeGitHubGraphQLParityArtifacts(left, generated),
+    mergeGitHubGraphQLParityArtifacts(right, generated),
+    "the canonical artifact set must be independent of generator execution order",
+  );
 });
 
 test("fails closed for a missing canary, duplicate root command, unbounded list, or unclassified deleteIssue", async () => {

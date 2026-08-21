@@ -99,6 +99,13 @@ type structuredJSONRecordPreflighter interface {
 	PreflightStructuredJSONRecordField(actionName, field string) error
 }
 
+// structuredJSONRecordStringArmPreflighter is an even narrower opt-in for a
+// source-declared string arm of a named multi-kind record field. It cannot
+// authorize a raw body, open object, or a direct operation input.
+type structuredJSONRecordStringArmPreflighter interface {
+	PreflightStructuredJSONRecordStringArm(actionName, field string) error
+}
+
 // structuredJSONOperationBodyPreflighter is intentionally an operation
 // contract rather than a generic JSON parser. The engine owns the source
 // schema, body mapping, and recursive bounds for the named field.
@@ -488,14 +495,17 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 
 // preflightStructuredJSONFlags preserves the original reverse-ETL record
 // boundary and adds operation-specific exceptions. A JSON flag never means
-// "take an arbitrary request body": a direct write can name only a declared
-// body field from its fixed REST operation and a direct read can name
-// only one variable from its fixed GraphQL operation. The engine proves the
-// named value is a closed, bounded object or array in that exact declaration.
+// "take an arbitrary request body": direct writes and reads can name only a
+// declared body field from their fixed operation. The engine proves the named
+// value is a closed, bounded object or array in that exact declaration.
 func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
 	var preflighter structuredJSONRecordPreflighter
-	var graphQLPreflighter connectors.OperationStructuredJSONVariablePreflighter
+	var stringArmPreflighter structuredJSONRecordStringArmPreflighter
+	var operationPreflighter structuredJSONOperationBodyPreflighter
 	for _, flag := range cmd.Flags {
+		if flag.AllowBareString && flag.Type != "json" {
+			return fmt.Errorf("bare-string flag --%s must use the bounded json flag type", flag.Name)
+		}
 		if flag.Type != "json" {
 			continue
 		}
@@ -515,31 +525,37 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 			if err := preflighter.PreflightStructuredJSONRecordField(cmd.Write, field); err != nil {
 				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
 			}
-		case cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "":
+			if flag.AllowBareString {
+				if stringArmPreflighter == nil {
+					var supported bool
+					stringArmPreflighter, supported = connector.(structuredJSONRecordStringArmPreflighter)
+					if !supported {
+						return fmt.Errorf("bare-string flag --%s requires a declarative string-arm preflight", flag.Name)
+					}
+				}
+				if err := stringArmPreflighter.PreflightStructuredJSONRecordStringArm(cmd.Write, field); err != nil {
+					return fmt.Errorf("bare-string flag --%s is not declared safely: %w", flag.Name, err)
+				}
+			}
+		case (cmd.Intent == "direct_write" || cmd.Intent == "direct_read") && strings.TrimSpace(cmd.Operation) != "":
+			if flag.AllowBareString {
+				return fmt.Errorf("bare-string flag --%s is allowed only on a declared reverse-ETL record field", flag.Name)
+			}
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
 			if !ok || variable == "" {
 				return fmt.Errorf("structured JSON flag --%s must map to a declared body field of its operation", flag.Name)
 			}
-			preflighter, supported := connector.(structuredJSONOperationBodyPreflighter)
-			if !supported {
-				return fmt.Errorf("structured JSON flag --%s requires declaration-backed operation body preflight", flag.Name)
+			if cmd.Intent == "direct_read" && strings.Contains(variable, ".") {
+				return fmt.Errorf("structured JSON flag --%s must map to one top-level body field of a fixed operation", flag.Name)
 			}
-			if err := preflighter.PreflightOperationStructuredJSONBodyField(cmd.Operation, variable); err != nil {
-				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
-			}
-		case cmd.Intent == "direct_read" && strings.TrimSpace(cmd.Operation) != "":
-			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
-			if !ok || variable == "" || strings.Contains(variable, ".") {
-				return fmt.Errorf("structured JSON flag --%s must map to one top-level body.<variable> of a fixed GraphQL operation", flag.Name)
-			}
-			if graphQLPreflighter == nil {
+			if operationPreflighter == nil {
 				var supported bool
-				graphQLPreflighter, supported = connector.(connectors.OperationStructuredJSONVariablePreflighter)
+				operationPreflighter, supported = connector.(structuredJSONOperationBodyPreflighter)
 				if !supported {
-					return fmt.Errorf("structured JSON flag --%s requires fixed GraphQL variable preflight", flag.Name)
+					return fmt.Errorf("structured JSON flag --%s requires declaration-backed operation body preflight", flag.Name)
 				}
 			}
-			if err := graphQLPreflighter.PreflightOperationStructuredJSONVariable(cmd.Operation, variable); err != nil {
+			if err := operationPreflighter.PreflightOperationStructuredJSONBodyField(cmd.Operation, variable); err != nil {
 				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
 			}
 		default:
@@ -548,6 +564,13 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 	}
 	return nil
 }
+
+/*
+	The structured body preflight above intentionally shares the REST and
+	GraphQL declaration boundary. Do not route json flags through a transport
+	method/path/body escape hatch: the fixed operation and its top-level mapped
+	field remain the only authority.
+*/
 
 // directReadPageFlagNames are consumed as Request.Page/Request.PageCursor
 // rather than as command flags. Only this intent can honour them, so they are
@@ -1130,9 +1153,31 @@ func validateCommandConstraint(constraint connectors.CommandSurfaceConstraint, c
 	switch constraint.Kind {
 	case "order":
 		return validateOrderConstraint(constraint, cfg, inputs)
+	case "exactly_one":
+		return validateExactlyOneConstraint(constraint, cfg, inputs)
 	default:
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command constraint kind %q", constraint.Kind)}
 	}
+}
+
+func validateExactlyOneConstraint(constraint connectors.CommandSurfaceConstraint, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
+	present := 0
+	for _, target := range constraint.Fields {
+		_, targetPresent, _, err := validationTargetValue(target, cfg, inputs)
+		if err != nil {
+			return err
+		}
+		if targetPresent {
+			present++
+		}
+	}
+	if present == 1 {
+		return nil
+	}
+	if strings.TrimSpace(constraint.Message) != "" {
+		return errors.New(constraint.Message)
+	}
+	return fmt.Errorf("invalid command constraint: exactly one of %s must be provided", strings.Join(constraint.Fields, ", "))
 }
 
 func validateOrderConstraint(constraint connectors.CommandSurfaceConstraint, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
@@ -2009,11 +2054,22 @@ func coerceDeclaredStructuredJSONRecordFlagValue(flag connectors.CommandSurfaceF
 		return nil, fmt.Errorf("invalid --%s: structured JSON flags accept exactly one value", flag.Name)
 	}
 	raw := values[0]
-	if len(raw) > maxStructuredJSONFlagBytes {
-		return nil, fmt.Errorf("invalid --%s: structured JSON exceeds %d bytes", flag.Name, maxStructuredJSONFlagBytes)
+	maxBytes := maxStructuredJSONFlagBytes
+	if flag.MaxBytes > 0 && flag.MaxBytes < maxBytes {
+		maxBytes = flag.MaxBytes
+	}
+	if len(raw) > maxBytes {
+		return nil, fmt.Errorf("invalid --%s: structured JSON exceeds %d bytes", flag.Name, maxBytes)
 	}
 	if err := safety.RejectDangerousChars(raw, "flag value"); err != nil {
 		return nil, err
+	}
+	if flag.AllowBareString && !structuredJSONRecordValueStartsContainer(raw) {
+		// The declaration preflight has proved this exact named field has a
+		// string arm. Preserve normal command-line text (including text that
+		// resembles a JSON scalar) while object/array values keep their strict
+		// JSON syntax and all values still face record-schema validation.
+		return raw, nil
 	}
 
 	decoder := json.NewDecoder(strings.NewReader(raw))
@@ -2029,12 +2085,17 @@ func coerceDeclaredStructuredJSONRecordFlagValue(flag connectors.CommandSurfaceF
 		}
 		return nil, fmt.Errorf("invalid JSON for --%s: %w", flag.Name, err)
 	}
-	switch value.(type) {
-	case map[string]any, []any:
-		return value, nil
-	default:
-		return nil, fmt.Errorf("invalid --%s: structured JSON must be an object or array", flag.Name)
-	}
+	// Runtime preflight has already proved the exact named record property is
+	// structured or a provider-declared multi-kind union. Do not impose a
+	// second object/array-only rule here: it would silently remove a scalar arm
+	// from that declared union. This remains a named record value, never a raw
+	// request body, and is still bounded above before decoding.
+	return value, nil
+}
+
+func structuredJSONRecordValueStartsContainer(raw string) bool {
+	trimmed := strings.TrimSpace(raw)
+	return strings.HasPrefix(trimmed, "{") || strings.HasPrefix(trimmed, "[")
 }
 
 // coerceCommandFlagValue retains the normal command-line control-character
@@ -2171,6 +2232,8 @@ func validateCommandFlagEncodedBytes(flag connectors.CommandSurfaceFlag, value s
 	}
 	encoded := ""
 	switch location {
+	case "record":
+		encoded = value
 	case "path":
 		if name == "path" || name == "ref" {
 			parts := strings.Split(value, "/")

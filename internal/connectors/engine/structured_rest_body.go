@@ -37,10 +37,12 @@ func PreflightOperationStructuredJSONBodyField(b Bundle, operation, field string
 }
 
 // ValidateOperationStructuredJSONBodyField is the common declaration gate for
-// a json command flag on a fixed write operation. GraphQL retains its existing
-// closed-variable contract; REST uses the equivalent closed body-schema path
-// contract. Commandrunner and connectorgen call this same function; typed
-// execution compiles the same schema at its shared body boundary.
+// a json command flag on a fixed operation. GraphQL retains its existing
+// closed-variable contract. REST writes and POST reads use their respective
+// closed body-schema compilation path, which lets direct reads accept a named
+// provider-declared object or array without creating a generic request body.
+// Commandrunner and connectorgen call this same function; typed execution
+// compiles the same schema at its shared body boundary.
 func ValidateOperationStructuredJSONBodyField(op OperationSpec, field string) error {
 	field = strings.TrimSpace(field)
 	if field == "" {
@@ -48,16 +50,42 @@ func ValidateOperationStructuredJSONBodyField(op OperationSpec, field string) er
 	}
 
 	switch op.Kind {
-	case "graphql_mutation":
+	case "graphql_query", "graphql_mutation":
 		if err := safety.ValidateIdentifier(field, "structured body field"); err != nil {
 			return err
 		}
 		return ValidateGraphQLOperationStructuredJSONVariable(op, field)
 	case "rest_write":
 		return validateRESTStructuredJSONBodyField(op, field)
+	case "rest_read":
+		return validateRESTDirectReadStructuredJSONBodyField(op, field)
 	default:
-		return fmt.Errorf("operation %q structured JSON body requires rest_write or graphql_mutation, got %q", op.ID, op.Kind)
+		return fmt.Errorf("operation %q structured JSON body requires rest_read, rest_write, graphql_query, or graphql_mutation, got %q", op.ID, op.Kind)
 	}
+}
+
+func validateRESTDirectReadStructuredJSONBodyField(op OperationSpec, field string) error {
+	if op.REST == nil {
+		return fmt.Errorf("operation %q rest_read has no rest declaration", op.ID)
+	}
+	if strings.ToUpper(strings.TrimSpace(op.REST.Method)) != "POST" {
+		return fmt.Errorf("operation %q structured JSON body requires a POST rest_read", op.ID)
+	}
+	if operationDirectReadContentType(op) != "application/json" {
+		return fmt.Errorf("operation %q structured JSON body requires application/json content_type", op.ID)
+	}
+	_, compiled, err := compileOperationDirectReadBodySchema(op)
+	if err != nil {
+		return err
+	}
+	resolved, err := resolveOperationDirectWriteBodySchemaPath(compiled.root, field)
+	if err != nil {
+		return fmt.Errorf("operation %q body_schema does not declare structured field %q: %w", op.ID, field, err)
+	}
+	if !isObjectType(resolved.node) && !isArrayType(resolved.node) {
+		return fmt.Errorf("operation %q body_schema field %q must be an object or array", op.ID, field)
+	}
+	return nil
 }
 
 func validateRESTStructuredJSONBodyField(op OperationSpec, field string) error {

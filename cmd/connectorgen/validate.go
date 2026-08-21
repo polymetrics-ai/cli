@@ -969,7 +969,7 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
 			operation, found := operations[cmd.Operation]
 			if ok && variable != "" && !strings.Contains(variable, ".") && found {
-				if err := engine.ValidateGraphQLOperationStructuredJSONVariable(operation, variable); err == nil {
+				if err := engine.ValidateOperationStructuredJSONBodyField(operation, variable); err == nil {
 					continue
 				}
 			}
@@ -1580,22 +1580,39 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		}
 	}
 	for j, constraint := range cmd.Constraints {
-		if constraint.Kind != "order" {
+		if constraint.Kind != "order" && constraint.Kind != "exactly_one" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported kind %q", i, cmd.Path, j, constraint.Kind)})
 		}
-		if constraint.Op != "lt" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported op %q", i, cmd.Path, j, constraint.Op)})
-		}
-		if constraint.ValueType != "date-time" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d must declare value_type date-time", i, cmd.Path, j)})
-		}
-		for _, ref := range []struct {
+		var targets []struct {
 			role   string
 			target string
-		}{
-			{role: "left", target: constraint.Left},
-			{role: "right", target: constraint.Right},
-		} {
+		}
+		switch constraint.Kind {
+		case "order":
+			if constraint.Op != "lt" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported op %q", i, cmd.Path, j, constraint.Op)})
+			}
+			if constraint.ValueType != "date-time" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d must declare value_type date-time", i, cmd.Path, j)})
+			}
+			targets = append(targets,
+				struct{ role, target string }{role: "left", target: constraint.Left},
+				struct{ role, target string }{role: "right", target: constraint.Right},
+			)
+		case "exactly_one":
+			if len(constraint.Fields) < 2 {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d exactly_one requires at least two fields", i, cmd.Path, j)})
+			}
+			seenTargets := map[string]bool{}
+			for k, target := range constraint.Fields {
+				if seenTargets[target] {
+					findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d repeats field target %q", i, cmd.Path, j, target)})
+				}
+				seenTargets[target] = true
+				targets = append(targets, struct{ role, target string }{role: fmt.Sprintf("fields[%d]", k), target: target})
+			}
+		}
+		for _, ref := range targets {
 			if err := validateCLIConstraintMappedTarget(ref.target); err != nil {
 				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is invalid: %v", i, cmd.Path, j, ref.role, ref.target, err)})
 				continue

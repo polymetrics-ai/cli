@@ -132,22 +132,31 @@ type openAPIDoc struct {
 }
 
 type openAPIParameter struct {
-	Ref         string `json:"$ref"`
-	Name        string `json:"name"`
-	In          string `json:"in"`
-	Required    bool   `json:"required"`
-	Description string `json:"description"`
-	Schema      struct {
-		Type      string   `json:"type"`
-		Enum      []string `json:"enum"`
-		Pattern   string   `json:"pattern"`
-		MinLength int      `json:"minLength"`
-		MaxLength int      `json:"maxLength"`
-	} `json:"schema"`
+	Ref         string                 `json:"$ref"`
+	Name        string                 `json:"name"`
+	In          string                 `json:"in"`
+	Required    bool                   `json:"required"`
+	Description string                 `json:"description"`
+	Schema      openAPIParameterSchema `json:"schema"`
 	// Swagger 2 puts type/enum directly on the parameter rather than under a
 	// schema object.
 	Type string   `json:"type"`
 	Enum []string `json:"enum"`
+}
+
+// openAPIParameterSchema is the deliberately small parameter subset the
+// importer needs. A path/query parameter whose source is an unconditional
+// string-or-scalar union still has one closed textual wire representation, so
+// the importer can expose it as a bounded string flag without inventing a
+// body or a raw request path.
+type openAPIParameterSchema struct {
+	Type      string                   `json:"type"`
+	Enum      []string                 `json:"enum"`
+	Pattern   string                   `json:"pattern"`
+	MinLength int                      `json:"minLength"`
+	MaxLength int                      `json:"maxLength"`
+	OneOf     []openAPIParameterSchema `json:"oneOf"`
+	AnyOf     []openAPIParameterSchema `json:"anyOf"`
 }
 
 type openAPIOperation struct {
@@ -176,6 +185,10 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 	}
 
 	declaredPaging, configProps, runtimeHeaders, err := paramsImportSkipSets(bundleDir)
+	if err != nil {
+		return 0, 0, err
+	}
+	declaredCLIPathBindings, err := paramsImportDeclaredCLIPathBindings(bundleDir)
 	if err != nil {
 		return 0, 0, err
 	}
@@ -209,11 +222,11 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		path := stringField(block, "path")
 		item, ok := doc.Paths[path]
 		if !ok {
-			continue
+			return 0, total, fmt.Errorf("operation %q provider route %s %s is absent from the artifact", stringField(op, "id"), strings.ToUpper(method), path)
 		}
 		rawOp, ok := item[method]
 		if !ok {
-			continue
+			return 0, total, fmt.Errorf("operation %q provider route %s %s is absent from the artifact", stringField(op, "id"), strings.ToUpper(method), path)
 		}
 		var parsed openAPIOperation
 		if err := json.Unmarshal(rawOp, &parsed); err != nil {
@@ -226,6 +239,14 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 			}
 		}
 		parameters := mergedOpenAPIParameters(doc, pathParameters, parsed.Parameters)
+		for _, parameter := range parameters {
+			if parameter.Ref == "" {
+				continue
+			}
+			if _, ok := resolveOpenAPIParameter(doc, parameter); !ok {
+				return 0, total, fmt.Errorf("operation %q has unresolved parameter reference %q", stringField(op, "id"), parameter.Ref)
+			}
+		}
 		skip := map[string]bool{}
 		for name := range declaredPaging {
 			skip[name] = true
@@ -235,7 +256,7 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		// some other code path reads, and skipping it drops a parameter the
 		// caller has no other way to set.
 		for _, name := range pathTemplateVariables(path) {
-			if configProps[name] {
+			if configProps[name] && !declaredCLIPathBindings[stringField(op, "id")][name] {
 				skip[name] = true
 			}
 		}
@@ -268,6 +289,52 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		return 0, 0, err
 	}
 	return changed, total, nil
+}
+
+// paramsImportDeclaredCLIPathBindings preserves an already-declared caller
+// path binding. Config interpolation normally owns a matching path variable,
+// but a command that explicitly maps a flag to that same operation/path is an
+// intentional declaration-owned override. Retaining it lets params-import
+// synchronize its source type/requiredness instead of silently deleting the
+// only caller route to that provider field.
+func paramsImportDeclaredCLIPathBindings(bundleDir string) (map[string]map[string]bool, error) {
+	bindings := map[string]map[string]bool{}
+	raw, err := os.ReadFile(filepath.Join(bundleDir, "cli_surface.json"))
+	if err != nil {
+		if os.IsNotExist(err) {
+			return bindings, nil
+		}
+		return nil, fmt.Errorf("read cli_surface.json: %w", err)
+	}
+	var document orderedJSON
+	if err := json.Unmarshal(raw, &document); err != nil {
+		return nil, fmt.Errorf("parse cli_surface.json: %w", err)
+	}
+	for _, rawCommand := range arrayField(document.root, "commands") {
+		command, ok := rawCommand.(*orderedObject)
+		if !ok {
+			continue
+		}
+		operation := stringField(command, "operation")
+		if operation == "" {
+			continue
+		}
+		for _, rawFlag := range arrayField(command, "flags") {
+			flag, ok := rawFlag.(*orderedObject)
+			if !ok {
+				continue
+			}
+			name, mapped := strings.CutPrefix(stringField(flag, "maps_to"), "path.")
+			if !mapped || name == "" {
+				continue
+			}
+			if bindings[operation] == nil {
+				bindings[operation] = map[string]bool{}
+			}
+			bindings[operation][name] = true
+		}
+	}
+	return bindings, nil
 }
 
 func mergedOpenAPIParameters(doc openAPIDoc, pathParameters, operationParameters []openAPIParameter) []openAPIParameter {
@@ -504,7 +571,7 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 		}
 		seen[parameterKey] = true
 		entry := map[string]any{"name": name, "in": p.In}
-		if typ := firstNonEmpty(p.Schema.Type, p.Type); typ != "" {
+		if typ := importedParameterWireType(p); typ != "" {
 			entry["type"] = typ
 		}
 		if p.Required {
@@ -534,6 +601,40 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 		return out[i]["name"].(string) < out[j]["name"].(string)
 	})
 	return out
+}
+
+func importedParameterWireType(p openAPIParameter) string {
+	if typ := firstNonEmpty(p.Schema.Type, p.Type); typ != "" {
+		return typ
+	}
+	if (p.In == "path" || p.In == "query") && openAPIStringScalarWireUnion(p.Schema) {
+		return "string"
+	}
+	return ""
+}
+
+func openAPIStringScalarWireUnion(schema openAPIParameterSchema) bool {
+	arms := schema.OneOf
+	if len(arms) == 0 {
+		arms = schema.AnyOf
+	}
+	if len(arms) < 2 {
+		return false
+	}
+	hasOpenString := false
+	for _, arm := range arms {
+		if len(arm.OneOf) != 0 || len(arm.AnyOf) != 0 || len(arm.Enum) != 0 || arm.Pattern != "" || arm.MinLength != 0 || arm.MaxLength != 0 {
+			return false
+		}
+		switch arm.Type {
+		case "string":
+			hasOpenString = true
+		case "integer", "number", "boolean":
+		default:
+			return false
+		}
+	}
+	return hasOpenString
 }
 
 // importedHeaderSchema turns the bounded string subset of an OpenAPI header

@@ -41,6 +41,10 @@ type CommandSurfaceFlag struct {
 	// declared --from-env field=ENV channel. The resolved value is still
 	// validated by the ordinary typed flag path, but it never appears in argv.
 	EnvOnly bool
+	// AllowBareString is valid only for a bounded, declaration-owned JSON
+	// record field. It lets a source-declared string arm retain ordinary CLI
+	// text syntax while the complete union remains schema-validated.
+	AllowBareString bool
 	// MaxItems/MinItems bound a string_array flag's item count. This is a second,
 	// independent bound alongside the body schema's maxItems: the schema bound
 	// only fires after the flag has been expanded into a body, whereas this one
@@ -55,6 +59,7 @@ type CommandSurfaceFlag struct {
 
 type CommandSurfaceConstraint struct {
 	Kind          string
+	Fields        []string
 	Left          string
 	Right         string
 	Op            string

@@ -150,6 +150,7 @@
                   "properties": {
                     "name": { "type": "string" },
                     "in": { "type": "string", "enum": ["query", "path", "header"] },
+                    "cli_name": { "type": "string" },
                     "type": { "type": "string" },
                     "required": { "type": "boolean" },
                     "repeatable": { "type": "boolean" },
@@ -300,6 +301,7 @@
 				  "properties": {
 					"name": { "type": "string" },
 					"in": { "type": "string", "enum": ["query", "path", "header"] },
+					"cli_name": { "type": "string" },
 					"type": { "type": "string" },
 					"required": { "type": "boolean" },
 					"repeatable": { "type": "boolean" },

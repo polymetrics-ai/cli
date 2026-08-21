@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import json
 import os
 import re
@@ -10,6 +11,10 @@ from pathlib import Path
 ROOT = Path("internal/connectors/defs/google-ads")
 PHASE = Path(".planning/phases/google-ads-parity-wave03-r1")
 DISCOVERY_URL = "https://googleads.googleapis.com/$discovery/rest?version=v22"
+DISCOVERY_CANONICAL_SHA256 = "c14a489015a3a4664addc58fa429c05b3bce26adc2a519a3a5469d475c18f8f8"
+DISCOVERY_CANONICAL_BYTES = 2243707
+DISCOVERY_RAW_BYTES = 2937930
+DISCOVERY_REVISION = "20260817"
 
 READ_TERMS = ("generate", "suggest", "search", "list", "get", "fetch", "retrieve", "preview")
 WRITE_TERMS = (
@@ -41,7 +46,21 @@ RESOURCE_PATH_VARS = ["resourceName", "name", "experiment", "campaignDraft", "ad
 
 def load_discovery():
     with urllib.request.urlopen(DISCOVERY_URL, timeout=60) as response:
-        return json.load(response)
+        raw = response.read()
+    document = json.loads(raw)
+    canonical = json.dumps(document, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
+    actual_sha256 = hashlib.sha256(canonical).hexdigest()
+    if len(raw) != DISCOVERY_RAW_BYTES or len(canonical) != DISCOVERY_CANONICAL_BYTES or actual_sha256 != DISCOVERY_CANONICAL_SHA256:
+        raise RuntimeError(
+            "Google Ads Discovery source drift: "
+            f"got canonical_sha256={actual_sha256} canonical_bytes={len(canonical)} raw_bytes={len(raw)}, "
+            f"want canonical_sha256={DISCOVERY_CANONICAL_SHA256} canonical_bytes={DISCOVERY_CANONICAL_BYTES} raw_bytes={DISCOVERY_RAW_BYTES}"
+        )
+    if str(document.get("revision")) != DISCOVERY_REVISION:
+        raise RuntimeError(
+            f"Google Ads Discovery revision drift: got {document.get('revision')}, want {DISCOVERY_REVISION}"
+        )
+    return document
 
 
 def collect_methods(rest_description):
@@ -361,6 +380,11 @@ def cli_flag_for_schema(name, schema, target_prefix="body", summary_prefix="Goog
             if item.get("enum"):
                 flag["values"] = item["enum"]
             return flag
+        flag["type"] = "json"
+        return flag
+    if typ == "object":
+        flag["type"] = "json"
+        return flag
     return None
 
 
@@ -624,6 +648,19 @@ def build_artifacts(rest_description):
             }
             if flags:
                 command["flags"] = flags
+            if method_name == "customers.generateKeywordIdeas":
+                seed_targets = [
+                    "body.keywordAndUrlSeed",
+                    "body.urlSeed",
+                    "body.keywordSeed",
+                    "body.siteSeed",
+                ]
+                if all(any(flag.get("maps_to") == target for flag in flags) for target in seed_targets):
+                    command["constraints"] = [{
+                        "kind": "exactly_one",
+                        "fields": seed_targets,
+                        "message": "exactly one Google Ads keyword seed must be provided",
+                    }]
             cli_commands.append(command)
             api_endpoints.append({"method": http_method, "path": spath, "covered_by": {"direct_read": cmd}})
             continue
@@ -790,6 +827,10 @@ def update_definition_files(rest_description, artifacts):
         write_json(fixture_path, fixture)
 
     docs = f"""# Google Ads connector notes\n\n## Overview\n\nGoogle Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave ships sanitized fixture coverage plus executable credential-backed reads, fixed direct reads, and guarded reverse/write actions, but does not claim certification.\n\nPublic source audit:\n\n- Source: `{DISCOVERY_URL}`\n- API version: `{rest_description.get('version')}`\n- Discovery revision: `{rest_description.get('revision')}`\n- Raw discovery method count: `{len(methods)}` (`POST={Counter(m.get('httpMethod') for _, m in methods).get('POST', 0)}`, `GET={Counter(m.get('httpMethod') for _, m in methods).get('GET', 0)}`, `DELETE={Counter(m.get('httpMethod') for _, m in methods).get('DELETE', 0)}`)\n- Local operation ledger rows: `{len(api_endpoints)}`. The row count is one greater than the raw method count because the single `customers.googleAds.search` method is intentionally represented by two fixed GAQL stream rows: `campaigns` and `ad_groups`.\n\n## Auth setup\n\nProvide `access_token` and `developer_token` through the credentials layer or environment. Optional `login_customer_id` is sent only when present. `customer_id` is required for customer-scoped streams, fixed direct reads, and reverse/write actions. Do not place secret values in plans, docs, fixtures, or command text.\n\n## Streams notes\n\nImplemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.\n\nDirect reads: `{len(operations)}` fixed connector-owned operations with JSON-redacted output, bounded response size, and typed CLI body/query fields where a POST body or GET query parameters are required.\n\n## Write actions & risks\n\nReverse/write actions: `{len(writes)}` guarded write actions whose request schemas are closed and connector-owned.\n\n- Write actions use closed record schemas derived from public discovery fields that can be represented without raw operation objects.\n- Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.\n- Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.\n- No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.\n\n## Known limits\n\nBlocked/planned operations: `{len(blocked_rows)}` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, raw GAQL query commands, and direct reads with required complex request bodies remain blocked.\n\nGoogle Ads methods whose REST paths use `{{+resourceName}}`, `{{+name}}`, `{{+experiment}}`, `{{+campaignDraft}}`, or `{{+adGroupAd}}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.\n"""
+    docs = docs.replace(
+        "- Raw discovery method count:",
+        f"- Canonical Discovery SHA-256: `{DISCOVERY_CANONICAL_SHA256}` (`{DISCOVERY_CANONICAL_BYTES}` canonical bytes; `{DISCOVERY_RAW_BYTES}` source bytes)\n- Raw discovery method count:",
+    )
     (ROOT / "docs.md").write_text(docs, encoding="utf-8")
 
 
@@ -804,6 +845,9 @@ def write_audit(rest_description, artifacts):
         "source_url": DISCOVERY_URL,
         "version": rest_description.get("version"),
         "revision": rest_description.get("revision"),
+        "source_canonical_sha256": DISCOVERY_CANONICAL_SHA256,
+        "source_canonical_bytes": DISCOVERY_CANONICAL_BYTES,
+        "source_raw_bytes": DISCOVERY_RAW_BYTES,
         "method_count": len(methods),
         "http_method_counts": dict(sorted(http_counts.items())),
         "schema_count": len(rest_description.get("schemas", {})),
@@ -826,6 +870,9 @@ def write_audit(rest_description, artifacts):
         f"- Source: `{DISCOVERY_URL}`",
         f"- Version: `{rest_description.get('version')}`",
         f"- Revision: `{rest_description.get('revision')}`",
+        f"- Canonical source SHA-256: `{DISCOVERY_CANONICAL_SHA256}`",
+        f"- Canonical source bytes: `{DISCOVERY_CANONICAL_BYTES}`",
+        f"- Raw source bytes: `{DISCOVERY_RAW_BYTES}`",
         f"- Raw methods: `{len(methods)}` ({dict(sorted(http_counts.items()))})",
         f"- Schemas: `{len(rest_description.get('schemas', {}))}`",
         f"- Path variable counts: `{dict(sorted(var_counts.items()))}`",

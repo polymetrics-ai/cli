@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -30,6 +31,40 @@ func metadataWithIntegrationType(name, integrationType string) string {
 		"release_stage": "ga",
 		"capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
 	}`
+}
+
+func TestValidateWriteHookFieldsRequireClosedSupplementalDeclarations(t *testing.T) {
+	base := WriteAction{
+		Name:       "pulls",
+		Kind:       "create",
+		Method:     "POST",
+		Path:       "/pulls",
+		Hook:       "compound",
+		BodyType:   "json",
+		BodyFields: []string{"title"},
+		HookFields: []string{"labels"},
+		RecordSchema: json.RawMessage(`{
+  "type":"object", "additionalProperties":false,
+  "properties":{"title":{"type":"string"},"labels":{"type":"array","maxItems":10,"items":{"type":"string","maxLength":64}}}
+}`),
+	}
+	if err := validateWriteBodies([]WriteAction{base}); err != nil {
+		t.Fatalf("closed declared hook supplement rejected: %v", err)
+	}
+	for name, mutate := range map[string]func(*WriteAction){
+		"missing hook":          func(action *WriteAction) { action.Hook = "" },
+		"missing schema field":  func(action *WriteAction) { action.HookFields = []string{"reviewers"} },
+		"duplicate field":       func(action *WriteAction) { action.HookFields = []string{"labels", "labels"} },
+		"overlaps primary body": func(action *WriteAction) { action.HookFields = []string{"title"} },
+	} {
+		t.Run(name, func(t *testing.T) {
+			action := base
+			mutate(&action)
+			if err := validateWriteBodies([]WriteAction{action}); err == nil {
+				t.Fatalf("validateWriteBodies accepted unsafe hook field declaration: %+v", action)
+			}
+		})
+	}
 }
 
 func dynamicSchemaMetadata(name string) string {

@@ -5291,7 +5291,7 @@
   "mutation_generation": {
     "cohort": {
       "name": "fixture_required_mutations",
-      "command_count": 874,
+      "command_count": 906,
       "intents": [
         "direct_write",
         "reverse_etl"

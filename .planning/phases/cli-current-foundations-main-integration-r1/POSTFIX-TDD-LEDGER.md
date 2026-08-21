@@ -1,0 +1,131 @@
+# Foundation Post-Fix TDD Ledger r1
+
+This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIEW.md`. A test is recorded as green only when it passes from the same commit as its production change; generated artifacts are part of the green state, not a later cleanup.
+
+| Group | Finding set | Red contract | Green / regression evidence | State |
+| --- | --- | --- | --- | --- |
+| 1 | B01, B02, B03, B09, B12, W01 | `TestGitHubParityGenerationOrderIsCommutative`; `TestSourceProjectionGapOperationsCannotMasqueradeAsImplemented`; `TestGoogleAdsGeneratedPOSTReadsAcceptDeclaredNestedObjects`; v2 projection digest mutation; deleted route/parameter and semantic update/delete surface-sync cases. | `go test -timeout 20m ./cmd/connectorgen`; Node parity-order and combined-ledger checks; `connectorgen validate`; `surface-sync --check`; all six affected source IDs have installed coverage. | green atomic checkpoint pending commit/push |
+| 2 | B04-B08, W02 | No/both GraphQL directions; backward pageInfo; inline secret/result secret; omitted mutation identity; root/nested/list Int32; flag metadata loss. | Generator, engine, commandrunner, CLI, website, skills, and help exact-output suites. | pending |
+| 3 | B13-B14, B17, B19, B24 | Classified secrets versus ordinary IDs/headers; error-bearing direct/native result; status receipt; SQS success/error receipt. | connsdk, engine, commandrunner, native SQS, App, and CLI receipt suites. | pending |
+| 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | pending |
+| 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | pending |
+| 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | pending |
+| 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | pending |
+| 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | pending |
+| 9 | B10-B11 | Evidence/certification metadata for another or stale SHA is accepted. | Exact final-SHA evidence, matrix, candidate, and certification checks. | pending |
+
+## Group 1 preserved test provenance
+
+The recovery worktree contains uncommitted Group 1 production-shaped tests and generated fixtures. They are transferred as the reviewed recovery set without modifying their bytes, then run as the red/green evidence recorded above. The supplemental Node transport-order test is explicitly rerun before Group 1 commit because its ordering defect is the B01 manifestation.
+
+## Group 1 full-CLI failure-set disposition (2026-08-21)
+
+The first full `go test -timeout 20m ./internal/cli -count=1` run reached a
+terminal **failure** after `792.193s`. The terminal capture was truncated by
+the transport, so the four failures extracted from that output are frozen
+below but are not represented as the entire Group 1 full-suite set. The later
+exact-session terminal capture expands the frozen set immediately after this
+table. A later green full run is evidence only after every row has its focused
+red/green disposition. No row is treated as an environment-only exception.
+
+| Exact failing test | Reproduced cause | Red evidence | Correction and focused green evidence |
+| --- | --- | --- | --- |
+| `TestSkillsGenerateMatchesTrackedSkills` | The source-derived GitHub/Google Ads and related connector command surfaces had changed while tracked `docs/skills/**` and matching connector manuals were stale. | The 792.193s full CLI output named this exact test; the tracked generated files differed from `pm skills generate`. | Regenerated only through `go run ./cmd/pm skills generate --dir docs/skills` and `go run ./cmd/pm docs generate --dir docs/cli`; the exact match test is included in the current session-tracked full rerun and must pass before this group closes. |
+| `TestGoldenTranscripts/dynamic_connector_bare_json` | The generated GitHub command/help ordering changed, leaving the exact bare dynamic-connector JSON transcript stale. | The 792.193s full CLI output named this exact subtest. | Regenerated only with `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1`; the non-update exact transcript test is included in the current session-tracked full rerun and must pass before closure. |
+| `TestReverseETLToGitHubCreatesPullRequestAfterApproval` | Projection replaced the declared GitHub compound-hook follow-up fields `labels` and `reviewers` with only the primary provider body fields, so planning rejected `record.labels` before any provider I/O. | The 792.193s full CLI output failed at `//labels: additional property not allowed`; `TestSourceProjectionPreservesDeclaredHookFollowupFieldsOutsideProviderBody` then failed before the projector repair. | Added generic declaration-owned `hook_fields`, requiring a closed schema, a registered hook, no duplicates, and no primary path/body overlap. `sourceProjectionRetainDeclaredHookFields` preserves only those named bounded fields outside `body_fields`; `TestSourceProjectionPreservesDeclaredHookFollowupFieldsOutsideProviderBody`, `TestValidateWriteHookFieldsRequireClosedSupplementalDeclarations`, and the exact reverse-ETL test now pass. |
+| `TestYouTubeAnalyticsReportsDownloadRunsThroughBoundedBinaryExecutor` | The fixed binary operation exposed `{path}` but did not declare the provider resource identity; source sync reduced the command to no flags, so `--resource-name` was unknown. | The 792.193s full CLI output named this exact test and its unknown `--resource-name` failure; `TestDeriveCommandParameterFlagsUsesDeclaredCLIAliasForSafePathPlaceholder` then failed with generated `--path`. | Added a validated path-only declaration alias `cli_name`, mapping `--resource-name` to the closed `path.path` parameter with an explicit 4,096-byte cap. The alias unit test and the installed binary executor test now pass; the latter also proves a 4,097-byte value fails before another provider request. |
+
+## Group 1 later exact-session full-CLI failure-set expansion (2026-08-21)
+
+The non-overlapping session-tracked rerun returned terminal exit `1` after
+`1201.193s`; it is red evidence, not a Group 1 closure. Its complete observed
+failure set expands the frozen ledger as follows. No further full CLI run may
+start until these rows, together with the preceding four, have focused
+dispositions.
+
+| Exact failing test | Reproduced cause | Red evidence | Correction and focused green evidence |
+| --- | --- | --- | --- |
+| `TestGitHubCommandSurfacePlansReverseETLCommand` | The immutable source declares the issue `title` through a scalar `oneOf` (`string` or `integer`). Projection retained that provider schema but generated a named `json` flag requiring JSON syntax, so the ordinary declared `--title Ship connector command plans` route failed before plan creation. | Exact-session full CLI output: `error: invalid JSON for --title: invalid character 'S' looking for beginning of value`; the focused installed test reproduced the same red before repair. | Added `allow_bare_string` only for an already-bounded, named reverse-ETL `json` flag whose concrete closed record schema has a declared string arm. `TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms`, `TestValidateStructuredJSONRecordStringArmRequiresNamedDeclaredStringUnion`, and `TestRecordOverridesBareStringUnionRemainsBoundedAndRejectsMalformedContainers` pass; they retain all source union arms, reject malformed object/array JSON and 8-byte overflow, and add no raw body authority. Regenerated GitHub projection reports `cli=14`; exact installed `TestGitHubCommandSurfacePlansReverseETLCommand` passes. |
+| `TestBahmniBareCommandGroupInvalidMultiPartPathIsNotHelp` | The full process exhausted its 20-minute suite budget while this test was active. Its source only creates a temporary project and asserts the invalid nested path yields usage output; it performs no provider/network action. The timeout stack showed unrelated generated-surface loading, not a Bahmni assertion failure. | Exact-session terminal output: `panic: test timed out after 20m0s`, active test `TestBahmniBareCommandGroupInvalidMultiPartPathIsNotHelp`. | Dispositioned as the prior full-suite environment/scheduling timeout, not a product failure: isolated exact runs passed three times (`2.571s`, `2.510s`, `2.490s` test elapsed; outer wall `6.15s` and `5.94s` for the repeated pair). The test still asserts the exact unknown-command and no-help/no-credential-resolution boundaries. No waiver is applied to the later combined full-suite gate. |
+
+### Focused closure reruns
+
+- `TestSkillsGenerateMatchesTrackedSkills` passed from the regenerated surface in `150.025s` (tracked terminal exit `0`).
+- The remaining original failure tests passed serially with terminal exit `0`: `TestGoldenTranscripts/dynamic_connector_bare_json` (`2.467s`), `TestReverseETLToGitHubCreatesPullRequestAfterApproval` (`3.246s`), and `TestYouTubeAnalyticsReportsDownloadRunsThroughBoundedBinaryExecutor` (`4.168s`). The serial command reached each test only after its predecessor passed.
+- `TestGitHubCommandSurfacePlansReverseETLCommand` passed after the named string-arm repair (`3.108s`); no full `internal/cli` rerun has been used to close Group 1.
+
+## Group 1 atomic closure gates
+
+All below commands ran from this exact pre-commit tree after the final help
+renderer and generated artifact refresh. Group 1 intentionally uses focused
+engine, generator, and installed-command evidence; the heavyweight combined
+App/CLI/all-connectors suite is reserved for the final exact SHA.
+
+- Red/green: `TestGitHubIssueCreateHelpDescribesDeclaredBareStringArm` failed while help printed `--title (json)` and passed after the renderer published `--title (json or string)`. The paired normal plan test also passed.
+- Package gates: `go test -timeout 20m ./cmd/connectorgen -count=1` (`105.213s`), `./internal/connectors/engine` (`6.988s`), and `./internal/connectors/commandrunner` (`21.707s`) passed.
+- Required idempotence: `TestSourceProjectionGapCreatesCommandFromExistingClosedActionVariant` passed twice with the exact `stats.CLI == 1` assertion intact; `TestSyncBundleDerivesRequiredPathFlagFromRESTParameter` and `TestSyncBundleProviderParameterProjectionIsIdempotent` passed. The following immutable source check then verified `1525` operations with no drift.
+- Generated boundaries: source-import `--cache-dir .source-import-qualification-cache.OHUVcH --check`, `surface-sync --check`, GitHub certification candidates `--check`, sweep `--check` (`1616` rows; `1612` CLI commands), and `connectorgen validate` (`552` connectors, `0` findings) passed.
+- Surface parity: `make github-parity-artifacts-check` passed all 16 Node tests and both generator checks; regenerated `docs/skills`, `docs/cli`, connector manuals, and `TestGoldenTranscripts` update completed. `TestSkillsGenerateMatchesTrackedSkills` then passed (`169.312s`), and the final focused installed CLI failure-set suite passed (`9.119s`).
+- Build hygiene: `make docs-check`, `go build ./cmd/pm`, `go vet ./...`, and `git diff --check` passed.
+
+## Group 1 source-lock cache qualification
+
+- Red: `TestSourceImportCommandUsesExplicitVerifiedCacheRoot` initially failed with `unknown flag "--cache-dir"`; this demonstrated that an empty, qualification-owned cache could not be selected and that the earlier XDG-based observations did not establish a cold cache.
+- Green: the command now accepts only an existing non-symlink `--cache-dir`, wraps the normal source fetcher at that root, and never changes the connector-owned URL, digest, byte count, or request authority. The focused cache suite passed: `TestSourceImportArtifactCacheColdSlowFetchWritesOnlyVerifiedBytes`, `TestSourceImportArtifactCacheHitVerifiesWithoutNetwork`, `TestSourceImportArtifactCacheRejectsCorruptionAndOnlyRecoversFromVerifiedFetch`, `TestSourceImportCommandUsesExplicitVerifiedCacheRoot`, and `TestSourceImportCommandContractAndMigrationDocumentation`.
+- Live locked GitHub REST source (2026-08-21): a newly empty explicit root at `/Users/karthiksivadas/.treehouse/cli-83d592/57/cli/.source-import-qualification-cache.OHUVcH` completed `go run ./cmd/connectorgen source-import github --cache-dir <root> --check` in `real 9.01` seconds. It created exactly `/Users/karthiksivadas/.treehouse/cli-83d592/57/cli/.source-import-qualification-cache.OHUVcH/80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d.artifact`, with `12,920,264` bytes and SHA-256 `80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d`.
+- Warm live check: the same exact root and immutable file completed the same command in `real 5.50` seconds; byte count and SHA-256 were rechecked and the artifact modification time remained `2026-08-21T10:55:15Z`. This temporary qualification root is inventoried here and must be removed recoverably before the Group 1 commit.
+
+## Group 1 frozen GitHub mutation delta crosswalk
+
+`874 -> 906` is held provisional until this crosswalk, the runner-bound proof,
+and the generator suite are green. The independent test
+`TestGitHubFoundationMutationDeltaHasUniqueClosedBoundedSourceCrosswalk`
+compares the base candidate artifact at
+`c9824b5837f487acaa2c2a39126d29cf401d7fb5` with the generated artifact,
+requires exactly these 32 unique command paths, rejects duplicate write actions
+or source identities, checks the `fixture_required_mutations`/`reverse_etl`/
+`reverse_plan` cohort, and rechecks the immutable source URL, SHA-256, and
+12,920,264-byte count. Every root has `additionalProperties: false`.
+
+Bound legend: `S32` is a commandrunner-enforced 32,768-byte UTF-8 cap plus
+schema `maxLength: 8192`; `S1120` is 1,120 bytes plus `maxLength: 280`; `J1M`
+is the one-value commandrunner JSON cap of 1,048,576 bytes; `A256` is
+`maxItems: 256`; `O256` is `maxProperties: 256` on the named dynamic object;
+`C` is a recursively closed, bounded named JSON schema; `I`, `B`, and `E` are
+the runner's parsed integer, parsed boolean, and finite enum forms. No row has
+a raw body, method, path, or header channel.
+
+| Unique command path | Immutable source identity | Write declaration | Method / path | additionalProperties | Certified cohort | Effective runner-enforced inputs |
+| --- | --- | --- | --- | --- | --- | --- |
+| `api agents set-selected-repos-for-org-secret` | `agents/set-selected-repos-for-org-secret` | `agents_set_selected_repos_for_org_secret` | `PUT /orgs/{org}/agents/secrets/{secret_name}/repositories` | false | fixture_required_mutations | org S32; secret_name S32; selected_repository_ids J1M+A256 |
+| `api agents set-selected-repos-for-org-variable` | `agents/set-selected-repos-for-org-variable` | `agents_set_selected_repos_for_org_variable` | `PUT /orgs/{org}/agents/variables/{name}/repositories` | false | fixture_required_mutations | name S32; org S32; selected_repository_ids J1M+A256 |
+| `api agents update-org-variable` | `agents/update-org-variable` | `agents_update_org_variable` | `PATCH /orgs/{org}/agents/variables/{name}` | false | fixture_required_mutations | name S32; org S32; selected_repository_ids J1M+A256; value S32; visibility E |
+| `api code-scanning update-alert` | `code-scanning/update-alert` | `update_code_scanning_alert` | `PATCH /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}` | false | fixture_required_mutations | alert_number I; assignees J1M+A256; create_request B; dismissed_comment S1120; dismissed_reason E; state E |
+| `api dependabot update-alert` | `dependabot/update-alert` | `update_dependabot_alert` | `PATCH /repos/{owner}/{repo}/dependabot/alerts/{alert_number}` | false | fixture_required_mutations | agent_assignment J1M+C; alert_number I; assignees J1M+A256; dismissed_comment S1120; dismissed_reason E; state E |
+| `api git create-ref` | `git/create-ref` | `create_ref` | `POST /repos/{owner}/{repo}/git/refs` | false | fixture_required_mutations | ref S32; sha S32 |
+| `api git update-ref` | `git/update-ref` | `update_ref` | `PATCH /repos/{owner}/{repo}/git/refs/{ref}` | false | fixture_required_mutations | force B; ref S32; sha S32 |
+| `api issues add-assignees` | `issues/add-assignees` | `add_issue_assignees` | `POST /repos/{owner}/{repo}/issues/{issue_number}/assignees` | false | fixture_required_mutations | assignees J1M+A256; issue_number I |
+| `api issues add-labels` | `issues/add-labels` | `add_issue_labels` | `POST /repos/{owner}/{repo}/issues/{issue_number}/labels` | false | fixture_required_mutations | issue_number I; labels J1M+A256 |
+| `api issues create-milestone` | `issues/create-milestone` | `create_milestone` | `POST /repos/{owner}/{repo}/milestones` | false | fixture_required_mutations | description S32; due_on S32; state E; title S32 |
+| `api issues remove-assignees` | `issues/remove-assignees` | `remove_issue_assignees` | `DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees` | false | fixture_required_mutations | assignees J1M+A256; issue_number I |
+| `api issues set-labels` | `issues/set-labels` | `set_issue_labels` | `PUT /repos/{owner}/{repo}/issues/{issue_number}/labels` | false | fixture_required_mutations | issue_number I; labels J1M+A256 |
+| `api issues update-comment` | `issues/update-comment` | `update_issue_comment` | `PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}` | false | fixture_required_mutations | body S32; comment_id I |
+| `api issues update-milestone` | `issues/update-milestone` | `update_milestone` | `PATCH /repos/{owner}/{repo}/milestones/{milestone_number}` | false | fixture_required_mutations | description S32; due_on S32; milestone_number I; state E; title S32 |
+| `api pulls create-review-comment` | `pulls/create-review-comment` | `create_review_comment` | `POST /repos/{owner}/{repo}/pulls/{pull_number}/comments` | false | fixture_required_mutations | body S32; commit_id S32; in_reply_to I; line I; path S32; position I; pull_number I; side E; start_line I; start_side E; subject_type E |
+| `api pulls dismiss-review` | `pulls/dismiss-review` | `dismiss_pull_request_review` | `PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals` | false | fixture_required_mutations | event E; message S32; pull_number I; review_id I |
+| `api pulls request-reviewers` | `pulls/request-reviewers` | `request_reviewers` | `POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers` | false | fixture_required_mutations | pull_number I; reviewers J1M+A256; team_reviewers J1M+A256 |
+| `api pulls submit-review` | `pulls/submit-review` | `submit_pull_request_review` | `POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events` | false | fixture_required_mutations | body S32; event E; pull_number I; review_id I |
+| `api pulls update-review-comment` | `pulls/update-review-comment` | `update_review_comment` | `PATCH /repos/{owner}/{repo}/pulls/comments/{comment_id}` | false | fixture_required_mutations | body S32; comment_id I |
+| `api repos add-collaborator` | `repos/add-collaborator` | `add_collaborator` | `PUT /repos/{owner}/{repo}/collaborators/{username}` | false | fixture_required_mutations | permission S32; username S32 |
+| `api repos create-commit-comment` | `repos/create-commit-comment` | `create_commit_comment` | `POST /repos/{owner}/{repo}/commits/{commit_sha}/comments` | false | fixture_required_mutations | body S32; commit_sha S32; line I; path S32; position I |
+| `api repos create-deployment` | `repos/create-deployment` | `create_deployment` | `POST /repos/{owner}/{repo}/deployments` | false | fixture_required_mutations | auto_merge B; description S32; environment S32; payload J1M+O256+maxLength 1,048,576; production_environment B; ref S32; required_contexts J1M+A256; task S32; transient_environment B |
+| `api repos create-or-update-environment` | `repos/create-or-update-environment` | `create_or_update_environment` | `PUT /repos/{owner}/{repo}/environments/{environment_name}` | false | fixture_required_mutations | deployment_branch_policy J1M+C; environment_name S32; prevent_self_review B; reviewers J1M+A256; wait_timer I |
+| `api repos create-or-update-file-contents` | `repos/create-or-update-file-contents` | `create_or_update_file` | `PUT /repos/{owner}/{repo}/contents/{path}` | false | fixture_required_mutations | author J1M+C; branch S32; committer J1M+C; content S32; message S32; path S32; sha S32 |
+| `api repos create-webhook` | `repos/create-webhook` | `create_webhook` | `POST /repos/{owner}/{repo}/hooks` | false | fixture_required_mutations | active B; config J1M+O256; events J1M+A256; name S32 |
+| `api repos delete-file` | `repos/delete-file` | `delete_file` | `DELETE /repos/{owner}/{repo}/contents/{path}` | false | fixture_required_mutations | author J1M+C; branch S32; committer J1M+C; message S32; path S32; sha S32 |
+| `api repos merge` | `repos/merge` | `merge_branch` | `POST /repos/{owner}/{repo}/merges` | false | fixture_required_mutations | base S32; commit_message S32; head S32 |
+| `api repos replace-all-topics` | `repos/replace-all-topics` | `replace_repo_topics` | `PUT /repos/{owner}/{repo}/topics` | false | fixture_required_mutations | names J1M+A256 |
+| `api repos update-commit-comment` | `repos/update-commit-comment` | `update_commit_comment` | `PATCH /repos/{owner}/{repo}/comments/{comment_id}` | false | fixture_required_mutations | body S32; comment_id I |
+| `api repos update-release-asset` | `repos/update-release-asset` | `update_release_asset` | `PATCH /repos/{owner}/{repo}/releases/assets/{asset_id}` | false | fixture_required_mutations | asset_id I; label S32; name S32; state S32 |
+| `api repos update-webhook` | `repos/update-webhook` | `update_webhook` | `PATCH /repos/{owner}/{repo}/hooks/{hook_id}` | false | fixture_required_mutations | active B; add_events J1M+A256; config J1M+O256; events J1M+A256; hook_id I; remove_events J1M+A256 |
+| `api secret-scanning update-alert` | `secret-scanning/update-alert` | `update_secret_scanning_alert` | `PATCH /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}` | false | fixture_required_mutations | alert_number I; assignee S32; resolution E; resolution_comment S32; state E; validity E |

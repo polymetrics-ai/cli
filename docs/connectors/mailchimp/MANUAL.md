@@ -1027,85 +1027,85 @@ COMMAND SURFACE
     --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
   ETL streams
     lists list - Get lists info as ETL records. [intent=etl availability=implemented stream=lists]
-    lists get - Get list info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id]; flags: --list-id, --page, --page-cursor
-    lists abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_abuse_reports_id]; flags: --list-id, --report-id, --page, --page-cursor
-    lists growth-history get - Get growth history by month [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_growth_history_id]; flags: --list-id, --month, --page, --page-cursor
-    lists interest-categories get - Get interest category info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id]; flags: --list-id, --interest-category-id, --page, --page-cursor
-    lists interest-categories interests get - Get interest in category [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id_interests_id]; flags: --list-id, --interest-category-id, --interest-id, --page, --page-cursor
-    lists members get - Get member info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id]; flags: --list-id, --subscriber-hash, --page, --page-cursor
-    lists members activity-feed get - View recent activity [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_activity_feed]; flags: --list-id, --subscriber-hash, --page, --page-cursor
-    lists members notes get - Get member note [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_notes_id]; flags: --list-id, --subscriber-hash, --note-id, --page, --page-cursor
-    lists merge-fields get - Get merge field [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_merge_fields_id]; flags: --list-id, --merge-id, --page, --page-cursor
-    lists segments get - Get segment info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_segments_id]; flags: --list-id, --segment-id, --page, --page-cursor
-    lists surveys get - Get survey [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_surveys_id]; flags: --list-id, --survey-id, --page, --page-cursor
-    lists tag-search get - Search for tags on a list by name. [intent=direct_read availability=implemented operation=mailchimp.search_tags_by_name]; flags: --list-id, --query, --page, --page-cursor
-    lists webhooks get - Get webhook info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_webhooks_id]; flags: --list-id, --webhook-id, --page, --page-cursor
+    lists get - Get list info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id]; flags: --page, --page-cursor
+    lists abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_abuse_reports_id]; flags: --page, --page-cursor
+    lists growth-history get - Get growth history by month [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_growth_history_id]; flags: --page, --page-cursor
+    lists interest-categories get - Get interest category info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id]; flags: --page, --page-cursor
+    lists interest-categories interests get - Get interest in category [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id_interests_id]; flags: --page, --page-cursor
+    lists members get - Get member info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id]; flags: --page, --page-cursor
+    lists members activity-feed get - View recent activity [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_activity_feed]; flags: --page, --page-cursor
+    lists members notes get - Get member note [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_notes_id]; flags: --page, --page-cursor
+    lists merge-fields get - Get merge field [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_merge_fields_id]; flags: --page, --page-cursor
+    lists segments get - Get segment info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_segments_id]; flags: --page, --page-cursor
+    lists surveys get - Get survey [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_surveys_id]; flags: --page, --page-cursor
+    lists tag-search get - Search for tags on a list by name. [intent=direct_read availability=implemented operation=mailchimp.search_tags_by_name]; flags: --page, --page-cursor
+    lists webhooks get - Get webhook info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_webhooks_id]; flags: --page, --page-cursor
     campaigns list - List campaigns as ETL records. [intent=etl availability=implemented stream=campaigns]
-    campaigns get - Get campaign info [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id]; flags: --campaign-id, --page, --page-cursor
-    campaigns content get - Get campaign content [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_content]; flags: --campaign-id, --page, --page-cursor
-    campaigns feedback get - Get campaign feedback message [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_feedback_id]; flags: --campaign-id, --feedback-id, --page, --page-cursor
-    campaigns send-checklist get - Get campaign send checklist [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_send_checklist]; flags: --campaign-id, --page, --page-cursor
+    campaigns get - Get campaign info [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id]; flags: --page, --page-cursor
+    campaigns content get - Get campaign content [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_content]; flags: --page, --page-cursor
+    campaigns feedback get - Get campaign feedback message [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_feedback_id]; flags: --page, --page-cursor
+    campaigns send-checklist get - Get campaign send checklist [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_send_checklist]; flags: --page, --page-cursor
     reports list - List campaign reports as ETL records. [intent=etl availability=implemented stream=reports]
-    reports get - Get campaign report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id]; flags: --campaign-id, --page, --page-cursor
-    reports abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_abuse_reports_id_id]; flags: --campaign-id, --report-id, --page, --page-cursor
-    reports click-details get - Get campaign link details [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id]; flags: --campaign-id, --link-id, --page, --page-cursor
-    reports click-details members get - Get clicked link subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id_members_id]; flags: --campaign-id, --link-id, --subscriber-hash, --page, --page-cursor
-    reports email-activity get - Get subscriber email activity [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_email_activity_id]; flags: --campaign-id, --subscriber-hash, --page, --page-cursor
-    reports open-details get - Get opened campaign subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_open_details_id_members_id]; flags: --campaign-id, --subscriber-hash, --page, --page-cursor
-    reports sent-to get - Get campaign recipient info [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_sent_to_id]; flags: --campaign-id, --subscriber-hash, --page, --page-cursor
-    reports unsubscribed get - Get unsubscribed member [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_unsubscribed_id]; flags: --campaign-id, --subscriber-hash, --page, --page-cursor
+    reports get - Get campaign report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id]; flags: --page, --page-cursor
+    reports abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_abuse_reports_id_id]; flags: --page, --page-cursor
+    reports click-details get - Get campaign link details [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id]; flags: --page, --page-cursor
+    reports click-details members get - Get clicked link subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id_members_id]; flags: --page, --page-cursor
+    reports email-activity get - Get subscriber email activity [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_email_activity_id]; flags: --page, --page-cursor
+    reports open-details get - Get opened campaign subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_open_details_id_members_id]; flags: --page, --page-cursor
+    reports sent-to get - Get campaign recipient info [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_sent_to_id]; flags: --page, --page-cursor
+    reports unsubscribed get - Get unsubscribed member [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_unsubscribed_id]; flags: --page, --page-cursor
     automations list - List automations as ETL records. [intent=etl availability=implemented stream=automations]
-    automations get - Get automation info [intent=direct_read availability=implemented operation=mailchimp.get_automations_id]; flags: --workflow-id, --page, --page-cursor
-    automations emails get - Get workflow email info [intent=direct_read availability=implemented operation=mailchimp.get_automations_id_emails_id]; flags: --workflow-id, --workflow-email-id, --page, --page-cursor
-    automations emails queue get - Get automated email subscriber [intent=direct_read availability=implemented operation=mailchimp.get_automations_id_emails_id_queue_id]; flags: --workflow-id, --workflow-email-id, --subscriber-hash, --page, --page-cursor
-    automations removed-subscribers get - Get subscriber removed from workflow [intent=direct_read availability=implemented operation=mailchimp.get_automations_id_removed_subscribers_id]; flags: --workflow-id, --subscriber-hash, --page, --page-cursor
-    ecommerce stores get - Get store info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id]; flags: --store-id, --page, --page-cursor
-    ecommerce stores carts get - Get cart info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_carts_id]; flags: --store-id, --cart-id, --page, --page-cursor
-    ecommerce stores carts lines get - Get cart line item [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_carts_id_lines_id]; flags: --store-id, --cart-id, --line-id, --page, --page-cursor
-    ecommerce stores customers get - Get customer info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_customers_id]; flags: --store-id, --customer-id, --page, --page-cursor
-    ecommerce stores orders get - Get order info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_orders_id]; flags: --store-id, --order-id, --page, --page-cursor
-    ecommerce stores orders lines get - Get order line item [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_orders_id_lines_id]; flags: --store-id, --order-id, --line-id, --page, --page-cursor
-    ecommerce stores products get - Get product info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_products_id]; flags: --store-id, --product-id, --page, --page-cursor
-    ecommerce stores products images get - Get product image info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_products_id_images_id]; flags: --store-id, --product-id, --image-id, --page, --page-cursor
-    ecommerce stores products variants get - Get product variant info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_products_id_variants_id]; flags: --store-id, --product-id, --variant-id, --page, --page-cursor
-    ecommerce stores promo-rules get - Get promo rule [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_promorules_id]; flags: --store-id, --promo-rule-id, --page, --page-cursor
-    ecommerce stores promo-rules promo-codes get - Get promo code [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_promocodes_id]; flags: --store-id, --promo-rule-id, --promo-code-id, --page, --page-cursor
+    automations get - Get automation info [intent=direct_read availability=implemented operation=mailchimp.get_automations_id]; flags: --page, --page-cursor
+    automations emails get - Get workflow email info [intent=direct_read availability=implemented operation=mailchimp.get_automations_id_emails_id]; flags: --page, --page-cursor
+    automations emails queue get - Get automated email subscriber [intent=direct_read availability=implemented operation=mailchimp.get_automations_id_emails_id_queue_id]; flags: --page, --page-cursor
+    automations removed-subscribers get - Get subscriber removed from workflow [intent=direct_read availability=implemented operation=mailchimp.get_automations_id_removed_subscribers_id]; flags: --page, --page-cursor
+    ecommerce stores get - Get store info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id]; flags: --page, --page-cursor
+    ecommerce stores carts get - Get cart info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_carts_id]; flags: --page, --page-cursor
+    ecommerce stores carts lines get - Get cart line item [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_carts_id_lines_id]; flags: --page, --page-cursor
+    ecommerce stores customers get - Get customer info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_customers_id]; flags: --page, --page-cursor
+    ecommerce stores orders get - Get order info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_orders_id]; flags: --page, --page-cursor
+    ecommerce stores orders lines get - Get order line item [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_orders_id_lines_id]; flags: --page, --page-cursor
+    ecommerce stores products get - Get product info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_products_id]; flags: --page, --page-cursor
+    ecommerce stores products images get - Get product image info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_products_id_images_id]; flags: --page, --page-cursor
+    ecommerce stores products variants get - Get product variant info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_products_id_variants_id]; flags: --page, --page-cursor
+    ecommerce stores promo-rules get - Get promo rule [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_promorules_id]; flags: --page, --page-cursor
+    ecommerce stores promo-rules promo-codes get - Get promo code [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_promocodes_id]; flags: --page, --page-cursor
     templates list - List templates as ETL records. [intent=etl availability=implemented stream=templates]
-    templates get - Get template info [intent=direct_read availability=implemented operation=mailchimp.get_templates_id]; flags: --template-id, --page, --page-cursor
-    templates default-content get - View default content [intent=direct_read availability=implemented operation=mailchimp.get_templates_id_default_content]; flags: --template-id, --page, --page-cursor
-    file-manager files get - Get file [intent=direct_read availability=implemented operation=mailchimp.get_file_manager_files_id]; flags: --file-id, --page, --page-cursor
-    file-manager folders get - Get folder [intent=direct_read availability=implemented operation=mailchimp.get_file_manager_folders_id]; flags: --folder-id, --page, --page-cursor
+    templates get - Get template info [intent=direct_read availability=implemented operation=mailchimp.get_templates_id]; flags: --page, --page-cursor
+    templates default-content get - View default content [intent=direct_read availability=implemented operation=mailchimp.get_templates_id_default_content]; flags: --page, --page-cursor
+    file-manager files get - Get file [intent=direct_read availability=implemented operation=mailchimp.get_file_manager_files_id]; flags: --page, --page-cursor
+    file-manager folders get - Get folder [intent=direct_read availability=implemented operation=mailchimp.get_file_manager_folders_id]; flags: --page, --page-cursor
   Typed direct reads and search
-    search-members get - Search members [intent=direct_read availability=implemented operation=mailchimp.get_search_members]; flags: --query, --page, --page-cursor
-    search-campaigns get - Search campaigns [intent=direct_read availability=implemented operation=mailchimp.get_search_campaigns]; flags: --query, --page, --page-cursor
+    search-members get - Search members [intent=direct_read availability=implemented operation=mailchimp.get_search_members]; flags: --page, --page-cursor
+    search-campaigns get - Search campaigns [intent=direct_read availability=implemented operation=mailchimp.get_search_campaigns]; flags: --page, --page-cursor
     reports list - List campaign reports as ETL records. [intent=etl availability=implemented stream=reports]
-    reports get - Get campaign report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id]; flags: --campaign-id, --page, --page-cursor
-    reports abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_abuse_reports_id_id]; flags: --campaign-id, --report-id, --page, --page-cursor
-    reports click-details get - Get campaign link details [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id]; flags: --campaign-id, --link-id, --page, --page-cursor
-    reports click-details members get - Get clicked link subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id_members_id]; flags: --campaign-id, --link-id, --subscriber-hash, --page, --page-cursor
-    reports email-activity get - Get subscriber email activity [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_email_activity_id]; flags: --campaign-id, --subscriber-hash, --page, --page-cursor
-    reports open-details get - Get opened campaign subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_open_details_id_members_id]; flags: --campaign-id, --subscriber-hash, --page, --page-cursor
-    reports sent-to get - Get campaign recipient info [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_sent_to_id]; flags: --campaign-id, --subscriber-hash, --page, --page-cursor
-    reports unsubscribed get - Get unsubscribed member [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_unsubscribed_id]; flags: --campaign-id, --subscriber-hash, --page, --page-cursor
+    reports get - Get campaign report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id]; flags: --page, --page-cursor
+    reports abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_abuse_reports_id_id]; flags: --page, --page-cursor
+    reports click-details get - Get campaign link details [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id]; flags: --page, --page-cursor
+    reports click-details members get - Get clicked link subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id_members_id]; flags: --page, --page-cursor
+    reports email-activity get - Get subscriber email activity [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_email_activity_id]; flags: --page, --page-cursor
+    reports open-details get - Get opened campaign subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_open_details_id_members_id]; flags: --page, --page-cursor
+    reports sent-to get - Get campaign recipient info [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_sent_to_id]; flags: --page, --page-cursor
+    reports unsubscribed get - Get unsubscribed member [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_unsubscribed_id]; flags: --page, --page-cursor
     campaigns list - List campaigns as ETL records. [intent=etl availability=implemented stream=campaigns]
-    campaigns get - Get campaign info [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id]; flags: --campaign-id, --page, --page-cursor
-    campaigns content get - Get campaign content [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_content]; flags: --campaign-id, --page, --page-cursor
-    campaigns feedback get - Get campaign feedback message [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_feedback_id]; flags: --campaign-id, --feedback-id, --page, --page-cursor
-    campaigns send-checklist get - Get campaign send checklist [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_send_checklist]; flags: --campaign-id, --page, --page-cursor
+    campaigns get - Get campaign info [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id]; flags: --page, --page-cursor
+    campaigns content get - Get campaign content [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_content]; flags: --page, --page-cursor
+    campaigns feedback get - Get campaign feedback message [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_feedback_id]; flags: --page, --page-cursor
+    campaigns send-checklist get - Get campaign send checklist [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_send_checklist]; flags: --page, --page-cursor
     lists list - Get lists info as ETL records. [intent=etl availability=implemented stream=lists]
-    lists get - Get list info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id]; flags: --list-id, --page, --page-cursor
-    lists abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_abuse_reports_id]; flags: --list-id, --report-id, --page, --page-cursor
-    lists growth-history get - Get growth history by month [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_growth_history_id]; flags: --list-id, --month, --page, --page-cursor
-    lists interest-categories get - Get interest category info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id]; flags: --list-id, --interest-category-id, --page, --page-cursor
-    lists interest-categories interests get - Get interest in category [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id_interests_id]; flags: --list-id, --interest-category-id, --interest-id, --page, --page-cursor
-    lists members get - Get member info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id]; flags: --list-id, --subscriber-hash, --page, --page-cursor
-    lists members activity-feed get - View recent activity [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_activity_feed]; flags: --list-id, --subscriber-hash, --page, --page-cursor
-    lists members notes get - Get member note [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_notes_id]; flags: --list-id, --subscriber-hash, --note-id, --page, --page-cursor
-    lists merge-fields get - Get merge field [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_merge_fields_id]; flags: --list-id, --merge-id, --page, --page-cursor
-    lists segments get - Get segment info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_segments_id]; flags: --list-id, --segment-id, --page, --page-cursor
-    lists surveys get - Get survey [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_surveys_id]; flags: --list-id, --survey-id, --page, --page-cursor
-    lists tag-search get - Search for tags on a list by name. [intent=direct_read availability=implemented operation=mailchimp.search_tags_by_name]; flags: --list-id, --query, --page, --page-cursor
-    lists webhooks get - Get webhook info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_webhooks_id]; flags: --list-id, --webhook-id, --page, --page-cursor
+    lists get - Get list info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id]; flags: --page, --page-cursor
+    lists abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_abuse_reports_id]; flags: --page, --page-cursor
+    lists growth-history get - Get growth history by month [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_growth_history_id]; flags: --page, --page-cursor
+    lists interest-categories get - Get interest category info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id]; flags: --page, --page-cursor
+    lists interest-categories interests get - Get interest in category [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id_interests_id]; flags: --page, --page-cursor
+    lists members get - Get member info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id]; flags: --page, --page-cursor
+    lists members activity-feed get - View recent activity [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_activity_feed]; flags: --page, --page-cursor
+    lists members notes get - Get member note [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_notes_id]; flags: --page, --page-cursor
+    lists merge-fields get - Get merge field [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_merge_fields_id]; flags: --page, --page-cursor
+    lists segments get - Get segment info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_segments_id]; flags: --page, --page-cursor
+    lists surveys get - Get survey [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_surveys_id]; flags: --page, --page-cursor
+    lists tag-search get - Search for tags on a list by name. [intent=direct_read availability=implemented operation=mailchimp.search_tags_by_name]; flags: --page, --page-cursor
+    lists webhooks get - Get webhook info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_webhooks_id]; flags: --page, --page-cursor
   Approval-gated reverse ETL actions
     actions post-account-exports - Add export [intent=reverse_etl availability=implemented write=post_account_exports]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: Externally visible Mailchimp mutation: Add export. Reverse ETL must plan, preview, receive explicit approval, and then execute.
     actions post-audiences-contacts - Add Contact [intent=reverse_etl availability=implemented write=post_audiences_contacts]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: Externally visible Mailchimp mutation: Add Contact. Reverse ETL must plan, preview, receive explicit approval, and then execute.; flags: --audience-id
@@ -1257,30 +1257,30 @@ COMMAND SURFACE
     actions verify-verified-domains - Verify domain [intent=reverse_etl availability=implemented write=verify_verified_domains]; approval: reverse ETL plan -> preview -> explicit approval -> execute with destructive confirmation; risk: Destructive or externally visible Mailchimp mutation: Verify domain. Reverse ETL must plan, preview, receive explicit approval, and then execute.; flags: --domain-name
   Other Commands
     account-exports-exports list - List account exports as ETL records. [intent=etl availability=implemented stream=account_exports_exports]
-    account-exports get - Get account export info [intent=direct_read availability=implemented operation=mailchimp.get_account_export_id]; flags: --export-id, --page, --page-cursor
+    account-exports get - Get account export info [intent=direct_read availability=implemented operation=mailchimp.get_account_export_id]; flags: --page, --page-cursor
     activity-feed-chimp-chatter list - Get latest chimp chatter as ETL records. [intent=etl availability=implemented stream=activity_feed_chimp_chatter]
     audiences list - Get a list of audiences as ETL records. [intent=etl availability=implemented stream=audiences]
-    audiences get - Get audience info [intent=direct_read availability=implemented operation=mailchimp.get_audience_id]; flags: --audience-id, --page, --page-cursor
+    audiences get - Get audience info [intent=direct_read availability=implemented operation=mailchimp.get_audience_id]; flags: --page, --page-cursor
     audiences-contacts list - Get Contacts as ETL records. [intent=etl availability=implemented stream=audiences_contacts]
-    audiences contacts get - Get Contact [intent=direct_read availability=implemented operation=mailchimp.get_audience_contact]; flags: --audience-id, --contact-id, --page, --page-cursor
+    audiences contacts get - Get Contact [intent=direct_read availability=implemented operation=mailchimp.get_audience_contact]; flags: --page, --page-cursor
     authorized-apps-apps list - List authorized apps as ETL records. [intent=etl availability=implemented stream=authorized_apps_apps]
-    authorized-apps get - Get authorized app info [intent=direct_read availability=implemented operation=mailchimp.get_authorized_apps_id]; flags: --app-id, --page, --page-cursor
+    authorized-apps get - Get authorized app info [intent=direct_read availability=implemented operation=mailchimp.get_authorized_apps_id]; flags: --page, --page-cursor
     automations-emails list - List automated emails as ETL records. [intent=etl availability=implemented stream=automations_emails]
     automations-emails-queue list - List automated email subscribers as ETL records. [intent=etl availability=implemented stream=automations_emails_queue]
     automations-removed-subscribers-subscribers list - List subscribers removed from workflow as ETL records. [intent=etl availability=implemented stream=automations_removed_subscribers_subscribers]
     batch-webhooks-webhooks list - List batch webhooks as ETL records. [intent=etl availability=implemented stream=batch_webhooks_webhooks]
-    batch-webhooks get - Get batch webhook info [intent=direct_read availability=implemented operation=mailchimp.get_batch_webhook]; flags: --batch-webhook-id, --page, --page-cursor
+    batch-webhooks get - Get batch webhook info [intent=direct_read availability=implemented operation=mailchimp.get_batch_webhook]; flags: --page, --page-cursor
     batches list - List batch requests as ETL records. [intent=etl availability=implemented stream=batches]
-    batches get - Get batch operation status [intent=direct_read availability=implemented operation=mailchimp.get_batches_id]; flags: --batch-id, --page, --page-cursor
+    batches get - Get batch operation status [intent=direct_read availability=implemented operation=mailchimp.get_batches_id]; flags: --page, --page-cursor
     campaign-folders-folders list - List campaign folders as ETL records. [intent=etl availability=implemented stream=campaign_folders_folders]
-    campaign-folders get - Get campaign folder [intent=direct_read availability=implemented operation=mailchimp.get_campaign_folders_id]; flags: --folder-id, --page, --page-cursor
+    campaign-folders get - Get campaign folder [intent=direct_read availability=implemented operation=mailchimp.get_campaign_folders_id]; flags: --page, --page-cursor
     campaigns-feedback list - List campaign feedback as ETL records. [intent=etl availability=implemented stream=campaigns_feedback]
     connected-sites-sites list - List connected sites as ETL records. [intent=etl availability=implemented stream=connected_sites_sites]
-    connected-sites get - Get connected site [intent=direct_read availability=implemented operation=mailchimp.get_connected_sites_id]; flags: --connected-site-id, --page, --page-cursor
+    connected-sites get - Get connected site [intent=direct_read availability=implemented operation=mailchimp.get_connected_sites_id]; flags: --page, --page-cursor
     conversations list - List conversations as ETL records. [intent=etl availability=implemented stream=conversations]
-    conversations get - Get conversation [intent=direct_read availability=implemented operation=mailchimp.get_conversations_id]; flags: --conversation-id, --page, --page-cursor
+    conversations get - Get conversation [intent=direct_read availability=implemented operation=mailchimp.get_conversations_id]; flags: --page, --page-cursor
     conversations-messages-conversation-messages list - List messages as ETL records. [intent=etl availability=implemented stream=conversations_messages_conversation_messages]
-    conversations messages get - Get message [intent=direct_read availability=implemented operation=mailchimp.get_conversations_id_messages_id]; flags: --conversation-id, --message-id, --page, --page-cursor
+    conversations messages get - Get message [intent=direct_read availability=implemented operation=mailchimp.get_conversations_id_messages_id]; flags: --page, --page-cursor
     ecommerce-orders list - List account orders as ETL records. [intent=etl availability=implemented stream=ecommerce_orders]
     ecommerce-stores list - List stores as ETL records. [intent=etl availability=implemented stream=ecommerce_stores]
     ecommerce-stores-carts list - List carts as ETL records. [intent=etl availability=implemented stream=ecommerce_stores_carts]
@@ -1294,13 +1294,13 @@ COMMAND SURFACE
     ecommerce-stores-promo-rules list - List promo rules as ETL records. [intent=etl availability=implemented stream=ecommerce_stores_promo_rules]
     ecommerce-stores-promo-rules-promo-codes list - List promo codes as ETL records. [intent=etl availability=implemented stream=ecommerce_stores_promo_rules_promo_codes]
     facebook-ads list - List facebook ads as ETL records. [intent=etl availability=implemented stream=facebook_ads]
-    facebook-ads get - Get facebook ad info [intent=direct_read availability=implemented operation=mailchimp.get_facebook_ads_id]; flags: --outreach-id, --page, --page-cursor
+    facebook-ads get - Get facebook ad info [intent=direct_read availability=implemented operation=mailchimp.get_facebook_ads_id]; flags: --page, --page-cursor
     file-manager-files list - List stored files as ETL records. [intent=etl availability=implemented stream=file_manager_files]
     file-manager-folders list - List folders as ETL records. [intent=etl availability=implemented stream=file_manager_folders]
     file-manager-folders-files list - List stored files as ETL records. [intent=etl availability=implemented stream=file_manager_folders_files]
     landing-pages list - List landing pages as ETL records. [intent=etl availability=implemented stream=landing_pages]
-    landing-pages get - Get landing page info [intent=direct_read availability=implemented operation=mailchimp.get_landing_page_id]; flags: --page-id, --page, --page-cursor
-    landing-pages content get - Get landing page content [intent=direct_read availability=implemented operation=mailchimp.get_landing_page_id_content]; flags: --page-id, --page, --page-cursor
+    landing-pages get - Get landing page info [intent=direct_read availability=implemented operation=mailchimp.get_landing_page_id]; flags: --page, --page-cursor
+    landing-pages content get - Get landing page content [intent=direct_read availability=implemented operation=mailchimp.get_landing_page_id_content]; flags: --page, --page-cursor
     lists-abuse-reports list - List abuse reports as ETL records. [intent=etl availability=implemented stream=lists_abuse_reports]
     lists-activity list - List recent activity as ETL records. [intent=etl availability=implemented stream=lists_activity]
     lists-clients list - List top email clients as ETL records. [intent=etl availability=implemented stream=lists_clients]
@@ -1321,17 +1321,17 @@ COMMAND SURFACE
     lists-surveys list - Get information about all surveys for a list as ETL records. [intent=etl availability=implemented stream=lists_surveys]
     lists-webhooks list - List webhooks as ETL records. [intent=etl availability=implemented stream=lists_webhooks]
     reporting-facebook-ads list - List facebook ads reports as ETL records. [intent=etl availability=implemented stream=reporting_facebook_ads]
-    reporting facebook-ads get - Get facebook ad report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_facebook_ads_id]; flags: --outreach-id, --page, --page-cursor
+    reporting facebook-ads get - Get facebook ad report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_facebook_ads_id]; flags: --page, --page-cursor
     reporting-facebook-ads-ecommerce-product-activity-products list - List facebook ecommerce report as ETL records. [intent=etl availability=implemented stream=reporting_facebook_ads_ecommerce_product_activity_products]
     reporting-landing-pages list - List landing pages reports as ETL records. [intent=etl availability=implemented stream=reporting_landing_pages]
-    reporting landing-pages get - Get landing page report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_landing_pages_id]; flags: --outreach-id, --page, --page-cursor
+    reporting landing-pages get - Get landing page report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_landing_pages_id]; flags: --page, --page-cursor
     reporting-surveys list - List survey reports as ETL records. [intent=etl availability=implemented stream=reporting_surveys]
-    reporting surveys get - Get survey report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_surveys_id]; flags: --survey-id, --page, --page-cursor
+    reporting surveys get - Get survey report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_surveys_id]; flags: --page, --page-cursor
     reporting-surveys-questions list - List survey question reports as ETL records. [intent=etl availability=implemented stream=reporting_surveys_questions]
-    reporting surveys questions get - Get survey question report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_surveys_id_questions_id]; flags: --survey-id, --question-id, --page, --page-cursor
+    reporting surveys questions get - Get survey question report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_surveys_id_questions_id]; flags: --page, --page-cursor
     reporting-surveys-questions-answers list - List answers for question as ETL records. [intent=etl availability=implemented stream=reporting_surveys_questions_answers]
     reporting-surveys-responses list - List survey responses as ETL records. [intent=etl availability=implemented stream=reporting_surveys_responses]
-    reporting surveys responses get - Get survey response [intent=direct_read availability=implemented operation=mailchimp.get_reporting_surveys_id_responses_id]; flags: --survey-id, --response-id, --page, --page-cursor
+    reporting surveys responses get - Get survey response [intent=direct_read availability=implemented operation=mailchimp.get_reporting_surveys_id_responses_id]; flags: --page, --page-cursor
     reports-abuse-reports list - List abuse reports as ETL records. [intent=etl availability=implemented stream=reports_abuse_reports]
     reports-advice list - List campaign feedback as ETL records. [intent=etl availability=implemented stream=reports_advice]
     reports-click-details-urls-clicked list - List campaign details as ETL records. [intent=etl availability=implemented stream=reports_click_details_urls_clicked]
@@ -1346,12 +1346,12 @@ COMMAND SURFACE
     reports-sub-reports list - List child campaign reports as ETL records. [intent=etl availability=implemented stream=reports_sub_reports]
     reports-unsubscribed-unsubscribes list - List unsubscribed members as ETL records. [intent=etl availability=implemented stream=reports_unsubscribed_unsubscribes]
     sms-campaigns list - List SMS campaigns as ETL records. [intent=etl availability=implemented stream=sms_campaigns]
-    sms-campaigns get - Get SMS campaign info [intent=direct_read availability=implemented operation=mailchimp.get_sms_campaigns_id]; flags: --sms-campaign-id, --page, --page-cursor
-    sms-campaigns content get - Get SMS campaign content [intent=direct_read availability=implemented operation=mailchimp.get_sms_campaigns_id_content]; flags: --sms-campaign-id, --page, --page-cursor
+    sms-campaigns get - Get SMS campaign info [intent=direct_read availability=implemented operation=mailchimp.get_sms_campaigns_id]; flags: --page, --page-cursor
+    sms-campaigns content get - Get SMS campaign content [intent=direct_read availability=implemented operation=mailchimp.get_sms_campaigns_id_content]; flags: --page, --page-cursor
     template-folders-folders list - List template folders as ETL records. [intent=etl availability=implemented stream=template_folders_folders]
-    template-folders get - Get template folder [intent=direct_read availability=implemented operation=mailchimp.get_template_folders_id]; flags: --folder-id, --page, --page-cursor
+    template-folders get - Get template folder [intent=direct_read availability=implemented operation=mailchimp.get_template_folders_id]; flags: --page, --page-cursor
     verified-domains-domains list - List sending domains as ETL records. [intent=etl availability=implemented stream=verified_domains_domains]
-    verified-domains get - Get domain info [intent=direct_read availability=implemented operation=mailchimp.get_verified_domain]; flags: --domain-name, --page, --page-cursor
+    verified-domains get - Get domain info [intent=direct_read availability=implemented operation=mailchimp.get_verified_domain]; flags: --page, --page-cursor
   Help topics:
     auth - Use access_token or api_key from environment/stdin; never paste secrets into prompts or shell history.
     safety - Writes are reverse-ETL only: plan, preview, explicit approval, execute; destructive actions require confirmation.

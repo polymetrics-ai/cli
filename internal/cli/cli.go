@@ -1152,7 +1152,11 @@ func writeConnectorGlobalFlags(b *strings.Builder, surface *connectors.CommandSu
 func writeConnectorFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) {
 	fmt.Fprintf(b, "  --%s", strings.TrimLeft(flag.Name, "-"))
 	if flag.Type != "" {
-		fmt.Fprintf(b, " (%s)", flag.Type)
+		flagType := flag.Type
+		if flag.Type == "json" && flag.AllowBareString {
+			flagType = "json or string"
+		}
+		fmt.Fprintf(b, " (%s)", flagType)
 	}
 	if flag.Required {
 		b.WriteString(" required")

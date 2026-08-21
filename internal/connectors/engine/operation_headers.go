@@ -57,6 +57,9 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 	seen := make(map[string]struct{})
 	for _, parameter := range operationParameters(op) {
 		location := strings.ToLower(strings.TrimSpace(parameter.In))
+		if err := validateOperationParameterCLIName(parameter, location); err != nil {
+			return err
+		}
 		switch location {
 		case "path", "query":
 			if err := safety.ValidateIdentifier(parameter.Name, "operation "+location+" parameter"); err != nil {
@@ -105,6 +108,23 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 		if _, err := CompileSchema(parameter.Schema); err != nil {
 			return fmt.Errorf("header parameter %q schema: %w", parameter.Name, err)
 		}
+	}
+	return nil
+}
+
+func validateOperationParameterCLIName(parameter OperationParameter, location string) error {
+	cliName := strings.TrimSpace(parameter.CLIName)
+	if cliName == "" {
+		return nil
+	}
+	if cliName != parameter.CLIName || location != "path" {
+		return fmt.Errorf("parameter %q cli_name is supported only as an exact path flag name", parameter.Name)
+	}
+	if err := safety.ValidateIdentifier(cliName, "path parameter cli_name"); err != nil {
+		return err
+	}
+	if cliName != strings.ToLower(cliName) || strings.Contains(cliName, ".") || strings.HasPrefix(cliName, "-") || strings.HasSuffix(cliName, "-") || strings.Contains(cliName, "--") {
+		return fmt.Errorf("path parameter cli_name %q must be a lowercase hyphenated flag name", parameter.CLIName)
 	}
 	return nil
 }
