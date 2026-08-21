@@ -126,6 +126,22 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 			current.Runs[index].DestinationResults = cloneDestinationResults(result.DestinationResults)
 			current.Runs[index].Error = runError
 			current.Runs[index].CompletedAt = completedAt
+			streamState, present := current.StreamStates[stateKey]
+			if !present {
+				return current, fmt.Errorf("rate-limited run %q no longer owns its transport stream work", request.runID)
+			}
+			if streamState.ActiveWorkID != "" && (streamState.ActiveWorkID != request.runID || streamState.ActiveWorkLeaseUntil == nil) {
+				return current, fmt.Errorf("rate-limited run %q no longer owns its transport stream work", request.runID)
+			}
+			// Parking is a durable terminal handoff, not a live owner. Retain the
+			// acknowledged checkpoint and monotonic fence. A direct persistence
+			// caller has no live lease to release; an exact live owner is released
+			// so the separately identified resume attempt can claim it.
+			if streamState.ActiveWorkID == request.runID {
+				streamState.ActiveWorkID = ""
+				streamState.ActiveWorkLeaseUntil = nil
+			}
+			current.StreamStates[stateKey] = cloneStreamState(streamState)
 			return current, nil
 		}
 		return current, fmt.Errorf("rate-limited run %q not found", request.runID)

@@ -379,10 +379,20 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
 	}
 
 	var reads, writes int
+	var readBackLocators []string
 	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		switch {
 		case request.Method == http.MethodGet && request.URL.Path == "/widgets":
 			reads++
+			if locator := request.URL.Query().Get("id"); locator != "" {
+				readBackLocators = append(readBackLocators, locator)
+				if locator != "receipt-widget-1" {
+					writer.WriteHeader(http.StatusNotFound)
+					return
+				}
+				_ = json.NewEncoder(writer).Encode(map[string]any{"data": []map[string]any{{"id": "widget-1", "value": "definition-owned"}}})
+				return
+			}
 			_ = json.NewEncoder(writer).Encode(map[string]any{"data": []map[string]any{{"id": "widget-1", "value": "definition-owned"}}})
 		case request.Method == http.MethodPost && request.URL.Path == "/widgets/target":
 			var record map[string]any
@@ -395,7 +405,8 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
 				return
 			}
 			writes++
-			_ = json.NewEncoder(writer).Encode(map[string]any{"ok": true})
+			writer.Header().Set("Content-Type", "application/json")
+			_ = json.NewEncoder(writer).Encode(map[string]any{"ok": true, "receipt_id": "receipt-widget-1"})
 		default:
 			writer.WriteHeader(http.StatusNotFound)
 		}
@@ -404,10 +415,10 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
 
 	bundleFS := syntheticTransportBundleFS()
 	bundleFS["synthetic/metadata.json"] = &fstest.MapFile{Data: []byte(`{"name":"synthetic","display_name":"Synthetic typed destination","description":"test-only typed destination","integration_type":"api","release_stage":"ga","capabilities":{"check":true,"read":true,"write":true,"query":false,"cdc":false,"dynamic_schema":false}}`)}
-	bundleFS["synthetic/streams.json"] = &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/widgets"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)}
+	bundleFS["synthetic/streams.json"] = &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/widgets"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","query":{"id":{"template":"{{ query.id }}","omit_when_absent":true}},"records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)}
 	bundleFS["synthetic/api_surface.json"] = &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},{"method":"POST","path":"/widgets/target","covered_by":{"write":"apply_widget"}}]}`)}
 	bundleFS["synthetic/schemas/widgets.json"] = &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","x-primary-key":["id"],"properties":{"id":{"type":"string"},"value":{"type":"string"}}}`)}
-	bundleFS["synthetic/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[{"name":"apply_widget","kind":"create","method":"POST","path":"/widgets/target","body_type":"json","body_fields":["target_id","value"],"risk":"creates a synthetic widget target","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}]}`)}
+	bundleFS["synthetic/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[{"name":"apply_widget","kind":"create","method":"POST","path":"/widgets/target","body_type":"json","body_fields":["target_id","value"],"idempotency_key_header":"Idempotency-Key","risk":"creates a synthetic widget target","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}]}`)}
 	bundleFS["synthetic/sync_transport.json"] = &fstest.MapFile{Data: []byte(`{
   "schema_version": 1,
   "source_transport": {
@@ -427,6 +438,7 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
     "apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "apply_widget"}],
     "read_back": {
       "operation": "widgets",
+	  "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1},
       "identity": [{"provider_field": "id", "expected_field": "target_id"}],
       "expected": [{"provider_field": "value", "expected_field": "value"}],
       "max_records": 1000,
@@ -481,11 +493,329 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
 	if err != nil {
 		t.Fatalf("run synthetic typed destination: %v", err)
 	}
-	if reads != 2 || writes != 1 || commits != 1 {
+	if reads != 2 || writes != 1 || commits != 1 || !reflect.DeepEqual(readBackLocators, []string{"receipt-widget-1"}) {
 		t.Fatalf("synthetic typed destination effects read/write/commit = %d/%d/%d, want source read + provider read-back, one write, one commit", reads, writes, commits)
 	}
 	if result.RecordsRead != 1 || result.RecordsApplied != 1 || result.CommittedCheckpoint == nil {
 		t.Fatalf("synthetic typed destination result = %#v, want one acknowledged action", result)
+	}
+}
+
+// TestDeclarativeDestination_ClaimedKeyedWithoutIndependentProofIsRejected
+// keeps PF-CF-B28 at the definition boundary: delivery.idempotency=keyed is
+// only a claim. The executable action must independently declare the exact
+// provider idempotency header that the sealed approval will bind.
+func TestDeclarativeDestination_ClaimedKeyedWithoutIndependentProofIsRejected(t *testing.T) {
+	files := declarativeTypedDestinationBundleFS("claimed-keyed-without-proof", "source-proof", "destination-proof")
+	files["claimed-keyed-without-proof/writes.json"] = &fstest.MapFile{Data: []byte(strings.Replace(string(files["claimed-keyed-without-proof/writes.json"].Data), `"idempotency_key_header":"Idempotency-Key",`, "", 1))}
+	bundle, err := engine.Load(files, "claimed-keyed-without-proof")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = declarativeTypedDestinationContractFor(engine.New(bundle, nil))
+	if err == nil || !strings.Contains(err.Error(), "independent idempotency proof") {
+		t.Fatalf("keyed declaration contract error = %v, want independent idempotency proof refusal", err)
+	}
+}
+
+// TestDeclarativeDestination_IndependentProof proves the positive B28 path:
+// the sealed proof is exact to the executor, action digest, and provider
+// header, and a post-provider-success retry reuses that header rather than
+// creating a second mutation.
+func TestDeclarativeDestination_IndependentProof(t *testing.T) {
+	name := "independent-idempotency-proof"
+	files := declarativeTypedDestinationBundleFS(name, "source-proof", "destination-proof")
+	bundle, err := engine.Load(files, name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	connector := engine.New(bundle, nil)
+	contract, err := declarativeTypedDestinationContractFor(connector)
+	if err != nil {
+		t.Fatalf("typed destination contract: %v", err)
+	}
+	digest, err := contract.actionDefinitionDigest("apply_widget")
+	if err != nil {
+		t.Fatal(err)
+	}
+	header, err := contract.idempotencyHeader("apply_widget")
+	if err != nil {
+		t.Fatal(err)
+	}
+	approval := synctransport.DestinationApproval{IdempotencyProof: synctransport.DestinationIdempotencyProof{
+		Executor: contract.descriptor.Executor, ActionDefinitionSHA256: digest, EffectiveHeader: header,
+	}}
+	if err := validateDeclarativeTypedDestinationIdempotencyProof(approval, contract.descriptor.Executor, digest, header); err != nil {
+		t.Fatalf("exact idempotency proof = %v", err)
+	}
+	for _, proof := range []synctransport.DestinationIdempotencyProof{
+		{Executor: contract.descriptor.Executor, ActionDefinitionSHA256: strings.Repeat("0", 64), EffectiveHeader: header},
+		{Executor: contract.descriptor.Executor, ActionDefinitionSHA256: digest, EffectiveHeader: "X-Other-Key"},
+		{Executor: declarativeStreamSourceReference, ActionDefinitionSHA256: digest, EffectiveHeader: header},
+	} {
+		approval.IdempotencyProof = proof
+		if err := validateDeclarativeTypedDestinationIdempotencyProof(approval, contract.descriptor.Executor, digest, header); err == nil {
+			t.Fatalf("mismatched idempotency proof %#v was accepted", proof)
+		}
+	}
+
+	providerCalls := 0
+	mutations := 0
+	keys := make(map[string]struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		providerCalls++
+		key := request.Header.Get(header)
+		if key == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		if _, replay := keys[key]; !replay {
+			keys[key] = struct{}{}
+			mutations++
+			// The provider committed the mutation but the response was ambiguous.
+			// Its keyed retry must not execute the mutation again.
+			w.WriteHeader(http.StatusBadGateway)
+			return
+		}
+		w.WriteHeader(http.StatusCreated)
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer server.Close()
+
+	fixtureApproval := syntheticTypedDestinationApproval(t, name, "apply_widget")
+	result, err := connector.Write(context.Background(), connectors.WriteRequest{
+		Action: "apply_widget", Config: connectors.RuntimeConfig{ProjectDir: t.TempDir(), Config: map[string]string{"base_url": server.URL}}, Approval: fixtureApproval.Evidence,
+	}, []connectors.Record{{"target_id": "widget-1", "value": "one"}})
+	if err != nil {
+		t.Fatalf("keyed post-success retry = %v", err)
+	}
+	if providerCalls != 2 || mutations != 1 || result.RecordsWritten != 1 {
+		t.Fatalf("provider calls/mutations/writes = %d/%d/%d, want 2/1/1", providerCalls, mutations, result.RecordsWritten)
+	}
+}
+
+// TestDeclarativeDestination_ReadBackUsesInternalReceiptLocator proves the
+// receipt boundary end to end: a declaration-owned write receipt selects one
+// declared, bounded read-back query while its complete locator never crosses
+// the public acknowledgement boundary. The bad cases are deliberately
+// admission/read-back failures before a checkpoint caller can proceed.
+func TestDeclarativeDestination_ReadBackUsesInternalReceiptLocator(t *testing.T) {
+	const privateLocator = "receipt-private-locator"
+
+	t.Run("unsupported compound locator is refused before write", func(t *testing.T) {
+		files := declarativeTypedDestinationBundleFS("readback-compound-refusal", "source", "destination")
+		path := "readback-compound-refusal/sync_transport.json"
+		files[path] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[path].Data), `"response_index": 0`, `"response_index": 1`, 1))}
+		bundle, err := engine.Load(files, "readback-compound-refusal")
+		if err != nil {
+			t.Fatalf("load bundle: %v", err)
+		}
+		if _, err := declarativeTypedDestinationContractFor(engine.New(bundle, nil)); err == nil || !strings.Contains(err.Error(), "response_index") {
+			t.Fatalf("compound receipt locator contract error = %v, want pre-write response_index refusal", err)
+		}
+	})
+
+	var writes, readBackAttempts int
+	var readBackLocators []string
+	var readBackPages []string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodPost && r.URL.Path == "/widgets/target":
+			writes++
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"receipt_id":"receipt-private-locator","echo":"receipt-private-locator"}`))
+		case r.Method == http.MethodGet && r.URL.Path == "/widgets":
+			locator := r.URL.Query().Get("id")
+			readBackLocators = append(readBackLocators, locator)
+			page := r.URL.Query().Get("page")
+			readBackPages = append(readBackPages, page)
+			if locator != privateLocator {
+				w.WriteHeader(http.StatusNotFound)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			switch page {
+			case "1":
+				readBackAttempts++
+				_, _ = w.Write([]byte(`{"data":[{"id":"unrelated","value":"definition-owned"}]}`))
+			case "2":
+				if readBackAttempts == 1 {
+					_, _ = w.Write([]byte(`{"data":[]}`))
+					return
+				}
+				_, _ = w.Write([]byte(`{"data":[{"id":"widget-1","value":"definition-owned"}]}`))
+			default:
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	const name = "readback-private-receipt"
+	files := declarativeTypedDestinationBundleFS(name, "source", "destination")
+	streamsPath := name + "/streams.json"
+	files[streamsPath] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[streamsPath].Data), `"pagination":{"type":"none"}`, `"pagination":{"type":"page_number","page_param":"page","size_param":"per_page","page_size":1}`, 1))}
+	syncPath := name + "/sync_transport.json"
+	files[syncPath] = &fstest.MapFile{Data: []byte(strings.Replace(string(files[syncPath].Data), `"max_pages": 1`, `"max_pages": 2`, 1))}
+	bundle, err := engine.Load(files, name)
+	if err != nil {
+		t.Fatalf("load bundle: %v", err)
+	}
+	connector := engine.New(bundle, nil)
+	executor := &declarativeTypedDestinationExecutor{}
+	approval := syntheticTypedDestinationApproval(t, name, "apply_widget")
+	strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+	plan, err := executor.PlanDestination(context.Background(), synctransport.DestinationPlanRequest{
+		Connector: connector, Source: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend, ApplyStrategy: strategy, Approval: approval,
+	})
+	if err != nil {
+		t.Fatalf("plan destination: %v", err)
+	}
+	warehouseReceipt := synctransport.WarehouseReceipt{
+		ID: "private-readback-workset", Owner: "private-readback-workset", Generation: 1, Stream: "widgets", Mode: synccontract.ModeFullAppend,
+		CheckpointSHA256: "checkpoint", TombstonesSHA256: "tombstones", ManifestSHA256: "manifest", ContentSHA256: "content", ParquetSHA256: "parquet", Records: 1,
+	}
+	runtime := connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL}, Secrets: map[string]string{"receipt_secret": privateLocator}}
+	workset := synctransport.WarehouseWorkset{ID: warehouseReceipt.ID, Records: []connectors.Record{{"id": "widget-1", "value": "definition-owned"}}}
+	applyRequest := synctransport.DestinationApplyRequest{
+		ConnectionID: warehouseReceipt.Owner, Plan: plan, Receipt: warehouseReceipt, Workset: workset, Runtime: runtime,
+		Source: connector, Destination: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend, Approval: approval,
+	}
+	acknowledgement, err := executor.ApplyDestination(context.Background(), applyRequest)
+	if err != nil {
+		t.Fatalf("apply destination: %v", err)
+	}
+	if writes != 1 || bytes.Contains(acknowledgement.Output, []byte(privateLocator)) {
+		t.Fatalf("write/public acknowledgement = %d/%q, want one write and redacted public output", writes, acknowledgement.Output)
+	}
+	privateReceipt, found := acknowledgement.PrivateReceipt()
+	if !found || !bytes.Contains(privateReceipt, []byte(privateLocator)) {
+		t.Fatal("durable acknowledgement did not retain the complete private receipt locator")
+	}
+	readBackRequest := synctransport.DestinationReadBackRequest{
+		Plan: plan, Workset: workset, Runtime: runtime,
+		Source: connector, Destination: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend, Acknowledgement: acknowledgement,
+	}
+	if err := executor.ReadBackDestination(context.Background(), readBackRequest); err != nil {
+		t.Fatalf("read back destination: %v", err)
+	}
+	if got, want := readBackLocators, []string{privateLocator, privateLocator, privateLocator, privateLocator}; !reflect.DeepEqual(got, want) || !reflect.DeepEqual(readBackPages, []string{"1", "2", "1", "2"}) || readBackAttempts != 2 {
+		t.Fatalf("read-back locators/pages/attempts = %q/%q/%d, want one stable locator across two declared two-page attempts", got, readBackPages, readBackAttempts)
+	}
+
+	missingReceipt, err := synccontract.NewDurableDownstreamAcknowledgement(name, time.Now().UTC())
+	if err != nil {
+		t.Fatal(err)
+	}
+	beforeMissing := len(readBackLocators)
+	readBackRequest.Acknowledgement = missingReceipt
+	if err := executor.ReadBackDestination(context.Background(), readBackRequest); err == nil || !strings.Contains(err.Error(), "private provider receipt") {
+		t.Fatalf("missing private receipt read-back error = %v, want pre-I/O refusal", err)
+	}
+	if len(readBackLocators) != beforeMissing {
+		t.Fatal("missing private receipt reached provider read-back")
+	}
+
+	foreignReceipt, err := connectors.NewDeclarativeTypedDestinationReadBackReceipt(plan.ActionDefinitionSHA256, connectors.DestinationReceiptLocator{
+		ResponseIndex: 0, BodyField: "receipt_id", QueryParameter: "id", MaxValueBytes: 256, MaxPages: 1,
+	}, []string{"foreign-receipt"}, 1000)
+	if err != nil {
+		t.Fatalf("construct foreign receipt: %v", err)
+	}
+	foreignAcknowledgement, err := missingReceipt.WithPrivateReceipt(foreignReceipt)
+	if err != nil {
+		t.Fatalf("attach foreign receipt: %v", err)
+	}
+	readBackRequest.Acknowledgement = foreignAcknowledgement
+	if err := executor.ReadBackDestination(context.Background(), readBackRequest); err == nil {
+		t.Fatal("foreign private receipt matched provider state")
+	}
+}
+
+// TestDeclarativeTransportClone_PreservesLargeNumbers keeps source records
+// lossless across the declaration-owned source -> stage -> destination
+// boundary. In particular, this must not use JSON's default float64 decode
+// path: provider JSON and native readers legitimately deliver distinct exact
+// integer and json.Number values.
+func TestDeclarativeTransportClone_PreservesLargeNumbers(t *testing.T) {
+	source := connectors.Record{
+		"signed":   int64(9007199254740993),
+		"unsigned": ^uint64(0),
+		"number":   json.Number("900719925474099312345678901234567890"),
+		"raw":      json.RawMessage(`{"nested":9007199254740993}`),
+		"nested": map[string]any{
+			"items": []any{int64(-9007199254740993), json.Number("42.0"), []byte("bytes")},
+		},
+	}
+
+	cloned, err := cloneTransportRecord(source)
+	if err != nil {
+		t.Fatalf("clone transport record: %v", err)
+	}
+	if got, ok := cloned["signed"].(int64); !ok || got != source["signed"] {
+		t.Fatalf("signed clone = %#v (%T), want exact int64", cloned["signed"], cloned["signed"])
+	}
+	if got, ok := cloned["unsigned"].(uint64); !ok || got != source["unsigned"] {
+		t.Fatalf("unsigned clone = %#v (%T), want exact uint64", cloned["unsigned"], cloned["unsigned"])
+	}
+	if got, ok := cloned["number"].(json.Number); !ok || got != source["number"] {
+		t.Fatalf("number clone = %#v (%T), want exact json.Number", cloned["number"], cloned["number"])
+	}
+	if got, ok := cloned["raw"].(json.RawMessage); !ok || !bytes.Equal(got, source["raw"].(json.RawMessage)) {
+		t.Fatalf("raw clone = %#v (%T), want exact raw JSON bytes", cloned["raw"], cloned["raw"])
+	}
+	nested := cloned["nested"].(map[string]any)
+	nested["items"].([]any)[0] = int64(1)
+	nested["items"].([]any)[2].([]byte)[0] = 'X'
+	if got := source["nested"].(map[string]any)["items"].([]any); got[0] != int64(-9007199254740993) || string(got[2].([]byte)) != "bytes" {
+		t.Fatalf("clone mutation changed source record: %#v", source)
+	}
+	if _, err := cloneTransportRecord(connectors.Record{"unsupported": make(chan struct{})}); err == nil {
+		t.Fatal("clone accepted an unsupported mutable value")
+	}
+}
+
+// TestDeclarativeReadBack_NumericSemanticEquality defines the destination
+// identity policy: finite JSON/integer values compare by arbitrary-precision
+// mathematical value, including scale/exponent variants (42 == 42.0), while
+// strings and booleans retain their own distinct JSON types.
+func TestDeclarativeReadBack_NumericSemanticEquality(t *testing.T) {
+	policy := connectors.DestinationReadBackPolicy{
+		Identity: []connectors.DestinationReadBackField{{ProviderField: "identity", ExpectedField: "target_identity"}},
+		Expected: []connectors.DestinationReadBackField{{ProviderField: "state", ExpectedField: "target_state"}},
+	}
+	expected := []connectors.Record{{
+		"target_identity": map[string]any{"id": int64(9007199254740993), "version": json.Number("42.0")},
+		"target_state":    map[string]any{"nested": []any{json.Number("1e3"), int64(42)}},
+	}}
+	provider := []connectors.Record{{
+		"identity": map[string]any{"id": json.Number("9007199254740993"), "version": int64(42)},
+		"state":    map[string]any{"nested": []any{int64(1000), json.Number("42.0")}},
+	}}
+	if err := matchDeclarativeTypedDestinationProviderState(expected, provider, policy); err != nil {
+		t.Fatalf("numeric semantic provider match: %v", err)
+	}
+
+	for _, testCase := range []struct {
+		name  string
+		value any
+	}{
+		{name: "unequal numeric", value: map[string]any{"nested": []any{int64(1000), int64(43)}}},
+		{name: "string is not numeric", value: "42"},
+		{name: "boolean is not numeric", value: true},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			changed := []connectors.Record{{
+				"identity": provider[0]["identity"],
+				"state":    testCase.value,
+			}}
+			if err := matchDeclarativeTypedDestinationProviderState(expected, changed, policy); err == nil {
+				t.Fatalf("read-back accepted %s value %#v", testCase.name, testCase.value)
+			}
+		})
 	}
 }
 
@@ -531,12 +861,21 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 		t.Fatal(err)
 	}
 
-	const appendProviderResponse = "{\n  \"id\": \"provider-append-1\",\n  \"large_provider_id\": 9007199254740993,\n  \"rare_field\": {\"enabled\": true},\n  \"paid_tier\": \"enterprise\",\n  \"echoed_secret\": \"destination-secret\",\n  \"duplicate\": \"first\",\n  \"duplicate\": \"second\"\n}\n"
+	const appendProviderResponse = "{\n  \"id\": \"provider-append-1\",\n  \"receipt_id\": \"widget-1\",\n  \"large_provider_id\": 9007199254740993,\n  \"rare_field\": {\"enabled\": true},\n  \"paid_tier\": \"enterprise\",\n  \"echoed_secret\": \"destination-secret\",\n  \"duplicate\": \"first\",\n  \"duplicate\": \"second\"\n}\n"
+	// A configured scalar requires structured masking, so the public raw
+	// result is the exact JSON encoder form of the masked object. BodyBytes
+	// remains the verbatim provider byte count above; the companion Group-3
+	// regression covers byte-for-byte raw preservation when no value is masked.
+	const publicAppendProviderResponse = `{"duplicate":"second","echoed_secret":"[masked]","id":"provider-append-1","large_provider_id":9007199254740993,"paid_tier":"enterprise","rare_field":{"enabled":true},"receipt_id":"widget-1"}`
 	var reads, appendWrites, replaceWrites, otherWrites int
 	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		switch {
 		case request.Method == http.MethodGet && request.URL.Path == "/widgets":
 			reads++
+			if locator := request.URL.Query().Get("id"); locator != "" && locator != "widget-1" {
+				writer.WriteHeader(http.StatusNotFound)
+				return
+			}
 			_, _ = writer.Write([]byte(`{"data":[{"id":"widget-1","value":"definition-owned"}]}`))
 		case request.Method == http.MethodPost && request.URL.Path == "/widgets/append":
 			appendWrites++
@@ -548,10 +887,14 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			_, _ = writer.Write([]byte(appendProviderResponse))
 		case request.Method == http.MethodPost && request.URL.Path == "/widgets/replace":
 			replaceWrites++
-			writer.WriteHeader(http.StatusNoContent)
+			writer.Header().Set("Content-Type", "application/json")
+			writer.WriteHeader(http.StatusCreated)
+			_, _ = writer.Write([]byte(`{"receipt_id":"widget-1"}`))
 		case request.Method == http.MethodPost && request.URL.Path == "/widgets/other":
 			otherWrites++
-			writer.WriteHeader(http.StatusNoContent)
+			writer.Header().Set("Content-Type", "application/json")
+			writer.WriteHeader(http.StatusCreated)
+			_, _ = writer.Write([]byte(`{"receipt_id":"widget-1"}`))
 		default:
 			writer.WriteHeader(http.StatusNotFound)
 		}
@@ -678,11 +1021,21 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			if got := output.ProviderResponses[0].Headers["X-Echoed-Credential"]; !reflect.DeepEqual(got.Values, []string{"[masked]"}) {
 				t.Fatal("configured credential echo was not masked")
 			}
-			if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || got["echoed_secret"] != "[masked]" {
+			if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["receipt_id"] != "widget-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || got["echoed_secret"] != "[masked]" {
 				t.Fatal("ordinary provider body fields were not preserved")
 			}
-			if provider := output.ProviderResponses[0]; !provider.BodyPresent || provider.BodyBytes != len(appendProviderResponse) || provider.BodyRaw != strings.ReplaceAll(appendProviderResponse, "destination-secret", "[masked]") || provider.BodyRawEncoding != "text" {
-				t.Fatal("provider raw body metadata or credential masking was incorrect")
+			provider := output.ProviderResponses[0]
+			if !provider.BodyPresent {
+				t.Fatal("provider raw body presence was lost")
+			}
+			if provider.BodyBytes != len(appendProviderResponse) {
+				t.Fatalf("provider raw body byte count = %d, want exact %d", provider.BodyBytes, len(appendProviderResponse))
+			}
+			if provider.BodyRaw != publicAppendProviderResponse {
+				t.Fatal("provider raw body lost bytes or credential masking")
+			}
+			if provider.BodyRawEncoding != "text" {
+				t.Fatalf("provider raw body encoding = %q, want text", provider.BodyRawEncoding)
 			}
 			var rawOutput struct {
 				ProviderResponses []struct {
@@ -1180,8 +1533,8 @@ func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(
 	if err == nil || !strings.Contains(err.Error(), "HTTP status 500") {
 		t.Fatalf("RunETL error = %v, want failed provider response", err)
 	}
-	if run.Status != "failed" || run.RecordsLoaded != 0 || posts != 2 || len(run.DestinationResults) != 1 {
-		t.Fatal("failed partial-result run did not retain the expected provider output")
+	if run.Status != "failed" || run.RecordsLoaded != 0 || posts != 6 || len(run.DestinationResults) != 1 {
+		t.Fatalf("failed partial-result run status/loaded/posts/results = %q/%d/%d/%d, want failed/0/6/1", run.Status, run.RecordsLoaded, posts, len(run.DestinationResults))
 	}
 	var output struct {
 		RecordsWritten    int `json:"records_written"`
@@ -1772,10 +2125,10 @@ func declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID str
 		files[name+"/"+strings.TrimPrefix(path, "synthetic/")] = file
 	}
 	files[name+"/metadata.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"name":%q,"display_name":"Synthetic typed destination","description":"test-only typed destination","integration_type":"api","release_stage":"ga","capabilities":{"check":true,"read":true,"write":true,"query":false,"cdc":false,"dynamic_schema":false}}`, name))}
-	files[name+"/streams.json"] = &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/widgets"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)}
+	files[name+"/streams.json"] = &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/widgets"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","query":{"id":{"template":"{{ query.id }}","omit_when_absent":true}},"records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)}
 	files[name+"/api_surface.json"] = &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},{"method":"POST","path":"/widgets/target","covered_by":{"write":"apply_widget"}}]}`)}
 	files[name+"/schemas/widgets.json"] = &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","x-primary-key":["id"],"properties":{"id":{"type":"string"},"value":{"type":"string"}}}`)}
-	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[{"name":"apply_widget","kind":"create","method":"POST","path":"/widgets/target","body_type":"json","body_fields":["target_id","value"],"risk":"creates a synthetic widget target","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}]}`)}
+	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[{"name":"apply_widget","kind":"create","method":"POST","path":"/widgets/target","body_type":"json","body_fields":["target_id","value"],"idempotency_key_header":"Idempotency-Key","risk":"creates a synthetic widget target","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}]}`)}
 	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
   "schema_version": 1,
   "source_transport": {
@@ -1795,6 +2148,7 @@ func declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID str
     "apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "apply_widget"}],
     "read_back": {
       "operation": "widgets",
+	  "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1},
       "identity": [{"provider_field": "id", "expected_field": "target_id"}],
       "expected": [{"provider_field": "value", "expected_field": "value"}],
       "max_records": 1000,
@@ -1826,8 +2180,8 @@ func declarativeTypedDestinationActionBundleFS(name, sourceRunID, destinationRun
 func declarativeTypedDestinationMultiActionBundleFS(name, sourceRunID, destinationRunID string) fstest.MapFS {
 	files := declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID)
 	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[
-  {"name":"append_widget","kind":"create","method":"POST","path":"/widgets/append","body_type":"json","body_fields":["target_id","value"],"risk":"creates a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}},
-  {"name":"replace_widget","kind":"update","method":"POST","path":"/widgets/replace","body_type":"json","body_fields":["target_id","value"],"risk":"replaces a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}
+  {"name":"append_widget","kind":"create","method":"POST","path":"/widgets/append","body_type":"json","body_fields":["target_id","value"],"idempotency_key_header":"Idempotency-Key","risk":"creates a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}},
+  {"name":"replace_widget","kind":"update","method":"POST","path":"/widgets/replace","body_type":"json","body_fields":["target_id","value"],"idempotency_key_header":"Idempotency-Key","risk":"replaces a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}
 ]}`)}
 	files[name+"/api_surface.json"] = &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},{"method":"POST","path":"/widgets/append","covered_by":{"write":"append_widget"}},{"method":"POST","path":"/widgets/replace","covered_by":{"write":"replace_widget"}}]}`)}
 	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
@@ -1852,6 +2206,7 @@ func declarativeTypedDestinationMultiActionBundleFS(name, sourceRunID, destinati
     ],
     "read_back": {
       "operation": "widgets",
+	  "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1},
       "identity": [{"provider_field": "id", "expected_field": "target_id"}],
       "expected": [{"provider_field": "value", "expected_field": "value"}],
       "max_records": 1000,
@@ -2445,9 +2800,10 @@ func TestOpenComposedGitHubCommitsHonorsTransportMaxPages(t *testing.T) {
 		maxPages     string
 		wantRequests int
 		wantRecords  int
+		wantBudget   bool
 	}{
-		{name: "omitted defaults to one page", wantRequests: 1, wantRecords: 100},
-		{name: "positive cap", maxPages: "2", wantRequests: 2, wantRecords: 200},
+		{name: "omitted defaults to one page", wantRequests: 1, wantRecords: 100, wantBudget: true},
+		{name: "positive cap", maxPages: "2", wantRequests: 2, wantRecords: 200, wantBudget: true},
 		{name: "zero is unlimited", maxPages: "0", wantRequests: 3, wantRecords: 201},
 		{name: "all is unlimited", maxPages: "all", wantRequests: 3, wantRecords: 201},
 		{name: "unlimited is unlimited", maxPages: "unlimited", wantRequests: 3, wantRecords: 201},
@@ -2513,10 +2869,213 @@ func TestOpenComposedGitHubCommitsHonorsTransportMaxPages(t *testing.T) {
 				records += len(page.Records)
 				return nil
 			})
-			if err != nil || providerRequests != testCase.wantRequests || records != testCase.wantRecords {
-				t.Fatalf("max_pages=%q read = (err=%v requests=%d records=%d), want requests=%d records=%d", testCase.maxPages, err, providerRequests, records, testCase.wantRequests, testCase.wantRecords)
+			var budgetStop *synctransport.SourceBudgetStoppedError
+			if testCase.wantBudget {
+				if !errors.As(err, &budgetStop) || budgetStop == nil || budgetStop.Continuation.Kind == "" || len(budgetStop.Continuation.Token) == 0 {
+					t.Fatalf("max_pages=%q read error = %T %v, want typed bounded-source continuation", testCase.maxPages, err, err)
+				}
+			} else if err != nil {
+				t.Fatalf("max_pages=%q read error = %v, want exhausted scan", testCase.maxPages, err)
+			}
+			if providerRequests != testCase.wantRequests || records != testCase.wantRecords {
+				t.Fatalf("max_pages=%q read = (requests=%d records=%d), want requests=%d records=%d", testCase.maxPages, providerRequests, records, testCase.wantRequests, testCase.wantRecords)
 			}
 		})
+	}
+}
+
+// TestDeclarativeTransport_PageBudgetIsNotEOF keeps the source-side half of
+// PF-CF-B27 production-shaped: an engine-declared three-page collection must
+// distinguish an exhausted scan from a bounded prefix, and the opaque
+// continuation must resume the next provider page without exposing a caller
+// cursor or replaying an acknowledged batch.
+func TestDeclarativeTransport_PageBudgetIsNotEOF(t *testing.T) {
+	type outcomeSource interface {
+		ReadTransportWithOutcome(context.Context, synctransport.SourceRequest, func(synctransport.SourcePage) error) (synctransport.SourceReadOutcome, error)
+	}
+
+	requestedPages := make([]int, 0, 8)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		page, _ := strconv.Atoi(request.URL.Query().Get("page"))
+		if page == 0 {
+			page = 1
+		}
+		requestedPages = append(requestedPages, page)
+		count := 100
+		if page == 3 {
+			count = 1
+		}
+		records := make([]map[string]any, 0, count)
+		for index := range count {
+			records = append(records, map[string]any{
+				"sha": fmt.Sprintf("sha-%d-%d", page, index),
+				"commit": map[string]any{
+					"message":   "budget outcome",
+					"author":    map[string]any{"date": "2026-08-15T00:00:00Z"},
+					"committer": map[string]any{"date": "2026-08-15T00:00:00Z"},
+				},
+			})
+		}
+		if err := json.NewEncoder(w).Encode(records); err != nil {
+			t.Errorf("encode provider page: %v", err)
+		}
+	}))
+	defer server.Close()
+
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	github, _ := a.registry.Get("github")
+	postgres, _ := a.registry.Get("postgres")
+	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+		Source: github, Destination: postgres, Stream: "commits", Mode: synccontract.ModeFullAppend,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	source, ok := resolved.Source.(outcomeSource)
+	if !ok {
+		t.Fatalf("declarative source %T does not expose a typed read outcome", resolved.Source)
+	}
+	resume := synccontract.ResumeExpectation{
+		Source:           synccontract.SourceIdentity{Engine: "github", AccountOrCluster: "budget-outcome", ObjectScope: "commits"},
+		SourceGeneration: synccontract.OpaqueToken("budget-outcome-generation"),
+	}
+	baseConfig := map[string]string{"base_url": server.URL, "owner": "rails", "repo": "rails", "public_access": "true"}
+	cappedConfig := func() map[string]string {
+		config := cloneStringMap(baseConfig)
+		config[declarativeTransportMaxPagesConfig] = "1"
+		return config
+	}
+
+	for _, testCase := range []struct {
+		name          string
+		maxPages      string
+		wantRequests  int
+		wantRecords   int
+		wantExhausted bool
+	}{
+		{name: "omitted default is an incomplete one-page prefix", wantRequests: 1, wantRecords: 100},
+		{name: "explicit one-page prefix", maxPages: "1", wantRequests: 1, wantRecords: 100},
+		{name: "explicit two-page prefix", maxPages: "2", wantRequests: 2, wantRecords: 200},
+		{name: "unlimited scan is exhausted", maxPages: "unlimited", wantRequests: 3, wantRecords: 201, wantExhausted: true},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			requestedPages = requestedPages[:0]
+			config := cloneStringMap(baseConfig)
+			if testCase.maxPages != "" {
+				config[declarativeTransportMaxPagesConfig] = testCase.maxPages
+			}
+			records := 0
+			outcome, readErr := source.ReadTransportWithOutcome(context.Background(), synctransport.SourceRequest{
+				Connector: github, Runtime: connectors.RuntimeConfig{ProjectDir: root, Config: config}, Stream: "commits",
+				Mode: synccontract.ModeFullAppend, BatchSize: issueCollectionTransportMaxRecords, Resume: resume,
+			}, func(page synctransport.SourcePage) error {
+				records += len(page.Records)
+				return nil
+			})
+			if readErr != nil {
+				t.Fatalf("ReadTransportWithOutcome() error = %v", readErr)
+			}
+			if got := len(requestedPages); got != testCase.wantRequests {
+				t.Fatalf("provider requests = %d, want %d", got, testCase.wantRequests)
+			}
+			if records != testCase.wantRecords {
+				t.Fatalf("emitted records = %d, want %d", records, testCase.wantRecords)
+			}
+			if outcome.Exhausted != testCase.wantExhausted {
+				t.Fatalf("outcome exhausted = %t, want %t", outcome.Exhausted, testCase.wantExhausted)
+			}
+			if outcome.Exhausted && outcome.Continuation != nil {
+				t.Fatalf("exhausted outcome exposed a continuation: %#v", outcome.Continuation)
+			}
+			if !outcome.Exhausted && outcome.Continuation == nil {
+				t.Fatal("budget-stopped outcome omitted its opaque continuation")
+			}
+		})
+	}
+
+	requestedPages = requestedPages[:0]
+	var firstPage synctransport.SourcePage
+	firstOutcome, err := source.ReadTransportWithOutcome(context.Background(), synctransport.SourceRequest{
+		Connector: github,
+		Runtime:   connectors.RuntimeConfig{ProjectDir: root, Config: cappedConfig()},
+		Stream:    "commits", Mode: synccontract.ModeIncrementalDedupe, BatchSize: issueCollectionTransportMaxRecords, Resume: resume,
+	}, func(page synctransport.SourcePage) error {
+		firstPage = page
+		return nil
+	})
+	if err != nil || firstOutcome.Exhausted || firstOutcome.Continuation == nil || len(firstPage.Records) != 100 {
+		t.Fatalf("first incremental prefix = (outcome=%#v err=%v records=%d), want one bounded resumable page", firstOutcome, err, len(firstPage.Records))
+	}
+	ack, err := synccontract.NewDurableDownstreamAcknowledgement("postgres", firstPage.CandidateCheckpoint.ObservedAt.Add(time.Millisecond))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var checkpoint synccontract.CheckpointEnvelope
+	if err := synccontract.CommitAfterDownstreamAcknowledgement(firstPage.CandidateCheckpoint, ack, func(committed synccontract.CheckpointEnvelope) error {
+		checkpoint = committed
+		return nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	checkpoint.Continuation = firstOutcome.Continuation.Clone()
+
+	requestedPages = requestedPages[:0]
+	resumed := make([]string, 0, 100)
+	_, err = source.ReadTransportWithOutcome(context.Background(), synctransport.SourceRequest{
+		Connector: github,
+		Runtime:   connectors.RuntimeConfig{ProjectDir: root, Config: cappedConfig()},
+		Stream:    "commits", Mode: synccontract.ModeIncrementalDedupe, BatchSize: issueCollectionTransportMaxRecords,
+		Resume: resume, Checkpoint: &checkpoint,
+	}, func(page synctransport.SourcePage) error {
+		for _, record := range page.Records {
+			resumed = append(resumed, record["sha"].(string))
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("resumed incremental read error = %v", err)
+	}
+	if got, want := len(resumed), 100; got != want {
+		t.Fatalf("resumed records = %d, want page N+1 exactly once (%d)", got, want)
+	}
+	for _, sha := range resumed {
+		if !strings.HasPrefix(sha, "sha-2-") {
+			t.Fatalf("resumed records include an acknowledged-prefix value %q", sha)
+		}
+	}
+	if got, want := requestedPages, []int{1, 2}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("resumed provider traversal = %v, want engine-owned replay through %v", got, want)
+	}
+
+	// The continuation is an engine-owned, definition-bound capability. A
+	// corrupted persisted token must be rejected before it can select a
+	// provider page, rather than falling back to page one or treating the
+	// capped prefix as an exhausted scan.
+	corrupt := checkpoint.Clone()
+	corrupt.Continuation.Token = append(synccontract.OpaqueToken(nil), corrupt.Continuation.Token...)
+	corrupt.Continuation.Token[0] ^= 0x01
+	requestedPages = requestedPages[:0]
+	_, err = source.ReadTransportWithOutcome(context.Background(), synctransport.SourceRequest{
+		Connector: github,
+		Runtime:   connectors.RuntimeConfig{ProjectDir: root, Config: cappedConfig()},
+		Stream:    "commits", Mode: synccontract.ModeIncrementalDedupe, BatchSize: issueCollectionTransportMaxRecords,
+		Resume: resume, Checkpoint: &corrupt,
+	}, func(synctransport.SourcePage) error {
+		t.Fatal("corrupt continuation reached the source emitter")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("corrupt continuation was accepted")
+	}
+	if got := len(requestedPages); got != 0 {
+		t.Fatalf("corrupt continuation made %d provider requests, want rejection before I/O", got)
 	}
 }
 

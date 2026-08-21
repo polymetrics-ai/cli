@@ -24,8 +24,13 @@ type DownstreamAcknowledgement struct {
 	AcknowledgedAt time.Time `json:"acknowledged_at"`
 	// Output is connector-owned typed-action output captured after the target
 	// reports durable success; callers cannot supply it through the transport API.
-	Output  json.RawMessage `json:"output,omitempty"`
-	durable bool
+	Output json.RawMessage `json:"output,omitempty"`
+	// privateReceipt is a bounded, connector-owned continuation from a
+	// successful write to its compulsory read-back. It is intentionally absent
+	// from JSON, diagnostics, persisted run output, and public acknowledgement
+	// accessors; only the in-process destination adapter can consume it.
+	privateReceipt json.RawMessage
+	durable        bool
 }
 
 // DurableETLDestination supplies an acknowledgement only after its writes are
@@ -79,6 +84,29 @@ func (a DownstreamAcknowledgement) WithOutput(output json.RawMessage) (Downstrea
 	}
 	a.Output = append(json.RawMessage(nil), output...)
 	return a, nil
+}
+
+// WithPrivateReceipt attaches a small, validated connector-owned receipt for
+// an immediate read-back. Unlike Output it is never serialized. The bound
+// prevents a provider response from becoming an unbounded hidden transport.
+func (a DownstreamAcknowledgement) WithPrivateReceipt(receipt json.RawMessage) (DownstreamAcknowledgement, error) {
+	if err := a.validate(); err != nil {
+		return DownstreamAcknowledgement{}, err
+	}
+	if len(receipt) == 0 || len(receipt) > 8<<10 || !json.Valid(receipt) {
+		return DownstreamAcknowledgement{}, fmt.Errorf("durable acknowledgement private receipt must be valid bounded JSON")
+	}
+	a.privateReceipt = append(json.RawMessage(nil), receipt...)
+	return a, nil
+}
+
+// PrivateReceipt returns a defensive copy for the destination read-back port.
+// It intentionally has no JSON representation and no caller-provided setter.
+func (a DownstreamAcknowledgement) PrivateReceipt() (json.RawMessage, bool) {
+	if len(a.privateReceipt) == 0 {
+		return nil, false
+	}
+	return append(json.RawMessage(nil), a.privateReceipt...), true
 }
 
 func (a DownstreamAcknowledgement) validate() error {

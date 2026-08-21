@@ -122,7 +122,7 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 	if err := authorizeDestinationEffect(ctx, request.Approval, "Arrow full-overwrite publication"); err != nil {
 		return result, err
 	}
-	publishCtx, cancelPublish := context.WithTimeout(ctx, request.unitDeadline())
+	publishCtx, cancelPublish := transportUnitContext(ctx, request.unitDeadline())
 	publishStarted := time.Now()
 	acknowledgement, publishErr := session.PublishArrowFullOverwrite(publishCtx, ArrowFullOverwritePublicationRequest{
 		LastCheckpoint: lastCandidate, Segments: append([]FastSegmentReceipt(nil), segments...),
@@ -131,13 +131,15 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 	})
 	collectDestinationResult(&result, acknowledgement, publishErr)
 	result.PublishElapsed += time.Since(publishStarted)
+	cancelPublish()
 	if publishErr == nil {
 		published = true
+		readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
 		readBackStarted := time.Now()
-		publishErr = session.ReadBackArrowFullOverwrite(publishCtx, acknowledgement)
-		result.PublishElapsed += time.Since(readBackStarted)
+		publishErr = session.ReadBackArrowFullOverwrite(readBackCtx, acknowledgement)
+		result.ReadBackElapsed += time.Since(readBackStarted)
+		cancelReadBack()
 	}
-	cancelPublish()
 	if publishErr != nil {
 		return result, fmt.Errorf("publish Arrow full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}

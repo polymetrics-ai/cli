@@ -189,6 +189,15 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 	})
 }
 
+// ReadWithOutcome is the closed transport-source variant of Read. It retains
+// the normal authentication boundary while making a known page budget stop
+// distinguishable from provider exhaustion for a durable continuation.
+func (c *Connector) ReadWithOutcome(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, ReadWithOutcome(admitted, c.bundle, req, c.hooks, emit))
+	})
+}
+
 // RateLimitParkingScope reproduces the declaration-selected policy group for
 // the failed stream. It accepts only connsdk's typed terminal 429 evidence;
 // generic HTTP or string-shaped errors cannot create durable parking state.
@@ -247,29 +256,41 @@ func (c *Connector) ReadBackDeclarativeDestination(ctx context.Context, req conn
 	if req.MaxRecords < 1 {
 		return nil, fmt.Errorf("declarative destination read-back requires a positive record bound")
 	}
-	found := false
-	for _, stream := range c.bundle.Streams {
-		if stream.Name == req.Operation {
-			found = true
-			break
-		}
-	}
-	if !found {
+	stream, err := findStream(c.bundle, req.Operation)
+	if err != nil {
 		return nil, fmt.Errorf("declarative destination read-back operation %q is not a declared stream", req.Operation)
 	}
+	queryParameter, declared := stream.Query[req.ReceiptLocator.QueryParameter]
+	if !declared {
+		return nil, fmt.Errorf("declarative destination read-back locator query parameter %q is not declared by operation %q", req.ReceiptLocator.QueryParameter, req.Operation)
+	}
+	if queryParameter.Template != "{{ query."+req.ReceiptLocator.QueryParameter+" }}" {
+		return nil, fmt.Errorf("declarative destination read-back locator query parameter %q is not an exact declared query binding", req.ReceiptLocator.QueryParameter)
+	}
+	locators, err := connectors.ParseDeclarativeTypedDestinationReadBackReceipt(req.Receipt, req.ActionDefinitionSHA256, req.ReceiptLocator, req.MaxRecords)
+	if err != nil {
+		return nil, err
+	}
 	records := make([]connectors.Record, 0)
-	err := c.Read(ctx, connectors.ReadRequest{Stream: req.Operation, Config: req.Runtime}, func(record connectors.Record) error {
-		if len(records) >= req.MaxRecords {
-			return fmt.Errorf("declarative destination read-back exceeded max_records %d", req.MaxRecords)
+	for _, locator := range locators {
+		err := c.Read(ctx, connectors.ReadRequest{
+			Stream: req.Operation, Config: req.Runtime, Query: map[string]string{req.ReceiptLocator.QueryParameter: locator}, MaxPages: req.ReceiptLocator.MaxPages,
+		}, func(record connectors.Record) error {
+			if len(records) >= req.MaxRecords {
+				return fmt.Errorf("declarative destination read-back exceeded max_records %d", req.MaxRecords)
+			}
+			copy := make(connectors.Record, len(record))
+			for key, value := range record {
+				copy[key] = value
+			}
+			records = append(records, copy)
+			return nil
+		})
+		if err != nil {
+			return records, err
 		}
-		copy := make(connectors.Record, len(record))
-		for key, value := range record {
-			copy[key] = value
-		}
-		records = append(records, copy)
-		return nil
-	})
-	return records, err
+	}
+	return records, nil
 }
 
 // PreflightOperationDirectRead proves a command's declared binding can reach
@@ -540,6 +561,10 @@ func (c *Connector) DeclarativeTypedDestinationActionDigest(actionName string) (
 	return declarativeTypedDestinationActionDigest(c.bundle, actionName)
 }
 
+func (c *Connector) DeclarativeTypedDestinationIdempotencyHeader(actionName string) (string, error) {
+	return declarativeTypedDestinationIdempotencyHeader(c.bundle, actionName)
+}
+
 // PreflightStructuredJSONRecordField makes the concrete write schema the
 // authority for a commandrunner `json` flag. It intentionally accepts a field
 // name rather than a raw body or arbitrary path, so the runner cannot grow a
@@ -653,6 +678,10 @@ func (b Base) DeclarativeTypedDestinationActionDigest(actionName string) (string
 	return declarativeTypedDestinationActionDigest(b.bundle, actionName)
 }
 
+func (b Base) DeclarativeTypedDestinationIdempotencyHeader(actionName string) (string, error) {
+	return declarativeTypedDestinationIdempotencyHeader(b.bundle, actionName)
+}
+
 func (b Base) ValidateWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) error {
 	if len(b.bundle.Writes) == 0 {
 		return connectors.ErrUnsupportedOperation
@@ -704,6 +733,18 @@ func declarativeTypedDestinationActionDigest(b Bundle, actionName string) (strin
 	}
 	sum := sha256.Sum256(canonical)
 	return hex.EncodeToString(sum[:]), nil
+}
+
+func declarativeTypedDestinationIdempotencyHeader(b Bundle, actionName string) (string, error) {
+	action, err := findWriteAction(b, actionName)
+	if err != nil {
+		return "", err
+	}
+	header := strings.TrimSpace(action.IdempotencyKeyHeader)
+	if header == "" {
+		return "", fmt.Errorf("action %q has no provider idempotency key header", actionName)
+	}
+	return header, nil
 }
 
 // OperationDirectReadMaxBytes returns the bounded response limit for a

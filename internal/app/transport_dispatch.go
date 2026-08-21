@@ -306,8 +306,11 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			if err := interim.ValidateResume(sourceExpectation); err != nil {
 				return err
 			}
-			_, err := workLease.commit(ctx, interim)
+			_, err := workLease.commitAfterAcknowledgement(ctx, interim)
 			if err != nil {
+				if errors.Is(err, errTransportStreamWorkFenceLost) {
+					err = fmt.Errorf("%w: %w", errTransportStreamStateConflict, err)
+				}
 				return fmt.Errorf("persist acknowledged transport checkpoint: %w", err)
 			}
 			copy := interim.Clone()
@@ -322,11 +325,25 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	transportMeasurement := transportPhaseMeasurement(transportResult)
 	if committed == nil || committed.CommittedAt == nil {
 		if err != nil {
-			return etlExecutionResult{
+			result := etlExecutionResult{
 				RecordsRead: transportResult.RecordsRead, RecordsLoaded: transportResult.RecordsApplied,
 				BatchCount: transportResult.Pages, TransportPhaseMeasurement: transportMeasurement,
 				DestinationResults: cloneDestinationResults(transportResult.DestinationResults),
-			}, err
+			}
+			// A per-page run that already had a durable checkpoint can be a
+			// rate-limit handoff. Keep its exact active lease until parking
+			// atomically records the terminal run and releases that lease with the
+			// same checkpoint. Every other uncommitted path has no durable handoff
+			// evidence and must restore/delete its claim before terminal failure.
+			if (mode.IsOverwrite() || prior.Checkpoint == nil) && !stateStoreCommitMayHaveSucceeded(err) {
+				if releaseErr := workLease.abandonUncommitted(ctx); releaseErr != nil {
+					if errors.Is(releaseErr, errTransportStreamWorkFenceLost) {
+						releaseErr = fmt.Errorf("%w: %w", errTransportStreamStateConflict, releaseErr)
+					}
+					return result, errors.Join(err, releaseErr)
+				}
+			}
+			return result, err
 		}
 		if transportResult.Pages == 0 && transportResult.RecordsRead == 0 && transportResult.RecordsApplied == 0 {
 			if requiresManagedTargetApproval {
@@ -353,7 +370,14 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
 			return result, nil
 		}
-		return emptyResult, fmt.Errorf("closed transport completed without a durable committed checkpoint")
+		completionErr := fmt.Errorf("closed transport completed without a durable committed checkpoint")
+		if releaseErr := workLease.abandonUncommitted(ctx); releaseErr != nil {
+			if errors.Is(releaseErr, errTransportStreamWorkFenceLost) {
+				releaseErr = fmt.Errorf("%w: %w", errTransportStreamStateConflict, releaseErr)
+			}
+			return emptyResult, errors.Join(completionErr, releaseErr)
+		}
+		return emptyResult, completionErr
 	}
 
 	updated := workLease.stateForTerminalRun()
@@ -416,6 +440,7 @@ func transportPhaseMeasurement(result synctransport.Result) *TransportPhaseMeasu
 		SourceLogicalBytes: result.SourceLogicalBytes, TransformedLogicalBytes: result.TransformedBytes, ParquetBytes: result.ParquetBytes,
 		SourceReadElapsedNanos: result.ExtractElapsed.Nanoseconds(), TransformElapsedNanos: result.TransformElapsed.Nanoseconds(),
 		ParquetCloseElapsedNanos: result.ParquetElapsed.Nanoseconds(), BinaryCOPYElapsedNanos: result.ApplyElapsed.Nanoseconds(),
+		ReadBackElapsedNanos:             result.ReadBackElapsed.Nanoseconds(),
 		IndexConstraintBuildElapsedNanos: result.IndexConstraintElapsed.Nanoseconds(),
 		PublishReceiptElapsedNanos:       result.PublishElapsed.Nanoseconds(), CheckpointElapsedNanos: result.CheckpointElapsed.Nanoseconds(),
 		CriticalPathElapsedNanos: result.WallElapsed.Nanoseconds(), PeakCreditBytes: result.PeakCreditBytes,

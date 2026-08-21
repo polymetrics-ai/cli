@@ -422,6 +422,51 @@ func TestOrchestratorFullOverwritePublishesAllBoundedPagesBeforeOneCheckpoint(t 
 	}
 }
 
+func TestOrchestratorFullOverwriteBudgetStopNeverPublishes(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{
+		Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace",
+	}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	fullOverwrite := &testFullOverwriteRun{sink: pair.destination.Name()}
+	pair.destinationExecutor.fullOverwrite = fullOverwrite
+	source := &budgetStoppedTestSource{
+		testSourceExecutor: pair.sourceExecutor,
+		continuation: synccontract.SourceContinuation{
+			Kind:  "engine_pagination_v1",
+			Token: synccontract.OpaqueToken("opaque-engine-owned-continuation"),
+		},
+	}
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(source); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(pair.destinationExecutor); err != nil {
+		t.Fatal(err)
+	}
+	commits := 0
+
+	_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite,
+		BatchSize: 1, Stage: &testWarehouseStage{}, Commit: func(synccontract.CheckpointEnvelope) error {
+			commits++
+			return nil
+		},
+	})
+	var stopped *SourceBudgetStoppedError
+	if !errors.As(err, &stopped) {
+		t.Fatalf("Run() error = %v, want typed budget stop", err)
+	}
+	if fullOverwrite.publishCalls != 0 || fullOverwrite.readBackCalls != 0 || commits != 0 {
+		t.Fatalf("publish/read-back/checkpoints = %d/%d/%d, want 0/0/0 after capped source", fullOverwrite.publishCalls, fullOverwrite.readBackCalls, commits)
+	}
+	if fullOverwrite.abortCalls != 1 {
+		t.Fatalf("abort calls = %d, want private shadow abort", fullOverwrite.abortCalls)
+	}
+}
+
 func TestFullOverwrite_PublishSuccessReadbackFailureDoesNotAbort(t *testing.T) {
 	t.Run("standard", func(t *testing.T) {
 		pair := newTestTransportPair("database", "database")
@@ -473,6 +518,163 @@ func TestFullOverwrite_PublishSuccessReadbackFailureDoesNotAbort(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestTransport_ReadBackGetsIndependentUnitDeadline(t *testing.T) {
+	const (
+		unitDeadline  = 50 * time.Millisecond
+		applyDelay    = 40 * time.Millisecond
+		readBackDelay = 20 * time.Millisecond
+	)
+
+	delay := func(duration time.Duration) func(context.Context, int) error {
+		return func(ctx context.Context, _ int) error {
+			select {
+			case <-time.After(duration):
+				return ctx.Err()
+			case <-ctx.Done():
+				return ctx.Err()
+			}
+		}
+	}
+	configureFullOverwrite := func(pair *testTransportPair) {
+		pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+		pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+		pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+		pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{
+			Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace",
+		}}
+	}
+	assertIndependentMetrics := func(t *testing.T, apply, readBack time.Duration) {
+		t.Helper()
+		if apply < applyDelay || apply >= unitDeadline {
+			t.Fatalf("effect elapsed = %s, want its own %s bounded phase", apply, unitDeadline)
+		}
+		if readBack < readBackDelay || readBack >= unitDeadline {
+			t.Fatalf("read-back elapsed = %s, want its own %s bounded phase", readBack, unitDeadline)
+		}
+	}
+
+	t.Run("ordinary", func(t *testing.T) {
+		pair := newTestTransportPair("api", "database")
+		pair.destinationExecutor.applyContext = delay(applyDelay)
+		pair.destinationExecutor.readBackContext = delay(readBackDelay)
+		registry := NewRegistry(pair.verifier)
+		registerTransportPair(t, registry, pair)
+
+		result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+			Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+			BatchSize: 1, UnitDeadline: unitDeadline, Stage: &testWarehouseStage{}, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+		})
+		if err != nil {
+			t.Fatalf("Run() error = %v, want independent apply/read-back unit deadlines", err)
+		}
+		assertIndependentMetrics(t, result.ApplyElapsed, result.ReadBackElapsed)
+	})
+
+	t.Run("full-overwrite", func(t *testing.T) {
+		pair := newTestTransportPair("database", "database")
+		configureFullOverwrite(pair)
+		run := &testFullOverwriteRun{sink: pair.destination.Name(), publishContext: delay(applyDelay), readBackContext: delay(readBackDelay)}
+		pair.destinationExecutor.fullOverwrite = run
+		registry := NewRegistry(pair.verifier)
+		registerTransportPair(t, registry, pair)
+
+		result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+			Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite,
+			BatchSize: 1, UnitDeadline: unitDeadline, Stage: &testWarehouseStage{}, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+		})
+		if err != nil {
+			t.Fatalf("Run() error = %v, want independent publication/read-back unit deadlines", err)
+		}
+		// Non-Arrow full overwrite retains its legacy apply bucket for the
+		// externally visible publication; read-back must still be separate.
+		assertIndependentMetrics(t, result.ApplyElapsed, result.ReadBackElapsed)
+	})
+
+	for _, maxInFlight := range []int{1, 2} {
+		t.Run(fmt.Sprintf("arrow-max-in-flight-%d", maxInFlight), func(t *testing.T) {
+			pair := newTestTransportPair("database", "database")
+			configureFullOverwrite(pair)
+			if maxInFlight > 1 {
+				pair.source.descriptor.Source.OrderedPipeline = true
+				pair.destination.descriptor.Destination.OrderedPipeline = true
+			}
+			source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}, batches: []ArrowSourceBatch{{
+				Record: testArrowRecord(t, []int64{1}, []string{"open"}), SourceLogicalBytes: 32, SourceRows: 1, CandidateCheckpoint: testCheckpoint(pair.source.Name()),
+			}}}
+			run := &testArrowFullOverwriteRun{sink: pair.destination.Name(), publishContext: delay(applyDelay), readBackContext: delay(readBackDelay)}
+			destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: run}
+			registry := NewRegistry(pair.verifier)
+			if err := registry.RegisterSource(source); err != nil {
+				t.Fatal(err)
+			}
+			if err := registry.RegisterDestination(destination); err != nil {
+				t.Fatal(err)
+			}
+			plan := `{"version":1,"select":[{"source":"id","target":"id","type":"int64"}]}`
+			hash, err := databaseTransformHash(plan)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+				Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite,
+				BatchSize: 1, MaxInFlightBatches: maxInFlight, UnitDeadline: unitDeadline, TransformPlanJSON: plan, TransformPlanHash: hash,
+				FastSegments: &testFastSegmentStore{}, ByteCreditCapacity: 64, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+			})
+			if err != nil {
+				t.Fatalf("Run() error = %v, want independent Arrow publication/read-back unit deadlines", err)
+			}
+			assertIndependentMetrics(t, result.PublishElapsed, result.ReadBackElapsed)
+		})
+	}
+
+	t.Run("apply-unit-deadline-remains-strict", func(t *testing.T) {
+		pair := newTestTransportPair("api", "database")
+		pair.destinationExecutor.applyContext = delay(unitDeadline + 10*time.Millisecond)
+		registry := NewRegistry(pair.verifier)
+		registerTransportPair(t, registry, pair)
+		commits := 0
+
+		_, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+			Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+			BatchSize: 1, UnitDeadline: unitDeadline, Stage: &testWarehouseStage{}, Commit: func(synccontract.CheckpointEnvelope) error { commits++; return nil },
+		})
+		if !errors.Is(err, context.DeadlineExceeded) {
+			t.Fatalf("Run() error = %v, want strict apply unit deadline", err)
+		}
+		if pair.destinationExecutor.readBackCalls != 0 || commits != 0 {
+			t.Fatalf("read-back/checkpoints = %d/%d, want 0/0 after expired apply", pair.destinationExecutor.readBackCalls, commits)
+		}
+	})
+
+	t.Run("parent-cancellation-reaches-read-back", func(t *testing.T) {
+		pair := newTestTransportPair("api", "database")
+		readBackStarted := make(chan struct{}, 1)
+		pair.destinationExecutor.readBackContext = func(ctx context.Context, _ int) error {
+			readBackStarted <- struct{}{}
+			<-ctx.Done()
+			return ctx.Err()
+		}
+		registry := NewRegistry(pair.verifier)
+		registerTransportPair(t, registry, pair)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		done := make(chan error, 1)
+		go func() {
+			_, err := NewOrchestrator(registry).Run(ctx, RunRequest{
+				Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+				BatchSize: 1, UnitDeadline: unitDeadline, Stage: &testWarehouseStage{}, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+			})
+			done <- err
+		}()
+		<-readBackStarted
+		cancel()
+		if err := <-done; !errors.Is(err, context.Canceled) {
+			t.Fatalf("Run() error = %v, want parent cancellation during read-back", err)
+		}
+	})
 }
 
 func TestTransportPreflight_EnforcesDeliveryGuaranteeCompatibility(t *testing.T) {
@@ -1753,6 +1955,21 @@ type testSourceExecutor struct {
 	lastRequest SourceRequest
 }
 
+// budgetStoppedTestSource models the closed error-only compatibility path
+// used by full overwrite. The engine has already staged the bounded prefix,
+// but it must never let that prefix reach replacement publication.
+type budgetStoppedTestSource struct {
+	*testSourceExecutor
+	continuation synccontract.SourceContinuation
+}
+
+func (e *budgetStoppedTestSource) ReadTransport(ctx context.Context, request SourceRequest, emit func(SourcePage) error) error {
+	if err := e.testSourceExecutor.ReadTransport(ctx, request, emit); err != nil {
+		return err
+	}
+	return &SourceBudgetStoppedError{Continuation: *e.continuation.Clone()}
+}
+
 type emptyResultTestSource struct {
 	*testSourceExecutor
 }
@@ -1790,6 +2007,7 @@ type testDestinationExecutor struct {
 	afterApply          func()
 	applyContext        func(context.Context, int) error
 	afterReadBack       func()
+	readBackContext     func(context.Context, int) error
 	readBackErr         error
 	mutateStringMap     bool
 	planCalls           int
@@ -1848,11 +2066,16 @@ func (e *testDestinationExecutor) ApplyDestination(ctx context.Context, request 
 	return acknowledgement, nil
 }
 
-func (e *testDestinationExecutor) ReadBackDestination(_ context.Context, request DestinationReadBackRequest) error {
+func (e *testDestinationExecutor) ReadBackDestination(ctx context.Context, request DestinationReadBackRequest) error {
 	e.readBackCalls++
 	e.lastReadBack = request
 	if e.events != nil {
 		*e.events = append(*e.events, "destination-readback")
+	}
+	if e.readBackContext != nil {
+		if err := e.readBackContext(ctx, e.readBackCalls); err != nil {
+			return err
+		}
 	}
 	if e.afterReadBack != nil {
 		e.afterReadBack()
@@ -1869,16 +2092,26 @@ func (e *testDestinationExecutor) BeginFullOverwrite(_ context.Context, request 
 }
 
 type testFullOverwriteRun struct {
-	sink          string
-	ids           []string
-	publishCalls  int
-	readBackCalls int
-	abortCalls    int
-	publishOutput json.RawMessage
-	readBackErr   error
+	sink            string
+	ids             []string
+	applyCalls      int
+	publishCalls    int
+	readBackCalls   int
+	abortCalls      int
+	applyContext    func(context.Context, int) error
+	publishContext  func(context.Context, int) error
+	readBackContext func(context.Context, int) error
+	publishOutput   json.RawMessage
+	readBackErr     error
 }
 
-func (r *testFullOverwriteRun) ApplyFullOverwrite(_ context.Context, request DestinationApplyRequest) error {
+func (r *testFullOverwriteRun) ApplyFullOverwrite(ctx context.Context, request DestinationApplyRequest) error {
+	r.applyCalls++
+	if r.applyContext != nil {
+		if err := r.applyContext(ctx, r.applyCalls); err != nil {
+			return err
+		}
+	}
 	for _, record := range request.Workset.Records {
 		id, ok := record["id"].(string)
 		if !ok {
@@ -1889,8 +2122,13 @@ func (r *testFullOverwriteRun) ApplyFullOverwrite(_ context.Context, request Des
 	return nil
 }
 
-func (r *testFullOverwriteRun) PublishFullOverwrite(_ context.Context, request FullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
+func (r *testFullOverwriteRun) PublishFullOverwrite(ctx context.Context, request FullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
 	r.publishCalls++
+	if r.publishContext != nil {
+		if err := r.publishContext(ctx, r.publishCalls); err != nil {
+			return synccontract.DownstreamAcknowledgement{}, err
+		}
+	}
 	if request.Pages != len(r.ids) || request.Records != len(r.ids) || request.LastCheckpoint == nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("test full-overwrite publication is incomplete")
 	}
@@ -1899,8 +2137,13 @@ func (r *testFullOverwriteRun) PublishFullOverwrite(_ context.Context, request F
 	return acknowledgement, err
 }
 
-func (r *testFullOverwriteRun) ReadBackFullOverwrite(_ context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
+func (r *testFullOverwriteRun) ReadBackFullOverwrite(ctx context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
 	r.readBackCalls++
+	if r.readBackContext != nil {
+		if err := r.readBackContext(ctx, r.readBackCalls); err != nil {
+			return err
+		}
+	}
 	if acknowledgement.Sink != r.sink || acknowledgement.AcknowledgedAt.IsZero() {
 		return fmt.Errorf("test full-overwrite receipt is not durable")
 	}
@@ -1959,18 +2202,20 @@ func (d *testArrowDestination) BeginArrowFullOverwrite(_ context.Context, reques
 }
 
 type testArrowFullOverwriteRun struct {
-	sink          string
-	ids           []int64
-	publishCalls  int
-	readBackCalls int
-	abortCalls    int
-	applyStarted  chan<- struct{}
-	releaseApply  <-chan struct{}
-	applyCalls    int
-	failApplyAt   int
-	applyErr      error
-	publishOutput json.RawMessage
-	readBackErr   error
+	sink            string
+	ids             []int64
+	publishCalls    int
+	readBackCalls   int
+	abortCalls      int
+	applyStarted    chan<- struct{}
+	releaseApply    <-chan struct{}
+	applyCalls      int
+	failApplyAt     int
+	applyErr        error
+	publishContext  func(context.Context, int) error
+	readBackContext func(context.Context, int) error
+	publishOutput   json.RawMessage
+	readBackErr     error
 }
 
 func (r *testArrowFullOverwriteRun) ApplyArrowSegment(_ context.Context, request ArrowBulkApplyRequest) error {
@@ -1994,8 +2239,13 @@ func (r *testArrowFullOverwriteRun) ApplyArrowSegment(_ context.Context, request
 	return nil
 }
 
-func (r *testArrowFullOverwriteRun) PublishArrowFullOverwrite(_ context.Context, request ArrowFullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
+func (r *testArrowFullOverwriteRun) PublishArrowFullOverwrite(ctx context.Context, request ArrowFullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
 	r.publishCalls++
+	if r.publishContext != nil {
+		if err := r.publishContext(ctx, r.publishCalls); err != nil {
+			return synccontract.DownstreamAcknowledgement{}, err
+		}
+	}
 	if request.TransformedRows != int64(len(r.ids)) || request.SourceRows < request.TransformedRows {
 		return synccontract.DownstreamAcknowledgement{}, ErrArrowFastPathInvalid
 	}
@@ -2004,8 +2254,13 @@ func (r *testArrowFullOverwriteRun) PublishArrowFullOverwrite(_ context.Context,
 	return acknowledgement, err
 }
 
-func (r *testArrowFullOverwriteRun) ReadBackArrowFullOverwrite(_ context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
+func (r *testArrowFullOverwriteRun) ReadBackArrowFullOverwrite(ctx context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
 	r.readBackCalls++
+	if r.readBackContext != nil {
+		if err := r.readBackContext(ctx, r.readBackCalls); err != nil {
+			return err
+		}
+	}
 	if acknowledgement.Sink != r.sink || acknowledgement.AcknowledgedAt.IsZero() {
 		return ErrArrowFastPathInvalid
 	}

@@ -34,6 +34,7 @@ type declarativeTypedDestinationBinding struct {
 	DestinationEvidence    connectors.ConformanceEvidenceReference `json:"destination_evidence"`
 	Action                 string                                  `json:"action"`
 	ActionDefinitionSHA256 string                                  `json:"action_definition_sha256"`
+	IdempotencyKeyHeader   string                                  `json:"idempotency_key_header"`
 	Strategy               connectors.ApplyStrategy                `json:"strategy"`
 	SourceMapping          connectors.SourceRecordMapping          `json:"source_mapping"`
 	CredentialRevision     string                                  `json:"credential_revision"`
@@ -191,6 +192,11 @@ func (a *App) authorizeDeclarativeTypedDestinationTransport(ctx context.Context,
 	}
 	return synctransport.DestinationApproval{
 		PlanID: plan.ID, Evidence: evidence, Target: prepared.target, PreviewDigest: preview.Digest, ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
+		IdempotencyProof: synctransport.DestinationIdempotencyProof{
+			Executor:               prepared.binding.DestinationExecutor,
+			ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
+			EffectiveHeader:        prepared.binding.IdempotencyKeyHeader,
+		},
 		AuthorizeNextUnit: func(unitCtx context.Context) error {
 			if unitCtx == nil {
 				return fmt.Errorf("declarative typed destination authorization context is required")
@@ -225,6 +231,7 @@ func (a *App) declarativeTypedDestinationAuthorizationScope(prepared preparedDec
 	fieldMappings := map[string]string{
 		"transport_binding_sha256": plan.TransportBindingSHA256,
 		"action_definition_sha256": prepared.binding.ActionDefinitionSHA256,
+		"idempotency_key_header":   prepared.binding.IdempotencyKeyHeader,
 		"source_connector":         prepared.binding.Source,
 		"source_executor":          string(prepared.binding.SourceExecutor.Family) + ":" + prepared.binding.SourceExecutor.ID,
 		"destination_executor":     string(prepared.binding.DestinationExecutor.Family) + ":" + prepared.binding.DestinationExecutor.ID,
@@ -296,11 +303,15 @@ func (a *App) prepareDeclarativeTypedDestinationTransport(ctx context.Context, c
 	if err != nil {
 		return preparedDeclarativeTypedDestinationTransport{}, err
 	}
+	idempotencyKeyHeader, err := contract.idempotencyHeader(action.Name)
+	if err != nil {
+		return preparedDeclarativeTypedDestinationTransport{}, err
+	}
 	declaration := declarativeTypedDestinationBinding{
 		Domain: declarativeTypedDestinationBindingDomain, ConnectionID: conn.ID, Stream: streamName, StreamID: stream.StreamID, Mode: mode.ContractMode,
 		Source: source.Name(), SourceExecutor: resolved.SourceDescriptor.Executor, SourceEvidence: resolved.SourceDescriptor.Conformance,
 		Destination: destination.Name(), DestinationExecutor: resolved.DestinationDescriptor.Executor, DestinationEvidence: resolved.DestinationDescriptor.Conformance,
-		Action: resolved.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, Strategy: resolved.ApplyStrategy.Strategy, SourceMapping: binding.RecordMapping.Clone(),
+		Action: resolved.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, IdempotencyKeyHeader: idempotencyKeyHeader, Strategy: resolved.ApplyStrategy.Strategy, SourceMapping: binding.RecordMapping.Clone(),
 		CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest, ApprovalScope: runtime.WriteApprovalScope,
 	}
 	bindingSHA256, err := hashJSON(declaration)

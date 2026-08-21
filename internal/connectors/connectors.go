@@ -393,6 +393,40 @@ type OpaqueCursorState struct {
 	Present bool
 }
 
+// ReadContinuation is engine-owned pagination state for a bounded source
+// scan. Its bytes are opaque outside the connector engine: callers may retain
+// and return an exact value through a durable checkpoint, but cannot select a
+// provider cursor, URL, query, or pagination strategy with it.
+type ReadContinuation struct {
+	Kind  string
+	Token []byte
+}
+
+// Clone preserves the exact opaque continuation bytes across request and
+// result boundaries.
+func (c *ReadContinuation) Clone() *ReadContinuation {
+	if c == nil {
+		return nil
+	}
+	clone := *c
+	clone.Token = append([]byte(nil), c.Token...)
+	return &clone
+}
+
+// ReadBudgetStoppedError reports that an engine scan reached its declared
+// page budget while a further provider page was known to exist. It is not EOF
+// and cannot be treated as a completed collection.
+type ReadBudgetStoppedError struct {
+	Continuation ReadContinuation
+}
+
+func (e *ReadBudgetStoppedError) Error() string {
+	if e == nil {
+		return "source pagination stopped at its page budget"
+	}
+	return "source pagination stopped at its page budget before exhaustion"
+}
+
 type SourceOrderedCursorReader interface {
 	CursorStateFromRecord(Record, string) (OpaqueCursorState, error)
 	ValidateCursorField(RuntimeConfig, string) error
@@ -410,6 +444,9 @@ type ReadRequest struct {
 	// tighten a declared stream limit; zero leaves it unchanged and a negative
 	// value is rejected.
 	MaxPages int
+	// Continuation is accepted only by an engine-owned bounded-source resume.
+	// It is deliberately not mapped from command input or connector config.
+	Continuation *ReadContinuation
 	// PageDeadline bounds one retryable provider page request. It is used by
 	// closed transports and never represents a deadline for an entire stream.
 	PageDeadline time.Duration
@@ -1578,15 +1615,100 @@ type DeclarativeTypedDestination interface {
 	WriteValidator
 	PreflightWriteRecordFieldMapping(actionName string, fields []string) error
 	DeclarativeTypedDestinationActionDigest(actionName string) (string, error)
+	// DeclarativeTypedDestinationIdempotencyHeader returns the provider-owned
+	// header from the compiled action. A transport delivery claim alone is not
+	// evidence that an action can safely replay an ambiguous write.
+	DeclarativeTypedDestinationIdempotencyHeader(actionName string) (string, error)
 }
 
 // DeclarativeTypedDestinationReadBackRequest is a declaration-owned bounded
 // provider-state read. Operation remains opaque to shared orchestration.
 type DeclarativeTypedDestinationReadBackRequest struct {
-	Operation  string
-	Runtime    RuntimeConfig
-	MaxRecords int
-	Receipt    json.RawMessage
+	Operation              string
+	Runtime                RuntimeConfig
+	MaxRecords             int
+	Receipt                json.RawMessage
+	ReceiptLocator         DestinationReceiptLocator
+	ActionDefinitionSHA256 string
+}
+
+// DeclarativeTypedDestinationReadBackReceipt is private, bounded evidence
+// extracted from provider write responses. It is only decoded by the exact
+// connector-owned read-back method and never becomes printable result output.
+type DeclarativeTypedDestinationReadBackReceipt struct {
+	Version                int      `json:"version"`
+	ActionDefinitionSHA256 string   `json:"action_definition_sha256"`
+	Locators               []string `json:"locators"`
+}
+
+// NewDeclarativeTypedDestinationReadBackReceipt creates the private, bounded
+// bridge from a successful typed write to its declared read-back. Callers pass
+// only scalars already extracted under the declaration's response locator.
+func NewDeclarativeTypedDestinationReadBackReceipt(actionDefinitionSHA256 string, locator DestinationReceiptLocator, locators []string, maxRecords int) (json.RawMessage, error) {
+	if err := locator.Validate(); err != nil {
+		return nil, fmt.Errorf("declarative destination receipt locator: %w", err)
+	}
+	if len(strings.TrimSpace(actionDefinitionSHA256)) != sha256.Size*2 {
+		return nil, fmt.Errorf("declarative destination receipt requires an action definition digest")
+	}
+	if maxRecords < 1 || len(locators) == 0 || len(locators) > maxRecords {
+		return nil, fmt.Errorf("declarative destination receipt locator count is outside its read-back bound")
+	}
+	copyLocators := make([]string, len(locators))
+	for index, value := range locators {
+		if value == "" || len(value) > locator.MaxValueBytes {
+			return nil, fmt.Errorf("declarative destination receipt locator value is outside its byte bound")
+		}
+		copyLocators[index] = value
+	}
+	receipt, err := json.Marshal(DeclarativeTypedDestinationReadBackReceipt{
+		Version:                1,
+		ActionDefinitionSHA256: actionDefinitionSHA256,
+		Locators:               copyLocators,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("encode declarative destination read-back receipt: %w", err)
+	}
+	if len(receipt) > 8<<10 {
+		return nil, fmt.Errorf("declarative destination receipt exceeds its byte bound")
+	}
+	return receipt, nil
+}
+
+// ParseDeclarativeTypedDestinationReadBackReceipt validates the exact private
+// receipt before it can drive a declared query parameter. It never accepts a
+// fallback output body, route, or user-provided selector.
+func ParseDeclarativeTypedDestinationReadBackReceipt(raw json.RawMessage, actionDefinitionSHA256 string, locator DestinationReceiptLocator, maxRecords int) ([]string, error) {
+	if len(raw) == 0 || len(raw) > 8<<10 {
+		return nil, fmt.Errorf("declarative destination read-back requires a bounded private receipt")
+	}
+	if err := locator.Validate(); err != nil {
+		return nil, fmt.Errorf("declarative destination receipt locator: %w", err)
+	}
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	var receipt DeclarativeTypedDestinationReadBackReceipt
+	if err := decoder.Decode(&receipt); err != nil {
+		return nil, fmt.Errorf("decode declarative destination read-back receipt: %w", err)
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return nil, fmt.Errorf("declarative destination read-back receipt contains multiple JSON values")
+		}
+		return nil, fmt.Errorf("decode declarative destination read-back receipt: %w", err)
+	}
+	if receipt.Version != 1 || !strings.EqualFold(receipt.ActionDefinitionSHA256, actionDefinitionSHA256) || maxRecords < 1 || len(receipt.Locators) == 0 || len(receipt.Locators) > maxRecords {
+		return nil, fmt.Errorf("declarative destination read-back receipt does not match the declared action")
+	}
+	locators := make([]string, len(receipt.Locators))
+	for index, value := range receipt.Locators {
+		if value == "" || len(value) > locator.MaxValueBytes {
+			return nil, fmt.Errorf("declarative destination read-back receipt locator is outside its byte bound")
+		}
+		locators[index] = value
+	}
+	return locators, nil
 }
 
 // DeclarativeTypedDestinationReadBack is required by the generic typed

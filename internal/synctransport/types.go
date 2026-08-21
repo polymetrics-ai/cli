@@ -47,6 +47,59 @@ type SourceExecutor interface {
 	ReadTransport(context.Context, SourceRequest, func(SourcePage) error) error
 }
 
+// SourceReadOutcome distinguishes a complete source traversal from a page
+// budget stop. A continuation is opaque engine state: it is persisted only on
+// the last acknowledged source checkpoint and is never exposed as a command
+// cursor, URL, query, or connector-specific execution input.
+type SourceReadOutcome struct {
+	Exhausted    bool
+	Continuation *synccontract.SourceContinuation
+}
+
+func (o SourceReadOutcome) validate() error {
+	if o.Exhausted {
+		if o.Continuation != nil {
+			return fmt.Errorf("exhausted source read outcome must not carry a continuation")
+		}
+		return nil
+	}
+	if o.Continuation == nil {
+		return fmt.Errorf("budget-stopped source read outcome requires a continuation")
+	}
+	checkpoint := synccontract.CheckpointEnvelope{Continuation: o.Continuation.Clone()}
+	if checkpoint.Continuation == nil {
+		return fmt.Errorf("budget-stopped source read outcome requires a continuation")
+	}
+	// Continuation validation is intentionally shared with persisted
+	// checkpoints, without manufacturing a partial checkpoint envelope here.
+	if checkpoint.Continuation.Kind == "" || len(checkpoint.Continuation.Token) == 0 || len(checkpoint.Continuation.Token) > 4096 {
+		return fmt.Errorf("budget-stopped source read outcome contains an invalid continuation")
+	}
+	return nil
+}
+
+// SourceOutcomeExecutor is an optional closed extension of SourceExecutor for
+// sources that can prove whether a read reached provider exhaustion. Legacy
+// sources keep their exact executor interface and behavior.
+type SourceOutcomeExecutor interface {
+	SourceExecutor
+	ReadTransportWithOutcome(context.Context, SourceRequest, func(SourcePage) error) (SourceReadOutcome, error)
+}
+
+// SourceBudgetStoppedError is returned to callers that use the historical
+// error-only source interface. It makes a capped prefix terminally distinct
+// from an exhausted scan while retaining no provider route authority.
+type SourceBudgetStoppedError struct {
+	Continuation synccontract.SourceContinuation
+}
+
+func (e *SourceBudgetStoppedError) Error() string {
+	if e == nil {
+		return "source transport stopped at its page budget"
+	}
+	return "source transport stopped at its page budget before exhaustion"
+}
+
 // EmptyResultSource explicitly admits a successful, zero-page read without a
 // fabricated checkpoint. The orchestrator keeps rejecting silent zero-page
 // executors unless the exact registered source implements this marker.
@@ -393,6 +446,17 @@ type DestinationPlan struct {
 	ActionDefinitionSHA256 string
 }
 
+// DestinationIdempotencyProof is carried only from a sealed, independently
+// approved transport plan to the exact destination action. It names neither a
+// URL nor a raw request: the compiled action still owns both. Its purpose is
+// to prevent a descriptor's keyed claim from being mistaken for proof that the
+// effective provider operation accepts a stable idempotency key.
+type DestinationIdempotencyProof struct {
+	Executor               connectors.TransportExecutorReference
+	ActionDefinitionSHA256 string
+	EffectiveHeader        string
+}
+
 // DestinationApproval carries only the ephemeral result of a separately
 // prepared PM plan -> preview -> approval lifecycle. It is intentionally
 // non-serializable: warehouse receipts, runtime configuration, destination
@@ -405,6 +469,7 @@ type DestinationApproval struct {
 	Target                 connectors.WriteApprovalTarget    `json:"-"`
 	PreviewDigest          string                            `json:"-"`
 	ActionDefinitionSHA256 string                            `json:"-"`
+	IdempotencyProof       DestinationIdempotencyProof       `json:"-"`
 	// AuthorizeNextUnit rechecks a standing authorization immediately before a
 	// staged batch can cause a destination side effect. It is in-memory only:
 	// receipts and checkpoints retain no token or authorization callback.
@@ -542,6 +607,10 @@ type Result struct {
 	StageElapsed     time.Duration
 	ParquetElapsed   time.Duration
 	ApplyElapsed     time.Duration
+	// ReadBackElapsed is confirmation work performed after a destination
+	// effect. It is deliberately distinct from apply/publication: read-back has
+	// its own bounded provider phase and must not be hidden in effect latency.
+	ReadBackElapsed time.Duration
 	// IndexConstraintElapsed is destination schema/index work performed once
 	// for the private full-overwrite shadow. It is distinct from binary COPY so
 	// a high COPY rate cannot hide a slow target build.
@@ -736,7 +805,7 @@ func cloneRecords(records []connectors.Record) ([]connectors.Record, error) {
 	}
 	clone := make([]connectors.Record, len(records))
 	for index, record := range records {
-		clonedRecord, err := cloneRecord(record)
+		clonedRecord, err := CloneRecord(record)
 		if err != nil {
 			return nil, fmt.Errorf("record %d: %w", index, err)
 		}
@@ -747,11 +816,12 @@ func cloneRecords(records []connectors.Record) ([]connectors.Record, error) {
 
 var errUnsupportedTransportRecordValue = errors.New("unsupported transport record value")
 
-// cloneRecord copies the closed JSON-like record vocabulary accepted by
+// CloneRecord copies the closed JSON-like record vocabulary accepted by
 // transport. A stage or destination therefore cannot mutate a nested provider
 // field through the workset it receives, and an unrecognized mutable value
-// cannot silently cross either boundary by alias.
-func cloneRecord(record connectors.Record) (connectors.Record, error) {
+// cannot silently cross either boundary by alias. Declarative source adapters
+// use this same lossless boundary before records enter a transport workset.
+func CloneRecord(record connectors.Record) (connectors.Record, error) {
 	clone := make(connectors.Record, len(record))
 	for key, value := range record {
 		clonedValue, err := cloneRecordValue(value)
@@ -763,10 +833,16 @@ func cloneRecord(record connectors.Record) (connectors.Record, error) {
 	return clone, nil
 }
 
+// cloneRecord keeps existing package-local callers and focused tests on the
+// exported transport boundary without retaining a second implementation.
+func cloneRecord(record connectors.Record) (connectors.Record, error) {
+	return CloneRecord(record)
+}
+
 func cloneRecordValue(value any) (any, error) {
 	switch typed := value.(type) {
 	case connectors.Record:
-		return cloneRecord(typed)
+		return CloneRecord(typed)
 	case map[string]any:
 		clone := make(map[string]any, len(typed))
 		for key, nested := range typed {

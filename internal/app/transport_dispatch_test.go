@@ -2136,7 +2136,11 @@ func TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation(t *testing.T) 
 
 func TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
-	fixture.app.store.Locker = &appTransportFailAtLockLocker{failAt: 3, err: errTransportFinalStateSave}
+	// The Group-6 durable work fence deliberately commits claim, source
+	// admission, destination admission, and acknowledgement before this final
+	// run-status write. Keep the failure pinned to that final write rather than
+	// weakening the test into an earlier pre-I/O failure.
+	fixture.app.store.Locker = &appTransportFailAtLockLocker{failAt: 6, err: errTransportFinalStateSave}
 
 	_, err := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
 	if !errors.Is(err, errTransportFinalStateSave) {
@@ -2322,7 +2326,10 @@ func startPausedAcknowledgedTransportCompletion(t *testing.T, mode synccontract.
 		// App cannot enter terminal completion until the test releases it.
 		paused.fixture.app.store.Locker = &appTransportPostFinalCheckpointLocker{
 			lock:    statestore.FileLock{Path: paused.fixture.app.store.Path + ".lock"},
-			pauseAt: 2,
+			// Claim plus the exact Group-6 source/begin/destination/publish fences
+			// precede the final checkpoint. Pause only after that checkpoint has
+			// been atomically persisted and its lock released.
+			pauseAt: 7,
 			reached: checkpointAcknowledged,
 			release: paused.release,
 		}

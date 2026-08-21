@@ -305,6 +305,7 @@ type TransportPhaseMeasurement struct {
 	TransformElapsedNanos            int64   `json:"transform_elapsed_ns"`
 	ParquetCloseElapsedNanos         int64   `json:"parquet_close_fsync_elapsed_ns"`
 	BinaryCOPYElapsedNanos           int64   `json:"binary_copy_elapsed_ns"`
+	ReadBackElapsedNanos             int64   `json:"read_back_elapsed_ns"`
 	IndexConstraintBuildElapsedNanos int64   `json:"index_constraint_build_elapsed_ns"`
 	PublishReceiptElapsedNanos       int64   `json:"publish_receipt_elapsed_ns"`
 	CheckpointElapsedNanos           int64   `json:"checkpoint_elapsed_ns"`

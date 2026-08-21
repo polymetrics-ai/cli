@@ -52,6 +52,14 @@ func sourceCheckpointForMode(mode synccontract.Mode, checkpoint, rateLimitResume
 	}
 }
 
+// transportUnitContext gives every physical destination effect its own bounded
+// phase while retaining parent cancellation. Apply/publication and confirmation
+// are independent provider units: confirmation must never inherit time already
+// spent making an externally visible change.
+func transportUnitContext(parent context.Context, unitDeadline time.Duration) (context.Context, context.CancelFunc) {
+	return context.WithTimeout(parent, unitDeadline)
+}
+
 func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, error) {
 	if o == nil || o.registry == nil {
 		return Result{}, fmt.Errorf("transport orchestrator registry is required")
@@ -126,10 +134,12 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 
 	result := Result{}
 	pendingReceipts := make([]WarehouseReceipt, 0)
+	var deferredCandidate *synccontract.CheckpointEnvelope
+	var deferredAcknowledgement synccontract.DownstreamAcknowledgement
 	if err := authorizeTransportSource(ctx, request); err != nil {
 		return result, err
 	}
-	err = resolved.Source.ReadTransport(ctx, cloneSourceRequest(SourceRequest{
+	sourceRequest := cloneSourceRequest(SourceRequest{
 		Connector:    request.Source,
 		Runtime:      request.SourceRuntime,
 		Stream:       request.Stream,
@@ -143,7 +153,8 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		RecordExtraction: func(elapsed time.Duration) {
 			result.ExtractElapsed += elapsed
 		},
-	}), func(page SourcePage) (callbackErr error) {
+	})
+	callback := func(page SourcePage) (callbackErr error) {
 		defer func() {
 			callbackErr = tagTransportExecutionError(TransportExecutionOriginInternal, callbackErr)
 		}()
@@ -232,15 +243,16 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			return fmt.Errorf("clone destination apply request: %w", err)
 		}
 		acknowledgement, err := func() (synccontract.DownstreamAcknowledgement, error) {
-			applyCtx, cancelApply := context.WithTimeout(ctx, request.unitDeadline())
-			defer cancelApply()
+			applyCtx, cancelApply := transportUnitContext(ctx, request.unitDeadline())
 			if err := authorizeDestinationEffect(applyCtx, request.Approval, "apply"); err != nil {
+				cancelApply()
 				return synccontract.DownstreamAcknowledgement{}, err
 			}
 
 			applyStarted := time.Now()
 			acknowledgement, err := resolved.Destination.ApplyDestination(applyCtx, destinationApplyRequest)
 			result.ApplyElapsed += time.Since(applyStarted)
+			cancelApply()
 			collectDestinationResult(&result, acknowledgement, err)
 			if err != nil {
 				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply destination transport: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
@@ -263,12 +275,15 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			if err != nil {
 				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("clone destination read-back request: %w", err)
 			}
+			readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
 			readBackStarted := time.Now()
-			if err := resolved.Destination.ReadBackDestination(applyCtx, readBackRequest); err != nil {
-				result.ApplyElapsed += time.Since(readBackStarted)
+			if err := resolved.Destination.ReadBackDestination(readBackCtx, readBackRequest); err != nil {
+				result.ReadBackElapsed += time.Since(readBackStarted)
+				cancelReadBack()
 				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("read back destination transport receipt: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 			}
-			result.ApplyElapsed += time.Since(readBackStarted)
+			result.ReadBackElapsed += time.Since(readBackStarted)
+			cancelReadBack()
 			return acknowledgement, nil
 		}()
 		if err != nil {
@@ -287,6 +302,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 				return err
 			}
 			pendingReceipts = pendingReceipts[:0]
+			deferredCandidate = nil
 		}
 
 		committed := candidate.Clone()
@@ -295,14 +311,60 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		result.Pages++
 		if !page.DeferCheckpoint {
 			result.CommittedCheckpoint = &committed
+		} else {
+			deferred := candidate.Clone()
+			deferredCandidate = &deferred
+			deferredAcknowledgement = acknowledgement
 		}
 		if err := ctx.Err(); err != nil {
 			return err
 		}
 		return nil
-	})
+	}
+	var sourceOutcome SourceReadOutcome
+	outcomeSource, tracksSourceOutcome := resolved.Source.(SourceOutcomeExecutor)
+	if tracksSourceOutcome {
+		sourceOutcome, err = outcomeSource.ReadTransportWithOutcome(ctx, sourceRequest, callback)
+	} else {
+		err = resolved.Source.ReadTransport(ctx, sourceRequest, callback)
+	}
 	if err != nil {
 		return result, tagTransportExecutionError(TransportExecutionOriginSource, err)
+	}
+	if tracksSourceOutcome {
+		if err := sourceOutcome.validate(); err != nil {
+			return result, fmt.Errorf("source transport outcome: %w", err)
+		}
+		if deferredCandidate != nil {
+			candidate := deferredCandidate.Clone()
+			if sourceOutcome.Exhausted {
+				candidate.Continuation = nil
+			} else {
+				candidate.Continuation = sourceOutcome.Continuation.Clone()
+			}
+			if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, deferredAcknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
+				if deferredAcknowledgement.Sink != request.Destination.Name() {
+					return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", deferredAcknowledgement.Sink, request.Destination.Name())
+				}
+				return request.Commit(checkpoint)
+			}); err != nil {
+				return result, err
+			}
+			if err := retireCommittedReceipts(ctx, request, pendingReceipts); err != nil {
+				return result, err
+			}
+			pendingReceipts = pendingReceipts[:0]
+			committed := candidate.Clone()
+			committedAt := deferredAcknowledgement.AcknowledgedAt
+			committed.CommittedAt = &committedAt
+			result.CommittedCheckpoint = &committed
+		}
+		if !sourceOutcome.Exhausted {
+			if result.CommittedCheckpoint == nil {
+				return result, fmt.Errorf("budget-stopped source transport completed without an acknowledged continuation checkpoint")
+			}
+			return result, &SourceBudgetStoppedError{Continuation: *sourceOutcome.Continuation.Clone()}
+		}
 	}
 	if result.CommittedCheckpoint == nil {
 		if result.Pages == 0 {
@@ -441,7 +503,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		if err != nil {
 			return fmt.Errorf("clone destination apply request: %w", err)
 		}
-		applyCtx, cancelApply := context.WithTimeout(ctx, request.unitDeadline())
+		applyCtx, cancelApply := transportUnitContext(ctx, request.unitDeadline())
 		if err := authorizeDestinationEffect(applyCtx, request.Approval, "full-overwrite apply"); err != nil {
 			cancelApply()
 			return err
@@ -470,21 +532,25 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 	if err := authorizeDestinationEffect(ctx, request.Approval, "full-overwrite publication"); err != nil {
 		return result, err
 	}
-	publishCtx, cancelPublish := context.WithTimeout(ctx, request.unitDeadline())
+	publishCtx, cancelPublish := transportUnitContext(ctx, request.unitDeadline())
 	publishStarted := time.Now()
 	acknowledgement, publishErr := session.PublishFullOverwrite(publishCtx, FullOverwritePublicationRequest{
 		LastCheckpoint: lastCandidate, Pages: result.Pages, Records: result.RecordsApplied,
 	})
 	collectDestinationResult(&result, acknowledgement, publishErr)
 	result.ApplyElapsed += time.Since(publishStarted)
+	cancelPublish()
 	if publishErr == nil {
 		// Publication is already externally visible. Disarm pre-publication
 		// abort before read-back so an ambiguous verification failure cannot
 		// delete or roll back a successfully published destination.
 		published = true
-		publishErr = session.ReadBackFullOverwrite(publishCtx, acknowledgement)
+		readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
+		readBackStarted := time.Now()
+		publishErr = session.ReadBackFullOverwrite(readBackCtx, acknowledgement)
+		result.ReadBackElapsed += time.Since(readBackStarted)
+		cancelReadBack()
 	}
-	cancelPublish()
 	if publishErr != nil {
 		return result, fmt.Errorf("publish destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}

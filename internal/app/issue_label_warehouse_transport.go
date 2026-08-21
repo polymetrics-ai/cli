@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -157,10 +158,11 @@ func appendDefinitionTransportEvidence(values []connectors.ConformanceEvidenceRe
 type declarativeTypedDestinationExecutor struct{}
 
 type declarativeTypedDestinationContract struct {
-	connector  connectors.DeclarativeTypedDestination
-	readBack   connectors.DeclarativeTypedDestinationReadBack
-	descriptor connectors.DestinationTransportDescriptor
-	actions    map[string]connectors.WriteActionInfo
+	connector          connectors.DeclarativeTypedDestination
+	readBack           connectors.DeclarativeTypedDestinationReadBack
+	descriptor         connectors.DestinationTransportDescriptor
+	actions            map[string]connectors.WriteActionInfo
+	idempotencyHeaders map[string]string
 }
 
 func (*declarativeTypedDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -190,6 +192,9 @@ func (e *declarativeTypedDestinationExecutor) PlanDestination(_ context.Context,
 	if err := validateDeclarativeTypedDestinationApprovalDefinition(request.Approval, actionDefinitionSHA256); err != nil {
 		return synctransport.DestinationPlan{}, err
 	}
+	if err := validateDeclarativeTypedDestinationIdempotencyProof(request.Approval, contract.descriptor.Executor, actionDefinitionSHA256, contract.idempotencyHeaders[request.ApplyStrategy.Action]); err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
 	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy, ActionDefinitionSHA256: actionDefinitionSHA256}, nil
 }
 
@@ -216,6 +221,9 @@ func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Conte
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination action %q definition changed; replan and reapprove", request.Plan.ApplyStrategy.Action)
 	}
 	if err := validateDeclarativeTypedDestinationApprovalDefinition(request.Approval, actionDefinitionSHA256); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	if err := validateDeclarativeTypedDestinationIdempotencyProof(request.Approval, contract.descriptor.Executor, actionDefinitionSHA256, contract.idempotencyHeaders[request.Plan.ApplyStrategy.Action]); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
 	if err := validateDeclarativeTypedDestinationWorkset(request); err != nil {
@@ -256,6 +264,11 @@ func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Conte
 	if result.RecordsWritten != len(records) || result.RecordsFailed != 0 {
 		return synccontract.DownstreamAcknowledgement{}, synctransport.NewDestinationApplyOutputError(fmt.Errorf("declarative typed destination action %q wrote=%d failed=%d, want %d durable writes", writeRequest.Action, result.RecordsWritten, result.RecordsFailed, len(records)), output)
 	}
+	policy := *contract.descriptor.ReadBack
+	privateReceipt, receiptErr := declarativeTypedDestinationReadBackReceipt(result, policy, actionDefinitionSHA256)
+	if receiptErr != nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("extract declarative typed destination action %q read-back receipt: %w", writeRequest.Action, receiptErr)
+	}
 	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(contract.connector.Name(), time.Now().UTC())
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
@@ -264,7 +277,72 @@ func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Conte
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("attach declarative typed destination action %q output: %w", writeRequest.Action, err)
 	}
+	acknowledgement, err = acknowledgement.WithPrivateReceipt(privateReceipt)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("attach declarative typed destination action %q private read-back receipt: %w", writeRequest.Action, err)
+	}
 	return acknowledgement, nil
+}
+
+func declarativeTypedDestinationReadBackReceipt(result connectors.WriteResult, policy connectors.DestinationReadBackPolicy, actionDefinitionSHA256 string) (json.RawMessage, error) {
+	if err := policy.ReceiptLocator.Validate(); err != nil {
+		return nil, err
+	}
+	// A typed destination action is one declaration-owned physical request per
+	// record. A compound protocol needs a dedicated closed adapter instead of
+	// letting this generic path guess a receipt occurrence.
+	if policy.ReceiptLocator.ResponseIndex != 0 {
+		return nil, fmt.Errorf("declarative typed destination receipt locator response_index %d is unavailable for a single-action write", policy.ReceiptLocator.ResponseIndex)
+	}
+	if result.RecordsWritten < 1 || len(result.ProviderResponses) != result.RecordsWritten {
+		return nil, fmt.Errorf("declarative typed destination write has incomplete provider receipts")
+	}
+	responses := make(map[int]connectors.WriteProviderResponse, len(result.ProviderResponses))
+	for _, response := range result.ProviderResponses {
+		if _, duplicate := responses[response.RecordIndex]; duplicate {
+			return nil, fmt.Errorf("declarative typed destination write duplicates provider receipt index %d", response.RecordIndex)
+		}
+		responses[response.RecordIndex] = response
+	}
+	locators := make([]string, 0, result.RecordsWritten)
+	for recordIndex := 0; recordIndex < result.RecordsWritten; recordIndex++ {
+		response, found := responses[recordIndex]
+		if !found {
+			return nil, fmt.Errorf("declarative typed destination write is missing provider receipt index %d", recordIndex)
+		}
+		body, ok := response.Body.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("declarative typed destination provider receipt %d has no JSON object body", recordIndex)
+		}
+		value, found := body[policy.ReceiptLocator.BodyField]
+		if !found {
+			return nil, fmt.Errorf("declarative typed destination provider receipt %d is missing locator field %q", recordIndex, policy.ReceiptLocator.BodyField)
+		}
+		locator, err := declarativeTypedDestinationReceiptLocatorValue(value, policy.ReceiptLocator.MaxValueBytes)
+		if err != nil {
+			return nil, fmt.Errorf("declarative typed destination provider receipt %d locator: %w", recordIndex, err)
+		}
+		locators = append(locators, locator)
+	}
+	return connectors.NewDeclarativeTypedDestinationReadBackReceipt(actionDefinitionSHA256, policy.ReceiptLocator, locators, policy.MaxRecords)
+}
+
+func declarativeTypedDestinationReceiptLocatorValue(value any, maxBytes int) (string, error) {
+	var locator string
+	switch typed := value.(type) {
+	case string:
+		locator = typed
+	case json.Number:
+		locator = typed.String()
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, bool:
+		locator = fmt.Sprint(typed)
+	default:
+		return "", fmt.Errorf("must be a scalar string, number, integer, or boolean")
+	}
+	if locator == "" || len(locator) > maxBytes {
+		return "", fmt.Errorf("is outside its byte bound")
+	}
+	return locator, nil
 }
 
 // validateDeclarativeTypedDestinationApproval keeps the generic adapter on
@@ -295,6 +373,28 @@ func validateDeclarativeTypedDestinationApprovalDefinition(approval synctranspor
 	return nil
 }
 
+// validateDeclarativeTypedDestinationIdempotencyProof keeps declaration
+// conformance separate from action admission. The descriptor can honestly say
+// it expects keyed delivery, but only the approved, definition-bound action
+// proof can show which provider header carries that stable key. Fixture scope
+// remains a hermetic test seam; production plans are always sealed below.
+func validateDeclarativeTypedDestinationIdempotencyProof(approval synctransport.DestinationApproval, executor connectors.TransportExecutorReference, actionDefinitionSHA256, header string) error {
+	if approval.Target.Scope == connectors.WriteApprovalScopeFixture {
+		return nil
+	}
+	if err := executor.Validate(); err != nil {
+		return fmt.Errorf("declarative typed destination idempotency executor: %w", err)
+	}
+	if strings.TrimSpace(header) == "" {
+		return fmt.Errorf("declarative typed destination action has no independent idempotency proof")
+	}
+	proof := approval.IdempotencyProof
+	if proof.Executor != executor || !constantTimeStringEqual(proof.ActionDefinitionSHA256, actionDefinitionSHA256) || !strings.EqualFold(strings.TrimSpace(proof.EffectiveHeader), header) {
+		return fmt.Errorf("declarative typed destination approval does not bind the exact executor, action definition, and idempotency header")
+	}
+	return nil
+}
+
 func (e *declarativeTypedDestinationExecutor) ReadBackDestination(ctx context.Context, request synctransport.DestinationReadBackRequest) error {
 	if e == nil {
 		return fmt.Errorf("declarative typed destination is unavailable")
@@ -319,6 +419,10 @@ func (e *declarativeTypedDestinationExecutor) ReadBackDestination(ctx context.Co
 	if request.Acknowledgement.Sink != contract.connector.Name() || request.Acknowledgement.AcknowledgedAt.IsZero() {
 		return fmt.Errorf("declarative typed destination read-back requires its durable acknowledgement")
 	}
+	privateReceipt, found := request.Acknowledgement.PrivateReceipt()
+	if !found {
+		return fmt.Errorf("declarative typed destination read-back requires its private provider receipt")
+	}
 	binding, err := contract.plan(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy)
 	if err != nil {
 		return err
@@ -328,13 +432,16 @@ func (e *declarativeTypedDestinationExecutor) ReadBackDestination(ctx context.Co
 		return err
 	}
 	policy := *contract.descriptor.ReadBack
+	if len(expected) > policy.MaxRecords {
+		return fmt.Errorf("declarative typed destination read-back expected records exceed declared max_records %d", policy.MaxRecords)
+	}
 	readCtx, cancel := context.WithTimeout(ctx, time.Duration(policy.TimeoutMilliseconds)*time.Millisecond)
 	defer cancel()
 	var lastErr error
 	for attempt := 1; attempt <= policy.MaxAttempts; attempt++ {
 		provider, readErr := contract.readBack.ReadBackDeclarativeDestination(readCtx, connectors.DeclarativeTypedDestinationReadBackRequest{
 			Operation: policy.Operation, Runtime: request.Runtime, MaxRecords: policy.MaxRecords,
-			Receipt: append(json.RawMessage(nil), request.Acknowledgement.Output...),
+			Receipt: privateReceipt, ReceiptLocator: policy.ReceiptLocator, ActionDefinitionSHA256: actionDefinitionSHA256,
 		})
 		if readErr == nil {
 			readErr = matchDeclarativeTypedDestinationProviderState(expected, provider, policy)
@@ -387,7 +494,14 @@ func matchDeclarativeTypedDestinationProviderState(expected, provider []connecto
 		for _, field := range policy.Expected {
 			want, wantFound := record[field.ExpectedField]
 			got, gotFound := actual[field.ProviderField]
-			if !wantFound || !gotFound || !reflect.DeepEqual(want, got) {
+			if !wantFound || !gotFound {
+				return fmt.Errorf("provider read-back field %q does not match expected destination state", field.ProviderField)
+			}
+			equal, err := declarativeReadBackValuesEqual(want, got)
+			if err != nil {
+				return fmt.Errorf("provider read-back field %q comparison: %w", field.ProviderField, err)
+			}
+			if !equal {
 				return fmt.Errorf("provider read-back field %q does not match expected destination state", field.ProviderField)
 			}
 		}
@@ -408,11 +522,11 @@ func declarativeDestinationReadBackIdentity(record connectors.Record, fields []c
 		}
 		values = append(values, value)
 	}
-	digest, err := hashJSON(values)
+	canonical, err := canonicalDeclarativeReadBackValue(values)
 	if err != nil {
-		return "", fmt.Errorf("hash destination read-back identity: %w", err)
+		return "", fmt.Errorf("canonicalize destination read-back identity: %w", err)
 	}
-	return digest, nil
+	return hashString(string(canonical)), nil
 }
 
 func declarativeTypedDestinationContractFor(connector connectors.Connector) (declarativeTypedDestinationContract, error) {
@@ -446,6 +560,13 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 	if descriptor.ReadBack == nil {
 		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination declares provider read-back unavailable")
 	}
+	// This adapter executes one named declaration-owned physical request per
+	// record. A response occurrence beyond zero belongs to a compound adapter
+	// that must independently plan and seal every physical request; accepting it
+	// here would discover an unusable receipt only after a provider mutation.
+	if descriptor.ReadBack.ReceiptLocator.ResponseIndex != 0 {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination receipt locator response_index %d requires a dedicated compound destination adapter", descriptor.ReadBack.ReceiptLocator.ResponseIndex)
+	}
 	readBack, ok := candidate.(connectors.DeclarativeTypedDestinationReadBack)
 	if !ok || reflect.ValueOf(readBack).Kind() == reflect.Pointer && reflect.ValueOf(readBack).IsNil() {
 		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination does not implement its declared provider read-back")
@@ -459,6 +580,7 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 		}
 	}
 	actions := make(map[string]connectors.WriteActionInfo, len(definition.WriteActions))
+	idempotencyHeaders := make(map[string]string, len(definition.WriteActions))
 	for _, action := range definition.WriteActions {
 		if _, duplicate := actions[action.Name]; duplicate {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination duplicates write action %q", action.Name)
@@ -473,8 +595,16 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 		if action.TransportBinding != nil {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q selects a different closed adapter", action.Name)
 		}
+		header, err := candidate.DeclarativeTypedDestinationIdempotencyHeader(action.Name)
+		if err != nil {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q has no independent idempotency proof: %w", action.Name, err)
+		}
+		if strings.TrimSpace(header) == "" {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q has no independent idempotency proof", action.Name)
+		}
+		idempotencyHeaders[action.Name] = header
 	}
-	return declarativeTypedDestinationContract{connector: candidate, readBack: readBack, descriptor: descriptor, actions: actions}, nil
+	return declarativeTypedDestinationContract{connector: candidate, readBack: readBack, descriptor: descriptor, actions: actions, idempotencyHeaders: idempotencyHeaders}, nil
 }
 
 func declarativeTypedDestinationIsNil(candidate connectors.DeclarativeTypedDestination) bool {
@@ -534,6 +664,14 @@ func (c declarativeTypedDestinationContract) actionDefinitionDigest(action strin
 		return "", fmt.Errorf("declarative typed destination action %q has no definition digest", action)
 	}
 	return digest, nil
+}
+
+func (c declarativeTypedDestinationContract) idempotencyHeader(action string) (string, error) {
+	header, found := c.idempotencyHeaders[action]
+	if !found || strings.TrimSpace(header) == "" {
+		return "", fmt.Errorf("declarative typed destination action %q has no independent idempotency proof", action)
+	}
+	return header, nil
 }
 
 // validateDeclarativeTypedDestinationSelection binds a registry-selected
@@ -1085,35 +1223,49 @@ func (*declarativeStreamSourceExecutor) TransportExecutorReference() connectors.
 func (*declarativeStreamSourceExecutor) AllowEmptySourceResult() {}
 
 func (e *declarativeStreamSourceExecutor) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+	outcome, err := e.ReadTransportWithOutcome(ctx, request, emit)
+	if err != nil {
+		return err
+	}
+	if outcome.Exhausted {
+		return nil
+	}
+	return &synctransport.SourceBudgetStoppedError{Continuation: *outcome.Continuation.Clone()}
+}
+
+func (e *declarativeStreamSourceExecutor) ReadTransportWithOutcome(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (synctransport.SourceReadOutcome, error) {
 	if e == nil || request.Connector == nil {
-		return fmt.Errorf("declarative stream transport source is unavailable")
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport source is unavailable")
 	}
 	descriptor, ok := connectors.SourceTransportDescriptorOf(request.Connector)
 	if !ok || descriptor.Executor != declarativeStreamSourceReference || !transportContainsName(descriptor.EligibleStreams, request.Stream) {
-		return fmt.Errorf("declarative stream transport source received an undeclared connector or stream")
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport source received an undeclared connector or stream")
 	}
 	if !transportContainsMode(descriptor.Modes, request.Mode) {
-		return fmt.Errorf("declarative stream transport source does not support sync mode %q", request.Mode)
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport source does not support sync mode %q", request.Mode)
 	}
 	if request.BatchSize <= 0 || request.BatchSize > issueCollectionTransportMaxRecords {
-		return fmt.Errorf("declarative stream transport batch size must be between 1 and %d", issueCollectionTransportMaxRecords)
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport batch size must be between 1 and %d", issueCollectionTransportMaxRecords)
 	}
 	if err := request.Resume.Source.Validate(); err != nil || len(request.Resume.SourceGeneration) == 0 {
-		return fmt.Errorf("declarative stream transport source requires a complete resume identity")
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport source requires a complete resume identity")
 	}
 	if request.Checkpoint != nil {
 		if err := request.Checkpoint.ValidateResume(request.Resume); err != nil {
-			return err
+			return synctransport.SourceReadOutcome{}, err
 		}
 	}
 	configuredIssue := strings.TrimSpace(request.Runtime.Config[issueLabelTransportSourceIssueConfig])
 	if configuredIssue != "" && request.Stream != "issues" {
-		return fmt.Errorf("%s is valid only for the issues stream", issueLabelTransportSourceIssueConfig)
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("%s is valid only for the issues stream", issueLabelTransportSourceIssueConfig)
 	}
 	if configuredIssue == "" {
 		return e.readDeclarativeCollection(ctx, request.Connector, request, emit)
 	}
-	return e.readConfiguredIssue(ctx, request.Connector, request, emit)
+	if err := e.readConfiguredIssue(ctx, request.Connector, request, emit); err != nil {
+		return synctransport.SourceReadOutcome{}, err
+	}
+	return synctransport.SourceReadOutcome{Exhausted: true}, nil
 }
 
 func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
@@ -1168,10 +1320,14 @@ func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Contex
 // retains ownership of provider pagination. A persisted candidate is matched
 // and suppressed on resume, so acknowledged pages are not re-delivered even
 // though the provider sequence must be traversed again to recover its position.
-func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (synctransport.SourceReadOutcome, error) {
 	maxPages, err := declarativeTransportMaxPages(request.Runtime.Config)
 	if err != nil {
-		return err
+		return synctransport.SourceReadOutcome{}, err
+	}
+	engineConnector, _, err := declarativeStreamTransportConnector(connector)
+	if err != nil {
+		return synctransport.SourceReadOutcome{}, err
 	}
 	records := make([]connectors.Record, 0, request.BatchSize)
 	pageOrdinal := 0
@@ -1181,7 +1337,8 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 	// strategies collapse an identical replay and retain a distinct version.
 	// Suppressing it by an old page hash would instead turn an ordinary provider
 	// update into an invalid checkpoint before the destination can compare it.
-	waitingForResume := request.Checkpoint != nil && !declarativeCollectionReplaysForMode(request.Mode)
+	waitingForResume := request.Checkpoint != nil && request.Checkpoint.Continuation == nil && !declarativeCollectionReplaysForMode(request.Mode)
+	deferCheckpoint := maxPages > 0 && declarativeCollectionIncrementalMode(request.Mode)
 	emitBatch := func() error {
 		if len(records) == 0 {
 			return nil
@@ -1198,14 +1355,19 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 			records = records[:0]
 			return nil
 		}
-		page := synctransport.SourcePage{Records: append([]connectors.Record(nil), records...), CandidateCheckpoint: candidate}
+		page := synctransport.SourcePage{Records: append([]connectors.Record(nil), records...), CandidateCheckpoint: candidate, DeferCheckpoint: deferCheckpoint}
 		records = records[:0]
 		return emit(page)
 	}
-	err = connector.Read(ctx, connectors.ReadRequest{
+	var continuation *connectors.ReadContinuation
+	if request.Checkpoint != nil && request.Checkpoint.Continuation != nil {
+		continuation = &connectors.ReadContinuation{Kind: request.Checkpoint.Continuation.Kind, Token: append([]byte(nil), request.Checkpoint.Continuation.Token...)}
+	}
+	err = engineConnector.ReadWithOutcome(ctx, connectors.ReadRequest{
 		Stream:           request.Stream,
 		Config:           request.Runtime,
 		MaxPages:         maxPages,
+		Continuation:     continuation,
 		PageDeadline:     request.UnitDeadline,
 		ObservePageFetch: request.RecordExtraction,
 	}, func(record connectors.Record) error {
@@ -1219,23 +1381,37 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 		}
 		return nil
 	})
-	if err != nil {
-		return fmt.Errorf("read declarative stream collection: %w", err)
+	var budgetStop *connectors.ReadBudgetStoppedError
+	if err != nil && !errors.As(err, &budgetStop) {
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("read declarative stream collection: %w", err)
 	}
 	if err := ctx.Err(); err != nil {
-		return err
+		return synctransport.SourceReadOutcome{}, err
 	}
 	if err := emitBatch(); err != nil {
-		return err
+		return synctransport.SourceReadOutcome{}, err
 	}
 	if waitingForResume {
-		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "declarative stream resume page is no longer present")
+		return synctransport.SourceReadOutcome{}, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "declarative stream resume page is no longer present")
 	}
-	return nil
+	if budgetStop != nil {
+		continuation := &synccontract.SourceContinuation{Kind: budgetStop.Continuation.Kind, Token: append(synccontract.OpaqueToken(nil), budgetStop.Continuation.Token...)}
+		return synctransport.SourceReadOutcome{Continuation: continuation}, nil
+	}
+	return synctransport.SourceReadOutcome{Exhausted: true}, nil
 }
 
 func declarativeCollectionReplaysForMode(mode synccontract.Mode) bool {
 	return mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
+}
+
+func declarativeCollectionIncrementalMode(mode synccontract.Mode) bool {
+	switch mode {
+	case synccontract.ModeIncrementalAppend, synccontract.ModeIncrementalUpsert, synccontract.ModeIncrementalDedupe, synccontract.ModeIncrementalDedupeHistory:
+		return true
+	default:
+		return false
+	}
 }
 
 func declarativeTransportMaxPages(config map[string]string) (int, error) {
@@ -1572,13 +1748,9 @@ func issueLabelNames(labels any) []string {
 }
 
 func cloneTransportRecord(record connectors.Record) (connectors.Record, error) {
-	encoded, err := json.Marshal(record)
+	clone, err := synctransport.CloneRecord(record)
 	if err != nil {
-		return nil, fmt.Errorf("encode issue record: %w", err)
-	}
-	var clone connectors.Record
-	if err := json.Unmarshal(encoded, &clone); err != nil {
-		return nil, fmt.Errorf("decode issue record: %w", err)
+		return nil, fmt.Errorf("clone declarative transport record: %w", err)
 	}
 	return clone, nil
 }

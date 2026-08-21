@@ -217,6 +217,34 @@ type DestinationReadBackField struct {
 	ExpectedField string `json:"expected_field"`
 }
 
+// DestinationReceiptLocator is a deliberately small provider-response to
+// provider-read mapping. It allows a declared write response's one top-level
+// scalar field to fill one declared query parameter; it is not a JSONPath,
+// URL, method, header, or generic read capability.
+type DestinationReceiptLocator struct {
+	ResponseIndex  int    `json:"response_index"`
+	BodyField      string `json:"body_field"`
+	QueryParameter string `json:"query_parameter"`
+	MaxValueBytes  int    `json:"max_value_bytes"`
+	MaxPages       int    `json:"max_pages"`
+}
+
+func (l DestinationReceiptLocator) Validate() error {
+	if l.ResponseIndex < 0 || l.ResponseIndex > 1023 {
+		return fmt.Errorf("destination receipt locator response_index must be between 0 and 1023")
+	}
+	if !isConcreteTransportIdentifier(l.BodyField) || !isConcreteTransportIdentifier(l.QueryParameter) {
+		return fmt.Errorf("destination receipt locator requires concrete body_field and query_parameter")
+	}
+	if l.MaxValueBytes < 1 || l.MaxValueBytes > 4096 {
+		return fmt.Errorf("destination receipt locator max_value_bytes must be between 1 and 4096")
+	}
+	if l.MaxPages < 1 || l.MaxPages > 10 {
+		return fmt.Errorf("destination receipt locator max_pages must be between 1 and 10")
+	}
+	return nil
+}
+
 // DestinationReadBackPolicy declares the bounded provider read that proves a
 // typed destination write before its source checkpoint may advance. Operation
 // is interpreted only by the connector that owns the declaration.
@@ -228,6 +256,7 @@ type DestinationReadBackPolicy struct {
 	MaxAttempts            int                          `json:"max_attempts"`
 	TimeoutMilliseconds    int                          `json:"timeout_milliseconds"`
 	RetryDelayMilliseconds int                          `json:"retry_delay_milliseconds,omitempty"`
+	ReceiptLocator         DestinationReceiptLocator    `json:"receipt_locator"`
 	Conformance            ConformanceEvidenceReference `json:"conformance"`
 }
 
@@ -251,6 +280,9 @@ func (p DestinationReadBackPolicy) Validate() error {
 		return err
 	}
 	if err := validateDestinationReadBackFields("expected", p.Expected); err != nil {
+		return err
+	}
+	if err := p.ReceiptLocator.Validate(); err != nil {
 		return err
 	}
 	return p.Conformance.Validate()

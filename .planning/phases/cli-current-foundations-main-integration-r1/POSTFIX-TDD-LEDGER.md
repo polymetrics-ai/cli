@@ -9,10 +9,225 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 | 3 | B13-B14, B17, B19, B24 | Classified secrets versus ordinary IDs/headers; error-bearing direct/native result; status receipt; SQS success/error receipt. | connsdk, engine, commandrunner, native SQS, App, and CLI receipt suites. | green; remote `58c86d18bd27e55f334cea37f263dd4cdf7540ee` |
 | 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | green; remote `b0eb22feb7f413d15f747b3f78d62c6c46e314b9` |
 | 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | green; remote `2bddbf5387d323a0dbf074074cf43fa2d40b60b5` |
-| 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | green; local atomic boundary pending commit |
-| 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | pending |
+| 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | green; remote `51ab7639e30bb2fb5585d853beba6a2550d84def` |
+| 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | green; local atomic commit pending |
 | 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | pending |
 | 9 | B10-B11 | Evidence/certification metadata for another or stale SHA is accepted. | Exact final-SHA evidence, matrix, candidate, and certification checks. | pending |
+
+## Group 7 red-contract plan (2026-08-21)
+
+- **GSD/manual fallback and skills:** this is the preserved single-owner
+  postfix phase. The existing `POSTFIX-EXECUTION.md` delivery header and
+  manual GSD fallback remain in force; `golang-how-to`, `golang-testing`,
+  `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`,
+  and `golang-concurrency` govern this transport-only group. Group 8 files
+  (`internal/cli/cli.go`, `internal/app/app.go`,
+  `internal/app/change_capture_dispatch.go`, and
+  `internal/app/etl_mode_dispatch.go`) are explicitly out of scope.
+- **B27 red:** `TestDeclarativeTransport_PageBudgetIsNotEOF` must prove a
+  deterministic three-page declaration reports omitted/default, one-page,
+  two-page, and unlimited outcomes distinctly; a full-overwrite prefix must
+  publish zero replacement tables; and an incremental continuation must emit
+  page N+1 once rather than replaying an acknowledged prefix. A continuation
+  is engine-owned opaque state, never a CLI/provider-cursor input.
+- **B28 red:**
+  `TestDeclarativeDestination_ClaimedKeyedWithoutIndependentProofIsRejected`
+  and `TestDeclarativeDestination_IndependentProof` must refuse a declaration
+  that merely claims keyed delivery before source I/O, then prove immutable
+  executor/action-digest evidence plus one preview/workset-stable effective
+  idempotency key permits exactly one provider mutation after a post-success
+  retry. Foreign or changed evidence/action must fail admission.
+- **B29 red:** `TestDeclarativeDestination_ReadBackUsesInternalReceiptLocator`
+  must put the confirmed record beyond a first unrelated page, retain a full
+  private provider receipt locator while public acknowledgement output stays
+  redacted, reject absent/foreign/changed locators before checkpoint, and
+  reuse the exact locator for bounded eventual-consistency retries.
+- **B30 red:** `TestDeclarativeTransportClone_PreservesLargeNumbers` must
+  carry nested signed/unsigned values, `json.Number`, `json.RawMessage`, and
+  a value above 2^53 through source, stage, destination, read-back, and
+  checkpoint without mutating the caller record; unsupported mutable values
+  fail closed.
+- **B31 red:** `TestDeclarativeReadBack_NumericSemanticEquality` must prove
+  arbitrary-precision `int64`/`json.Number` equality above 2^53, nested
+  identity equality, the explicit exact policy for `42` and `42.0`, and
+  rejection of unequal numeric, string, and boolean values.
+- **B32 red:** `TestTransport_ReadBackGetsIndependentUnitDeadline` must prove
+  ordinary, full-overwrite, serial Arrow, and pipeline Arrow execution use
+  separately bounded apply and read-back phases: 40 ms apply plus 20 ms
+  read-back fits independent 50 ms bounds, while a >50 ms apply fails and a
+  parent cancellation reaches both phases.
+
+### Group 7 observed red evidence (2026-08-21)
+
+- **B27:** `TestDeclarativeTransport_PageBudgetIsNotEOF` initially treated a
+  capped `Read` prefix as ordinary EOF, so the durable path had neither a
+  typed continuation nor an exhausted/non-exhausted distinction. The
+  full-overwrite compatibility test then demonstrated that a capped source
+  could reach its replacement boundary without a typed terminal stop.
+- **B28:** the declared `delivery.idempotency=keyed` claim alone admitted a
+  destination plan; the red tests showed that no independently sealed
+  executor/action digest/effective header bound existed before provider I/O.
+- **B29:** `TestDeclarativeDestination_ReadBackUsesInternalReceiptLocator`
+  first observed a `response_index: 1` locator pass contract construction and
+  broad/receipt-free read-back remained possible. The engine optional-query
+  red additionally rejected a declaration-owned omitted query before request
+  assembly, rather than preserving the bounded point-query route.
+- **B30:** `TestDeclarativeTransportClone_PreservesLargeNumbers` first
+  received `9007199254740993` as `float64` after the App JSON round trip,
+  proving loss before destination/read-back/checkpoint boundaries.
+- **B31:** `TestDeclarativeReadBack_NumericSemanticEquality` first reported
+  an expected identity missing when an exact `int64` value was returned as
+  `json.Number`; float-normalized hashing/comparison was not a valid
+  compatibility bridge.
+- **B32:** the test first failed to compile because `Result` had no separate
+  confirmation metric. After adding that required observable, all four happy
+  routes failed as intended: a 40 ms effect followed by a 20 ms read-back on
+  one 50 ms context returned `context deadline exceeded`. The strict
+  over-deadline apply and parent-cancellation edge cases remained red/green
+  fences throughout.
+
+### Group 7 focused green evidence (complete)
+
+- **B27:** engine-owned `ReadContinuation` now records only definition-bound
+  pagination state, `SourceReadOutcome` preserves exhaustion separately, and
+  full overwrite converts the legacy typed budget stop into zero publication,
+  zero read-back, zero checkpoint, and one private shadow abort. Incremental
+  runs checkpoint exactly the acknowledged page plus opaque continuation.
+- **B28:** `DestinationIdempotencyProof` binds the exact transport executor,
+  action definition SHA-256, and declaration-owned effective header. A
+  production plan is refused without all three. The existing partial-result
+  assertion intentionally now expects exactly six sends: one successful first
+  record plus five retry-safe attempts for the terminal second record under
+  its declared stable `Idempotency-Key`; it still asserts every provider result
+  is persisted and does not weaken to a lower-bound count.
+- **B29:** public acknowledgement output is sanitized while bounded private
+  receipt bytes stay process-local. A locator has an exact declared query
+  binding, 4 KiB-or-less scalar cap, and 10-page-or-less declaration limit;
+  the generic one-action path refuses compound response index ownership before
+  a write. The regression now proves two exact two-page point-query attempts:
+  an unrelated first page, then absent/confirmed target, always with the same
+  private locator and no locator in public output. Missing and foreign private
+  receipts fail before provider I/O.
+- **B30/B31:** the App calls the transport lossless clone rather than JSON
+  marshal/unmarshal; arbitrary precision numeric identity is canonicalized as
+  an exact rational value. `42`, `42.0`, and `1e3` are equal numerically, but
+  strings/booleans and unequal values fail closed.
+- **B32:** `transportUnitContext` creates a fresh parent-derived 50 ms phase
+  for every apply/publication and every confirmation. The focused suite passed
+  ordinary transport, ordinary full overwrite, serial Arrow, pipelined Arrow,
+  strict >50 ms effect refusal, and parent cancellation. `ReadBackElapsed`
+  is persisted as `read_back_elapsed_ns`, distinct from effect latency.
+- **Combined focused command:**
+  `go test -timeout 20m ./internal/connectors/engine ./internal/synctransport ./internal/app -run 'Test(DeclarativeTransport_PageBudgetIsNotEOF|OpenComposedGitHubCommitsHonorsTransportMaxPages|OrchestratorFullOverwriteBudgetStopNeverPublishes|DeclarativeDestination_ClaimedKeyedWithoutIndependentProofIsRejected|DeclarativeDestination_IndependentProof|DeclarativeDestination_ReadBackUsesInternalReceiptLocator|DeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint|DeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply|DeclarativeTransportClone_PreservesLargeNumbers|DeclarativeReadBack_NumericSemanticEquality|Transport_ReadBackGetsIndependentUnitDeadline|ReadRequestQueryTemplateMissingFailsBeforeRequest|ReadRequestOptionalQueryTemplateMissingOmitsBeforeRequest)$' -count=1 -v`
+  passed before the final two-page B29 strengthening; it is rerun as part of
+  the Group 7 closure gates below.
+
+### Group 7 package-gate failure set (2026-08-21)
+
+The sole completion-tracked `go test -timeout 20m ./internal/app -count=1`
+gate reached terminal exit `1` after `243.610s`. This complete observed set is
+frozen before any later full App rerun:
+
+| Exact failing test | Initial disposition to prove with focused evidence |
+| --- | --- |
+| `TestFoundationRollupPreservesMultiActionReverseETLComposition/first_declared_action` | B29 made a private provider receipt mandatory, but the pre-existing synthetic multi-action write fixture returns no declared `receipt_id`. Update only its closed provider fixture/read-back response so the already-declared locator is exercised. |
+| `TestFoundationRollupPreservesMultiActionReverseETLComposition/second_declared_action` | Same B29 fixture gap: the write body is not a JSON receipt. Preserve multi-action composition and give the closed synthetic operation its declared receipt. |
+| `TestFoundationRollupPreservesMultiActionReverseETLComposition/one_action_in_another_connector` | Same B29 fixture gap across a second declaration-owned connector; no connector-name branch is permitted. |
+| `TestFoundationRollupPreservesMultiActionReverseETLComposition/refuses_missing_action_in_multi-action_connector` | Its exact expected I/O count was derived from the three successful source/write/read-back paths above. Recalculate and retain the exact count only after their closed receipts are restored. |
+| `TestFoundationRollupPreservesMultiActionReverseETLComposition/refuses_other_connector_action` | Same exact-count dependency; no assertion relaxation. |
+| `TestFoundationRollupPreservesMultiActionReverseETLComposition/refuses_unlisted_action` | Same exact-count dependency; no assertion relaxation. |
+| `TestFoundationRollupPreservesMultiActionReverseETLComposition` final persisted-missing-action count | Same exact-count dependency; no assertion relaxation. |
+| `TestPersistedConnectionSelectsDeclarativeTypedDestinationAction` (the matching three successful and four exact-count subcases) | This wrapper shares the same multi-action fixture and is expected to close with the focused composition test; it must be rerun explicitly. |
+| `TestDeclarativeTransportSourceEmitsWholeProviderPageInBoundedBatches` | B27 now surfaces a capped source as `SourceBudgetStoppedError`. Determine whether its fixture is an intentionally complete scan (then make its test request unlimited) or whether production outcome handling is incorrectly translating an exhausted page; retain full-page/batch assertions. |
+| `TestParkedFullAppendRateResumePreservesCheckpointAndBatchSize` | Test in isolation after the earlier duplicate App package processes are gone; current terminal error was an active-work ownership conflict. |
+| `TestParkedFullAppendRateResumeRearmsLatestCheckpoint` | Same isolated ownership/rearm determination. |
+| `TestParkedFullAppendRateResumeReconcilesInterruptedRearmAttempt` | Same isolated ownership/rearm determination. |
+| `TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume` (three subcases) | Same isolated state-fence determination. |
+| `TestRunETLTransportFullOverwriteSourceFailureAbortsWithoutCheckpoint` | Same isolated generation determination. |
+| `TestRunETLTransportFullOverwriteCancellationBeforePublishAbortsWithoutCheckpoint` | Same isolated generation determination. |
+| `TestRunETLTransportDistinguishesMissingAndPresentStreamState` | Same isolated state-fence determination. |
+| `TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation` | Same isolated state-fence determination. |
+| `TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails` | Same isolated state-fence determination. |
+| `TestRunETLTransportFullOverwriteCompletionRebasesUnrelatedStateAfterFinalCheckpoint` | Same isolated state-fence determination. |
+| `TestRunETLTransportFullOverwriteCompletionMissingRunIsTypedConflictAfterFinalCheckpoint` | Same isolated state-fence determination. |
+
+No later full App-package rerun closes this table. Every row must have focused
+red/green evidence or a reproducible environment-only determination first.
+
+### Group 7 package-failure focused disposition (2026-08-21)
+
+All 20 rows above are now closed by the following focused green evidence before
+the one final Group-7 App package rerun:
+
+- **B29 multi-action rows (rows 1–8):**
+  `go test -timeout 20m ./internal/app -run '^(TestFoundationRollupPreservesMultiActionReverseETLComposition|TestPersistedConnectionSelectsDeclarativeTypedDestinationAction|TestDeclarativeTransportSourceEmitsWholeProviderPageInBoundedBatches)$' -count=1 -v`
+  passed. The closed synthetic response now supplies the already-declared
+  `receipt_id`; all three selectable actions, both cross-connector rejection
+  cases, and their exact I/O-dependent counts passed unchanged. The unrelated
+  `TestDeclarativeTransportSourceEmitsWholeProviderPageInBoundedBatches` now
+  explicitly asks for its intended unlimited complete scan and proves the
+  two-provider-page exhaustion read, rather than converting a B27 budget stop
+  into EOF.
+- **Group-6 fence integration rows (rows 9–20):**
+  `go test -timeout 20m ./internal/app -run '^(TestParkedFullAppendRateResumePreservesCheckpointAndBatchSize|TestParkedFullAppendRateResumeRearmsLatestCheckpoint|TestParkedFullAppendRateResumeReconcilesInterruptedRearmAttempt|TestRunETLTransportRejectsAcknowledgedCheckpointWithIncompatibleResume|TestRunETLTransportFullOverwriteSourceFailureAbortsWithoutCheckpoint|TestRunETLTransportFullOverwriteCancellationBeforePublishAbortsWithoutCheckpoint|TestRunETLTransportDistinguishesMissingAndPresentStreamState|TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation|TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails|TestRunETLTransportFullOverwriteCompletionRebasesUnrelatedStateAfterFinalCheckpoint|TestRunETLTransportFullOverwriteCompletionMissingRunIsTypedConflictAfterFinalCheckpoint)$' -count=1 -v`
+  passed. The correction keeps parent cancellation on provider phases but gives
+  an already acknowledged receipt one bounded local checkpoint attempt. An
+  uncommitted exact lease is atomically released/restored; a rate-limit handoff
+  releases only its exact parked owner with its committed checkpoint. A lost
+  fence remains both the typed stream-state conflict and its original fence
+  cause. The final-save and full-overwrite pause fixtures retain their old
+  assertions but count the new exact claim/source/begin/destination/publish
+  fence writes so they still inject at the intended post-checkpoint boundary.
+- **Full Group-7 red/green cohort:**
+  `go test -timeout 20m ./internal/connectors/engine ./internal/synctransport ./internal/app -run 'Test(DeclarativeTransport_PageBudgetIsNotEOF|OpenComposedGitHubCommitsHonorsTransportMaxPages|OrchestratorFullOverwriteBudgetStopNeverPublishes|DeclarativeDestination_ClaimedKeyedWithoutIndependentProofIsRejected|DeclarativeDestination_IndependentProof|DeclarativeDestination_ReadBackUsesInternalReceiptLocator|DeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint|DeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply|DeclarativeTransportClone_PreservesLargeNumbers|DeclarativeReadBack_NumericSemanticEquality|Transport_ReadBackGetsIndependentUnitDeadline|ReadRequestQueryTemplateMissingFailsBeforeRequest|ReadRequestOptionalQueryTemplateMissingOmitsBeforeRequest)$' -count=1 -v`
+  passed after the final two-page private-locator strengthening.
+
+### Group 7 final App-gate supplemental red set (2026-08-21)
+
+The one permitted post-disposition `go test -timeout 20m ./internal/app -count=1`
+run reached terminal exit `1` after `212.611s`. Its complete additional failure
+set is frozen here before another package rerun:
+
+| Exact failing test | Reproduced cause to correct with focused red/green evidence |
+| --- | --- |
+| `TestProductionParkingCompositionSurvivesProcessKill` | Its process fixture inherits `TestParkRateLimitedRunPersistsOnlyDeclarativeTypedDestinationPlanID`; the new parking lease release treated a direct, no-live-lease persistence call as a foreign owner instead of preserving its existing closed parking behavior. |
+| `TestParkRateLimitedRunPersistsOnlyDeclarativeTypedDestinationPlanID` | A parked run with an acknowledged checkpoint but no active lease is a valid direct parking persistence seam; it must retain that checkpoint/plan proof. Only a nonempty foreign active owner is a conflict; the current exact owner is the one that must be released. |
+| `TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure` | An indeterminate checkpoint store outcome may already have durably committed the acknowledgement. The new uncommitted-lease rollback deleted that state even though a subsequent retry could duplicate an acknowledged provider effect. |
+
+No further full App-package rerun is permitted until all three tests have
+focused green dispositions.
+
+### Group 7 supplemental focused green disposition (2026-08-21)
+
+`go test -timeout 20m ./internal/app -run '^(TestProductionParkingCompositionSurvivesProcessKill|TestParkRateLimitedRunPersistsOnlyDeclarativeTypedDestinationPlanID|TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure)$' -count=1 -v`
+passed. A direct valid parking persistence has no lease to release, while an
+exact live owner releases only itself and a foreign nonempty owner still fails
+closed. A checkpoint error whose store outcome may have committed now retains
+the acknowledged durable state; only a definite no-commit unacknowledged path
+is eligible for lease rollback. The process-kill path proves the same behavior
+through three isolated processes.
+
+### Group 7 closure gates (2026-08-21)
+
+- The definitive package gate, run only after dispositioning every failure in
+  both frozen App failure sets above, passed:
+  `go test -timeout 20m ./internal/app -count=1` (`244.005s`).
+- The non-App package gate passed:
+  `go test -timeout 20m ./internal/connectors/engine ./internal/synctransport -count=1`
+  (`9.692s` and `1.079s`).
+- The complete named Group-7/co-composed regression cohort, including B27
+  continuation, B28 plan proof, B29 private two-page receipt read-back,
+  B30/B31 lossless comparison, B32 ordinary/full-overwrite/serial-Arrow/
+  pipelined-Arrow deadlines, and the Group-6 fence compatibility cases,
+  passed under `go test -race -timeout 20m` over engine, synctransport, and
+  App (`2.145s`, `2.990s`, and `603.875s` respectively).
+- `go vet ./internal/connectors/engine ./internal/synctransport ./internal/app`,
+  `go build ./cmd/pm`, `go run ./cmd/connectorgen validate` (552 connectors,
+  zero findings), `go run ./cmd/connectorgen surface-sync --check` (zero
+  drift), and `git diff --check` passed. The final diff inventory contains
+  only the Group-7 engine/transport/App/sync-contract files plus this ledger;
+  it leaves every Group-8 file untouched.
 
 ## Group 1 preserved test provenance
 

@@ -18,10 +18,12 @@ import (
 const transportWorkLeaseDuration = 2 * time.Minute
 
 type transportWorkLease struct {
-	app    *App
-	key    string
-	workID string
-	fence  int64
+	app          *App
+	key          string
+	workID       string
+	fence        int64
+	prior        StreamState
+	priorPresent bool
 
 	mu    sync.Mutex
 	state StreamState
@@ -37,9 +39,13 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 	now := time.Now().UTC()
 	until := now.Add(transportWorkLeaseDuration)
 	var claimed StreamState
+	var prior StreamState
+	var priorPresent bool
 	if _, err := a.updateState(func(current state) (state, error) {
 		currentState, present := current.StreamStates[key]
 		currentState = cloneStreamState(currentState)
+		prior = cloneStreamState(currentState)
+		priorPresent = present
 		if currentState.Checkpoint != nil {
 			if err := validateStreamStateResume(currentState, source); err != nil {
 				return current, err
@@ -75,7 +81,10 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 	}); err != nil {
 		return nil, fmt.Errorf("claim transport stream work before I/O: %w", err)
 	}
-	return &transportWorkLease{app: a, key: key, workID: workID, fence: claimed.ActiveWorkFence, state: claimed}, nil
+	return &transportWorkLease{
+		app: a, key: key, workID: workID, fence: claimed.ActiveWorkFence,
+		prior: prior, priorPresent: priorPresent, state: claimed,
+	}, nil
 }
 
 func transportWorkOwnerTerminal(runs []Run, workID string) bool {
@@ -106,6 +115,57 @@ func (l *transportWorkLease) commit(ctx context.Context, checkpoint synccontract
 		}
 		return updated, nil
 	})
+}
+
+// commitAfterAcknowledgement persists a receipt that has already crossed the
+// provider boundary. Caller cancellation still reaches every source, apply,
+// and read-back operation; after a destination acknowledgement returns, it
+// must not turn a verified external effect into a replayable prefix merely by
+// interrupting this bounded local checkpoint write.
+func (l *transportWorkLease) commitAfterAcknowledgement(ctx context.Context, checkpoint synccontract.CheckpointEnvelope) (StreamState, error) {
+	persistCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), transportWorkLeaseDuration)
+	defer cancel()
+	return l.commit(persistCtx, checkpoint)
+}
+
+// abandonUncommitted releases only this exact active lease after the
+// orchestrator has established that it did not produce a durable checkpoint.
+// It restores a pre-existing stream state without lowering its monotonic
+// fence. An absent predecessor is deleted so an invalid candidate cannot leave
+// a synthetic stream state behind. Any concurrent owner change fails closed.
+func (l *transportWorkLease) abandonUncommitted(ctx context.Context) error {
+	if l == nil || l.app == nil {
+		return errTransportStreamWorkFenceLost
+	}
+	cleanupCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), transportWorkLeaseDuration)
+	defer cancel()
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	now := time.Now().UTC()
+	if _, err := l.app.updateState(func(current state) (state, error) {
+		actual, present := current.StreamStates[l.key]
+		if !present || actual.ActiveWorkID != l.workID || actual.ActiveWorkFence != l.fence || actual.ActiveWorkLeaseUntil == nil || !actual.ActiveWorkLeaseUntil.After(now) {
+			return current, errTransportStreamWorkFenceLost
+		}
+		if err := cleanupCtx.Err(); err != nil {
+			return current, err
+		}
+		if !l.priorPresent {
+			delete(current.StreamStates, l.key)
+			l.state = StreamState{}
+			return current, nil
+		}
+		restored := cloneStreamState(l.prior)
+		if restored.ActiveWorkFence < l.fence {
+			restored.ActiveWorkFence = l.fence
+		}
+		current.StreamStates[l.key] = restored
+		l.state = cloneStreamState(restored)
+		return current, nil
+	}); err != nil {
+		return fmt.Errorf("release uncommitted transport stream work fence: %w", err)
+	}
+	return nil
 }
 
 func (l *transportWorkLease) mutate(ctx context.Context, change func(StreamState) (StreamState, error)) (StreamState, error) {

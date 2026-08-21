@@ -147,7 +147,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 				}
 				return fmt.Errorf("close Arrow Parquet segment: %w", err)
 			}
-			applyCtx, cancelApply := context.WithTimeout(ctx, request.unitDeadline())
+			applyCtx, cancelApply := transportUnitContext(ctx, request.unitDeadline())
 			if err := authorizeDestinationEffect(applyCtx, request.Approval, "Arrow segment apply"); err != nil {
 				cancelApply()
 				return err
@@ -188,7 +188,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 	if err := authorizeDestinationEffect(ctx, request.Approval, "Arrow full-overwrite publication"); err != nil {
 		return result, err
 	}
-	publishCtx, cancelPublish := context.WithTimeout(ctx, request.unitDeadline())
+	publishCtx, cancelPublish := transportUnitContext(ctx, request.unitDeadline())
 	publishStarted := time.Now()
 	acknowledgement, publishErr := session.PublishArrowFullOverwrite(publishCtx, ArrowFullOverwritePublicationRequest{
 		LastCheckpoint: lastCandidate, Segments: append([]FastSegmentReceipt(nil), segments...),
@@ -197,13 +197,15 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 	})
 	collectDestinationResult(&result, acknowledgement, publishErr)
 	result.PublishElapsed += time.Since(publishStarted)
+	cancelPublish()
 	if publishErr == nil {
 		published = true
+		readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
 		readBackStarted := time.Now()
-		publishErr = session.ReadBackArrowFullOverwrite(publishCtx, acknowledgement)
-		result.PublishElapsed += time.Since(readBackStarted)
+		publishErr = session.ReadBackArrowFullOverwrite(readBackCtx, acknowledgement)
+		result.ReadBackElapsed += time.Since(readBackStarted)
+		cancelReadBack()
 	}
-	cancelPublish()
 	if publishErr != nil {
 		return result, fmt.Errorf("publish Arrow full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}
