@@ -96,6 +96,46 @@ func TestCommittedTransactionStagePublishesOnlyAfterDurableReceipt(t *testing.T)
 	}
 }
 
+func TestCommittedTransactionStagePersistsPrivateArtifactManifestAcrossRestart(t *testing.T) {
+	root := t.TempDir()
+	stage := newTestTransactionStage(t, root, testTransactionStageLimits())
+	const transactionID = "artifact-manifest-restart"
+	const artifactManifest = `{"version":1,"connection_id":"connection","stream":"public.users","generation_id":7,"transaction_key":"opaque-key","records":1,"content_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","raw_wal_sha256":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","final_table_sha256":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}`
+	stageCompleteChunk(t, stage, transactionID)
+
+	receiver := transactionReceiverFunc(func(ctx context.Context, transaction CommittedTransaction) (DownstreamTransactionReceipt, error) {
+		if err := transaction.StreamChunks(ctx, func(chunk TransactionChunk) error {
+			_, err := io.Copy(io.Discard, chunk.Reader)
+			return err
+		}); err != nil {
+			return DownstreamTransactionReceipt{}, err
+		}
+		return DownstreamTransactionReceipt{
+			ReceiptID:        "artifact-manifest-receipt",
+			Sink:             "test-sink",
+			DurableAt:        time.Now().UTC(),
+			ArtifactManifest: artifactManifest,
+		}, nil
+	})
+
+	receipt, err := stage.CommitTransaction(context.Background(), transactionID, receiver)
+	if err != nil {
+		t.Fatalf("CommitTransaction() error = %v", err)
+	}
+	if got := receipt.ArtifactManifest(); got != artifactManifest {
+		t.Fatalf("receipt ArtifactManifest() = %q, want exact private manifest %q", got, artifactManifest)
+	}
+
+	reopened := newTestTransactionStage(t, root, testTransactionStageLimits())
+	recovered, err := reopened.Receipt(transactionID)
+	if err != nil {
+		t.Fatalf("Receipt() from reopened stage error = %v", err)
+	}
+	if got := recovered.ArtifactManifest(); got != artifactManifest {
+		t.Fatalf("recovered ArtifactManifest() = %q, want exact private manifest %q", got, artifactManifest)
+	}
+}
+
 type recordedTransaction struct {
 	chunks []string
 }

@@ -1518,14 +1518,28 @@ type CDCEvent struct {
 // consumed once with bounded memory. Its identity is opaque-safe and contains
 // no provider transaction value.
 type CDCTransaction struct {
-	id      string
-	records int64
-	stream  func(context.Context, func(CDCEvent) error) error
+	id            string
+	records       int64
+	contentDigest string
+	stream        func(context.Context, func(CDCEvent) error) error
 }
 
 // NewCDCTransaction constructs a committed transaction around a one-shot
 // event stream. Native changefeeds use it only after their own commit boundary.
 func NewCDCTransaction(id string, records int64, stream func(context.Context, func(CDCEvent) error) error) (CDCTransaction, error) {
+	return newCDCTransaction(id, records, "", stream)
+}
+
+// NewCDCTransactionWithContentDigest constructs a committed transaction whose
+// source-stage content digest is required by an artifact-bound durable receipt.
+func NewCDCTransactionWithContentDigest(id string, records int64, contentDigest string, stream func(context.Context, func(CDCEvent) error) error) (CDCTransaction, error) {
+	if !validCDCArtifactDigest(contentDigest) {
+		return CDCTransaction{}, errors.New("CDC transaction content digest is invalid")
+	}
+	return newCDCTransaction(id, records, contentDigest, stream)
+}
+
+func newCDCTransaction(id string, records int64, contentDigest string, stream func(context.Context, func(CDCEvent) error) error) (CDCTransaction, error) {
 	if strings.TrimSpace(id) == "" || len(id) > 1024 {
 		return CDCTransaction{}, errors.New("CDC transaction identity is invalid")
 	}
@@ -1535,7 +1549,7 @@ func NewCDCTransaction(id string, records int64, stream func(context.Context, fu
 	if stream == nil {
 		return CDCTransaction{}, errors.New("CDC transaction event stream is required")
 	}
-	return CDCTransaction{id: id, records: records, stream: stream}, nil
+	return CDCTransaction{id: id, records: records, contentDigest: contentDigest, stream: stream}, nil
 }
 
 // ID returns the opaque-safe committed transaction identity.
@@ -1543,6 +1557,10 @@ func (t CDCTransaction) ID() string { return t.id }
 
 // Records returns the source-declared event count.
 func (t CDCTransaction) Records() int64 { return t.records }
+
+// ContentDigest is the exact source-stage content identity when the native
+// changefeed has one. An empty value cannot bind a warehouse recovery receipt.
+func (t CDCTransaction) ContentDigest() string { return t.contentDigest }
 
 // StreamEvents visits the transaction in source order exactly once.
 func (t CDCTransaction) StreamEvents(ctx context.Context, emit func(CDCEvent) error) error {
@@ -1562,14 +1580,95 @@ func (t CDCTransaction) StreamEvents(ctx context.Context, emit func(CDCEvent) er
 // transaction. Its acknowledgement is constructible only through the sync
 // contract's durable acknowledgement constructor.
 type CDCTransactionReceipt struct {
-	id              string
-	acknowledgement synccontract.DownstreamAcknowledgement
-	durable         bool
+	id               string
+	acknowledgement  synccontract.DownstreamAcknowledgement
+	artifactManifest string
+	durable          bool
+}
+
+const cdcArtifactManifestVersion = 1
+
+// CDCArtifactManifest is the private, versioned evidence binding a durable
+// CDC receipt to the exact connection-owned warehouse generation and files.
+// It is never included in public run or provider output.
+type CDCArtifactManifest struct {
+	Version          int    `json:"version"`
+	ConnectionID     string `json:"connection_id"`
+	Stream           string `json:"stream"`
+	GenerationID     int64  `json:"generation_id"`
+	TransactionKey   string `json:"transaction_key"`
+	Records          int64  `json:"records"`
+	ContentSHA256    string `json:"content_sha256"`
+	RawWALSHA256     string `json:"raw_wal_sha256"`
+	FinalTableSHA256 string `json:"final_table_sha256"`
+}
+
+// NewCDCArtifactManifest makes the exact source/staged transaction identity
+// available only to the durable recovery-receipt path.
+func NewCDCArtifactManifest(connectionID, stream string, generationID int64, transactionKey string, records int64, contentSHA256, rawWALSHA256, finalTableSHA256 string) (CDCArtifactManifest, error) {
+	manifest := CDCArtifactManifest{
+		Version:          cdcArtifactManifestVersion,
+		ConnectionID:     connectionID,
+		Stream:           stream,
+		GenerationID:     generationID,
+		TransactionKey:   transactionKey,
+		Records:          records,
+		ContentSHA256:    contentSHA256,
+		RawWALSHA256:     rawWALSHA256,
+		FinalTableSHA256: finalTableSHA256,
+	}
+	if err := manifest.Validate(); err != nil {
+		return CDCArtifactManifest{}, err
+	}
+	return manifest, nil
+}
+
+// Validate refuses incomplete, unbounded, or non-digest artifact evidence
+// before it can bind a recovered source checkpoint.
+func (m CDCArtifactManifest) Validate() error {
+	if m.Version != cdcArtifactManifestVersion || strings.TrimSpace(m.ConnectionID) == "" || len(m.ConnectionID) > 1024 ||
+		strings.TrimSpace(m.Stream) == "" || len(m.Stream) > 1024 || m.GenerationID <= 0 ||
+		strings.TrimSpace(m.TransactionKey) == "" || len(m.TransactionKey) > 1024 || m.Records < 0 ||
+		!validCDCArtifactDigest(m.ContentSHA256) || !validCDCArtifactDigest(m.RawWALSHA256) || !validCDCArtifactDigest(m.FinalTableSHA256) {
+		return errors.New("CDC artifact manifest is invalid")
+	}
+	return nil
 }
 
 // NewCDCTransactionReceipt constructs a receipt after the named sink has made
 // the complete transaction durable.
 func NewCDCTransactionReceipt(id, sink string, durableAt time.Time) (CDCTransactionReceipt, error) {
+	return newCDCTransactionReceipt(id, sink, durableAt, "")
+}
+
+// NewCDCTransactionReceiptWithArtifactManifest creates a private
+// artifact-bound receipt after all manifest artifacts are durable.
+func NewCDCTransactionReceiptWithArtifactManifest(id, sink string, durableAt time.Time, manifest CDCArtifactManifest) (CDCTransactionReceipt, error) {
+	if err := manifest.Validate(); err != nil {
+		return CDCTransactionReceipt{}, err
+	}
+	payload, err := json.Marshal(manifest)
+	if err != nil {
+		return CDCTransactionReceipt{}, fmt.Errorf("encode CDC artifact manifest: %w", err)
+	}
+	return newCDCTransactionReceipt(id, sink, durableAt, string(payload))
+}
+
+// NewCDCTransactionReceiptWithArtifactManifestJSON restores the bounded
+// private manifest persisted by a native transaction stage; it accepts no
+// public provider body or caller-selected path.
+func NewCDCTransactionReceiptWithArtifactManifestJSON(id, sink string, durableAt time.Time, payload string) (CDCTransactionReceipt, error) {
+	manifest, canonical, err := parseCDCArtifactManifest(payload)
+	if err != nil {
+		return CDCTransactionReceipt{}, err
+	}
+	if _, err := NewCDCTransactionReceiptWithArtifactManifest(id, sink, durableAt, manifest); err != nil {
+		return CDCTransactionReceipt{}, err
+	}
+	return newCDCTransactionReceipt(id, sink, durableAt, canonical)
+}
+
+func newCDCTransactionReceipt(id, sink string, durableAt time.Time, artifactManifest string) (CDCTransactionReceipt, error) {
 	if strings.TrimSpace(id) == "" || len(id) > 1024 {
 		return CDCTransactionReceipt{}, errors.New("CDC transaction receipt identity is invalid")
 	}
@@ -1577,11 +1676,17 @@ func NewCDCTransactionReceipt(id, sink string, durableAt time.Time) (CDCTransact
 	if err != nil {
 		return CDCTransactionReceipt{}, err
 	}
-	return CDCTransactionReceipt{id: id, acknowledgement: acknowledgement, durable: true}, nil
+	return CDCTransactionReceipt{id: id, acknowledgement: acknowledgement, artifactManifest: artifactManifest, durable: true}, nil
 }
 
 // ID returns the receiver-owned durable receipt identity.
 func (r CDCTransactionReceipt) ID() string { return r.id }
+
+// HasArtifactManifest reports whether this private durable receipt carries
+// exact warehouse artifact evidence.
+func (r CDCTransactionReceipt) HasArtifactManifest() bool {
+	return r.durable && r.artifactManifest != ""
+}
 
 // Acknowledgement returns the checkpoint admission produced by this receipt.
 func (r CDCTransactionReceipt) Acknowledgement() (synccontract.DownstreamAcknowledgement, error) {
@@ -1589,6 +1694,64 @@ func (r CDCTransactionReceipt) Acknowledgement() (synccontract.DownstreamAcknowl
 		return synccontract.DownstreamAcknowledgement{}, errors.New("durable CDC transaction receipt is unavailable")
 	}
 	return r.acknowledgement, nil
+}
+
+// ArtifactManifest returns private exact artifact evidence. It is deliberately
+// unavailable for ordinary unbound CDC receipts and never becomes result data.
+func (r CDCTransactionReceipt) ArtifactManifest() (CDCArtifactManifest, error) {
+	if !r.durable || strings.TrimSpace(r.id) == "" {
+		return CDCArtifactManifest{}, errors.New("durable CDC transaction receipt is unavailable")
+	}
+	manifest, _, err := parseCDCArtifactManifest(r.artifactManifest)
+	return manifest, err
+}
+
+// ArtifactManifestJSON returns a validated canonical private payload for the
+// transaction-stage receipt store. It is not a public output projection.
+func (r CDCTransactionReceipt) ArtifactManifestJSON() (string, error) {
+	if !r.durable || strings.TrimSpace(r.id) == "" {
+		return "", errors.New("durable CDC transaction receipt is unavailable")
+	}
+	_, canonical, err := parseCDCArtifactManifest(r.artifactManifest)
+	return canonical, err
+}
+
+func parseCDCArtifactManifest(payload string) (CDCArtifactManifest, string, error) {
+	if len(payload) == 0 || len(payload) > 8<<10 {
+		return CDCArtifactManifest{}, "", errors.New("CDC artifact manifest is unavailable")
+	}
+	decoder := json.NewDecoder(strings.NewReader(payload))
+	decoder.DisallowUnknownFields()
+	var manifest CDCArtifactManifest
+	if err := decoder.Decode(&manifest); err != nil {
+		return CDCArtifactManifest{}, "", fmt.Errorf("decode CDC artifact manifest: %w", err)
+	}
+	if err := decoder.Decode(&struct{}{}); !errors.Is(err, io.EOF) {
+		if err == nil {
+			return CDCArtifactManifest{}, "", errors.New("CDC artifact manifest has trailing values")
+		}
+		return CDCArtifactManifest{}, "", fmt.Errorf("decode CDC artifact manifest trailing value: %w", err)
+	}
+	if err := manifest.Validate(); err != nil {
+		return CDCArtifactManifest{}, "", err
+	}
+	canonical, err := json.Marshal(manifest)
+	if err != nil {
+		return CDCArtifactManifest{}, "", fmt.Errorf("encode CDC artifact manifest: %w", err)
+	}
+	return manifest, string(canonical), nil
+}
+
+func validCDCArtifactDigest(value string) bool {
+	if len(value) != sha256.Size*2 {
+		return false
+	}
+	for _, character := range value {
+		if (character < '0' || character > '9') && (character < 'a' || character > 'f') {
+			return false
+		}
+	}
+	return true
 }
 
 // CDCTransactionReceiver makes one complete source transaction durable and

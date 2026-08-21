@@ -10,9 +10,93 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 | 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | green; remote `b0eb22feb7f413d15f747b3f78d62c6c46e314b9` |
 | 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | green; remote `2bddbf5387d323a0dbf074074cf43fa2d40b60b5` |
 | 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | green; remote `51ab7639e30bb2fb5585d853beba6a2550d84def` |
-| 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | green; local atomic commit pending |
-| 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | pending |
+| 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | green; remote `6084b1c1275b2dbe01fc49aba25785677fd8fd52` |
+| 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | in progress; B37 local-green, remote checkpoint pending |
 | 9 | B10-B11 | Evidence/certification metadata for another or stale SHA is accepted. | Exact final-SHA evidence, matrix, candidate, and certification checks. | pending |
+
+## Group 8 execution plan (2026-08-21)
+
+- **GSD/manual fallback and skills:** `scripts/gsd doctor`, all five required
+  command sources/prompts, and `go run ./cmd/agentcontractgen check` passed.
+  This single-owner non-Pi lane applies the generated workflow inline because
+  its runtime cannot provide a compatible isolated GSD worker. The completed
+  Group-7 remote base is `6084b1c1275b2dbe01fc49aba25785677fd8fd52`.
+  `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
+  `golang-security`, `golang-safety`, `golang-design-patterns`,
+  `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, and
+  `golang-database` govern Group 8. CLI help/manual/website parity is not
+  applicable to B37 because its private recovery evidence changes no command,
+  flag, help text, output schema, or generated surface; B34/B35 will revisit
+  that checklist before their CLI presentation work.
+- **B37 scope and ownership:** only the CDC receipt/stage/native PostgreSQL
+  recovery and App change-capture paths (`transaction_stage.go`,
+  `cdc_v2.go`, `change_capture_dispatch.go`, their tests, connectors receipt
+  contract, and this ledger). Group 8 B34/B35 and B38/W08 files are untouched
+  until their separately ordered parcels. The manifest is private durable
+  evidence: version, connection, stream, generation, transaction key, record
+  count, staged content digest, and exact raw-WAL/final-table digests. It must
+  be atomically durable before its receipt can permit LSN progress.
+- **B37 Red:**
+  `TestCDCRecovery_ReceiptBindsExactWarehouseArtifacts` exercises untouched
+  restart recovery, missing/truncated/swapped raw/table artifacts, a stale
+  manifest generation, and a manifest checksum mismatch. Every bad case must
+  fail as typed artifact reconciliation before checkpoint/LSN acknowledgement,
+  without a second transaction receive; the untouched case restores exactly
+  once without replay.
+
+### Group 8 B37 observed red and compatibility set (2026-08-21)
+
+- The named App red command,
+  `go test -timeout 20m ./internal/app -run '^TestCDCRecovery_ReceiptBindsExactWarehouseArtifacts$' -count=1 -v`,
+  first failed to compile because neither the typed reconciliation error nor a
+  connection/stream/generation-owned manifest path existed. After adding only
+  those assertion scaffolds, the unchanged happy case passed while all five
+  bad restart cases incorrectly returned completed runs with an `lsn-1`
+  checkpoint: missing manifest, truncated raw WAL, swapped final table, stale
+  manifest generation, and mismatched raw-WAL checksum. This is the frozen
+  pre-fix proof that regular-file checks advanced source progress.
+- The first focused package probe,
+  `go test -timeout 20m ./internal/connectors ./internal/connectors/database ./internal/connectors/native/postgres -run 'Test(CDC|CommittedTransaction|TransactionReceipt|PGOutput)' -count=1`,
+  had one complete failure after the manifest path was introduced:
+  `TestPGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint`.
+  Its old synthetic durable receiver intentionally returned an unbound receipt,
+  so its replay correctly reached the new missing-manifest refusal. The test
+  now supplies a closed, exact synthetic manifest and asserts that the native
+  stage persisted/restored it; its original receive → receipt → checkpoint →
+  acknowledgement ordering assertion remains exact.
+
+### Group 8 B37 green evidence (2026-08-21)
+
+- The durable receipt now carries a private, strict version-1 artifact manifest
+  from the App receiver through the native PostgreSQL stage, including its
+  transaction-stage content digest, connection, stream, generation, record
+  count, and raw-WAL/final-table SHA-256 identities.  The manifest itself is
+  atomically written under the connection-owned warehouse root and directory
+  synced before a receipt can permit source LSN progress.  Restart recovery
+  recreates the receipt only from the persisted private manifest, checks its
+  exact identity against the stage record and durable manifest file, and
+  re-digests both artifacts before restoration; a missing, corrupt, stale, or
+  mismatched artifact returns `ChangeCaptureArtifactReconciliationError`
+  before checkpoint/acknowledgement.
+- Focused happy/bad/restart proof passed:
+  `go test -timeout 20m ./internal/app ./internal/connectors/database ./internal/connectors/native/postgres -run 'Test(CDCRecovery_ReceiptBindsExactWarehouseArtifacts|CommittedTransactionStagePersistsPrivateArtifactManifestAcrossRestart|PGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint)' -count=1 -v`.
+  The exact App cases retain one receive/zero restore/zero LSN checkpoint for
+  every bad artifact and one receive/one restore/one checkpoint for untouched
+  artifacts.  The stage test proves the private manifest survives a reopen.
+- Strict private receipt decoding proof passed:
+  `go test -timeout 20m ./internal/connectors -run '^TestCDCArtifactManifestRestorationIsStrictAndBounded$' -count=1 -v`.
+  Missing, unknown-field, trailing-value, and over-8-KiB receipt manifests are
+  rejected rather than becoming a fallback receipt.
+- Completion-tracked final package gate passed from this source/test set:
+  `go test -timeout 20m ./internal/app ./internal/connectors ./internal/connectors/database ./internal/connectors/native/postgres -count=1`
+  (`internal/app` 253.135s; `connectors` 0.616s; `database` 8.177s;
+  `native/postgres` 2.473s).  It produced no failure set.  The first focused
+  package-probe compatibility failure remains dispositioned above; no broad
+  gate failed after its exact manifest fixture was added.
+- The final focused race gate passed with the full B37 contract:
+  `go test -race -timeout 20m ./internal/app ./internal/connectors ./internal/connectors/database ./internal/connectors/native/postgres -run 'Test(CDCRecovery_ReceiptBindsExactWarehouseArtifacts|CDCArtifactManifestRestorationIsStrictAndBounded|CommittedTransactionStagePersistsPrivateArtifactManifestAcrossRestart|PGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint)' -count=1 -v`
+  (`app` 40.937s; `connectors` 2.168s; `database` 1.715s;
+  `native/postgres` 3.338s), with no data race or failure.
 
 ## Group 7 red-contract plan (2026-08-21)
 
