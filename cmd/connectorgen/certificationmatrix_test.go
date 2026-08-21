@@ -456,6 +456,7 @@ func TestCertificationSanitizesPreparedValuesBeforeProofPersistence(t *testing.T
 
 func TestCertificationEvidenceWriterUsesRepositoryLocalSaltBeforePersistence(t *testing.T) {
 	root := t.TempDir()
+	subject := writeTestCurrentCertificationSubject(t, root, strings.Repeat("d", 64))
 	path := filepath.Join(root, "internal", "connectors", "certifications", "evidence", "github.json")
 	secret := "credential-only-in-memory"
 	completed := completedLiveEvidence{
@@ -486,6 +487,9 @@ func TestCertificationEvidenceWriterUsesRepositoryLocalSaltBeforePersistence(t *
 	}
 	if len(evidence.Proof.CredentialFingerprints) != 1 {
 		t.Fatalf("credential fingerprints = %#v, want one", evidence.Proof.CredentialFingerprints)
+	}
+	if !certificationSubjectsEqual(evidence.Proof.CertificationSubject, subject) {
+		t.Fatalf("writer subject = %#v, want exact current subject", evidence.Proof.CertificationSubject)
 	}
 	raw, err := os.ReadFile(path)
 	if err != nil {
@@ -1138,7 +1142,27 @@ func TestCertificationScopedSourceResolutionIgnoresUnrelatedRuntimeLedgerEntry(t
 }
 
 func TestCertificationCheckIgnoresMalformedNonAllowlistedRuntimeLedgerEntry(t *testing.T) {
+	sourceRoot := repoRootForCertificationTest(t)
+	sourcePostgresMatrix := filepath.Join(sourceRoot, "internal", "connectors", "defs", "postgres", "certification-matrix.json")
+	sourceBefore, err := os.ReadFile(sourcePostgresMatrix)
+	if err != nil {
+		t.Fatalf("read source PostgreSQL matrix before isolated generator: %v", err)
+	}
 	root := certificationCommandWorkspace(t)
+	writeTestCurrentCertificationSubject(t, root, strings.Repeat("a", 64))
+	bootstrap := exec.Command("go", "run", "./cmd/connectorgen", "certification-matrix", "--all")
+	bootstrap.Dir = root
+	bootstrap.Env = append(os.Environ(), "GOCACHE="+t.TempDir())
+	if output, err := bootstrap.CombinedOutput(); err != nil {
+		t.Fatalf("bootstrap certification-matrix --all: %v\n%s", err, output)
+	}
+	sourceAfter, err := os.ReadFile(sourcePostgresMatrix)
+	if err != nil {
+		t.Fatalf("read source PostgreSQL matrix after isolated generator: %v", err)
+	}
+	if !bytes.Equal(sourceBefore, sourceAfter) {
+		t.Fatal("isolated certification generator rewrote the source PostgreSQL matrix")
+	}
 	ledgerPath := filepath.Join(root, "internal", "connectors", "defs", engine.RuntimeOperationEndpointLedgerFile)
 	raw, err := os.ReadFile(ledgerPath)
 	if err != nil {
@@ -1243,9 +1267,6 @@ func copyCertificationCommandPath(t *testing.T, source, destination string) {
 
 func copyCertificationCommandFile(t *testing.T, source, destination string, mode os.FileMode) {
 	t.Helper()
-	if err := os.Link(source, destination); err == nil {
-		return
-	}
 	in, err := os.Open(source)
 	if err != nil {
 		t.Fatalf("open command workspace source %q: %v", source, err)

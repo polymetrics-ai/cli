@@ -11,8 +11,8 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 | 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | green; remote `2bddbf5387d323a0dbf074074cf43fa2d40b60b5` |
 | 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | green; remote `51ab7639e30bb2fb5585d853beba6a2550d84def` |
 | 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | green; remote `6084b1c1275b2dbe01fc49aba25785677fd8fd52` |
-| 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | local-green; B37 remote `636cc72e8d6aa2483a7fc7a94d216546008fcef1`; B34/B35 remote `dfefc52170057cdb435f9354b8c975da631845e7`; B38/W08 remote checkpoint pending |
-| 9 | B10-B11 | Evidence/certification metadata for another or stale SHA is accepted. | Exact final-SHA evidence, matrix, candidate, and certification checks. | pending |
+| 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | green; remote `0b061b0f3149ba9b050f6a7b7ec3cc2494c08f0c` |
+| 9 | B10-B11, B01 artifact closure | Evidence/certification metadata for another or stale implementation, subject, or generated surface is accepted. | Exact implementation/evidence graph, complete subject-component mutation set, and source/CLI/docs/website/skills/ledger/matrix/candidate/sweep closure checks. | red contract frozen |
 
 ## Group 8 execution plan (2026-08-21)
 
@@ -1064,3 +1064,81 @@ a raw body, method, path, or header channel.
 | `api repos update-release-asset` | `repos/update-release-asset` | `update_release_asset` | `PATCH /repos/{owner}/{repo}/releases/assets/{asset_id}` | false | fixture_required_mutations | asset_id I; label S32; name S32; state S32 |
 | `api repos update-webhook` | `repos/update-webhook` | `update_webhook` | `PATCH /repos/{owner}/{repo}/hooks/{hook_id}` | false | fixture_required_mutations | active B; add_events J1M+A256; config J1M+O256; events J1M+A256; hook_id I; remove_events J1M+A256 |
 | `api secret-scanning update-alert` | `secret-scanning/update-alert` | `update_secret_scanning_alert` | `PATCH /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}` | false | fixture_required_mutations | alert_number I; assignee S32; resolution E; resolution_comment S32; state E; validity E |
+
+## Group 9 execution plan (2026-08-21)
+
+- **GSD/manual fallback and skills:** this remains the single-owner inline GSD
+  lane recorded in `POSTFIX-EXECUTION.md`; no compatible isolated GSD worker is
+  available. `golang-how-to`, `golang-cli`, `golang-testing`,
+  `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, and
+  `golang-documentation` govern this evidence and generator boundary. The
+  exact clean remote base is
+  `0b061b0f3149ba9b050f6a7b7ec3cc2494c08f0c`.
+- **B10 red contract:** a production-shaped repository graph fixture must
+  reject independently mutated implementation SHA, diff-base SHA, each of
+  the five component head SHAs, and each preserving merge; it must also reject
+  a current-HEAD/self-reference claim. The reviewed SHA is checked only
+  against the review record and can never stand in for the implementation
+  identity. A valid evidence closure has a distinct evidence commit directly
+  above the verified implementation commit, so the evidence file never claims
+  to hash its own commit.
+- **B11 red contract:** `TestCertificationEvidenceBecomesStaleWhenSubjectChanges`
+  begins with a matching live proof, then independently changes the PM binary,
+  build identity, declarations digest, source/projection digest, CLI command
+  mapping digest, relevant configuration digest, and proof protocol. Each
+  mutation must move the record to historical/stale evidence and clear
+  `live_tested`; only an exact new subject can restore it.
+- **B01 final-closure red contract:** the closure records an exact digest for
+  every regenerated source, CLI, docs, website, skills, ledger, matrix,
+  candidate, sweep, and Foundation-evidence artifact. It rejects a duplicate
+  path, an omitted required category, a mutated byte, and a subject/implementation
+  mismatch. The final regeneration is deliberately one ordered producer pass
+  from the immutable implementation commit; `--check` proves no second pass
+  would change bytes.
+- **Frozen intended red command:**
+  `go test -timeout 20m ./cmd/connectorgen -run '^(TestFoundationEvidenceRejectsEveryStaleGraphIdentityAndArtifact|TestCertificationEvidenceBecomesStaleWhenSubjectChanges|TestCertificationSubjectFingerprintIncludesEveryComponent)$' -count=1 -v`.
+  The initial compilation failure is expected until the graph-aware evidence
+  validator, deterministic subject builder, and artifact-closure validator
+  exist. No production code or generated artifact is changed before that full
+  named set is present and observed.
+- **Full package red set (2026-08-21, 111.488s):** the first non-overlapping
+  `go test -timeout 20m ./cmd/connectorgen -count=1` exited 1 with exactly
+  `TestCertificationEvidencePostgresTransportPromotesOnlyCompletedModes`,
+  `TestCertificationEvidencePostgresChangeCapturePromotesOnlyReceiptBackedBinaryProof`,
+  `TestCertificationEvidenceReportImportsDefinitionBoundHTTPProofWithoutSecrets`,
+  `TestCertificationEvidenceReportUsesSecondConnectorDefinitionWithoutSharedBranch`,
+  `TestCertificationEvidenceWriterUsesRepositoryLocalSaltBeforePersistence`, and
+  `TestCertificationCheckIgnoresMalformedNonAllowlistedRuntimeLedgerEntry`.
+  Each disposable test root lacked
+  `internal/connectors/certifications/current-subject.json`; the new
+  declaration-owned producer/check gate correctly refused to publish or
+  project unbound evidence. The green correction must give only those
+  disposable fixtures a deterministic non-secret valid subject, and the
+  malformed-ledger test must regenerate its fixture output before proving its
+  unrelated-ledger assertion. Production remains fail-closed when the artifact
+  is absent or does not match its exact subject.
+- **Green after the complete disposition:** the named focused suite passed in
+  `83.753s`, and the one non-overlapping full rerun passed in `152.752s`:
+  `go test -timeout 20m ./cmd/connectorgen -count=1`. The corrected fixtures
+  assert the exact subject is embedded in successful evidence; they do not
+  change the absent/mismatched-subject production refusal.
+- **Atomic-subcommit green gate:** after adding the closure-subject and
+  trailing-manifest negatives, the focused suite passed in `80.972s` and the
+  final package pass completed in `146.597s`. `go vet ./cmd/connectorgen`,
+  `go build ./cmd/connectorgen`, `connectorgen validate internal/connectors/defs`
+  (552 connectors, zero findings), and `connectorgen surface-sync --check`
+  (552 scanned, zero changes) also passed. The certification-subject and
+  final artifact/evidence producers are intentionally deferred until both
+  incoming immutable component heads are ancestry-preservingly merged, so this
+  subcommit contains no generated final Foundation evidence.
+- **Isolation correction:** the new disposable command-workspace bootstrap
+  initially exposed that its older helper attempted `os.Link`, so a generator
+  write could mutate the source `postgres/certification-matrix.json`. The
+  exact source file was restored before any commit. The helper now always
+  byte-copies, and
+  `TestCertificationCheckIgnoresMalformedNonAllowlistedRuntimeLedgerEntry`
+  snapshots and proves the source matrix byte-identical around its bootstrap.
+  The focused red/green check passed in `80.027s`, then the final
+  package-wide `go test -timeout 20m ./cmd/connectorgen -count=1` passed in
+  `138.887s`; no generated matrix is retained by this pre-merge subcommit.

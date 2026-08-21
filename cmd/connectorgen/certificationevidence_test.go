@@ -18,6 +18,7 @@ import (
 
 func TestCertificationEvidencePostgresTransportPromotesOnlyCompletedModes(t *testing.T) {
 	root := t.TempDir()
+	subject := writeTestCurrentCertificationSubject(t, root, strings.Repeat("a", 64))
 	reportPath := filepath.Join(root, "postgres-report.json")
 	completed := postgresTransportEvidenceTestReport()
 	raw, err := json.Marshal(struct {
@@ -59,6 +60,9 @@ func TestCertificationEvidencePostgresTransportPromotesOnlyCompletedModes(t *tes
 		if item.Scope != evidenceScopeSyncMode || item.Connector != "postgres" ||
 			(item.Primitive != "database_read_into_warehouse" && item.Primitive != "database_write_from_warehouse") {
 			t.Fatalf("accepted PostgreSQL evidence = %#v, want exact sync-mode proof", item)
+		}
+		if !certificationSubjectsEqual(item.Proof.CertificationSubject, subject) {
+			t.Fatalf("accepted PostgreSQL evidence subject = %#v, want exact current subject", item.Proof.CertificationSubject)
 		}
 	}
 }
@@ -103,6 +107,7 @@ func TestCertificationEvidencePostgresTransportRejectsUnexecutedMode(t *testing.
 
 func TestCertificationEvidencePostgresChangeCapturePromotesOnlyReceiptBackedBinaryProof(t *testing.T) {
 	root := t.TempDir()
+	subject := writeTestCurrentCertificationSubject(t, root, strings.Repeat("a", 64))
 	reportPath := filepath.Join(root, "postgres-cdc-report.json")
 	raw, err := json.Marshal(postgresChangeCaptureEvidenceTestReport())
 	if err != nil {
@@ -138,6 +143,9 @@ func TestCertificationEvidencePostgresChangeCapturePromotesOnlyReceiptBackedBina
 	}
 	seenCapability, seenMode := false, false
 	for _, item := range items {
+		if !certificationSubjectsEqual(item.Proof.CertificationSubject, subject) {
+			t.Fatalf("accepted PostgreSQL CDC evidence subject = %#v, want exact current subject", item.Proof.CertificationSubject)
+		}
 		switch {
 		case item.Scope == evidenceScopeCapability && item.FunctionKind == "capability:cdc":
 			seenCapability = true
@@ -217,6 +225,10 @@ func TestCertificationEvidenceReportImportsDefinitionBoundHTTPProofWithoutSecret
 	}
 	if len(items) != 2 || items[0].Provider != "github_api" || len(items[0].Proof.HTTPExchanges) == 0 {
 		t.Fatalf("imported GitHub evidence = %#v", items)
+	}
+	current, err := loadCurrentCertificationSubject(root)
+	if err != nil || !certificationSubjectsEqual(items[0].Proof.CertificationSubject, current) {
+		t.Fatalf("imported GitHub subject = %#v current=%#v err=%v, want exact current subject", items[0].Proof.CertificationSubject, current, err)
 	}
 	if got, want := items[0].SchemaVersion, acceptedEvidenceSchemaVersion; got != want {
 		t.Fatalf("imported schema version = %d, want %d", got, want)
@@ -459,6 +471,7 @@ func writeImportedEvidenceProof(t *testing.T, root, connector, canary string) st
 
 func writeImportedEvidenceProofWithExchangeCount(t *testing.T, root, connector, canary string, exchangeCount int) string {
 	t.Helper()
+	writeTestCurrentCertificationSubject(t, root, strings.Repeat("a", 64))
 	body := []byte(`{"account":"` + canary + `"}`)
 	bundle, err := engine.Load(defs.FS, connector)
 	if err != nil {
@@ -488,6 +501,41 @@ func writeImportedEvidenceProofWithExchangeCount(t *testing.T, root, connector, 
 		t.Fatalf("write external proof: %v", err)
 	}
 	return path
+}
+
+// writeTestCurrentCertificationSubject supplies a deterministic non-secret
+// producer boundary for disposable test roots. Production can only create this
+// artifact from a built pm binary via certification-subject.
+func writeTestCurrentCertificationSubject(t *testing.T, root, pmBinarySHA256 string) certificationSubject {
+	t.Helper()
+	subject, err := newCertificationSubject(certificationSubjectComponents{
+		PMBinarySHA256:          pmBinarySHA256,
+		PMBuildSHA256:           strings.Repeat("b", 64),
+		DeclarationsSHA256:      strings.Repeat("c", 64),
+		SourceProjectionSHA256:  strings.Repeat("d", 64),
+		CLICommandMappingSHA256: strings.Repeat("e", 64),
+		RelevantConfigSHA256:    strings.Repeat("f", 64),
+		ProofProtocol:           certificationSubjectProofProtocol,
+	})
+	if err != nil {
+		t.Fatalf("newCertificationSubject() = %v", err)
+	}
+	payload, err := marshalGeneratedJSON(currentCertificationSubjectArtifact{
+		SchemaVersion:    certificationSubjectSchemaVersion,
+		GeneratedCommand: "go run ./cmd/connectorgen certification-subject --pm ./pm",
+		Subject:          subject,
+	})
+	if err != nil {
+		t.Fatalf("marshal current subject = %v", err)
+	}
+	path := filepath.Join(root, filepath.FromSlash(certificationSubjectArtifactPath))
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatalf("mkdir current subject = %v", err)
+	}
+	if err := os.WriteFile(path, payload, 0o600); err != nil {
+		t.Fatalf("write current subject = %v", err)
+	}
+	return subject
 }
 
 func isSanitizedJSONValueMust(t *testing.T, raw json.RawMessage) bool {

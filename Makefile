@@ -10,7 +10,7 @@ export GOTOOLCHAIN ?= auto
 # produces a pm that can read or write a warehouse table.
 export CGO_ENABLED ?= 1
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build pinned-build-dependencies-check release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-runtime-preflight connector-canon-check certify-timing github-parity-artifacts-check
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build pinned-build-dependencies-check release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connectorgen-certification-subject connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-runtime-preflight connector-canon-check certify-timing github-parity-artifacts-check
 
 # Packages covered by `lint` include declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not hard-fail
@@ -114,9 +114,14 @@ github-parity-artifacts-check:
 	node scripts/gen-github-graphql-parity.mjs --check
 	node scripts/github-combined-operation-ledger.mjs --check
 
+# Requires the built pm binary so certification cannot silently retain proof
+# from another executable/build/declaration subject.
+connectorgen-certification-subject: build
+	go run ./cmd/connectorgen certification-subject --pm ./pm --check
+
 # Fails when the allowlisted connector certification shards drift.
 # Regenerate one connector with `go run ./cmd/connectorgen certification-matrix --connector <name>`.
-connectorgen-certification-matrix:
+connectorgen-certification-matrix: connectorgen-certification-subject
 	go run ./cmd/connectorgen certification-matrix --check
 
 # Fails when direct-read candidates generated from the declared connector surface drift.
@@ -155,12 +160,12 @@ release-workflow-check: pinned-build-dependencies-check
 	./scripts/tests/release-production-layout.sh
 	./scripts/tests/release-installed-github-certification.sh
 
-verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check
+verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-subject connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check
 
 # Opt-in local gate that overlaps independent read/build checks after the
 # mutating fmt/tidy steps. CI keeps using serial `verify` for stable logs.
 verify-parallel: fmt tidy-check
-	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check
+	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-subject connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check
 	$(MAKE) -j$(VERIFY_JOBS) docs-check-no-build smoke-no-build
 
 perf-free: build

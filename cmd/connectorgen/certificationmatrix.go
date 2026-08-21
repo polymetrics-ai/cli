@@ -267,6 +267,10 @@ func runCertificationMatrix(args []string, stdout, stderr io.Writer) int {
 		logf(stderr, "connectorgen certification-matrix: resolve repository root: %v\n", err)
 		return 1
 	}
+	if _, err := loadCurrentCertificationSubject(absRoot); err != nil {
+		logf(stderr, "connectorgen certification-matrix: %v\n", err)
+		return 1
+	}
 	result, err := generateCertificationMatrix(absRoot, absRoot, check, all, connector)
 	if err != nil {
 		logf(stderr, "connectorgen certification-matrix: %v\n", err)
@@ -803,6 +807,7 @@ func buildCapabilityMatrixForConnectors(repoRoot string, names []string) (capabi
 	if err != nil {
 		return capabilityMatrix{}, err
 	}
+	evidence = currentCertificationEvidence(repoRoot, evidence)
 	sources, err := matrixConnectorSourcesForNames(bundles, names)
 	if err != nil {
 		return capabilityMatrix{}, err
@@ -1415,6 +1420,20 @@ func matchingCapabilityEvidence(evidence []acceptedEvidence, connectorName, kind
 		return matched[i].Record < matched[j].Record
 	})
 	return matched
+}
+
+func currentCertificationEvidence(repoRoot string, evidence []acceptedEvidence) []acceptedEvidence {
+	subject, err := loadCurrentCertificationSubject(repoRoot)
+	if err != nil {
+		// Only the production command may project a certification matrix. It
+		// requires a current subject before reaching this core, while direct
+		// in-memory callers keep their explicit evidence fixture semantics.
+		// This prevents test-only matrix construction from silently becoming a
+		// second production acceptance boundary.
+		return evidence
+	}
+	live, _ := classifyEvidenceForCertificationSubject(evidence, subject)
+	return live
 }
 
 func certificationComplete(cells []certificationCell) bool {
