@@ -461,9 +461,10 @@ func clampOperationBinaryDownloadMaxBytes(requested int64, operationMax int) int
 // content type.
 //
 // Every filesystem operation goes through os.Root, which refuses traversal and
-// escaping symlinks. The bytes land in a temp file inside the SAME root (so the
-// rename cannot cross a filesystem and stop being atomic), are fsync'd, and are
-// only then renamed into place.
+// escaping symlinks. The bytes land in an owned hidden temp file inside the
+// SAME root, are fsync'd, then publish with either a replacing rename (when
+// explicitly allowed) or an atomic hard-link claim (when no overwrite was
+// approved). The containing directory is synced after the name transition.
 func streamBinaryDownloadToRoot(body io.Reader, destRoot, fileName string, maxBytes int64, allowOverwrite bool, stall time.Duration, cancel context.CancelFunc) (int64, string, string, error) {
 	root, err := os.OpenRoot(destRoot)
 	if err != nil {
@@ -471,31 +472,18 @@ func streamBinaryDownloadToRoot(body io.Reader, destRoot, fileName string, maxBy
 	}
 	defer func() { _ = root.Close() }()
 
-	// Reserve the destination FIRST when overwriting is not permitted, so the
-	// collision check and the claim are one atomic operation rather than a
-	// stat-then-write race.
-	if !allowOverwrite {
-		reserve, err := root.OpenFile(fileName, os.O_CREATE|os.O_EXCL|os.O_WRONLY, binaryDownloadFileMode)
-		if err != nil {
-			return 0, "", "", fmt.Errorf("binary download destination %q: %w", fileName, err)
-		}
-		_ = reserve.Close()
-	}
-
-	tempName := fileName + ".part-" + strconv.FormatInt(time.Now().UnixNano(), 36)
+	// Do not reserve fileName while staging: a process death must leave the
+	// visible final name absent. A hidden temp is owned solely by this attempt;
+	// its eventual hard-link publication below atomically claims fileName only
+	// if no competing final exists.
+	tempName := "." + fileName + ".part-" + strconv.FormatInt(time.Now().UnixNano(), 36)
 	temp, err := root.OpenFile(tempName, os.O_CREATE|os.O_EXCL|os.O_WRONLY, binaryDownloadFileMode)
 	if err != nil {
-		if !allowOverwrite {
-			_ = root.Remove(fileName)
-		}
 		return 0, "", "", fmt.Errorf("binary download temp file: %w", err)
 	}
 	cleanup := func() {
 		_ = temp.Close()
 		_ = root.Remove(tempName)
-		if !allowOverwrite {
-			_ = root.Remove(fileName)
-		}
 	}
 
 	hash := sha256.New()
@@ -520,19 +508,38 @@ func streamBinaryDownloadToRoot(body io.Reader, destRoot, fileName string, maxBy
 	}
 	if err := temp.Close(); err != nil {
 		_ = root.Remove(tempName)
-		if !allowOverwrite {
-			_ = root.Remove(fileName)
-		}
 		return 0, "", "", fmt.Errorf("binary download close: %w", err)
 	}
-	if err := root.Rename(tempName, fileName); err != nil {
-		_ = root.Remove(tempName)
-		if !allowOverwrite {
-			_ = root.Remove(fileName)
+	if allowOverwrite {
+		if err := root.Rename(tempName, fileName); err != nil {
+			_ = root.Remove(tempName)
+			return 0, "", "", fmt.Errorf("binary download rename: %w", err)
 		}
-		return 0, "", "", fmt.Errorf("binary download rename: %w", err)
+	} else if err := root.Link(tempName, fileName); err != nil {
+		_ = root.Remove(tempName)
+		return 0, "", "", fmt.Errorf("binary download publish without overwrite: %w", err)
+	} else if err := root.Remove(tempName); err != nil {
+		// The final link is already published. Never remove it on a cleanup
+		// error: doing so could delete the just-created artifact or a foreign
+		// replacement. Report the owned-temp cleanup failure for recovery.
+		return 0, "", "", fmt.Errorf("binary download publish cleanup: %w", err)
+	}
+	if err := syncBinaryDownloadDirectory(root); err != nil {
+		// Publication is durable enough to be visible but its directory entry
+		// was not confirmed to stable storage. Preserve the artifact; callers
+		// can inspect it and a retry will safely collide rather than overwrite.
+		return 0, "", "", fmt.Errorf("binary download directory sync: %w", err)
 	}
 	return written, hex.EncodeToString(hash.Sum(nil)), http.DetectContentType(sniff.head), nil
+}
+
+func syncBinaryDownloadDirectory(root *os.Root) error {
+	directory, err := root.Open(".")
+	if err != nil {
+		return err
+	}
+	defer func() { _ = directory.Close() }()
+	return directory.Sync()
 }
 
 // sniffBuffer captures only the first 512 bytes, matching

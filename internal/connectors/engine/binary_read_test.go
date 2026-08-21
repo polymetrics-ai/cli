@@ -1,12 +1,17 @@
 package engine
 
 import (
+	"bufio"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -15,6 +20,50 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 )
+
+const binaryDownloadCrashHelperEnv = "PM_BINARY_DOWNLOAD_CRASH_HELPER"
+
+// publicationGateReader lets the test create a competing final name after
+// owned temporary bytes exist but before EOF allows the publication step.
+// That is the precise race a no-overwrite download must tolerate.
+type publicationGateReader struct {
+	payload []byte
+	started chan<- struct{}
+	release <-chan struct{}
+	wrote   bool
+}
+
+func (r *publicationGateReader) Read(p []byte) (int, error) {
+	if !r.wrote {
+		r.wrote = true
+		copy(p, r.payload)
+		close(r.started)
+		return len(r.payload), nil
+	}
+	<-r.release
+	return 0, io.EOF
+}
+
+type crashPublicationReader struct {
+	wrote     bool
+	announced bool
+}
+
+func (r *crashPublicationReader) Read(p []byte) (int, error) {
+	if !r.wrote {
+		r.wrote = true
+		copy(p, []byte("bytes staged before crash"))
+		return len("bytes staged before crash"), nil
+	}
+	if !r.announced {
+		r.announced = true
+		// io.Copy asks for this second read only after it has written the
+		// first payload into the owned temp, so readiness proves the crash is
+		// at the staged-but-unpublished state rather than before temp I/O.
+		fmt.Fprintln(os.Stdout, "binary-download-staged")
+	}
+	select {}
+}
 
 func binaryBundle(srv *httptest.Server, spec *BinaryOperationSpec) Bundle {
 	if spec.Method == "" {
@@ -215,6 +264,118 @@ func TestBinaryDownloadExactLimitSucceeds(t *testing.T) {
 
 	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil); err != nil {
 		t.Fatalf("exactly-at-limit must succeed: %v", err)
+	}
+}
+
+// TestBinaryDownloadNoOverwritePublicationIsCrashAndRaceSafe proves both
+// edges of the no-overwrite contract without relying on a timing accident: no
+// final name exists while a download is still staging (so process death cannot
+// leave a visible zero-byte claim), and a foreign final inserted before
+// publication remains byte/inode-identical after the owned temp is cleaned.
+func TestBinaryDownloadNoOverwritePublicationIsCrashAndRaceSafe(t *testing.T) {
+	if os.Getenv(binaryDownloadCrashHelperEnv) == "1" {
+		dest := os.Getenv("PM_BINARY_DOWNLOAD_CRASH_DEST")
+		if dest == "" {
+			t.Fatal("crash helper destination is empty")
+		}
+		_, _, _, err := streamBinaryDownloadToRoot(&crashPublicationReader{}, dest, "locked-export.csv", 1024, false, 0, nil)
+		t.Fatalf("crash helper returned before being killed: %v", err)
+	}
+
+	// A process killed while the owned temp is staged must leave no visible
+	// final name. This is a helper-process assertion rather than a simulated
+	// cleanup path, so defers cannot accidentally make the claim pass.
+	crashDest := t.TempDir()
+	crash := exec.Command(os.Args[0], "-test.run=^TestBinaryDownloadNoOverwritePublicationIsCrashAndRaceSafe$")
+	crash.Env = append(os.Environ(), binaryDownloadCrashHelperEnv+"=1", "PM_BINARY_DOWNLOAD_CRASH_DEST="+crashDest)
+	stdout, err := crash.StdoutPipe()
+	if err != nil {
+		t.Fatalf("crash helper stdout: %v", err)
+	}
+	if err := crash.Start(); err != nil {
+		t.Fatalf("start crash helper: %v", err)
+	}
+	ready := make(chan string, 1)
+	go func() {
+		line, _ := bufio.NewReader(stdout).ReadString('\n')
+		ready <- line
+	}()
+	select {
+	case line := <-ready:
+		if line != "binary-download-staged\n" {
+			_ = crash.Process.Kill()
+			_ = crash.Wait()
+			t.Fatalf("crash helper readiness = %q", line)
+		}
+	case <-time.After(5 * time.Second):
+		_ = crash.Process.Kill()
+		_ = crash.Wait()
+		t.Fatal("crash helper did not stage owned bytes")
+	}
+	if err := crash.Process.Kill(); err != nil {
+		t.Fatalf("kill crash helper: %v", err)
+	}
+	if err := crash.Wait(); err == nil {
+		t.Fatal("crash helper exited cleanly after kill")
+	}
+	if _, err := os.Stat(filepath.Join(crashDest, "locked-export.csv")); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("crash left visible final name: %v", err)
+	}
+
+	dest := t.TempDir()
+	const finalName = "locked-export.csv"
+	started := make(chan struct{})
+	release := make(chan struct{})
+	done := make(chan error, 1)
+	go func() {
+		_, _, _, err := streamBinaryDownloadToRoot(&publicationGateReader{
+			payload: []byte("owned export bytes"),
+			started: started,
+			release: release,
+		}, dest, finalName, 1024, false, 0, nil)
+		done <- err
+	}()
+
+	<-started
+	finalPath := filepath.Join(dest, finalName)
+	if _, err := os.Stat(finalPath); !errors.Is(err, os.ErrNotExist) {
+		close(release)
+		<-done
+		t.Fatalf("final name exists before publication: %v", err)
+	}
+
+	if err := os.WriteFile(finalPath, []byte("foreign sentinel"), 0o600); err != nil {
+		close(release)
+		<-done
+		t.Fatalf("create foreign sentinel: %v", err)
+	}
+	before, err := os.Stat(finalPath)
+	if err != nil {
+		close(release)
+		<-done
+		t.Fatalf("stat foreign sentinel: %v", err)
+	}
+	close(release)
+	if err := <-done; err == nil {
+		t.Fatal("no-overwrite publication succeeded over a foreign final file")
+	}
+	after, err := os.Stat(finalPath)
+	if err != nil {
+		t.Fatalf("foreign sentinel disappeared after failed publication: %v", err)
+	}
+	if !os.SameFile(before, after) {
+		t.Fatal("foreign sentinel inode changed during failed publication")
+	}
+	contents, err := os.ReadFile(finalPath)
+	if err != nil || string(contents) != "foreign sentinel" {
+		t.Fatalf("foreign sentinel contents = %q / %v, want unchanged", contents, err)
+	}
+	entries, err := os.ReadDir(dest)
+	if err != nil {
+		t.Fatalf("read destination: %v", err)
+	}
+	if len(entries) != 1 || entries[0].Name() != finalName {
+		t.Fatalf("destination entries = %#v, want only foreign final", entries)
 	}
 }
 

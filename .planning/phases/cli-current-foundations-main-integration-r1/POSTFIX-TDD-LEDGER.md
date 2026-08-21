@@ -7,8 +7,8 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 | 1 | B01, B02, B03, B09, B12, W01 | `TestGitHubParityGenerationOrderIsCommutative`; `TestSourceProjectionGapOperationsCannotMasqueradeAsImplemented`; `TestGoogleAdsGeneratedPOSTReadsAcceptDeclaredNestedObjects`; v2 projection digest mutation; deleted route/parameter and semantic update/delete surface-sync cases. | `go test -timeout 20m ./cmd/connectorgen`; Node parity-order and combined-ledger checks; `connectorgen validate`; `surface-sync --check`; all six affected source IDs have installed coverage. | green; remote `d3bf5da0e6a4575628dd76dd94a7522220f9d3df` |
 | 2 | B04-B08, W02 | `TestGraphQLOperationVariablesRequiresExactlyOnePaginationDirection`; `TestOperationDirectReadBackwardGraphQLPaginationUsesPreviousPageInfo`; `TestGraphQLIntUsesSigned32BitDomain`; `TestGeneratedGraphQLContractsClassifySecretInputsAndBoundedIdentitySelections`; `TestWebsiteFlagProjectionPreservesEverySafetyProperty`; `TestRenderCommandSurfaceCommandRendersSafetyConstraints`. | Focused generator, engine/schema, commandrunner preflight, website, guide/skills, generated GitHub artifacts, source-import, surface-sync, certification-candidate/sweep checks. | green; remote `0565f3fd6d152b38f2062aac5dd0df29170b6d4e` |
 | 3 | B13-B14, B17, B19, B24 | Classified secrets versus ordinary IDs/headers; error-bearing direct/native result; status receipt; SQS success/error receipt. | connsdk, engine, commandrunner, native SQS, App, and CLI receipt suites. | green; remote `58c86d18bd27e55f334cea37f263dd4cdf7540ee` |
-| 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | ready-to-commit |
-| 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | pending |
+| 4 | B15-B16, B18, B21, B23, B25, W03-W04 | Hook sealed bytes/compound receipt; retry/redirect/cancel receipt; >2^53 CLI value; hostile cursor; SQS redirect; idempotency header; minLength witness. | engine, commandrunner, connsdk, native SQS, CLI, and structured-body regressions. | green; remote `b0eb22feb7f413d15f747b3f78d62c6c46e314b9` |
+| 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | ready-to-commit |
 | 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | pending |
 | 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | pending |
 | 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | pending |
@@ -327,9 +327,58 @@ was verified, then moved recoverably to Trash. Neither was committed.
   `git diff --check` all passed. No generated artifact changed in this group.
 
 The B15 planner boundary and the frozen Group-4 package/generator gates are
-now closed. Group 4 is eligible for its one coherent atomic commit after the
-final worktree/diff review; no unrelated recovery, credential, or generated
-artifact is included.
+closed and committed in remote-verified Group-4 SHA
+`b0eb22feb7f413d15f747b3f78d62c6c46e314b9`; no recovery, credential, or
+generated artifact was included.
+
+## Group 5 red-contract plan (2026-08-21)
+
+- **B22:** a binary download with `allow_overwrite=false` must leave no final
+  name while its owned hidden temp is staging; a foreign final inserted before
+  publication must survive byte- and inode-identically, and all owned temp
+  entries must be removed after the link conflict. `TestBinaryDownloadNoOverwritePublicationIsCrashAndRaceSafe`
+  is production-shaped: its reader blocks after writing staged bytes, letting
+  the test observe the pre-publish directory and install the competing file.
+- **W05:** the multipart escaping-symlink refusal must wait for handler
+  completion before observing whether secret bytes reached the server. The
+  handler has a request-completion channel and the test disables retries so the
+  one observation has a single owner.
+
+### Group 5 observed red evidence
+
+- **B22:** before the state-machine correction,
+  `TestBinaryDownloadNoOverwritePublicationIsCrashAndRaceSafe` failed at
+  `final name exists before publication: <nil>`. The old `O_EXCL` reservation
+  exposed a zero-byte final while the reader was blocked, so a crash could
+  leave it and a later rename/cleanup could overwrite/delete a foreign file.
+- **W05:** `go test -race -timeout 20m ./internal/connectors/connsdk -run
+  '^TestRequesterDoMultipartRefusesEscapingSymlinkSwappedAfterValidation$'
+  -count=1` reported a concrete data race between the test's read of
+  `sawFile` and `uploadEcho`'s handler write. That result is retained as the
+  red proof; the test was not treated as a reliable security assertion.
+
+### Group 5 green evidence to date
+
+- B22 now stages only an owned hidden temp, `Sync`s that file, uses
+  `os.Root.Link` as the atomic no-replace final-name claim, removes only the
+  owned temp, and syncs the containing `os.Root` directory. The focused test
+  kills a helper process only after its first temp bytes are staged and proves
+  no final name remains; its in-process race half preserves the pre-publish
+  foreign sentinel byte-for-byte/on the same inode and removes the owned temp.
+- W05's focused symlink test passes under `-race` after waiting on the handler
+  completion channel before reading the observation.
+
+### Group 5 atomic closure gates (2026-08-21)
+
+- `go test -timeout 20m ./internal/connectors/engine -count=1` passed
+  (`10.716s`); `go test -timeout 20m ./internal/connectors/connsdk -count=1`
+  passed (`5.656s`).
+- Race gates passed: the binary crash/no-replace test (`2.208s`) and the
+  multipart escaping-symlink refusal repeated twenty times (`1.398s`) under
+  `-race`.
+- `go vet ./internal/connectors/engine ./internal/connectors/connsdk`,
+  `go build ./cmd/pm`, and `git diff --check` passed. This group changes no
+  generated declaration or CLI/manual surface.
 
 ## Group 1 frozen GitHub mutation delta crosswalk
 
