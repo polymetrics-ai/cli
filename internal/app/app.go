@@ -689,12 +689,19 @@ func terminalETLRunFromState(loaded state, runID string) (Run, error) {
 		if run.ID != runID {
 			continue
 		}
-		if (run.Status != "completed" && run.Status != "failed") || run.CompletedAt.IsZero() {
+		if !IsTerminalETLRunStatus(run.Status) || run.CompletedAt.IsZero() {
 			return Run{}, fmt.Errorf("durable ETL run %q is not terminal", runID)
 		}
 		return run, nil
 	}
 	return Run{}, fmt.Errorf("durable ETL run %q was not found", runID)
+}
+
+// IsTerminalETLRunStatus reports statuses that are durably presentable to
+// callers. A reconciliation-required run is terminal delivery evidence, not a
+// runnable work item: it can only be repaired from its stored receipt.
+func IsTerminalETLRunStatus(status string) bool {
+	return status == "completed" || status == "failed" || status == ETLRunStatusDeliveredReconciliationRequired
 }
 
 func terminalReverseRunFromState(loaded state, planID, runID string) (ReverseRun, error) {
@@ -1408,6 +1415,9 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if !ok {
 		return Run{}, fmt.Errorf("stream %q not configured on connection %q", req.Stream, req.Connection)
 	}
+	if delivered, pending := a.deliveredReconciliationFor(req.Connection, req.Stream); pending {
+		return a.reconcileDeliveredTransportRun(ctx, delivered)
+	}
 	if a.connectionMaterializesLocalWarehouse(conn) {
 		if err := a.validateConfiguredLocalWarehouseDestinationTables(); err != nil {
 			return Run{}, err
@@ -1686,6 +1696,12 @@ func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResu
 	acknowledged, present := a.state.StreamStates[result.PendingStreamState.Key]
 	if !present {
 		return a.failRunWithResult(runID, result, runErr)
+	}
+	if result.DeliveryReconciliation != nil {
+		return a.persistDeliveredReconciliationRun(runID, result, runErr, &acknowledgedTransportCompletion{
+			key:   result.PendingStreamState.Key,
+			state: cloneStreamState(acknowledged),
+		})
 	}
 	return a.failRunWithAcknowledgedTransportState(runID, result, runErr, &acknowledgedTransportCompletion{
 		key:   result.PendingStreamState.Key,

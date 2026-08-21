@@ -30,6 +30,7 @@ type etlExecutionResult struct {
 	Checkpoint                map[string]string
 	TransportPhaseMeasurement *TransportPhaseMeasurement
 	DestinationResults        []json.RawMessage
+	DeliveryReconciliation    *DeliveryReconciliation
 	PendingStreamState        *pendingStreamState
 }
 
@@ -49,6 +50,14 @@ func cloneTransportPhaseMeasurement(measurement *TransportPhaseMeasurement) *Tra
 		return nil
 	}
 	clone := *measurement
+	return &clone
+}
+
+func cloneDeliveryReconciliation(reconciliation *DeliveryReconciliation) *DeliveryReconciliation {
+	if reconciliation == nil {
+		return nil
+	}
+	clone := *reconciliation
 	return &clone
 }
 

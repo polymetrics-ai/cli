@@ -111,6 +111,20 @@ type DestinationSourceIneligibleError struct {
 	Stream         string
 }
 
+// DestinationExecutorUnregisteredError is a declaration-owned preflight
+// refusal. It lets App preserve the exact closed-route failure instead of
+// treating an incomplete declared destination as an absent legacy route.
+type DestinationExecutorUnregisteredError struct {
+	Executor connectors.TransportExecutorReference
+}
+
+func (e *DestinationExecutorUnregisteredError) Error() string {
+	if e == nil {
+		return "declared destination transport executor is not registered"
+	}
+	return fmt.Sprintf("destination transport executor %q is not registered", e.Executor.ID)
+}
+
 func (e *DestinationSourceIneligibleError) Error() string {
 	if e == nil {
 		return "destination transport does not admit source"
@@ -194,7 +208,7 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 		return ResolvedTransport{}, fmt.Errorf("source transport executor %q is not registered", sourceDescriptor.Executor.ID)
 	}
 	if !destinationRegistered || isNilInterface(destination) {
-		return ResolvedTransport{}, fmt.Errorf("destination transport executor %q is not registered", destinationDescriptor.Executor.ID)
+		return ResolvedTransport{}, &DestinationExecutorUnregisteredError{Executor: destinationDescriptor.Executor}
 	}
 	if source.TransportExecutorReference() != sourceDescriptor.Executor {
 		return ResolvedTransport{}, fmt.Errorf("registered source transport executor does not match source descriptor")

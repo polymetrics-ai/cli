@@ -667,7 +667,7 @@ func catalogStatusMessage(status *connectors.DiscoveryStatus) string {
 // returns Run{}. The accompanying operational error controls the categorized
 // nonzero exit, never whether a durable terminal envelope is emitted.
 func shouldPresentETLTerminalRun(run app.Run) bool {
-	if run.ID == "" || (run.Status != "completed" && run.Status != "failed") || run.CompletedAt.IsZero() {
+	if run.ID == "" || !app.IsTerminalETLRunStatus(run.Status) || run.CompletedAt.IsZero() {
 		return false
 	}
 	return true

@@ -90,7 +90,7 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 func transportWorkOwnerTerminal(runs []Run, workID string) bool {
 	for _, run := range runs {
 		if run.ID == workID {
-			return run.Status == "failed" || run.Status == "completed"
+			return IsTerminalETLRunStatus(run.Status)
 		}
 	}
 	return false

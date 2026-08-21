@@ -298,20 +298,23 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			}); err != nil {
 				return err
 			}
+			committed := candidate.Clone()
+			committedAt := acknowledgement.AcknowledgedAt
+			committed.CommittedAt = &committedAt
+			result.CommittedCheckpoint = &committed
+			// The page was fully delivered and checkpointed before retirement.
+			// Preserve that fact even when local cleanup needs reconciliation.
+			result.Pages++
 			if err := retireCommittedReceipts(ctx, request, pendingReceipts); err != nil {
-				return err
+				result.DeliveredReconciliationRequired = true
+				return NewDeliveredReconciliationRequiredError(err)
 			}
 			pendingReceipts = pendingReceipts[:0]
 			deferredCandidate = nil
 		}
 
-		committed := candidate.Clone()
-		committedAt := acknowledgement.AcknowledgedAt
-		committed.CommittedAt = &committedAt
-		result.Pages++
-		if !page.DeferCheckpoint {
-			result.CommittedCheckpoint = &committed
-		} else {
+		if page.DeferCheckpoint {
+			result.Pages++
 			deferred := candidate.Clone()
 			deferredCandidate = &deferred
 			deferredAcknowledgement = acknowledgement
@@ -350,14 +353,15 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			}); err != nil {
 				return result, err
 			}
-			if err := retireCommittedReceipts(ctx, request, pendingReceipts); err != nil {
-				return result, err
-			}
-			pendingReceipts = pendingReceipts[:0]
 			committed := candidate.Clone()
 			committedAt := deferredAcknowledgement.AcknowledgedAt
 			committed.CommittedAt = &committedAt
 			result.CommittedCheckpoint = &committed
+			if err := retireCommittedReceipts(ctx, request, pendingReceipts); err != nil {
+				result.DeliveredReconciliationRequired = true
+				return result, NewDeliveredReconciliationRequiredError(err)
+			}
+			pendingReceipts = pendingReceipts[:0]
 		}
 		if !sourceOutcome.Exhausted {
 			if result.CommittedCheckpoint == nil {
@@ -565,13 +569,14 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 	}); err != nil {
 		return result, err
 	}
-	if err := retireCommittedReceipts(ctx, request, receipts); err != nil {
-		return result, err
-	}
 	committed := lastCandidate.Clone()
 	committedAt := acknowledgement.AcknowledgedAt
 	committed.CommittedAt = &committedAt
 	result.CommittedCheckpoint = &committed
+	if err := retireCommittedReceipts(ctx, request, receipts); err != nil {
+		result.DeliveredReconciliationRequired = true
+		return result, NewDeliveredReconciliationRequiredError(err)
+	}
 	return result, nil
 }
 

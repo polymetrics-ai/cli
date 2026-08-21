@@ -154,6 +154,16 @@ influence this output. The regular persisted reverse-ETL run uses the same
 same provider response facts. Its declared `output_policy` may select a parsing
 form, but it does not suppress a successful ordinary provider response.
 
+When the provider effect, read-back, and checkpoint are durable but bounded
+receipt retirement or a declaration-owned approval marker cannot be finalized,
+the App persists terminal run status `delivered_reconciliation_required` with
+`delivery_reconciliation`. The record retains its exact checkpoint and
+`destination_results`; the nonzero CLI result still presents that exact
+`ETLRun`. A repeated saved connection/stream invocation repairs only the named
+local stage or plan marker before endpoint resolution. It never replays a
+source read, destination action, or arbitrary route. Missing, corrupt, or
+conflicting reconciliation evidence remains a typed terminal refusal.
+
 At plan time the adapter verifies the declared mode, persisted selected action,
 and source binding, then requires the existing reverse-ETL plan, preview,
 approval and per-unit authorization. At apply time it accepts only a reopened

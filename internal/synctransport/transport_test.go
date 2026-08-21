@@ -1481,6 +1481,83 @@ func TestOrchestratorRetiresOwnedStageOnlyAfterCheckpointCommit(t *testing.T) {
 	}
 }
 
+// TestTransport_PostCheckpointBookkeepingFailureRemainsDelivered is the
+// transport-core half of the delivered-reconciliation contract.  The provider
+// effect, read-back, and checkpoint have all completed before Retire is
+// attempted, so a retiring-stage failure must retain that completed evidence
+// rather than turning the request into a replayable failed delivery.
+func TestTransport_PostCheckpointBookkeepingFailureRemainsDelivered(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	retireErr := errors.New("transient receipt retirement failure")
+	stage := &failingRetiringTestWarehouseStage{retireErr: retireErr}
+	commits := 0
+
+	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		ConnectionID: "test-connection-owner",
+		Generation:   1,
+		Source:       pair.source,
+		Destination:  pair.destination,
+		Stream:       "records",
+		Mode:         synccontract.ModeFullAppend,
+		BatchSize:    10,
+		Stage:        stage,
+		Commit: func(synccontract.CheckpointEnvelope) error {
+			commits++
+			return nil
+		},
+	})
+
+	var reconciliation *DeliveredReconciliationRequiredError
+	if !errors.As(err, &reconciliation) || !errors.Is(err, retireErr) {
+		t.Fatalf("Run() error = %T %v, want delivered reconciliation wrapping %v", err, err, retireErr)
+	}
+	if !result.DeliveredReconciliationRequired || result.CommittedCheckpoint == nil || result.Pages != 1 || result.RecordsApplied != 1 {
+		t.Fatalf("Run() result = %#v, want durable checkpoint plus reconciliation-required outcome", result)
+	}
+	if commits != 1 || pair.destinationExecutor.applyCalls != 1 || pair.destinationExecutor.readBackCalls != 1 || stage.retireCalls != 1 {
+		t.Fatalf("post-checkpoint effects commit/apply/read-back/retire = %d/%d/%d/%d, want 1/1/1/1", commits, pair.destinationExecutor.applyCalls, pair.destinationExecutor.readBackCalls, stage.retireCalls)
+	}
+}
+
+// TestTransport_DeferredCheckpointRetirementFailureRemainsDelivered covers
+// the bootstrap/deferred branch: both bounded pages may have been applied,
+// but only the final acknowledged checkpoint permits receipt retirement.
+func TestTransport_DeferredCheckpointRetirementFailureRemainsDelivered(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	first := testCheckpoint(pair.source.Name())
+	second := testCheckpoint(pair.source.Name())
+	second.Position.Primary = synccontract.OpaqueToken("second")
+	second.Dedupe.Value = synccontract.OpaqueToken("second")
+	second.DedupeWindow.End = synccontract.OpaqueToken("second")
+	pair.sourceExecutor.pages = []SourcePage{
+		{Records: []connectors.Record{{"id": "1"}}, CandidateCheckpoint: first, DeferCheckpoint: true},
+		{Records: []connectors.Record{{"id": "2"}}, CandidateCheckpoint: second},
+	}
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	retireErr := errors.New("deferred receipt retirement failure")
+	stage := &failingRetiringTestWarehouseStage{retireErr: retireErr}
+	commits := 0
+
+	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		ConnectionID: "test-connection-owner", Generation: 1,
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
+		BatchSize: 10, Stage: stage, Commit: func(synccontract.CheckpointEnvelope) error { commits++; return nil },
+	})
+	var reconciliation *DeliveredReconciliationRequiredError
+	if !errors.As(err, &reconciliation) || !errors.Is(err, retireErr) {
+		t.Fatalf("Run() error = %T %v, want deferred delivered reconciliation wrapping %v", err, err, retireErr)
+	}
+	if !result.DeliveredReconciliationRequired || result.CommittedCheckpoint == nil || string(result.CommittedCheckpoint.Position.Primary) != "second" || result.Pages != 2 || result.RecordsApplied != 2 {
+		t.Fatalf("Run() result = %#v, want both delivered pages and final durable checkpoint", result)
+	}
+	if commits != 1 || pair.destinationExecutor.applyCalls != 2 || pair.destinationExecutor.readBackCalls != 2 || stage.retireCalls != 1 {
+		t.Fatalf("deferred post-checkpoint effects commit/apply/read-back/retire = %d/%d/%d/%d, want 1/2/2/1", commits, pair.destinationExecutor.applyCalls, pair.destinationExecutor.readBackCalls, stage.retireCalls)
+	}
+}
+
 func TestOrchestratorAdmitsEmptyResultOnlyFromExplicitSourceMarker(t *testing.T) {
 	for _, testCase := range []struct {
 		name    string
@@ -2339,6 +2416,17 @@ type retiringTestWarehouseStage struct {
 func (s *retiringTestWarehouseStage) Retire(_ context.Context, receipt WarehouseReceipt) error {
 	s.retired = append(s.retired, receipt)
 	return nil
+}
+
+type failingRetiringTestWarehouseStage struct {
+	testWarehouseStage
+	retireCalls int
+	retireErr   error
+}
+
+func (s *failingRetiringTestWarehouseStage) Retire(_ context.Context, _ WarehouseReceipt) error {
+	s.retireCalls++
+	return s.retireErr
 }
 
 func (s *testWarehouseStage) Stage(_ context.Context, request WarehouseStageRequest) (WarehouseReceipt, error) {

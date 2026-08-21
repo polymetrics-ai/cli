@@ -20,6 +20,7 @@ func TestETLTerminalPresentationRequiresDurableUncertainCommit(t *testing.T) {
 		{name: "clean terminal success", run: terminal, want: true},
 		{name: "durably persisted source failure", run: terminal, err: errors.New("source is unavailable"), want: true},
 		{name: "durably persisted provider failure", run: terminal, err: errors.New("provider rejected credential"), want: true},
+		{name: "durably persisted delivered reconciliation", run: app.Run{ID: "run_delivered_reconciliation", Status: app.ETLRunStatusDeliveredReconciliationRequired, CompletedAt: time.Now().UTC()}, err: errors.New("local receipt retirement requires repair"), want: true},
 		{name: "committed unlock uncertainty", run: terminal, err: &state.CommitOutcomeError{Outcome: state.CommitOutcomeCommitted, Err: errors.New("unlock state")}, want: true},
 		{name: "indeterminate directory uncertainty", run: terminal, err: &state.CommitOutcomeError{Outcome: state.CommitOutcomeIndeterminate, Err: errors.New("sync directory")}, want: true},
 		{name: "definite no-commit has zero run", err: &state.CommitOutcomeError{Outcome: state.CommitOutcomeNotCommitted, Err: errors.New("lock state")}, want: false},

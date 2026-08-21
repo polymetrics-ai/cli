@@ -3106,6 +3106,308 @@ func TestETLRouteSelection_PropagatesDeclaredRoutePreflightErrors(t *testing.T) 
 	TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t)
 }
 
+// TestETLRouteSelection_DeclarativeSourcePreservesDeclaredDestinationPreflightError
+// prevents route selection from relabeling a declared but unregistered
+// destination as an absent route. The typed registry refusal is the contract;
+// treating it as an ordinary ETL fallback would make a declared operation
+// unreachable and hide its exact failure before I/O.
+func TestETLRouteSelection_DeclarativeSourcePreservesDeclaredDestinationPreflightError(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	sourceEvidence := connectors.ConformanceEvidenceReference{Suite: "declared-route", RunID: "source"}
+	destinationEvidence := connectors.ConformanceEvidenceReference{Suite: "declared-route", RunID: "destination"}
+	destinationRef := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyDeclarativeAPI, ID: "unregistered_declared_destination"}
+	source := &appTransportConnector{
+		meta:              connectors.Metadata{Name: "declared_source", IntegrationType: "api", Capabilities: connectors.Capabilities{Read: true}},
+		definitionStreams: []connectors.StreamSummary{{Name: "records"}},
+		descriptor: &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{
+			Executor: declarativeStreamSourceReference, EligibleStreams: []string{"records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend},
+			Delivery: appTransportDelivery(), Conformance: sourceEvidence,
+		}},
+	}
+	destination := &appTransportConnector{
+		meta: connectors.Metadata{Name: "declared_destination", IntegrationType: "api", Capabilities: connectors.Capabilities{Write: true}},
+		descriptor: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
+			Executor: destinationRef, EligibleActions: []string{"apply_records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend},
+			Delivery: appTransportDelivery(), Conformance: destinationEvidence, Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
+			ApplyStrategies: []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_records"}},
+		}},
+	}
+	sourceExecutor := &appTransportSourceExecutor{reference: declarativeStreamSourceReference}
+	a.transports = synctransport.NewRegistry(appTransportVerifier{})
+	if err := a.transports.RegisterSource(sourceExecutor); err != nil {
+		t.Fatal(err)
+	}
+
+	selected, reason, err := a.selectTransportRoute(Connection{Streams: map[string]StreamConfig{"records": {DestinationAction: "apply_records"}}}, "records", SyncMode{ContractMode: synccontract.ModeFullAppend}, source, destination)
+	var unregistered *synctransport.DestinationExecutorUnregisteredError
+	if selected || reason != transportRouteDeclared || !errors.As(err, &unregistered) || unregistered.Executor != destinationRef {
+		t.Fatalf("selectTransportRoute() = selected=%t reason=%q err=%v, want declared typed missing-destination preflight error", selected, reason, err)
+	}
+	if sourceExecutor.readCalls != 0 || source.legacyReadCalls != 0 || destination.legacyWriteCalls != 0 {
+		t.Fatalf("declared route preflight source/legacy reads/writes = %d/%d/%d, want zero before I/O", sourceExecutor.readCalls, source.legacyReadCalls, destination.legacyWriteCalls)
+	}
+}
+
+func TestETLRouteSelection_DeclarativeSourceRejectsUnmarkedResolvedDestination(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	sourceEvidence := connectors.ConformanceEvidenceReference{Suite: "declared-route", RunID: "source"}
+	destinationEvidence := connectors.ConformanceEvidenceReference{Suite: "declared-route", RunID: "destination"}
+	destinationRef := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyDeclarativeAPI, ID: "unmarked_declared_destination"}
+	source := &appTransportConnector{
+		meta:              connectors.Metadata{Name: "declared_marker_source", IntegrationType: "api", Capabilities: connectors.Capabilities{Read: true}},
+		definitionStreams: []connectors.StreamSummary{{Name: "records"}},
+		descriptor: &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{
+			Executor: declarativeStreamSourceReference, EligibleStreams: []string{"records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend}, Delivery: appTransportDelivery(), Conformance: sourceEvidence,
+		}},
+	}
+	destination := &appTransportConnector{
+		meta: connectors.Metadata{Name: "declared_marker_destination", IntegrationType: "api", Capabilities: connectors.Capabilities{Write: true}},
+		descriptor: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
+			Executor: destinationRef, EligibleActions: []string{"apply_records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend}, Delivery: appTransportDelivery(), Conformance: destinationEvidence,
+			Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse, ApplyStrategies: []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_records"}},
+		}},
+	}
+	verifier := appTransportVerifier{accepted: map[appTransportConformanceKey]struct{}{
+		{role: connectors.TransportRoleSource, reference: declarativeStreamSourceReference, evidence: sourceEvidence}: {},
+		{role: connectors.TransportRoleDestination, reference: destinationRef, evidence: destinationEvidence}:                {},
+	}}
+	a.transports = synctransport.NewRegistry(verifier)
+	sourceExecutor := &appTransportSourceExecutor{reference: declarativeStreamSourceReference}
+	destinationExecutor := &appTransportDestinationExecutor{reference: destinationRef, sink: destination.Name()}
+	if err := a.transports.RegisterSource(sourceExecutor); err != nil {
+		t.Fatal(err)
+	}
+	if err := a.transports.RegisterDestination(destinationExecutor); err != nil {
+		t.Fatal(err)
+	}
+
+	selected, reason, err := a.selectTransportRoute(Connection{Streams: map[string]StreamConfig{"records": {DestinationAction: "apply_records"}}}, "records", SyncMode{ContractMode: synccontract.ModeFullAppend}, source, destination)
+	var route *synctransport.DeclaredDestinationRouteError
+	if selected || reason != transportRouteDeclared || !errors.As(err, &route) || route.Executor != destinationRef {
+		t.Fatalf("selectTransportRoute() = selected=%t reason=%q err=%v, want typed unmarked declared-route refusal", selected, reason, err)
+	}
+	if sourceExecutor.readCalls != 0 || destinationExecutor.applyCalls != 0 || destinationExecutor.readBackCalls != 0 {
+		t.Fatalf("unmarked declared route source/apply/read-back = %d/%d/%d, want zero before I/O", sourceExecutor.readCalls, destinationExecutor.applyCalls, destinationExecutor.readBackCalls)
+	}
+}
+
+// TestETLRouteSelection_DeclarativeSourceKeepsBoundedLocalWarehouseLegacyModes
+// protects the established declaration-owned local warehouse representation.
+// Only its two dedupe modes use the closed transport executor; its remaining
+// executable modes stay on the bounded ordinary warehouse route.  They must
+// not be mistaken for an unmarked destination or forced through a source mode
+// the transport declaration did not select.
+func TestETLRouteSelection_DeclarativeSourceKeepsBoundedLocalWarehouseLegacyModes(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source, ok := a.registry.Get("github")
+	if !ok || !isDeclarativeStreamTransportConnector(source) {
+		t.Fatal("GitHub declaration-owned stream source is unavailable")
+	}
+	destination, ok := a.registry.Get("warehouse")
+	if !ok || !isLocalWarehouseDestination(destination) {
+		t.Fatal("closed local warehouse destination representation is unavailable")
+	}
+	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
+	if !ok || !materializer.MaterializesLocalWarehouse() {
+		t.Fatal("closed local warehouse destination is not a materializer")
+	}
+
+	for _, mode := range []synccontract.Mode{
+		synccontract.ModeFullAppend,
+		synccontract.ModeFullOverwrite,
+		synccontract.ModeIncrementalAppend,
+	} {
+		t.Run(string(mode), func(t *testing.T) {
+			selected, reason, err := a.selectTransportRoute(
+				Connection{Streams: map[string]StreamConfig{"pull_requests": {}}},
+				"pull_requests",
+				SyncMode{ContractMode: mode},
+				source,
+				destination,
+			)
+			if selected || reason != transportRouteDeclarationAbsent || err != nil {
+				t.Fatalf("selectTransportRoute(%q) = selected=%t reason=%q err=%v, want bounded ordinary local-warehouse route", mode, selected, reason, err)
+			}
+		})
+	}
+}
+
+// TestRunETLTransportPostCheckpointBookkeepingPersistsDeliveredReconciliationAndRepairsWithoutReplay
+// proves the App boundary preserves the durable checkpoint and provider
+// receipt when only local stage retirement fails. A restart repairs from the
+// recorded state and must not invoke the source or destination again.
+func TestRunETLTransportPostCheckpointBookkeepingPersistsDeliveredReconciliationAndRepairsWithoutReplay(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+	stage := &deliveredReconciliationAppTransportStage{retireErr: errors.New("transient retirement failure")}
+	fixture.app.transportStage = stage
+	fixture.destinationExecutor.output = json.RawMessage(`{"occurrence_id":"provider-occurred-once"}`)
+
+	first, err := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	var reconciliation *synctransport.DeliveredReconciliationRequiredError
+	if !errors.As(err, &reconciliation) {
+		t.Fatalf("first RunETL() error = %T %v, want delivered reconciliation", err, err)
+	}
+	if first.Status != ETLRunStatusDeliveredReconciliationRequired || first.DeliveryReconciliation == nil || !first.DeliveryReconciliation.StageRetirement {
+		t.Fatalf("first RunETL() = %#v, want persisted delivered-reconciliation terminal run", first)
+	}
+	if len(first.DestinationResults) != 1 || string(first.DestinationResults[0]) != `{"occurrence_id":"provider-occurred-once"}` {
+		t.Fatalf("first provider results = %s, want exact retained receipt", first.DestinationResults)
+	}
+	if stage.retireCalls != 1 || fixture.sourceExecutor.readCalls != 1 || fixture.destinationExecutor.applyCalls != 1 || fixture.destinationExecutor.readBackCalls != 1 {
+		t.Fatalf("first effects retire/source/apply/read-back = %d/%d/%d/%d, want 1/1/1/1", stage.retireCalls, fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls, fixture.destinationExecutor.readBackCalls)
+	}
+
+	reopened, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fixture.configureRuntime(t, reopened, fixture.sourceExecutor, fixture.destinationExecutor)
+	reopened.transportStage = stage
+	repaired, err := reopened.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	if err != nil {
+		t.Fatalf("restart RunETL() = %v, want reconciliation repair", err)
+	}
+	if repaired.ID != first.ID || repaired.Status != "completed" || repaired.DeliveryReconciliation != nil {
+		t.Fatalf("repaired RunETL() = %#v, want original completed run with reconciliation cleared", repaired)
+	}
+	if stage.reconciliations < 2 || fixture.sourceExecutor.readCalls != 1 || fixture.destinationExecutor.applyCalls != 1 || fixture.destinationExecutor.readBackCalls != 1 {
+		t.Fatalf("restart reconciliation/source/apply/read-back = %d/%d/%d/%d, want repair with no replay", stage.reconciliations, fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls, fixture.destinationExecutor.readBackCalls)
+	}
+}
+
+// TestDeliveredReconciliationApprovalMarkersRepairOrFailClosedWithoutReplay
+// covers the two declaration-owned post-checkpoint marker stores. The
+// persisted run is built with the same acknowledged stream state and provider
+// receipt the transport path returns after an effect. Recovery may mark the
+// exact plan, but it never re-enters source or destination I/O; an unknown
+// marker remains durably reconciliation-required instead of being downgraded
+// into an ordinary ETL fallback.
+func TestDeliveredReconciliationApprovalMarkersRepairOrFailClosedWithoutReplay(t *testing.T) {
+	for _, testCase := range []struct {
+		name       string
+		plan       *ReversePlan
+		reconcile  func(string) *DeliveryReconciliation
+		wantRepair bool
+	}{
+		{
+			name: "managed target marker",
+			plan: &ReversePlan{ID: "rplan_managed_marker", Mode: reversePlanModePostgresManagedTarget, Status: reversePlanStatusApprovalConsumptionUncertain},
+			reconcile: func(planID string) *DeliveryReconciliation {
+				return &DeliveryReconciliation{State: ETLRunStatusDeliveredReconciliationRequired, PostgresManagedTargetPlanID: planID}
+			},
+			wantRepair: true,
+		},
+		{
+			name: "declarative typed destination marker",
+			plan: &ReversePlan{ID: "rplan_declarative_marker", Mode: reversePlanModeDeclarativeTypedDestinationTransport, Status: reversePlanStatusApprovalConsumptionUncertain},
+			reconcile: func(planID string) *DeliveryReconciliation {
+				return &DeliveryReconciliation{State: ETLRunStatusDeliveredReconciliationRequired, DeclarativeTypedDestinationPlanID: planID}
+			},
+			wantRepair: true,
+		},
+		{
+			name: "unknown marker stays terminal",
+			reconcile: func(string) *DeliveryReconciliation {
+				return &DeliveryReconciliation{State: ETLRunStatusDeliveredReconciliationRequired, DeclarativeTypedDestinationPlanID: "rplan_missing_marker"}
+			},
+		},
+		{
+			name: "corrupt reconciliation state stays terminal",
+			reconcile: func(string) *DeliveryReconciliation {
+				return &DeliveryReconciliation{State: "corrupt", StageRetirement: true}
+			},
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
+			if testCase.plan != nil {
+				if _, err := fixture.app.updateState(func(current state) (state, error) {
+					current.ReversePlans = append(current.ReversePlans, *testCase.plan)
+					return current, nil
+				}); err != nil {
+					t.Fatal(err)
+				}
+			}
+			planID := ""
+			if testCase.plan != nil {
+				planID = testCase.plan.ID
+			}
+			runID := "run_marker_reconciliation"
+			if _, err := fixture.app.beginRun(Run{ID: runID, Type: "etl", Connection: fixture.connection, Stream: "records", Status: "running", StartedAt: time.Now().UTC()}); err != nil {
+				t.Fatal(err)
+			}
+			stateKey := streamStateKey(fixture.connection, "records")
+			checkpoint := fixture.sourceExecutor.page.CandidateCheckpoint.Clone()
+			leaseUntil := time.Now().UTC().Add(time.Minute)
+			acknowledged := StreamState{Connection: fixture.connection, Stream: "records", GenerationID: 1, Checkpoint: &checkpoint, ActiveWorkID: runID, ActiveWorkFence: 1, ActiveWorkLeaseUntil: &leaseUntil}
+			if _, err := fixture.app.updateState(func(current state) (state, error) {
+				if current.StreamStates == nil {
+					current.StreamStates = map[string]StreamState{}
+				}
+				current.StreamStates[stateKey] = cloneStreamState(acknowledged)
+				return current, nil
+			}); err != nil {
+				t.Fatal(err)
+			}
+			pending := cloneStreamState(acknowledged)
+			pending.ActiveWorkID = ""
+			pending.ActiveWorkLeaseUntil = nil
+			result := etlExecutionResult{
+				Checkpoint:                map[string]string{"mode": string(synccontract.ModeFullAppend)},
+				DestinationResults:        []json.RawMessage{json.RawMessage(`{"occurrence_id":"marker-provider-receipt"}`)},
+				DeliveryReconciliation:    testCase.reconcile(planID),
+				TransportPhaseMeasurement: &TransportPhaseMeasurement{},
+				PendingStreamState:        &pendingStreamState{Key: stateKey, State: pending},
+			}
+			markerErr := synctransport.NewDeliveredReconciliationRequiredError(errors.New("post-checkpoint approval marker write failed"))
+			delivered, err := fixture.app.failAcknowledgedTransportRun(runID, result, markerErr)
+			if !errors.Is(err, markerErr) || delivered.Status != ETLRunStatusDeliveredReconciliationRequired || delivered.DeliveryReconciliation == nil || !reflect.DeepEqual(delivered.DestinationResults, result.DestinationResults) {
+				t.Fatalf("marker terminal persistence run/error = %#v / %v, want durable receipt plus reconciliation", delivered, err)
+			}
+
+			repaired, repairErr := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+			if testCase.wantRepair {
+				if repairErr != nil || repaired.ID != runID || repaired.Status != "completed" || repaired.DeliveryReconciliation != nil {
+					t.Fatalf("marker repair run/error = %#v / %v, want completed exact run", repaired, repairErr)
+				}
+				plan, err := fixture.app.GetReversePlan(planID)
+				if err != nil || plan.Status != "executed" {
+					t.Fatalf("marker repair plan/error = %#v / %v, want executed exact plan", plan, err)
+				}
+			} else {
+				var reconciliation *synctransport.DeliveredReconciliationRequiredError
+				if !errors.As(repairErr, &reconciliation) || repaired.ID != runID || repaired.Status != ETLRunStatusDeliveredReconciliationRequired {
+					t.Fatalf("unknown marker repair run/error = %#v / %v, want retained terminal reconciliation", repaired, repairErr)
+				}
+			}
+			if fixture.sourceExecutor.readCalls != 0 || fixture.destinationExecutor.applyCalls != 0 || fixture.destinationExecutor.readBackCalls != 0 {
+				t.Fatalf("marker recovery source/apply/read-back = %d/%d/%d, want zero replay I/O", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls, fixture.destinationExecutor.readBackCalls)
+			}
+		})
+	}
+}
+
 func TestHasDeclaredSyncTransportRequiresBothEndpoints(t *testing.T) {
 	source := &appTransportConnector{
 		meta:       connectors.Metadata{Name: "invalid_source", IntegrationType: "api"},
@@ -3242,17 +3544,18 @@ func TestAppTransportFullOverwriteRunLifecycleHooks(t *testing.T) {
 }
 
 type appTransportConnector struct {
-	meta             connectors.Metadata
-	descriptor       *connectors.SyncTransportDescriptor
-	rateLimitScope   connectors.RateLimitScopeKey
-	legacyReadCalls  int
-	legacyWriteCalls int
+	meta              connectors.Metadata
+	descriptor        *connectors.SyncTransportDescriptor
+	definitionStreams []connectors.StreamSummary
+	rateLimitScope    connectors.RateLimitScopeKey
+	legacyReadCalls   int
+	legacyWriteCalls  int
 }
 
 func (c *appTransportConnector) Name() string                  { return c.meta.Name }
 func (c *appTransportConnector) Metadata() connectors.Metadata { return c.meta }
 func (c *appTransportConnector) Definition() connectors.Definition {
-	return connectors.Definition{Name: c.meta.Name, DisplayName: c.meta.DisplayName, IntegrationType: c.meta.IntegrationType, Capabilities: c.meta.Capabilities, SyncTransport: c.descriptor}
+	return connectors.Definition{Name: c.meta.Name, DisplayName: c.meta.DisplayName, IntegrationType: c.meta.IntegrationType, Capabilities: c.meta.Capabilities, Streams: c.definitionStreams, SyncTransport: c.descriptor}
 }
 func (*appTransportConnector) Check(context.Context, connectors.RuntimeConfig) error { return nil }
 func (c *appTransportConnector) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
@@ -3460,6 +3763,26 @@ type reconcilingAppTransportStage struct {
 	appTransportStage
 	reconciliations int
 	err             error
+}
+
+type deliveredReconciliationAppTransportStage struct {
+	appTransportStage
+	retireErr       error
+	retireCalls     int
+	reconciliations int
+}
+
+func (s *deliveredReconciliationAppTransportStage) Retire(context.Context, synctransport.WarehouseReceipt) error {
+	s.retireCalls++
+	return s.retireErr
+}
+
+func (s *deliveredReconciliationAppTransportStage) ReconcileCommitted(context.Context) error {
+	s.reconciliations++
+	if s.retireCalls > 0 {
+		s.retireErr = nil
+	}
+	return nil
 }
 
 func (s *reconcilingAppTransportStage) ReconcileCommitted(context.Context) error {

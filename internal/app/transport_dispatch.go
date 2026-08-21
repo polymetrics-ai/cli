@@ -63,18 +63,13 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
 	destinationDescriptor, destinationDeclared := connectors.DestinationTransportDescriptorOf(destination)
 	destinationIssueLabel := destinationDeclared && destinationDescriptor.Executor == issueLabelDestinationReference
-	if sourceDeclarative && !destinationIssueLabel {
-		descriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
-		if !declared {
-			return false, transportRouteDeclarationAbsent, nil
-		}
-		executor, registered := a.transports.RegisteredDestination(descriptor.Executor)
-		_, managedTarget := executor.(synctransport.ManagedTargetApprovalDestination)
-		_, definitionOwnedApproval := executor.(synctransport.DefinitionOwnedApprovalDestination)
-		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
-		if !registered || (!managedTarget && !definitionOwnedApproval && !(localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode))) {
-			return false, transportRouteDeclarationAbsent, nil
-		}
+	if sourceDeclarative && isBoundedLocalWarehouseLegacyRoute(destination, mode.ContractMode) {
+		// The local warehouse primitive owns a closed, bounded ordinary ETL
+		// representation for these executable modes. Its two dedupe modes are
+		// the only ones promoted to the registered transport executor below;
+		// routing the remainder through that executor would either replace their
+		// established semantics or reject a mode it does not declare.
+		return false, transportRouteDeclarationAbsent, nil
 	}
 	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
 		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: action,
@@ -100,7 +95,9 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 		if localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode) {
 			return true, transportRouteDeclared, nil
 		}
-		return false, transportRouteDeclarationAbsent, nil
+		return false, transportRouteDeclared, &synctransport.DeclaredDestinationRouteError{
+			Destination: destination.Name(), Executor: destinationDescriptor.Executor,
+		}
 	}
 	transportConn, err := a.issueLabelTransportConnection(conn.ID)
 	if err != nil {
@@ -126,6 +123,17 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 
 func isWarehouseDedupeContractMode(mode synccontract.Mode) bool {
 	return mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
+}
+
+// isBoundedLocalWarehouseLegacyRoute recognizes only the local warehouse's
+// declaration-owned durable materializer. It is intentionally structural: no
+// connector-name branch or generic write capability can select this fallback.
+func isBoundedLocalWarehouseLegacyRoute(destination connectors.Connector, mode synccontract.Mode) bool {
+	if isWarehouseDedupeContractMode(mode) || !isLocalWarehouseDestination(destination) {
+		return false
+	}
+	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
+	return ok && materializer.MaterializesLocalWarehouse()
 }
 
 func isIssueLabelTransportConnector(connector connectors.Connector) bool {
@@ -388,12 +396,29 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	updated.LastSuccessfulRunID = runID
 	updated.RecordsLoaded = transportResult.RecordsApplied
 	updated.UpdatedAt = *committed.CommittedAt
+	var deliveryReconciliation *DeliveryReconciliation
+	if transportResult.DeliveredReconciliationRequired {
+		deliveryReconciliation = &DeliveryReconciliation{
+			State:           ETLRunStatusDeliveredReconciliationRequired,
+			StageRetirement: true,
+		}
+		// The provider action and checkpoint are durable, so an approval marker
+		// must be repaired with the same persisted terminal evidence rather than
+		// by re-entering the source/destination route.
+		if requiresManagedTargetApproval {
+			deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+		}
+		if requiresDefinitionOwnedApproval {
+			deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+		}
+	}
 	result := etlExecutionResult{
 		RecordsRead:               transportResult.RecordsRead,
 		RecordsLoaded:             transportResult.RecordsApplied,
 		BatchCount:                transportResult.Pages,
 		TransportPhaseMeasurement: transportMeasurement,
 		DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+		DeliveryReconciliation:    deliveryReconciliation,
 		PendingStreamState: &pendingStreamState{
 			Key:   stateKey,
 			State: updated,
@@ -405,12 +430,20 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 	if requiresManagedTargetApproval {
 		if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
-			return result, err
+			result.DeliveryReconciliation = &DeliveryReconciliation{
+				State:                       ETLRunStatusDeliveredReconciliationRequired,
+				PostgresManagedTargetPlanID: approval.PlanID,
+			}
+			return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark PostgreSQL managed target plan executed: %w", err))
 		}
 	}
 	if requiresDefinitionOwnedApproval {
 		if err := a.markDeclarativeTypedDestinationPlanExecuted(approval.PlanID); err != nil {
-			return result, err
+			result.DeliveryReconciliation = &DeliveryReconciliation{
+				State:                             ETLRunStatusDeliveredReconciliationRequired,
+				DeclarativeTypedDestinationPlanID: approval.PlanID,
+			}
+			return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark declarative typed destination plan executed: %w", err))
 		}
 	}
 	return result, nil

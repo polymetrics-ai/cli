@@ -276,6 +276,24 @@ type DefinitionOwnedApprovalDestination interface {
 	DefinitionOwnedApprovalDestination()
 }
 
+// DeclaredDestinationRouteError means both connector declarations selected a
+// closed route and registry preflight succeeded, but the resolved destination
+// is not one of App's declared delivery representations. It is deliberately a
+// typed refusal instead of an ordinary-route fallback: a declaration-owned
+// operation must remain visible and fail before I/O when its durable delivery
+// role is incomplete.
+type DeclaredDestinationRouteError struct {
+	Destination string
+	Executor    connectors.TransportExecutorReference
+}
+
+func (e *DeclaredDestinationRouteError) Error() string {
+	if e == nil {
+		return "declared destination route is not executable"
+	}
+	return fmt.Sprintf("declared destination route for %q executor %q has no bounded durable delivery representation", e.Destination, e.Executor.ID)
+}
+
 // SourceRequest is the fixed source invocation context. It has no generic
 // request URL, SQL text, command, action, or caller-authored payload.
 type SourceRequest struct {
@@ -630,6 +648,38 @@ type Result struct {
 	// logs, and errors are rendered secret-safely.
 	DestinationResults  []json.RawMessage
 	CommittedCheckpoint *synccontract.CheckpointEnvelope
+	// DeliveredReconciliationRequired says the destination effect, read-back,
+	// and checkpoint are already durable but a subsequent local bookkeeping
+	// action (for example, retiring a bounded stage receipt) needs repair.
+	// Callers must preserve the committed checkpoint and provider receipts and
+	// must not replay the destination operation.
+	DeliveredReconciliationRequired bool
+}
+
+// DeliveredReconciliationRequiredError is a typed terminal transport outcome
+// for a failure after durable delivery. The wrapped cause describes only the
+// reconciliation work that remains; it never revokes the acknowledged
+// destination effect or its committed checkpoint.
+type DeliveredReconciliationRequiredError struct {
+	cause error
+}
+
+func NewDeliveredReconciliationRequiredError(cause error) *DeliveredReconciliationRequiredError {
+	return &DeliveredReconciliationRequiredError{cause: cause}
+}
+
+func (e *DeliveredReconciliationRequiredError) Error() string {
+	if e == nil || e.cause == nil {
+		return "delivered reconciliation is required"
+	}
+	return "delivered reconciliation is required: " + e.cause.Error()
+}
+
+func (e *DeliveredReconciliationRequiredError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.cause
 }
 
 const defaultTransportUnitDeadline = time.Minute

@@ -11,7 +11,7 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
 | 5 | B22, W05 | Existing destination collision/foreign file, error cleanup, and symlink race test each fail before publication. | binary output and `go test -race` multipart publication cohorts. | green; remote `2bddbf5387d323a0dbf074074cf43fa2d40b60b5` |
 | 6 | B20, B26, B33, B36, W06-W07 | Stale/revoked authorization or stream owner reaches an effect; clone mutation leaks; indeterminate durable commit; expired park retries. | App, transport, coordination, Arrow/race, and auth fence regressions. | green; remote `51ab7639e30bb2fb5585d853beba6a2550d84def` |
 | 7 | B27-B32 | Budget stop looks like EOF; self-certification; receipt-free readback; >2^53 cloning/comparison; one shared deadline. | App, synctransport, engine, and provider-readback behavior suites. | green; remote `6084b1c1275b2dbe01fc49aba25785677fd8fd52` |
-| 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | in progress; B37 remote `636cc72e8d6aa2483a7fc7a94d216546008fcef1`; B34/B35 local-green, remote checkpoint pending |
+| 8 | B34-B38, W08 | Persisted terminal result is hidden; ambiguous finalization invents a run; CDC accepts swapped artifact; post-checkpoint error returns failure; declared route error disappears. | App, CLI, CDC/restart, transport, and state recovery suites. | local-green; B37 remote `636cc72e8d6aa2483a7fc7a94d216546008fcef1`; B34/B35 remote `dfefc52170057cdb435f9354b8c975da631845e7`; B38/W08 remote checkpoint pending |
 | 9 | B10-B11 | Evidence/certification metadata for another or stale SHA is accepted. | Exact final-SHA evidence, matrix, candidate, and certification checks. | pending |
 
 ## Group 8 execution plan (2026-08-21)
@@ -24,7 +24,7 @@ This ledger is bound to the frozen 46-finding canonical review in `POSTFIX-REVIE
   `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
   `golang-security`, `golang-safety`, `golang-design-patterns`,
   `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, and
-  `golang-database` govern Group 8. CLI help/manual/website parity is not
+  `golang-database`, and `golang-documentation` govern Group 8. CLI help/manual/website parity is not
   applicable to B37 because its private recovery evidence changes no command,
   flag, help text, output schema, or generated surface; B34/B35 will revisit
   that checklist before their CLI presentation work.
@@ -219,6 +219,142 @@ than a stand-alone `Error` envelope.
   declares its JSON response media type, retaining strict declaration-owned
   response parsing. No route, body authority, operation, provider result, or
   secret boundary was widened.
+
+### Group 8 B34/B35 certification-envelope reconciliation (2026-08-21)
+
+- The durable-state assertion is `TestCLI_CertificationPreIORefusalsPersistExactTerminalRun`.
+  It runs each `*_deduped` pre-I/O refusal through the installed CLI route,
+  reads the persisted state file, and requires exit `1` plus exactly one
+  failed terminal `ETLRun` byte-for-byte equal to that stored run.  The
+  contract is therefore unambiguous: any exact durable terminal run emits an
+  `ETLRun` regardless of the accompanying operational error; only a definite
+  no-commit or nonterminal state emits a typed `Error` without a run.  The
+  separate GitHub 401 remains `ConnectorCommandDirectRead` with its complete
+  bounded 401 receipt and inline `auth/credential_error`.
+- **Green recheck:** `go test -timeout 20m ./internal/cli -run
+  '^TestCLI_CertificationPreIORefusalsPersistExactTerminalRun$' -count=1 -v`
+  passed on the B34/B35 remote base in `4.710s` (test body `3.53s`).
+
+### Group 8 B38/W08 red-contract plan (2026-08-21)
+
+- **Scope and ownership:** `internal/synctransport/orchestrator.go`,
+  `internal/app/transport_dispatch.go`, `internal/app/etl_mode_dispatch.go`,
+  the declaration-owned approval marker stores, their focused tests, and this
+  ledger.  This parcel consumes the B34/B35 durable-terminal rule without
+  weakening it.  It does not change Group 9, command authority, connector
+  definitions, or generated artifacts by hand.
+- **B38 red:** `TestTransport_PostCheckpointBookkeepingFailureRemainsDelivered`
+  will inject retiring-stage, declarative marker, and managed marker cleanup
+  failures after a durable checkpoint.  It must prove one provider mutation,
+  retained checkpoint and complete provider output, durable
+  `delivered_reconciliation_required` state, and idempotent restart cleanup
+  with zero replay.
+- **W08 red:** `TestETLRouteSelection_PreservesDeclaredPreflightError` will
+  exercise a real `declarative_stream_source` paired with declared destination
+  variants that are unregistered, have the wrong closed marker, or omit the
+  binding/action/conformance.  Each must retain the typed preflight error and
+  cause zero source/stage/provider I/O; the two-sided declaration-absent
+  legacy case must remain an intentional non-transport selection.
+
+### Group 8 B38/W08 observed red and green evidence (2026-08-21)
+
+- **Final package-gate failure set (before the W08 compatibility correction):**
+  `go test -timeout 20m ./internal/app -count=1` exited `1` after `254.808s`.
+  Its complete failure set is the three named subcases of
+  `TestGithubPullRequestsETLSupportsLegacyExecutableModes`:
+  `full_refresh_append_duplicates` and
+  `full_refresh_overwrite_replaces_final` now returned
+  `DeclaredDestinationRouteError` for the declared
+  `local_parquet_warehouse` executor; and
+  `incremental_append_filters_older_cursor_and_appends_inclusive_cursor`
+  returned `source transport does not support sync mode "incremental_append"`.
+  The regression was introduced by removing the preflight result's
+  declaration-owned local-warehouse route from the selector. The correction
+  must retain the W08 requirement that an unregistered or unmarked
+  two-sided declaration returns its exact typed refusal before I/O, while
+  preserving this existing bounded local-warehouse representation and its
+  legacy source-mode fallback.
+
+- **Red — checkpoint evidence was lost:** `go test -timeout 20m
+  ./internal/synctransport -run
+  '^TestTransport_PostCheckpointBookkeepingFailureRemainsDelivered$' -count=1
+  -v` initially failed to compile because `Result` had neither the durable
+  reconciliation flag nor the typed outcome. Before the correction, each
+  `retireCommittedReceipts` call returned its local cleanup error before the
+  committed checkpoint was placed in `Result`, making a completed provider
+  effect look replayable.
+- **Red — App state had no terminal representation:** the focused App restart
+  proof initially failed to compile on the absent
+  `ETLRunStatusDeliveredReconciliationRequired` and
+  `Run.DeliveryReconciliation` fields. The route red
+  `TestETLRouteSelection_DeclarativeSourcePreservesDeclaredDestinationPreflightError`
+  then ran and observed `selected=false reason=declaration_absent err=<nil>`
+  for a real `declarative_stream_source` and an unregistered declared
+  destination. That was the B38/W08 regression: the route checker hid the
+  registry's pre-I/O declared-operation refusal.
+- **Green — B38 happy/bad/edge/restart:** the orchestrator now sets its exact
+  committed checkpoint, page/count evidence, complete destination results,
+  and `DeliveredReconciliationRequired` before any retirement attempt. A
+  typed `DeliveredReconciliationRequiredError` wraps only the local cause.
+  `TestTransport_PostCheckpointBookkeepingFailureRemainsDelivered` and
+  `TestTransport_DeferredCheckpointRetirementFailureRemainsDelivered` passed;
+  they cover ordinary and deferred-final checkpoint paths. The App test
+  `TestRunETLTransportPostCheckpointBookkeepingPersistsDeliveredReconciliationAndRepairsWithoutReplay`
+  passed through a fresh `Open`, retaining the exact occurrence ID, then
+  completed the same stored run with zero additional source/apply/read-back
+  calls. `TestDeliveredReconciliationApprovalMarkersRepairOrFailClosedWithoutReplay`
+  passed managed-target, declarative typed-destination, and missing-marker
+  cases: both declared markers repair exactly once from durable state, while
+  unknown-marker and corrupt-state rows remain terminal
+  reconciliation-required with zero I/O.
+- **Green — W08 typed route preservation:** the early
+  `RegisteredDestination` screen was removed. Every two-sided declaration
+  other than the established structural local-warehouse legacy representation
+  reaches registry `Preflight`; an unregistered destination returns the new
+  typed `DestinationExecutorUnregisteredError`, and a resolved destination
+  without one of the bounded managed/definition/local-warehouse representations
+  returns typed `DeclaredDestinationRouteError`. The focused unregistered and
+  unmarked-destination route proofs passed with zero source, stage, provider,
+  or legacy I/O.
+- **Green — bounded local-warehouse compatibility:** the red
+  `TestETLRouteSelection_DeclarativeSourceKeepsBoundedLocalWarehouseLegacyModes`
+  named exactly the three legacy modes that do not belong to the dedupe
+  transport cohort: `full_append`, `full_overwrite`, and
+  `incremental_append`. The focused green command
+  `go test -timeout 20m ./internal/app -run
+  '^(TestETLRouteSelection_DeclarativeSourceKeepsBoundedLocalWarehouseLegacyModes|TestGithubPullRequestsETLSupportsLegacyExecutableModes|TestETLRouteSelection_DeclarativeSourcePreservesDeclaredDestinationPreflightError|TestETLRouteSelection_DeclarativeSourceRejectsUnmarkedResolvedDestination)$'
+  -count=1 -v` passed in `4.504s`. The structural helper requires the exact
+  local-warehouse destination reference, matching conformance, durable
+  acknowledgement, and local materializer marker; it neither branches on a
+  connector name nor admits generic/raw write authority. Dedupe and history
+  modes still use the registered transport executor, while the three named
+  legacy modes retain their existing bounded ordinary representation.
+- **B34/B35 envelope reconciliation retained:**
+  `TestCLI_CertificationPreIORefusalsPersistExactTerminalRun` was rerun after
+  the B38 status addition and passed. It remains the durable-state authority:
+  any complete stored terminal run — including
+  `delivered_reconciliation_required` — is emitted as exactly one `ETLRun`
+  with its categorized nonzero operational error. A definite no-commit or
+  nonterminal result is the only `Error`/no-run case. GitHub 401 remains its
+  independent `ConnectorCommandDirectRead` 401 receipt with inline
+  `auth/credential_error`.
+- **Final local Group-8 gates:** the complete post-correction App package
+  gate, `go test -timeout 20m ./internal/app -count=1`, passed in `255.344s`.
+  The captured prior 3-case GitHub regression set is disposed above; this
+  final run produced no failure set. The focused package proof for B38/W08,
+  legacy GitHub execution, and the durable certification/direct-read envelope
+  passed across App, synctransport, and CLI (`7.239s`, `0.539s`, and
+  `21.118s`). The captured focused race gate passed with no race report:
+  `go test -race -timeout 20m ./internal/app ./internal/synctransport -run
+  '^(TestTransport_PostCheckpointBookkeepingFailureRemainsDelivered|TestTransport_DeferredCheckpointRetirementFailureRemainsDelivered|TestRunETLTransportPostCheckpointBookkeepingPersistsDeliveredReconciliationAndRepairsWithoutReplay|TestDeliveredReconciliationApprovalMarkersRepairOrFailClosedWithoutReplay|TestETLRouteSelection_DeclarativeSourcePreservesDeclaredDestinationPreflightError|TestETLRouteSelection_DeclarativeSourceRejectsUnmarkedResolvedDestination|TestETLRouteSelection_DeclarativeSourceKeepsBoundedLocalWarehouseLegacyModes|TestGithubPullRequestsETLSupportsLegacyExecutableModes)$'
+  -count=1 -v` (App `59.937s`; synctransport `1.640s`). `go vet
+  ./internal/app ./internal/synctransport ./internal/cli`, `go build ./cmd/pm`,
+  `go run ./cmd/connectorgen validate` (552, zero findings), `go run
+  ./cmd/connectorgen surface-sync --check` (552, zero drift), and `go run
+  ./cmd/pm docs validate --connectors-dir docs/connectors` passed. Website
+  generated-doc parity passed through `npm run test:scripts` (34/34); the
+  installed environment has no `tsc` executable, so no dependency was added
+  solely to run an untracked typecheck.
 
 ## Group 7 red-contract plan (2026-08-21)
 

@@ -302,6 +302,17 @@ diagnostics, and synthetic errors remain secret-taint-safe. The same
 preserved-result contract is used by persisted regular reverse-ETL runs
 (`destination_result`) and direct-write run output.
 
+If a closed transport already applied, read back, and checkpointed a provider
+effect but local receipt retirement or a declaration-owned approval marker
+cannot finish, the persisted run is terminal with status
+`delivered_reconciliation_required`. Its `delivery_reconciliation` field names
+only the bounded local repair and its `destination_results` and checkpoint stay
+intact. The nonzero JSON response contains that exact `ETLRun`; repeating the
+same saved connection and stream repairs from durable state before endpoint
+resolution and never replays source or destination I/O. Missing, malformed, or
+stale reconciliation evidence remains refused rather than falling back to an
+ordinary route.
+
 ## Closed PostgreSQL managed-target transport
 
 `postgres-managed-target` is a fixed definition-selected source-to-PostgreSQL

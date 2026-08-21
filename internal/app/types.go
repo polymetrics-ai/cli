@@ -254,6 +254,22 @@ type RunETLRequest struct {
 	rateParkingRearmAttemptRunID string
 }
 
+// ETLRunStatusDeliveredReconciliationRequired is terminal proof that the
+// declared destination effect and checkpoint are durable, while only local
+// post-checkpoint bookkeeping remains. Retrying this run repairs from the
+// recorded evidence; it must never replay provider I/O.
+const ETLRunStatusDeliveredReconciliationRequired = "delivered_reconciliation_required"
+
+// DeliveryReconciliation records the closed, declaration-owned cleanup that
+// remains after durable delivery. It contains only internal plan identities
+// and stage state, never credentials, provider configuration, or payloads.
+type DeliveryReconciliation struct {
+	State                             string `json:"state"`
+	StageRetirement                   bool   `json:"stage_retirement,omitempty"`
+	PostgresManagedTargetPlanID       string `json:"postgres_managed_target_plan_id,omitempty"`
+	DeclarativeTypedDestinationPlanID string `json:"declarative_typed_destination_plan_id,omitempty"`
+}
+
 type Run struct {
 	ID                                string            `json:"id"`
 	Type                              string            `json:"type"`
@@ -276,10 +292,11 @@ type Run struct {
 	TransportPhaseMeasurement *TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
 	// DestinationResults retains each completed declarative typed destination
 	// action's full provider result.
-	DestinationResults []json.RawMessage `json:"destination_results,omitempty"`
-	Error              string            `json:"error,omitempty"`
-	StartedAt          time.Time         `json:"started_at"`
-	CompletedAt        time.Time         `json:"completed_at,omitempty"`
+	DestinationResults     []json.RawMessage       `json:"destination_results,omitempty"`
+	DeliveryReconciliation *DeliveryReconciliation `json:"delivery_reconciliation,omitempty"`
+	Error                  string                  `json:"error,omitempty"`
+	StartedAt              time.Time               `json:"started_at"`
+	CompletedAt            time.Time               `json:"completed_at,omitempty"`
 }
 
 type TransportPhaseMeasurement struct {
