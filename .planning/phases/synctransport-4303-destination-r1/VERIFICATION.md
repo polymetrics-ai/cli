@@ -61,3 +61,18 @@ checkpoint.
 
 The final full run reported `ConnectorBoundaryReport.outcome: clean`, 552
 connectors loaded, 294 files checked, and zero findings.
+
+## 2026-08-20 reconciliation revalidation
+
+The published reconciliation head was revalidated locally before rollup. No
+new code change was required: the persisted App dispatch and the closed
+definition-owned boundary remained intact under a fresh run.
+
+- `go test -count=1 -timeout 20m ./internal/app -run '^(TestPersistedConnectionSelectsDeclarativeTypedDestinationAction|TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields|TestDefinitionTransportFactories(RunTypedDestinationFromDefinition|SelectDistinctTypedDestinationEvidence|RefuseTypedDestinationDeclarationsBeforeIO)|TestDeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite)$'` — passed.
+- `go test -count=1 -timeout 20m ./internal/connectors -run '^(TestDestinationTransportDescriptorSelectsPersistedActionWithinMode|TestSanitize.*Output)$'` — passed.
+- `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies$'` — passed.
+- `go test -count=1 -timeout 20m ./internal/cli -run '^(TestETLTransportBareAndLeafHelpAreContextual|TestDeclarativeTypedDestinationTransportRejectsCallerActionBeforeProjectIO|TestGoldenTranscripts)$'` — passed.
+- Detached and polled `make connector-boundary` — passed: `outcome: clean`, 552 connectors, 294 files, no findings or warnings. The full result is retained at `traces/connector-boundary-rerun-20260820.log`.
+- `make verify` — passed locally. The complete result is retained at `traces/make-verify-rerun-20260820.log`; it includes the full test tree, docs, smoke, lint, generator, certification, connector-boundary, canon, and release-target gates.
+- `git diff --check main...HEAD` — passed.
+- `gh api /repos/polymetrics-ai/cli/pulls/4304 --jq .base.ref` — returned `main`, matching the task delivery header.

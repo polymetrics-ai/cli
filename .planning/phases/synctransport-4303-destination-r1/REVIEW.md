@@ -67,3 +67,12 @@ CLI output, including credential-equal bytes. System-generated plans, logs,
 request diagnostics, and synthetic errors remain secret-taint-safe. Focused,
 affected-package, real-provider, and full repository verification are recorded
 in `VERIFICATION.md`.
+
+## 2026-08-20 revalidation review
+
+After the published-head reconciliation pass, an additional inline review
+covered the persisted selection and approval boundary, the generic adapter,
+the exact action-schema mapping, result projection, and the new CLI help and
+documentation paths. No actionable finding remained. Fresh focused tests,
+standalone connector-boundary, `git diff --check`, and full local `make verify`
+are recorded in `VERIFICATION.md`.
