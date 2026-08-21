@@ -773,17 +773,21 @@ func TestDirectWriteCommandFailurePersistsProviderResponse(t *testing.T) {
 	if calls != 1 || run.Status != "failed" {
 		t.Fatal("failed run did not record one failed direct write")
 	}
-	if strings.Contains(err.Error(), "server-token") {
-		t.Fatal("RunReverseETL error leaked a provider response")
-	}
-	if strings.Contains(run.Error, "server-token") {
-		t.Fatal("persisted direct-write error leaked a provider response")
+	if strings.Contains(err.Error(), "server-token") || strings.Contains(run.Error, "server-token") {
+		t.Fatalf("direct-write error exposed provider secret: error=%q persisted=%q", err, run.Error)
 	}
 	if run.OperationDirectWrite == nil || !run.OperationDirectWrite.ResponseReceived || run.OperationDirectWrite.Status != http.StatusInternalServerError || run.OperationDirectWrite.BodyRaw != `{"error":"fixture failure","token":"server-token"}` {
 		t.Fatal("failed direct write did not retain the complete provider response")
 	}
 	if receipt := run.OperationDirectWrite.Headers["X-Provider-Receipt"].Values; len(receipt) != 2 || receipt[0] != "receipt-one" || receipt[1] != "receipt-two" {
 		t.Fatal("failed direct write did not retain the provider receipt")
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatal("RunReverseETL error did not retain a provider response cause")
+	}
+	if providerErr.Status != http.StatusInternalServerError || providerErr.Body != `{"error":"fixture failure","token":"server-token"}` {
+		t.Fatalf("provider response cause = %#v, want exact provider failure for internal handling", providerErr)
 	}
 }
 
