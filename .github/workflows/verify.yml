@@ -28,6 +28,17 @@ jobs:
           go-version: '1.26.6'
           cache: false
 
+      # GitHub certification fixtures own a disposable Redis-compatible
+      # coordinator so require_shared admission is exercised without inheriting
+      # a shared service. The hosted image does not guarantee redis-server.
+      - name: Provision local shared-admission fixture
+        run: |
+          if ! command -v redis-server >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install --yes redis-server
+          fi
+          redis-server --version
+
       - name: Install golangci-lint
         run: |
           go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${GOLANGCI_LINT_VERSION}

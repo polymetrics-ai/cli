@@ -1,20 +1,23 @@
 package cli
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"slices"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors/certify"
 	"polymetrics.ai/internal/connectors/defs"
@@ -91,7 +94,10 @@ func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) 
 	binary := buildTransportPM(t)
 	root := filepath.Join(t.TempDir(), "project")
 	generatedStages := githubGeneratedDirectReadStageSelection(t)
-	output, diagnostics, err := runFixtureTransportPMJSON(binary, "",
+	coordinator := startFixtureSharedRateLimitCoordinator(t)
+	output, diagnostics, err := runFixtureTransportPMJSONWithEnvironment(binary, "", map[string]string{
+		"POLYMETRICS_DRAGONFLY_ADDR": coordinator.address,
+	},
 		"connectors", "certify", "github",
 		"--direct-read-only",
 		"--config", "base_url="+server.URL,
@@ -134,6 +140,9 @@ func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) 
 	observed.Unlock()
 	if requestCount < 98 { // 97 direct-read stages plus credential validation.
 		t.Fatalf("GitHub direct-read fixture requests = %d, want at least 98 real connector HTTP requests", requestCount)
+	}
+	if keys := coordinator.keyCount(t); keys == 0 {
+		t.Fatal("GitHub direct-read fixture made provider requests without storing any declared shared-admission state")
 	}
 }
 
@@ -271,16 +280,21 @@ func TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture(t *testing.
 }
 
 // runFixtureTransportPMJSON keeps a fixture child's machine-readable stdout
-// separate from diagnostics and gives it a self-contained process environment.
-// runTransportPM intentionally uses CombinedOutput for legacy failure
-// assertions, but decoding that combined stream as JSON makes a valid
-// certification result fail whenever a diagnostic is emitted on stderr. The
-// fixture also must not inherit an unrelated test's coordinator endpoint: a
-// certification-tier command correctly refuses before transport when that
-// endpoint is unreachable, which would make this local HTTP proof nonhermetic.
+// separate from diagnostics and removes the runtime coordinator aliases that
+// an unrelated test may export. Certification fixtures that need a shared
+// coordinator pass one explicitly through runFixtureTransportPMJSONWithEnvironment.
 func runFixtureTransportPMJSON(binary, stdin string, args ...string) (stdout, stderr string, err error) {
+	return runFixtureTransportPMJSONWithEnvironment(binary, stdin, nil, args...)
+}
+
+// runFixtureTransportPMJSONWithEnvironment starts the real pm binary with a
+// self-contained environment. It deliberately replaces both documented
+// coordinator aliases rather than inheriting a process-global address: a
+// certification tier that declares require_shared must use the fixture's
+// actual local coordinator, never silently fall back to process-local limits.
+func runFixtureTransportPMJSONWithEnvironment(binary, stdin string, additions map[string]string, args ...string) (stdout, stderr string, err error) {
 	command := exec.Command(binary, args...)
-	command.Env = withoutTransportFixtureEnvironment(os.Environ(), "PM_DRAGONFLY_ADDR")
+	command.Env = transportFixtureEnvironment(os.Environ(), additions)
 	if stdin != "" {
 		command.Stdin = strings.NewReader(stdin)
 	}
@@ -291,16 +305,141 @@ func runFixtureTransportPMJSON(binary, stdin string, args ...string) (stdout, st
 	return stdoutBuffer.String(), stderrBuffer.String(), err
 }
 
-func withoutTransportFixtureEnvironment(environment []string, names ...string) []string {
+func transportFixtureEnvironment(environment []string, additions map[string]string) []string {
+	const (
+		primaryCoordinatorAddress = "POLYMETRICS_DRAGONFLY_ADDR"
+		aliasCoordinatorAddress   = "PM_DRAGONFLY_ADDR"
+	)
 	filtered := make([]string, 0, len(environment))
 	for _, entry := range environment {
 		name, _, found := strings.Cut(entry, "=")
-		if found && slices.Contains(names, name) {
+		if found && (name == primaryCoordinatorAddress || name == aliasCoordinatorAddress) {
 			continue
 		}
 		filtered = append(filtered, entry)
 	}
+	for name, value := range additions {
+		filtered = append(filtered, name+"="+value)
+	}
 	return filtered
+}
+
+// fixtureSharedRateLimitCoordinator is an isolated, disposable
+// Redis-compatible coordinator for the fresh pm process. The production
+// registry is explicitly Redis-compatible, and the build-tagged coordination
+// integration tests cover the same shared admission scripts against Dragonfly.
+// This fixture keeps its own Redis process so ordinary CI does not need a
+// shared daemon, while certification stages still execute their declared
+// require_shared admission path end-to-end.
+type fixtureSharedRateLimitCoordinator struct {
+	address string
+}
+
+func startFixtureSharedRateLimitCoordinator(t *testing.T) fixtureSharedRateLimitCoordinator {
+	t.Helper()
+	redisServer, err := exec.LookPath("redis-server")
+	if err != nil {
+		t.Fatalf("GitHub certification fixture requires the Redis-compatible redis-server executable: %v", err)
+	}
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("reserve local shared-coordinator address: %v", err)
+	}
+	address := listener.Addr().String()
+	port := listener.Addr().(*net.TCPAddr).Port
+	if err := listener.Close(); err != nil {
+		t.Fatalf("release local shared-coordinator address: %v", err)
+	}
+
+	process := exec.Command(redisServer,
+		"--bind", "127.0.0.1",
+		"--port", strconv.Itoa(port),
+		"--save", "",
+		"--appendonly", "no",
+		"--protected-mode", "no",
+		"--loglevel", "warning",
+	)
+	process.Stdout = io.Discard
+	process.Stderr = io.Discard
+	if err := process.Start(); err != nil {
+		t.Fatalf("start local shared coordinator: %v", err)
+	}
+	t.Cleanup(func() {
+		if process.Process == nil {
+			return
+		}
+		_ = process.Process.Signal(os.Interrupt)
+		done := make(chan error, 1)
+		go func() { done <- process.Wait() }()
+		select {
+		case <-done:
+		case <-time.After(5 * time.Second):
+			_ = process.Process.Kill()
+			<-done
+		}
+	})
+	if err := waitForFixtureSharedRateLimitCoordinator(address); err != nil {
+		t.Fatalf("wait for local shared coordinator at %s: %v", address, err)
+	}
+	return fixtureSharedRateLimitCoordinator{address: address}
+}
+
+func waitForFixtureSharedRateLimitCoordinator(address string) error {
+	deadline := time.Now().Add(5 * time.Second)
+	var lastErr error
+	for time.Now().Before(deadline) {
+		if err := fixtureSharedRateLimitCoordinatorCommand(address, "PING", func(response string) error {
+			if response != "+PONG" {
+				return fmt.Errorf("PING response = %q, want +PONG", response)
+			}
+			return nil
+		}); err == nil {
+			return nil
+		} else {
+			lastErr = err
+		}
+		time.Sleep(25 * time.Millisecond)
+	}
+	return lastErr
+}
+
+func (c fixtureSharedRateLimitCoordinator) keyCount(t *testing.T) int {
+	t.Helper()
+	var count int
+	if err := fixtureSharedRateLimitCoordinatorCommand(c.address, "DBSIZE", func(response string) error {
+		if !strings.HasPrefix(response, ":") {
+			return fmt.Errorf("DBSIZE response = %q, want integer", response)
+		}
+		value, err := strconv.Atoi(strings.TrimPrefix(response, ":"))
+		if err != nil {
+			return fmt.Errorf("decode DBSIZE response %q: %w", response, err)
+		}
+		count = value
+		return nil
+	}); err != nil {
+		t.Fatalf("inspect local shared coordinator: %v", err)
+	}
+	return count
+}
+
+func fixtureSharedRateLimitCoordinatorCommand(address, command string, check func(string) error) error {
+	connection, err := net.DialTimeout("tcp", address, time.Second)
+	if err != nil {
+		return err
+	}
+	defer connection.Close()
+	if err := connection.SetDeadline(time.Now().Add(time.Second)); err != nil {
+		return err
+	}
+	request := "*1\r\n$" + strconv.Itoa(len(command)) + "\r\n" + command + "\r\n"
+	if _, err := io.WriteString(connection, request); err != nil {
+		return err
+	}
+	response, err := bufio.NewReader(connection).ReadString('\n')
+	if err != nil {
+		return err
+	}
+	return check(strings.TrimSpace(response))
 }
 
 func githubGeneratedDirectReadStageSelection(t *testing.T) string {
