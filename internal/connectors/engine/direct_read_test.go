@@ -1033,6 +1033,65 @@ func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(
 	}
 }
 
+func TestOperationDirectReadMasksConfiguredResponseHeaderValues(t *testing.T) {
+	const credential = "configured-header-material"
+	const occurrenceID = "occurrence-9007199254740993"
+	const unconfiguredToken = "ghp_unconfigured_provider_token"
+	encodedCredential := base64.StdEncoding.EncodeToString([]byte(credential))
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Request-ID", occurrenceID)
+		w.Header().Set("X-Provider-Token", unconfiguredToken)
+		w.Header().Set("X-Configured-Secret", credential)
+		w.Header().Set("X-Configured-Encoding", encodedCredential)
+		_, _ = w.Write([]byte(`{"ordinary":"retained"}`))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.result", Kind: "rest_read", Summary: "Declared result", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method: http.MethodGet, Path: "/v1/result", MaxBytes: 1024,
+				Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
+					{Name: "X-Request-ID", MaxBytes: 64},
+					{Name: "X-Provider-Token", MaxBytes: 64},
+					{Name: "X-Configured-Secret", MaxBytes: 64},
+					{Name: "X-Configured-Encoding", MaxBytes: 64},
+				}},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v1/result", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+	}
+
+	result, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation: "acme.result",
+		Config:    connectors.RuntimeConfig{Secrets: map[string]string{"credential": credential}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	for name, want := range map[string][]string{
+		"X-Request-ID":          {occurrenceID},
+		"X-Provider-Token":      {unconfiguredToken},
+		"X-Configured-Secret":   {"[masked]"},
+		"X-Configured-Encoding": {"[masked]"},
+	} {
+		header, ok := result.Headers[name]
+		if !ok || header.Redacted || !reflect.DeepEqual(header.Values, want) {
+			t.Fatalf("header %q = %#v, want values %#v without header-name redaction", name, header, want)
+		}
+	}
+	public, err := json.Marshal(result.Headers)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Contains(public, []byte(credential)) || bytes.Contains(public, []byte(encodedCredential)) {
+		t.Fatal("public direct-read headers exposed configured material")
+	}
+}
+
 func TestOperationDirectReadSendsDeclaredPlainTextBody(t *testing.T) {
 	source := "# rendered from a declared plain-text body"
 	var issued int

@@ -190,8 +190,29 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		return readResult, err
 	}
 	readResult.Body = decoded
-	readResult.Headers = responseHeaders
+	readResult.Headers = sanitizeDirectReadResponseHeadersForOutput(responseHeaders, req.Config.Secrets)
 	return readResult, nil
+}
+
+func sanitizeDirectReadResponseHeadersForOutput(headers map[string]connectors.OperationResponseHeader, secrets map[string]string) map[string]connectors.OperationResponseHeader {
+	if headers == nil {
+		return nil
+	}
+	out := make(map[string]connectors.OperationResponseHeader, len(headers))
+	for name, header := range headers {
+		clone := header
+		if header.Values != nil {
+			values, ok := connectors.SanitizeProviderOutputForOutput(header.Values, secrets).([]string)
+			if !ok {
+				clone.Values = nil
+				clone.Redacted = true
+			} else {
+				clone.Values = values
+			}
+		}
+		out[name] = clone
+	}
+	return out
 }
 
 // PreflightOperationDirectRead proves a command's named operation can reach
