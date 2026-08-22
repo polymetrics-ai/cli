@@ -38,11 +38,21 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 		return connectors.OperationStatusCheckResult{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
+	if err := validateOperationDirectReadPathParams(op, req.PathParams); err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
 	path, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
-	query, err := directReadQuery(req.Query)
+	queryMap, err := operationDirectReadQuery(op, req.Query, nil)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	if err := requireOperationQueryGroups(op, queryMap); err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	query, err := directReadQuery(queryMap)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}

@@ -226,3 +226,53 @@ func TestOperationStatusCheckStripsDeclaredHeaderAcrossAllowedRedirect(t *testin
 		t.Fatal("allowed redirect did not reach target")
 	}
 }
+
+func TestOperationStatusCheckRejectsUndeclaredOrUnsafeParametersBeforeProviderIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if got := r.URL.Query().Get("view"); got != "full" {
+			t.Errorf("view = %q, want full", got)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	t.Cleanup(srv.Close)
+	b := statusCheckBundle(srv.URL, http.MethodHead)
+	b.Operations[0].REST.Path = "/v1/tags/{id}"
+	b.Surface.Endpoints[0].Path = "/v1/tags/{id}"
+	b.Operations[0].REST.Parameters = []OperationParameter{
+		{Name: "id", In: "path", Type: "string", Required: true, MaxBytes: 8},
+		{Name: "view", In: "query", Type: "string", Required: true, MaxBytes: 8},
+	}
+	for _, tc := range []struct {
+		name string
+		req  connectors.OperationStatusCheckRequest
+		ok   bool
+	}{
+		{name: "declared parameters", ok: true, req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full"}}},
+		{name: "undeclared path parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report", "admin": "true"}, Query: map[string]string{"view": "full"}}},
+		{name: "undeclared query parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full", "admin": "true"}}},
+		{name: "over cap query parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "too-long-value"}}},
+		{name: "missing required query parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			before := requests
+			_, err := OperationStatusCheck(context.Background(), b, tc.req, nil)
+			if tc.ok {
+				if err != nil {
+					t.Fatalf("OperationStatusCheck: %v", err)
+				}
+				if requests != before+1 {
+					t.Fatalf("requests = %d, want %d", requests, before+1)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("unsafe binding was accepted")
+			}
+			if requests != before {
+				t.Fatalf("unsafe binding reached provider %d times", requests-before)
+			}
+		})
+	}
+}

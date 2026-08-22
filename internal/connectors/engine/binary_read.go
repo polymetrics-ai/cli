@@ -124,11 +124,18 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	}
 
 	cfg := materializeConfigDefaults(b, req.Config)
+	if err := validateOperationBinaryDownloadPathParams(op, req.PathParams); err != nil {
+		return BinaryDownloadResult{}, err
+	}
 	resolvedPath, err := resolveSurfaceEndpointPath(spec.Path, cfg, req.PathParams)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	query, err := directReadQuery(req.Query)
+	queryMap, err := operationBinaryDownloadQuery(op, req.Query)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	query, err := directReadQuery(queryMap)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}

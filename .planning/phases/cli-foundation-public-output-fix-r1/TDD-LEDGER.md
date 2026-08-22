@@ -28,3 +28,8 @@ At this checkpoint, FND-B12, FND-B14, and FND-W02 remained pending their separat
 - Green: `go test -count=1 -timeout 20m ./internal/connectors/hooks/github -run 'TestAuthenticatorGithubAppRestrictionParsingFailsClosedBeforeDeclaredRouteIO'` proves valid restrictions make one declared-route POST while every malformed restriction returns before authenticated provider I/O.
 
 FND-B14 and FND-W02 remain pending their shared parameter-authority slice.
+
+### Slice 3 — FND-B14 and FND-W02 parameter authority
+
+- Red: `go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Test(BinaryDownloadRejectsUndeclaredOrUnsafeParametersBeforeProviderIO|OperationStatusCheckRejectsUndeclaredOrUnsafeParametersBeforeProviderIO)'` failed because both executors accepted undeclared bindings, over-cap values, and missing required query values, reaching the hermetic provider double.
+- Green: `go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Test(BinaryDownloadRejectsUndeclaredOrUnsafeParametersBeforeProviderIO|OperationStatusCheckRejectsUndeclaredOrUnsafeParametersBeforeProviderIO)'` proves declared inputs make the single expected request and every rejected binding makes none.

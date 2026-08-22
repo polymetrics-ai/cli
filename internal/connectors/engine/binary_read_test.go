@@ -576,6 +576,54 @@ func TestBinaryDownloadHTTPErrorKeepsProviderQueryAndBodyPrivateAndLeavesNoFile(
 	}
 }
 
+func TestBinaryDownloadRejectsUndeclaredOrUnsafeParametersBeforeProviderIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if got := r.URL.Query().Get("view"); got != "full" {
+			t.Errorf("view = %q, want full", got)
+		}
+		w.Header().Set("Content-Type", "application/octet-stream")
+		_, _ = w.Write([]byte("ok"))
+	}))
+	t.Cleanup(srv.Close)
+	b := binaryBundle(srv, &BinaryOperationSpec{Parameters: []OperationParameter{
+		{Name: "id", In: "path", Type: "string", Required: true, MaxBytes: 8},
+		{Name: "view", In: "query", Type: "string", Required: true, MaxBytes: 8},
+	}})
+	for _, tc := range []struct {
+		name string
+		req  BinaryDownloadRequest
+		ok   bool
+	}{
+		{name: "declared parameters", ok: true, req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "undeclared path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report", "admin": "true"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "undeclared query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full", "admin": "true"}, DestRoot: t.TempDir()}},
+		{name: "over cap path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "too-long-id"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "missing required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, DestRoot: t.TempDir()}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			before := requests
+			_, err := OperationBinaryDownload(context.Background(), b, tc.req, nil)
+			if tc.ok {
+				if err != nil {
+					t.Fatalf("OperationBinaryDownload: %v", err)
+				}
+				if requests != before+1 {
+					t.Fatalf("requests = %d, want %d", requests, before+1)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("unsafe binding was accepted")
+			}
+			if requests != before {
+				t.Fatalf("unsafe binding reached provider %d times", requests-before)
+			}
+		})
+	}
+}
+
 func TestBinaryDownloadProviderErrorReturnsCompleteMetadataAndNoArtifact(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Add("X-Provider-Receipt", "first")
