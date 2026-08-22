@@ -2,7 +2,7 @@
   "record": {
     "operations": [
       {
-        "create": {}
+        "update": {}
       }
     ]
   },
@@ -12,7 +12,7 @@
     "body": {
       "operations": [
         {
-          "create": {}
+          "update": {}
         }
       ]
     }

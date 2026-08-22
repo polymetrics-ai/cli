@@ -191,7 +191,7 @@ func prepareHookWritePlan(b Bundle, root WriteAction, records []connectors.Recor
 			if err != nil {
 				return nil, nil, false, &Error{Connector: b.Name, Action: root.Name, Page: -1, RecordIndex: recordIndex, Err: fmt.Errorf("hook step %d: %w", stepIndex, err)}
 			}
-			if strings.TrimSpace(stepAction.Hook) != "" && stepAction.Name != root.Name {
+			if strings.TrimSpace(stepAction.Hook) != "" && stepAction.Name != root.Name && !step.ResolvedDeclarative {
 				return nil, nil, false, &Error{Connector: b.Name, Action: root.Name, Page: -1, RecordIndex: recordIndex, Err: fmt.Errorf("hook step %d selects nested hook action %q", stepIndex, stepAction.Name)}
 			}
 			sealed := connectors.Record(copyRecordMap(map[string]any(step.Record)))

@@ -320,6 +320,9 @@ func githubPreparedWriteSteps(action string, rec connectors.Record) ([]engine.Pr
 	step := func(action string, record connectors.Record) engine.PreparedWriteHookStep {
 		return engine.PreparedWriteHookStep{Action: action, Record: record}
 	}
+	resolvedDeclarativeStep := func(action string, record connectors.Record) engine.PreparedWriteHookStep {
+		return engine.PreparedWriteHookStep{Action: action, Record: record, ResolvedDeclarative: true}
+	}
 	boundStep := func(action string, record connectors.Record, target string) engine.PreparedWriteHookStep {
 		return engine.PreparedWriteHookStep{
 			Action: action,
@@ -356,7 +359,7 @@ func githubPreparedWriteSteps(action string, rec connectors.Record) ([]engine.Pr
 		if comment := optionalString(rec, "comment"); comment != "" {
 			steps = append(steps, step("comment_issue", connectors.Record{"issue_number": number, "body": comment}))
 		}
-		return append(steps, step("update_pull_request", connectors.Record{"pull_number": number, "state": "closed"})), nil
+		return append(steps, resolvedDeclarativeStep("update_pull_request", connectors.Record{"pull_number": number, "state": "closed"})), nil
 	case "reopen_issue":
 		number, err := requiredInt(rec, "issue_number", "number")
 		if err != nil {
@@ -368,7 +371,7 @@ func githubPreparedWriteSteps(action string, rec connectors.Record) ([]engine.Pr
 		if err != nil {
 			return nil, err
 		}
-		return []engine.PreparedWriteHookStep{step("update_pull_request", connectors.Record{"pull_number": number, "state": "open"})}, nil
+		return []engine.PreparedWriteHookStep{resolvedDeclarativeStep("update_pull_request", connectors.Record{"pull_number": number, "state": "open"})}, nil
 	case "create_pull_request":
 		steps := []engine.PreparedWriteHookStep{step("create_pull_request", cloneGitHubWriteRecord(rec))}
 		if meta := selectFields(rec, metaFields); len(meta) > 0 {

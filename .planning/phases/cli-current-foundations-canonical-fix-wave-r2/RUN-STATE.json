@@ -3,7 +3,7 @@
   "status": "executing",
   "base_sha": "c3f83cbf6eabbae00219566fb02719ca2d6c480d",
   "branch": "fm/cli-current-foundations-canonical-fix-wave-r2",
-  "workflow": ["discuss-phase:inline-manual-fallback", "plan-phase:tdd:inline-manual-fallback", "execute-phase:group-1-green", "verify-work:pending", "code-review:pending", "no-mistakes:pending"],
+  "workflow": ["discuss-phase:inline-manual-fallback", "plan-phase:tdd:inline-manual-fallback", "execute-phase:group-1-green", "execute-phase:group-2-green", "verify-work:pending", "code-review:pending", "no-mistakes:pending"],
   "blockers": ["FND-B01", "FND-B02", "FND-B03", "FND-B04", "FND-B05", "FND-B06", "FND-B07", "FND-B08", "FND-B09", "FND-B10", "FND-B11", "FND-B12", "FND-B13", "FND-B14", "FND-B15", "FND-B16", "FND-B17", "FND-B18", "FND-B19"],
   "last_updated": "2026-08-22"
 }
