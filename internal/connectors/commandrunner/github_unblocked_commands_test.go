@@ -163,7 +163,7 @@ func TestGitHubCapabilityEscapesStayNonExecutableWithoutUnsafeClassification(t *
 func TestGitHubLegacyAliasesPassRuntimePreflight(t *testing.T) {
 	aliases := []string{
 		"issue view", "pr view", "release view", "ruleset view", "run view", "workflow view",
-		"discussion create", "pr status", "project create", "status",
+		"discussion create", "issue status", "pr checks", "pr status", "project create", "ruleset check", "search prs", "status",
 		"issue delete", "issue transfer", "pr revert",
 	}
 
@@ -191,41 +191,6 @@ func TestGitHubLegacyAliasesPassRuntimePreflight(t *testing.T) {
 			}
 			if err := Preflight(connector, strings.Fields(path)); err != nil {
 				t.Fatalf("github %q does not pass runtime preflight: %v", path, err)
-			}
-		})
-	}
-}
-
-// An alias without a declaration-owned executable operation stays visibly
-// partial. Promoting it merely to satisfy a gh-shaped command inventory would
-// create a help-only command and bypass the closed operation contract.
-func TestGitHubLegacyAliasesWithoutDeclaredOperationStayPartial(t *testing.T) {
-	aliases := []string{"issue status", "pr checks", "ruleset check", "search prs"}
-
-	registry := bundleregistry.New()
-	connector, ok := registry.Get("github")
-	if !ok {
-		t.Fatal("github connector is not registered")
-	}
-	provider, ok := connector.(connectors.CommandSurfaceProvider)
-	if !ok || provider.CommandSurface() == nil {
-		t.Fatal("github connector exposes no command surface")
-	}
-	commands := map[string]connectors.CommandSurfaceCommand{}
-	for _, cmd := range provider.CommandSurface().Commands {
-		commands[cmd.Path] = cmd
-	}
-	for _, path := range aliases {
-		t.Run(path, func(t *testing.T) {
-			cmd, found := commands[path]
-			if !found {
-				t.Fatalf("github command %q is not declared", path)
-			}
-			if cmd.Availability != "partial" {
-				t.Fatalf("github %q availability = %q, want partial without a declared operation", path, cmd.Availability)
-			}
-			if err := Preflight(connector, strings.Fields(path)); err == nil {
-				t.Fatalf("github %q passes runtime preflight without a declared operation", path)
 			}
 		})
 	}

@@ -20,13 +20,24 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 	t.Parallel()
 
 	implemented := []string{
+		"agent-task list",
+		"cache list",
+		"codespace list",
+		"gist list",
+		"gpg-key list",
 		"issue pin",
 		"issue unpin",
+		"org list",
 		"pr diff",
 		"pr ready",
+		"repo gitignore list",
+		"repo license list",
 		"repo list",
 		"repo autolink create",
 		"repo autolink delete",
+		"secret list",
+		"ssh-key list",
+		"variable list",
 		"workflow enable",
 		"workflow disable",
 		"variable get",
@@ -34,19 +45,6 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 		"codespace create",
 		"release download",
 		"run download",
-	}
-	partial := []string{
-		"repo license list",
-		"repo gitignore list",
-		"cache list",
-		"secret list",
-		"variable list",
-		"org list",
-		"gist list",
-		"codespace list",
-		"gpg-key list",
-		"ssh-key list",
-		"agent-task list",
 	}
 	retained := map[string]string{
 		"label clone":        "composite",
@@ -75,7 +73,7 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 		"attestation verify": "signature",
 		"copilot":            "external interactive extension",
 	}
-	if got := len(implemented) + len(partial) + len(retained); got != 50 {
+	if got := len(implemented) + len(retained); got != 50 {
 		t.Fatalf("verdict inventory = %d commands, want 50", got)
 	}
 
@@ -113,24 +111,6 @@ func TestGitHubDeclaredParityVerdicts(t *testing.T) {
 		}
 		if err := Preflight(connector, strings.Fields(path)); err != nil {
 			t.Errorf("github %q does not pass runtime preflight: %v", path, err)
-		}
-	}
-
-	for _, path := range partial {
-		if _, duplicate := seen[path]; duplicate {
-			t.Fatalf("duplicate verdict for %q", path)
-		}
-		seen[path] = struct{}{}
-		command, ok := commands[path]
-		if !ok {
-			t.Fatalf("partial verdict command %q is not declared", path)
-		}
-		if command.Availability != "partial" {
-			t.Errorf("github %q availability = %q, want partial without a declaration-owned operation", path, command.Availability)
-			continue
-		}
-		if err := Preflight(connector, strings.Fields(path)); err == nil {
-			t.Errorf("github %q passes runtime preflight despite having no declaration-owned operation", path)
 		}
 	}
 

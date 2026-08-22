@@ -1,12 +1,14 @@
 package cli
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -88,7 +90,7 @@ func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) 
 	binary := buildTransportPM(t)
 	root := filepath.Join(t.TempDir(), "project")
 	generatedStages := githubGeneratedDirectReadStageSelection(t)
-	output, err := runTransportPM(binary, "",
+	output, diagnostics, err := runTransportPMJSON(binary, "",
 		"connectors", "certify", "github",
 		"--direct-read-only",
 		"--config", "base_url="+server.URL,
@@ -101,13 +103,12 @@ func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) 
 		"--root", root,
 		"--json",
 	)
-
 	var envelope struct {
 		Kind   string         `json:"kind"`
 		Report certify.Report `json:"report"`
 	}
 	if err := json.Unmarshal([]byte(output), &envelope); err != nil {
-		t.Fatalf("decode GitHub direct-read fixture certification output: %v\n%s", err, redactTransportFailureOutput(output, token))
+		t.Fatalf("decode GitHub direct-read fixture certification stdout: %v\nstdout:\n%s\nstderr:\n%s", err, redactTransportFailureOutput(output, token), redactTransportFailureOutput(diagnostics, token))
 	}
 	if envelope.Kind != "ConnectorCertification" {
 		t.Fatalf("GitHub direct-read fixture certification kind = %q, want ConnectorCertification", envelope.Kind)
@@ -133,6 +134,155 @@ func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) 
 	if requestCount < 98 { // 97 direct-read stages plus credential validation.
 		t.Fatalf("GitHub direct-read fixture requests = %d, want at least 98 real connector HTTP requests", requestCount)
 	}
+}
+
+// TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture adjudicates
+// the exact commands whose hard-coded partial expectations fail the release
+// gate. Each command has the same implemented declaration it had in v0.2.1;
+// this test proves the real binary emits its declared request and accepts the
+// declared JSON result before a verdict test may classify it as non-executable.
+func TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture(t *testing.T) {
+	const token = "github-disputed-partial-fixture-token"
+	const tokenEnv = "PM_GITHUB_DISPUTED_PARTIAL_FIXTURE_TOKEN"
+	t.Setenv(tokenEnv, token)
+
+	paths := []string{
+		"agent-task list",
+		"cache list",
+		"codespace list",
+		"gist list",
+		"gpg-key list",
+		"issue status",
+		"org list",
+		"pr checks",
+		"repo gitignore list",
+		"repo license list",
+		"ruleset check",
+		"search prs",
+		"secret list",
+		"ssh-key list",
+		"variable list",
+	}
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("load GitHub disputed partial verdict commands: %v", err)
+	}
+	if bundle.CLISurface == nil {
+		t.Fatal("GitHub bundle has no CLI surface")
+	}
+	commands := make([]engine.CLICommand, 0, len(paths))
+	byPath := make(map[string]engine.CLICommand, len(bundle.CLISurface.Commands))
+	for _, command := range bundle.CLISurface.Commands {
+		byPath[command.Path] = command
+	}
+	for _, path := range paths {
+		command, found := byPath[path]
+		if !found {
+			t.Fatalf("GitHub disputed command %q is absent", path)
+		}
+		if command.Availability != "implemented" || command.Intent != "direct_read" || len(command.APISurface) != 1 || command.OutputPolicy != "json_redacted" {
+			t.Fatalf("GitHub disputed command %q declaration = %+v, want one implemented JSON direct-read route", path, command)
+		}
+		commands = append(commands, command)
+	}
+
+	var observed githubReleasedReadFixtureObserved
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		if request.Method != http.MethodGet {
+			http.Error(w, "disputed-partial fixture received a non-GET request", http.StatusMethodNotAllowed)
+			return
+		}
+		if request.Header.Get("Authorization") != "Bearer "+token {
+			http.Error(w, "disputed-partial fixture received no declared bearer authentication", http.StatusUnauthorized)
+			return
+		}
+		if strings.Contains(request.URL.EscapedPath(), "{") || strings.Contains(request.URL.EscapedPath(), "}") {
+			http.Error(w, "disputed-partial fixture received an unresolved path parameter", http.StatusBadRequest)
+			return
+		}
+		observed.Lock()
+		observed.requests = append(observed.requests, githubReleasedReadFixtureRequest{Method: request.Method, Path: request.URL.EscapedPath()})
+		observed.Unlock()
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, `{"fixture":"github-released-read","method":"`+request.Method+`","path":"`+request.URL.EscapedPath()+`"}`)
+	}))
+	t.Cleanup(server.Close)
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "project")
+	mustRunReleasedReadPM(t, binary, token, "init", "--root", root, "--json")
+	mustRunReleasedReadPM(t, binary, token,
+		"credentials", "add", "github-disputed-partial",
+		"--connector", "github",
+		"--config", "base_url="+server.URL,
+		"--config", "auth_type=token",
+		"--config", "rate_limit_account=disputed-partial-fixture",
+		"--config", "owner=Polymetrics-Cert",
+		"--config", "repo=pm-cert-3993-20260810-wz0fru",
+		"--from-env", "token="+tokenEnv,
+		"--root", root,
+		"--json",
+	)
+	observed.Lock()
+	observed.requests = nil
+	observed.Unlock()
+
+	for index, command := range commands {
+		t.Run(command.Path, func(t *testing.T) {
+			args := append([]string{"github"}, strings.Fields(command.Path)...)
+			args = append(args, "--credential", "github-disputed-partial")
+			for _, flag := range command.Flags {
+				if flag.Required {
+					args = append(args, "--"+flag.Name, githubReleasedReadFixtureFlagValue(t, command, flag))
+				}
+			}
+			args = append(args, "--root", root, "--json")
+
+			before := githubReleasedReadFixtureRequestCount(&observed)
+			output, diagnostics, err := runTransportPMJSON(binary, "", args...)
+			if err != nil {
+				t.Fatalf("pm %s failed: %v\nstderr:\n%s", command.Path, err, redactTransportFailureOutput(diagnostics, token))
+			}
+			githubReleasedReadFixtureAssertOutput(t, command, output, root, index)
+			var envelope struct {
+				Method string `json:"method"`
+				Path   string `json:"path"`
+			}
+			if err := json.Unmarshal([]byte(output), &envelope); err != nil {
+				t.Fatalf("decode %s emitted command output: %v\n%s", command.Path, err, output)
+			}
+			observed.Lock()
+			if len(observed.requests) != before+1 {
+				observed.Unlock()
+				t.Fatalf("%s fixture requests = %d, want exactly one new declared provider request", command.Path, len(observed.requests)-before)
+			}
+			request := observed.requests[before]
+			observed.Unlock()
+			wantMethod := strings.ToUpper(command.APISurface[0].Method)
+			if request.Method != wantMethod || !githubReleasedReadFixturePathMatches(command.APISurface[0].Path, request.Path) {
+				t.Fatalf("%s provider request = %+v, want declared %s %s with all path parameters resolved", command.Path, request, wantMethod, command.APISurface[0].Path)
+			}
+			if request.Method != envelope.Method || request.Path != envelope.Path {
+				t.Fatalf("%s provider request = %+v, emitted output = %+v; want exact declared request/output agreement", command.Path, request, envelope)
+			}
+		})
+	}
+}
+
+// runTransportPMJSON keeps a command's machine-readable stdout separate from
+// diagnostics. runTransportPM intentionally uses CombinedOutput for legacy
+// failure assertions, but decoding that combined stream as JSON makes a valid
+// certification result fail whenever a diagnostic is emitted on stderr.
+func runTransportPMJSON(binary, stdin string, args ...string) (stdout, stderr string, err error) {
+	command := exec.Command(binary, args...)
+	if stdin != "" {
+		command.Stdin = strings.NewReader(stdin)
+	}
+	var stdoutBuffer, stderrBuffer bytes.Buffer
+	command.Stdout = &stdoutBuffer
+	command.Stderr = &stderrBuffer
+	err = command.Run()
+	return stdoutBuffer.String(), stderrBuffer.String(), err
 }
 
 func githubGeneratedDirectReadStageSelection(t *testing.T) string {
