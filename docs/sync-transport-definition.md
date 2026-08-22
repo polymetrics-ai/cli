@@ -103,7 +103,10 @@ generic HTTP writer:
   A `full_overwrite` destination declaration is therefore rejected during
   preflight before any source, stage, or provider I/O.
 - Declare `acknowledgement: "durable_warehouse"` and
-  `delivery.idempotency: "keyed"`. Each action binding declares
+  `delivery.idempotency: "keyed"`. Provider idempotency binds the durable
+  workset occurrence, selected action, and record identity: reopening one
+  uncommitted workset reuses its key, while otherwise-equal records in another
+  workset use a different key. Each action binding declares
   `batch: {"disposition":"per_record","max_records":N}` and an
   action-owned read-back policy. Before provider I/O, the runtime validates
   both ordinary and tombstone policies and clamps a caller's `--batch-size` to
@@ -160,8 +163,8 @@ without granting a tool that can execute an arbitrary provider operation.
 
 ### Persisted result output and credential boundary
 
-After each durable `declarative_typed_destination` apply, the persisted App run
-and `pm etl run --json` / `pm etl status --json` expose
+After a provider-successful `declarative_typed_destination` apply, the
+persisted App run and `pm etl run --json` / `pm etl status --json` expose
 `run.destination_results`. Each element is the complete result of the already
 selected named `writes.json` action: record accounting and every successful
 provider response's status, headers, and body. Ordinary response fields are
@@ -169,14 +172,18 @@ never omitted because they are rare, destructive, paid-tier-specific,
 unfamiliar, or outside a summary list. JSON bodies retain their original
 structure; text and binary bodies retain an explicit encoding.
 
-Provider-returned fields, keys, and values are preserved verbatim, even when
-they equal configured credential bytes. System-generated plans, logs, request
-diagnostics, and synthetic errors remain secret-taint-safe. No route, request
-body, action selector, or credential is accepted from a runtime caller to
-influence this output. The regular persisted reverse-ETL run uses the same
-`destination_result` contract, and an operation-direct-write run preserves the
-same provider response facts. Its declared `output_policy` may select a parsing
-form, but it does not suppress a successful ordinary provider response.
+Concrete configured credential material is masked wherever it occurs in the
+public/persisted provider result; provider-owned field names and ordinary
+values are otherwise preserved. System-generated plans, logs, request
+diagnostics, and synthetic errors remain secret-taint-safe. If a later local
+receipt, acknowledgement, composition, or output step fails before checkpoint,
+the failed uncheckpointed run still retains the ordered sanitized provider
+evidence. No route, request body, action selector, or credential is accepted
+from a runtime caller to influence this output. The regular persisted
+reverse-ETL run uses the same `destination_result` contract, and an
+operation-direct-write run preserves the same provider response facts. Its
+declared `output_policy` may select a parsing form, but it does not suppress a
+successful ordinary provider response.
 
 When the provider effect, read-back, and checkpoint are durable but bounded
 receipt retirement or a declaration-owned approval marker cannot be finalized,

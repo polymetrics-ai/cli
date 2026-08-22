@@ -308,8 +308,9 @@ type Run struct {
 	// contains counts and elapsed times only, never records, paths, tokens, or
 	// connector configuration.
 	TransportPhaseMeasurement *TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
-	// DestinationResults retains each completed declarative typed destination
-	// action's full provider result.
+	// DestinationResults retains each provider-successful declarative typed
+	// destination action's sanitized result, including evidence preserved when a
+	// later local receipt or acknowledgement step fails before checkpoint.
 	DestinationResults     []json.RawMessage       `json:"destination_results,omitempty"`
 	DeliveryReconciliation *DeliveryReconciliation `json:"delivery_reconciliation,omitempty"`
 	Error                  string                  `json:"error,omitempty"`

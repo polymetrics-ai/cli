@@ -472,12 +472,9 @@ func (s *connectionWarehouseStage) ReconcileCommitted(ctx context.Context) error
 			if !prepared {
 				continue
 			}
-			retired, err := s.retirePreparedTransportReceipt(ctx, conn.Name, manifest.Stream, receipt)
+			_, err = s.retirePreparedTransportReceipt(ctx, conn.Name, manifest.Stream, receipt)
 			if err != nil {
 				return fmt.Errorf("retire reconciled warehouse stage receipt %q: %w", manifest.ID, err)
-			}
-			if !retired {
-				continue
 			}
 		}
 	}

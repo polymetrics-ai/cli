@@ -304,10 +304,11 @@ the selected named action's record accounting and complete successful provider
 response: status, headers, and body. The CLI does not discard ordinary response
 fields because they are rare, destructive, paid-tier-specific, or unfamiliar.
 
-Provider-returned fields, keys, and values are preserved verbatim, even when
-they equal configured credential bytes. System-generated plans, logs, request
-diagnostics, and synthetic errors remain secret-taint-safe. The same
-preserved-result contract is used by persisted regular reverse-ETL runs
+Concrete configured credential material is masked wherever it occurs; provider-
+owned field names and ordinary values remain available. If a later local
+receipt, acknowledgement, composition, or output step fails before checkpoint,
+the persisted failed run still retains ordered sanitized provider evidence. The
+same preserved-result contract is used by persisted regular reverse-ETL runs
 (`destination_result`) and direct-write run output.
 
 If a closed transport already applied, read back, and checkpointed a provider
