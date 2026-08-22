@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -67,14 +68,18 @@ func operationBinaryDownloadPathParameterNames(op OperationSpec) (map[string]str
 	return names, nil
 }
 
-func validateOperationBinaryDownloadPathParams(op OperationSpec, pathParams map[string]string) error {
+func materializeOperationBinaryDownloadPathParams(op OperationSpec, cfg connectors.RuntimeConfig, pathParams map[string]string) (map[string]string, error) {
 	declared, err := operationBinaryDownloadPathParameterNames(op)
 	if err != nil {
-		return err
+		return nil, err
 	}
+	return materializeOperationPathParams(op, declared, cfg, pathParams)
+}
+
+func materializeOperationPathParams(op OperationSpec, declared map[string]struct{}, cfg connectors.RuntimeConfig, pathParams map[string]string) (map[string]string, error) {
 	parameters, err := operationParametersForLocation(op, "path")
 	if err != nil {
-		return err
+		return nil, err
 	}
 	fields := make([]string, 0, len(pathParams))
 	for field := range pathParams {
@@ -82,21 +87,37 @@ func validateOperationBinaryDownloadPathParams(op OperationSpec, pathParams map[
 	}
 	sort.Strings(fields)
 	for _, field := range fields {
-		if err := safety.ValidateIdentifier(field, "binary path parameter"); err != nil {
-			return fmt.Errorf("operation %q binary path parameter: %w", op.ID, err)
+		if err := safety.ValidateIdentifier(field, "operation path parameter"); err != nil {
+			return nil, fmt.Errorf("operation %q path parameter: %w", op.ID, err)
 		}
 		if _, ok := declared[field]; !ok {
-			return fmt.Errorf("operation %q binary path parameter %q is not declared by binary.path", op.ID, field)
+			return nil, fmt.Errorf("operation %q path parameter %q is not declared", op.ID, field)
+		}
+	}
+	names := make([]string, 0, len(declared))
+	for name := range declared {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	effective := make(map[string]string, len(names))
+	for _, field := range names {
+		value, provided := pathParams[field]
+		if !provided || value == "" {
+			value, provided = cfg.Config[field]
+		}
+		if !provided || value == "" {
+			return nil, fmt.Errorf("missing path variable %q", field)
 		}
 		parameter, ok := parameters[field]
 		if !ok {
 			parameter = OperationParameter{Name: field, In: "path", Type: "string"}
 		}
-		if err := validateOperationParameterWireValue(op, parameter, "path", pathParams[field]); err != nil {
-			return err
+		if err := validateOperationParameterWireValue(op, parameter, "path", value); err != nil {
+			return nil, err
 		}
+		effective[field] = value
 	}
-	return nil
+	return effective, nil
 }
 
 func operationBinaryDownloadQuery(op OperationSpec, requested map[string]string) (map[string]string, error) {
@@ -136,6 +157,9 @@ func operationBinaryDownloadQuery(op OperationSpec, requested map[string]string)
 }
 
 func validateOperationParameterWireValue(op OperationSpec, parameter OperationParameter, location, value string) error {
+	if location == "query" && parameter.Required && strings.TrimSpace(value) == "" {
+		return fmt.Errorf("operation %q requires non-blank query parameter %q", op.ID, parameter.Name)
+	}
 	if err := safety.RejectDangerousChars(value, location+" parameter "+parameter.Name); err != nil {
 		return err
 	}

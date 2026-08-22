@@ -1245,9 +1245,6 @@ func redactProviderResponseText(value string, secrets []string) string {
 }
 
 func providerResponseJSONStrings(value string) ([]providerResponseJSONStringSpan, bool) {
-	if !json.Valid([]byte(value)) {
-		return nil, false
-	}
 	spans := make([]providerResponseJSONStringSpan, 0)
 	for offset := 0; offset < len(value); {
 		if value[offset] != '"' {
@@ -1272,7 +1269,7 @@ func providerResponseJSONStrings(value string) ([]providerResponseJSONStringSpan
 			}
 		}
 		if !terminated {
-			return nil, false
+			break
 		}
 		next := offset
 		for next < len(value) && isProviderResponseJSONWhitespace(value[next]) {
@@ -1280,7 +1277,7 @@ func providerResponseJSONStrings(value string) ([]providerResponseJSONStringSpan
 		}
 		spans = append(spans, providerResponseJSONStringSpan{start: start, end: offset, key: next < len(value) && value[next] == ':'})
 	}
-	return spans, true
+	return spans, len(spans) != 0
 }
 
 func isProviderResponseJSONWhitespace(value byte) bool {

@@ -223,13 +223,14 @@ func installationRepositories(raw string) ([]string, error) {
 		if repository == "" || strings.TrimSpace(repository) != repository || !githubRepositoryName(repository) {
 			return nil, errors.New("github installation_repositories must be a comma-separated list of repository names")
 		}
-		if _, duplicate := seen[repository]; duplicate {
+		identity := strings.ToLower(repository)
+		if _, duplicate := seen[identity]; duplicate {
 			return nil, fmt.Errorf("github installation_repositories repeats %q", repository)
 		}
 		if len(out) >= githubInstallationRepositoryRestrictionLimit {
 			return nil, fmt.Errorf("github installation_repositories supports at most %d repositories", githubInstallationRepositoryRestrictionLimit)
 		}
-		seen[repository] = struct{}{}
+		seen[identity] = struct{}{}
 		out = append(out, repository)
 	}
 	return out, nil

@@ -637,10 +637,14 @@ func TestBinaryDownloadRejectsUndeclaredOrUnsafeParametersBeforeProviderIO(t *te
 		ok   bool
 	}{
 		{name: "declared parameters", ok: true, req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "declared path parameter from config", ok: true, req: BinaryDownloadRequest{Operation: "acme.download_file", Config: connectors.RuntimeConfig{Config: map[string]string{"id": "report"}}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
 		{name: "undeclared path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report", "admin": "true"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
 		{name: "undeclared query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full", "admin": "true"}, DestRoot: t.TempDir()}},
 		{name: "over cap path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "too-long-id"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "over cap configured path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", Config: connectors.RuntimeConfig{Config: map[string]string{"id": "too-long-id"}}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
 		{name: "missing required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, DestRoot: t.TempDir()}},
+		{name: "empty required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": ""}, DestRoot: t.TempDir()}},
+		{name: "whitespace required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "   "}, DestRoot: t.TempDir()}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			before := requests

@@ -291,10 +291,14 @@ func TestOperationStatusCheckRejectsUndeclaredOrUnsafeParametersBeforeProviderIO
 		ok   bool
 	}{
 		{name: "declared parameters", ok: true, req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full"}}},
+		{name: "declared path parameter from config", ok: true, req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", Config: connectors.RuntimeConfig{Config: map[string]string{"id": "report"}}, Query: map[string]string{"view": "full"}}},
 		{name: "undeclared path parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report", "admin": "true"}, Query: map[string]string{"view": "full"}}},
 		{name: "undeclared query parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full", "admin": "true"}}},
 		{name: "over cap query parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "too-long-value"}}},
+		{name: "over cap configured path parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", Config: connectors.RuntimeConfig{Config: map[string]string{"id": "too-long-id"}}, Query: map[string]string{"view": "full"}}},
 		{name: "missing required query parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}}},
+		{name: "empty required query parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": ""}}},
+		{name: "whitespace required query parameter", req: connectors.OperationStatusCheckRequest{Operation: "acme.tags.status", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "   "}}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			before := requests

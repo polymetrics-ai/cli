@@ -512,6 +512,7 @@ func TestAuthenticatorGithubAppRestrictionParsingFailsClosedBeforeDeclaredRouteI
 		{name: "valid provider permission matrix", valid: true, extra: map[string]string{"valid": "true", "installation_permissions": `{"repository_projects":"admin","workflows":"write","organization_events":"read"}`}},
 		{name: "empty repository member", extra: map[string]string{"installation_repositories": "alpha,,beta"}},
 		{name: "unsafe repository name", extra: map[string]string{"installation_repositories": "alpha/../beta"}},
+		{name: "case insensitive duplicate repository name", extra: map[string]string{"installation_repositories": "Widget,widget"}},
 		{name: "too many repository names", extra: map[string]string{"installation_repositories": repositories(501)}},
 		{name: "non-numeric repository id", extra: map[string]string{"installation_repository_ids": "7,not-a-number"}},
 		{name: "duplicate repository id", extra: map[string]string{"installation_repository_ids": "7,7"}},

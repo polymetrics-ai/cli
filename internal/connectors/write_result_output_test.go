@@ -446,6 +446,45 @@ func TestPublicWriteReceiptsMaskEscapedJSONValuesWithoutChangingOtherBytes(t *te
 	}
 }
 
+func TestPublicReceiptsMaskEscapedValuesInMalformedOrMultiValueJSON(t *testing.T) {
+	const credential = "secret"
+	const escapedCredential = `\u0073\u0065\u0063\u0072\u0065\u0074`
+	tests := []struct {
+		name     string
+		raw      string
+		expected string
+	}{
+		{
+			name:     "malformed object",
+			raw:      `{"secret":"ordinary-occurrence-id","diagnostic":"provider ` + escapedCredential + ` occurrence_id=occurrence-9007199254740993"`,
+			expected: `{"secret":"ordinary-occurrence-id","diagnostic":"provider [masked] occurrence_id=occurrence-9007199254740993"`,
+		},
+		{
+			name:     "multiple objects",
+			raw:      `{"secret":"ordinary-occurrence-id"}` + "\n" + `{"diagnostic":"provider ` + escapedCredential + ` occurrence_id=occurrence-9007199254740993"}`,
+			expected: `{"secret":"ordinary-occurrence-id"}` + "\n" + `{"diagnostic":"provider [masked] occurrence_id=occurrence-9007199254740993"}`,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := SanitizeProviderResponseReceiptForOutput(ProviderResponseReceipt{
+				BodyPresent:     true,
+				BodyBytes:       int64(len(test.raw)),
+				BodyRaw:         test.raw,
+				BodyRawEncoding: "text",
+				Body:            test.raw,
+			}, map[string]string{"credential": credential})
+			body, ok := got.Body.(string)
+			if !ok || got.BodyRaw != test.expected || body != test.expected {
+				t.Fatalf("sanitized receipt = raw %q body %#v, want %q", got.BodyRaw, got.Body, test.expected)
+			}
+			if strings.Contains(got.BodyRaw, escapedCredential) {
+				t.Fatal("sanitized receipt retained the escaped configured value")
+			}
+		})
+	}
+}
+
 func TestPublicResponseHeaderSanitizationMasksOnlyExactConfiguredValues(t *testing.T) {
 	const credential = "configured-header-material"
 	const occurrenceID = "occurrence-9007199254740993"

@@ -124,10 +124,11 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	}
 
 	cfg := materializeConfigDefaults(b, req.Config)
-	if err := validateOperationBinaryDownloadPathParams(op, req.PathParams); err != nil {
+	effectivePathParams, err := materializeOperationBinaryDownloadPathParams(op, cfg, req.PathParams)
+	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	resolvedPath, err := resolveSurfaceEndpointPath(spec.Path, cfg, req.PathParams)
+	resolvedPath, err := resolveSurfaceEndpointPath(spec.Path, cfg, effectivePathParams)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
