@@ -33,3 +33,9 @@ FND-B14 and FND-W02 remain pending their shared parameter-authority slice.
 
 - Red: `go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Test(BinaryDownloadRejectsUndeclaredOrUnsafeParametersBeforeProviderIO|OperationStatusCheckRejectsUndeclaredOrUnsafeParametersBeforeProviderIO)'` failed because both executors accepted undeclared bindings, over-cap values, and missing required query values, reaching the hermetic provider double.
 - Green: `go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Test(BinaryDownloadRejectsUndeclaredOrUnsafeParametersBeforeProviderIO|OperationStatusCheckRejectsUndeclaredOrUnsafeParametersBeforeProviderIO)'` proves declared inputs make the single expected request and every rejected binding makes none.
+
+### Review hardening
+
+- Review found that a direct-read error could return page context before the success-only cursor sanitizer ran. Sanitization now occurs when the public result is constructed, before every error branch.
+- Review found that a decoded `map[string]string` could bypass scalar sanitization. It now receives the same exact configured-value masking while its provider field names and ordinary values remain intact.
+- Green: `go test -count=1 -timeout 20m ./internal/connectors -run 'TestPublicReceiptSanitizationMasksConcreteSecretRepresentationsWithoutChangingProviderNames'` and `go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestOperationDirectReadMasksConfiguredCursorAtThePublicBoundary'`.

@@ -1068,6 +1068,12 @@ func sanitizeProviderOutputValue(value any, secrets []string) any {
 			out[key] = sanitizeProviderOutputValue(item, secrets)
 		}
 		return out
+	case map[string]string:
+		out := make(map[string]string, len(typed))
+		for key, item := range typed {
+			out[key] = sanitizeProviderOutputScalar(item, secrets)
+		}
+		return out
 	case []any:
 		out := make([]any, len(typed))
 		for i, item := range typed {

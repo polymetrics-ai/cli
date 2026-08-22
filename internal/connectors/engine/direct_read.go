@@ -140,7 +140,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		pageCursor:      req.PageCursor,
 		pagination:      op.REST.Pagination,
 	})
-	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: method, Path: resolvedPath, Page: pageInfo}
+	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: method, Path: resolvedPath, Page: connectors.SanitizeDirectReadPageForOutput(pageInfo, cfg.Secrets)}
 	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
 	if readResult.Receipt == nil && err != nil {
 		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
@@ -191,7 +191,6 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	}
 	readResult.Body = decoded
 	readResult.Headers = responseHeaders
-	readResult.Page = connectors.SanitizeDirectReadPageForOutput(readResult.Page, cfg.Secrets)
 	return readResult, nil
 }
 
@@ -488,7 +487,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		page:         req.Page,
 		pageCursor:   req.PageCursor,
 	})
-	readResult := connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Page: pageInfo}
+	readResult := connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Page: connectors.SanitizeDirectReadPageForOutput(pageInfo, cfg.Secrets)}
 	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
 	if readResult.Receipt == nil && err != nil {
 		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
@@ -530,7 +529,6 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
 	readResult.Body = body
-	readResult.Page = connectors.SanitizeDirectReadPageForOutput(readResult.Page, cfg.Secrets)
 	return readResult, nil
 }
 

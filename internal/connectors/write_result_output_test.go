@@ -124,6 +124,7 @@ func TestPublicReceiptSanitizationMasksConcreteSecretRepresentationsWithoutChang
 			"encoded":       encoded,
 			"occurrence_id": "occurrence-9007199254740993",
 			"token_type":    "ordinary",
+			"string_map":    map[string]string{"credential": credential, "occurrence_id": "occurrence-9007199254740993"},
 		},
 	}
 
@@ -138,6 +139,10 @@ func TestPublicReceiptSanitizationMasksConcreteSecretRepresentationsWithoutChang
 	if !ok || body["credential"] != "[masked]" || body["encoded"] != "[masked]" || body["occurrence_id"] != "occurrence-9007199254740993" || body["token_type"] != "ordinary" {
 		t.Fatal("public receipt changed ordinary provider output")
 	}
+	stringMap, ok := body["string_map"].(map[string]string)
+	if !ok || stringMap["credential"] != "[masked]" || stringMap["occurrence_id"] != "occurrence-9007199254740993" {
+		t.Fatalf("public receipt string map = %#v, want concrete masking without changing provider IDs", body["string_map"])
+	}
 	if !strings.Contains(got.BodyRaw, "occurrence-9007199254740993") {
 		t.Fatal("public JSON receipt lost an ordinary occurrence identifier")
 	}
@@ -146,5 +151,11 @@ func TestPublicReceiptSanitizationMasksConcreteSecretRepresentationsWithoutChang
 	gotPrintable := SanitizeProviderResponseReceiptForOutput(printable, map[string]string{"credential": credential})
 	if gotPrintable.BodyRaw != "provider diagnostic [masked] for occurrence_id" || gotPrintable.Body != "provider diagnostic [masked] for occurrence_id" {
 		t.Fatalf("printable receipt = %#v, want concrete secret masking without changing occurrence_id", gotPrintable)
+	}
+
+	page := SanitizeDirectReadPageForOutput(DirectReadPage{NextCursor: credential}, map[string]string{"credential": credential})
+	ordinaryPage := SanitizeDirectReadPageForOutput(DirectReadPage{NextCursor: "occurrence_id"}, map[string]string{"credential": credential})
+	if page.NextCursor != "[masked]" || ordinaryPage.NextCursor != "occurrence_id" {
+		t.Fatalf("public pages = %#v, %#v, want exact secret masking with ordinary cursor preservation", page, ordinaryPage)
 	}
 }
