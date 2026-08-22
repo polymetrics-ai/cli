@@ -44,6 +44,7 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 	if _, err := a.updateState(func(current state) (state, error) {
 		currentState, present := current.StreamStates[key]
 		currentState = cloneStreamState(currentState)
+		migrateLegacyTransportReceiptAssociation(&currentState)
 		prior = cloneStreamState(currentState)
 		priorPresent = present
 		if currentState.Checkpoint != nil {
@@ -56,7 +57,7 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 			// Its successor receives a higher fence and must still reconcile any
 			// durable receipt before the source can replay; a running owner (or an
 			// unknown historical owner) remains fail-closed until expiry.
-			if !transportWorkOwnerTerminal(current.Runs, currentState.ActiveWorkID) && (currentState.ActiveWorkLeaseUntil == nil || currentState.ActiveWorkLeaseUntil.After(now)) {
+			if transportStreamWorkLeaseLive(currentState, current.Runs, now) {
 				return current, errTransportStreamWorkInProgress
 			}
 		}
@@ -94,6 +95,12 @@ func transportWorkOwnerTerminal(runs []Run, workID string) bool {
 		}
 	}
 	return false
+}
+
+func transportStreamWorkLeaseLive(streamState StreamState, runs []Run, now time.Time) bool {
+	return streamState.ActiveWorkID != "" &&
+		!transportWorkOwnerTerminal(runs, streamState.ActiveWorkID) &&
+		(streamState.ActiveWorkLeaseUntil == nil || streamState.ActiveWorkLeaseUntil.After(now))
 }
 
 // renew verifies that this exact durable work identity still owns the stream,

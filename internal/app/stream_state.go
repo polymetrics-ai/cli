@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -20,18 +21,20 @@ import (
 // scalar cursor or silently replace it with a full scan.
 func (s *StreamState) UnmarshalJSON(data []byte) error {
 	type streamStateWire struct {
-		Connection                 string                           `json:"connection"`
-		Stream                     string                           `json:"stream"`
-		Checkpoint                 *synccontract.CheckpointEnvelope `json:"checkpoint"`
-		CommittedTransportReceipts []TransportReceiptCommit         `json:"committed_transport_receipts"`
-		LegacyCursor               *string                          `json:"cursor"`
-		GenerationID               int64                            `json:"generation_id"`
-		ActiveWorkID               string                           `json:"active_work_id"`
-		ActiveWorkFence            int64                            `json:"active_work_fence"`
-		ActiveWorkLeaseUntil       *time.Time                       `json:"active_work_lease_until"`
-		LastSuccessfulRunID        string                           `json:"last_successful_run_id"`
-		RecordsLoaded              int                              `json:"records_loaded"`
-		UpdatedAt                  time.Time                        `json:"updated_at"`
+		Connection                         string                           `json:"connection"`
+		Stream                             string                           `json:"stream"`
+		Checkpoint                         *synccontract.CheckpointEnvelope `json:"checkpoint"`
+		CommittedTransportReceipts         []TransportReceiptCommit         `json:"committed_transport_receipts"`
+		TransportReceiptAssociationVersion uint                             `json:"transport_receipt_association_version"`
+		LegacyCommittedTransportCheckpoint *synccontract.CheckpointEnvelope `json:"legacy_committed_transport_checkpoint"`
+		LegacyCursor                       *string                          `json:"cursor"`
+		GenerationID                       int64                            `json:"generation_id"`
+		ActiveWorkID                       string                           `json:"active_work_id"`
+		ActiveWorkFence                    int64                            `json:"active_work_fence"`
+		ActiveWorkLeaseUntil               *time.Time                       `json:"active_work_lease_until"`
+		LastSuccessfulRunID                string                           `json:"last_successful_run_id"`
+		RecordsLoaded                      int                              `json:"records_loaded"`
+		UpdatedAt                          time.Time                        `json:"updated_at"`
 	}
 	var wire streamStateWire
 	if err := json.Unmarshal(data, &wire); err != nil {
@@ -45,19 +48,27 @@ func (s *StreamState) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("stream state committed transport receipts: %w", err)
 	}
 	*s = StreamState{
-		Connection:                 wire.Connection,
-		Stream:                     wire.Stream,
-		CommittedTransportReceipts: committedReceipts,
-		GenerationID:               wire.GenerationID,
-		ActiveWorkID:               wire.ActiveWorkID,
-		ActiveWorkFence:            wire.ActiveWorkFence,
-		LastSuccessfulRunID:        wire.LastSuccessfulRunID,
-		RecordsLoaded:              wire.RecordsLoaded,
-		UpdatedAt:                  wire.UpdatedAt,
+		Connection:                         wire.Connection,
+		Stream:                             wire.Stream,
+		CommittedTransportReceipts:         committedReceipts,
+		TransportReceiptAssociationVersion: wire.TransportReceiptAssociationVersion,
+		GenerationID:                       wire.GenerationID,
+		ActiveWorkID:                       wire.ActiveWorkID,
+		ActiveWorkFence:                    wire.ActiveWorkFence,
+		LastSuccessfulRunID:                wire.LastSuccessfulRunID,
+		RecordsLoaded:                      wire.RecordsLoaded,
+		UpdatedAt:                          wire.UpdatedAt,
 	}
 	if wire.Checkpoint != nil {
 		checkpoint := wire.Checkpoint.Clone()
 		s.Checkpoint = &checkpoint
+	}
+	if wire.LegacyCommittedTransportCheckpoint != nil {
+		checkpoint := wire.LegacyCommittedTransportCheckpoint.Clone()
+		if checkpoint.CommittedAt != nil {
+			return fmt.Errorf("legacy committed transport checkpoint must not include a commit timestamp")
+		}
+		s.LegacyCommittedTransportCheckpoint = &checkpoint
 	}
 	if wire.ActiveWorkLeaseUntil != nil {
 		until := wire.ActiveWorkLeaseUntil.UTC()
@@ -81,11 +92,46 @@ func cloneStreamState(state StreamState) StreamState {
 		checkpoint := state.Checkpoint.Clone()
 		clone.Checkpoint = &checkpoint
 	}
+	if state.LegacyCommittedTransportCheckpoint != nil {
+		checkpoint := state.LegacyCommittedTransportCheckpoint.Clone()
+		clone.LegacyCommittedTransportCheckpoint = &checkpoint
+	}
 	if state.ActiveWorkLeaseUntil != nil {
 		until := state.ActiveWorkLeaseUntil.UTC()
 		clone.ActiveWorkLeaseUntil = &until
 	}
 	return clone
+}
+
+const transportReceiptAssociationVersion uint = 1
+
+func migrateLegacyTransportReceiptAssociation(streamState *StreamState) bool {
+	if streamState == nil || streamState.TransportReceiptAssociationVersion >= transportReceiptAssociationVersion {
+		return false
+	}
+	streamState.TransportReceiptAssociationVersion = transportReceiptAssociationVersion
+	if streamState.LegacyCommittedTransportCheckpoint == nil && len(streamState.CommittedTransportReceipts) == 0 && streamState.Checkpoint != nil && streamState.Checkpoint.CommittedAt != nil {
+		checkpoint := streamState.Checkpoint.Clone()
+		checkpoint.CommittedAt = nil
+		streamState.LegacyCommittedTransportCheckpoint = &checkpoint
+	}
+	return true
+}
+
+func migrateLegacyTransportReceiptAssociations(value *state) bool {
+	if value == nil || len(value.StreamStates) == 0 {
+		return false
+	}
+	changed := false
+	for key, streamState := range value.StreamStates {
+		streamState = cloneStreamState(streamState)
+		if !migrateLegacyTransportReceiptAssociation(&streamState) {
+			continue
+		}
+		value.StreamStates[key] = streamState
+		changed = true
+	}
+	return changed
 }
 
 func transportReceiptCommitFromWarehouseReceipt(receipt synctransport.WarehouseReceipt) (TransportReceiptCommit, error) {
@@ -181,6 +227,18 @@ func (state StreamState) hasCommittedTransportReceipt(receipt synctransport.Ware
 		}
 	}
 	return false
+}
+
+func (state StreamState) hasLegacyCommittedTransportCheckpoint(candidate synccontract.CheckpointEnvelope) bool {
+	if state.LegacyCommittedTransportCheckpoint != nil {
+		return reflect.DeepEqual(candidate, *state.LegacyCommittedTransportCheckpoint)
+	}
+	if state.TransportReceiptAssociationVersion != 0 || len(state.CommittedTransportReceipts) != 0 || state.Checkpoint == nil || state.Checkpoint.CommittedAt == nil {
+		return false
+	}
+	checkpoint := state.Checkpoint.Clone()
+	checkpoint.CommittedAt = nil
+	return reflect.DeepEqual(candidate, checkpoint)
 }
 
 func removeTransportReceiptCommit(commits []TransportReceiptCommit, receipt synctransport.WarehouseReceipt) ([]TransportReceiptCommit, bool) {

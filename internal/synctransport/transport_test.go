@@ -1610,14 +1610,17 @@ func TestOrchestratorAppliesDeferredBootstrapPagesWithoutAdvancingCheckpoint(t *
 	}
 	registry := NewRegistry(pair.verifier)
 	registerTransportPair(t, registry, pair)
+	stage := &testWarehouseStage{}
 	commits := 0
 	var committed synccontract.CheckpointEnvelope
+	var committedReceipts []WarehouseReceipt
 
 	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
 		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullAppend,
-		BatchSize: 10, Stage: &testWarehouseStage{}, Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
+		BatchSize: 10, Stage: stage, CommitWorksets: func(checkpoint synccontract.CheckpointEnvelope, receipts []WarehouseReceipt) error {
 			commits++
 			committed = checkpoint.Clone()
+			committedReceipts = append([]WarehouseReceipt(nil), receipts...)
 			return nil
 		},
 	})
@@ -1629,6 +1632,9 @@ func TestOrchestratorAppliesDeferredBootstrapPagesWithoutAdvancingCheckpoint(t *
 	}
 	if commits != 1 || string(committed.Position.Primary) != "second" || result.CommittedCheckpoint == nil || string(result.CommittedCheckpoint.Position.Primary) != "second" {
 		t.Fatalf("deferred bootstrap checkpoint = commits %d committed=%+v result=%+v, want only final page", commits, committed, result.CommittedCheckpoint)
+	}
+	if len(committedReceipts) != 2 || committedReceipts[0].ID != "stage-1" || committedReceipts[1].ID != "stage-2" {
+		t.Fatalf("deferred bootstrap committed receipts = %#v, want both pending worksets", committedReceipts)
 	}
 }
 

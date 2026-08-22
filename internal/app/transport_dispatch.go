@@ -525,6 +525,7 @@ func transportPhaseMeasurement(result synctransport.Result) *TransportPhaseMeasu
 func transportStreamStateEqual(left, right StreamState) bool {
 	if left.Connection != right.Connection ||
 		left.Stream != right.Stream ||
+		left.TransportReceiptAssociationVersion != right.TransportReceiptAssociationVersion ||
 		left.GenerationID != right.GenerationID ||
 		left.ActiveWorkID != right.ActiveWorkID ||
 		left.ActiveWorkFence != right.ActiveWorkFence ||
@@ -534,7 +535,9 @@ func transportStreamStateEqual(left, right StreamState) bool {
 		!left.UpdatedAt.Equal(right.UpdatedAt) {
 		return false
 	}
-	return transportCheckpointEqual(left.Checkpoint, right.Checkpoint) && transportReceiptCommitsEqual(left.CommittedTransportReceipts, right.CommittedTransportReceipts)
+	return transportCheckpointEqual(left.Checkpoint, right.Checkpoint) &&
+		transportCheckpointEqual(left.LegacyCommittedTransportCheckpoint, right.LegacyCommittedTransportCheckpoint) &&
+		transportReceiptCommitsEqual(left.CommittedTransportReceipts, right.CommittedTransportReceipts)
 }
 
 func transportReceiptCommitsEqual(left, right []TransportReceiptCommit) bool {

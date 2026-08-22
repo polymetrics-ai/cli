@@ -23,6 +23,12 @@ const (
 	connectionWarehouseStageReconcileLimit  = 64
 )
 
+var (
+	errTransportReceiptReconciliationDeferred = errors.New("transport receipt reconciliation is deferred")
+	errTransportReceiptReconciliationPrepared = errors.New("transport receipt reconciliation is already prepared")
+	errTransportReceiptReconciliationUnknown  = errors.New("transport receipt is not durably committed")
+)
+
 // connectionWarehouseStage owns temporary transport worksets inside the
 // connection-owned warehouse layout. It deliberately receives an opaque
 // connection ID, never a caller-selected directory or credential-derived
@@ -234,8 +240,10 @@ func (s *connectionWarehouseStage) recoverUncommittedReceipt(ctx context.Context
 			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("digest staged receipt %q manifest: %w", manifest.ID, err)
 		}
 		receipt := manifest.receipt(manifestSHA256)
-		if streamState, present := s.app.state.StreamStates[streamStateKey(conn.Name, manifest.Stream)]; present && streamState.hasCommittedTransportReceipt(receipt) {
-			continue
+		if streamState, present := s.app.state.StreamStates[streamStateKey(conn.Name, manifest.Stream)]; present {
+			if streamState.hasCommittedTransportReceipt(receipt) || streamState.hasLegacyCommittedTransportCheckpoint(manifest.CandidateCheckpoint) {
+				continue
+			}
 		}
 		workset, err := s.Reopen(ctx, receipt)
 		if err != nil {
@@ -452,49 +460,111 @@ func (s *connectionWarehouseStage) ReconcileCommitted(ctx context.Context) error
 			if err != nil || !manifest.belongsToConnection(conn) {
 				continue
 			}
-			streamState, present := s.app.state.StreamStates[streamStateKey(conn.Name, manifest.Stream)]
-			if !present {
-				continue
-			}
 			manifestSHA256, _, err := digestPayloadFile(artifact.manifestPath)
 			if err != nil {
 				continue
 			}
 			receipt := manifest.receipt(manifestSHA256)
-			if !streamState.hasCommittedTransportReceipt(receipt) {
+			prepared, err := s.prepareCommittedTransportReceiptForReconciliation(ctx, conn.Name, manifest.Stream, manifest.CandidateCheckpoint, receipt)
+			if err != nil {
+				return fmt.Errorf("prepare reconciled warehouse stage receipt %q: %w", manifest.ID, err)
+			}
+			if !prepared {
 				continue
 			}
-			if err := s.retire(ctx, receipt); err != nil {
+			retired, err := s.retirePreparedTransportReceipt(ctx, conn.Name, manifest.Stream, receipt)
+			if err != nil {
 				return fmt.Errorf("retire reconciled warehouse stage receipt %q: %w", manifest.ID, err)
 			}
-			if err := s.forgetCommittedTransportReceipt(ctx, conn.Name, manifest.Stream, receipt); err != nil {
-				return fmt.Errorf("forget reconciled warehouse stage receipt %q: %w", manifest.ID, err)
+			if !retired {
+				continue
 			}
 		}
 	}
 	return nil
 }
 
-func (s *connectionWarehouseStage) forgetCommittedTransportReceipt(ctx context.Context, connection, stream string, receipt synctransport.WarehouseReceipt) error {
+func (s *connectionWarehouseStage) prepareCommittedTransportReceiptForReconciliation(ctx context.Context, connection, stream string, candidate synccontract.CheckpointEnvelope, receipt synctransport.WarehouseReceipt) (bool, error) {
 	if err := ctx.Err(); err != nil {
-		return err
+		return false, err
+	}
+	if err := receipt.Validate(); err != nil {
+		return false, err
 	}
 	_, err := s.app.updateState(func(current state) (state, error) {
 		key := streamStateKey(connection, stream)
 		streamState, present := current.StreamStates[key]
 		if !present {
-			return current, nil
+			return current, errTransportReceiptReconciliationUnknown
+		}
+		if transportStreamWorkLeaseLive(streamState, current.Runs, time.Now().UTC()) {
+			return current, errTransportReceiptReconciliationDeferred
+		}
+		if streamState.hasCommittedTransportReceipt(receipt) {
+			return current, errTransportReceiptReconciliationPrepared
+		}
+		if !streamState.hasLegacyCommittedTransportCheckpoint(candidate) {
+			return current, errTransportReceiptReconciliationUnknown
+		}
+		commit, err := transportReceiptCommitFromWarehouseReceipt(receipt)
+		if err != nil {
+			return current, err
+		}
+		commits, err := appendTransportReceiptCommits(streamState.CommittedTransportReceipts, []TransportReceiptCommit{commit})
+		if err != nil {
+			return current, err
+		}
+		streamState = cloneStreamState(streamState)
+		streamState.CommittedTransportReceipts = commits
+		streamState.LegacyCommittedTransportCheckpoint = nil
+		streamState.TransportReceiptAssociationVersion = transportReceiptAssociationVersion
+		current.StreamStates[key] = streamState
+		return current, nil
+	})
+	if err == nil || errors.Is(err, errTransportReceiptReconciliationPrepared) {
+		return true, nil
+	}
+	if errors.Is(err, errTransportReceiptReconciliationDeferred) || errors.Is(err, errTransportReceiptReconciliationUnknown) {
+		return false, nil
+	}
+	return false, err
+}
+
+func (s *connectionWarehouseStage) retirePreparedTransportReceipt(ctx context.Context, connection, stream string, receipt synctransport.WarehouseReceipt) (bool, error) {
+	if err := ctx.Err(); err != nil {
+		return false, err
+	}
+	if err := receipt.Validate(); err != nil {
+		return false, err
+	}
+	_, err := s.app.updateState(func(current state) (state, error) {
+		key := streamStateKey(connection, stream)
+		streamState, present := current.StreamStates[key]
+		if !present || !streamState.hasCommittedTransportReceipt(receipt) {
+			return current, errTransportReceiptReconciliationUnknown
+		}
+		if transportStreamWorkLeaseLive(streamState, current.Runs, time.Now().UTC()) {
+			return current, errTransportReceiptReconciliationDeferred
+		}
+		if err := s.retire(ctx, receipt); err != nil {
+			return current, err
 		}
 		remaining, removed := removeTransportReceiptCommit(streamState.CommittedTransportReceipts, receipt)
 		if !removed {
-			return current, nil
+			return current, errTransportReceiptReconciliationUnknown
 		}
 		streamState = cloneStreamState(streamState)
 		streamState.CommittedTransportReceipts = remaining
 		current.StreamStates[key] = streamState
 		return current, nil
 	})
-	return err
+	if err == nil {
+		return true, nil
+	}
+	if errors.Is(err, errTransportReceiptReconciliationDeferred) || errors.Is(err, errTransportReceiptReconciliationUnknown) {
+		return false, nil
+	}
+	return false, err
 }
 
 func (s *connectionWarehouseStage) connectionForStageRequest(request synctransport.WarehouseStageRequest) (Connection, error) {

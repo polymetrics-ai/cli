@@ -148,11 +148,13 @@ type StreamConfig struct {
 }
 
 type StreamState struct {
-	Connection                 string                           `json:"connection"`
-	Stream                     string                           `json:"stream"`
-	Checkpoint                 *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
-	CommittedTransportReceipts []TransportReceiptCommit         `json:"committed_transport_receipts,omitempty"`
-	GenerationID               int64                            `json:"generation_id"`
+	Connection                         string                           `json:"connection"`
+	Stream                             string                           `json:"stream"`
+	Checkpoint                         *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
+	CommittedTransportReceipts         []TransportReceiptCommit         `json:"committed_transport_receipts,omitempty"`
+	TransportReceiptAssociationVersion uint                             `json:"transport_receipt_association_version,omitempty"`
+	LegacyCommittedTransportCheckpoint *synccontract.CheckpointEnvelope `json:"legacy_committed_transport_checkpoint,omitempty"`
+	GenerationID                       int64                            `json:"generation_id"`
 	// ActiveWorkID and ActiveWorkFence form one durable, connection-and-stream
 	// scoped work lease. They are present only while a source/stage/destination
 	// run owns the stream; effects and checkpoint commits renew the same fence

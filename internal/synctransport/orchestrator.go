@@ -294,7 +294,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 				if acknowledgement.Sink != request.Destination.Name() {
 					return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
 				}
-				return request.commitAcknowledgedWorksets(checkpoint, []WarehouseReceipt{receipt})
+				return request.commitAcknowledgedWorksets(checkpoint, pendingReceipts)
 			}); err != nil {
 				return err
 			}

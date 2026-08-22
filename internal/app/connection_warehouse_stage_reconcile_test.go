@@ -170,6 +170,175 @@ func TestDeferredReconciliationKeepsUncommittedRepeatedFullAppendReceipt(t *test
 	}
 }
 
+func TestDeferredReconciliationMigratesLegacyReceiptBeforeRepeatedFullAppendRecovery(t *testing.T) {
+	ctx := context.Background()
+	fixture := newIssueLabelWarehouseStageFixture(t)
+	stage, ok := fixture.app.transportStage.(*connectionWarehouseStage)
+	if !ok {
+		t.Fatalf("transport stage = %T, want connectionWarehouseStage", fixture.app.transportStage)
+	}
+	checkpoint := issueLabelTransportDurabilityCheckpoint()
+	firstPage := synctransport.SourcePage{
+		Records:             []connectors.Record{{"id": "legacy-repeated-stage"}},
+		CandidateCheckpoint: checkpoint,
+	}
+	legacyReceipt := stageIssueLabelWarehousePage(t, ctx, fixture, firstPage)
+	connection := fixture.app.state.Connections[0]
+	committedCheckpoint := checkpoint.Clone()
+	committedAt := committedCheckpoint.ObservedAt.Add(time.Second)
+	committedCheckpoint.CommittedAt = &committedAt
+	legacyState, err := fixture.app.store.Load()
+	if err != nil {
+		t.Fatalf("load pre-association state: %v", err)
+	}
+	if legacyState.StreamStates == nil {
+		legacyState.StreamStates = make(map[string]StreamState)
+	}
+	legacyState.StreamStates[streamStateKey(connection.Name, "issues")] = StreamState{
+		Connection: connection.Name, Stream: "issues", Checkpoint: &committedCheckpoint, GenerationID: 1, UpdatedAt: committedAt,
+	}
+	if err := fixture.app.store.Save(legacyState); err != nil {
+		t.Fatalf("persist pre-association state: %v", err)
+	}
+	fresh, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatalf("open legacy state: %v", err)
+	}
+	streamState := fresh.state.StreamStates[streamStateKey(connection.Name, "issues")]
+	if streamState.TransportReceiptAssociationVersion != transportReceiptAssociationVersion || streamState.LegacyCommittedTransportCheckpoint == nil {
+		t.Fatalf("migrated legacy state = %#v, want exact legacy checkpoint marker", streamState)
+	}
+	freshStage, ok := fresh.transportStage.(*connectionWarehouseStage)
+	if !ok {
+		t.Fatalf("fresh transport stage = %T, want connectionWarehouseStage", fresh.transportStage)
+	}
+	repeatedCheckpoint := checkpoint.Clone()
+	repeatedCheckpoint.ObservedAt = repeatedCheckpoint.ObservedAt.Add(time.Second)
+	repeatedPage := firstPage
+	repeatedPage.CandidateCheckpoint = repeatedCheckpoint
+	repeatedReceipt, err := freshStage.Stage(ctx, synctransport.WarehouseStageRequest{
+		ConnectionID: fixture.connectionID, Generation: 1, SourceName: "github", DestinationName: "github",
+		Stream: "issues", Mode: synccontract.ModeFullAppend, Page: repeatedPage,
+	})
+	if err != nil {
+		t.Fatalf("stage repeated legacy workset: %v", err)
+	}
+	if repeatedReceipt.ID == legacyReceipt.ID {
+		t.Fatalf("repeated legacy receipt = %q, want a distinct workset", repeatedReceipt.ID)
+	}
+	if err := fresh.reconcileCommittedTransportStages(ctx); err != nil {
+		t.Fatalf("reconcile migrated legacy receipt: %v", err)
+	}
+	legacyArtifact, err := stage.artifactFor(connection, legacyReceipt.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(legacyArtifact.manifestPath); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("legacy committed artifact stat error = %v, want removal", err)
+	}
+	repeatedArtifact, err := freshStage.artifactFor(connection, repeatedReceipt.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(repeatedArtifact.manifestPath); err != nil {
+		t.Fatalf("repeated uncommitted artifact stat error = %v, want retention", err)
+	}
+	recovered, err := freshStage.Stage(ctx, synctransport.WarehouseStageRequest{
+		ConnectionID: fixture.connectionID, Generation: 1, SourceName: "github", DestinationName: "github",
+		Stream: "issues", Mode: synccontract.ModeFullAppend, Page: repeatedPage,
+	})
+	if err != nil {
+		t.Fatalf("recover repeated legacy workset: %v", err)
+	}
+	if recovered != repeatedReceipt {
+		t.Fatalf("recovered repeated receipt = %#v, want %#v", recovered, repeatedReceipt)
+	}
+	streamState = fresh.state.StreamStates[streamStateKey(connection.Name, "issues")]
+	if streamState.LegacyCommittedTransportCheckpoint != nil || len(streamState.CommittedTransportReceipts) != 0 {
+		t.Fatalf("reconciled legacy state = %#v, want consumed marker and no active receipt association", streamState)
+	}
+}
+
+func TestDeferredReconciliationDefersReceiptWithLiveTransportWorkLease(t *testing.T) {
+	ctx := context.Background()
+	fixture := newIssueLabelWarehouseStageFixture(t)
+	stage, ok := fixture.app.transportStage.(*connectionWarehouseStage)
+	if !ok {
+		t.Fatalf("transport stage = %T, want connectionWarehouseStage", fixture.app.transportStage)
+	}
+	checkpoint := issueLabelTransportDurabilityCheckpoint()
+	receipt := stageIssueLabelWarehousePage(t, ctx, fixture, synctransport.SourcePage{
+		Records:             []connectors.Record{{"id": "live-stage"}},
+		CandidateCheckpoint: checkpoint,
+	})
+	connection := fixture.app.state.Connections[0]
+	commit, err := transportReceiptCommitFromWarehouseReceipt(receipt)
+	if err != nil {
+		t.Fatalf("bind live receipt: %v", err)
+	}
+	committedCheckpoint := checkpoint.Clone()
+	committedAt := committedCheckpoint.ObservedAt.Add(time.Second)
+	committedCheckpoint.CommittedAt = &committedAt
+	leaseUntil := time.Now().UTC().Add(time.Minute)
+	workID := "running-acknowledged-work"
+	if _, err := fixture.app.updateState(func(current state) (state, error) {
+		if current.StreamStates == nil {
+			current.StreamStates = make(map[string]StreamState)
+		}
+		current.Runs = append(current.Runs, Run{ID: workID, Status: "running"})
+		current.StreamStates[streamStateKey(connection.Name, "issues")] = StreamState{
+			Connection: connection.Name, Stream: "issues", Checkpoint: &committedCheckpoint,
+			CommittedTransportReceipts: []TransportReceiptCommit{commit}, TransportReceiptAssociationVersion: transportReceiptAssociationVersion,
+			GenerationID: 1, ActiveWorkID: workID, ActiveWorkFence: 1, ActiveWorkLeaseUntil: &leaseUntil, UpdatedAt: committedAt,
+		}
+		return current, nil
+	}); err != nil {
+		t.Fatalf("persist live acknowledged receipt: %v", err)
+	}
+	fresh, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatalf("open live acknowledged receipt: %v", err)
+	}
+	artifact, err := stage.artifactFor(connection, receipt.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := fresh.reconcileCommittedTransportStages(ctx); err != nil {
+		t.Fatalf("reconcile live acknowledged receipt: %v", err)
+	}
+	if _, err := os.Stat(artifact.manifestPath); err != nil {
+		t.Fatalf("live receipt artifact stat error = %v, want retention", err)
+	}
+	streamState := fresh.state.StreamStates[streamStateKey(connection.Name, "issues")]
+	if len(streamState.CommittedTransportReceipts) != 1 || streamState.ActiveWorkID != workID {
+		t.Fatalf("live reconciled stream state = %#v, want retained receipt and work lease", streamState)
+	}
+	if _, err := fresh.updateState(func(current state) (state, error) {
+		for index := range current.Runs {
+			if current.Runs[index].ID == workID {
+				current.Runs[index].Status = "completed"
+			}
+		}
+		streamState := current.StreamStates[streamStateKey(connection.Name, "issues")]
+		streamState.ActiveWorkID = ""
+		streamState.ActiveWorkLeaseUntil = nil
+		current.StreamStates[streamStateKey(connection.Name, "issues")] = streamState
+		return current, nil
+	}); err != nil {
+		t.Fatalf("complete live acknowledged work: %v", err)
+	}
+	if err := fresh.reconcileCommittedTransportStages(ctx); err != nil {
+		t.Fatalf("reconcile terminal acknowledged receipt: %v", err)
+	}
+	if _, err := os.Stat(artifact.manifestPath); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("terminal receipt artifact stat error = %v, want removal", err)
+	}
+	streamState = fresh.state.StreamStates[streamStateKey(connection.Name, "issues")]
+	if len(streamState.CommittedTransportReceipts) != 0 {
+		t.Fatalf("terminal reconciled stream state = %#v, want cleared receipt association", streamState)
+	}
+}
+
 func TestConnectionWarehouseStageRefusesUnreadableReceiptOnRetry(t *testing.T) {
 	ctx := context.Background()
 	fixture := newIssueLabelWarehouseStageFixture(t)
