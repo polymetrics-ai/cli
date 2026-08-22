@@ -2,8 +2,8 @@
   "schema_version": 3,
   "integration": "cli-current-foundations-main-integration-r1",
   "checkpoint": "foundation-0.3.0-release-candidate-r1-evidence-closure",
-  "code_sha": "bbbfc67002363b35c6f9ac5ca340a1886523039c",
-  "reviewed_sha": "bbbfc67002363b35c6f9ac5ca340a1886523039c",
+  "code_sha": "298a519de14b98cef5e1d8e20cd43b6d0ab42d84",
+  "reviewed_sha": "298a519de14b98cef5e1d8e20cd43b6d0ab42d84",
   "base_sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
   "component_inputs": [
     {
@@ -82,6 +82,13 @@
       "assertion": "At I, a fresh pm executes all 97 generated candidates and all 633 released GitHub read-surface targets with emitted request and declared output assertions; source projection and inventory preserve the v0.2.1 reachable surface.",
       "tests": ["TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture", "TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture", "TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints"],
       "modes": ["source_projection", "direct_read.fixture_behavior", "binary_download.fixture_behavior", "release_surface_parity"]
+    },
+    {
+      "command": "go test -timeout 20m -count=1 -v ./internal/connectors/engine -run '^(TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest|TestWriteErrorRedactsOverlappingConfiguredRecordFields)$'; go test -timeout 20m -count=1 -v ./internal/coordination -run '^TestRateParkingCoordinator_ReconcilesEachPostCommitResumeMutation$'; go test -timeout 20m -count=1 -v ./internal/connectors/connsdk -run '^(TestRequesterMutationRetryCancellationRetainsLastResponse|TestRequesterRetryTransportFailureRetainsEarlierProviderResponse)$'; go test -timeout 20m -count=1 ./cmd/connectorgen; go vet ./...",
+      "status": "passed",
+      "assertion": "RC-09 preserves overlapping redaction, durable post-commit claim reconciliation, and typed terminal provider receipts while removing the three direct CodeQL alert sources without suppression.",
+      "tests": ["TestWriteErrorRedactsOverlappingConfiguredRecordFields", "TestRateParkingCoordinator_ReconcilesEachPostCommitResumeMutation", "TestRequesterRetryTransportFailureRetainsEarlierProviderResponse"],
+      "modes": ["public_output.redaction", "rate_parking.durable_reconciliation", "requester.terminal_receipt", "codeql.alert_remediation"]
     }
   ],
   "gate_ledger": [
@@ -126,7 +133,7 @@
   ],
   "deferred_gates": [
     "No approved non-secret credential reference was supplied, so no real-provider path was inferred, probed, or certified.",
-    "CI, no-mistakes review handoff, and PR review remain external gates.",
+    "Fresh CodeQL, CI, no-mistakes review handoff, and PR review remain external gates.",
     "The predecessor full go test ./... run exposed certification-harness count expectations; they remain visible for disposition and are not represented as green. The confirmed Recurly path-flag failure is repaired and passes its exact local package proof; it is not a certification claim."
   ],
   "credential_handling": "No credential value was requested, read, printed, stored, or inferred. Local fixture proof, historical provider observations, and certification claims are separately classified in the review record.",
@@ -138,7 +145,7 @@
     }
   ],
   "artifact_closure": {
-    "implementation_sha": "bbbfc67002363b35c6f9ac5ca340a1886523039c",
+    "implementation_sha": "298a519de14b98cef5e1d8e20cd43b6d0ab42d84",
     "subject_fingerprint": "6e718f8cd4b80497467e907ecb8ae49373afb1758920dfe7d18c83340061c86a",
     "artifacts": [
       {
@@ -148,13 +155,13 @@
       },
       {
         "category": "source",
-        "path": "internal/connectors/defs/github/sources/github-operation-descriptor.json",
-        "sha256": "d1978c0c6fd0eb66e9fcd4d78d637864a6e486f558aaad1e51550bc43758b899"
+        "path": "internal/connectors/engine/write.go",
+        "sha256": "fd15f92058d06dcdaef3a2ca9780edd5d06db6f137e91396994dd3c7130646ae"
       },
       {
         "category": "cli",
-        "path": "internal/connectors/defs/github/cli_surface.json",
-        "sha256": "dd6d1eb3bafc5a689276ee2ce905c3b5c953abf49ac1d39d76818891dbf22914"
+        "path": "internal/connectors/connsdk/http.go",
+        "sha256": "fabeac80145b9306327ecce720577da794af6b7cfb969527844e7357fb625666"
       },
       {
         "category": "docs",
@@ -174,7 +181,7 @@
       {
         "category": "ledger",
         "path": ".planning/phases/cli-current-foundations-main-integration-r1/TDD-LEDGER.md",
-        "sha256": "364fa23096dbedfe889b0ad6839df395c664ea97609317c0bc07f73b7b1771d3"
+        "sha256": "4de5012975ab8b60a9230a6bd627d96caa1413125d52d6de06cf4412c87e4368"
       },
       {
         "category": "matrix",
@@ -194,7 +201,7 @@
       {
         "category": "foundation_evidence",
         "path": "data/cli-current-foundations-main-integration-r1/report.md",
-        "sha256": "f914bcbe4bd04bbfd163929790545f4ba04ace8f44f75a812bdef91b1cfb9dbe"
+        "sha256": "97c323234fdc830c5468119e464e14dae78dabf267c2a19086088a4c34f4cc67"
       }
     ]
   }

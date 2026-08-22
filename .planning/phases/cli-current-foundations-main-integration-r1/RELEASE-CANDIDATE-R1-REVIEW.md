@@ -1,6 +1,6 @@
 # Foundation 0.3.0 release-candidate r1 review record
 
-source_sha: bbbfc67002363b35c6f9ac5ca340a1886523039c
+source_sha: 298a519de14b98cef5e1d8e20cd43b6d0ab42d84
 
 This is final code-and-generated implementation SHA **I**. Its schema-3 evidence closure is deliberately the next commit: an evidence file cannot truthfully name the Git object that contains itself.
 
@@ -18,6 +18,8 @@ This is final code-and-generated implementation SHA **I**. Its schema-3 evidence
 | RC-07 behavioral witness | Before the hyphenated path fix, a freshly built `pm connectors certify github --direct-read-only` fixture run failed `enterprise-team-organizations get-assignments` before fixture I/O with unresolved `{enterprise-team}`. After repair, `TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture` executes all 97 generated stages through the fresh binary, requires a resolved authenticated HTTP request for each stage, and requires the generated object-or-array output assertion to pass. |
 | RC-08 GitHub released read surface | At `a750e2c…`, the real inventory regression reported 854 covered REST endpoints where 1,224 were required: 1,225 endpoints still existed but 371 were blocked. The 370 added blocked GET routes shared the source-projection reason. `748865f1b` introduced the conservative downgrade; the count later oscillated as component merges interleaved. |
 | RC-08 minimal repair and proof | The projection now restores each existing, field-complete, declaration-owned read route rather than only the certification cohort, and promotes an already-declared required source path flag (`repo read-file --path`) to required. No endpoint, route, ledger entry, or generated JSON was hand-authored. A fresh `pm` executes all 633 unique API-surface read targets against a fixture; every invocation emits its declared resolved request and meets its JSON/text/status-only/repository-content/binary output assertion. |
+| RC-09 CodeQL confirmation | At evidence E `25b2f844…`, CodeQL directly reported three new PR alerts: high allocation-size overflow for `len(values)*4` in write redaction, and two useless assignments at parked-resume reconciliation and final HTTP non-2xx handling. All three findings have a direct current-code witness. |
+| RC-09 minimal repair | The redaction literal list no longer derives capacity from input arithmetic; parked-resume reconciliation still runs for its durable side effect, and final non-2xx handling still returns its typed status error directly. No suppression, baseline, annotation, JavaScript, or `ledger.go` change was made. Focused redaction/reconciliation/terminal-receipt behavior, fresh-binary 633-command GitHub proof, full `cmd/connectorgen` (143.231s), and `go vet ./...` pass. Fresh CodeQL is pending externally. |
 | CI website-data parity | Fresh CI directly failed because generator-owned website data was stale. A local `website` generator run reproduced it and changed only four generated website artifacts; its data now includes the required Recurly flags and current source-projection statuses. No provider/runtime declaration was altered. |
 
 ## Conflict-invariant preservation
@@ -29,7 +31,7 @@ This is final code-and-generated implementation SHA **I**. Its schema-3 evidence
 
 ## FND-B09 and FND-W01
 
-- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closures `7c3d856…`, `133afe481…`, and `596c90c…` are superseded after the confirmed Recurly correction, CI-proven website-data drift, and the confirmed GitHub reachability regression. This schema-3 closure binds I, five typed component identities, current subject fingerprint, and exact artifact digests.
+- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closures `7c3d856…`, `133afe481…`, `596c90c…`, and `25b2f844…` are superseded after the confirmed Recurly correction, CI-proven website-data drift, GitHub reachability regression, and RC-09 CodeQL repair. This schema-3 closure binds I2, five typed component identities, current subject fingerprint, and exact artifact digests.
 - **FND-W01 — deferred / non-reproducing:** current `sourceimport` flow and hermetic `TestSourceImport.*` evidence were inspected. No deterministic externally observable publication-order defect was established, so no speculative publication rewrite was made.
 
 ## Behavioral proof, provider proof, and certification claim
@@ -53,6 +55,9 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 | Initialized-project `pm recurly invoice pdf get --invoice-id …` and `pm recurly export files get --export-date …` | PASS for CLI reachability: each parsed the flag and reached only `missing --credential`; no provider I/O. |
 | `go test -timeout 20m -count=1 -v ./internal/cli -run '^TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture$'` | PASS (71.24s): fresh `pm` executes all 97 generated direct-read stages against a local fixture; each stage reports `ConnectorCommandDirectRead`, emits an authenticated resolved request, and passes the candidate's object-or-array output assertion. |
 | `go test -timeout 20m -count=1 -v ./internal/cli -run '^TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture$'` | PASS (190.44s): fresh `pm` executes all 633 released API-surface read targets with 633 fixture requests, declared method/path checks, and JSON/text/status-only/repository-content/binary output assertions. |
+| RC-09 focused behavioral suites | PASS: write redaction preserves overlapping-mask behavior; parked rate-limit post-commit claim reconciliation preserves the durable retry; terminal requester retry retains its provider receipt and typed error. |
+| `go test -timeout 20m -count=1 ./cmd/connectorgen` after cache repair | PASS (143.231s) from I2. |
+| `go vet ./...` after RC-09 | PASS. |
 | GitHub `source-import --check`, `surface-sync --check`, `certification-candidates --check`, generated `certification-sweep`, and direct-read candidate/cohort tests | PASS: 120 total direct-read candidates (23 manual, 97 generated); unchanged expectations. |
 | Exact GitHub release-surface parity at I | PASS: `v0.2.1` and I both have `endpoints=1225`, `blocked=1`, and `direct_read_candidates=120`; the sole blocked identity is `POST /user/{user_id}/projectsV2/{project_number}/drafts`, duplicate of `POST /graphql (github.graphql.mutation.add-project-v2-draft-issue)`. |
 | `go test -timeout 20m ./cmd/connectorgen -count=1` | PASS (151.700s). |
@@ -67,4 +72,4 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 
 ## Merge recommendation
 
-The local Foundation implementation and the targeted GitHub candidate repair gates are green. Recurly and GitHub reads are implemented but explicitly not live certified. Do not merge this PR from this record: remaining gates are the strict evidence gate on the new closure, pushed-head/PR identity read-back, fresh automated review, and GitHub CI. PR #4314 remains unmerged against `fm/cli-current-foundations-main-integration-r1`.
+The local Foundation implementation and the targeted GitHub candidate repair gates are green. Recurly and GitHub reads are implemented but explicitly not live certified. Do not merge this PR from this record: remaining gates are the strict evidence gate on the replacement closure, fresh CodeQL/automated review, and GitHub CI. PR #4314 remains unmerged against `fm/cli-current-foundations-main-integration-r1`.

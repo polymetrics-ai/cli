@@ -41,7 +41,8 @@ This checkpoint is intentionally limited to exact local-pipeline composition, th
 - [x] FND-B09 schema-2 failure reproduced before closure; FND-W01 disposition is evidence-backed and does not broaden scope.
 - [x] Prior I/E (`a5005fae…` / `7c3d856…`) superseded by the confirmed Recurly path-flag regression; the unchanged binary regression test is green after the narrow declaration/generation repair.
 - [x] Prior I/E (`1d83dd9…` / `133afe481…`) superseded by CI-proven generated website-data drift; generator output is now committed and locally idempotent.
-- [x] Implementation SHA I `bbbfc67002363b35c6f9ac5ca340a1886523039c` frozen after all production/generated checks; no production/generated path changes afterwards. Its tag-versus-head GitHub parity is exact: endpoints=1,225, blocked=1 with the same retired POST identity, candidates=120.
-- [x] Replacement evidence-only closure is prepared above I; strict evidence gate is run only from the resulting clean E commit.
+- [x] I (`bbbfc670…`) / E (`25b2f844…`) are superseded by the confirmed RC-09 CodeQL repair; the source change is limited to safe allocation and two dead assignments, with no suppression or unrelated alert change.
+- [x] Implementation SHA I2 `298a519de14b98cef5e1d8e20cd43b6d0ab42d84` is frozen after the RC-09 focused behavioral suite, fresh-binary 633-command fixture proof, cold full `cmd/connectorgen` (143.231s), and `go vet ./...`. Existing GitHub parity remains the independently confirmed exact release baseline.
+- [x] Replacement evidence-only closure is prepared above I2; strict evidence gate is run only from the resulting clean E2 commit.
 - [x] `gofmt`/diff check, targeted tests and races, `go vet ./...`, `go build ./cmd/pm`, generation, docs/help/skills/certification, and individually runnable release gates pass; predecessor aggregate test failures are explicitly documented rather than waived.
 - [ ] PR opened only after E is immutable; GitHub API reports its base exactly `fm/cli-current-foundations-main-integration-r1` and head exactly E.
