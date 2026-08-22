@@ -13,6 +13,7 @@ import (
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synctransport"
 )
 
 func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
@@ -49,9 +50,18 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 	if err := runETLTransport(context.Background(), nil, []string{"declarative-typed-destination"}, &declaredStdout, false); err != nil {
 		t.Fatalf("runDeclarativeTypedDestinationTransport help = %v", err)
 	}
-	for _, want := range []string{"destination_action", "writes.json", "cannot pass a connector, action, URL, method, body, mapping, or evidence", "--approval-token-stdin"} {
+	for _, want := range []string{"destination_action", "writes.json", "cannot pass a connector, action, URL, method, body, mapping, or evidence", "--approval-token-stdin", "clamp --batch-size", "separately approved tombstone delete"} {
 		if !strings.Contains(declaredStdout.String(), want) {
 			t.Fatalf("declarative typed destination help missing %q", want)
+		}
+	}
+	var manualStdout bytes.Buffer
+	if err := writeETLTransportManual(&manualStdout, false, "etl transport"); err != nil {
+		t.Fatalf("writeETLTransportManual(etl transport) = %v", err)
+	}
+	for _, want := range []string{"clamp --batch-size", "separately approved tombstone delete"} {
+		if !strings.Contains(manualStdout.String(), want) {
+			t.Fatalf("generated etl transport manual missing %q", want)
 		}
 	}
 	var postgresStdout bytes.Buffer
@@ -67,6 +77,51 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 	code := Run([]string{"etl", "transport", "github-issue-label", "cleanup", "--root", filepath.Join(t.TempDir(), "uninitialized")}, &stdout, &stderr)
 	if code != 0 || !strings.Contains(stdout.String(), "pm etl transport github-issue-label plan") || stderr.Len() != 0 {
 		t.Fatalf("bare cleanup namespace = code %d stdout=%q stderr=%q, want contextual manual without opening a project", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestDeclarativeTypedDestinationPlanPrintsCompletePhysicalActionSet(t *testing.T) {
+	plan := app.ReversePlan{
+		ID:     "rplan_action_set",
+		Mode:   "incremental_upsert",
+		Action: "upsert_issue",
+		TransportPhysicalActions: []synctransport.DestinationPhysicalAction{
+			{Action: "upsert_issue", ActionDefinitionSHA256: "apply-digest", IdempotencyKeyHeader: "Idempotency-Key", Kind: "upsert"},
+			{Action: "delete_issue", ActionDefinitionSHA256: "delete-digest", IdempotencyKeyHeader: "Idempotency-Key", Kind: "delete", Destructive: true},
+		},
+	}
+
+	var human bytes.Buffer
+	if err := writeDeclarativeTypedDestinationTransportPlan(&human, false, plan); err != nil {
+		t.Fatalf("writeDeclarativeTypedDestinationTransportPlan(human) = %v", err)
+	}
+	for _, want := range []string{"Physical actions:", "upsert_issue", "apply-digest", "delete_issue", "delete-digest", "destructive"} {
+		if !strings.Contains(human.String(), want) {
+			t.Fatalf("human plan missing %q:\n%s", want, human.String())
+		}
+	}
+
+	var jsonOut bytes.Buffer
+	if err := writeDeclarativeTypedDestinationTransportPlan(&jsonOut, true, plan); err != nil {
+		t.Fatalf("writeDeclarativeTypedDestinationTransportPlan(json) = %v", err)
+	}
+	for _, want := range []string{"transport_physical_actions", "upsert_issue", "apply-digest", "delete_issue", "delete-digest"} {
+		if !strings.Contains(jsonOut.String(), want) {
+			t.Fatalf("JSON plan missing %q:\n%s", want, jsonOut.String())
+		}
+	}
+
+	plan.ApprovalToken = "issued-for-fixture"
+	for _, jsonOutput := range []bool{false, true} {
+		var preview bytes.Buffer
+		if err := writeDeclarativeTypedDestinationTransportPreview(&preview, jsonOutput, plan, connectors.WritePreview{Action: plan.Action}); err != nil {
+			t.Fatalf("writeDeclarativeTypedDestinationTransportPreview(json=%t) = %v", jsonOutput, err)
+		}
+		for _, want := range []string{"upsert_issue", "apply-digest", "delete_issue", "delete-digest", "destructive"} {
+			if !strings.Contains(preview.String(), want) {
+				t.Fatalf("preview(json=%t) missing %q:\n%s", jsonOutput, want, preview.String())
+			}
+		}
 	}
 }
 

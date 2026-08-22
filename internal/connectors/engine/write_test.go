@@ -41,6 +41,47 @@ func newWriteTestBundle(srv *httptest.Server, action WriteAction) Bundle {
 	}
 }
 
+func TestWriteIdempotencyKeySeparatesDurableWorksets(t *testing.T) {
+	action := WriteAction{Name: "apply_widget", IdempotencyKeyHeader: "Idempotency-Key"}
+	first := writeIdempotencyKey("acme", action, "sealed-preview", "connection-a/workset-one/checkpoint", 0)
+	retry := writeIdempotencyKey("acme", action, "sealed-preview", "connection-a/workset-one/checkpoint", 0)
+	second := writeIdempotencyKey("acme", action, "sealed-preview", "connection-a/workset-two/checkpoint", 0)
+	if first == "" {
+		t.Fatal("keyed action did not derive an idempotency key")
+	}
+	// These calls model distinct durable worksets carrying the same record at
+	// index zero. A preview/body/index-only key aliases them at the provider.
+	if first != retry {
+		t.Fatalf("same durable workset retry changed provider key: %q != %q", first, retry)
+	}
+	if first == second {
+		t.Fatalf("distinct durable worksets derived the same provider key %q", first)
+	}
+}
+
+func TestWriteIdempotencyHeaderBindsDeliveryOccurrence(t *testing.T) {
+	keys := make([]string, 0, 3)
+	srv := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		keys = append(keys, request.Header.Get("Idempotency-Key"))
+		writer.WriteHeader(http.StatusNoContent)
+	}))
+	t.Cleanup(srv.Close)
+	bundle := newWriteTestBundle(srv, WriteAction{
+		Name: "apply_widget", Kind: "update", Method: http.MethodPost,
+		Path: "/widgets/{{ record.id }}", PathFields: []string{"id"},
+		IdempotencyKeyHeader: "Idempotency-Key",
+	})
+	records := []connectors.Record{{"id": "same-provider-payload"}}
+	for _, occurrence := range []string{"connection-a/workset-one/checkpoint", "connection-a/workset-one/checkpoint", "connection-a/workset-two/checkpoint"} {
+		if _, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "apply_widget", DeliveryOccurrence: occurrence}, records, nil); err != nil {
+			t.Fatalf("Write(%q): %v", occurrence, err)
+		}
+	}
+	if len(keys) != 3 || keys[0] == "" || keys[0] != keys[1] || keys[0] == keys[2] {
+		t.Fatalf("provider idempotency headers = %#v, want stable retry key and distinct durable-workset key", keys)
+	}
+}
+
 func writeSpecWithDefaultBaseURL(t *testing.T, defaultURL string) *Schema {
 	t.Helper()
 	rawDefault, err := json.Marshal(defaultURL)

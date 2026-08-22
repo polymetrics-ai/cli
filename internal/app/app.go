@@ -327,7 +327,8 @@ func (a *App) normalizeLoadedState(loaded state, persist bool) error {
 	if err != nil {
 		return err
 	}
-	changed = changed || catalogRefsChanged || compatibilityChanged || coordinationChanged || identityChanged
+	receiptAssociationChanged := migrateLegacyTransportReceiptAssociations(&a.state)
+	changed = changed || catalogRefsChanged || compatibilityChanged || coordinationChanged || identityChanged || receiptAssociationChanged
 	if persist && changed {
 		if err := a.save(); err != nil {
 			return fmt.Errorf("persist project identity: %w", err)
@@ -621,6 +622,7 @@ func (a *App) save() error {
 
 func (a *App) updateState(update func(state) (state, error)) (state, error) {
 	updated, err := a.store.Update(func(current state) (state, error) {
+		migrateLegacyTransportReceiptAssociations(&current)
 		next, updateErr := update(current)
 		if updateErr != nil {
 			return current, updateErr
@@ -636,6 +638,7 @@ func (a *App) updateState(update func(state) (state, error)) (state, error) {
 
 func (a *App) updateStateAfterPreflight(preflight func(state) error, update func(state) (state, error)) (state, error) {
 	updated, err := a.store.UpdateAfterPreflight(preflight, func(current state) (state, error) {
+		migrateLegacyTransportReceiptAssociations(&current)
 		next, updateErr := update(current)
 		if updateErr != nil {
 			return current, updateErr
@@ -1679,6 +1682,12 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 	if !present {
 		return a.completeRun(runID, result)
 	}
+	// A concurrent state update may perform the receipt-association migration
+	// before this finalization rebases. Compare the same normalized historical
+	// representation so that migration metadata alone cannot discard a durable
+	// empty-publication replay fence; every execution-relevant field remains in
+	// the stale-state comparison below.
+	migrateLegacyTransportReceiptAssociation(&acknowledged)
 	completion := &acknowledgedTransportCompletion{
 		key:   result.PendingStreamState.Key,
 		state: cloneStreamState(acknowledged),

@@ -270,7 +270,7 @@ func TestGitHubConnectorCommandPreservesExactLargeIntegerPathAfterPlanReload(t *
 	}
 }
 
-func TestGitHubOrgWebhookDeleteDoesNotCountProviderNotFoundAsSuccess(t *testing.T) {
+func TestGitHubOrgWebhookDeleteCompletesDeclaredMissingAcknowledgement(t *testing.T) {
 	ctx := context.Background()
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -306,11 +306,11 @@ func TestGitHubOrgWebhookDeleteDoesNotCountProviderNotFoundAsSuccess(t *testing.
 	if calls != 1 {
 		t.Fatalf("webhook delete calls = %d, want 1", calls)
 	}
-	if runErr == nil {
-		t.Fatalf("RunReverseETL unexpectedly accepted provider 404: %#v", run)
+	if runErr != nil {
+		t.Fatalf("RunReverseETL declared missing acknowledgement: %v", runErr)
 	}
-	if run.Status != "failed" || run.RecordsSucceeded != 0 || run.RecordsFailed != 1 {
-		t.Fatalf("webhook 404 run = %#v, want one failed write", run)
+	if run.Status != "completed" || run.RecordsSucceeded != 0 || run.RecordsFailed != 0 {
+		t.Fatalf("webhook 404 run = %#v, want a declared idempotent missing acknowledgement", run)
 	}
 }
 

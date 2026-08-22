@@ -424,7 +424,7 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: errors.New("prepared request no longer matches its approved execution plan")}
 			}
-			idempotencyKey := writeIdempotencyKey(b.Name, step.action, previewDigest, requestIndex)
+			idempotencyKey := writeIdempotencyKey(b.Name, step.action, previewDigest, req.DeliveryOccurrence, requestIndex)
 			response, err := executeWriteRecordWithResponse(ctx, b, step.action, pinned, recordIndex, cfg, rt, idempotencyKey)
 			responses[stepIndex] = response
 			requestIndex++
@@ -781,18 +781,23 @@ func writeRequester(base *connsdk.Requester, action WriteAction, idempotencyKey 
 // name into that preview; the record index keeps one approved batch from
 // aliasing two provider mutations. Retries reuse this value because Requester
 // clones the same default headers for every attempt against the original URL.
-func writeIdempotencyKey(connector string, action WriteAction, previewDigest string, recordIndex int) string {
+func writeIdempotencyKey(connector string, action WriteAction, previewDigest, deliveryOccurrence string, recordIndex int) string {
 	if strings.TrimSpace(action.IdempotencyKeyHeader) == "" || strings.TrimSpace(previewDigest) == "" {
 		return ""
 	}
-	payload := strings.Join([]string{
+	parts := []string{
 		"polymetrics/write-idempotency/v1",
 		strings.TrimSpace(connector),
 		strings.TrimSpace(action.Name),
 		strings.ToLower(strings.TrimSpace(action.IdempotencyKeyHeader)),
 		strings.TrimSpace(previewDigest),
-		fmt.Sprintf("%d", recordIndex),
-	}, "\x00")
+	}
+	if strings.TrimSpace(deliveryOccurrence) != "" {
+		parts[0] = "polymetrics/write-idempotency/v2"
+		parts = append(parts, deliveryOccurrence)
+	}
+	parts = append(parts, fmt.Sprintf("%d", recordIndex))
+	payload := strings.Join(parts, "\x00")
 	sum := sha256.Sum256([]byte(payload))
 	return hex.EncodeToString(sum[:])
 }

@@ -2,6 +2,7 @@ package connectors
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
 	"testing"
 
@@ -83,6 +84,69 @@ func TestDestinationTransportDescriptorSelectsPersistedActionWithinMode(t *testi
 	})
 	if err := descriptor.Validate(); err == nil || !strings.Contains(err.Error(), "duplicate apply strategy action") {
 		t.Fatalf("duplicate mode/action descriptor error = %v, want refusal", err)
+	}
+}
+
+// TestDestinationSourceBindingJSONOmitsAbsentBatch protects legacy bindings:
+// an omitted optional batch must stay absent on generated/catalog surfaces,
+// rather than becoming an invalid zero-value declaration.
+func TestDestinationSourceBindingJSONOmitsAbsentBatch(t *testing.T) {
+	binding := DestinationSourceBinding{
+		Action:          "apply_record",
+		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyDeclarativeAPI, ID: "declared_source"},
+		EligibleStreams: []string{"records"},
+		RecordMapping: SourceRecordMapping{
+			Kind:   SourceRecordMappingKindInputFields,
+			Inputs: []SourceRecordInputBinding{{Input: "target_id", Field: "id"}},
+		},
+	}
+	encoded, err := json.Marshal(binding)
+	if err != nil {
+		t.Fatalf("marshal binding: %v", err)
+	}
+	var projected map[string]json.RawMessage
+	if err := json.Unmarshal(encoded, &projected); err != nil {
+		t.Fatalf("decode binding: %v", err)
+	}
+	if _, found := projected["batch"]; found {
+		t.Fatalf("absent batch serialized as %s, want omitted optional property", encoded)
+	}
+}
+
+// TestDestinationTransportDescriptorRequiresExactActionClosure ensures the
+// declaration does not advertise an action that cannot be selected and that a
+// source binding cannot survive without a reachable strategy/write action.
+func TestDestinationTransportDescriptorRequiresExactActionClosure(t *testing.T) {
+	base := DestinationTransportDescriptor{
+		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyDeclarativeAPI, ID: "declarative_typed_destination"},
+		EligibleActions: []string{"apply_record", "ghost_action"},
+		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
+		Delivery:        closedTestDeliveryGuarantees(),
+		Conformance:     closedTestConformanceReference(),
+		Acknowledgement: TransportAcknowledgementDurableWarehouse,
+		ApplyStrategies: []DestinationApplyStrategy{{
+			Mode:     synccontract.ModeFullAppend,
+			Strategy: ApplyStrategyAppend,
+			Action:   "apply_record",
+		}},
+		SourceBindings: []DestinationSourceBinding{{
+			Action:          "ghost_action",
+			Executor:        TransportExecutorReference{Family: TransportExecutorFamilyDeclarativeAPI, ID: "declared_source"},
+			EligibleStreams: []string{"records"},
+			RecordMapping: SourceRecordMapping{
+				Kind:   SourceRecordMappingKindInputFields,
+				Inputs: []SourceRecordInputBinding{{Input: "target_id", Field: "id"}},
+			},
+			Batch: &DestinationBatch{Disposition: DestinationBatchPerRecord, MaxRecords: 1},
+		}},
+	}
+	if err := base.Validate(); err == nil || !strings.Contains(err.Error(), "eligible action") {
+		t.Fatalf("ghost eligible action error = %v, want exact strategy closure refusal", err)
+	}
+
+	base.EligibleActions = []string{"apply_record"}
+	if err := base.Validate(); err == nil || !strings.Contains(err.Error(), "source binding action") {
+		t.Fatalf("orphan source binding error = %v, want reachable action refusal", err)
 	}
 }
 

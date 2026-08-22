@@ -51,6 +51,7 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 		}
 		currentState, present := current.StreamStates[key]
 		currentState = cloneStreamState(currentState)
+		migrateLegacyTransportReceiptAssociation(&currentState)
 		prior = cloneStreamState(currentState)
 		priorPresent = present
 		if currentState.ActiveWorkFence != admissionFence {
@@ -66,7 +67,7 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 			// Its successor receives a higher fence and must still reconcile any
 			// durable receipt before the source can replay; a running owner (or an
 			// unknown historical owner) remains fail-closed until expiry.
-			if !transportWorkOwnerTerminal(current.Runs, currentState.ActiveWorkID) && (currentState.ActiveWorkLeaseUntil == nil || currentState.ActiveWorkLeaseUntil.After(now)) {
+			if transportStreamWorkLeaseLive(currentState, current.Runs, now) {
 				return current, errTransportStreamWorkInProgress
 			}
 		}
@@ -114,6 +115,12 @@ func transportWorkOwnerTerminal(runs []Run, workID string) bool {
 	return false
 }
 
+func transportStreamWorkLeaseLive(streamState StreamState, runs []Run, now time.Time) bool {
+	return streamState.ActiveWorkID != "" &&
+		!transportWorkOwnerTerminal(runs, streamState.ActiveWorkID) &&
+		(streamState.ActiveWorkLeaseUntil == nil || streamState.ActiveWorkLeaseUntil.After(now))
+}
+
 // renew verifies that this exact durable work identity still owns the stream,
 // then atomically extends it. It is called immediately before source, stage,
 // destination, and checkpoint effects. A stale process cannot renew after a
@@ -123,11 +130,16 @@ func (l *transportWorkLease) renew(ctx context.Context) error {
 	return err
 }
 
-func (l *transportWorkLease) commit(ctx context.Context, checkpoint synccontract.CheckpointEnvelope) (StreamState, error) {
+func (l *transportWorkLease) commit(ctx context.Context, checkpoint synccontract.CheckpointEnvelope, receipts []TransportReceiptCommit) (StreamState, error) {
 	return l.mutate(ctx, func(current StreamState) (StreamState, error) {
 		updated := cloneStreamState(current)
 		copy := checkpoint.Clone()
 		updated.Checkpoint = &copy
+		committedReceipts, err := appendTransportReceiptCommits(updated.CommittedTransportReceipts, receipts)
+		if err != nil {
+			return StreamState{}, fmt.Errorf("record committed transport receipts: %w", err)
+		}
+		updated.CommittedTransportReceipts = committedReceipts
 		if checkpoint.CommittedAt != nil {
 			updated.UpdatedAt = checkpoint.CommittedAt.UTC()
 		}
@@ -140,10 +152,10 @@ func (l *transportWorkLease) commit(ctx context.Context, checkpoint synccontract
 // and read-back operation; after a destination acknowledgement returns, it
 // must not turn a verified external effect into a replayable prefix merely by
 // interrupting this bounded local checkpoint write.
-func (l *transportWorkLease) commitAfterAcknowledgement(ctx context.Context, checkpoint synccontract.CheckpointEnvelope) (StreamState, error) {
+func (l *transportWorkLease) commitAfterAcknowledgement(ctx context.Context, checkpoint synccontract.CheckpointEnvelope, receipts []TransportReceiptCommit) (StreamState, error) {
 	persistCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), transportWorkLeaseDuration)
 	defer cancel()
-	return l.commit(persistCtx, checkpoint)
+	return l.commit(persistCtx, checkpoint, receipts)
 }
 
 // abandonUncommitted releases only this exact active lease after the

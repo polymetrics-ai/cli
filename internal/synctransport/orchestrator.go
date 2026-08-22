@@ -296,7 +296,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 				if acknowledgement.Sink != request.Destination.Name() {
 					return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
 				}
-				return request.Commit(checkpoint)
+				return request.commitAcknowledgedWorksets(checkpoint, pendingReceipts)
 			}); err != nil {
 				return err
 			}
@@ -351,7 +351,7 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 				if deferredAcknowledgement.Sink != request.Destination.Name() {
 					return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", deferredAcknowledgement.Sink, request.Destination.Name())
 				}
-				return request.Commit(checkpoint)
+				return request.commitAcknowledgedWorksets(checkpoint, pendingReceipts)
 			}); err != nil {
 				return result, err
 			}
@@ -583,7 +583,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		if acknowledgement.Sink != request.Destination.Name() {
 			return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
 		}
-		return request.Commit(checkpoint)
+		return request.commitAcknowledgedWorksets(checkpoint, receipts)
 	}); err != nil {
 		return result, err
 	}

@@ -33,6 +33,7 @@ type schemaNode struct {
 	properties           map[string]*schemaNode
 	items                *schemaNode
 	prefixItems          []*schemaNode
+	oneOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
 	format               string
@@ -99,6 +100,7 @@ var structuralKeywords = map[string]bool{
 	"required":             true,
 	"properties":           true,
 	"items":                true,
+	"oneOf":                true,
 	"enum":                 true,
 	"pattern":              true,
 	"minLength":            true,
@@ -209,6 +211,27 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 			return nil, fmt.Errorf("compile schema: items: %w", err)
 		}
 		n.items = child
+	}
+
+	if raw, ok := m["oneOf"]; ok {
+		var subs []map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &subs); err != nil || len(subs) == 0 {
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: oneOf: %w", err)
+			}
+			return nil, fmt.Errorf("compile schema: oneOf must contain at least one schema object")
+		}
+		n.oneOf = make([]*schemaNode, len(subs))
+		for index, sub := range subs {
+			if sub == nil {
+				return nil, fmt.Errorf("compile schema: oneOf.%d must be a schema object", index)
+			}
+			child, err := compileNode(sub, allowPrefixItems)
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: oneOf.%d: %w", index, err)
+			}
+			n.oneOf[index] = child
+		}
 	}
 
 	if raw, ok := m["prefixItems"]; ok {
@@ -496,6 +519,17 @@ func (s *Schema) Validate(v any) error {
 func (n *schemaNode) validate(v any, path string) error {
 	if len(n.types) > 0 && !typeMatches(v, n.types) {
 		return fmt.Errorf("%s: value does not match type %v", displayPath(path), n.types)
+	}
+	if len(n.oneOf) != 0 {
+		matches := 0
+		for _, alternative := range n.oneOf {
+			if err := alternative.validate(v, path); err == nil {
+				matches++
+			}
+		}
+		if matches != 1 {
+			return fmt.Errorf("%s: oneOf expected exactly one schema match, got %d", displayPath(path), matches)
+		}
 	}
 
 	if len(n.enum) > 0 {

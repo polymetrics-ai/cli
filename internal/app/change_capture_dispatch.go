@@ -361,7 +361,7 @@ func (r *warehouseChangeCaptureReceiver) CommitDurableChangefeedCheckpoint(ctx c
 	}
 	var committed synccontract.CheckpointEnvelope
 	err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, r.acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
-		updated, err := r.workLease.commit(ctx, checkpoint)
+		updated, err := r.workLease.commit(ctx, checkpoint, nil)
 		if err != nil {
 			return fmt.Errorf("persist change capture warehouse checkpoint: %w", err)
 		}

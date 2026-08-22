@@ -17,6 +17,12 @@ var ErrDownstreamAcknowledgementRequired = errors.New("durable downstream acknow
 // a generic destination can produce a checkpointed write.
 var ErrDurableETLDestinationRequired = errors.New("checkpointed sync requires a durable destination acknowledgement")
 
+// MaxPrivateReceiptBytes is the single hard bound for connector-owned
+// read-back continuations. Receipt constructors must use this value before
+// provider I/O, because WithPrivateReceipt cannot safely discover overflow
+// after a successful mutation.
+const MaxPrivateReceiptBytes = 8 << 10
+
 // DownstreamAcknowledgement is supplied only after the destination has made
 // the batch durable according to its own native protocol.
 type DownstreamAcknowledgement struct {
@@ -113,7 +119,7 @@ func (a DownstreamAcknowledgement) WithPrivateReceipt(receipt json.RawMessage) (
 	if err := a.validate(); err != nil {
 		return DownstreamAcknowledgement{}, err
 	}
-	if len(receipt) == 0 || len(receipt) > 8<<10 || !json.Valid(receipt) {
+	if len(receipt) == 0 || len(receipt) > MaxPrivateReceiptBytes || !json.Valid(receipt) {
 		return DownstreamAcknowledgement{}, fmt.Errorf("durable acknowledgement private receipt must be valid bounded JSON")
 	}
 	a.privateReceipt = append(json.RawMessage(nil), receipt...)

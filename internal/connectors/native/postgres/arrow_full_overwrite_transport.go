@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"errors"
+	"reflect"
 	"sort"
 	"strings"
 	"sync"
@@ -99,7 +100,7 @@ func (s *managedTargetArrowFullOverwriteRun) ApplyArrowSegment(ctx context.Conte
 }
 
 func (s *managedTargetArrowFullOverwriteRun) applyArrowSegment(ctx context.Context, request synctransport.ArrowBulkApplyRequest) error {
-	if ctx == nil || s == nil || ctx.Err() != nil || request.Record == nil || request.ConnectionID != s.request.ConnectionID || request.Plan != s.request.Plan || request.Segment.TransformPlanHash != s.request.TransformPlanHash || request.Segment.TransformPlanHash == "" || request.Segment.TransformedRows != request.Record.NumRows() || request.Segment.ParquetBytes < 1 {
+	if ctx == nil || s == nil || ctx.Err() != nil || request.Record == nil || request.ConnectionID != s.request.ConnectionID || !reflect.DeepEqual(request.Plan, s.request.Plan) || request.Segment.TransformPlanHash != s.request.TransformPlanHash || request.Segment.TransformPlanHash == "" || request.Segment.TransformedRows != request.Record.NumRows() || request.Segment.ParquetBytes < 1 {
 		return ErrManagedTargetTransportBindingInvalid
 	}
 	s.mu.Lock()
