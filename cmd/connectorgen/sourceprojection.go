@@ -98,9 +98,12 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		}
 	}
 	blockedReads := sourceProjectionBlockedReadSources(result)
+	reachableReads := sourceProjectionReachableReadSources(result)
 	stats := sourceProjectionStats{CLI: sourceProjectionDowngradeUnreachableReadCommands(cli.root, blockedReads)}
+	stats.CLI += sourceProjectionRestoreReachableReadCommands(cli.root, blockedReads, reachableReads)
 	if api.root != nil {
 		stats.Surface = sourceProjectionBlockUnreachableReadSurfaceEndpoints(api.root, blockedReads)
+		stats.Surface += sourceProjectionRestoreReachableReadSurfaceEndpoints(api.root, cli.root, blockedReads, reachableReads)
 	}
 
 	actionsByEndpoint := map[string][]*orderedObject{}
@@ -239,6 +242,29 @@ func sourceProjectionBlockedReadSources(result sourceImportResult) map[string]so
 	return blocked
 }
 
+func sourceProjectionReachableReadSources(result sourceImportResult) map[string]sourceOperationDescriptor {
+	reachable := map[string]sourceOperationDescriptor{}
+	for _, operation := range result.Operations {
+		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
+			continue
+		}
+		reachable[operation.SourceID] = operation
+	}
+	return reachable
+}
+
+func sourceProjectionBlockedReadCommandNote(sourceID string) string {
+	return "Blocked: locked source operation " + sourceID + " has no declaration-owned executable stream, direct-read, binary, or status route."
+}
+
+func sourceProjectionBlockedReadSurfaceReason(sourceID string) string {
+	return "Locked source operation " + sourceID + " has no field-complete declaration-owned executable route."
+}
+
+func sourceProjectionBlockedReadSurfaceNote(sourceID string) string {
+	return "Named dependency: source_operation=" + sourceID
+}
+
 // sourceProjectionDowngradeUnreachableReadCommands prevents a direct-read
 // command from claiming implementation after the source projection has
 // recorded that its provider operation has no field-complete
@@ -268,7 +294,7 @@ func sourceProjectionDowngradeUnreachableReadCommands(cli *orderedObject, blocke
 			continue
 		}
 		commandChanged := setOrderedIfDifferent(command, "availability", "partial")
-		if setOrderedIfDifferent(command, "notes", "Blocked: locked source operation "+source.SourceID+" has no declaration-owned executable stream, direct-read, binary, or status route.") {
+		if setOrderedIfDifferent(command, "notes", sourceProjectionBlockedReadCommandNote(source.SourceID)) {
 			commandChanged = true
 		}
 		if commandChanged {
@@ -276,6 +302,65 @@ func sourceProjectionDowngradeUnreachableReadCommands(cli *orderedObject, blocke
 		}
 	}
 	return changed
+}
+
+func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked map[string]sourceOperationDescriptor, reachable map[string]sourceOperationDescriptor) int {
+	changed := 0
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "availability") != "partial" || stringField(command, "intent") != "direct_read" {
+			continue
+		}
+		sourceID, ok := sourceProjectionBlockedReadCommandSourceID(command)
+		if !ok {
+			continue
+		}
+		source, found := reachable[sourceID]
+		if !found || sourceProjectionCommandHasBlockedEndpoint(command, blocked) || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, source.Path)) {
+			continue
+		}
+		command.set("availability", "implemented")
+		command.remove("notes")
+		changed++
+	}
+	return changed
+}
+
+func sourceProjectionBlockedReadCommandSourceID(command *orderedObject) (string, bool) {
+	const prefix = "Blocked: locked source operation "
+	const suffix = " has no declaration-owned executable stream, direct-read, binary, or status route."
+	note := stringField(command, "notes")
+	if !strings.HasPrefix(note, prefix) || !strings.HasSuffix(note, suffix) {
+		return "", false
+	}
+	sourceID := strings.TrimSuffix(strings.TrimPrefix(note, prefix), suffix)
+	if sourceID == "" || note != sourceProjectionBlockedReadCommandNote(sourceID) {
+		return "", false
+	}
+	return sourceID, true
+}
+
+func sourceProjectionCommandHasBlockedEndpoint(command *orderedObject, blocked map[string]sourceOperationDescriptor) bool {
+	for _, raw := range arrayField(command, "api_surface") {
+		surface, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		if _, found := blocked[sourceProjectionEndpointKey(stringField(surface, "method"), stringField(surface, "path"))]; found {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceProjectionCommandHasEndpoint(command *orderedObject, endpoint string) bool {
+	for _, raw := range arrayField(command, "api_surface") {
+		surface, ok := raw.(*orderedObject)
+		if ok && sourceProjectionEndpointKey(stringField(surface, "method"), stringField(surface, "path")) == endpoint {
+			return true
+		}
+	}
+	return false
 }
 
 // sourceProjectionBlockUnreachableReadSurfaceEndpoints replaces stale
@@ -322,8 +407,8 @@ func sourceProjectionBlockUnreachableReadSurfaceEndpoints(surface *orderedObject
 		operation.set("status", "blocked")
 		operation.set("risk", "low")
 		operation.set("blocked_by_default", true)
-		operation.set("reason", "Locked source operation "+source.SourceID+" has no field-complete declaration-owned executable route.")
-		operation.set("notes", "Named dependency: source_operation="+source.SourceID)
+		operation.set("reason", sourceProjectionBlockedReadSurfaceReason(source.SourceID))
+		operation.set("notes", sourceProjectionBlockedReadSurfaceNote(source.SourceID))
 		if setOrderedIfDifferent(endpoint, "operation", operation) {
 			endpointChanged = true
 		}
@@ -332,6 +417,76 @@ func sourceProjectionBlockUnreachableReadSurfaceEndpoints(surface *orderedObject
 		}
 	}
 	return changed
+}
+
+func sourceProjectionRestoreReachableReadSurfaceEndpoints(surface, cli *orderedObject, blocked map[string]sourceOperationDescriptor, reachable map[string]sourceOperationDescriptor) int {
+	changed := 0
+	for _, raw := range arrayField(surface, "endpoints") {
+		endpoint, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		endpointKey := sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path"))
+		if _, stillBlocked := blocked[endpointKey]; stillBlocked {
+			continue
+		}
+		sourceID, ok := sourceProjectionBlockedReadSurfaceSourceID(endpoint)
+		if !ok {
+			continue
+		}
+		source, found := reachable[sourceID]
+		if !found || sourceProjectionEndpointKey(source.Method, source.Path) != endpointKey {
+			continue
+		}
+		commands := sourceProjectionDirectReadCommandPaths(cli, endpointKey)
+		if len(commands) == 0 {
+			continue
+		}
+		endpoint.remove("operation")
+		endpoint.set("covered_by", directReadCoverage(commands))
+		changed++
+	}
+	return changed
+}
+
+func sourceProjectionBlockedReadSurfaceSourceID(endpoint *orderedObject) (string, bool) {
+	rawOperation, ok := endpoint.get("operation")
+	if !ok {
+		return "", false
+	}
+	operation, ok := rawOperation.(*orderedObject)
+	if !ok || stringField(operation, "model") != "direct_read" || stringField(operation, "status") != "blocked" {
+		return "", false
+	}
+	const prefix = "Named dependency: source_operation="
+	note := stringField(operation, "notes")
+	if !strings.HasPrefix(note, prefix) {
+		return "", false
+	}
+	sourceID := strings.TrimPrefix(note, prefix)
+	if sourceID == "" || note != sourceProjectionBlockedReadSurfaceNote(sourceID) || stringField(operation, "reason") != sourceProjectionBlockedReadSurfaceReason(sourceID) {
+		return "", false
+	}
+	return sourceID, true
+}
+
+func sourceProjectionDirectReadCommandPaths(cli *orderedObject, endpoint string) []string {
+	paths := map[string]bool{}
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "direct_read" || stringField(command, "availability") != "implemented" || len(arrayField(command, "api_surface")) != 1 || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+			continue
+		}
+		if path := stringField(command, "path"); path != "" {
+			paths[path] = true
+		}
+	}
+	commands := make([]string, 0, len(paths))
+	for path := range paths {
+		commands = append(commands, path)
+	}
+	sort.Strings(commands)
+	return commands
 }
 
 func sourceOperationHasFoundationGap(operation sourceOperationDescriptor, foundation string) bool {
@@ -1761,6 +1916,14 @@ func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundl
 		path   string
 		decode func([]byte) error
 	}{
+		{path: "spec.json", decode: func(raw []byte) error {
+			spec, err := engine.CompileSchema(json.RawMessage(raw))
+			if err != nil {
+				return err
+			}
+			bundle.Spec = spec
+			return nil
+		}},
 		{path: "operations.json", decode: func(raw []byte) error {
 			var value struct {
 				Operations []engine.OperationSpec `json:"operations"`

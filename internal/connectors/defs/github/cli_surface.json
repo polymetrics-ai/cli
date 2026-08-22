@@ -94,7 +94,7 @@
       "path": "actions access view",
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/access",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_permissions_access",
       "source_cli_path": "",
       "flags": [],
@@ -104,8 +104,7 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/access"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-workflow-access-to-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions add-custom-labels-to-self-hosted-runner-for-org",
@@ -319,7 +318,7 @@
       "path": "actions approvals view",
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_runs_run_id_approvals",
       "source_cli_path": "",
       "flags": [
@@ -337,8 +336,7 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-reviews-for-run has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions approve create",
@@ -369,7 +367,7 @@
       "path": "actions artifact-and-log-retention view",
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_permissions_artifact_and_log_retention",
       "source_cli_path": "",
       "flags": [],
@@ -379,8 +377,7 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-artifact-and-log-retention-settings-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions artifacts delete",
@@ -411,7 +408,7 @@
       "path": "actions attempts view",
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_runs_run_id_attempts_attempt_number",
       "source_cli_path": "",
       "flags": [
@@ -442,8 +439,7 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-workflow-run-attempt has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions caches delete-2",
@@ -556,7 +552,7 @@
       "path": "actions concurrency_groups view-2",
       "summary": "Read /repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_concurrency_groups_concurrency_group_name",
       "source_cli_path": "",
       "flags": [
@@ -586,8 +582,7 @@
           "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-concurrency-group-for-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions concurrency_groups view-3",
@@ -1347,7 +1342,7 @@
       "path": "actions downloads view",
       "summary": "Read /repos/{owner}/{repo}/actions/runners/downloads",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_runners_downloads",
       "source_cli_path": "",
       "flags": [],
@@ -1357,8 +1352,7 @@
           "path": "/repos/{owner}/{repo}/actions/runners/downloads"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/list-runner-applications-for-repo has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions enable set",
@@ -1484,7 +1478,7 @@
       "path": "actions fork-pr-contributor-approval view",
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_permissions_fork_pr_contributor_approval",
       "source_cli_path": "",
       "flags": [],
@@ -1494,14 +1488,13 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-fork-pr-contributor-approval-permissions-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions fork-pr-workflows-private-repos view",
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_permissions_fork_pr_workflows_private_repos",
       "source_cli_path": "",
       "flags": [],
@@ -1511,8 +1504,7 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-private-repo-fork-pr-workflows-settings-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions generate-jitconfig create",
@@ -2392,7 +2384,7 @@
       "path": "actions jobs view",
       "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_jobs_job_id",
       "source_cli_path": "",
       "flags": [
@@ -2410,8 +2402,7 @@
           "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-job-for-workflow-run has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions labels create",
@@ -2539,7 +2530,7 @@
       "path": "actions labels view",
       "summary": "Read /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_runners_runner_id_labels2",
       "source_cli_path": "",
       "flags": [
@@ -2557,8 +2548,7 @@
           "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/list-labels-for-self-hosted-runner-for-repo has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions list-custom-image-versions-for-org",
@@ -3121,7 +3111,7 @@
       "path": "actions pending_deployments view",
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_runs_run_id_pending_deployments",
       "source_cli_path": "",
       "flags": [
@@ -3139,8 +3129,7 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-pending-deployments-for-run has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-2",
@@ -3372,7 +3361,7 @@
       "path": "actions permissions view",
       "summary": "Read /repos/{owner}/{repo}/actions/permissions",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_permissions",
       "source_cli_path": "",
       "flags": [],
@@ -3382,14 +3371,13 @@
           "path": "/repos/{owner}/{repo}/actions/permissions"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-github-actions-permissions-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions public-key view",
       "summary": "Read /repos/{owner}/{repo}/actions/secrets/public-key",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_secrets_public_key",
       "source_cli_path": "",
       "flags": [],
@@ -3399,8 +3387,7 @@
           "path": "/repos/{owner}/{repo}/actions/secrets/public-key"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-repo-public-key has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions registration-token create",
@@ -3771,7 +3758,7 @@
       "path": "actions retention-limit view",
       "summary": "Read /repos/{owner}/{repo}/actions/cache/retention-limit",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_cache_retention_limit",
       "source_cli_path": "",
       "flags": [],
@@ -3781,8 +3768,7 @@
           "path": "/repos/{owner}/{repo}/actions/cache/retention-limit"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-actions-cache-retention-limit-for-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions runners delete",
@@ -3813,7 +3799,7 @@
       "path": "actions runners view-2",
       "summary": "Read /repos/{owner}/{repo}/actions/runners/{runner_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_runners_runner_id2",
       "source_cli_path": "",
       "flags": [
@@ -3831,8 +3817,7 @@
           "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-self-hosted-runner-for-repo has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions runners view",
@@ -3951,7 +3936,7 @@
       "path": "actions runs view",
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_runs_run_id",
       "source_cli_path": "",
       "flags": [
@@ -3975,14 +3960,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation actions/get-workflow-run has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "actions secrets view-2",
       "summary": "Read /repos/{owner}/{repo}/actions/secrets/{secret_name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_secrets_secret_name2",
       "source_cli_path": "",
       "flags": [
@@ -4000,8 +3984,7 @@
           "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-repo-secret has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions secrets view",
@@ -4024,7 +4007,7 @@
       "path": "actions selected-actions view",
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/selected-actions",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_permissions_selected_actions",
       "source_cli_path": "",
       "flags": [],
@@ -4034,8 +4017,7 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-allowed-actions-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions set-actions-cache-retention-limit-for-enterprise",
@@ -4787,7 +4769,7 @@
       "path": "actions storage-limit view",
       "summary": "Read /repos/{owner}/{repo}/actions/cache/storage-limit",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_cache_storage_limit",
       "source_cli_path": "",
       "flags": [],
@@ -4797,8 +4779,7 @@
           "path": "/repos/{owner}/{repo}/actions/cache/storage-limit"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-actions-cache-storage-limit-for-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions sub set",
@@ -4839,7 +4820,7 @@
       "path": "actions sub view",
       "summary": "Read /repos/{owner}/{repo}/actions/oidc/customization/sub",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_oidc_customization_sub",
       "source_cli_path": "",
       "flags": [],
@@ -4849,14 +4830,13 @@
           "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-custom-oidc-sub-claim-for-repo has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions timing view-2",
       "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_workflows_workflow_id_timing",
       "source_cli_path": "",
       "flags": [
@@ -4874,14 +4854,13 @@
           "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-workflow-usage has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions timing view",
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/timing",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_runs_run_id_timing",
       "source_cli_path": "",
       "flags": [
@@ -4899,8 +4878,7 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-workflow-run-usage has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions update-hosted-runner-for-org",
@@ -5141,7 +5119,7 @@
       "path": "actions usage view",
       "summary": "Read /repos/{owner}/{repo}/actions/cache/usage",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_cache_usage",
       "source_cli_path": "",
       "flags": [],
@@ -5151,14 +5129,13 @@
           "path": "/repos/{owner}/{repo}/actions/cache/usage"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-actions-cache-usage has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions variables view-2",
       "summary": "Read /repos/{owner}/{repo}/actions/variables/{name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_variables_name2",
       "source_cli_path": "",
       "flags": [
@@ -5176,8 +5153,7 @@
           "path": "/repos/{owner}/{repo}/actions/variables/{name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-repo-variable has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions variables view",
@@ -5200,7 +5176,7 @@
       "path": "actions workflow view",
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/workflow",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_permissions_workflow",
       "source_cli_path": "",
       "flags": [],
@@ -5210,14 +5186,13 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/workflow"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-github-actions-default-workflow-permissions-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions workflows view",
       "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_workflows_workflow_id",
       "source_cli_path": "",
       "flags": [
@@ -5235,8 +5210,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation actions/get-workflow has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "activity delete-thread-subscription",
@@ -6529,7 +6503,7 @@
       "path": "agents public-key view",
       "summary": "Read /repos/{owner}/{repo}/agents/secrets/public-key",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.agents_secrets_public_key",
       "source_cli_path": "",
       "flags": [],
@@ -6539,8 +6513,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/agents/secrets/public-key"
         }
-      ],
-      "notes": "Blocked: locked source operation agents/get-repo-public-key has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "agents remove-selected-repo-from-org-secret",
@@ -6630,7 +6603,7 @@
       "path": "agents secrets view-2",
       "summary": "Read /repos/{owner}/{repo}/agents/secrets/{secret_name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.agents_secrets_secret_name2",
       "source_cli_path": "",
       "flags": [
@@ -6648,8 +6621,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
         }
-      ],
-      "notes": "Blocked: locked source operation agents/get-repo-secret has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "agents secrets view",
@@ -6817,7 +6789,7 @@
       "path": "agents variables view-2",
       "summary": "Read /repos/{owner}/{repo}/agents/variables/{name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.agents_variables_name2",
       "source_cli_path": "",
       "flags": [
@@ -6835,8 +6807,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/agents/variables/{name}"
         }
-      ],
-      "notes": "Blocked: locked source operation agents/get-repo-variable has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "agents variables view",
@@ -9880,7 +9851,7 @@
       "path": "artifact download-2",
       "summary": "Read /repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_artifacts_artifact_id2",
       "source_cli_path": "",
       "flags": [
@@ -9898,8 +9869,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation actions/get-artifact has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "artifact download-3",
@@ -9992,7 +9962,7 @@
       "path": "assignees view",
       "summary": "Read /repos/{owner}/{repo}/assignees/{assignee}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.assignees_assignee",
       "source_cli_path": "",
       "flags": [
@@ -10010,8 +9980,7 @@
           "path": "/repos/{owner}/{repo}/assignees/{assignee}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation issues/check-user-can-be-assigned has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "attestation verify",
@@ -10171,7 +10140,7 @@
       "path": "autolinks view",
       "summary": "Read /repos/{owner}/{repo}/autolinks/{autolink_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.autolinks_autolink_id2",
       "source_cli_path": "",
       "flags": [
@@ -10189,8 +10158,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-autolink has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "automated-security-fixes delete",
@@ -10230,7 +10198,7 @@
       "path": "automated-security-fixes view",
       "summary": "Read /repos/{owner}/{repo}/automated-security-fixes",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.automated_security_fixes2",
       "source_cli_path": "",
       "flags": [],
@@ -10240,8 +10208,7 @@
           "path": "/repos/{owner}/{repo}/automated-security-fixes"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/check-automated-security-fixes has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "billing create-organization-budget",
@@ -10818,7 +10785,7 @@
       "path": "branches apps view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection_restrictions_apps2",
       "source_cli_path": "",
       "flags": [
@@ -10836,8 +10803,7 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-apps-with-access-to-protected-branch has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches contexts create",
@@ -10921,7 +10887,7 @@
       "path": "branches contexts view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection_required_status_checks_contexts2",
       "source_cli_path": "",
       "flags": [
@@ -10939,8 +10905,7 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-all-status-check-contexts has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches enforce_admins create",
@@ -10998,7 +10963,7 @@
       "path": "branches enforce_admins view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection_enforce_admins2",
       "source_cli_path": "",
       "flags": [
@@ -11016,8 +10981,7 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-admin-branch-protection has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches protection delete",
@@ -11141,7 +11105,7 @@
       "path": "branches protection view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection2",
       "source_cli_path": "",
       "flags": [
@@ -11159,8 +11123,7 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-branch-protection has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches rename create",
@@ -11283,7 +11246,7 @@
       "path": "branches required_pull_request_reviews view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection_required_pull_request_reviews2",
       "source_cli_path": "",
       "flags": [
@@ -11301,8 +11264,7 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-pull-request-review-protection has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches required_signatures create",
@@ -11360,7 +11322,7 @@
       "path": "branches required_signatures view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection_required_signatures2",
       "source_cli_path": "",
       "flags": [
@@ -11378,8 +11340,7 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-commit-signature-protection has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches required_status_checks delete",
@@ -11454,7 +11415,7 @@
       "path": "branches required_status_checks view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection_required_status_checks2",
       "source_cli_path": "",
       "flags": [
@@ -11472,8 +11433,7 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-status-checks-protection has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches restrictions delete",
@@ -11505,7 +11465,7 @@
       "path": "branches restrictions view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection_restrictions2",
       "source_cli_path": "",
       "flags": [
@@ -11523,8 +11483,7 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-access-restrictions has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches teams create",
@@ -11608,7 +11567,7 @@
       "path": "branches teams view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection_restrictions_teams2",
       "source_cli_path": "",
       "flags": [
@@ -11626,8 +11585,7 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-teams-with-access-to-protected-branch has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches users create",
@@ -11732,7 +11690,7 @@
       "path": "branches users view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch_protection_restrictions_users2",
       "source_cli_path": "",
       "flags": [
@@ -11750,14 +11708,13 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-users-with-access-to-protected-branch has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.branches_branch",
       "source_cli_path": "",
       "flags": [
@@ -11775,8 +11732,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/branches/{branch}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-branch has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "browse",
@@ -12289,7 +12245,7 @@
       "path": "check-runs view",
       "summary": "Read /repos/{owner}/{repo}/check-runs/{check_run_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.check_runs_check_run_id",
       "source_cli_path": "",
       "flags": [
@@ -12307,8 +12263,7 @@
           "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation checks/get has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "check-suites check-runs view",
@@ -12440,7 +12395,7 @@
       "path": "check-suites view",
       "summary": "Read /repos/{owner}/{repo}/check-suites/{check_suite_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.check_suites_check_suite_id",
       "source_cli_path": "",
       "flags": [
@@ -12458,8 +12413,7 @@
           "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation checks/get-suite has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "classroom get-a-classroom",
@@ -12607,7 +12561,7 @@
       "path": "code-quality findings view-2",
       "summary": "Read /repos/{owner}/{repo}/code-quality/findings/{finding_number}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_quality_findings_finding_number",
       "source_cli_path": "",
       "flags": [
@@ -12625,8 +12579,7 @@
           "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-quality/get-finding has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-quality findings view",
@@ -12727,7 +12680,7 @@
       "path": "code-quality setup view",
       "summary": "Read /repos/{owner}/{repo}/code-quality/setup",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_quality_setup",
       "source_cli_path": "",
       "flags": [],
@@ -12737,8 +12690,7 @@
           "path": "/repos/{owner}/{repo}/code-quality/setup"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-quality/get-setup has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-sanning upload",
@@ -12806,7 +12758,7 @@
       "path": "code-scanning alerts view",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_alerts_alert_number",
       "source_cli_path": "",
       "flags": [
@@ -12824,8 +12776,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"
         }
-      ],
-      "notes": "Blocked: locked source operation code-scanning/get-alert has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "code-scanning analyses delete",
@@ -12862,7 +12813,7 @@
       "path": "code-scanning analyses view-2",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_analyses_analysis_id2",
       "source_cli_path": "",
       "flags": [
@@ -12880,8 +12831,7 @@
           "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/get-analysis has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning analyses view",
@@ -12979,7 +12929,7 @@
       "path": "code-scanning autofix view",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_alerts_alert_number_autofix",
       "source_cli_path": "",
       "flags": [
@@ -12997,8 +12947,7 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/get-autofix has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning commits create",
@@ -13067,7 +13016,7 @@
       "path": "code-scanning databases view-2",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_codeql_databases_language2",
       "source_cli_path": "",
       "flags": [
@@ -13085,14 +13034,13 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/get-codeql-database has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning databases view",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_codeql_databases",
       "source_cli_path": "",
       "flags": [],
@@ -13102,8 +13050,7 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/list-codeql-databases has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning default-setup update",
@@ -13175,7 +13122,7 @@
       "path": "code-scanning default-setup view",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/default-setup",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_default_setup",
       "source_cli_path": "",
       "flags": [],
@@ -13185,8 +13132,7 @@
           "path": "/repos/{owner}/{repo}/code-scanning/default-setup"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/get-default-setup has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning instances view",
@@ -13254,7 +13200,7 @@
       "path": "code-scanning repos view",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_codeql_variant_analyses_codeql_variant_analysis_id_repos_repo_owner_repo_name",
       "source_cli_path": "",
       "flags": [
@@ -13286,14 +13232,13 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/get-variant-analysis-repo-task has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning sarifs view",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_sarifs_sarif_id",
       "source_cli_path": "",
       "flags": [
@@ -13311,8 +13256,7 @@
           "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/get-sarif has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning variant-analyses create",
@@ -13379,7 +13323,7 @@
       "path": "code-scanning variant-analyses view",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_codeql_variant_analyses_codeql_variant_analysis_id",
       "source_cli_path": "",
       "flags": [
@@ -13397,8 +13341,7 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/get-variant-analysis has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-security attach-configuration",
@@ -15026,7 +14969,7 @@
       "path": "code-security-configuration view",
       "summary": "Read /repos/{owner}/{repo}/code-security-configuration",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_security_configuration",
       "source_cli_path": "",
       "flags": [],
@@ -15036,14 +14979,13 @@
           "path": "/repos/{owner}/{repo}/code-security-configuration"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-security/get-configuration-for-repository has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codeowners errors view",
       "summary": "Read /repos/{owner}/{repo}/codeowners/errors",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.codeowners_errors",
       "source_cli_path": "",
       "flags": [
@@ -15060,8 +15002,7 @@
           "path": "/repos/{owner}/{repo}/codeowners/errors"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/codeowners-errors has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codes-of-conduct get-all-codes-of-conduct",
@@ -16208,7 +16149,7 @@
       "path": "codespaces machines view",
       "summary": "Read /repos/{owner}/{repo}/codespaces/machines",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.codespaces_machines",
       "source_cli_path": "",
       "flags": [
@@ -16237,14 +16178,13 @@
           "path": "/repos/{owner}/{repo}/codespaces/machines"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/repo-machines-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces new view",
       "summary": "Read /repos/{owner}/{repo}/codespaces/new",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.codespaces_new",
       "source_cli_path": "",
       "flags": [
@@ -16267,14 +16207,13 @@
           "path": "/repos/{owner}/{repo}/codespaces/new"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/pre-flight-with-repo-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces permissions_check view",
       "summary": "Read /repos/{owner}/{repo}/codespaces/permissions_check",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.codespaces_permissions_check",
       "source_cli_path": "",
       "flags": [
@@ -16299,14 +16238,13 @@
           "path": "/repos/{owner}/{repo}/codespaces/permissions_check"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/check-permissions-for-devcontainer has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces public-key view",
       "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/public-key",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.codespaces_secrets_public_key",
       "source_cli_path": "",
       "flags": [],
@@ -16316,8 +16254,7 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/get-repo-public-key has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces publish-for-authenticated-user",
@@ -16439,7 +16376,7 @@
       "path": "codespaces secrets view-2",
       "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.codespaces_secrets_secret_name2",
       "source_cli_path": "",
       "flags": [
@@ -16457,8 +16394,7 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/get-repo-secret has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces secrets view",
@@ -16803,7 +16739,7 @@
       "path": "collaborators permission view",
       "summary": "Read /repos/{owner}/{repo}/collaborators/{username}/permission",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.collaborators_username_permission",
       "source_cli_path": "",
       "flags": [
@@ -16821,14 +16757,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/collaborators/{username}/permission"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-collaborator-permission-level has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "collaborators view",
       "summary": "Read /repos/{owner}/{repo}/collaborators/{username}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.collaborators_username",
       "source_cli_path": "",
       "flags": [
@@ -16846,8 +16781,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/collaborators/{username}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/check-collaborator has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "comments reactions create",
@@ -16967,7 +16901,7 @@
       "path": "comments view",
       "summary": "Read /repos/{owner}/{repo}/comments/{comment_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.comments_comment_id",
       "source_cli_path": "",
       "flags": [
@@ -16985,14 +16919,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/comments/{comment_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-commit-comment has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "commits branches-where-head view",
       "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.commits_commit_sha_branches_where_head",
       "source_cli_path": "",
       "flags": [
@@ -17010,8 +16943,7 @@
           "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/list-branches-for-head-commit has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits check-runs view",
@@ -17236,7 +17168,7 @@
       "path": "community profile view",
       "summary": "Read /repos/{owner}/{repo}/community/profile",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.community_profile",
       "source_cli_path": "",
       "flags": [],
@@ -17246,8 +17178,7 @@
           "path": "/repos/{owner}/{repo}/community/profile"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-community-profile-metrics has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "compare view",
@@ -17490,7 +17421,7 @@
       "path": "copilot configuration view",
       "summary": "Read /repos/{owner}/{repo}/copilot/cloud-agent/configuration",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.copilot_cloud_agent_configuration",
       "source_cli_path": "",
       "flags": [],
@@ -17500,8 +17431,7 @@
           "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/get-copilot-cloud-agent-configuration has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-content-exclusion-for-organization",
@@ -19658,7 +19588,7 @@
       "path": "dependabot alerts view",
       "summary": "Read /repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.dependabot_alerts_alert_number",
       "source_cli_path": "",
       "flags": [
@@ -19676,8 +19606,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}"
         }
-      ],
-      "notes": "Blocked: locked source operation dependabot/get-alert has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "dependabot create-or-update-org-secret",
@@ -19950,7 +19879,7 @@
       "path": "dependabot public-key view",
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/public-key",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.dependabot_secrets_public_key",
       "source_cli_path": "",
       "flags": [],
@@ -19960,8 +19889,7 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/get-repo-public-key has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot remove-selected-repo-from-org-secret",
@@ -20059,7 +19987,7 @@
       "path": "dependabot secrets view-2",
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.dependabot_secrets_secret_name2",
       "source_cli_path": "",
       "flags": [
@@ -20077,8 +20005,7 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/get-repo-secret has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot secrets view",
@@ -20298,7 +20225,7 @@
       "path": "dependency-graph compare view",
       "summary": "Read /repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.dependency_graph_compare_basehead",
       "source_cli_path": "",
       "flags": [
@@ -20322,8 +20249,7 @@
           "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependency-graph/diff-range has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependency-graph snapshots create",
@@ -20500,7 +20426,7 @@
       "path": "deployments statuses view-2",
       "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.deployments_deployment_id_statuses_status_id",
       "source_cli_path": "",
       "flags": [
@@ -20524,8 +20450,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-deployment-status has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "deployments statuses view",
@@ -20556,7 +20481,7 @@
       "path": "deployments view",
       "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.deployments_deployment_id2",
       "source_cli_path": "",
       "flags": [
@@ -20574,8 +20499,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/deployments/{deployment_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-deployment has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "discussion create",
@@ -21500,7 +21424,7 @@
       "path": "environments deployment_protection_rules view-2",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.environments_environment_name_deployment_protection_rules_protection_rule_id2",
       "source_cli_path": "",
       "flags": [
@@ -21525,14 +21449,13 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-custom-deployment-protection-rule has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment_protection_rules view",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.environments_environment_name_deployment_protection_rules",
       "source_cli_path": "",
       "flags": [
@@ -21550,8 +21473,7 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-all-deployment-protection-rules has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment-branch-policies create",
@@ -21672,7 +21594,7 @@
       "path": "environments deployment-branch-policies view-2",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.environments_environment_name_deployment_branch_policies_branch_policy_id2",
       "source_cli_path": "",
       "flags": [
@@ -21697,8 +21619,7 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-deployment-branch-policy has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment-branch-policies view",
@@ -21729,7 +21650,7 @@
       "path": "environments public-key view",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.environments_environment_name_secrets_public_key",
       "source_cli_path": "",
       "flags": [
@@ -21747,14 +21668,13 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-environment-public-key has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments secrets view-2",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.environments_environment_name_secrets_secret_name2",
       "source_cli_path": "",
       "flags": [
@@ -21779,8 +21699,7 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-environment-secret has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments secrets view",
@@ -21811,7 +21730,7 @@
       "path": "environments variables view-2",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.environments_environment_name_variables_name2",
       "source_cli_path": "",
       "flags": [
@@ -21836,8 +21755,7 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-environment-variable has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments variables view",
@@ -21868,7 +21786,7 @@
       "path": "environments view",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.environments_environment_name",
       "source_cli_path": "",
       "flags": [
@@ -21886,8 +21804,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/environments/{environment_name}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-environment has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "events view",
@@ -22548,7 +22465,7 @@
       "path": "git blobs view",
       "summary": "Read /repos/{owner}/{repo}/git/blobs/{file_sha}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.git_blobs_file_sha",
       "source_cli_path": "",
       "flags": [
@@ -22566,8 +22483,7 @@
           "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation git/get-blob has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "git commits create",
@@ -22635,7 +22551,7 @@
       "path": "git commits view",
       "summary": "Read /repos/{owner}/{repo}/git/commits/{commit_sha}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.git_commits_commit_sha",
       "source_cli_path": "",
       "flags": [
@@ -22653,14 +22569,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}"
         }
-      ],
-      "notes": "Blocked: locked source operation git/get-commit has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "git matching-refs view",
       "summary": "Read /repos/{owner}/{repo}/git/matching-refs/{ref}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.git_matching_refs_ref",
       "source_cli_path": "",
       "flags": [
@@ -22678,14 +22593,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}"
         }
-      ],
-      "notes": "Blocked: locked source operation git/list-matching-refs has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "git ref view",
       "summary": "Read /repos/{owner}/{repo}/git/ref/{ref}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.git_ref_ref",
       "source_cli_path": "",
       "flags": [
@@ -22703,8 +22617,7 @@
           "path": "/repos/{owner}/{repo}/git/ref/{ref}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation git/get-ref has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "git tags create",
@@ -22771,7 +22684,7 @@
       "path": "git tags view",
       "summary": "Read /repos/{owner}/{repo}/git/tags/{tag_sha}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.git_tags_tag_sha",
       "source_cli_path": "",
       "flags": [
@@ -22789,8 +22702,7 @@
           "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation git/get-tag has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "git trees create",
@@ -22829,7 +22741,7 @@
       "path": "git trees view",
       "summary": "Read /repos/{owner}/{repo}/git/trees/{tree_sha}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.git_trees_tree_sha",
       "source_cli_path": "",
       "flags": [
@@ -22853,8 +22765,7 @@
           "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation git/get-tree has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "gitignore get-all-templates",
@@ -30783,7 +30694,7 @@
       "path": "hash-algorithm view",
       "summary": "Read /repos/{owner}/{repo}/hash-algorithm",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.hash_algorithm",
       "source_cli_path": "",
       "flags": [],
@@ -30793,14 +30704,13 @@
           "path": "/repos/{owner}/{repo}/hash-algorithm"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-hash-algorithm has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "hooks config view",
       "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/config",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.hooks_hook_id_config",
       "source_cli_path": "",
       "flags": [
@@ -30818,14 +30728,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-webhook-config-for-repo has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "hooks deliveries view-2",
       "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.hooks_hook_id_deliveries_delivery_id",
       "source_cli_path": "",
       "flags": [
@@ -30850,8 +30759,7 @@
           "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-webhook-delivery has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "hooks deliveries view",
@@ -30892,7 +30800,7 @@
       "path": "hooks view",
       "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.hooks_hook_id",
       "source_cli_path": "",
       "flags": [
@@ -30910,8 +30818,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/hooks/{hook_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-webhook has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "hosted-compute create-network-configuration-for-org",
@@ -31213,7 +31120,7 @@
       "path": "immutable-releases view",
       "summary": "Read /repos/{owner}/{repo}/immutable-releases",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.immutable_releases2",
       "source_cli_path": "",
       "flags": [],
@@ -31223,8 +31130,7 @@
           "path": "/repos/{owner}/{repo}/immutable-releases"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/check-immutable-releases has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "import authors update",
@@ -31267,7 +31173,7 @@
       "path": "import authors view",
       "summary": "Read /repos/{owner}/{repo}/import/authors",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.import_authors",
       "source_cli_path": "",
       "flags": [
@@ -31284,8 +31190,7 @@
           "path": "/repos/{owner}/{repo}/import/authors"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation migrations/get-commit-authors has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "import delete",
@@ -31308,7 +31213,7 @@
       "path": "import large_files view",
       "summary": "Read /repos/{owner}/{repo}/import/large_files",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.import_large_files",
       "source_cli_path": "",
       "flags": [],
@@ -31318,8 +31223,7 @@
           "path": "/repos/{owner}/{repo}/import/large_files"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation migrations/get-large-files has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "import lfs update",
@@ -31454,7 +31358,7 @@
       "path": "import view",
       "summary": "Read /repos/{owner}/{repo}/import",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.import2",
       "source_cli_path": "",
       "flags": [],
@@ -31464,14 +31368,13 @@
           "path": "/repos/{owner}/{repo}/import"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation migrations/get-import-status has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "installation view",
       "summary": "Read /repos/{owner}/{repo}/installation",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.installation",
       "source_cli_path": "",
       "flags": [],
@@ -31481,8 +31384,7 @@
           "path": "/repos/{owner}/{repo}/installation"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation apps/get-repo-installation has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "interaction-limits bypass-list delete",
@@ -31538,7 +31440,7 @@
       "path": "interaction-limits bypass-list view",
       "summary": "Read /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.interaction_limits_pulls_bypass_list2",
       "source_cli_path": "",
       "flags": [],
@@ -31548,8 +31450,7 @@
           "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation interactions/get-pull-request-bypass-list-for-repo has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "interaction-limits delete",
@@ -31613,7 +31514,7 @@
       "path": "interaction-limits view",
       "summary": "Read /repos/{owner}/{repo}/interaction-limits",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.interaction_limits2",
       "source_cli_path": "",
       "flags": [],
@@ -31623,8 +31524,7 @@
           "path": "/repos/{owner}/{repo}/interaction-limits"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation interactions/get-restrictions-for-repo has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "interactions get-pull-request-creation-cap-for-org",
@@ -32485,7 +32385,7 @@
       "path": "issue view",
       "summary": "View issue details",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.issues_issue_number",
       "source_cli_path": "gh issue view",
       "flags": [
@@ -32503,14 +32403,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/issues/{issue_number}"
         }
-      ],
-      "notes": "Blocked: locked source operation issues/get has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "issue-types view",
       "summary": "Read /repos/{owner}/{repo}/issue-types",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.issue_types",
       "source_cli_path": "",
       "flags": [],
@@ -32520,8 +32419,7 @@
           "path": "/repos/{owner}/{repo}/issue-types"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/list-issue-types has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues approve-suggestion",
@@ -32560,7 +32458,7 @@
       "path": "issues assignees view",
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.issues_issue_number_assignees_assignee",
       "source_cli_path": "",
       "flags": [
@@ -32585,8 +32483,7 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation issues/check-user-can-be-assigned-to-issue has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues blocked_by create",
@@ -32736,7 +32633,7 @@
       "path": "issues comments view",
       "summary": "Read /repos/{owner}/{repo}/issues/comments/{comment_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.issues_comments_comment_id",
       "source_cli_path": "",
       "flags": [
@@ -32754,8 +32651,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation issues/get-comment has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "issues dismiss-suggestion",
@@ -32819,7 +32715,7 @@
       "path": "issues events view",
       "summary": "Read /repos/{owner}/{repo}/issues/events/{event_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.issues_events_event_id",
       "source_cli_path": "",
       "flags": [
@@ -32836,8 +32732,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/issues/events/{event_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation issues/get-event has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "issues issue-field-values create",
@@ -33096,7 +32991,7 @@
       "path": "issues parent view",
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/parent",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.issues_issue_number_parent",
       "source_cli_path": "",
       "flags": [
@@ -33114,8 +33009,7 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation issues/get-parent has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues pin delete",
@@ -33563,7 +33457,7 @@
       "path": "issues view",
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.issues_issue_number",
       "source_cli_path": "",
       "flags": [
@@ -33581,14 +33475,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/issues/{issue_number}"
         }
-      ],
-      "notes": "Blocked: locked source operation issues/get has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "keys view",
       "summary": "Read /repos/{owner}/{repo}/keys/{key_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.keys_key_id",
       "source_cli_path": "",
       "flags": [
@@ -33606,8 +33499,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/keys/{key_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-deploy-key has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "label clone",
@@ -33758,7 +33650,7 @@
       "path": "labels view",
       "summary": "Read /repos/{owner}/{repo}/labels/{name}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.labels_name",
       "source_cli_path": "",
       "flags": [
@@ -33775,14 +33667,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/labels/{name}"
         }
-      ],
-      "notes": "Blocked: locked source operation issues/get-label has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "license view",
       "summary": "Read /repos/{owner}/{repo}/license",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.license",
       "source_cli_path": "",
       "flags": [
@@ -33799,8 +33690,7 @@
           "path": "/repos/{owner}/{repo}/license"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation licenses/get-for-repo has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "licenses get",
@@ -34553,7 +34443,7 @@
       "path": "milestones view",
       "summary": "Read /repos/{owner}/{repo}/milestones/{milestone_number}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.milestones_milestone_number",
       "source_cli_path": "",
       "flags": [
@@ -34571,8 +34461,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/milestones/{milestone_number}"
         }
-      ],
-      "notes": "Blocked: locked source operation issues/get-milestone has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "notifications set",
@@ -41000,7 +40889,7 @@
       "path": "pages builds view-2",
       "summary": "Read /repos/{owner}/{repo}/pages/builds/{build_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pages_builds_build_id",
       "source_cli_path": "",
       "flags": [
@@ -41018,8 +40907,7 @@
           "path": "/repos/{owner}/{repo}/pages/builds/{build_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-pages-build has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages builds view",
@@ -41168,7 +41056,7 @@
       "path": "pages deployments view",
       "summary": "Read /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pages_deployments_pages_deployment_id",
       "source_cli_path": "",
       "flags": [
@@ -41186,14 +41074,13 @@
           "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-pages-deployment has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages health view",
       "summary": "Read /repos/{owner}/{repo}/pages/health",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pages_health",
       "source_cli_path": "",
       "flags": [],
@@ -41203,14 +41090,13 @@
           "path": "/repos/{owner}/{repo}/pages/health"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-pages-health-check has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages latest view",
       "summary": "Read /repos/{owner}/{repo}/pages/builds/latest",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pages_builds_latest",
       "source_cli_path": "",
       "flags": [],
@@ -41220,8 +41106,7 @@
           "path": "/repos/{owner}/{repo}/pages/builds/latest"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-latest-pages-build has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages set",
@@ -41271,7 +41156,7 @@
       "path": "pages view",
       "summary": "Read /repos/{owner}/{repo}/pages",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pages2",
       "source_cli_path": "",
       "flags": [],
@@ -41281,8 +41166,7 @@
           "path": "/repos/{owner}/{repo}/pages"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-pages has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "pr checkout",
@@ -41920,7 +41804,7 @@
       "path": "pr view",
       "summary": "View pull request details",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pulls_pull_number",
       "source_cli_path": "gh pr view",
       "flags": [
@@ -41938,8 +41822,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
         }
-      ],
-      "notes": "Blocked: locked source operation pulls/get has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "private-registries create-org-private-registry",
@@ -42549,7 +42432,7 @@
       "path": "private-vulnerability-reporting view",
       "summary": "Read /repos/{owner}/{repo}/private-vulnerability-reporting",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.private_vulnerability_reporting2",
       "source_cli_path": "",
       "flags": [],
@@ -42559,8 +42442,7 @@
           "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/check-private-vulnerability-reporting has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "project create",
@@ -43566,7 +43448,7 @@
       "path": "properties values view",
       "summary": "Read /repos/{owner}/{repo}/properties/values",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.properties_values",
       "source_cli_path": "",
       "flags": [],
@@ -43576,8 +43458,7 @@
           "path": "/repos/{owner}/{repo}/properties/values"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/custom-properties-for-repos-get-repository-values has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "pull-request-stacks add",
@@ -43799,7 +43680,7 @@
       "path": "pulls comments view-2",
       "summary": "Read /repos/{owner}/{repo}/pulls/comments/{comment_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pulls_comments_comment_id",
       "source_cli_path": "",
       "flags": [
@@ -43817,8 +43698,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation pulls/get-review-comment has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "pulls comments view-3",
@@ -43989,7 +43869,7 @@
       "path": "pulls merge view",
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/merge",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pulls_pull_number_merge",
       "source_cli_path": "",
       "flags": [
@@ -44007,8 +43887,7 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation pulls/check-if-merged has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls merge-async",
@@ -44275,7 +44154,7 @@
       "path": "pulls requested_reviewers view",
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pulls_pull_number_requested_reviewers2",
       "source_cli_path": "",
       "flags": [
@@ -44293,8 +44172,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
         }
-      ],
-      "notes": "Blocked: locked source operation pulls/list-requested-reviewers has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "pulls reviews delete",
@@ -44372,7 +44250,7 @@
       "path": "pulls reviews view-2",
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pulls_pull_number_reviews_review_id2",
       "source_cli_path": "",
       "flags": [
@@ -44397,8 +44275,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation pulls/get-review has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "pulls reviews view",
@@ -44429,7 +44306,7 @@
       "path": "pulls view",
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.pulls_pull_number",
       "source_cli_path": "",
       "flags": [
@@ -44447,8 +44324,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
         }
-      ],
-      "notes": "Blocked: locked source operation pulls/get has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "rate-limit get",
@@ -44471,7 +44347,7 @@
       "path": "readme view-2",
       "summary": "Read /repos/{owner}/{repo}/readme/{dir}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.readme_dir",
       "source_cli_path": "",
       "flags": [
@@ -44495,14 +44371,13 @@
           "path": "/repos/{owner}/{repo}/readme/{dir}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-readme-in-directory has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "readme view",
       "summary": "Read /repos/{owner}/{repo}/readme",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.readme",
       "source_cli_path": "",
       "flags": [
@@ -44519,8 +44394,7 @@
           "path": "/repos/{owner}/{repo}/readme"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-readme has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "release create",
@@ -44802,7 +44676,7 @@
       "path": "release view",
       "summary": "View a release",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.releases_release_id",
       "source_cli_path": "gh release view",
       "flags": [
@@ -44820,8 +44694,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/releases/{release_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-release has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "releases assets upload",
@@ -44900,7 +44773,7 @@
       "path": "releases assets view",
       "summary": "Read /repos/{owner}/{repo}/releases/assets/{asset_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.releases_assets_asset_id",
       "source_cli_path": "",
       "flags": [
@@ -44918,8 +44791,7 @@
           "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-release-asset has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "releases generate-notes view",
@@ -44968,7 +44840,7 @@
       "path": "releases latest view",
       "summary": "Read /repos/{owner}/{repo}/releases/latest",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.releases_latest",
       "source_cli_path": "",
       "flags": [],
@@ -44978,8 +44850,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/releases/latest"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-latest-release has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "releases reactions create",
@@ -45095,7 +44966,7 @@
       "path": "releases tags view",
       "summary": "Read /repos/{owner}/{repo}/releases/tags/{tag}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.releases_tags_tag",
       "source_cli_path": "",
       "flags": [
@@ -45113,14 +44984,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/releases/tags/{tag}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-release-by-tag has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "releases view",
       "summary": "Read /repos/{owner}/{repo}/releases/{release_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.releases_release_id",
       "source_cli_path": "",
       "flags": [
@@ -45138,8 +45008,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/releases/{release_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-release has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "repo archive tarball",
@@ -47438,7 +47307,7 @@
       "path": "ruleset view",
       "summary": "View repository ruleset details",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.rulesets_ruleset_id",
       "source_cli_path": "gh ruleset view",
       "flags": [
@@ -47462,14 +47331,13 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-repo-ruleset has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "rulesets history view-2",
       "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.rulesets_ruleset_id_history_version_id",
       "source_cli_path": "",
       "flags": [
@@ -47494,8 +47362,7 @@
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-repo-ruleset-version has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "rulesets history view",
@@ -47526,7 +47393,7 @@
       "path": "rulesets rule-suites view-2",
       "summary": "Read /repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.rulesets_rule_suites_rule_suite_id",
       "source_cli_path": "",
       "flags": [
@@ -47544,8 +47411,7 @@
           "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-repo-rule-suite has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "rulesets rule-suites view",
@@ -47616,7 +47482,7 @@
       "path": "rulesets view",
       "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.rulesets_ruleset_id",
       "source_cli_path": "",
       "flags": [
@@ -47640,8 +47506,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation repos/get-repo-ruleset has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "run cancel",
@@ -47848,7 +47713,7 @@
       "path": "run view",
       "summary": "View workflow run details",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_runs_run_id",
       "source_cli_path": "gh run view",
       "flags": [
@@ -47872,8 +47737,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation actions/get-workflow-run has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "run watch",
@@ -48514,7 +48378,7 @@
       "path": "secret-scanning alerts view",
       "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.secret_scanning_alerts_alert_number",
       "source_cli_path": "",
       "flags": [
@@ -48538,8 +48402,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"
         }
-      ],
-      "notes": "Blocked: locked source operation secret-scanning/get-alert has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "secret-scanning bulk-create-org-custom-patterns",
@@ -48842,7 +48705,7 @@
       "path": "secret-scanning scan-history view",
       "summary": "Read /repos/{owner}/{repo}/secret-scanning/scan-history",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.secret_scanning_scan_history",
       "source_cli_path": "",
       "flags": [],
@@ -48852,8 +48715,7 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/scan-history"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation secret-scanning/get-scan-history has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning update-org-pattern-configs",
@@ -49270,7 +49132,7 @@
       "path": "security-advisories view",
       "summary": "Read /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.security_advisories_ghsa_id2",
       "source_cli_path": "",
       "flags": [
@@ -49288,8 +49150,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation security-advisories/get-repository-advisory has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     },
     {
       "path": "skill list",
@@ -49320,7 +49181,7 @@
       "path": "stats code_frequency view",
       "summary": "Read /repos/{owner}/{repo}/stats/code_frequency",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.stats_code_frequency",
       "source_cli_path": "",
       "flags": [],
@@ -49330,14 +49191,13 @@
           "path": "/repos/{owner}/{repo}/stats/code_frequency"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-code-frequency-stats has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats commit_activity view",
       "summary": "Read /repos/{owner}/{repo}/stats/commit_activity",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.stats_commit_activity",
       "source_cli_path": "",
       "flags": [],
@@ -49347,14 +49207,13 @@
           "path": "/repos/{owner}/{repo}/stats/commit_activity"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-commit-activity-stats has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats contributors view",
       "summary": "Read /repos/{owner}/{repo}/stats/contributors",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.stats_contributors",
       "source_cli_path": "",
       "flags": [],
@@ -49364,14 +49223,13 @@
           "path": "/repos/{owner}/{repo}/stats/contributors"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-contributors-stats has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats participation view",
       "summary": "Read /repos/{owner}/{repo}/stats/participation",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.stats_participation",
       "source_cli_path": "",
       "flags": [],
@@ -49381,14 +49239,13 @@
           "path": "/repos/{owner}/{repo}/stats/participation"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-participation-stats has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats punch_card view",
       "summary": "Read /repos/{owner}/{repo}/stats/punch_card",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.stats_punch_card",
       "source_cli_path": "",
       "flags": [],
@@ -49398,8 +49255,7 @@
           "path": "/repos/{owner}/{repo}/stats/punch_card"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-punch-card-stats has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "statuses create",
@@ -49528,7 +49384,7 @@
       "path": "subscription view",
       "summary": "Read /repos/{owner}/{repo}/subscription",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.subscription2",
       "source_cli_path": "",
       "flags": [],
@@ -49538,8 +49394,7 @@
           "path": "/repos/{owner}/{repo}/subscription"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation activity/get-repo-subscription has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "teams add-member-legacy",
@@ -50785,7 +50640,7 @@
       "path": "traffic clones view",
       "summary": "Read /repos/{owner}/{repo}/traffic/clones",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.traffic_clones",
       "source_cli_path": "",
       "flags": [
@@ -50806,14 +50661,13 @@
           "path": "/repos/{owner}/{repo}/traffic/clones"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-clones has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic paths view",
       "summary": "Read /repos/{owner}/{repo}/traffic/popular/paths",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.traffic_popular_paths",
       "source_cli_path": "",
       "flags": [],
@@ -50823,14 +50677,13 @@
           "path": "/repos/{owner}/{repo}/traffic/popular/paths"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-top-paths has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic referrers view",
       "summary": "Read /repos/{owner}/{repo}/traffic/popular/referrers",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.traffic_popular_referrers",
       "source_cli_path": "",
       "flags": [],
@@ -50840,14 +50693,13 @@
           "path": "/repos/{owner}/{repo}/traffic/popular/referrers"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-top-referrers has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic views view",
       "summary": "Read /repos/{owner}/{repo}/traffic/views",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.traffic_views",
       "source_cli_path": "",
       "flags": [
@@ -50868,8 +50720,7 @@
           "path": "/repos/{owner}/{repo}/traffic/views"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/get-views has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "transfer create",
@@ -52749,7 +52600,7 @@
       "path": "variable get",
       "summary": "Get a repository variable",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_variables_name2",
       "source_url": "https://docs.github.com/en/rest/actions/variables#get-a-repository-variable",
       "flags": [
@@ -52768,8 +52619,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh variable get",
-      "notes": "Blocked: locked source operation actions/get-repo-variable has no declaration-owned executable stream, direct-read, binary, or status route."
+      "source_cli_path": "gh variable get"
     },
     {
       "path": "variable list",
@@ -52951,7 +52801,7 @@
       "path": "vulnerability-alerts view",
       "summary": "Read /repos/{owner}/{repo}/vulnerability-alerts",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.vulnerability_alerts2",
       "source_cli_path": "",
       "flags": [],
@@ -52961,8 +52811,7 @@
           "path": "/repos/{owner}/{repo}/vulnerability-alerts"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation repos/check-vulnerability-alerts has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "webhook create-2",
@@ -53222,7 +53071,7 @@
       "path": "workflow view",
       "summary": "View workflow details",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.actions_workflows_workflow_id",
       "source_cli_path": "gh workflow view",
       "flags": [
@@ -53240,8 +53089,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}"
         }
-      ],
-      "notes": "Blocked: locked source operation actions/get-workflow has no declaration-owned executable stream, direct-read, binary, or status route."
+      ]
     }
   ],
   "help_topics": [

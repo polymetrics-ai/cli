@@ -4462,13 +4462,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-artifact has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-artifact"
+      "covered_by": {
+        "direct_read": "artifact download-2"
       }
     },
     {
@@ -4486,37 +4481,22 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-actions-cache-retention-limit-for-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-actions-cache-retention-limit-for-repository"
+      "covered_by": {
+        "direct_read": "actions retention-limit view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-actions-cache-storage-limit-for-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-actions-cache-storage-limit-for-repository"
+      "covered_by": {
+        "direct_read": "actions storage-limit view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/cache/usage",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-actions-cache-usage has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-actions-cache-usage"
+      "covered_by": {
+        "direct_read": "actions usage view"
       }
     },
     {
@@ -4546,25 +4526,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-concurrency-group-for-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-concurrency-group-for-repository"
+      "covered_by": {
+        "direct_read": "actions concurrency_groups view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-job-for-workflow-run has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-job-for-workflow-run"
+      "covered_by": {
+        "direct_read": "actions jobs view"
       }
     },
     {
@@ -4582,13 +4552,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-custom-oidc-sub-claim-for-repo has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-custom-oidc-sub-claim-for-repo"
+      "covered_by": {
+        "direct_read": "actions sub view"
       }
     },
     {
@@ -4618,85 +4583,50 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-github-actions-permissions-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-github-actions-permissions-repository"
+      "covered_by": {
+        "direct_read": "actions permissions view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/access",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-workflow-access-to-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-workflow-access-to-repository"
+      "covered_by": {
+        "direct_read": "actions access view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-artifact-and-log-retention-settings-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-artifact-and-log-retention-settings-repository"
+      "covered_by": {
+        "direct_read": "actions artifact-and-log-retention view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-fork-pr-contributor-approval-permissions-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-fork-pr-contributor-approval-permissions-repository"
+      "covered_by": {
+        "direct_read": "actions fork-pr-contributor-approval view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-private-repo-fork-pr-workflows-settings-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-private-repo-fork-pr-workflows-settings-repository"
+      "covered_by": {
+        "direct_read": "actions fork-pr-workflows-private-repos view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-allowed-actions-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-allowed-actions-repository"
+      "covered_by": {
+        "direct_read": "actions selected-actions view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-github-actions-default-workflow-permissions-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-github-actions-default-workflow-permissions-repository"
+      "covered_by": {
+        "direct_read": "actions workflow view"
       }
     },
     {
@@ -4714,37 +4644,22 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-self-hosted-runner-for-repo has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-self-hosted-runner-for-repo"
+      "covered_by": {
+        "direct_read": "actions runners view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/list-labels-for-self-hosted-runner-for-repo has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/list-labels-for-self-hosted-runner-for-repo"
+      "covered_by": {
+        "direct_read": "actions labels view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runners/downloads",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/list-runner-applications-for-repo has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/list-runner-applications-for-repo"
+      "covered_by": {
+        "direct_read": "actions downloads view"
       }
     },
     {
@@ -4757,25 +4672,18 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-workflow-run has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-workflow-run"
+      "covered_by": {
+        "direct_reads": [
+          "actions runs view",
+          "run view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-reviews-for-run has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-reviews-for-run"
+      "covered_by": {
+        "direct_read": "actions approvals view"
       }
     },
     {
@@ -4793,13 +4701,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-workflow-run-attempt has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-workflow-run-attempt"
+      "covered_by": {
+        "direct_read": "actions attempts view"
       }
     },
     {
@@ -4865,25 +4768,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-pending-deployments-for-run has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-pending-deployments-for-run"
+      "covered_by": {
+        "direct_read": "actions pending_deployments view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-workflow-run-usage has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-workflow-run-usage"
+      "covered_by": {
+        "direct_read": "actions timing view"
       }
     },
     {
@@ -4901,25 +4794,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-repo-secret has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-repo-secret"
+      "covered_by": {
+        "direct_read": "actions secrets view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/secrets/public-key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-repo-public-key has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-repo-public-key"
+      "covered_by": {
+        "direct_read": "actions public-key view"
       }
     },
     {
@@ -4937,13 +4820,11 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/variables/{name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-repo-variable has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-repo-variable"
+      "covered_by": {
+        "direct_reads": [
+          "actions variables view-2",
+          "variable get"
+        ]
       }
     },
     {
@@ -4956,13 +4837,11 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-workflow has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-workflow"
+      "covered_by": {
+        "direct_reads": [
+          "actions workflows view",
+          "workflow view"
+        ]
       }
     },
     {
@@ -4980,13 +4859,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-workflow-usage has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-workflow-usage"
+      "covered_by": {
+        "direct_read": "actions timing view-2"
       }
     },
     {
@@ -5040,25 +4914,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation agents/get-repo-secret has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=agents/get-repo-secret"
+      "covered_by": {
+        "direct_read": "agents secrets view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/secrets/public-key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation agents/get-repo-public-key has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=agents/get-repo-public-key"
+      "covered_by": {
+        "direct_read": "agents public-key view"
       }
     },
     {
@@ -5076,13 +4940,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/variables/{name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation agents/get-repo-variable has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=agents/get-repo-variable"
+      "covered_by": {
+        "direct_read": "agents variables view-2"
       }
     },
     {
@@ -5100,13 +4959,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/assignees/{assignee}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation issues/check-user-can-be-assigned has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=issues/check-user-can-be-assigned"
+      "covered_by": {
+        "direct_read": "assignees view"
       }
     },
     {
@@ -5131,25 +4985,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-autolink has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-autolink"
+      "covered_by": {
+        "direct_read": "autolinks view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/automated-security-fixes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/check-automated-security-fixes has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/check-automated-security-fixes"
+      "covered_by": {
+        "direct_read": "automated-security-fixes view"
       }
     },
     {
@@ -5162,145 +5006,85 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-branch has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-branch"
+      "covered_by": {
+        "direct_read": "branches view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-branch-protection has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-branch-protection"
+      "covered_by": {
+        "direct_read": "branches protection view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-admin-branch-protection has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-admin-branch-protection"
+      "covered_by": {
+        "direct_read": "branches enforce_admins view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-pull-request-review-protection has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-pull-request-review-protection"
+      "covered_by": {
+        "direct_read": "branches required_pull_request_reviews view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-commit-signature-protection has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-commit-signature-protection"
+      "covered_by": {
+        "direct_read": "branches required_signatures view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-status-checks-protection has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-status-checks-protection"
+      "covered_by": {
+        "direct_read": "branches required_status_checks view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-all-status-check-contexts has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-all-status-check-contexts"
+      "covered_by": {
+        "direct_read": "branches contexts view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-access-restrictions has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-access-restrictions"
+      "covered_by": {
+        "direct_read": "branches restrictions view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-apps-with-access-to-protected-branch has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-apps-with-access-to-protected-branch"
+      "covered_by": {
+        "direct_read": "branches apps view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-teams-with-access-to-protected-branch has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-teams-with-access-to-protected-branch"
+      "covered_by": {
+        "direct_read": "branches teams view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-users-with-access-to-protected-branch has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-users-with-access-to-protected-branch"
+      "covered_by": {
+        "direct_read": "branches users view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation checks/get has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=checks/get"
+      "covered_by": {
+        "direct_read": "check-runs view"
       }
     },
     {
@@ -5318,13 +5102,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation checks/get-suite has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=checks/get-suite"
+      "covered_by": {
+        "direct_read": "check-suites view"
       }
     },
     {
@@ -5354,25 +5133,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-quality/get-finding has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-quality/get-finding"
+      "covered_by": {
+        "direct_read": "code-quality findings view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-quality/setup",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-quality/get-setup has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-quality/get-setup"
+      "covered_by": {
+        "direct_read": "code-quality setup view"
       }
     },
     {
@@ -5385,25 +5154,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/get-alert has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/get-alert"
+      "covered_by": {
+        "direct_read": "code-scanning alerts view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/get-autofix has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/get-autofix"
+      "covered_by": {
+        "direct_read": "code-scanning autofix view"
       }
     },
     {
@@ -5433,109 +5192,64 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/get-analysis has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/get-analysis"
+      "covered_by": {
+        "direct_read": "code-scanning analyses view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/list-codeql-databases has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/list-codeql-databases"
+      "covered_by": {
+        "direct_read": "code-scanning databases view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/get-codeql-database has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/get-codeql-database"
+      "covered_by": {
+        "direct_read": "code-scanning databases view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/get-variant-analysis has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/get-variant-analysis"
+      "covered_by": {
+        "direct_read": "code-scanning variant-analyses view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/get-variant-analysis-repo-task has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/get-variant-analysis-repo-task"
+      "covered_by": {
+        "direct_read": "code-scanning repos view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/get-default-setup has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/get-default-setup"
+      "covered_by": {
+        "direct_read": "code-scanning default-setup view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/get-sarif has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/get-sarif"
+      "covered_by": {
+        "direct_read": "code-scanning sarifs view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-security-configuration",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-security/get-configuration-for-repository has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-security/get-configuration-for-repository"
+      "covered_by": {
+        "direct_read": "code-security-configuration view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codeowners/errors",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/codeowners-errors has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/codeowners-errors"
+      "covered_by": {
+        "direct_read": "codeowners errors view"
       }
     },
     {
@@ -5565,37 +5279,22 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/machines",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/repo-machines-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/repo-machines-for-authenticated-user"
+      "covered_by": {
+        "direct_read": "codespaces machines view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/new",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/pre-flight-with-repo-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/pre-flight-with-repo-for-authenticated-user"
+      "covered_by": {
+        "direct_read": "codespaces new view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/permissions_check",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/check-permissions-for-devcontainer has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/check-permissions-for-devcontainer"
+      "covered_by": {
+        "direct_read": "codespaces permissions_check view"
       }
     },
     {
@@ -5613,25 +5312,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/get-repo-secret has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/get-repo-secret"
+      "covered_by": {
+        "direct_read": "codespaces secrets view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/get-repo-public-key has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/get-repo-public-key"
+      "covered_by": {
+        "direct_read": "codespaces public-key view"
       }
     },
     {
@@ -5644,25 +5333,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/collaborators/{username}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/check-collaborator has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/check-collaborator"
+      "covered_by": {
+        "direct_read": "collaborators view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/collaborators/{username}/permission",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-collaborator-permission-level has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-collaborator-permission-level"
+      "covered_by": {
+        "direct_read": "collaborators permission view"
       }
     },
     {
@@ -5675,13 +5354,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/comments/{comment_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-commit-comment has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-commit-comment"
+      "covered_by": {
+        "direct_read": "comments view"
       }
     },
     {
@@ -5706,13 +5380,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/list-branches-for-head-commit has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/list-branches-for-head-commit"
+      "covered_by": {
+        "direct_read": "commits branches-where-head view"
       }
     },
     {
@@ -5802,13 +5471,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/community/profile",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-community-profile-metrics has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-community-profile-metrics"
+      "covered_by": {
+        "direct_read": "community profile view"
       }
     },
     {
@@ -5845,13 +5509,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/get-copilot-cloud-agent-configuration has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/get-copilot-cloud-agent-configuration"
+      "covered_by": {
+        "direct_read": "copilot configuration view"
       }
     },
     {
@@ -5864,13 +5523,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/get-alert has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/get-alert"
+      "covered_by": {
+        "direct_read": "dependabot alerts view"
       }
     },
     {
@@ -5888,37 +5542,22 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/get-repo-secret has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/get-repo-secret"
+      "covered_by": {
+        "direct_read": "dependabot secrets view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/get-repo-public-key has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/get-repo-public-key"
+      "covered_by": {
+        "direct_read": "dependabot public-key view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependency-graph/diff-range has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependency-graph/diff-range"
+      "covered_by": {
+        "direct_read": "dependency-graph compare view"
       }
     },
     {
@@ -5967,13 +5606,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-deployment has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-deployment"
+      "covered_by": {
+        "direct_read": "deployments view"
       }
     },
     {
@@ -5991,13 +5625,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-deployment-status has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-deployment-status"
+      "covered_by": {
+        "direct_read": "deployments statuses view-2"
       }
     },
     {
@@ -6010,37 +5639,22 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-environment has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-environment"
+      "covered_by": {
+        "direct_read": "environments view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-all-deployment-protection-rules has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-all-deployment-protection-rules"
+      "covered_by": {
+        "direct_read": "environments deployment_protection_rules view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-custom-deployment-protection-rule has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-custom-deployment-protection-rule"
+      "covered_by": {
+        "direct_read": "environments deployment_protection_rules view-2"
       }
     },
     {
@@ -6070,13 +5684,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-deployment-branch-policy has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-deployment-branch-policy"
+      "covered_by": {
+        "direct_read": "environments deployment-branch-policies view-2"
       }
     },
     {
@@ -6094,25 +5703,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-environment-secret has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-environment-secret"
+      "covered_by": {
+        "direct_read": "environments secrets view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-environment-public-key has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-environment-public-key"
+      "covered_by": {
+        "direct_read": "environments public-key view"
       }
     },
     {
@@ -6130,13 +5729,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-environment-variable has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-environment-variable"
+      "covered_by": {
+        "direct_read": "environments variables view-2"
       }
     },
     {
@@ -6161,85 +5755,50 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation git/get-blob has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=git/get-blob"
+      "covered_by": {
+        "direct_read": "git blobs view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation git/get-commit has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=git/get-commit"
+      "covered_by": {
+        "direct_read": "git commits view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation git/list-matching-refs has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=git/list-matching-refs"
+      "covered_by": {
+        "direct_read": "git matching-refs view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/ref/{ref}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation git/get-ref has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=git/get-ref"
+      "covered_by": {
+        "direct_read": "git ref view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation git/get-tag has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=git/get-tag"
+      "covered_by": {
+        "direct_read": "git tags view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation git/get-tree has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=git/get-tree"
+      "covered_by": {
+        "direct_read": "git trees view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hash-algorithm",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-hash-algorithm has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-hash-algorithm"
+      "covered_by": {
+        "direct_read": "hash-algorithm view"
       }
     },
     {
@@ -6252,25 +5811,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-webhook has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-webhook"
+      "covered_by": {
+        "direct_read": "hooks view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-webhook-config-for-repo has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-webhook-config-for-repo"
+      "covered_by": {
+        "direct_read": "hooks config view"
       }
     },
     {
@@ -6288,97 +5837,57 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-webhook-delivery has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-webhook-delivery"
+      "covered_by": {
+        "direct_read": "hooks deliveries view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/immutable-releases",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/check-immutable-releases has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/check-immutable-releases"
+      "covered_by": {
+        "direct_read": "immutable-releases view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/import",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation migrations/get-import-status has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=migrations/get-import-status"
+      "covered_by": {
+        "direct_read": "import view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/import/authors",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation migrations/get-commit-authors has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=migrations/get-commit-authors"
+      "covered_by": {
+        "direct_read": "import authors view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/import/large_files",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation migrations/get-large-files has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=migrations/get-large-files"
+      "covered_by": {
+        "direct_read": "import large_files view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/installation",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation apps/get-repo-installation has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=apps/get-repo-installation"
+      "covered_by": {
+        "direct_read": "installation view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/interaction-limits",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation interactions/get-restrictions-for-repo has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=interactions/get-restrictions-for-repo"
+      "covered_by": {
+        "direct_read": "interaction-limits view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation interactions/get-pull-request-bypass-list-for-repo has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=interactions/get-pull-request-bypass-list-for-repo"
+      "covered_by": {
+        "direct_read": "interaction-limits bypass-list view"
       }
     },
     {
@@ -6403,13 +5912,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issue-types",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/list-issue-types has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/list-issue-types"
+      "covered_by": {
+        "direct_read": "issue-types view"
       }
     },
     {
@@ -6422,25 +5926,18 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation issues/get has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=issues/get"
+      "covered_by": {
+        "direct_reads": [
+          "issue view",
+          "issues view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation issues/check-user-can-be-assigned-to-issue has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=issues/check-user-can-be-assigned-to-issue"
+      "covered_by": {
+        "direct_read": "issues assignees view"
       }
     },
     {
@@ -6518,13 +6015,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation issues/get-parent has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=issues/get-parent"
+      "covered_by": {
+        "direct_read": "issues parent view"
       }
     },
     {
@@ -6585,13 +6077,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation issues/get-comment has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=issues/get-comment"
+      "covered_by": {
+        "direct_read": "issues comments view"
       }
     },
     {
@@ -6616,13 +6103,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/events/{event_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation issues/get-event has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=issues/get-event"
+      "covered_by": {
+        "direct_read": "issues events view"
       }
     },
     {
@@ -6635,13 +6117,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/keys/{key_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-deploy-key has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-deploy-key"
+      "covered_by": {
+        "direct_read": "keys view"
       }
     },
     {
@@ -6654,13 +6131,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/labels/{name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation issues/get-label has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=issues/get-label"
+      "covered_by": {
+        "direct_read": "labels view"
       }
     },
     {
@@ -6673,13 +6145,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/license",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation licenses/get-for-repo has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=licenses/get-for-repo"
+      "covered_by": {
+        "direct_read": "license view"
       }
     },
     {
@@ -6692,13 +6159,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/milestones/{milestone_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation issues/get-milestone has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=issues/get-milestone"
+      "covered_by": {
+        "direct_read": "milestones view"
       }
     },
     {
@@ -6728,13 +6190,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-pages has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-pages"
+      "covered_by": {
+        "direct_read": "pages view"
       }
     },
     {
@@ -6752,73 +6209,43 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages/builds/{build_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-pages-build has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-pages-build"
+      "covered_by": {
+        "direct_read": "pages builds view-2"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages/builds/latest",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-latest-pages-build has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-latest-pages-build"
+      "covered_by": {
+        "direct_read": "pages latest view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-pages-deployment has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-pages-deployment"
+      "covered_by": {
+        "direct_read": "pages deployments view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages/health",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-pages-health-check has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-pages-health-check"
+      "covered_by": {
+        "direct_read": "pages health view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/check-private-vulnerability-reporting has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/check-private-vulnerability-reporting"
+      "covered_by": {
+        "direct_read": "private-vulnerability-reporting view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/properties/values",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/custom-properties-for-repos-get-repository-values has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/custom-properties-for-repos-get-repository-values"
+      "covered_by": {
+        "direct_read": "properties values view"
       }
     },
     {
@@ -6831,13 +6258,11 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation pulls/get has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=pulls/get"
+      "covered_by": {
+        "direct_reads": [
+          "pr view",
+          "pulls view"
+        ]
       }
     },
     {
@@ -6891,25 +6316,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation pulls/check-if-merged has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=pulls/check-if-merged"
+      "covered_by": {
+        "direct_read": "pulls merge view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation pulls/list-requested-reviewers has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=pulls/list-requested-reviewers"
+      "covered_by": {
+        "direct_read": "pulls requested_reviewers view"
       }
     },
     {
@@ -6927,13 +6342,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation pulls/get-review has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=pulls/get-review"
+      "covered_by": {
+        "direct_read": "pulls reviews view-2"
       }
     },
     {
@@ -6958,13 +6368,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation pulls/get-review-comment has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=pulls/get-review-comment"
+      "covered_by": {
+        "direct_read": "pulls comments view-2"
       }
     },
     {
@@ -6982,25 +6387,15 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/readme",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-readme has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-readme"
+      "covered_by": {
+        "direct_read": "readme view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/readme/{dir}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-readme-in-directory has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-readme-in-directory"
+      "covered_by": {
+        "direct_read": "readme view-2"
       }
     },
     {
@@ -7013,13 +6408,11 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/{release_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-release has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-release"
+      "covered_by": {
+        "direct_reads": [
+          "release view",
+          "releases view"
+        ]
       }
     },
     {
@@ -7049,37 +6442,22 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-release-asset has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-release-asset"
+      "covered_by": {
+        "direct_read": "releases assets view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/latest",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-latest-release has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-latest-release"
+      "covered_by": {
+        "direct_read": "releases latest view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/tags/{tag}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-release-by-tag has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-release-by-tag"
+      "covered_by": {
+        "direct_read": "releases tags view"
       }
     },
     {
@@ -7104,13 +6482,11 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-repo-ruleset has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-repo-ruleset"
+      "covered_by": {
+        "direct_reads": [
+          "ruleset view",
+          "rulesets view"
+        ]
       }
     },
     {
@@ -7128,13 +6504,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-repo-ruleset-version has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-repo-ruleset-version"
+      "covered_by": {
+        "direct_read": "rulesets history view-2"
       }
     },
     {
@@ -7152,13 +6523,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-repo-rule-suite has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-repo-rule-suite"
+      "covered_by": {
+        "direct_read": "rulesets rule-suites view-2"
       }
     },
     {
@@ -7171,13 +6537,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation secret-scanning/get-alert has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=secret-scanning/get-alert"
+      "covered_by": {
+        "direct_read": "secret-scanning alerts view"
       }
     },
     {
@@ -7207,13 +6568,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/secret-scanning/scan-history",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation secret-scanning/get-scan-history has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=secret-scanning/get-scan-history"
+      "covered_by": {
+        "direct_read": "secret-scanning scan-history view"
       }
     },
     {
@@ -7226,13 +6582,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation security-advisories/get-repository-advisory has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=security-advisories/get-repository-advisory"
+      "covered_by": {
+        "direct_read": "security-advisories view"
       }
     },
     {
@@ -7269,61 +6620,36 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/code_frequency",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-code-frequency-stats has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-code-frequency-stats"
+      "covered_by": {
+        "direct_read": "stats code_frequency view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/commit_activity",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-commit-activity-stats has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-commit-activity-stats"
+      "covered_by": {
+        "direct_read": "stats commit_activity view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/contributors",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-contributors-stats has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-contributors-stats"
+      "covered_by": {
+        "direct_read": "stats contributors view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/participation",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-participation-stats has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-participation-stats"
+      "covered_by": {
+        "direct_read": "stats participation view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/punch_card",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-punch-card-stats has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-punch-card-stats"
+      "covered_by": {
+        "direct_read": "stats punch_card view"
       }
     },
     {
@@ -7336,13 +6662,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/subscription",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation activity/get-repo-subscription has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=activity/get-repo-subscription"
+      "covered_by": {
+        "direct_read": "subscription view"
       }
     },
     {
@@ -7391,61 +6712,36 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/traffic/clones",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-clones has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-clones"
+      "covered_by": {
+        "direct_read": "traffic clones view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/traffic/popular/paths",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-top-paths has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-top-paths"
+      "covered_by": {
+        "direct_read": "traffic paths view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/traffic/popular/referrers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-top-referrers has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-top-referrers"
+      "covered_by": {
+        "direct_read": "traffic referrers view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/traffic/views",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/get-views has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/get-views"
+      "covered_by": {
+        "direct_read": "traffic views view"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/vulnerability-alerts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation repos/check-vulnerability-alerts has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=repos/check-vulnerability-alerts"
+      "covered_by": {
+        "direct_read": "vulnerability-alerts view"
       }
     },
     {

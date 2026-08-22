@@ -2196,65 +2196,125 @@ func TestRunETLTransportRetainsInterimCheckpointWhenFinalStateSaveFails(t *testi
 // terminal stream state for repair; reopening may not run source, apply, or
 // publish again.
 func TestCompleteAcknowledgedEmptyPublicationFailurePersistsReconciliationAndRepairsWithoutReplay(t *testing.T) {
-	fixture := setupAppTransportFixture(t, synccontract.ModeFullOverwrite)
-	runID := "run_empty_publication_state_save"
-	if _, err := fixture.app.beginRun(Run{ID: runID, Type: "etl", Connection: fixture.connection, Stream: "records", Status: "running", StartedAt: time.Now().UTC()}); err != nil {
-		t.Fatal(err)
-	}
-	stateKey := streamStateKey(fixture.connection, "records")
-	leaseUntil := time.Now().UTC().Add(time.Minute)
-	acknowledged := StreamState{Connection: fixture.connection, Stream: "records", GenerationID: 1, ActiveWorkID: runID, ActiveWorkFence: 1, ActiveWorkLeaseUntil: &leaseUntil}
-	if _, err := fixture.app.updateState(func(current state) (state, error) {
-		if current.StreamStates == nil {
-			current.StreamStates = map[string]StreamState{}
-		}
-		current.StreamStates[stateKey] = cloneStreamState(acknowledged)
-		return current, nil
-	}); err != nil {
-		t.Fatal(err)
-	}
-	witness, err := synccontract.NewDurableDownstreamAcknowledgement(fixture.destination.Name(), time.Now().UTC())
-	if err != nil {
-		t.Fatal(err)
-	}
-	publication, err := witness.PublicationWitness()
-	if err != nil {
-		t.Fatal(err)
-	}
-	pending := cloneStreamState(acknowledged)
-	pending.ActiveWorkID = ""
-	pending.ActiveWorkLeaseUntil = nil
-	result := etlExecutionResult{
-		DestinationResults:        []json.RawMessage{json.RawMessage(`{"receipt_id":"empty-publication-once"}`)},
-		TransportPhaseMeasurement: &TransportPhaseMeasurement{},
-		DeliveryReconciliation:    &DeliveryReconciliation{State: ETLRunStatusDeliveredReconciliationRequired, EmptyPublication: &publication},
-		PendingStreamState:        &pendingStreamState{Key: stateKey, State: pending},
-	}
-	fixture.app.store.Locker = &appTransportFailAtLockLocker{failAt: 1, err: errTransportFinalStateSave}
-
-	first, err := fixture.app.completeAcknowledgedTransportRun(runID, result)
-	var reconciliation *synctransport.DeliveredReconciliationRequiredError
-	if !errors.As(err, &reconciliation) || !errors.Is(err, errTransportFinalStateSave) {
-		t.Fatalf("empty publication finalization error = %T %v, want delivered reconciliation wrapping state save failure", err, err)
-	}
-	if first.ID != runID || first.Status != ETLRunStatusDeliveredReconciliationRequired || first.DeliveryReconciliation == nil || first.DeliveryReconciliation.EmptyPublication == nil || !reflect.DeepEqual(first.DestinationResults, result.DestinationResults) {
-		t.Fatalf("empty publication finalization run = %#v, want durable receipt and reconciliation", first)
+	tests := []struct {
+		name        string
+		configure   func(*App)
+		wantOutcome statestore.CommitOutcome
+		wantCause   error
+	}{
+		{
+			name: "definite pre-commit failure",
+			configure: func(a *App) {
+				a.store.Locker = &appTransportFailAtLockLocker{failAt: 1, err: errTransportFinalStateSave}
+			},
+			wantCause: errTransportFinalStateSave,
+		},
+		{
+			name: "committed unlock failure",
+			configure: func(a *App) {
+				a.store.Locker = &postCommitUnlockFailureLocker{failAt: 1}
+			},
+			wantOutcome: statestore.CommitOutcomeCommitted,
+		},
+		{
+			name: "indeterminate directory sync failure",
+			configure: func(a *App) {
+				a.store.SyncDirectory = func(string) error {
+					return errTransportFinalizationStateSync
+				}
+			},
+			wantOutcome: statestore.CommitOutcomeIndeterminate,
+			wantCause:   errTransportFinalizationStateSync,
+		},
 	}
 
-	reopened, err := Open(fixture.app.root)
-	if err != nil {
-		t.Fatal(err)
-	}
-	fixture.configureRuntime(t, reopened, fixture.sourceExecutor, fixture.destinationExecutor)
-	repaired, err := reopened.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
-	if err != nil {
-		t.Fatalf("empty publication repair RunETL() = %v", err)
-	}
-	if repaired.ID != runID || repaired.Status != "completed" || repaired.DeliveryReconciliation != nil {
-		t.Fatalf("empty publication repaired run = %#v, want original completed run", repaired)
-	}
-	if fixture.sourceExecutor.readCalls != 0 || fixture.destinationExecutor.applyCalls != 0 || fixture.destinationExecutor.publishCalls != 0 || fixture.destinationExecutor.readBackCalls != 0 {
-		t.Fatalf("empty publication repair source/apply/publish/read-back = %d/%d/%d/%d, want no replay", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls, fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fixture := setupAppTransportFixture(t, synccontract.ModeFullOverwrite)
+			runID := "run_empty_publication_state_save"
+			if _, err := fixture.app.beginRun(Run{ID: runID, Type: "etl", Connection: fixture.connection, Stream: "records", Status: "running", StartedAt: time.Now().UTC()}); err != nil {
+				t.Fatal(err)
+			}
+			stateKey := streamStateKey(fixture.connection, "records")
+			leaseUntil := time.Now().UTC().Add(time.Minute)
+			acknowledged := StreamState{Connection: fixture.connection, Stream: "records", GenerationID: 1, ActiveWorkID: runID, ActiveWorkFence: 1, ActiveWorkLeaseUntil: &leaseUntil}
+			if _, err := fixture.app.updateState(func(current state) (state, error) {
+				if current.StreamStates == nil {
+					current.StreamStates = map[string]StreamState{}
+				}
+				current.StreamStates[stateKey] = cloneStreamState(acknowledged)
+				return current, nil
+			}); err != nil {
+				t.Fatal(err)
+			}
+			witness, err := synccontract.NewDurableDownstreamAcknowledgement(fixture.destination.Name(), time.Now().UTC())
+			if err != nil {
+				t.Fatal(err)
+			}
+			publication, err := witness.PublicationWitness()
+			if err != nil {
+				t.Fatal(err)
+			}
+			pending := cloneStreamState(acknowledged)
+			pending.ActiveWorkID = ""
+			pending.ActiveWorkLeaseUntil = nil
+			result := etlExecutionResult{
+				DestinationResults:        []json.RawMessage{json.RawMessage(`{"receipt_id":"empty-publication-once"}`)},
+				TransportPhaseMeasurement: &TransportPhaseMeasurement{},
+				DeliveryReconciliation:    &DeliveryReconciliation{State: ETLRunStatusDeliveredReconciliationRequired, EmptyPublication: &publication},
+				PendingStreamState:        &pendingStreamState{Key: stateKey, State: pending},
+			}
+			tt.configure(fixture.app)
+
+			first, err := fixture.app.completeAcknowledgedTransportRun(runID, result)
+			var reconciliation *synctransport.DeliveredReconciliationRequiredError
+			if !errors.As(err, &reconciliation) {
+				t.Fatalf("empty publication finalization error = %T %v, want delivered reconciliation", err, err)
+			}
+			if tt.wantCause != nil && !errors.Is(err, tt.wantCause) {
+				t.Fatalf("empty publication finalization error = %v, want %v", err, tt.wantCause)
+			}
+			if tt.wantOutcome != statestore.CommitOutcomeNotCommitted {
+				var outcome *statestore.CommitOutcomeError
+				if !errors.As(err, &outcome) || outcome.Outcome != tt.wantOutcome || !outcome.Outcome.MayHaveCommitted() {
+					t.Fatalf("empty publication commit outcome = %#v, want %s", outcome, tt.wantOutcome)
+				}
+			}
+			if first.ID != runID || first.Status != ETLRunStatusDeliveredReconciliationRequired || first.DeliveryReconciliation == nil || first.DeliveryReconciliation.EmptyPublication == nil {
+				t.Fatalf("empty publication finalization run = %#v, want durable receipt and reconciliation", first)
+			}
+			if len(first.DestinationResults) != len(result.DestinationResults) {
+				t.Fatalf("empty publication receipt count = %d, want %d", len(first.DestinationResults), len(result.DestinationResults))
+			}
+			for index := range result.DestinationResults {
+				var got, want any
+				if err := json.Unmarshal(first.DestinationResults[index], &got); err != nil {
+					t.Fatalf("decode durable empty publication receipt: %v", err)
+				}
+				if err := json.Unmarshal(result.DestinationResults[index], &want); err != nil {
+					t.Fatalf("decode expected empty publication receipt: %v", err)
+				}
+				if !reflect.DeepEqual(got, want) {
+					t.Fatalf("empty publication receipt = %#v, want %#v", got, want)
+				}
+			}
+
+			reopened, err := Open(fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			fixture.configureRuntime(t, reopened, fixture.sourceExecutor, fixture.destinationExecutor)
+			repaired, err := reopened.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+			if err != nil {
+				t.Fatalf("empty publication repair RunETL() = %v", err)
+			}
+			if repaired.ID != runID || repaired.Status != "completed" || repaired.DeliveryReconciliation != nil {
+				t.Fatalf("empty publication repaired run = %#v, want original completed run", repaired)
+			}
+			if fixture.sourceExecutor.readCalls != 0 || fixture.destinationExecutor.applyCalls != 0 || fixture.destinationExecutor.publishCalls != 0 || fixture.destinationExecutor.readBackCalls != 0 {
+				t.Fatalf("empty publication repair source/apply/publish/read-back = %d/%d/%d/%d, want no replay", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls, fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls)
+			}
+		})
 	}
 }
 

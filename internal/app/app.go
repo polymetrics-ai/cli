@@ -1690,7 +1690,13 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 	// receipt and terminal stream state as repair work rather than allowing a
 	// retry to publish the empty replacement again.
 	reconciliationErr := synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite terminal state: %w", err))
-	delivered, persistErr := a.persistDeliveredReconciliationRun(runID, result, reconciliationErr, completion)
+	var delivered Run
+	var persistErr error
+	if completed.ID == runID && completed.Status == "completed" {
+		delivered, persistErr = a.persistCompletedDeliveredReconciliationRun(completed, runID, result, reconciliationErr, completion)
+	} else {
+		delivered, persistErr = a.persistDeliveredReconciliationRun(runID, result, reconciliationErr, completion)
+	}
 	if delivered.ID != "" {
 		return delivered, persistErr
 	}
@@ -3022,14 +3028,8 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	}
 	writeRequest.Approval = evidence
 	result, err := writer.Write(ctx, writeRequest, records)
-	if err == nil && (result.RecordsWritten != len(records) || result.RecordsFailed != 0 || result.RecordsUnchanged != 0) {
-		err = fmt.Errorf(
-			"connector command acknowledgement is incomplete: wrote %d, unchanged %d, failed %d of %d records",
-			result.RecordsWritten,
-			result.RecordsUnchanged,
-			result.RecordsFailed,
-			len(records),
-		)
+	if err == nil {
+		err = validateCompleteReverseWriteAcknowledgement(len(records), result, a.reverseWriteAllowsUnchanged(plan.ID))
 	}
 	return a.finishReverseWrite(plan.ID, run, result, runtime, len(records), err)
 }

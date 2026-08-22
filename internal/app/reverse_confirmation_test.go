@@ -314,6 +314,65 @@ func TestGitHubOrgWebhookDeleteDoesNotCountProviderNotFoundAsSuccess(t *testing.
 	}
 }
 
+func TestGitHubIssueCommentDeleteCompletesDeclaredMissingAcknowledgement(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodDelete || r.URL.Path != "/repos/acme/widgets/issues/comments/4242" {
+			t.Errorf("request = %s %s, want DELETE exact issue-comment path", r.Method, r.URL.Path)
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	t.Cleanup(server.Close)
+
+	a, _ := setupGitHubApp(t, ctx, server.URL)
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Name:       "delete_missing_issue_comment",
+		Connector:  "github",
+		Credential: "github-local",
+		Path:       []string{"api", "issues", "delete-comment"},
+		Flags:      map[string][]string{"comment-id": {"4242"}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand(api issues delete-comment): %v", err)
+	}
+	if preview == nil || plan.ApprovalToken == "" {
+		t.Fatalf("previewed declared-idempotent plan = %#v/%#v, want preview and approval", plan, preview)
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("RunReverseETL declared missing acknowledgement: %v", err)
+	}
+	if calls != 1 || run.Status != "completed" || run.RecordsSucceeded != 0 || run.RecordsFailed != 0 {
+		t.Fatalf("declared missing acknowledgement run/calls = %#v/%d, want completed unchanged delete", run, calls)
+	}
+	var destinationResult struct {
+		RecordsUnchanged int `json:"records_unchanged"`
+	}
+	if err := json.Unmarshal(run.DestinationResult, &destinationResult); err != nil {
+		t.Fatalf("decode declared missing destination result: %v", err)
+	}
+	if destinationResult.RecordsUnchanged != 1 {
+		t.Fatalf("declared missing destination result = %#v, want one unchanged acknowledgement", destinationResult)
+	}
+	stored, err := a.GetReversePlan(plan.ID)
+	if err != nil {
+		t.Fatalf("GetReversePlan() error = %v", err)
+	}
+	if stored.Status != "executed" {
+		t.Fatalf("declared missing plan status = %q, want executed", stored.Status)
+	}
+}
+
 // The label deletion action is the nearby, proven 404 control: it follows the
 // identical plan/preview/confirmation/write route, but it does not declare a
 // missing status as success. A not-found response must remain visible to the

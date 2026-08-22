@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
 	"strings"
 	"time"
 
@@ -30,8 +31,19 @@ func (a *App) deliveredReconciliationFor(connection, stream string) (Run, bool) 
 // bookkeeping error. The terminal record is the anti-replay fence: future
 // calls can repair only the declared cleanup named in it.
 func (a *App) persistDeliveredReconciliationRun(runID string, result etlExecutionResult, runErr error, acknowledged *acknowledgedTransportCompletion) (Run, error) {
+	return a.persistDeliveredReconciliationRunWithCompleted(runID, result, runErr, acknowledged, nil)
+}
+
+func (a *App) persistCompletedDeliveredReconciliationRun(completed Run, runID string, result etlExecutionResult, runErr error, acknowledged *acknowledgedTransportCompletion) (Run, error) {
+	return a.persistDeliveredReconciliationRunWithCompleted(runID, result, runErr, acknowledged, &completed)
+}
+
+func (a *App) persistDeliveredReconciliationRunWithCompleted(runID string, result etlExecutionResult, runErr error, acknowledged *acknowledgedTransportCompletion, completed *Run) (Run, error) {
 	if result.PendingStreamState == nil || result.DeliveryReconciliation == nil || acknowledged == nil {
 		return a.failRunWithResult(runID, result, runErr)
+	}
+	if completed != nil && (completed.ID != runID || completed.Status != "completed") {
+		return Run{}, errors.Join(runErr, fmt.Errorf("acknowledged transport run %q is not an exact completed terminal result", runID))
 	}
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
@@ -39,8 +51,12 @@ func (a *App) persistDeliveredReconciliationRun(runID string, result etlExecutio
 	updated, persistErr := a.updateState(func(current state) (state, error) {
 		rebased := current.Revision != expectedRevision
 		if rebased {
+			expectedStreamState := acknowledged.state
+			if completed != nil {
+				expectedStreamState = result.PendingStreamState.State
+			}
 			currentStreamState, present := current.StreamStates[acknowledged.key]
-			if !present || !transportStreamStateEqual(currentStreamState, acknowledged.state) {
+			if !present || !transportStreamStateEqual(currentStreamState, expectedStreamState) {
 				return current, fmt.Errorf("acknowledged transport stream state changed before delivered reconciliation: %w", errStateRevisionConflict)
 			}
 		}
@@ -48,7 +64,10 @@ func (a *App) persistDeliveredReconciliationRun(runID string, result etlExecutio
 			if current.Runs[i].ID != runID {
 				continue
 			}
-			if current.Runs[i].Status != "running" {
+			if completed != nil && !reflect.DeepEqual(current.Runs[i], *completed) {
+				return current, fmt.Errorf("acknowledged transport run %q changed before delivered reconciliation: %w", runID, errStateRevisionConflict)
+			}
+			if completed == nil && current.Runs[i].Status != "running" {
 				return current, fmt.Errorf("acknowledged transport run %q has status %q, want running before delivered reconciliation: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
 			}
 			current.Runs[i].Status = ETLRunStatusDeliveredReconciliationRequired

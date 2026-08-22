@@ -958,6 +958,106 @@ func TestSourceProjectionGapCoverageHonorsDeclaredConfigPathBinding(t *testing.T
 	}
 }
 
+func TestSourceProjectionExecutionSurfaceHonorsDeclaredConfigPathReachability(t *testing.T) {
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "spec.json"), `{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["owner", "repo"],
+  "properties": {
+    "owner": {"type": "string"},
+    "repo": {"type": "string"}
+  }
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "operations.json"), `{
+  "operations": [{
+    "id": "github.actions_permissions_artifact_and_log_retention",
+    "kind": "rest_read",
+    "output_policy": "json",
+    "rest": {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "max_bytes": 1024
+    }
+  }]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{
+  "commands": [{
+    "path": "actions artifact-and-log-retention view",
+    "intent": "direct_read",
+    "availability": "implemented",
+    "operation": "github.actions_permissions_artifact_and_log_retention"
+  }]
+}`)
+
+	surface, err := sourceProjectionExecutionSurface(bundleDir, "github")
+	if err != nil {
+		t.Fatalf("sourceProjectionExecutionSurface() error = %v", err)
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{{
+		Connector: "github", SourceID: "actions/get-artifact-and-log-retention-settings-repository", Method: "GET",
+		Path: "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{
+			{Name: "owner", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "repo", Required: true, Schema: map[string]any{"type": "string"}},
+		}},
+	}}}
+	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
+	if sourceProjectionHasBlockingGap(result.Operations[0].Runtime.Gaps) {
+		t.Fatalf("config-owned GitHub path fields left source read unreachable: %+v", result.Operations[0].Runtime.Gaps)
+	}
+}
+
+func TestSourceProjectionRestoresReachableSourceBoundRead(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "GET", Path: "/widgets",
+	}
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), fmt.Sprintf(`{
+  "schema_version": 1,
+  "commands": [{
+    "path": "widgets list",
+    "summary": "list widgets",
+    "intent": "direct_read",
+    "availability": "partial",
+    "api_surface": [{"method":"GET","path":"/widgets"}],
+    "notes": %q
+  }]
+}`, sourceProjectionBlockedReadCommandNote(source.SourceID)))
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), fmt.Sprintf(`{
+  "api": "alpha",
+  "endpoints": [{
+    "method": "GET",
+    "path": "/widgets",
+    "operation": {
+      "model": "direct_read",
+      "status": "blocked",
+      "risk": "low",
+      "blocked_by_default": true,
+      "reason": %q,
+      "notes": %q
+    }
+  }]
+}`, sourceProjectionBlockedReadSurfaceReason(source.SourceID), sourceProjectionBlockedReadSurfaceNote(source.SourceID)))
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{source}}, false)
+	if err != nil {
+		t.Fatalf("project reachable source-bound read: %v", err)
+	}
+	if stats.CLI != 1 || stats.Surface != 1 {
+		t.Fatalf("reachable source-bound read stats = %+v, want CLI and surface restoration", stats)
+	}
+	cli := readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"))
+	if !strings.Contains(cli, `"availability": "implemented"`) || strings.Contains(cli, `"notes"`) {
+		t.Fatalf("reachable source-bound CLI was not restored:\n%s", cli)
+	}
+	surface := readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))
+	if strings.Contains(surface, `"operation"`) || !strings.Contains(surface, `"direct_read": "widgets list"`) {
+		t.Fatalf("reachable source-bound API surface was not restored:\n%s", surface)
+	}
+}
+
 func TestSourceProjectionGapCoverageHonorsDeclaredActionConfigPathBinding(t *testing.T) {
 	spec, err := engine.CompileSchema(json.RawMessage(`{
   "type":"object","additionalProperties":false,
