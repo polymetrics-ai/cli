@@ -2,8 +2,8 @@
   "schema_version": 3,
   "integration": "cli-current-foundations-main-integration-r1",
   "checkpoint": "foundation-0.3.0-release-candidate-r1-evidence-closure",
-  "code_sha": "91c8b6f71c2894848de5271560671b8dfb42a1af",
-  "reviewed_sha": "91c8b6f71c2894848de5271560671b8dfb42a1af",
+  "code_sha": "7e0507e518a55ef2d8164c34cc39c0865555a963",
+  "reviewed_sha": "7e0507e518a55ef2d8164c34cc39c0865555a963",
   "base_sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
   "component_inputs": [
     {
@@ -72,16 +72,16 @@
     {
       "command": "gofmt -d cmd internal; go mod tidy -diff; go vet ./...; go build -o ./pm ./cmd/pm; make docs-check-no-build; make smoke-no-build; make lint; make agent-contract-check; make connectorgen-validate; make connectorgen-surface-sync; make connectorgen-certification-subject; make connectorgen-certification-matrix; make connectorgen-certification-candidates; make connectorgen-certification-sweep; cd website && npm run gen:website-data",
       "status": "passed",
-      "assertion": "Formatting, module, vet, build, docs/manual generation, smoke, lint, agent contract, declaration validation, surface synchronization, generated certification gates, and CI-required website projection agree at I7; matrix reports certified=0.",
+      "assertion": "Formatting, module, vet, build, docs/manual generation, smoke, lint, agent contract, declaration validation, surface synchronization, generated certification gates, and CI-required website projection agree at I10; matrix reports certified=0.",
       "tests": ["gofmt-diff", "go-vet", "docs-validate", "smoke-no-build", "connectorgen-certification-matrix"],
       "modes": ["build", "docs", "generated_surfaces", "website_generated_data", "certification_metadata"]
     },
     {
-      "command": "go test -timeout 20m -count=1 -v ./internal/cli -run '^(TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestGitHubCommandSurfaceExecutesDeclaredContentRead|TestGitHubSourceBoundDirectReadsExecuteBeforeIO)$'; go test -timeout 20m -count=1 -v ./cmd/connectorgen -run '^(TestSourceProjectionRequiresExistingPathFlagForRestoredNonCandidateDirectRead|TestSourceProjectionRestoresFieldCompleteNonCandidateSourceBoundRead|TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints)$'",
+      "command": "go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli -run '^(TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'; go test -timeout 20m -count=1 ./internal/cli; go test -timeout 20m -count=1 -v ./cmd/connectorgen -run '^(TestSourceProjectionRequiresExistingPathFlagForRestoredNonCandidateDirectRead|TestSourceProjectionRestoresFieldCompleteNonCandidateSourceBoundRead|TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints)$'",
       "status": "passed",
-      "assertion": "At I, a fresh pm executes all 97 generated candidates and all 633 released GitHub read-surface targets with emitted request and declared output assertions; source projection and inventory preserve the v0.2.1 reachable surface.",
-      "tests": ["TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture", "TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture", "TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints"],
-      "modes": ["source_projection", "direct_read.fixture_behavior", "binary_download.fixture_behavior", "release_surface_parity"]
+      "assertion": "At I10, one dedicated 45-minute CI job runs every hermetic fresh-binary GitHub proof: three shared-admission stages, all 97 generated candidates, all 15 disputed aliases, all 633 released-surface targets, issue-label transport, and warehouse flow. The unchanged ordinary package gate contains none of those fixture tests; source projection and inventory preserve the v0.2.1 reachable surface.",
+      "tests": ["TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture", "TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture", "TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture", "TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle", "TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip", "TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints"],
+      "modes": ["source_projection", "direct_read.fixture_behavior", "shared_admission.fixture_behavior", "local_admission.fixture_behavior", "binary_download.fixture_behavior", "release_surface_parity"]
     },
     {
       "command": "go test -timeout 20m -count=1 -v ./internal/connectors/engine -run '^(TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest|TestWriteErrorRedactsOverlappingConfiguredRecordFields)$'; go test -timeout 20m -count=1 -v ./internal/coordination -run '^TestRateParkingCoordinator_ReconcilesEachPostCommitResumeMutation$'; go test -timeout 20m -count=1 -v ./internal/connectors/connsdk -run '^(TestRequesterMutationRetryCancellationRetainsLastResponse|TestRequesterRetryTransportFailureRetainsEarlierProviderResponse)$'; go test -timeout 20m -count=1 ./cmd/connectorgen; go vet ./...",
@@ -91,18 +91,18 @@
       "modes": ["public_output.redaction", "rate_parking.durable_reconciliation", "requester.terminal_receipt", "codeql.alert_remediation"]
     },
     {
-      "command": "go test -timeout 20m -count=1 -v ./internal/cli -run '^(TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture)$'; go test -timeout 20m -count=1 ./internal/connectors/commandrunner; go test -timeout 20m -count=1 ./internal/cli; go test -timeout 20m -count=1 ./cmd/connectorgen; go vet ./...; go build ./cmd/pm; go run ./cmd/connectorgen surface-sync --check",
+      "command": "go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli -run '^(TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture)$'; go test -timeout 20m -count=1 ./internal/connectors/commandrunner; go test -timeout 20m -count=1 ./internal/cli; go test -timeout 20m -count=1 ./cmd/connectorgen; go vet ./...; go build ./cmd/pm; go run ./cmd/connectorgen surface-sync --check",
       "status": "passed",
       "assertion": "RC-10 executes every disputed GitHub command through a fresh initialized pm binary and authenticated fixture. Each observed request matches the declared GET path template, and each declared JSON output assertion passes; the stale partial verdicts are corrected without changing declarations, generated surface, or runtime authority. Candidate certification JSON decodes stdout apart from diagnostics.",
-      "tests": ["TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture", "TestGitHubDeclaredParityVerdicts", "TestGitHubLegacyAliasesPassRuntimePreflight"],
+      "tests": ["TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture", "TestGitHubDeclaredParityVerdicts", "TestGitHubLegacyAliasesPassRuntimePreflight"],
       "modes": ["direct_read.fixture_behavior", "cli.stdout_stderr_separation", "github.declared_verdict", "implemented_but_uncertified"]
     },
     {
-      "command": "POLYMETRICS_DRAGONFLY_ADDR=127.0.0.1:1 go test -timeout 8m -count=1 -v ./internal/cli -run '^TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture$'; PM_DRAGONFLY_ADDR=127.0.0.1:1 go test -timeout 8m -count=1 -v ./internal/cli -run '^TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture$'; go test -timeout 20m -count=1 ./internal/connectors/commandrunner; go test -timeout 20m -count=1 ./internal/cli; go test -timeout 20m -count=1 ./cmd/connectorgen; go vet ./...; go build ./cmd/pm; make tidy-check lint docs-check-no-build smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check",
+      "command": "go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli -run '^(TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'; go test -timeout 20m -count=1 ./internal/connectors/commandrunner; go test -timeout 20m -count=1 ./internal/cli; go test -timeout 20m -count=1 ./cmd/connectorgen; go vet ./...; go build ./cmd/pm; make tidy-check lint docs-check-no-build smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check",
       "status": "passed",
-      "assertion": "RC-11 preserves the declared require_shared fence: the fixture starts an ephemeral loopback Redis-compatible coordinator, injects only its address into the fresh child while either inherited alias is unreachable, and proves all 97 stages make authenticated declared requests, pass declared output assertions, and write shared-admission state. RC-12 leaves source projection behavior unchanged while making exact lint clean; RC-13 restores only generated manual/skill parity.",
-      "tests": ["TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture", "TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryRefusesRequiredSharedRateBudgetBeforeSend"],
-      "modes": ["direct_read.fixture_behavior", "rate_limit.local_redis_fixture", "shared_coordinator.refusal_preserved", "implemented_but_uncertified", "lint.exact_gate", "docs.generated_parity"]
+      "assertion": "RC-11 proves the declared require_shared fence with an explicit ephemeral loopback coordinator and a three-stage fresh-binary certification cohort. RC-14 retains all 633 released-surface assertions, RC-15 retains all 97 generated-candidate request/output assertions, and RC-17 moves every hermetic fresh-binary GitHub fixture proof into one mandatory 45-minute job without raising the ordinary package deadline. RC-12 leaves source projection behavior unchanged while making exact lint clean; RC-13 restores only generated manual/skill parity.",
+      "tests": ["TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture", "TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture", "TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture", "TestPMBinaryRefusesRequiredSharedRateBudgetBeforeSend"],
+      "modes": ["direct_read.fixture_behavior", "rate_limit.local_redis_fixture", "shared_coordinator.refusal_preserved", "local_admission.fixture_behavior", "implemented_but_uncertified", "lint.exact_gate", "docs.generated_parity"]
     }
   ],
   "gate_ledger": [
@@ -159,7 +159,7 @@
     }
   ],
   "artifact_closure": {
-    "implementation_sha": "91c8b6f71c2894848de5271560671b8dfb42a1af",
+    "implementation_sha": "7e0507e518a55ef2d8164c34cc39c0865555a963",
     "subject_fingerprint": "6e718f8cd4b80497467e907ecb8ae49373afb1758920dfe7d18c83340061c86a",
     "artifacts": [
       {
@@ -174,8 +174,8 @@
       },
       {
         "category": "cli",
-        "path": "internal/cli/github_direct_read_certification_binary_test.go",
-        "sha256": "284c1d63ffeba3891753b601451995ae0b2a11ddd048736ab52f2d8989d2672f"
+        "path": "internal/cli/github_fixture_binary_sweep_ci_test.go",
+        "sha256": "e769dcb4d385d5106d82ed84dedcb6cb4436dc6e4aa3d093aa75ee4ecf110fa5"
       },
       {
         "category": "docs",
@@ -195,7 +195,7 @@
       {
         "category": "ledger",
         "path": ".planning/phases/cli-current-foundations-main-integration-r1/TDD-LEDGER.md",
-        "sha256": "680778fdb231482d73eddbb0edf0bb609caf3e201a53948f8b1ebe8e1b3b8589"
+        "sha256": "38b4a61f87605f5b1d11ca148a92c6b35ff2ec11b683f87acc1f4287c11c14ea"
       },
       {
         "category": "matrix",
