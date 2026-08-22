@@ -1,0 +1,8 @@
+{
+  "phase": "cli-foundation-public-output-fix-r1",
+  "mode": "inline-manual",
+  "base_commit": "c9824b5837f487acaa2c2a39126d29cf401d7fb5",
+  "status": "planning",
+  "scope": ["FND-B10", "FND-B11", "FND-B12", "FND-B13", "FND-B14", "FND-W02"],
+  "excluded_scope": ["FND-B01..FND-B09", "FND-W01", "reverse-etl action binding"]
+}
