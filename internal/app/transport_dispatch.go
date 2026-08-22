@@ -354,6 +354,68 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			return result, err
 		}
 		if transportResult.Pages == 0 && transportResult.RecordsRead == 0 && transportResult.RecordsApplied == 0 {
+			if mode.IsOverwrite() && transportResult.EmptyPublication != nil {
+				witness := *transportResult.EmptyPublication
+				if err := witness.Validate(); err != nil {
+					return emptyResult, fmt.Errorf("closed transport returned an invalid empty publication witness: %w", err)
+				}
+				if witness.Sink != destination.Name() {
+					return emptyResult, fmt.Errorf("closed transport empty publication sink %q does not match destination %q", witness.Sink, destination.Name())
+				}
+				updated := workLease.stateForTerminalRun()
+				updated.Connection = conn.Name
+				updated.Stream = streamName
+				updated.GenerationID = generationID
+				updated.LastSuccessfulRunID = runID
+				updated.RecordsLoaded = 0
+				updated.UpdatedAt = witness.AcknowledgedAt
+				deliveryReconciliation := &DeliveryReconciliation{
+					State:            ETLRunStatusDeliveredReconciliationRequired,
+					EmptyPublication: &witness,
+				}
+				if requiresManagedTargetApproval {
+					deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+				}
+				if requiresDefinitionOwnedApproval {
+					deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+				}
+				result := etlExecutionResult{
+					TransportPhaseMeasurement: transportMeasurement,
+					DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+					DeliveryReconciliation:    deliveryReconciliation,
+					PendingStreamState:        &pendingStreamState{Key: stateKey, State: updated},
+				}
+				result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+				// A marker records only that the exact declaration-owned approval
+				// was consumed. The externally visible empty replacement, read-back
+				// receipt, and terminal state were already sealed above, so a marker
+				// failure must persist reconciliation rather than abandon and replay.
+				if requiresManagedTargetApproval {
+					if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
+						return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark PostgreSQL managed target plan executed: %w", err))
+					}
+				}
+				if requiresDefinitionOwnedApproval {
+					if err := a.markDeclarativeTypedDestinationPlanExecuted(approval.PlanID); err != nil {
+						return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark declarative typed destination plan executed: %w", err))
+					}
+				}
+				return result, nil
+			}
+			if mode.IsOverwrite() {
+				// A full-overwrite that made no provider-visible publication cannot
+				// be presented as a successful empty replacement. The only allowed
+				// zero-result success is the sealed witness minted after publish and
+				// read-back above.
+				completionErr := fmt.Errorf("closed transport completed empty full-overwrite without a durable publication witness")
+				if releaseErr := workLease.abandonUncommitted(ctx); releaseErr != nil {
+					if errors.Is(releaseErr, errTransportStreamWorkFenceLost) {
+						releaseErr = fmt.Errorf("%w: %w", errTransportStreamStateConflict, releaseErr)
+					}
+					return emptyResult, errors.Join(completionErr, releaseErr)
+				}
+				return emptyResult, completionErr
+			}
 			if requiresManagedTargetApproval {
 				if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
 					return emptyResult, err
@@ -513,6 +575,7 @@ func transportCheckpointEqual(left, right *synccontract.CheckpointEnvelope) bool
 		left.Mechanism != right.Mechanism ||
 		!transportSnapshotBarrierEqual(left.SnapshotBarrier, right.SnapshotBarrier) ||
 		!transportCheckpointPositionEqual(left.Position, right.Position) ||
+		!synccontract.ContinuationEqual(left.Continuation, right.Continuation) ||
 		!transportOptionalBoolEqual(left.PositionObserved, right.PositionObserved) ||
 		!transportOpaqueTokenEqual(left.SourceGeneration, right.SourceGeneration) ||
 		left.SchemaVersion != right.SchemaVersion ||

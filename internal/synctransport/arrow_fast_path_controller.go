@@ -54,16 +54,19 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 		result.CreditWaitElapsed = time.Duration(snapshot.WaitNanos)
 	}()
 
-	if err := authorizeDestinationEffect(ctx, request.Approval, "Arrow full-overwrite begin"); err != nil {
+	beginCtx, cancelBegin := transportUnitContext(ctx, request.unitDeadline())
+	if err := authorizeDestinationEffect(beginCtx, request.Approval, "Arrow full-overwrite begin"); err != nil {
+		cancelBegin()
 		return result, err
 	}
-	session, err := destination.BeginArrowFullOverwrite(ctx, cloneArrowFullOverwriteRunRequest(ArrowFullOverwriteRunRequest{
+	session, err := destination.BeginArrowFullOverwrite(beginCtx, cloneArrowFullOverwriteRunRequest(ArrowFullOverwriteRunRequest{
 		ConnectionID: request.ConnectionID, Generation: request.Generation, Plan: plan,
 		Runtime: request.DestinationRuntime, Source: request.Source,
 		SourceRuntime: request.SourceRuntime, Binding: request.DestinationBinding,
 		Stream: request.Stream, BatchSize: request.BatchSize, TransformPlanJSON: request.TransformPlanJSON,
 		TransformPlanHash: request.TransformPlanHash, Approval: request.Approval,
 	}))
+	cancelBegin()
 	if err != nil || isNilInterface(session) {
 		if err == nil {
 			err = ErrArrowFastPathInvalid
@@ -213,6 +216,9 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 		result.IndexConstraintElapsed = reporter.ArrowBulkPhaseMeasurement().IndexConstraintBuildElapsed
 	}
 	if lastCandidate == nil {
+		if err := sealEmptyPublicationWitness(&result, acknowledgement, request.Destination.Name()); err != nil {
+			return result, err
+		}
 		return result, nil
 	}
 	checkpointStarted := time.Now()

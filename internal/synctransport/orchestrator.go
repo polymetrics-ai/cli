@@ -2,6 +2,7 @@ package synctransport
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -407,10 +408,13 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		TransformPlanHash: request.TransformPlanHash,
 		Approval:          request.Approval,
 	}
-	if err := authorizeDestinationEffect(ctx, request.Approval, "full-overwrite begin"); err != nil {
+	beginCtx, cancelBegin := transportUnitContext(ctx, request.unitDeadline())
+	if err := authorizeDestinationEffect(beginCtx, request.Approval, "full-overwrite begin"); err != nil {
+		cancelBegin()
 		return Result{}, err
 	}
-	session, err := destination.BeginFullOverwrite(ctx, fullRequest)
+	session, err := destination.BeginFullOverwrite(beginCtx, fullRequest)
+	cancelBegin()
 	if err != nil {
 		return Result{}, fmt.Errorf("begin destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 	}
@@ -559,6 +563,9 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		return result, fmt.Errorf("publish destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}
 	if lastCandidate == nil {
+		if err := sealEmptyPublicationWitness(&result, acknowledgement, request.Destination.Name()); err != nil {
+			return result, err
+		}
 		return result, nil
 	}
 	if err := synccontract.CommitAfterDownstreamAcknowledgement(*lastCandidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
@@ -578,6 +585,25 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		return result, NewDeliveredReconciliationRequiredError(err)
 	}
 	return result, nil
+}
+
+// sealEmptyPublicationWitness converts only a connector-issued durable
+// acknowledgement into the local anti-replay witness for a full-overwrite
+// publication that had no source checkpoint. Read-back has already succeeded
+// before callers reach this helper; output remains in DestinationResults.
+func sealEmptyPublicationWitness(result *Result, acknowledgement synccontract.DownstreamAcknowledgement, destination string) error {
+	if result == nil {
+		return errors.New("empty publication result is required")
+	}
+	witness, err := acknowledgement.PublicationWitness()
+	if err != nil {
+		return fmt.Errorf("seal empty full-overwrite publication: %w", err)
+	}
+	if witness.Sink != destination {
+		return fmt.Errorf("durable empty publication sink %q does not match destination %q", witness.Sink, destination)
+	}
+	result.EmptyPublication = &witness
+	return nil
 }
 
 // collectDestinationResult is the single defensive-copy boundary for every

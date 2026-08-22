@@ -33,6 +33,26 @@ type DownstreamAcknowledgement struct {
 	durable        bool
 }
 
+// PublicationWitness is the bounded durable evidence for an externally
+// visible publication that intentionally has no source checkpoint, such as a
+// full-overwrite of an explicitly empty source. Provider-owned output remains
+// on the acknowledgement and is persisted by the caller as its exact receipt.
+// This witness contains only the destination identity and durable timestamp
+// needed to prevent replay while local bookkeeping is repaired.
+type PublicationWitness struct {
+	Sink           string    `json:"sink"`
+	AcknowledgedAt time.Time `json:"acknowledged_at"`
+}
+
+// Validate proves that a persisted empty-publication witness still identifies
+// one acknowledged destination effect. It cannot grant checkpoint authority.
+func (w PublicationWitness) Validate() error {
+	if strings.TrimSpace(w.Sink) == "" || w.AcknowledgedAt.IsZero() {
+		return fmt.Errorf("durable publication witness requires a sink and acknowledgement timestamp")
+	}
+	return nil
+}
+
 // DurableETLDestination supplies an acknowledgement only after its writes are
 // durable enough for a checkpoint to advance.
 type DurableETLDestination interface {
@@ -107,6 +127,21 @@ func (a DownstreamAcknowledgement) PrivateReceipt() (json.RawMessage, bool) {
 		return nil, false
 	}
 	return append(json.RawMessage(nil), a.privateReceipt...), true
+}
+
+// PublicationWitness returns the non-payload durable evidence from this
+// acknowledgement. Only an acknowledgement constructed by the connector-owned
+// durability boundary can produce a witness, so callers cannot manufacture
+// post-publication replay authority from an arbitrary response.
+func (a DownstreamAcknowledgement) PublicationWitness() (PublicationWitness, error) {
+	if err := a.validate(); err != nil {
+		return PublicationWitness{}, err
+	}
+	witness := PublicationWitness{Sink: a.Sink, AcknowledgedAt: a.AcknowledgedAt}
+	if err := witness.Validate(); err != nil {
+		return PublicationWitness{}, err
+	}
+	return witness, nil
 }
 
 func (a DownstreamAcknowledgement) validate() error {

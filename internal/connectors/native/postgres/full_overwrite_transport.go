@@ -25,6 +25,15 @@ import (
 // port. The PostgreSQL-specific shadow relation and publish transaction remain
 // entirely here; synctransport sees only staged worksets and a durable receipt.
 func (d *ManagedTargetTransportDestination) BeginFullOverwrite(ctx context.Context, request synctransport.FullOverwriteRunRequest) (synctransport.FullOverwriteRun, error) {
+	if ctx == nil || d == nil {
+		return nil, ErrManagedTargetTransportBindingInvalid
+	}
+	return executeManagedTargetWithAuthenticationAdmission(ctx, request.Runtime, func(admitted context.Context) (synctransport.FullOverwriteRun, error) {
+		return d.beginFullOverwrite(admitted, request)
+	})
+}
+
+func (d *ManagedTargetTransportDestination) beginFullOverwrite(ctx context.Context, request synctransport.FullOverwriteRunRequest) (synctransport.FullOverwriteRun, error) {
 	if ctx == nil || d == nil || request.Mode != synccontract.ModeFullOverwrite || request.Plan.ApplyStrategy.Strategy != connectors.ApplyStrategyReplace {
 		return nil, ErrManagedTargetTransportBindingInvalid
 	}
@@ -98,6 +107,15 @@ func (s *managedTargetFullOverwriteRun) ApplyFullOverwrite(ctx context.Context, 
 }
 
 func (s *managedTargetFullOverwriteRun) PublishFullOverwrite(ctx context.Context, request synctransport.FullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
+	if ctx == nil || s == nil {
+		return synccontract.DownstreamAcknowledgement{}, ErrManagedTargetTransportBindingInvalid
+	}
+	return executeManagedTargetWithAuthenticationAdmission(ctx, s.request.Runtime, func(admitted context.Context) (synccontract.DownstreamAcknowledgement, error) {
+		return s.publishFullOverwrite(admitted, request)
+	})
+}
+
+func (s *managedTargetFullOverwriteRun) publishFullOverwrite(ctx context.Context, request synctransport.FullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
 	if ctx == nil || s == nil || ctx.Err() != nil || request.Tombstones != 0 || request.Records < 0 || request.Pages < 0 {
 		return synccontract.DownstreamAcknowledgement{}, ErrManagedTargetTransportBindingInvalid
 	}
@@ -131,6 +149,16 @@ func (s *managedTargetFullOverwriteRun) PublishFullOverwrite(ctx context.Context
 }
 
 func (s *managedTargetFullOverwriteRun) ReadBackFullOverwrite(ctx context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
+	if ctx == nil || s == nil {
+		return ErrManagedTargetTransportReadBackFailed
+	}
+	_, err := executeManagedTargetWithAuthenticationAdmission(ctx, s.request.Runtime, func(admitted context.Context) (struct{}, error) {
+		return struct{}{}, s.readBackFullOverwrite(admitted, acknowledgement)
+	})
+	return err
+}
+
+func (s *managedTargetFullOverwriteRun) readBackFullOverwrite(ctx context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
 	if ctx == nil || s == nil || ctx.Err() != nil || acknowledgement.Sink != s.destination.connector.Name() || acknowledgement.AcknowledgedAt.IsZero() {
 		return ErrManagedTargetTransportReadBackFailed
 	}

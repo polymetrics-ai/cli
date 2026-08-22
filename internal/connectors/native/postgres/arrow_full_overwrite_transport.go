@@ -23,6 +23,15 @@ import (
 // pgx and SQL remain in this adapter; synctransport sees only Arrow records,
 // segment receipts and one durable final acknowledgement.
 func (d *ManagedTargetTransportDestination) BeginArrowFullOverwrite(ctx context.Context, request synctransport.ArrowFullOverwriteRunRequest) (synctransport.ArrowFullOverwriteRun, error) {
+	if ctx == nil || d == nil {
+		return nil, ErrManagedTargetTransportBindingInvalid
+	}
+	return executeManagedTargetWithAuthenticationAdmission(ctx, request.Runtime, func(admitted context.Context) (synctransport.ArrowFullOverwriteRun, error) {
+		return d.beginArrowFullOverwrite(admitted, request)
+	})
+}
+
+func (d *ManagedTargetTransportDestination) beginArrowFullOverwrite(ctx context.Context, request synctransport.ArrowFullOverwriteRunRequest) (synctransport.ArrowFullOverwriteRun, error) {
 	if ctx == nil || d == nil || request.Plan.ApplyStrategy.Strategy != connectors.ApplyStrategyReplace || strings.TrimSpace(request.TransformPlanJSON) == "" || request.TransformPlanHash != request.Plan.TransformPlanHash {
 		return nil, ErrManagedTargetTransportBindingInvalid
 	}
@@ -80,6 +89,16 @@ type managedTargetArrowFullOverwriteRun struct {
 }
 
 func (s *managedTargetArrowFullOverwriteRun) ApplyArrowSegment(ctx context.Context, request synctransport.ArrowBulkApplyRequest) error {
+	if ctx == nil || s == nil {
+		return ErrManagedTargetTransportBindingInvalid
+	}
+	_, err := executeManagedTargetWithAuthenticationAdmission(ctx, s.request.Runtime, func(admitted context.Context) (struct{}, error) {
+		return struct{}{}, s.applyArrowSegment(admitted, request)
+	})
+	return err
+}
+
+func (s *managedTargetArrowFullOverwriteRun) applyArrowSegment(ctx context.Context, request synctransport.ArrowBulkApplyRequest) error {
 	if ctx == nil || s == nil || ctx.Err() != nil || request.Record == nil || request.ConnectionID != s.request.ConnectionID || request.Plan != s.request.Plan || request.Segment.TransformPlanHash != s.request.TransformPlanHash || request.Segment.TransformPlanHash == "" || request.Segment.TransformedRows != request.Record.NumRows() || request.Segment.ParquetBytes < 1 {
 		return ErrManagedTargetTransportBindingInvalid
 	}
@@ -144,6 +163,15 @@ func (s *managedTargetArrowFullOverwriteRun) ArrowBulkPhaseMeasurement() synctra
 }
 
 func (s *managedTargetArrowFullOverwriteRun) PublishArrowFullOverwrite(ctx context.Context, request synctransport.ArrowFullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
+	if ctx == nil || s == nil {
+		return synccontract.DownstreamAcknowledgement{}, ErrManagedTargetTransportBindingInvalid
+	}
+	return executeManagedTargetWithAuthenticationAdmission(ctx, s.request.Runtime, func(admitted context.Context) (synccontract.DownstreamAcknowledgement, error) {
+		return s.publishArrowFullOverwrite(admitted, request)
+	})
+}
+
+func (s *managedTargetArrowFullOverwriteRun) publishArrowFullOverwrite(ctx context.Context, request synctransport.ArrowFullOverwritePublicationRequest) (synccontract.DownstreamAcknowledgement, error) {
 	if ctx == nil || s == nil || ctx.Err() != nil || request.SourceLogicalBytes < 0 || request.SourceRows < 0 || request.TransformedRows < 0 || request.TransformedBytes < 0 {
 		return synccontract.DownstreamAcknowledgement{}, ErrManagedTargetTransportBindingInvalid
 	}
@@ -189,6 +217,16 @@ func (s *managedTargetArrowFullOverwriteRun) PublishArrowFullOverwrite(ctx conte
 }
 
 func (s *managedTargetArrowFullOverwriteRun) ReadBackArrowFullOverwrite(ctx context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
+	if ctx == nil || s == nil {
+		return ErrManagedTargetTransportReadBackFailed
+	}
+	_, err := executeManagedTargetWithAuthenticationAdmission(ctx, s.request.Runtime, func(admitted context.Context) (struct{}, error) {
+		return struct{}{}, s.readBackArrowFullOverwrite(admitted, acknowledgement)
+	})
+	return err
+}
+
+func (s *managedTargetArrowFullOverwriteRun) readBackArrowFullOverwrite(ctx context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
 	if ctx == nil || s == nil || ctx.Err() != nil || acknowledgement.Sink != s.destination.connector.Name() || acknowledgement.AcknowledgedAt.IsZero() {
 		return ErrManagedTargetTransportReadBackFailed
 	}

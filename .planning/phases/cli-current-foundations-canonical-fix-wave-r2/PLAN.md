@@ -35,6 +35,7 @@ The repository GSD adapter was healthy; its sources for `discuss-phase`, `plan-p
 - Public clones, not internal receipts, are sanitized. Exact configured secrets and declared sensitive locations may be masked; ordinary names, occurrence IDs, token-shaped identifiers, headers, bodies, and provider fields are preserved.
 - Reverse ETL remains declaration-owned and executes only through plan → preview → approval → execute with provider readback/receipt evidence.
 - Every listed ID receives a behavior-first Red test before its fix, then a focused Green and relevant aggregate regression. No blocker is deferred for test expense.
+- Routing update (2026-08-22): FND-B10 through FND-B14 and FND-W02 are exclusively owned by the independent runtime-output branch through `4739e1f`. This branch must not duplicate or modify those fixes. It continues with the Foundation-only FND-B15 through FND-B19 repair; if a required repair materially conflicts with the reverse-ETL action-binding work, append a `needs-decision` record and stop that conflicting slice rather than duplicating it.
 
 ## Delivery groups
 
@@ -63,6 +64,8 @@ Regenerate affected bundle, CLI/help/manual/docs/skills/website projection and r
 
 ### Group 3 — safe receipts, secrets, and typed transfer authority
 
+**Routed out of this branch.** FND-B10–FND-B14 and FND-W02 are owned by the independent runtime-output branch through `4739e1f`; no implementation, tests, or generated artifacts for that work are added here.
+
 | IDs | Red contract | Green/aggregate proof |
 | --- | --- | --- |
 | FND-B10 | SQS key-name heuristics replace ordinary provider values. | Ordinary fields round-trip; only declared/configured secrets are absent publicly. |
@@ -75,6 +78,8 @@ Commit and non-force push after public-output, engine, native SQS, hook, command
 
 ### Group 4 — durable destination/reverse-ETL delivery
 
+Green Foundation checkpoint on 2026-08-22; atomic commit/push remains pending. Its public transport-boundary changes are additive to (and do not reproduce) the action-binding branch: the only overlapping files use independent seams. Keep action binding declaration-owned; do not reproduce work assigned to the independent runtime-output branch.
+
 | IDs | Red contract | Green/aggregate proof |
 | --- | --- | --- |
 | FND-B15 | PostgreSQL public target route calls DB before auth admission. | Every route enters admission and respects fence through all phases; cohort isolation is observed. |
@@ -83,7 +88,7 @@ Commit and non-force push after public-output, engine, native SQS, hook, command
 | FND-B18 | Partial/invalid nil-error bulk acknowledgement completes plan. | Complete action-aware accounting is required before terminalization. |
 | FND-B19 | Empty overwrite has no durable no-replay witness. | Empty publication persists receipt/plan witness; post-publication faults repair without second publish. |
 
-Commit and non-force push after synctransport, App, coordination, PostgreSQL, and synccontract focused proofs pass.
+Commit and non-force push after synctransport, App, coordination, PostgreSQL, and synccontract focused proofs pass. The ledger records each Red/Green behavior and package aggregate; no material reverse-ETL action-binding conflict was found.
 
 ## CLI/docs/website parity and final gates
 

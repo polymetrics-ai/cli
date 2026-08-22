@@ -58,6 +58,10 @@ func cloneDeliveryReconciliation(reconciliation *DeliveryReconciliation) *Delive
 		return nil
 	}
 	clone := *reconciliation
+	if reconciliation.EmptyPublication != nil {
+		witness := *reconciliation.EmptyPublication
+		clone.EmptyPublication = &witness
+	}
 	return &clone
 }
 

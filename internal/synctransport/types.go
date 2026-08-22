@@ -648,6 +648,12 @@ type Result struct {
 	// logs, and errors are rendered secret-safely.
 	DestinationResults  []json.RawMessage
 	CommittedCheckpoint *synccontract.CheckpointEnvelope
+	// EmptyPublication is sealed evidence that a full-overwrite publication of
+	// an explicitly empty source was made durable and verified. It is distinct
+	// from a source checkpoint: no source position was observed or advanced.
+	// App persists it with the exact provider receipt before any local repair,
+	// so retrying the run cannot publish the empty replacement a second time.
+	EmptyPublication *synccontract.PublicationWitness
 	// DeliveredReconciliationRequired says the destination effect, read-back,
 	// and checkpoint are already durable but a subsequent local bookkeeping
 	// action (for example, retiring a bounded stage receipt) needs repair.

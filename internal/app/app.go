@@ -1677,10 +1677,24 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 	if !present {
 		return a.completeRun(runID, result)
 	}
-	return a.completeRunWithAcknowledgedTransportState(runID, result, &acknowledgedTransportCompletion{
+	completion := &acknowledgedTransportCompletion{
 		key:   result.PendingStreamState.Key,
 		state: cloneStreamState(acknowledged),
-	})
+	}
+	completed, err := a.completeRunWithAcknowledgedTransportState(runID, result, completion)
+	if err == nil || result.DeliveryReconciliation == nil || result.DeliveryReconciliation.EmptyPublication == nil {
+		return completed, err
+	}
+	// A verified empty full-overwrite has no source checkpoint to recover from.
+	// If only the final local status write failed, seal its already-read-back
+	// receipt and terminal stream state as repair work rather than allowing a
+	// retry to publish the empty replacement again.
+	reconciliationErr := synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite terminal state: %w", err))
+	delivered, persistErr := a.persistDeliveredReconciliationRun(runID, result, reconciliationErr, completion)
+	if delivered.ID != "" {
+		return delivered, persistErr
+	}
+	return Run{}, errors.Join(reconciliationErr, persistErr)
 }
 
 // failAcknowledgedTransportRun uses a completed checkpoint only as an
@@ -3275,6 +3289,9 @@ func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result c
 }
 
 func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error, errorText func(error) string) (ReverseRun, error) {
+	if writeErr == nil {
+		writeErr = validateCompleteReverseWriteAcknowledgement(staged, result, a.reverseWriteAllowsUnchanged(planID))
+	}
 	output, outputErr := json.Marshal(connectors.SanitizeWriteResultForOutput(result, runtime.Secrets))
 	if outputErr != nil && writeErr == nil {
 		writeErr = fmt.Errorf("encode complete reverse destination result: %w", outputErr)
@@ -3282,15 +3299,15 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	if outputErr == nil {
 		run.DestinationResult = append(json.RawMessage(nil), output...)
 	}
-	run.RecordsSucceeded = result.RecordsWritten
-	run.RecordsFailed = result.RecordsFailed
+	run.RecordsSucceeded = min(max(result.RecordsWritten, 0), max(staged, 0))
+	run.RecordsFailed = min(max(result.RecordsFailed, 0), max(staged, 0))
 	run.CompletedAt = time.Now().UTC()
 	planStatus := "executed"
 	if writeErr != nil {
 		run.Status = "failed"
 		planStatus = "failed"
 		if run.RecordsFailed == 0 {
-			run.RecordsFailed = staged - result.RecordsWritten
+			run.RecordsFailed = max(0, staged-run.RecordsSucceeded)
 		}
 		run.Error = errorText(writeErr)
 	} else {

@@ -52,6 +52,85 @@ func TestManagedTargetTransportDestinationRefusesBeforeSideEffects(t *testing.T)
 	assertManagedTargetTransportDirectoryEmpty(t, root)
 }
 
+func TestManagedTargetPublicRoutesEnterAuthenticationAdmissionBeforeDatabaseIO(t *testing.T) {
+	want := errors.New("authentication cohort is fenced")
+	admission := &postgresRefusingAuthenticationAdmission{err: want}
+	approval, _ := managedTargetFixtureApproval(t)
+	binding := synctransport.DestinationBinding{
+		WorkspaceID: "workspace", SourceConnectorID: "postgres", ConnectionID: "connection", StreamID: "records",
+	}
+	runtime := connectors.RuntimeConfig{ProjectDir: t.TempDir(), AuthenticationAdmission: admission}
+	sourceRuntime := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
+	appendPlan := synctransport.DestinationPlan{ApplyStrategy: connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend}}
+	replacePlan := synctransport.DestinationPlan{ApplyStrategy: connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace}}
+	transformJSON := `{"version":1,"select":[{"source":"id","target":"event_id","type":"int64"}]}`
+	transform, err := database.ParseTransformPlanV1([]byte(transformJSON))
+	if err != nil {
+		t.Fatalf("parse transform: %v", err)
+	}
+	arrowPlan := replacePlan
+	arrowPlan.TransformPlanHash = transform.Hash()
+
+	for _, tt := range []struct {
+		name string
+		call func(*ManagedTargetTransportDestination) error
+	}{
+		{
+			name: "ordinary apply",
+			call: func(destination *ManagedTargetTransportDestination) error {
+				_, err := destination.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{
+					ConnectionID: "connection", Plan: appendPlan,
+					Receipt: synctransport.WarehouseReceipt{ID: "receipt", Owner: "connection"},
+					Workset: synctransport.WarehouseWorkset{ID: "receipt", SourceParquet: "sealed.parquet"},
+					Runtime: runtime, Source: New(), SourceRuntime: sourceRuntime, Binding: binding,
+					Stream: "records", Mode: synccontract.ModeFullAppend, BatchSize: 1, Approval: approval,
+				})
+				return err
+			},
+		},
+		{
+			name: "full overwrite begin",
+			call: func(destination *ManagedTargetTransportDestination) error {
+				_, err := destination.BeginFullOverwrite(context.Background(), synctransport.FullOverwriteRunRequest{
+					ConnectionID: "connection", Plan: replacePlan, Runtime: runtime, Source: New(), SourceRuntime: sourceRuntime,
+					Binding: binding, Stream: "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1, Approval: approval,
+				})
+				return err
+			},
+		},
+		{
+			name: "arrow full overwrite begin",
+			call: func(destination *ManagedTargetTransportDestination) error {
+				_, err := destination.BeginArrowFullOverwrite(context.Background(), synctransport.ArrowFullOverwriteRunRequest{
+					ConnectionID: "connection", Plan: arrowPlan, Runtime: runtime, Source: New(), SourceRuntime: sourceRuntime,
+					Binding: binding, Stream: "records", BatchSize: 1, TransformPlanJSON: transformJSON, TransformPlanHash: transform.Hash(), Approval: approval,
+				})
+				return err
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			admission.calls = 0
+			if err := tt.call(&ManagedTargetTransportDestination{connector: New()}); !errors.Is(err, want) {
+				t.Fatalf("route error = %v, want admission error %v", err, want)
+			}
+			if admission.calls != 1 {
+				t.Fatalf("admission calls = %d, want one before database I/O", admission.calls)
+			}
+		})
+	}
+}
+
+type postgresRefusingAuthenticationAdmission struct {
+	calls int
+	err   error
+}
+
+func (a *postgresRefusingAuthenticationAdmission) Execute(_ context.Context, _ func(context.Context) error) error {
+	a.calls++
+	return a.err
+}
+
 func TestManagedTargetHistoryRouteUsesTypedPostgresDefinitions(t *testing.T) {
 	destinationConnector := New()
 	destination := &ManagedTargetTransportDestination{connector: destinationConnector}

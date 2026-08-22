@@ -836,15 +836,16 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 	for _, a := range b.Writes {
 		confirm := confirmationKindForWriteAction(a)
 		writeActions = append(writeActions, connectors.WriteActionSpec{
-			Name:           a.Name,
-			RequiredFields: writeActionRequiredFields(a),
-			OptionalFields: writeActionOptionalFields(a),
-			Method:         a.Method,
-			Path:           a.Path,
-			RedactFields:   append([]string(nil), a.RedactFields...),
-			Risk:           a.Risk,
-			Batchable:      cloneBoolPtr(a.Batchable),
-			Confirm:        confirm,
+			Name:            a.Name,
+			RequiredFields:  writeActionRequiredFields(a),
+			OptionalFields:  writeActionOptionalFields(a),
+			Method:          a.Method,
+			Path:            a.Path,
+			RedactFields:    append([]string(nil), a.RedactFields...),
+			Risk:            a.Risk,
+			Batchable:       cloneBoolPtr(a.Batchable),
+			Confirm:         confirm,
+			AllowsUnchanged: a.Kind == "delete" && a.Delete != nil && len(a.Delete.MissingOkStatus) > 0,
 		})
 	}
 

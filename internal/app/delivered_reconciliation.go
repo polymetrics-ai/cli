@@ -171,13 +171,18 @@ func validateDeliveryReconciliation(reconciliation *DeliveryReconciliation) erro
 	}
 	postgresPlanID := strings.TrimSpace(reconciliation.PostgresManagedTargetPlanID)
 	declarativePlanID := strings.TrimSpace(reconciliation.DeclarativeTypedDestinationPlanID)
+	if reconciliation.EmptyPublication != nil {
+		if err := reconciliation.EmptyPublication.Validate(); err != nil {
+			return fmt.Errorf("delivered reconciliation empty publication witness is invalid: %w", err)
+		}
+	}
 	if (postgresPlanID == "") != (reconciliation.PostgresManagedTargetPlanID == "") || (declarativePlanID == "") != (reconciliation.DeclarativeTypedDestinationPlanID == "") {
 		return errors.New("delivered reconciliation plan identity is invalid")
 	}
 	if postgresPlanID != "" && declarativePlanID != "" {
 		return errors.New("delivered reconciliation has conflicting declaration-owned marker identities")
 	}
-	if !reconciliation.StageRetirement && postgresPlanID == "" && declarativePlanID == "" {
+	if !reconciliation.StageRetirement && postgresPlanID == "" && declarativePlanID == "" && reconciliation.EmptyPublication == nil {
 		return errors.New("delivered reconciliation has no repair action")
 	}
 	return nil
