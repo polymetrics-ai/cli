@@ -11,7 +11,7 @@
 ## Behavioral proof
 
 - [ ] AB-B01 through AB-B09 resolved with red/green test output linked in `TDD-LEDGER.md`.
-- [ ] AB-W01 through AB-W05 resolved with red/green test output linked in `TDD-LEDGER.md`.
+- [ ] AB-W01 through AB-W05 resolved with red/green test output linked in `TDD-LEDGER.md` (W01–W04 green; W05 pending).
 - [ ] Provider tests are synthetic and assert provider-call, checkpoint, receipt, output, and key behavior; no credentialed call occurred.
 
 ## Local gates

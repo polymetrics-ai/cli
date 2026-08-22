@@ -141,6 +141,10 @@
           "type": "array", "minItems": 1,
           "items": {
             "type": "object", "required": ["executor", "eligible_streams"], "additionalProperties": false,
+            "oneOf": [
+              {"required": ["record_mapping"]},
+              {"required": ["tombstone_mapping"]}
+            ],
             "properties": {
               "action": {"type": "string", "minLength": 1},
               "executor": {

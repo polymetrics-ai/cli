@@ -242,7 +242,7 @@ type DestinationSourceBinding struct {
 	// Batch is required by the reusable declarative typed destination. Keeping
 	// it adjacent to Action makes the bound unit part of the sealed mapping,
 	// rather than a caller-selected provider request control.
-	Batch DestinationBatch `json:"batch,omitempty"`
+	Batch *DestinationBatch `json:"batch,omitempty"`
 }
 
 func (m SourceRecordMapping) Clone() SourceRecordMapping {
@@ -255,6 +255,10 @@ func (b DestinationSourceBinding) Clone() DestinationSourceBinding {
 	clone := b
 	clone.EligibleStreams = append([]string(nil), b.EligibleStreams...)
 	clone.RecordMapping = b.RecordMapping.Clone()
+	if b.Batch != nil {
+		batch := *b.Batch
+		clone.Batch = &batch
+	}
 	if b.TombstoneMapping != nil {
 		mapping := b.TombstoneMapping.Clone()
 		clone.TombstoneMapping = &mapping
@@ -309,7 +313,7 @@ func (b DestinationSourceBinding) Validate() error {
 	if err := validateSourceTransportStreams(b.EligibleStreams); err != nil {
 		return err
 	}
-	if b.Batch.Disposition != "" || b.Batch.MaxRecords != 0 {
+	if b.Batch != nil {
 		if err := b.Batch.Validate(); err != nil {
 			return err
 		}
@@ -654,6 +658,7 @@ func (d DestinationTransportDescriptor) Validate() error {
 
 	strategies := make(map[synccontract.Mode]struct{}, len(d.ApplyStrategies))
 	strategyActions := make(map[synccontract.Mode]map[string]struct{}, len(d.ApplyStrategies))
+	declaredActions := make(map[string]struct{}, len(d.ApplyStrategies)*2)
 	for _, strategy := range d.ApplyStrategies {
 		if err := strategy.Mode.Validate(); err != nil {
 			return err
@@ -686,11 +691,33 @@ func (d DestinationTransportDescriptor) Validate() error {
 			return fmt.Errorf("destination transport declares duplicate apply strategy action %q for sync mode %q", strategy.Action, strategy.Mode)
 		}
 		strategyActions[strategy.Mode][strategy.Action] = struct{}{}
+		declaredActions[strategy.Action] = struct{}{}
+		if strategy.TombstoneAction != "" {
+			declaredActions[strategy.TombstoneAction] = struct{}{}
+		}
 		strategies[strategy.Mode] = struct{}{}
 	}
 	for _, mode := range d.Modes {
 		if _, exists := strategies[mode]; !exists {
 			return fmt.Errorf("destination transport is missing declared apply strategy for sync mode %q", mode)
+		}
+	}
+	for _, action := range d.EligibleActions {
+		if _, found := declaredActions[action]; !found {
+			return fmt.Errorf("destination eligible action %q has no declared apply strategy", action)
+		}
+	}
+	for action := range declaredActions {
+		if !containsTransportName(d.EligibleActions, action) {
+			return fmt.Errorf("destination apply strategy action %q is not an eligible action", action)
+		}
+	}
+	for _, binding := range d.SourceBindings {
+		if binding.Action == "" {
+			continue
+		}
+		if _, found := declaredActions[binding.Action]; !found {
+			return fmt.Errorf("destination source binding action %q has no reachable apply strategy", binding.Action)
 		}
 	}
 	return nil

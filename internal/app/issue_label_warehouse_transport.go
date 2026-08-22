@@ -806,6 +806,9 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 		if binding.Action == "" {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires an action-owned source binding")
 		}
+		if binding.Batch == nil {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q requires a declaration batch", binding.Action)
+		}
 		if err := binding.Batch.Validate(); err != nil {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q batch disposition: %w", binding.Action, err)
 		}

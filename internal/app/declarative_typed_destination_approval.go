@@ -360,12 +360,12 @@ func (a *App) prepareDeclarativeTypedDestinationTransport(ctx context.Context, c
 		Domain: declarativeTypedDestinationBindingDomain, ConnectionID: conn.ID, Stream: streamName, StreamID: stream.StreamID, Mode: mode.ContractMode,
 		Source: source.Name(), SourceExecutor: resolved.SourceDescriptor.Executor, SourceEvidence: resolved.SourceDescriptor.Conformance,
 		Destination: destination.Name(), DestinationExecutor: resolved.DestinationDescriptor.Executor, DestinationEvidence: resolved.DestinationDescriptor.Conformance,
-		Action: resolved.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, IdempotencyKeyHeader: idempotencyKeyHeader, Strategy: resolved.ApplyStrategy.Strategy, SourceMapping: binding.RecordMapping.Clone(), Batch: binding.Batch, ReadBackSHA256: readBackSHA256,
+		Action: resolved.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, IdempotencyKeyHeader: idempotencyKeyHeader, Strategy: resolved.ApplyStrategy.Strategy, SourceMapping: binding.RecordMapping.Clone(), Batch: *binding.Batch, ReadBackSHA256: readBackSHA256,
 		CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest, ApprovalScope: runtime.WriteApprovalScope,
 	}
 	if tombstoneBinding != nil {
 		mapping := tombstoneBinding.TombstoneMapping.Clone()
-		batch := tombstoneBinding.Batch
+		batch := *tombstoneBinding.Batch
 		declaration.TombstoneAction = resolved.ApplyStrategy.TombstoneAction
 		declaration.TombstoneActionDefinitionSHA256 = tombstoneActionDefinitionSHA256
 		declaration.TombstoneIdempotencyKeyHeader = tombstoneIdempotencyKeyHeader
