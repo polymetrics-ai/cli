@@ -20,4 +20,11 @@
 - Green: `go test -count=1 -timeout 20m ./internal/connectors/native/amazon-sqs -run 'TestOperationDirectReadListQueuesPreservesOrdinaryNameShapedProviderValues'`.
 - Green: `go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestOperationDirectReadMasksConfiguredCursorAtThePublicBoundary'`.
 
-FND-B12, FND-B14, and FND-W02 remain pending their separate red-green slices.
+At this checkpoint, FND-B12, FND-B14, and FND-W02 remained pending their separate red-green slices.
+
+### Slice 2 — FND-B12 GitHub App restrictions
+
+- Red: `go test -count=1 -timeout 20m ./internal/connectors/hooks/github -run 'TestAuthenticatorGithubAppRestrictionParsingFailsClosedBeforeDeclaredRouteIO'` failed for empty and unsafe repository entries, malformed or duplicate repository IDs, and malformed permissions because each silently fell through to the declared-route exchange.
+- Green: `go test -count=1 -timeout 20m ./internal/connectors/hooks/github -run 'TestAuthenticatorGithubAppRestrictionParsingFailsClosedBeforeDeclaredRouteIO'` proves valid restrictions make one declared-route POST while every malformed restriction returns before authenticated provider I/O.
+
+FND-B14 and FND-W02 remain pending their shared parameter-authority slice.

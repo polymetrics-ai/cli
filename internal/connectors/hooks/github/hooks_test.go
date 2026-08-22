@@ -470,6 +470,53 @@ func TestAuthenticatorGithubApp_HonorsContextCancellation(t *testing.T) {
 	}
 }
 
+func TestAuthenticatorGithubAppRestrictionParsingFailsClosedBeforeDeclaredRouteIO(t *testing.T) {
+	newConfig := func(t *testing.T, extra map[string]string) connectors.RuntimeConfig {
+		t.Helper()
+		return newRuntimeConfig("https://example.invalid", map[string]string{
+			"app_id":                      "12345",
+			"installation_id":             "67890",
+			"installation_repositories":   extra["installation_repositories"],
+			"installation_repository_ids": extra["installation_repository_ids"],
+			"installation_permissions":    extra["installation_permissions"],
+		}, map[string]string{"private_key": testPrivateKeyPEM(t)})
+	}
+	for _, tc := range []struct {
+		name  string
+		extra map[string]string
+		valid bool
+	}{
+		{name: "valid restrictions", valid: true, extra: map[string]string{"installation_repositories": "alpha,beta", "installation_repository_ids": "7,9", "installation_permissions": `{"contents":"read","issues":"write"}`}},
+		{name: "empty repository member", extra: map[string]string{"installation_repositories": "alpha,,beta"}},
+		{name: "unsafe repository name", extra: map[string]string{"installation_repositories": "alpha/../beta"}},
+		{name: "non-numeric repository id", extra: map[string]string{"installation_repository_ids": "7,not-a-number"}},
+		{name: "duplicate repository id", extra: map[string]string{"installation_repository_ids": "7,7"}},
+		{name: "permissions not json", extra: map[string]string{"installation_permissions": "not-json"}},
+		{name: "permissions wrong value type", extra: map[string]string{"installation_permissions": `{"contents":false}`}},
+		{name: "permissions duplicate key", extra: map[string]string{"installation_permissions": `{"contents":"read","contents":"write"}`}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			route := &githubAppDeclaredRouteRecorder{responseBody: []byte(`{"token":"synthetic-installation-token"}`)}
+			_, err := githubhooks.New().AuthenticatorWithDeclaredRoute(context.Background(), newConfig(t, tc.extra), engine.AuthSpec{Mode: "custom", Hook: "github"}, route)
+			if tc.valid {
+				if err != nil {
+					t.Fatalf("AuthenticatorWithDeclaredRoute: %v", err)
+				}
+				if route.method != http.MethodPost {
+					t.Fatal("valid restrictions did not reach the declared route")
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("malformed restriction was accepted")
+			}
+			if route.method != "" || route.path != "" || route.hasBearerJWT {
+				t.Fatal("malformed restriction reached authenticated declared-route I/O")
+			}
+		})
+	}
+}
+
 // --- ExecuteWrite (WriteHook) ---
 
 // captureServer records every request it receives (method, path, decoded

@@ -14,6 +14,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -83,6 +84,10 @@ func (h *Hooks) AuthenticatorWithDeclaredRoute(ctx context.Context, cfg connecto
 	if installationID == "" {
 		return nil, errors.New("github auth_type=github_app requires config installation_id")
 	}
+	payload, err := installationTokenPayload(cfg)
+	if err != nil {
+		return nil, err
+	}
 	key, err := parsePrivateKey(cfg)
 	if err != nil {
 		return nil, err
@@ -100,7 +105,7 @@ func (h *Hooks) AuthenticatorWithDeclaredRoute(ctx context.Context, cfg connecto
 			"Authorization": "Bearer " + jwt,
 			"Accept":        "application/vnd.github+json",
 		},
-		Body: installationTokenPayload(cfg),
+		Body: payload,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("github_app: exchange installation token: %w", err)
@@ -178,42 +183,143 @@ func parsePrivateKey(cfg connectors.RuntimeConfig) (*rsa.PrivateKey, error) {
 	return key, nil
 }
 
-func installationTokenPayload(cfg connectors.RuntimeConfig) map[string]any {
+func installationTokenPayload(cfg connectors.RuntimeConfig) (map[string]any, error) {
 	payload := map[string]any{}
-	if repos := compactSplit(cfg.Config["installation_repositories"]); len(repos) > 0 {
+	if repos, err := installationRepositories(cfg.Config["installation_repositories"]); err != nil {
+		return nil, err
+	} else if len(repos) > 0 {
 		payload["repositories"] = repos
 	}
-	if idsRaw := compactSplit(cfg.Config["installation_repository_ids"]); len(idsRaw) > 0 {
-		ids := make([]int, 0, len(idsRaw))
-		for _, raw := range idsRaw {
-			if n, err := strconv.Atoi(raw); err == nil {
-				ids = append(ids, n)
-			}
-		}
-		if len(ids) > 0 {
-			payload["repository_ids"] = ids
-		}
+	if ids, err := installationRepositoryIDs(cfg.Config["installation_repository_ids"]); err != nil {
+		return nil, err
+	} else if len(ids) > 0 {
+		payload["repository_ids"] = ids
 	}
-	if raw := strings.TrimSpace(cfg.Config["installation_permissions"]); raw != "" {
-		var perms map[string]string
-		if json.Unmarshal([]byte(raw), &perms) == nil {
-			payload["permissions"] = perms
-		}
+	if permissions, err := installationPermissions(cfg.Config["installation_permissions"]); err != nil {
+		return nil, err
+	} else if permissions != nil {
+		payload["permissions"] = permissions
 	}
-	return payload
+	return payload, nil
 }
 
-func compactSplit(raw string) []string {
+func installationRepositories(raw string) ([]string, error) {
 	if strings.TrimSpace(raw) == "" {
-		return nil
+		return nil, nil
 	}
 	out := make([]string, 0, 4)
-	for _, p := range strings.Split(raw, ",") {
-		if t := strings.TrimSpace(p); t != "" {
-			out = append(out, t)
+	seen := map[string]struct{}{}
+	for _, repository := range strings.Split(raw, ",") {
+		if repository == "" || strings.TrimSpace(repository) != repository || !githubRepositoryName(repository) {
+			return nil, errors.New("github installation_repositories must be a comma-separated list of repository names")
+		}
+		if _, duplicate := seen[repository]; duplicate {
+			return nil, fmt.Errorf("github installation_repositories repeats %q", repository)
+		}
+		seen[repository] = struct{}{}
+		out = append(out, repository)
+	}
+	return out, nil
+}
+
+func githubRepositoryName(value string) bool {
+	if len(value) > 100 {
+		return false
+	}
+	for _, character := range value {
+		if character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '-' || character == '_' || character == '.' {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func installationRepositoryIDs(raw string) ([]int64, error) {
+	if strings.TrimSpace(raw) == "" {
+		return nil, nil
+	}
+	ids := make([]int64, 0, 4)
+	seen := map[int64]struct{}{}
+	for _, rawID := range strings.Split(raw, ",") {
+		if rawID == "" || strings.TrimSpace(rawID) != rawID || !decimalIdentifier(rawID) {
+			return nil, errors.New("github installation_repository_ids must be a comma-separated list of positive integers")
+		}
+		id, err := strconv.ParseInt(rawID, 10, 64)
+		if err != nil || id <= 0 {
+			return nil, errors.New("github installation_repository_ids must be a comma-separated list of positive integers")
+		}
+		if _, duplicate := seen[id]; duplicate {
+			return nil, fmt.Errorf("github installation_repository_ids repeats %d", id)
+		}
+		seen[id] = struct{}{}
+		ids = append(ids, id)
+	}
+	return ids, nil
+}
+
+func decimalIdentifier(value string) bool {
+	for _, character := range value {
+		if character < '0' || character > '9' {
+			return false
 		}
 	}
-	return out
+	return value != ""
+}
+
+func installationPermissions(raw string) (map[string]string, error) {
+	if strings.TrimSpace(raw) == "" {
+		return nil, nil
+	}
+	decoder := json.NewDecoder(strings.NewReader(raw))
+	token, err := decoder.Token()
+	if err != nil || token != json.Delim('{') {
+		return nil, errors.New("github installation_permissions must be a JSON object")
+	}
+	permissions := map[string]string{}
+	for decoder.More() {
+		keyToken, err := decoder.Token()
+		if err != nil {
+			return nil, errors.New("github installation_permissions must be a JSON object")
+		}
+		name, ok := keyToken.(string)
+		if !ok || !githubPermissionName(name) {
+			return nil, errors.New("github installation_permissions contains an invalid permission name")
+		}
+		if _, duplicate := permissions[name]; duplicate {
+			return nil, fmt.Errorf("github installation_permissions repeats %q", name)
+		}
+		var level string
+		if err := decoder.Decode(&level); err != nil || !githubPermissionLevel(level) {
+			return nil, fmt.Errorf("github installation_permissions.%s must be read, write, or admin", name)
+		}
+		permissions[name] = level
+	}
+	if token, err := decoder.Token(); err != nil || token != json.Delim('}') {
+		return nil, errors.New("github installation_permissions must be a JSON object")
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); !errors.Is(err, io.EOF) {
+		return nil, errors.New("github installation_permissions must contain one JSON object")
+	}
+	return permissions, nil
+}
+
+func githubPermissionName(value string) bool {
+	if value == "" {
+		return false
+	}
+	for _, character := range value {
+		if character >= 'a' && character <= 'z' || character == '_' {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func githubPermissionLevel(value string) bool {
+	return value == "read" || value == "write" || value == "admin"
 }
 
 // --- WriteHook: compound writes + label color-strip normalization --------
