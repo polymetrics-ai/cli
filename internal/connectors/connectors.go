@@ -990,8 +990,7 @@ func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResu
 	}
 	out := result
 	out.Headers = sanitizeProviderHeaders(result.Headers, masked)
-	out.BodyRaw = redactWriteResultString(result.BodyRaw, masked)
-	out.Body = sanitizeProviderResponseValue(body, masked)
+	out.BodyRaw, out.Body = sanitizeProviderResponseBody(result.BodyRaw, result.BodyRawEncoding, body, masked)
 	out.OutputSecretFields = append([]string(nil), result.OutputSecretFields...)
 	out.GraphQL = sanitizeGraphQLResponseMetadataForOutput(result.GraphQL, masked)
 	return out
@@ -1020,8 +1019,7 @@ func sanitizeGraphQLResponseMetadataForOutput(metadata *GraphQLResponseMetadata,
 func sanitizeWriteProviderResponse(response WriteProviderResponse, secrets []string) WriteProviderResponse {
 	out := response
 	out.Headers = sanitizeProviderHeaders(response.Headers, secrets)
-	out.BodyRaw = redactWriteResultString(response.BodyRaw, secrets)
-	out.Body = sanitizeProviderResponseValue(response.Body, secrets)
+	out.BodyRaw, out.Body = sanitizeProviderResponseBody(response.BodyRaw, response.BodyRawEncoding, response.Body, secrets)
 	return out
 }
 
@@ -1187,16 +1185,17 @@ func SanitizeProviderResponseReceiptForOutput(receipt ProviderResponseReceipt, s
 	masked := configuredWriteResultSecrets(secrets)
 	out := receipt
 	out.Headers = sanitizeProviderHeaders(receipt.Headers, masked)
-	out.BodyRaw = sanitizeProviderResponseRaw(receipt.BodyRaw, receipt.BodyRawEncoding, masked)
-	out.Body = sanitizeProviderResponseValue(receipt.Body, masked)
-	if rawBody, ok := receipt.Body.(string); ok {
-		if rawBody == receipt.BodyRaw {
-			out.Body = out.BodyRaw
-		} else {
-			out.Body = redactWriteResultString(rawBody, masked)
-		}
-	}
+	out.BodyRaw, out.Body = sanitizeProviderResponseBody(receipt.BodyRaw, receipt.BodyRawEncoding, receipt.Body, masked)
 	return out
+}
+
+func sanitizeProviderResponseBody(raw, rawEncoding string, body any, secrets []string) (string, any) {
+	sanitizedRaw := sanitizeProviderResponseRaw(raw, rawEncoding, secrets)
+	sanitizedBody := sanitizeProviderResponseValue(body, secrets)
+	if rawBody, ok := body.(string); ok && rawBody == raw {
+		sanitizedBody = sanitizedRaw
+	}
+	return sanitizedRaw, sanitizedBody
 }
 
 func sanitizeProviderResponseRaw(value, encoding string, secrets []string) string {

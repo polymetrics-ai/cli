@@ -1,6 +1,7 @@
 package connectors
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -181,6 +182,80 @@ func TestOperationDirectWriteResultOutputMasksConfiguredTextInsideJSONDiagnostic
 	}
 	if result.Body.(map[string]any)["diagnostic"] != diagnostic {
 		t.Fatal("sanitizer mutated the complete internal receipt")
+	}
+}
+
+func TestPublicWriteReceiptsMaskConfiguredBinaryBodies(t *testing.T) {
+	const credential = "configured-binary-material"
+	raw := []byte{0xff}
+	raw = append(raw, []byte("occurrence_id=occurrence-9007199254740993;credential=")...)
+	raw = append(raw, []byte(credential)...)
+	raw = append(raw, []byte(";token_type=unconfigured-provider-token")...)
+	raw = append(raw, 0xfe)
+	expected := []byte{0xff}
+	expected = append(expected, []byte("occurrence_id=occurrence-9007199254740993;credential=")...)
+	expected = append(expected, []byte("[masked]")...)
+	expected = append(expected, []byte(";token_type=unconfigured-provider-token")...)
+	expected = append(expected, 0xfe)
+	encoded := base64.StdEncoding.EncodeToString(raw)
+
+	tests := []struct {
+		name     string
+		sanitize func() (string, any)
+	}{
+		{
+			name: "write receipt",
+			sanitize: func() (string, any) {
+				result := WriteResult{ProviderResponses: []WriteProviderResponse{{
+					BodyPresent:     true,
+					BodyBytes:       len(raw),
+					BodyRaw:         encoded,
+					BodyRawEncoding: "base64",
+					Body:            encoded,
+					BodyEncoding:    "base64",
+				}}}
+				got := SanitizeWriteResultForOutput(result, map[string]string{"credential": credential})
+				return got.ProviderResponses[0].BodyRaw, got.ProviderResponses[0].Body
+			},
+		},
+		{
+			name: "direct operation receipt",
+			sanitize: func() (string, any) {
+				result := OperationDirectWriteResult{
+					Connector:        "fixture",
+					Operation:        "fixture.create",
+					Method:           "POST",
+					Path:             "/fixed",
+					ResponseReceived: true,
+					Status:           201,
+					BodyPresent:      true,
+					BodyBytes:        len(raw),
+					BodyRaw:          encoded,
+					BodyRawEncoding:  "base64",
+					Body:             encoded,
+				}
+				got := SanitizeOperationDirectWriteResultForOutput(result, map[string]string{"credential": credential})
+				return got.BodyRaw, got.Body
+			},
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			bodyRaw, body := testCase.sanitize()
+			decodedRaw, err := base64.StdEncoding.DecodeString(bodyRaw)
+			if err != nil || !bytes.Equal(decodedRaw, expected) || bytes.Contains(decodedRaw, []byte(credential)) {
+				t.Fatal("public receipt raw body did not preserve non-secret bytes while masking configured material")
+			}
+			bodyString, ok := body.(string)
+			if !ok {
+				t.Fatal("public receipt body did not retain its base64 representation")
+			}
+			decodedBody, err := base64.StdEncoding.DecodeString(bodyString)
+			if err != nil || !bytes.Equal(decodedBody, expected) || bytes.Contains(decodedBody, []byte(credential)) {
+				t.Fatal("public receipt body did not preserve non-secret bytes while masking configured material")
+			}
+		})
 	}
 }
 
