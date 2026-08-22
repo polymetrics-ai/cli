@@ -974,6 +974,831 @@
           "value_type": "array"
         }
       ]
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_alerts_view",
+      "command": "code-scanning alerts view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "alerts"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--alert-number"
+        },
+        {
+          "config_key": "alert-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_analyses_view_2",
+      "command": "code-scanning analyses view-2",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "analyses"
+        },
+        {
+          "literal": "view-2"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--analysis-id"
+        },
+        {
+          "config_key": "analysis-id",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_autofix_view",
+      "command": "code-scanning autofix view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "autofix"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--alert-number"
+        },
+        {
+          "config_key": "alert-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_databases_view",
+      "command": "code-scanning databases view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "databases"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_databases_view_2",
+      "command": "code-scanning databases view-2",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "databases"
+        },
+        {
+          "literal": "view-2"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--language"
+        },
+        {
+          "config_key": "language",
+          "default": "javascript"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_default_setup_view",
+      "command": "code-scanning default-setup view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "default-setup"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_repos_view",
+      "command": "code-scanning repos view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "repos"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--codeql-variant-analysis-id"
+        },
+        {
+          "config_key": "codeql-variant-analysis-id",
+          "default": "1"
+        },
+        {
+          "literal": "--repo-owner"
+        },
+        {
+          "config_key": "repo-owner",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--repo-name"
+        },
+        {
+          "config_key": "repo-name",
+          "default": "pm-cert-3993-20260810-wz0fru"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_sarifs_view",
+      "command": "code-scanning sarifs view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "sarifs"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--sarif-id"
+        },
+        {
+          "config_key": "sarif-id",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_variant_analyses_view",
+      "command": "code-scanning variant-analyses view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "variant-analyses"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--codeql-variant-analysis-id"
+        },
+        {
+          "config_key": "codeql-variant-analysis-id",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_machines_view",
+      "command": "codespaces machines view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "machines"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_new_view",
+      "command": "codespaces new view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "new"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_permissions_check_view",
+      "command": "codespaces permissions_check view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "permissions_check"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--devcontainer-path"
+        },
+        {
+          "config_key": "devcontainer-path",
+          "default": ".devcontainer/devcontainer.json"
+        },
+        {
+          "literal": "--ref"
+        },
+        {
+          "config_key": "ref",
+          "default": "main"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_public_key_view",
+      "command": "codespaces public-key view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "public-key"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_secrets_view_2",
+      "command": "codespaces secrets view-2",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "secrets"
+        },
+        {
+          "literal": "view-2"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_configuration_view",
+      "command": "copilot configuration view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "configuration"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_alerts_view",
+      "command": "dependabot alerts view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "alerts"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--alert-number"
+        },
+        {
+          "config_key": "alert-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_public_key_view",
+      "command": "dependabot public-key view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "public-key"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_secrets_view_2",
+      "command": "dependabot secrets view-2",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "secrets"
+        },
+        {
+          "literal": "view-2"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_secret_scanning_alerts_view",
+      "command": "secret-scanning alerts view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "secret-scanning"
+        },
+        {
+          "literal": "alerts"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--alert-number"
+        },
+        {
+          "config_key": "alert-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_secret_scanning_scan_history_view",
+      "command": "secret-scanning scan-history view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "secret-scanning"
+        },
+        {
+          "literal": "scan-history"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
     }
   ],
   "direct_read_generation": {

@@ -1786,10 +1786,6 @@ func sourceProjectionOperationFlags(bundle engine.Bundle, operationID, sourceID 
 	return flags, implemented
 }
 
-func sourceProjectionImplementedStream(bundle engine.Bundle, streamName string) bool {
-	return sourceProjectionDeclaredStream(bundle, streamName, "", false)
-}
-
 func sourceProjectionDeclaredStream(bundle engine.Bundle, streamName, sourceID string, allowSourceBoundPartial bool) bool {
 	if bundle.CLISurface == nil {
 		return false
@@ -1879,31 +1875,6 @@ func sourceProjectionAnnotateUnreachableReadGaps(bundle engine.Bundle, result *s
 			)},
 		}
 	}
-}
-
-// sourceRESTOperationHasDeclaredRoute deliberately distinguishes route
-// existence from caller-field coverage. The importer marks only a genuinely
-// absent execution route as deferred; validation then reports a separately
-// incomplete declared route without hiding it behind a new gap.
-func sourceRESTOperationHasDeclaredRoute(bundle engine.Bundle, source sourceOperationDescriptor) bool {
-	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
-	for _, operation := range bundle.Operations {
-		if operation.REST != nil && sourceProjectionEndpointKey(operation.REST.Method, operation.REST.Path) == endpoint {
-			if _, implemented := sourceProjectionImplementedOperationFlags(bundle, operation.ID); implemented {
-				return true
-			}
-		}
-	}
-	for _, stream := range bundle.Streams {
-		method := stream.Method
-		if method == "" {
-			method = "GET"
-		}
-		if sourceProjectionEndpointKey(method, stream.Path) == endpoint && sourceProjectionImplementedStream(bundle, stream.Name) {
-			return true
-		}
-	}
-	return false
 }
 
 // sourceProjectionExecutionSurface reads only the declaration-owned execution

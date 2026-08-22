@@ -10,7 +10,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/access",
       "path": "actions access view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -20,8 +20,16 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/access"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates"
     },
     {
       "summary": "Add custom labels to a self-hosted runner for an organization",
@@ -237,7 +245,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
       "path": "actions approvals view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -254,8 +262,8 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
       "required_flags": [
         "--run-id"
       ]
@@ -292,7 +300,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
       "path": "actions artifact-and-log-retention view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -302,8 +310,8 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
@@ -337,7 +345,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}",
       "path": "actions attempts view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -366,8 +374,8 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --attempt-number, --run-id",
       "required_flags": [
         "--attempt-number",
         "--run-id"
@@ -507,7 +515,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
       "path": "actions concurrency_groups view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -536,8 +544,8 @@
           "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --concurrency-group-name",
       "required_flags": [
         "--concurrency-group-name"
       ]
@@ -1290,7 +1298,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/runners/downloads",
       "path": "actions downloads view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -1300,8 +1308,16 @@
           "path": "/repos/{owner}/{repo}/actions/runners/downloads"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates"
     },
     {
       "summary": "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
@@ -1433,7 +1449,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
       "path": "actions fork-pr-contributor-approval view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -1443,14 +1459,14 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "provider_refused",
+      "reason": "GitHub returned HTTP 422 because this setting does not apply to the disposable certification repository"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
       "path": "actions fork-pr-workflows-private-repos view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -1460,8 +1476,8 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig",
@@ -2328,7 +2344,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}",
       "path": "actions jobs view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -2345,8 +2361,8 @@
           "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --job-id",
       "required_flags": [
         "--job-id"
       ]
@@ -2559,7 +2575,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
       "path": "actions labels view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -2576,8 +2592,8 @@
           "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --runner-id",
       "required_flags": [
         "--runner-id"
       ]
@@ -3182,7 +3198,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
       "path": "actions pending_deployments view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -3199,8 +3215,8 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
       "required_flags": [
         "--run-id"
       ]
@@ -3466,7 +3482,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/permissions",
       "path": "actions permissions view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -3476,14 +3492,22 @@
           "path": "/repos/{owner}/{repo}/actions/permissions"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/secrets/public-key",
       "path": "actions public-key view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -3493,8 +3517,8 @@
           "path": "/repos/{owner}/{repo}/actions/secrets/public-key"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/actions/runners/registration-token",
@@ -3880,7 +3904,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/cache/retention-limit",
       "path": "actions retention-limit view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -3890,8 +3914,8 @@
           "path": "/repos/{owner}/{repo}/actions/cache/retention-limit"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}",
@@ -3949,7 +3973,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/runners/{runner_id}",
       "path": "actions runners view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -3966,8 +3990,8 @@
           "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --runner-id",
       "required_flags": [
         "--runner-id"
       ]
@@ -3976,7 +4000,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}",
       "path": "actions runs view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -3999,8 +4023,8 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
       "required_flags": [
         "--run-id"
       ]
@@ -4117,7 +4141,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/secrets/{secret_name}",
       "path": "actions secrets view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -4134,8 +4158,8 @@
           "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --secret-name",
       "required_flags": [
         "--secret-name"
       ]
@@ -4144,7 +4168,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/selected-actions",
       "path": "actions selected-actions view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -4154,8 +4178,8 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Set GitHub Actions cache retention limit for an enterprise",
@@ -4917,7 +4941,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/cache/storage-limit",
       "path": "actions storage-limit view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -4927,8 +4951,8 @@
           "path": "/repos/{owner}/{repo}/actions/cache/storage-limit"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "PUT /repos/{owner}/{repo}/actions/oidc/customization/sub",
@@ -4974,7 +4998,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/oidc/customization/sub",
       "path": "actions sub view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -4984,14 +5008,14 @@
           "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/timing",
       "path": "actions timing view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -5008,8 +5032,8 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
       "required_flags": [
         "--run-id"
       ]
@@ -5018,7 +5042,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
       "path": "actions timing view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -5035,8 +5059,8 @@
           "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --workflow-id",
       "required_flags": [
         "--workflow-id"
       ]
@@ -5274,7 +5298,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/cache/usage",
       "path": "actions usage view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -5284,8 +5308,8 @@
           "path": "/repos/{owner}/{repo}/actions/cache/usage"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/variables",
@@ -5308,7 +5332,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/variables/{name}",
       "path": "actions variables view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -5325,8 +5349,8 @@
           "path": "/repos/{owner}/{repo}/actions/variables/{name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
       "required_flags": [
         "--name"
       ]
@@ -5335,7 +5359,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/permissions/workflow",
       "path": "actions workflow view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -5345,14 +5369,22 @@
           "path": "/repos/{owner}/{repo}/actions/permissions/workflow"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}",
       "path": "actions workflows view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -5369,8 +5401,8 @@
           "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --workflow-id",
       "required_flags": [
         "--workflow-id"
       ]
@@ -6705,7 +6737,7 @@
       "summary": "Read /repos/{owner}/{repo}/agents/secrets/public-key",
       "path": "agents public-key view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -6715,8 +6747,8 @@
           "path": "/repos/{owner}/{repo}/agents/secrets/public-key"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Remove selected repository from an organization secret",
@@ -6823,7 +6855,7 @@
       "summary": "Read /repos/{owner}/{repo}/agents/secrets/{secret_name}",
       "path": "agents secrets view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -6840,8 +6872,8 @@
           "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --secret-name",
       "required_flags": [
         "--secret-name"
       ]
@@ -7009,7 +7041,7 @@
       "summary": "Read /repos/{owner}/{repo}/agents/variables/{name}",
       "path": "agents variables view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -7026,8 +7058,8 @@
           "path": "/repos/{owner}/{repo}/agents/variables/{name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
       "required_flags": [
         "--name"
       ]
@@ -10322,7 +10354,7 @@
       "summary": "Read /repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
       "path": "artifact download-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -10339,8 +10371,8 @@
           "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --artifact-id",
       "required_flags": [
         "--artifact-id"
       ]
@@ -10392,7 +10424,7 @@
       "summary": "Read /repos/{owner}/{repo}/assignees/{assignee}",
       "path": "assignees view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -10409,8 +10441,8 @@
           "path": "/repos/{owner}/{repo}/assignees/{assignee}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --assignee",
       "required_flags": [
         "--assignee"
       ]
@@ -10614,7 +10646,7 @@
       "summary": "Read /repos/{owner}/{repo}/autolinks/{autolink_id}",
       "path": "autolinks view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -10631,8 +10663,8 @@
           "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --autolink-id",
       "required_flags": [
         "--autolink-id"
       ]
@@ -10677,7 +10709,7 @@
       "summary": "Read /repos/{owner}/{repo}/automated-security-fixes",
       "path": "automated-security-fixes view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -10687,8 +10719,8 @@
           "path": "/repos/{owner}/{repo}/automated-security-fixes"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Create a budget for an organization",
@@ -11284,7 +11316,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
       "path": "branches apps view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -11301,8 +11333,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -11395,7 +11427,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
       "path": "branches contexts view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -11412,8 +11444,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -11478,7 +11510,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
       "path": "branches enforce_admins view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -11495,8 +11527,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -11631,7 +11663,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection",
       "path": "branches protection view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -11648,8 +11680,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -11785,7 +11817,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
       "path": "branches required_pull_request_reviews view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -11802,8 +11834,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -11868,7 +11900,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
       "path": "branches required_signatures view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -11885,8 +11917,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -11969,7 +12001,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
       "path": "branches required_status_checks view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -11986,8 +12018,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -12024,7 +12056,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
       "path": "branches restrictions view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -12041,8 +12073,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -12135,7 +12167,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
       "path": "branches teams view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -12152,8 +12184,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -12267,7 +12299,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
       "path": "branches users view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -12284,8 +12316,8 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch",
       "required_flags": [
         "--branch"
       ]
@@ -12294,7 +12326,7 @@
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}",
       "path": "branches view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -12311,11 +12343,18 @@
           "path": "/repos/{owner}/{repo}/branches/{branch}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--branch"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response/name",
+          "equals": "main"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates"
     },
     {
       "summary": "Open GitHub in a browser",
@@ -12840,7 +12879,7 @@
       "summary": "Read /repos/{owner}/{repo}/check-runs/{check_run_id}",
       "path": "check-runs view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -12857,8 +12896,8 @@
           "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --check-run-id",
       "required_flags": [
         "--check-run-id"
       ]
@@ -13002,7 +13041,7 @@
       "summary": "Read /repos/{owner}/{repo}/check-suites/{check_suite_id}",
       "path": "check-suites view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13019,8 +13058,8 @@
           "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --check-suite-id",
       "required_flags": [
         "--check-suite-id"
       ]
@@ -13219,7 +13258,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-quality/findings/{finding_number}",
       "path": "code-quality findings view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13236,8 +13275,8 @@
           "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --finding-number",
       "required_flags": [
         "--finding-number"
       ]
@@ -13307,7 +13346,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-quality/setup",
       "path": "code-quality setup view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -13317,8 +13356,8 @@
           "path": "/repos/{owner}/{repo}/code-quality/setup"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/sarifs",
@@ -13390,7 +13429,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
       "path": "code-scanning alerts view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13407,11 +13446,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
@@ -13518,7 +13566,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
       "path": "code-scanning analyses view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13535,11 +13583,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--analysis-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
@@ -13573,7 +13630,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
       "path": "code-scanning autofix view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13590,11 +13647,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
@@ -13668,7 +13734,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases",
       "path": "code-scanning databases view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -13678,14 +13744,23 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
       "path": "code-scanning databases view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13702,11 +13777,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--language"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/code-scanning/default-setup",
@@ -13783,7 +13867,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-scanning/default-setup",
       "path": "code-scanning default-setup view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -13793,8 +13877,17 @@
           "path": "/repos/{owner}/{repo}/code-scanning/default-setup"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
@@ -13866,7 +13959,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
       "path": "code-scanning repos view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13895,19 +13988,28 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codeql-variant-analysis-id",
         "--repo-name",
         "--repo-owner"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
       "path": "code-scanning sarifs view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13924,11 +14026,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--sarif-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
@@ -13999,7 +14110,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}",
       "path": "code-scanning variant-analyses view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -14016,11 +14127,20 @@
           "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codeql-variant-analysis-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Attach a configuration to repositories",
@@ -15666,7 +15786,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-security-configuration",
       "path": "code-security-configuration view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -15676,14 +15796,14 @@
           "path": "/repos/{owner}/{repo}/code-security-configuration"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codeowners/errors",
       "path": "codeowners errors view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -15700,8 +15820,8 @@
           "path": "/repos/{owner}/{repo}/codeowners/errors"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Get all codes of conduct",
@@ -16901,7 +17021,7 @@
       "summary": "Read /repos/{owner}/{repo}/codespaces/machines",
       "path": "codespaces machines view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16930,14 +17050,23 @@
           "path": "/repos/{owner}/{repo}/codespaces/machines"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/new",
       "path": "codespaces new view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16960,14 +17089,23 @@
           "path": "/repos/{owner}/{repo}/codespaces/new"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/permissions_check",
       "path": "codespaces permissions_check view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16990,18 +17128,27 @@
           "path": "/repos/{owner}/{repo}/codespaces/permissions_check"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--devcontainer-path",
         "--ref"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/public-key",
       "path": "codespaces public-key view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -17011,8 +17158,17 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Create a repository from an unpublished codespace",
@@ -17152,7 +17308,7 @@
       "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
       "path": "codespaces secrets view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -17169,11 +17325,20 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Manage access control for organization codespaces (deprecated by GitHub, still documented)",
@@ -17499,7 +17664,7 @@
       "summary": "Read /repos/{owner}/{repo}/collaborators/{username}/permission",
       "path": "collaborators permission view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -17516,8 +17681,8 @@
           "path": "/repos/{owner}/{repo}/collaborators/{username}/permission"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --username",
       "required_flags": [
         "--username"
       ]
@@ -17526,7 +17691,7 @@
       "summary": "Read /repos/{owner}/{repo}/collaborators/{username}",
       "path": "collaborators view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -17543,8 +17708,8 @@
           "path": "/repos/{owner}/{repo}/collaborators/{username}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --username",
       "required_flags": [
         "--username"
       ]
@@ -17676,7 +17841,7 @@
       "summary": "Read /repos/{owner}/{repo}/comments/{comment_id}",
       "path": "comments view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -17693,8 +17858,8 @@
           "path": "/repos/{owner}/{repo}/comments/{comment_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --comment-id",
       "required_flags": [
         "--comment-id"
       ]
@@ -17703,7 +17868,7 @@
       "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
       "path": "commits branches-where-head view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -17720,8 +17885,8 @@
           "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --commit-sha",
       "required_flags": [
         "--commit-sha"
       ]
@@ -17964,7 +18129,7 @@
       "summary": "Read /repos/{owner}/{repo}/community/profile",
       "path": "community profile view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -17974,8 +18139,16 @@
           "path": "/repos/{owner}/{repo}/community/profile"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/compare/{basehead}",
@@ -18236,7 +18409,7 @@
       "summary": "Read /repos/{owner}/{repo}/copilot/cloud-agent/configuration",
       "path": "copilot configuration view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -18246,8 +18419,17 @@
           "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot content exclusion rules for an organization",
@@ -20464,7 +20646,7 @@
       "summary": "Read /repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
       "path": "dependabot alerts view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20481,11 +20663,20 @@
           "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Create or update an organization secret",
@@ -20767,7 +20958,7 @@
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/public-key",
       "path": "dependabot public-key view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -20777,8 +20968,17 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Remove selected repository from an organization secret",
@@ -20897,7 +21097,7 @@
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
       "path": "dependabot secrets view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20914,11 +21114,20 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Set the default repository access level for Dependabot",
@@ -21124,7 +21333,7 @@
       "summary": "Read /repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
       "path": "dependency-graph compare view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -21147,8 +21356,8 @@
           "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --basehead",
       "required_flags": [
         "--basehead"
       ]
@@ -21367,7 +21576,7 @@
       "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
       "path": "deployments statuses view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -21390,8 +21599,8 @@
           "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --deployment-id, --status-id",
       "required_flags": [
         "--deployment-id",
         "--status-id"
@@ -21401,7 +21610,7 @@
       "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}",
       "path": "deployments view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -21418,8 +21627,8 @@
           "path": "/repos/{owner}/{repo}/deployments/{deployment_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --deployment-id",
       "required_flags": [
         "--deployment-id"
       ]
@@ -22442,7 +22651,7 @@
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
       "path": "environments deployment-branch-policies view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22465,8 +22674,8 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --branch-policy-id, --environment-name",
       "required_flags": [
         "--branch-policy-id",
         "--environment-name"
@@ -22545,7 +22754,7 @@
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
       "path": "environments deployment_protection_rules view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22562,8 +22771,8 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name",
       "required_flags": [
         "--environment-name"
       ]
@@ -22572,7 +22781,7 @@
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
       "path": "environments deployment_protection_rules view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22595,8 +22804,8 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name, --protection-rule-id",
       "required_flags": [
         "--environment-name",
         "--protection-rule-id"
@@ -22606,7 +22815,7 @@
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
       "path": "environments public-key view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22623,8 +22832,8 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name",
       "required_flags": [
         "--environment-name"
       ]
@@ -22660,7 +22869,7 @@
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
       "path": "environments secrets view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22683,8 +22892,8 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name, --secret-name",
       "required_flags": [
         "--environment-name",
         "--secret-name"
@@ -22721,7 +22930,7 @@
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
       "path": "environments variables view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22744,8 +22953,8 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name, --name",
       "required_flags": [
         "--environment-name",
         "--name"
@@ -22755,7 +22964,7 @@
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}",
       "path": "environments view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22772,8 +22981,8 @@
           "path": "/repos/{owner}/{repo}/environments/{environment_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --environment-name",
       "required_flags": [
         "--environment-name"
       ]
@@ -23464,7 +23673,7 @@
       "summary": "Read /repos/{owner}/{repo}/git/blobs/{file_sha}",
       "path": "git blobs view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -23481,8 +23690,8 @@
           "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --file-sha",
       "required_flags": [
         "--file-sha"
       ]
@@ -23550,7 +23759,7 @@
       "summary": "Read /repos/{owner}/{repo}/git/commits/{commit_sha}",
       "path": "git commits view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -23567,8 +23776,8 @@
           "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --commit-sha",
       "required_flags": [
         "--commit-sha"
       ]
@@ -23577,7 +23786,7 @@
       "summary": "Read /repos/{owner}/{repo}/git/matching-refs/{ref}",
       "path": "git matching-refs view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -23594,8 +23803,8 @@
           "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ref",
       "required_flags": [
         "--ref"
       ]
@@ -23604,7 +23813,7 @@
       "summary": "Read /repos/{owner}/{repo}/git/ref/{ref}",
       "path": "git ref view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -23621,11 +23830,18 @@
           "path": "/repos/{owner}/{repo}/git/ref/{ref}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--ref"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response/ref",
+          "equals": "refs/heads/main"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/git/tags",
@@ -23691,7 +23907,7 @@
       "summary": "Read /repos/{owner}/{repo}/git/tags/{tag_sha}",
       "path": "git tags view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -23708,8 +23924,8 @@
           "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --tag-sha",
       "required_flags": [
         "--tag-sha"
       ]
@@ -23752,7 +23968,7 @@
       "summary": "Read /repos/{owner}/{repo}/git/trees/{tree_sha}",
       "path": "git trees view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -23775,8 +23991,8 @@
           "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --tree-sha",
       "required_flags": [
         "--tree-sha"
       ]
@@ -32604,7 +32820,7 @@
       "summary": "Read /repos/{owner}/{repo}/hash-algorithm",
       "path": "hash-algorithm view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -32614,14 +32830,22 @@
           "path": "/repos/{owner}/{repo}/hash-algorithm"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/config",
       "path": "hooks config view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -32638,8 +32862,8 @@
           "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --hook-id",
       "required_flags": [
         "--hook-id"
       ]
@@ -32685,7 +32909,7 @@
       "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
       "path": "hooks deliveries view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -32708,8 +32932,8 @@
           "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --delivery-id, --hook-id",
       "required_flags": [
         "--delivery-id",
         "--hook-id"
@@ -32719,7 +32943,7 @@
       "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}",
       "path": "hooks view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -32736,8 +32960,8 @@
           "path": "/repos/{owner}/{repo}/hooks/{hook_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --hook-id",
       "required_flags": [
         "--hook-id"
       ]
@@ -33045,7 +33269,7 @@
       "summary": "Read /repos/{owner}/{repo}/immutable-releases",
       "path": "immutable-releases view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -33055,8 +33279,8 @@
           "path": "/repos/{owner}/{repo}/immutable-releases"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/import/authors/{author_id}",
@@ -33102,7 +33326,7 @@
       "summary": "Read /repos/{owner}/{repo}/import/authors",
       "path": "import authors view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -33119,8 +33343,8 @@
           "path": "/repos/{owner}/{repo}/import/authors"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/import",
@@ -33144,7 +33368,7 @@
       "summary": "Read /repos/{owner}/{repo}/import/large_files",
       "path": "import large_files view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -33154,8 +33378,8 @@
           "path": "/repos/{owner}/{repo}/import/large_files"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "PATCH /repos/{owner}/{repo}/import/lfs",
@@ -33300,7 +33524,7 @@
       "summary": "Read /repos/{owner}/{repo}/import",
       "path": "import view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -33310,14 +33534,14 @@
           "path": "/repos/{owner}/{repo}/import"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/installation",
       "path": "installation view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -33327,8 +33551,8 @@
           "path": "/repos/{owner}/{repo}/installation"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
@@ -33390,7 +33614,7 @@
       "summary": "Read /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
       "path": "interaction-limits bypass-list view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -33400,8 +33624,8 @@
           "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "DELETE /repos/{owner}/{repo}/interaction-limits",
@@ -33471,7 +33695,7 @@
       "summary": "Read /repos/{owner}/{repo}/interaction-limits",
       "path": "interaction-limits view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -33481,8 +33705,8 @@
           "path": "/repos/{owner}/{repo}/interaction-limits"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Get pull request creation cap for an org",
@@ -34369,7 +34593,7 @@
       "summary": "View issue details",
       "path": "issue view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -34386,8 +34610,8 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --issue-number",
       "required_flags": [
         "--issue-number"
       ]
@@ -34396,7 +34620,7 @@
       "summary": "Read /repos/{owner}/{repo}/issue-types",
       "path": "issue-types view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -34406,8 +34630,8 @@
           "path": "/repos/{owner}/{repo}/issue-types"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Approve an issue suggestion",
@@ -34448,7 +34672,7 @@
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
       "path": "issues assignees view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -34471,8 +34695,8 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --assignee, --issue-number",
       "required_flags": [
         "--assignee",
         "--issue-number"
@@ -34606,7 +34830,7 @@
       "summary": "Read /repos/{owner}/{repo}/issues/comments/{comment_id}",
       "path": "issues comments view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -34623,8 +34847,8 @@
           "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --comment-id",
       "required_flags": [
         "--comment-id"
       ]
@@ -34701,7 +34925,7 @@
       "summary": "Read /repos/{owner}/{repo}/issues/events/{event_id}",
       "path": "issues events view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -34718,8 +34942,8 @@
           "path": "/repos/{owner}/{repo}/issues/events/{event_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --event-id",
       "required_flags": [
         "--event-id"
       ]
@@ -35028,7 +35252,7 @@
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/parent",
       "path": "issues parent view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -35045,8 +35269,8 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --issue-number",
       "required_flags": [
         "--issue-number"
       ]
@@ -35540,7 +35764,7 @@
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}",
       "path": "issues view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -35557,8 +35781,8 @@
           "path": "/repos/{owner}/{repo}/issues/{issue_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --issue-number",
       "required_flags": [
         "--issue-number"
       ]
@@ -35567,7 +35791,7 @@
       "summary": "Read /repos/{owner}/{repo}/keys/{key_id}",
       "path": "keys view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -35584,8 +35808,8 @@
           "path": "/repos/{owner}/{repo}/keys/{key_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --key-id",
       "required_flags": [
         "--key-id"
       ]
@@ -35747,7 +35971,7 @@
       "summary": "Read /repos/{owner}/{repo}/labels/{name}",
       "path": "labels view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -35764,8 +35988,8 @@
           "path": "/repos/{owner}/{repo}/labels/{name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
       "required_flags": [
         "--name"
       ]
@@ -35774,7 +35998,7 @@
       "summary": "Read /repos/{owner}/{repo}/license",
       "path": "license view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -35791,8 +36015,8 @@
           "path": "/repos/{owner}/{repo}/license"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Get a license",
@@ -36585,7 +36809,7 @@
       "summary": "Read /repos/{owner}/{repo}/milestones/{milestone_number}",
       "path": "milestones view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -36602,8 +36826,8 @@
           "path": "/repos/{owner}/{repo}/milestones/{milestone_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --milestone-number",
       "required_flags": [
         "--milestone-number"
       ]
@@ -43251,7 +43475,7 @@
       "summary": "Read /repos/{owner}/{repo}/pages/builds/{build_id}",
       "path": "pages builds view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -43268,8 +43492,8 @@
           "path": "/repos/{owner}/{repo}/pages/builds/{build_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --build-id",
       "required_flags": [
         "--build-id"
       ]
@@ -43412,7 +43636,7 @@
       "summary": "Read /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
       "path": "pages deployments view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -43429,8 +43653,8 @@
           "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pages-deployment-id",
       "required_flags": [
         "--pages-deployment-id"
       ]
@@ -43439,7 +43663,7 @@
       "summary": "Read /repos/{owner}/{repo}/pages/health",
       "path": "pages health view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -43449,14 +43673,14 @@
           "path": "/repos/{owner}/{repo}/pages/health"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/pages/builds/latest",
       "path": "pages latest view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -43466,8 +43690,8 @@
           "path": "/repos/{owner}/{repo}/pages/builds/latest"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "PUT /repos/{owner}/{repo}/pages",
@@ -43520,7 +43744,7 @@
       "summary": "Read /repos/{owner}/{repo}/pages",
       "path": "pages view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -43530,8 +43754,8 @@
           "path": "/repos/{owner}/{repo}/pages"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Check out a pull request locally",
@@ -44203,7 +44427,7 @@
       "summary": "View pull request details",
       "path": "pr view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -44220,8 +44444,8 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number",
       "required_flags": [
         "--pull-number"
       ]
@@ -44805,7 +45029,7 @@
       "summary": "Read /repos/{owner}/{repo}/private-vulnerability-reporting",
       "path": "private-vulnerability-reporting view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -44815,8 +45039,8 @@
           "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Create a project",
@@ -45851,7 +46075,7 @@
       "summary": "Read /repos/{owner}/{repo}/properties/values",
       "path": "properties values view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -45861,8 +46085,8 @@
           "path": "/repos/{owner}/{repo}/properties/values"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Add pull requests to a pull request stack",
@@ -46131,7 +46355,7 @@
       "summary": "Read /repos/{owner}/{repo}/pulls/comments/{comment_id}",
       "path": "pulls comments view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -46148,8 +46372,8 @@
           "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --comment-id",
       "required_flags": [
         "--comment-id"
       ]
@@ -46299,7 +46523,7 @@
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/merge",
       "path": "pulls merge view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -46316,8 +46540,8 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number",
       "required_flags": [
         "--pull-number"
       ]
@@ -46600,7 +46824,7 @@
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
       "path": "pulls requested_reviewers view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -46617,8 +46841,8 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number",
       "required_flags": [
         "--pull-number"
       ]
@@ -46731,7 +46955,7 @@
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
       "path": "pulls reviews view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -46754,8 +46978,8 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number, --review-id",
       "required_flags": [
         "--pull-number",
         "--review-id"
@@ -46765,7 +46989,7 @@
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}",
       "path": "pulls view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -46782,8 +47006,8 @@
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --pull-number",
       "required_flags": [
         "--pull-number"
       ]
@@ -46809,7 +47033,7 @@
       "summary": "Read /repos/{owner}/{repo}/readme",
       "path": "readme view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -46826,14 +47050,25 @@
           "path": "/repos/{owner}/{repo}/readme"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response/name",
+          "equals": "README.md"
+        },
+        {
+          "json_pointer": "/response/type",
+          "equals": "file"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/readme/{dir}",
       "path": "readme view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -46856,8 +47091,8 @@
           "path": "/repos/{owner}/{repo}/readme/{dir}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --dir",
       "required_flags": [
         "--dir"
       ]
@@ -47158,7 +47393,7 @@
       "summary": "View a release",
       "path": "release view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -47175,8 +47410,8 @@
           "path": "/repos/{owner}/{repo}/releases/{release_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --release-id",
       "required_flags": [
         "--release-id"
       ]
@@ -47233,7 +47468,7 @@
       "summary": "Read /repos/{owner}/{repo}/releases/assets/{asset_id}",
       "path": "releases assets view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -47250,8 +47485,8 @@
           "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --asset-id",
       "required_flags": [
         "--asset-id"
       ]
@@ -47333,7 +47568,7 @@
       "summary": "Read /repos/{owner}/{repo}/releases/latest",
       "path": "releases latest view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -47343,8 +47578,8 @@
           "path": "/repos/{owner}/{repo}/releases/latest"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/reactions",
@@ -47469,7 +47704,7 @@
       "summary": "Read /repos/{owner}/{repo}/releases/tags/{tag}",
       "path": "releases tags view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -47486,8 +47721,8 @@
           "path": "/repos/{owner}/{repo}/releases/tags/{tag}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --tag",
       "required_flags": [
         "--tag"
       ]
@@ -47496,7 +47731,7 @@
       "summary": "Read /repos/{owner}/{repo}/releases/{release_id}",
       "path": "releases view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -47513,8 +47748,8 @@
           "path": "/repos/{owner}/{repo}/releases/{release_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --release-id",
       "required_flags": [
         "--release-id"
       ]
@@ -49962,7 +50197,7 @@
       "summary": "View repository ruleset details",
       "path": "ruleset view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -49985,8 +50220,8 @@
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ruleset-id",
       "required_flags": [
         "--ruleset-id"
       ]
@@ -50022,7 +50257,7 @@
       "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
       "path": "rulesets history view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -50045,8 +50280,8 @@
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ruleset-id, --version-id",
       "required_flags": [
         "--ruleset-id",
         "--version-id"
@@ -50121,7 +50356,7 @@
       "summary": "Read /repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}",
       "path": "rulesets rule-suites view-2",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -50138,8 +50373,8 @@
           "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --rule-suite-id",
       "required_flags": [
         "--rule-suite-id"
       ]
@@ -50148,7 +50383,7 @@
       "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}",
       "path": "rulesets view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -50171,8 +50406,8 @@
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ruleset-id",
       "required_flags": [
         "--ruleset-id"
       ]
@@ -50411,7 +50646,7 @@
       "summary": "View workflow run details",
       "path": "run view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -50434,8 +50669,8 @@
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --run-id",
       "required_flags": [
         "--run-id"
       ]
@@ -51116,7 +51351,7 @@
       "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
       "path": "secret-scanning alerts view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -51139,11 +51374,20 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Bulk create organization custom patterns",
@@ -51460,7 +51704,7 @@
       "summary": "Read /repos/{owner}/{repo}/secret-scanning/scan-history",
       "path": "secret-scanning scan-history view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -51470,8 +51714,17 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/scan-history"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Update organization pattern configurations",
@@ -51910,7 +52163,7 @@
       "summary": "Read /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
       "path": "security-advisories view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -51927,8 +52180,8 @@
           "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --ghsa-id",
       "required_flags": [
         "--ghsa-id"
       ]
@@ -51966,7 +52219,7 @@
       "summary": "Read /repos/{owner}/{repo}/stats/code_frequency",
       "path": "stats code_frequency view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -51976,14 +52229,14 @@
           "path": "/repos/{owner}/{repo}/stats/code_frequency"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/stats/commit_activity",
       "path": "stats commit_activity view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -51993,14 +52246,14 @@
           "path": "/repos/{owner}/{repo}/stats/commit_activity"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/stats/contributors",
       "path": "stats contributors view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -52010,14 +52263,14 @@
           "path": "/repos/{owner}/{repo}/stats/contributors"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/stats/participation",
       "path": "stats participation view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -52027,14 +52280,14 @@
           "path": "/repos/{owner}/{repo}/stats/participation"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/stats/punch_card",
       "path": "stats punch_card view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -52044,8 +52297,8 @@
           "path": "/repos/{owner}/{repo}/stats/punch_card"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Print GitHub status",
@@ -52176,7 +52429,7 @@
       "summary": "Read /repos/{owner}/{repo}/subscription",
       "path": "subscription view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -52186,8 +52439,8 @@
           "path": "/repos/{owner}/{repo}/subscription"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Add team member (Legacy) (deprecated by GitHub, still documented)",
@@ -53465,7 +53718,7 @@
       "summary": "Read /repos/{owner}/{repo}/traffic/clones",
       "path": "traffic clones view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -53486,14 +53739,14 @@
           "path": "/repos/{owner}/{repo}/traffic/clones"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/traffic/popular/paths",
       "path": "traffic paths view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -53503,14 +53756,14 @@
           "path": "/repos/{owner}/{repo}/traffic/popular/paths"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/traffic/popular/referrers",
       "path": "traffic referrers view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -53520,14 +53773,14 @@
           "path": "/repos/{owner}/{repo}/traffic/popular/referrers"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/traffic/views",
       "path": "traffic views view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -53548,8 +53801,8 @@
           "path": "/repos/{owner}/{repo}/traffic/views"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/transfer",
@@ -55543,7 +55796,7 @@
       "summary": "Get a repository variable",
       "path": "variable get",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -55560,8 +55813,8 @@
           "path": "/repos/{owner}/{repo}/actions/variables/{name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
       "required_flags": [
         "--name"
       ]
@@ -55753,7 +56006,7 @@
       "summary": "Read /repos/{owner}/{repo}/vulnerability-alerts",
       "path": "vulnerability-alerts view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -55763,8 +56016,8 @@
           "path": "/repos/{owner}/{repo}/vulnerability-alerts"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
@@ -56034,7 +56287,7 @@
       "summary": "View workflow details",
       "path": "workflow view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -56051,8 +56304,8 @@
           "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --workflow-id",
       "required_flags": [
         "--workflow-id"
       ]
@@ -56107,5 +56360,11 @@
     }
   ],
   "product_defects": [],
-  "provider_refusals": []
+  "provider_refusals": [
+    {
+      "command": "actions fork-pr-contributor-approval view",
+      "provider_status": 422,
+      "reason": "GitHub returned HTTP 422 because this setting does not apply to the disposable certification repository"
+    }
+  ]
 }
