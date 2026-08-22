@@ -73,6 +73,7 @@
 - Working branch: `fm/cli-foundation-release-candidate-r1`, created at `041d2ec7ed986aea15d2d3d64f2076b484c3f999`.
 - Task: Compose exactly core `041d2ec7ed986aea15d2d3d64f2076b484c3f999`, reverse action `487ec14e01c90f31a71b1cb5de060b8c66a203e9`, and public output `7fdef00d7e758cb4a3c413a16f8452ee0615f0d5` using ancestry-preserving merges; reproduce and close only FND-B09 with an evidence-only schema-3 commit; record FND-W01 without speculative remediation.
 - Verification: Exact ref/ancestry and remote read-back proofs; reverse and public conflict-adjacent test cohorts; all prescribed generation, lint, build, vet, race, documentation, certification, and strict evidence gates; PR API base/head read-back.
+- RC-07 correction: Preserve the pre-existing 120 GitHub direct-read certification candidates (23 manual plus 97 generated). At exact evidence head `596c90c`, the source-projection conservative downgrade changed 77 declared generated candidates to `partial`. Restore only the declaration-generated candidate projection and prove it through the fresh binary with a fixture transport; do not lower expectations, add a connector family, restore unrelated catalog coverage, or make a live-certification claim. The broader source-surface inventory hardening is a separately tracked follow-up.
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |

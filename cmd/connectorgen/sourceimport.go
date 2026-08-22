@@ -6858,6 +6858,8 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
 		return 1
 	}
+	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	sourceProjectionRestoreSourceBoundDirectReadPathFlags(&surface, result)
 	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
 	raw, err := marshalSourceImportResult(result)
 	if err != nil {

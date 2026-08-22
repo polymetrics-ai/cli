@@ -97,10 +97,19 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 			return sourceProjectionStats{}, fmt.Errorf("api_surface.json: %w", err)
 		}
 	}
+	spec, err := sourceProjectionBundleSpec(bundleDir)
+	if err != nil {
+		return sourceProjectionStats{}, err
+	}
+	certifiedReadCommands, err := sourceProjectionCertifiedReadCommandPaths(bundleDir)
+	if err != nil {
+		return sourceProjectionStats{}, err
+	}
 	blockedReads := sourceProjectionBlockedReadSources(result)
 	reachableReads := sourceProjectionReachableReadSources(result)
-	stats := sourceProjectionStats{CLI: sourceProjectionDowngradeUnreachableReadCommands(cli.root, blockedReads)}
-	stats.CLI += sourceProjectionRestoreReachableReadCommands(cli.root, blockedReads, reachableReads)
+	stats := sourceProjectionStats{CLI: sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli.root, spec, result, certifiedReadCommands)}
+	stats.CLI += sourceProjectionDowngradeUnreachableReadCommands(cli.root, blockedReads)
+	stats.CLI += sourceProjectionRestoreReachableReadCommands(cli.root, blockedReads, reachableReads, certifiedReadCommands)
 	if api.root != nil {
 		stats.Surface = sourceProjectionBlockUnreachableReadSurfaceEndpoints(api.root, blockedReads)
 		stats.Surface += sourceProjectionRestoreReachableReadSurfaceEndpoints(api.root, cli.root, blockedReads, reachableReads)
@@ -227,6 +236,49 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	return stats, nil
 }
 
+func sourceProjectionBundleSpec(bundleDir string) (*engine.Schema, error) {
+	raw, err := os.ReadFile(filepath.Join(bundleDir, "spec.json"))
+	if os.IsNotExist(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("spec.json: %w", err)
+	}
+	spec, err := engine.CompileSchema(json.RawMessage(raw))
+	if err != nil {
+		return nil, fmt.Errorf("spec.json: %w", err)
+	}
+	return spec, nil
+}
+
+// sourceProjectionCertifiedReadCommandPaths exposes only the existing,
+// connector-owned direct-read certification cohort. It is an explicit
+// declaration of executable fixture inputs, not an inferred broad promotion
+// of every legacy direct-read command.
+func sourceProjectionCertifiedReadCommandPaths(bundleDir string) (map[string]bool, error) {
+	raw, err := os.ReadFile(filepath.Join(bundleDir, "certification.json"))
+	if os.IsNotExist(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("certification.json: %w", err)
+	}
+	var certification engine.CertificationSpec
+	if err := json.Unmarshal(raw, &certification); err != nil {
+		return nil, fmt.Errorf("certification.json: %w", err)
+	}
+	paths := make(map[string]bool)
+	if certification.DirectReadGeneration == nil {
+		return paths, nil
+	}
+	for _, cohort := range certification.DirectReadGeneration.Cohorts {
+		for _, command := range cohort.Commands {
+			paths[command] = true
+		}
+	}
+	return paths, nil
+}
+
 // sourceProjectionBlockedReadSources indexes source operations which are
 // explicitly blocked because no field-complete declaration-owned read route
 // exists. It is source-derived and connector-neutral so the CLI and endpoint
@@ -234,7 +286,7 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 func sourceProjectionBlockedReadSources(result sourceImportResult) map[string]sourceOperationDescriptor {
 	blocked := map[string]sourceOperationDescriptor{}
 	for _, operation := range result.Operations {
-		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || !sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
+		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || !sourceProjectionReadHasBlockingGap(operation) {
 			continue
 		}
 		blocked[sourceProjectionEndpointKey(operation.Method, operation.Path)] = operation
@@ -245,12 +297,79 @@ func sourceProjectionBlockedReadSources(result sourceImportResult) map[string]so
 func sourceProjectionReachableReadSources(result sourceImportResult) map[string]sourceOperationDescriptor {
 	reachable := map[string]sourceOperationDescriptor{}
 	for _, operation := range result.Operations {
-		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
+		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || sourceProjectionReadHasBlockingGap(operation) {
 			continue
 		}
 		reachable[operation.SourceID] = operation
 	}
 	return reachable
+}
+
+// sourceProjectionReadHasBlockingGap retains every source gap for source
+// validation, but a schema gap on an omitted optional input cannot make the
+// zero-filter direct-read request unexecutable. The command surface does not
+// invent an input for that gap, and the direct-read runner sends only declared
+// caller values. Required inputs and all other source gaps remain blocking.
+func sourceProjectionReadHasBlockingGap(operation sourceOperationDescriptor) bool {
+	for _, gap := range operation.Runtime.Gaps {
+		if sourceProjectionOptionalAmbiguousParameterGap(operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(operation, gap) {
+			continue
+		}
+		if sourceProjectionHasBlockingGap([]sourceContractGap{gap}) {
+			return true
+		}
+	}
+	return false
+}
+
+// sourceProjectionNormalizeNonBlockingReadGaps removes only a typed source
+// gap on an omitted optional read input. Keeping it would make a descriptor
+// claim the endpoint is unavailable despite the declared zero-input request
+// being executable; required input and every other gap remain source-visible.
+func sourceProjectionNormalizeNonBlockingReadGaps(result *sourceImportResult) {
+	if result == nil {
+		return
+	}
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || len(operation.Runtime.Gaps) == 0 {
+			continue
+		}
+		gaps := operation.Runtime.Gaps[:0]
+		for _, gap := range operation.Runtime.Gaps {
+			if sourceProjectionOptionalAmbiguousParameterGap(*operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(*operation, gap) {
+				continue
+			}
+			gaps = append(gaps, gap)
+		}
+		operation.Runtime.Gaps = gaps
+		operation.Runtime.MergeBlocked = len(gaps) > 0
+	}
+}
+
+func sourceProjectionOmittedOptionalRequestBodySchemaGap(operation sourceOperationDescriptor, gap sourceContractGap) bool {
+	return gap.Foundation == "cli-request-schema-foundation-r1" &&
+		gap.Location == "request body" &&
+		operation.Request.Body != nil &&
+		!operation.Request.Body.Required
+}
+
+func sourceProjectionOptionalAmbiguousParameterGap(operation sourceOperationDescriptor, gap sourceContractGap) bool {
+	if gap.Foundation != "cli-request-schema-foundation-r1" || !strings.HasPrefix(gap.Location, "parameter ") || !strings.Contains(gap.Reason, "ambiguous request schema uses ") {
+		return false
+	}
+	name := strings.TrimPrefix(gap.Location, "parameter ")
+	if name == "" {
+		return false
+	}
+	for _, parameters := range [][]sourceParameterDescriptor{operation.Request.Path, operation.Request.Query, operation.Request.Header} {
+		for _, parameter := range parameters {
+			if parameter.Name == name {
+				return !parameter.Required
+			}
+		}
+	}
+	return false
 }
 
 func sourceProjectionBlockedReadCommandNote(sourceID string) string {
@@ -304,7 +423,7 @@ func sourceProjectionDowngradeUnreachableReadCommands(cli *orderedObject, blocke
 	return changed
 }
 
-func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked map[string]sourceOperationDescriptor, reachable map[string]sourceOperationDescriptor) int {
+func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked map[string]sourceOperationDescriptor, reachable map[string]sourceOperationDescriptor, certifiedReadCommands map[string]bool) int {
 	changed := 0
 	for _, raw := range arrayField(cli, "commands") {
 		command, ok := raw.(*orderedObject)
@@ -313,6 +432,9 @@ func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked ma
 		}
 		sourceID, ok := sourceProjectionBlockedReadCommandSourceID(command)
 		if !ok {
+			continue
+		}
+		if !certifiedReadCommands[stringField(command, "path")] {
 			continue
 		}
 		source, found := reachable[sourceID]
@@ -324,6 +446,89 @@ func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked ma
 		changed++
 	}
 	return changed
+}
+
+func sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli *orderedObject, spec *engine.Schema, result sourceImportResult, certifiedReadCommands map[string]bool) int {
+	operations := sourceProjectionOperationsByID(result)
+	changed := 0
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "direct_read" || stringField(command, "availability") != "partial" || len(arrayField(command, "api_surface")) != 1 {
+			continue
+		}
+		sourceID, ok := sourceProjectionBlockedReadCommandSourceID(command)
+		if !ok {
+			continue
+		}
+		if !certifiedReadCommands[stringField(command, "path")] {
+			continue
+		}
+		source, found := operations[sourceID]
+		if !found || source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, source.Path)) {
+			continue
+		}
+		flags := sourceProjectionOrderedCommandFlags(command)
+		missing := sourceProjectionMissingRequiredDirectReadPathParameters(spec, source, flags)
+		if len(missing) == 0 {
+			continue
+		}
+		if setOrderedIfDifferent(command, "flags", sourceProjectionInsertDirectReadPathFlagObjects(arrayField(command, "flags"), source, missing)) {
+			changed++
+		}
+	}
+	return changed
+}
+
+func sourceProjectionOrderedCommandFlags(command *orderedObject) []engine.CLIFlag {
+	flags := make([]engine.CLIFlag, 0, len(arrayField(command, "flags")))
+	for _, raw := range arrayField(command, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		flags = append(flags, engine.CLIFlag{MapsTo: stringField(flag, "maps_to")})
+	}
+	return flags
+}
+
+func sourceProjectionInsertDirectReadPathFlagObjects(flags []any, source sourceOperationDescriptor, missing []sourceParameterDescriptor) []any {
+	missingByIndex := sourceProjectionMissingPathParametersByIndex(source, missing)
+	out := make([]any, 0, len(flags)+len(missing))
+	for _, raw := range flags {
+		mapsTo := ""
+		if flag, ok := raw.(*orderedObject); ok {
+			mapsTo = stringField(flag, "maps_to")
+		}
+		for _, parameter := range sourceProjectionMissingPathParametersBefore(source, missingByIndex, mapsTo) {
+			out = append(out, sourceProjectionOrderedDirectReadPathFlag(parameter))
+		}
+		out = append(out, raw)
+	}
+	for _, parameter := range sourceProjectionRemainingMissingPathParameters(source, missingByIndex) {
+		out = append(out, sourceProjectionOrderedDirectReadPathFlag(parameter))
+	}
+	return out
+}
+
+func sourceProjectionOrderedDirectReadPathFlag(parameter sourceParameterDescriptor) *orderedObject {
+	flag := sourceProjectionDirectReadPathFlag(parameter)
+	object := newOrderedObject()
+	object.set("name", flag.Name)
+	object.set("type", flag.Type)
+	object.set("summary", flag.Summary)
+	if len(flag.Values) > 0 {
+		values := make([]any, len(flag.Values))
+		for index := range flag.Values {
+			values[index] = flag.Values[index]
+		}
+		object.set("values", values)
+	}
+	object.set("maps_to", flag.MapsTo)
+	object.set("required", true)
+	if flag.MaxBytes > 0 {
+		object.set("max_bytes", json.Number(strconv.Itoa(flag.MaxBytes)))
+	}
+	return object
 }
 
 func sourceProjectionBlockedReadCommandSourceID(command *orderedObject) (string, bool) {
@@ -1672,7 +1877,7 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 			continue
 		}
 		if !sourceProjectionMutationMethod(operation.Method) {
-			if sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
+			if sourceProjectionReadHasBlockingGap(operation) {
 				if sourceGapDirectOperationIsImplementedIncompletely(bundle, operation) {
 					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "implemented source operation retains an unresolved source-bound gap: "+operation.SourceID))
 				}
@@ -1724,15 +1929,11 @@ func sourceRESTOperationIsReachable(bundle engine.Bundle, source sourceOperation
 func sourceRESTOperationIsDeclaredReachable(bundle engine.Bundle, source sourceOperationDescriptor, allowSourceBoundPartial bool) bool {
 	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
 	for _, operation := range bundle.Operations {
-		if operation.REST == nil || sourceProjectionEndpointKey(operation.REST.Method, operation.REST.Path) != endpoint {
-			continue
-		}
-		flags, implemented := sourceProjectionOperationFlags(bundle, operation.ID, source.SourceID, allowSourceBoundPartial)
-		if !implemented {
-			continue
-		}
-		if sourceRESTOperationCoversSource(bundle, operation.REST, source, flags) {
-			return true
+		if operation.REST != nil && sourceProjectionEndpointKey(operation.REST.Method, operation.REST.Path) == endpoint {
+			flags, implemented := sourceProjectionOperationFlags(bundle, operation.ID, source.SourceID, allowSourceBoundPartial)
+			if implemented && sourceRESTOperationCoversSource(bundle, operation.REST, source, flags) {
+				return true
+			}
 		}
 	}
 	for _, stream := range bundle.Streams {
@@ -1744,7 +1945,220 @@ func sourceRESTOperationIsDeclaredReachable(bundle engine.Bundle, source sourceO
 			return true
 		}
 	}
+	if sourceProjectionDeclaredDirectRead(bundle, source, allowSourceBoundPartial) {
+		return true
+	}
 	return false
+}
+
+// sourceProjectionDeclaredDirectRead recognizes an existing closed direct-read
+// route that binds exactly one locked source endpoint. Older bundles expressed
+// those routes directly through cli_surface/api_surface rather than an
+// operations.json entry; their declared config path fields and command flags
+// are still the complete request contract. During projection, a route the
+// projection itself marked partial may be re-evaluated only when its exact
+// source-bound marker is present.
+func sourceProjectionDeclaredDirectRead(bundle engine.Bundle, source sourceOperationDescriptor, allowSourceBoundPartial bool) bool {
+	if bundle.CLISurface == nil {
+		return false
+	}
+	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Intent != "direct_read" || len(command.APISurface) != 1 || !sourceProjectionCommandHasEndpointRef(command, endpoint) {
+			continue
+		}
+		if !sourceProjectionReadCandidateCommandDeclared(bundle, command.Path) {
+			continue
+		}
+		if command.Availability != "implemented" && (!allowSourceBoundPartial || command.Availability != "partial" || !sourceProjectionCommandIsSourceBoundPartial(command, source.SourceID)) {
+			continue
+		}
+		covered := sourceProjectionDeclaredConfigPathFields(bundle.Spec, source.Path)
+		for _, flag := range command.Flags {
+			covered[flag.MapsTo] = true
+		}
+		if sourceRequiredCallerFieldsCovered(source, covered) {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceProjectionReadCandidateCommandDeclared(bundle engine.Bundle, path string) bool {
+	if bundle.Certification == nil || bundle.Certification.DirectReadGeneration == nil {
+		return false
+	}
+	for _, cohort := range bundle.Certification.DirectReadGeneration.Cohorts {
+		for _, command := range cohort.Commands {
+			if command == path {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func sourceProjectionCommandHasEndpointRef(command engine.CLICommand, endpoint string) bool {
+	for _, surface := range command.APISurface {
+		if sourceProjectionEndpointKey(surface.Method, surface.Path) == endpoint {
+			return true
+		}
+	}
+	return false
+}
+
+// sourceProjectionRestoreSourceBoundDirectReadPathFlags restores only a
+// required path input on a legacy direct-read route which this projection
+// previously downgraded for the exact locked source operation. It preserves
+// the closed route: config-bound path values and already-declared command
+// flags remain authoritative, optional provider filters stay optional, and no
+// new command or endpoint mapping is introduced.
+func sourceProjectionRestoreSourceBoundDirectReadPathFlags(bundle *engine.Bundle, result sourceImportResult) int {
+	if bundle == nil || bundle.CLISurface == nil {
+		return 0
+	}
+	operations := sourceProjectionOperationsByID(result)
+	changed := 0
+	for index := range bundle.CLISurface.Commands {
+		command := &bundle.CLISurface.Commands[index]
+		sourceID, ok := sourceProjectionEngineSourceBoundDirectReadID(*command)
+		if !ok || len(command.APISurface) != 1 {
+			continue
+		}
+		if !sourceProjectionReadCandidateCommandDeclared(*bundle, command.Path) {
+			continue
+		}
+		source, found := operations[sourceID]
+		if !found || source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || !sourceProjectionCommandHasEndpointRef(*command, sourceProjectionEndpointKey(source.Method, source.Path)) {
+			continue
+		}
+		missing := sourceProjectionMissingRequiredDirectReadPathParameters(bundle.Spec, source, command.Flags)
+		if len(missing) == 0 {
+			continue
+		}
+		command.Flags = sourceProjectionInsertDirectReadPathFlags(command.Flags, source, missing)
+		changed++
+	}
+	return changed
+}
+
+func sourceProjectionEngineSourceBoundDirectReadID(command engine.CLICommand) (string, bool) {
+	if command.Intent != "direct_read" || command.Availability != "partial" {
+		return "", false
+	}
+	const prefix = "Blocked: locked source operation "
+	const suffix = " has no declaration-owned executable stream, direct-read, binary, or status route."
+	if !strings.HasPrefix(command.Notes, prefix) || !strings.HasSuffix(command.Notes, suffix) {
+		return "", false
+	}
+	sourceID := strings.TrimSuffix(strings.TrimPrefix(command.Notes, prefix), suffix)
+	if sourceID == "" || command.Notes != sourceProjectionBlockedReadCommandNote(sourceID) {
+		return "", false
+	}
+	return sourceID, true
+}
+
+func sourceProjectionOperationsByID(result sourceImportResult) map[string]sourceOperationDescriptor {
+	operations := make(map[string]sourceOperationDescriptor, len(result.Operations))
+	for _, operation := range result.Operations {
+		if operation.SourceID != "" {
+			operations[operation.SourceID] = operation
+		}
+	}
+	return operations
+}
+
+func sourceProjectionMissingRequiredDirectReadPathParameters(spec *engine.Schema, source sourceOperationDescriptor, flags []engine.CLIFlag) []sourceParameterDescriptor {
+	covered := sourceProjectionDeclaredConfigPathFields(spec, source.Path)
+	for _, flag := range flags {
+		covered[flag.MapsTo] = true
+	}
+	missing := make([]sourceParameterDescriptor, 0, len(source.Request.Path))
+	for _, parameter := range source.Request.Path {
+		if parameter.Required && !covered["path."+parameter.Name] {
+			missing = append(missing, parameter)
+		}
+	}
+	return missing
+}
+
+func sourceProjectionInsertDirectReadPathFlags(flags []engine.CLIFlag, source sourceOperationDescriptor, missing []sourceParameterDescriptor) []engine.CLIFlag {
+	missingByIndex := sourceProjectionMissingPathParametersByIndex(source, missing)
+	out := make([]engine.CLIFlag, 0, len(flags)+len(missing))
+	for _, flag := range flags {
+		for _, parameter := range sourceProjectionMissingPathParametersBefore(source, missingByIndex, flag.MapsTo) {
+			out = append(out, sourceProjectionDirectReadPathFlag(parameter))
+		}
+		out = append(out, flag)
+	}
+	for _, parameter := range sourceProjectionRemainingMissingPathParameters(source, missingByIndex) {
+		out = append(out, sourceProjectionDirectReadPathFlag(parameter))
+	}
+	return out
+}
+
+func sourceProjectionMissingPathParametersByIndex(source sourceOperationDescriptor, missing []sourceParameterDescriptor) map[int]sourceParameterDescriptor {
+	missingByName := make(map[string]bool, len(missing))
+	for _, parameter := range missing {
+		missingByName[parameter.Name] = true
+	}
+	missingByIndex := make(map[int]sourceParameterDescriptor, len(missing))
+	for index, parameter := range source.Request.Path {
+		if missingByName[parameter.Name] {
+			missingByIndex[index] = parameter
+		}
+	}
+	return missingByIndex
+}
+
+func sourceProjectionMissingPathParametersBefore(source sourceOperationDescriptor, missing map[int]sourceParameterDescriptor, mapsTo string) []sourceParameterDescriptor {
+	position := len(source.Request.Path)
+	for index, parameter := range source.Request.Path {
+		if mapsTo == "path."+parameter.Name {
+			position = index
+			break
+		}
+	}
+	return sourceProjectionTakeMissingPathParametersBefore(missing, position)
+}
+
+func sourceProjectionRemainingMissingPathParameters(source sourceOperationDescriptor, missing map[int]sourceParameterDescriptor) []sourceParameterDescriptor {
+	return sourceProjectionTakeMissingPathParametersBefore(missing, len(source.Request.Path))
+}
+
+func sourceProjectionTakeMissingPathParametersBefore(missing map[int]sourceParameterDescriptor, position int) []sourceParameterDescriptor {
+	parameters := make([]sourceParameterDescriptor, 0, len(missing))
+	for index := 0; index < position; index++ {
+		parameter, found := missing[index]
+		if !found {
+			continue
+		}
+		parameters = append(parameters, parameter)
+		delete(missing, index)
+	}
+	return parameters
+}
+
+func sourceProjectionDirectReadPathFlag(parameter sourceParameterDescriptor) engine.CLIFlag {
+	flagType := sourceProjectionFlagType(parameter.Schema)
+	flag := engine.CLIFlag{
+		Name:     strings.ReplaceAll(parameter.Name, "_", "-"),
+		Type:     flagType,
+		Summary:  "The " + parameter.Name + " path parameter.",
+		MapsTo:   "path." + parameter.Name,
+		Required: true,
+	}
+	if schema, ok := parameter.Schema.(map[string]any); ok {
+		for _, value := range sourceAnySlice(schema["enum"]) {
+			if name, ok := value.(string); ok {
+				flag.Values = append(flag.Values, name)
+			}
+		}
+	}
+	if maxBytes := sourceProjectionFlagMaxBytes(parameter.Schema, flagType); maxBytes > 0 {
+		flag.MaxBytes = int(maxBytes)
+	}
+	return flag
 }
 
 func sourceGraphQLOperationIsReachable(bundle engine.Bundle, source sourceOperationDescriptor) bool {
@@ -1854,7 +2268,8 @@ func sourceProjectionAnnotateUnreachableReadGaps(bundle engine.Bundle, result *s
 	}
 	for index := range result.Operations {
 		operation := &result.Operations[index]
-		if len(operation.Runtime.Gaps) > 0 || (operation.Protocol != "graphql" && sourceProjectionMutationMethod(operation.Method)) {
+		if (operation.Protocol == "graphql" && len(operation.Runtime.Gaps) > 0) ||
+			(operation.Protocol != "graphql" && (sourceProjectionMutationMethod(operation.Method) || sourceProjectionReadHasBlockingGap(*operation))) {
 			continue
 		}
 		reachable := false
@@ -1921,6 +2336,14 @@ func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundl
 				return err
 			}
 			bundle.CLISurface = &value
+			return nil
+		}},
+		{path: "certification.json", decode: func(raw []byte) error {
+			var value engine.CertificationSpec
+			if err := json.Unmarshal(raw, &value); err != nil {
+				return err
+			}
+			bundle.Certification = &value
 			return nil
 		}},
 	} {
@@ -2007,6 +2430,38 @@ func sourceCallerFieldsCovered(source sourceOperationDescriptor, covered map[str
 					}
 				}
 			}
+		}
+	}
+	return true
+}
+
+// sourceRequiredCallerFieldsCovered keeps legacy direct-read routes usable
+// with provider defaults for optional filters and pagination while still
+// requiring every source-required path, query, header, and required body
+// field to have a declaration-owned binding. It is deliberately narrower than
+// sourceCallerFieldsCovered: source projection uses that stricter predicate
+// when producing new operation and action declarations.
+func sourceRequiredCallerFieldsCovered(source sourceOperationDescriptor, covered map[string]bool) bool {
+	for _, group := range []struct {
+		prefix string
+		items  []sourceParameterDescriptor
+	}{{"path.", source.Request.Path}, {"query.", source.Request.Query}, {"header.", source.Request.Header}} {
+		for _, parameter := range group.items {
+			if parameter.Required && !covered[group.prefix+parameter.Name] {
+				return false
+			}
+		}
+	}
+	if source.Request.Body == nil || !source.Request.Body.Required {
+		return true
+	}
+	schema, ok := source.Request.Body.Schema.(map[string]any)
+	if !ok {
+		return false
+	}
+	for name := range sourceSchemaRequired(schema) {
+		if !covered["body."+name] {
+			return false
 		}
 	}
 	return true

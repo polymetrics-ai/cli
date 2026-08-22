@@ -84,6 +84,33 @@ func TestDirectReadAllowsSlashBearingRefPathVariables(t *testing.T) {
 	}
 }
 
+func TestDirectReadExecutesHyphenatedPathVariable(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/enterprises/example/teams/team-alpha/organizations" {
+			t.Fatalf("path = %s, want hyphenated path variable resolved", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"organization":"example"}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/enterprises/{enterprise}/teams/{enterprise-team}/organizations"), connectors.DirectReadRequest{
+		Method: http.MethodGet,
+		Path:   "/enterprises/{enterprise}/teams/{enterprise-team}/organizations",
+		PathParams: map[string]string{
+			"enterprise":      "example",
+			"enterprise-team": "team-alpha",
+		},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("status = %d, want 200", result.Status)
+	}
+}
+
 func TestDirectReadHTTPErrorKeepsProviderQueryAndBodyPrivate(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got, want := r.URL.Query().Get("trace"), "direct-read-fixture"; got != want {

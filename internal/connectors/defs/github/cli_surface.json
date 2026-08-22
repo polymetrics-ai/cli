@@ -1611,7 +1611,7 @@
       "path": "actions get-actions-cache-retention-limit-for-enterprise",
       "summary": "Get GitHub Actions cache retention limit for an enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/cache#get-github-actions-cache-retention-limit-for-an-enterprise",
       "flags": [
@@ -1629,8 +1629,7 @@
           "path": "/enterprises/{enterprise}/actions/cache/retention-limit"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-actions-cache-retention-limit-for-enterprise has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions get-actions-cache-retention-limit-for-organization",
@@ -1661,7 +1660,7 @@
       "path": "actions get-actions-cache-storage-limit-for-enterprise",
       "summary": "Get GitHub Actions cache storage limit for an enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/cache#get-github-actions-cache-storage-limit-for-an-enterprise",
       "flags": [
@@ -1679,8 +1678,7 @@
           "path": "/enterprises/{enterprise}/actions/cache/storage-limit"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation actions/get-actions-cache-storage-limit-for-enterprise has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions get-actions-cache-storage-limit-for-organization",
@@ -12837,7 +12835,7 @@
       "path": "code-scanning analyses view",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_analyses",
       "source_cli_path": "",
       "flags": [
@@ -12897,8 +12895,7 @@
           "path": "/repos/{owner}/{repo}/code-scanning/analyses"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/list-recent-analyses has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning autofix create",
@@ -13138,7 +13135,7 @@
       "path": "code-scanning instances view",
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.code_scanning_alerts_alert_number_instances",
       "source_cli_path": "",
       "flags": [
@@ -13168,14 +13165,13 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/list-alert-instances has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning list-alerts-for-org",
       "summary": "List code scanning alerts for an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-scanning/code-scanning#list-code-scanning-alerts-for-an-organization",
       "flags": [
@@ -13193,8 +13189,7 @@
           "path": "/orgs/{org}/code-scanning/alerts"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-scanning/list-alerts-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning repos view",
@@ -14125,7 +14120,7 @@
       "path": "code-security get-configurations-for-enterprise",
       "summary": "Get code security configurations for an enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#get-code-security-configurations-for-an-enterprise",
       "flags": [
@@ -14143,14 +14138,13 @@
           "path": "/enterprises/{enterprise}/code-security/configurations"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-security/get-configurations-for-enterprise has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-security get-configurations-for-org",
       "summary": "Get code security configurations for an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#get-code-security-configurations-for-an-organization",
       "flags": [
@@ -14168,14 +14162,13 @@
           "path": "/orgs/{org}/code-security/configurations"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-security/get-configurations-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-security get-default-configurations",
       "summary": "Get default code security configurations",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#get-default-code-security-configurations",
       "flags": [
@@ -14193,14 +14186,13 @@
           "path": "/orgs/{org}/code-security/configurations/defaults"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-security/get-default-configurations has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-security get-default-configurations-for-enterprise",
       "summary": "Get default code security configurations for an enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#get-default-code-security-configurations-for-an-enterprise",
       "flags": [
@@ -14218,8 +14210,7 @@
           "path": "/enterprises/{enterprise}/code-security/configurations/defaults"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-security/get-default-configurations-for-enterprise has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-security get-repositories-for-configuration",
@@ -14257,7 +14248,7 @@
       "path": "code-security get-repositories-for-enterprise-configuration",
       "summary": "Get repositories associated with an enterprise code security configuration",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#get-repositories-associated-with-an-enterprise-code-security-configuration",
       "flags": [
@@ -14282,14 +14273,13 @@
           "path": "/enterprises/{enterprise}/code-security/configurations/{configuration_id}/repositories"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-security/get-repositories-for-enterprise-configuration has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-security get-single-configuration-for-enterprise",
       "summary": "Retrieve a code security configuration of an enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#retrieve-a-code-security-configuration-of-an-enterprise",
       "flags": [
@@ -14314,8 +14304,7 @@
           "path": "/enterprises/{enterprise}/code-security/configurations/{configuration_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation code-security/get-single-configuration-for-enterprise has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-security set-configuration-as-default-for-enterprise",
@@ -15140,7 +15129,7 @@
       "path": "codespace list",
       "summary": "List codespaces",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#list-codespaces-for-the-authenticated-user",
       "flags": [],
       "api_surface": [
@@ -15150,8 +15139,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh codespace list",
-      "notes": "Blocked: locked source operation codespaces/list-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "source_cli_path": "gh codespace list"
     },
     {
       "path": "codespace ssh",
@@ -15241,7 +15229,7 @@
       "path": "codespaces codespace-machines-for-authenticated-user",
       "summary": "List machine types for a codespace",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/machines#list-machine-types-for-a-codespace",
       "flags": [
@@ -15259,8 +15247,7 @@
           "path": "/user/codespaces/{codespace_name}/machines"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/codespace-machines-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces create-from-pull-request",
@@ -15776,7 +15763,7 @@
       "path": "codespaces devcontainers view",
       "summary": "Read /repos/{owner}/{repo}/codespaces/devcontainers",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.codespaces_devcontainers",
       "source_cli_path": "",
       "flags": [],
@@ -15786,8 +15773,7 @@
           "path": "/repos/{owner}/{repo}/codespaces/devcontainers"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/list-devcontainers-in-repository-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces export-for-authenticated-user",
@@ -15820,7 +15806,7 @@
       "path": "codespaces get-codespaces-for-user-in-org",
       "summary": "List codespaces for a user in organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organizations#list-codespaces-for-a-user-in-organization",
       "flags": [
@@ -15845,14 +15831,13 @@
           "path": "/orgs/{org}/members/{username}/codespaces"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/get-codespaces-for-user-in-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces get-export-details-for-authenticated-user",
       "summary": "Get details about a codespace export",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#get-details-about-a-codespace-export",
       "flags": [
@@ -15877,14 +15862,13 @@
           "path": "/user/codespaces/{codespace_name}/exports/{export_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/get-export-details-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces get-for-authenticated-user",
       "summary": "Get a codespace for the authenticated user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#get-a-codespace-for-the-authenticated-user",
       "flags": [
@@ -15902,14 +15886,13 @@
           "path": "/user/codespaces/{codespace_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/get-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces get-org-public-key",
       "summary": "Get an organization public key",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organization-secrets#get-an-organization-public-key",
       "flags": [
@@ -15927,14 +15910,13 @@
           "path": "/orgs/{org}/codespaces/secrets/public-key"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/get-org-public-key has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces get-org-secret",
       "summary": "Get an organization secret",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organization-secrets#get-an-organization-secret",
       "flags": [
@@ -15959,14 +15941,13 @@
           "path": "/orgs/{org}/codespaces/secrets/{secret_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/get-org-secret has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces get-public-key-for-authenticated-user",
       "summary": "Get public key for the authenticated user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/secrets#get-public-key-for-the-authenticated-user",
       "flags": [],
@@ -15976,14 +15957,13 @@
           "path": "/user/codespaces/secrets/public-key"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/get-public-key-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces get-secret-for-authenticated-user",
       "summary": "Get a secret for the authenticated user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/secrets#get-a-secret-for-the-authenticated-user",
       "flags": [
@@ -16001,14 +15981,13 @@
           "path": "/user/codespaces/secrets/{secret_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/get-secret-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces list-for-authenticated-user",
       "summary": "List codespaces for the authenticated user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/codespaces#list-codespaces-for-the-authenticated-user",
       "flags": [],
@@ -16018,14 +15997,13 @@
           "path": "/user/codespaces"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/list-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces list-in-organization",
       "summary": "List codespaces for the organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organizations#list-codespaces-for-the-organization",
       "flags": [
@@ -16043,14 +16021,13 @@
           "path": "/orgs/{org}/codespaces"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/list-in-organization has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces list-org-secrets",
       "summary": "List organization secrets",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organization-secrets#list-organization-secrets",
       "flags": [
@@ -16068,14 +16045,13 @@
           "path": "/orgs/{org}/codespaces/secrets"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/list-org-secrets has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces list-repositories-for-secret-for-authenticated-user",
       "summary": "List selected repositories for a user secret",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/secrets#list-selected-repositories-for-a-user-secret",
       "flags": [
@@ -16093,14 +16069,13 @@
           "path": "/user/codespaces/secrets/{secret_name}/repositories"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/list-repositories-for-secret-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces list-secrets-for-authenticated-user",
       "summary": "List secrets for the authenticated user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/secrets#list-secrets-for-the-authenticated-user",
       "flags": [],
@@ -16110,14 +16085,13 @@
           "path": "/user/codespaces/secrets"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/list-secrets-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces list-selected-repos-for-org-secret",
       "summary": "List selected repositories for an organization secret",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organization-secrets#list-selected-repositories-for-an-organization-secret",
       "flags": [
@@ -16142,8 +16116,7 @@
           "path": "/orgs/{org}/codespaces/secrets/{secret_name}/repositories"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/list-selected-repos-for-org-secret has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces machines view",
@@ -16400,7 +16373,7 @@
       "path": "codespaces secrets view",
       "summary": "Read /repos/{owner}/{repo}/codespaces/secrets",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.codespaces_secrets",
       "source_cli_path": "",
       "flags": [],
@@ -16410,8 +16383,7 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/list-repo-secrets has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces set-codespaces-access-users",
@@ -16722,7 +16694,7 @@
       "path": "codespaces view",
       "summary": "Read /repos/{owner}/{repo}/codespaces",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.codespaces",
       "source_cli_path": "",
       "flags": [],
@@ -16732,8 +16704,7 @@
           "path": "/repos/{owner}/{repo}/codespaces"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation codespaces/list-in-repository-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "collaborators permission view",
@@ -17437,7 +17408,7 @@
       "path": "copilot copilot-content-exclusion-for-organization",
       "summary": "Get Copilot content exclusion rules for an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-content-exclusion-management#get-copilot-content-exclusion-rules-for-an-organization",
       "flags": [
@@ -17455,14 +17426,13 @@
           "path": "/orgs/{org}/copilot/content_exclusion"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-content-exclusion-for-organization has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-enterprise-one-day-usage-metrics",
       "summary": "Get Copilot enterprise usage metrics for a specific day",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-enterprise-usage-metrics-for-a-specific-day",
       "flags": [
@@ -17487,14 +17457,13 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/enterprise-1-day"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-enterprise-one-day-usage-metrics has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-enterprise-repos-one-day-report",
       "summary": "Get Copilot enterprise repository report for a specific day",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-enterprise-repository-report-for-a-specific-day",
       "flags": [
@@ -17519,14 +17488,13 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/repos-1-day"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-enterprise-repos-one-day-report has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-enterprise-usage-metrics",
       "summary": "Get Copilot enterprise usage metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-enterprise-usage-metrics",
       "flags": [
@@ -17544,14 +17512,13 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/enterprise-28-day/latest"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-enterprise-usage-metrics has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-enterprise-user-teams-one-day-report",
       "summary": "Get Copilot enterprise user-teams report for a specific day",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-enterprise-user-teams-report-for-a-specific-day",
       "flags": [
@@ -17576,14 +17543,13 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/user-teams-1-day"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-enterprise-user-teams-one-day-report has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-organization-one-day-usage-metrics",
       "summary": "Get Copilot organization usage metrics for a specific day",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-organization-usage-metrics-for-a-specific-day",
       "flags": [
@@ -17608,14 +17574,13 @@
           "path": "/orgs/{org}/copilot/metrics/reports/organization-1-day"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-organization-one-day-usage-metrics has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-organization-repos-one-day-report",
       "summary": "Get Copilot organization repository report for a specific day",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-organization-repository-report-for-a-specific-day",
       "flags": [
@@ -17640,14 +17605,13 @@
           "path": "/orgs/{org}/copilot/metrics/reports/repos-1-day"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-organization-repos-one-day-report has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-organization-usage-metrics",
       "summary": "Get Copilot organization usage metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-organization-usage-metrics",
       "flags": [
@@ -17665,14 +17629,13 @@
           "path": "/orgs/{org}/copilot/metrics/reports/organization-28-day/latest"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-organization-usage-metrics has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-organization-user-teams-one-day-report",
       "summary": "Get Copilot organization user-teams report for a specific day",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-organization-user-teams-report-for-a-specific-day",
       "flags": [
@@ -17697,14 +17660,13 @@
           "path": "/orgs/{org}/copilot/metrics/reports/user-teams-1-day"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-organization-user-teams-one-day-report has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-organization-users-one-day-usage-metrics",
       "summary": "Get Copilot organization users usage metrics for a specific day",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-organization-users-usage-metrics-for-a-specific-day",
       "flags": [
@@ -17729,14 +17691,13 @@
           "path": "/orgs/{org}/copilot/metrics/reports/users-1-day"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-organization-users-one-day-usage-metrics has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-organization-users-usage-metrics",
       "summary": "Get Copilot organization users usage metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-organization-users-usage-metrics",
       "flags": [
@@ -17754,14 +17715,13 @@
           "path": "/orgs/{org}/copilot/metrics/reports/users-28-day/latest"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-organization-users-usage-metrics has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-users-one-day-usage-metrics",
       "summary": "Get Copilot users usage metrics for a specific day",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-users-usage-metrics-for-a-specific-day",
       "flags": [
@@ -17786,14 +17746,13 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/users-1-day"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-users-one-day-usage-metrics has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot copilot-users-usage-metrics",
       "summary": "Get Copilot users usage metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-usage-metrics#get-copilot-users-usage-metrics",
       "flags": [
@@ -17811,8 +17770,7 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/users-28-day/latest"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/copilot-users-usage-metrics has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot disable-copilot-coding-agent-for-repository-in-organization",
@@ -17886,7 +17844,7 @@
       "path": "copilot get-copilot-coding-agent-permissions-organization",
       "summary": "Get Copilot cloud agent permissions for an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-coding-agent-management#get-copilot-cloud-agent-permissions-for-an-organization",
       "flags": [
@@ -17904,14 +17862,13 @@
           "path": "/orgs/{org}/copilot/coding-agent/permissions"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/get-copilot-coding-agent-permissions-organization has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot get-copilot-organization-details",
       "summary": "Get Copilot seat information and settings for an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-user-management#get-copilot-seat-information-and-settings-for-an-organization",
       "flags": [
@@ -17929,14 +17886,13 @@
           "path": "/orgs/{org}/copilot/billing"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/get-copilot-organization-details has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot get-copilot-seat-details-for-user",
       "summary": "Get Copilot seat assignment details for a user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-user-management#get-copilot-seat-assignment-details-for-a-user",
       "flags": [
@@ -17961,14 +17917,13 @@
           "path": "/orgs/{org}/members/{username}/copilot"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/get-copilot-seat-details-for-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot list-copilot-coding-agent-selected-repositories-for-organization",
       "summary": "List repositories enabled for Copilot cloud agent in an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-coding-agent-management#list-repositories-enabled-for-copilot-cloud-agent-in-an-organization",
       "flags": [
@@ -17986,14 +17941,13 @@
           "path": "/orgs/{org}/copilot/coding-agent/permissions/repositories"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/list-copilot-coding-agent-selected-repositories-for-organization has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot list-copilot-seats",
       "summary": "List all Copilot seat assignments for an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-user-management#list-all-copilot-seat-assignments-for-an-organization",
       "flags": [
@@ -18011,8 +17965,7 @@
           "path": "/orgs/{org}/copilot/billing/seats"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot/list-copilot-seats has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot remove-organizations-from-enterprise-coding-agent-policy",
@@ -18723,7 +18676,7 @@
       "path": "copilot-spaces get-for-org",
       "summary": "Get an organization Copilot Space",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/copilot-spaces#get-an-organization-copilot-space",
       "flags": [
@@ -18748,14 +18701,13 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/get-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces get-for-user",
       "summary": "Get a Copilot Space for a user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/copilot-spaces#get-a-copilot-space-for-a-user",
       "flags": [
@@ -18780,14 +18732,13 @@
           "path": "/users/{username}/copilot-spaces/{space_number}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/get-for-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces get-resource-for-org",
       "summary": "Get a resource for an organization Copilot Space",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#get-a-resource-for-an-organization-copilot-space",
       "flags": [
@@ -18819,14 +18770,13 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}/resources/{space_resource_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/get-resource-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces get-resource-for-user",
       "summary": "Get a resource for a Copilot Space for a user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#get-a-resource-for-a-copilot-space-for-a-user",
       "flags": [
@@ -18858,14 +18808,13 @@
           "path": "/users/{username}/copilot-spaces/{space_number}/resources/{space_resource_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/get-resource-for-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces list-collaborators-for-org",
       "summary": "List collaborators for an organization Copilot Space",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/collaborators#list-collaborators-for-an-organization-copilot-space",
       "flags": [
@@ -18890,14 +18839,13 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}/collaborators"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/list-collaborators-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces list-collaborators-for-user",
       "summary": "List collaborators for a Copilot Space for a user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/collaborators#list-collaborators-for-a-copilot-space-for-a-user",
       "flags": [
@@ -18922,14 +18870,13 @@
           "path": "/users/{username}/copilot-spaces/{space_number}/collaborators"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/list-collaborators-for-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces list-for-org",
       "summary": "List organization Copilot Spaces",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/copilot-spaces#list-organization-copilot-spaces",
       "flags": [
@@ -18947,14 +18894,13 @@
           "path": "/orgs/{org}/copilot-spaces"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/list-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces list-for-user",
       "summary": "List Copilot Spaces for a user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/copilot-spaces#list-copilot-spaces-for-a-user",
       "flags": [
@@ -18972,14 +18918,13 @@
           "path": "/users/{username}/copilot-spaces"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/list-for-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces list-resources-for-org",
       "summary": "List resources for an organization Copilot Space",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#list-resources-for-an-organization-copilot-space",
       "flags": [
@@ -19004,14 +18949,13 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}/resources"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/list-resources-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces list-resources-for-user",
       "summary": "List resources for a Copilot Space for a user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#list-resources-for-a-copilot-space-for-a-user",
       "flags": [
@@ -19036,8 +18980,7 @@
           "path": "/users/{username}/copilot-spaces/{space_number}/resources"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation copilot-spaces/list-resources-for-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot-spaces remove-collaborator-for-org",
@@ -19715,7 +19658,7 @@
       "path": "dependabot get-org-public-key",
       "summary": "Get an organization public key",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/secrets#get-an-organization-public-key",
       "flags": [
@@ -19733,14 +19676,13 @@
           "path": "/orgs/{org}/dependabot/secrets/public-key"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/get-org-public-key has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot get-org-secret",
       "summary": "Get an organization secret",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/secrets#get-an-organization-secret",
       "flags": [
@@ -19765,14 +19707,13 @@
           "path": "/orgs/{org}/dependabot/secrets/{secret_name}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/get-org-secret has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot list-alerts-for-enterprise",
       "summary": "List Dependabot alerts for an enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/alerts#list-dependabot-alerts-for-an-enterprise",
       "flags": [
@@ -19790,14 +19731,13 @@
           "path": "/enterprises/{enterprise}/dependabot/alerts"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/list-alerts-for-enterprise has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot list-alerts-for-org",
       "summary": "List Dependabot alerts for an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/alerts#list-dependabot-alerts-for-an-organization",
       "flags": [
@@ -19815,14 +19755,13 @@
           "path": "/orgs/{org}/dependabot/alerts"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/list-alerts-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot list-org-secrets",
       "summary": "List organization secrets",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/secrets#list-organization-secrets",
       "flags": [
@@ -19840,14 +19779,13 @@
           "path": "/orgs/{org}/dependabot/secrets"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/list-org-secrets has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot list-selected-repos-for-org-secret",
       "summary": "List selected repositories for an organization secret",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/secrets#list-selected-repositories-for-an-organization-secret",
       "flags": [
@@ -19872,8 +19810,7 @@
           "path": "/orgs/{org}/dependabot/secrets/{secret_name}/repositories"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/list-selected-repos-for-org-secret has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot public-key view",
@@ -19937,7 +19874,7 @@
       "path": "dependabot repository-access-for-enterprise",
       "summary": "Lists the repositories Dependabot can access in an enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/repository-access#lists-the-repositories-dependabot-can-access-in-an-enterprise",
       "flags": [
@@ -19955,14 +19892,13 @@
           "path": "/enterprises/{enterprise}/dependabot/repository-access"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/repository-access-for-enterprise has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot repository-access-for-org",
       "summary": "Lists the repositories Dependabot can access in an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/repository-access#lists-the-repositories-dependabot-can-access-in-an-organization",
       "flags": [
@@ -19980,8 +19916,7 @@
           "path": "/orgs/{org}/dependabot/repository-access"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/repository-access-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot secrets view-2",
@@ -20011,7 +19946,7 @@
       "path": "dependabot secrets view",
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.dependabot_secrets",
       "source_cli_path": "",
       "flags": [],
@@ -20021,8 +19956,7 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/list-repo-secrets has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot set-repository-access-default-level-for-enterprise",
@@ -20752,7 +20686,7 @@
       "path": "enterprise-team-memberships get",
       "summary": "Get enterprise team membership",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-members#get-enterprise-team-membership",
       "flags": [
@@ -20761,6 +20695,13 @@
           "type": "string",
           "summary": "The slug version of the enterprise name.",
           "maps_to": "path.enterprise",
+          "required": true
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "summary": "The enterprise-team path parameter.",
+          "maps_to": "path.enterprise-team",
           "required": true
         },
         {
@@ -20777,14 +20718,13 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/memberships/{username}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation enterprise-team-memberships/get has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "enterprise-team-memberships list",
       "summary": "List members in an enterprise team",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-members#list-members-in-an-enterprise-team",
       "flags": [
@@ -20794,6 +20734,13 @@
           "summary": "The slug version of the enterprise name.",
           "maps_to": "path.enterprise",
           "required": true
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "summary": "The enterprise-team path parameter.",
+          "maps_to": "path.enterprise-team",
+          "required": true
         }
       ],
       "api_surface": [
@@ -20802,8 +20749,7 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/memberships"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation enterprise-team-memberships/list has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "enterprise-team-memberships remove",
@@ -21019,7 +20965,7 @@
       "path": "enterprise-team-organizations get-assignment",
       "summary": "Get organization assignment",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-organizations#get-organization-assignment",
       "flags": [
@@ -21028,6 +20974,13 @@
           "type": "string",
           "summary": "The slug version of the enterprise name.",
           "maps_to": "path.enterprise",
+          "required": true
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "summary": "The enterprise-team path parameter.",
+          "maps_to": "path.enterprise-team",
           "required": true
         },
         {
@@ -21044,14 +20997,13 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/organizations/{org}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation enterprise-team-organizations/get-assignment has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "enterprise-team-organizations get-assignments",
       "summary": "Get organization assignments",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-team-organizations#get-organization-assignments",
       "flags": [
@@ -21061,6 +21013,13 @@
           "summary": "The slug version of the enterprise name.",
           "maps_to": "path.enterprise",
           "required": true
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "summary": "The enterprise-team path parameter.",
+          "maps_to": "path.enterprise-team",
+          "required": true
         }
       ],
       "api_surface": [
@@ -21069,8 +21028,7 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/organizations"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation enterprise-team-organizations/get-assignments has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "enterprise-teams create",
@@ -21191,7 +21149,7 @@
       "path": "enterprise-teams get",
       "summary": "Get an enterprise team",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-teams#get-an-enterprise-team",
       "flags": [
@@ -21216,14 +21174,13 @@
           "path": "/enterprises/{enterprise}/teams/{team_slug}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation enterprise-teams/get has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "enterprise-teams list",
       "summary": "List enterprise teams",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/enterprise-teams/enterprise-teams#list-enterprise-teams",
       "flags": [
@@ -21241,8 +21198,7 @@
           "path": "/enterprises/{enterprise}/teams"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation enterprise-teams/list has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "enterprise-teams update",
@@ -34698,7 +34654,7 @@
       "path": "oidc list-oidc-custom-property-inclusions-for-enterprise",
       "summary": "List OIDC custom property inclusions for an enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/oidc#list-oidc-custom-property-inclusions-for-an-enterprise",
       "flags": [
@@ -34716,8 +34672,7 @@
           "path": "/enterprises/{enterprise}/actions/oidc/customization/properties/repo"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation oidc/list-oidc-custom-property-inclusions-for-enterprise has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "oidc list-oidc-custom-property-inclusions-for-org",
@@ -45698,7 +45653,6 @@
       "intent": "direct_read",
       "availability": "partial",
       "source_cli_path": "gh repo read-dir",
-      "notes": "Blocked: locked source operation repos/get-content has no declaration-owned executable stream, direct-read, binary, or status route.",
       "source_url": "https://docs.github.com/en/rest/repos/contents#get-repository-content",
       "flags": [
         {
@@ -45724,7 +45678,8 @@
       "examples": [
         "pm github repo read-dir --path docs --json",
         "pm github repo read-dir --path src --ref main --json"
-      ]
+      ],
+      "notes": "Blocked: locked source operation repos/get-content has no declaration-owned executable stream, direct-read, binary, or status route."
     },
     {
       "path": "repo read-file",
@@ -45732,7 +45687,6 @@
       "intent": "direct_read",
       "availability": "partial",
       "source_cli_path": "gh repo read-file",
-      "notes": "Blocked: locked source operation repos/get-content has no declaration-owned executable stream, direct-read, binary, or status route.",
       "source_url": "https://docs.github.com/en/rest/repos/contents#get-repository-content",
       "flags": [
         {
@@ -45758,7 +45712,8 @@
       "examples": [
         "pm github repo read-file --path README.md --json",
         "pm github repo read-file --path docs/guide.md --ref main --json"
-      ]
+      ],
+      "notes": "Blocked: locked source operation repos/get-content has no declaration-owned executable stream, direct-read, binary, or status route."
     },
     {
       "path": "repo ruleset create",
@@ -48552,7 +48507,7 @@
       "path": "secret-scanning list-alerts-for-org",
       "summary": "List secret scanning alerts for an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/secret-scanning#list-secret-scanning-alerts-for-an-organization",
       "flags": [
@@ -48570,14 +48525,13 @@
           "path": "/orgs/{org}/secret-scanning/alerts"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation secret-scanning/list-alerts-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning list-org-custom-patterns",
       "summary": "List organization custom patterns",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#list-organization-custom-patterns",
       "flags": [
@@ -48595,14 +48549,13 @@
           "path": "/orgs/{org}/secret-scanning/custom-patterns"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation secret-scanning/list-org-custom-patterns has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning list-org-pattern-configs",
       "summary": "List organization pattern configurations",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/push-protection#list-organization-pattern-configurations",
       "flags": [
@@ -48620,14 +48573,13 @@
           "path": "/orgs/{org}/secret-scanning/pattern-configurations"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation secret-scanning/list-org-pattern-configs has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning list-repo-custom-patterns",
       "summary": "List repository custom patterns",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#list-repository-custom-patterns",
       "flags": [],
@@ -48637,14 +48589,13 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation secret-scanning/list-repo-custom-patterns has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning locations view",
       "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation": "github.secret_scanning_alerts_alert_number_locations",
       "source_cli_path": "",
       "flags": [
@@ -48662,8 +48613,7 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation secret-scanning/list-locations-for-alert has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning push-protection-bypasses create",

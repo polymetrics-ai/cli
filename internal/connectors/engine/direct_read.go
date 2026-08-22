@@ -40,7 +40,7 @@ const (
 	directReadPolicyText = "text"
 )
 
-var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_-]*)\}`)
 
 // completeEngineErrorText renders only safe transport facts. The typed cause
 // remains available through errors.As for classification and rate parking, but

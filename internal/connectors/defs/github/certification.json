@@ -976,6 +976,86 @@
       ]
     },
     {
+      "stage_name": "generated_direct_read_actions_get_actions_cache_retention_limit_for_enterprise",
+      "command": "actions get-actions-cache-retention-limit-for-enterprise",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "actions"
+        },
+        {
+          "literal": "get-actions-cache-retention-limit-for-enterprise"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_actions_get_actions_cache_storage_limit_for_enterprise",
+      "command": "actions get-actions-cache-storage-limit-for-enterprise",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "actions"
+        },
+        {
+          "literal": "get-actions-cache-storage-limit-for-enterprise"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
       "stage_name": "generated_direct_read_code_scanning_alerts_view",
       "command": "code-scanning alerts view",
       "args": [
@@ -1003,6 +1083,42 @@
         {
           "config_key": "alert-number",
           "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_analyses_view",
+      "command": "code-scanning analyses view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "analyses"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
         },
         {
           "literal": "--json"
@@ -1220,6 +1336,89 @@
       "generated": true
     },
     {
+      "stage_name": "generated_direct_read_code_scanning_instances_view",
+      "command": "code-scanning instances view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "instances"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--alert-number"
+        },
+        {
+          "config_key": "alert-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_scanning_list_alerts_for_org",
+      "command": "code-scanning list-alerts-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-scanning"
+        },
+        {
+          "literal": "list-alerts-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
       "stage_name": "generated_direct_read_code_scanning_repos_view",
       "command": "code-scanning repos view",
       "args": [
@@ -1360,6 +1559,863 @@
         }
       ],
       "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_security_get_configurations_for_enterprise",
+      "command": "code-security get-configurations-for-enterprise",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-security"
+        },
+        {
+          "literal": "get-configurations-for-enterprise"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_security_get_configurations_for_org",
+      "command": "code-security get-configurations-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-security"
+        },
+        {
+          "literal": "get-configurations-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_security_get_default_configurations",
+      "command": "code-security get-default-configurations",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-security"
+        },
+        {
+          "literal": "get-default-configurations"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_security_get_default_configurations_for_enterprise",
+      "command": "code-security get-default-configurations-for-enterprise",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-security"
+        },
+        {
+          "literal": "get-default-configurations-for-enterprise"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_security_get_repositories_for_enterprise_configuration",
+      "command": "code-security get-repositories-for-enterprise-configuration",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-security"
+        },
+        {
+          "literal": "get-repositories-for-enterprise-configuration"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--configuration-id"
+        },
+        {
+          "config_key": "configuration-id",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_code_security_get_single_configuration_for_enterprise",
+      "command": "code-security get-single-configuration-for-enterprise",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "code-security"
+        },
+        {
+          "literal": "get-single-configuration-for-enterprise"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--configuration-id"
+        },
+        {
+          "config_key": "configuration-id",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_codespace_machines_for_authenticated_user",
+      "command": "codespaces codespace-machines-for-authenticated-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "codespace-machines-for-authenticated-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--codespace-name"
+        },
+        {
+          "config_key": "codespace-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_devcontainers_view",
+      "command": "codespaces devcontainers view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "devcontainers"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_get_codespaces_for_user_in_org",
+      "command": "codespaces get-codespaces-for-user-in-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "get-codespaces-for-user-in-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--username"
+        },
+        {
+          "config_key": "username",
+          "default": "polymetrics-ai-certification"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_get_export_details_for_authenticated_user",
+      "command": "codespaces get-export-details-for-authenticated-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "get-export-details-for-authenticated-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--codespace-name"
+        },
+        {
+          "config_key": "codespace-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--export-id"
+        },
+        {
+          "config_key": "export-id",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_get_for_authenticated_user",
+      "command": "codespaces get-for-authenticated-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "get-for-authenticated-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--codespace-name"
+        },
+        {
+          "config_key": "codespace-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_get_org_public_key",
+      "command": "codespaces get-org-public-key",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "get-org-public-key"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_get_org_secret",
+      "command": "codespaces get-org-secret",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "get-org-secret"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_get_public_key_for_authenticated_user",
+      "command": "codespaces get-public-key-for-authenticated-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "get-public-key-for-authenticated-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_get_secret_for_authenticated_user",
+      "command": "codespaces get-secret-for-authenticated-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "get-secret-for-authenticated-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_list_for_authenticated_user",
+      "command": "codespaces list-for-authenticated-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "list-for-authenticated-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_list_in_organization",
+      "command": "codespaces list-in-organization",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "list-in-organization"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_list_org_secrets",
+      "command": "codespaces list-org-secrets",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "list-org-secrets"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_list_repositories_for_secret_for_authenticated_user",
+      "command": "codespaces list-repositories-for-secret-for-authenticated-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "list-repositories-for-secret-for-authenticated-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_list_secrets_for_authenticated_user",
+      "command": "codespaces list-secrets-for-authenticated-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "list-secrets-for-authenticated-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_codespaces_list_selected_repos_for_org_secret",
+      "command": "codespaces list-selected-repos-for-org-secret",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "list-selected-repos-for-org-secret"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
       "generated": true
     },
     {
@@ -1521,6 +2577,42 @@
       "generated": true
     },
     {
+      "stage_name": "generated_direct_read_codespaces_secrets_view",
+      "command": "codespaces secrets view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "secrets"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
       "stage_name": "generated_direct_read_codespaces_secrets_view_2",
       "command": "codespaces secrets view-2",
       "args": [
@@ -1564,6 +2656,39 @@
       "generated": true
     },
     {
+      "stage_name": "generated_direct_read_codespaces_view",
+      "command": "codespaces view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "codespaces"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_codespaces",
+      "generated": true
+    },
+    {
       "stage_name": "generated_direct_read_copilot_configuration_view",
       "command": "copilot configuration view",
       "args": [
@@ -1584,6 +2709,1259 @@
         },
         {
           "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_content_exclusion_for_organization",
+      "command": "copilot copilot-content-exclusion-for-organization",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-content-exclusion-for-organization"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_enterprise_one_day_usage_metrics",
+      "command": "copilot copilot-enterprise-one-day-usage-metrics",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-enterprise-one-day-usage-metrics"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--day"
+        },
+        {
+          "config_key": "day",
+          "default": "2026-08-16"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_enterprise_repos_one_day_report",
+      "command": "copilot copilot-enterprise-repos-one-day-report",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-enterprise-repos-one-day-report"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--day"
+        },
+        {
+          "config_key": "day",
+          "default": "2026-08-16"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_enterprise_usage_metrics",
+      "command": "copilot copilot-enterprise-usage-metrics",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-enterprise-usage-metrics"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_enterprise_user_teams_one_day_report",
+      "command": "copilot copilot-enterprise-user-teams-one-day-report",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-enterprise-user-teams-one-day-report"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--day"
+        },
+        {
+          "config_key": "day",
+          "default": "2026-08-16"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_organization_one_day_usage_metrics",
+      "command": "copilot copilot-organization-one-day-usage-metrics",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-organization-one-day-usage-metrics"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--day"
+        },
+        {
+          "config_key": "day",
+          "default": "2026-08-16"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_organization_repos_one_day_report",
+      "command": "copilot copilot-organization-repos-one-day-report",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-organization-repos-one-day-report"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--day"
+        },
+        {
+          "config_key": "day",
+          "default": "2026-08-16"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_organization_usage_metrics",
+      "command": "copilot copilot-organization-usage-metrics",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-organization-usage-metrics"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_organization_user_teams_one_day_report",
+      "command": "copilot copilot-organization-user-teams-one-day-report",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-organization-user-teams-one-day-report"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--day"
+        },
+        {
+          "config_key": "day",
+          "default": "2026-08-16"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_organization_users_one_day_usage_metrics",
+      "command": "copilot copilot-organization-users-one-day-usage-metrics",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-organization-users-one-day-usage-metrics"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--day"
+        },
+        {
+          "config_key": "day",
+          "default": "2026-08-16"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_organization_users_usage_metrics",
+      "command": "copilot copilot-organization-users-usage-metrics",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-organization-users-usage-metrics"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_users_one_day_usage_metrics",
+      "command": "copilot copilot-users-one-day-usage-metrics",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-users-one-day-usage-metrics"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--day"
+        },
+        {
+          "config_key": "day",
+          "default": "2026-08-16"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_copilot_users_usage_metrics",
+      "command": "copilot copilot-users-usage-metrics",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "copilot-users-usage-metrics"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_get_copilot_coding_agent_permissions_organization",
+      "command": "copilot get-copilot-coding-agent-permissions-organization",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "get-copilot-coding-agent-permissions-organization"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_get_copilot_organization_details",
+      "command": "copilot get-copilot-organization-details",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "get-copilot-organization-details"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_get_copilot_seat_details_for_user",
+      "command": "copilot get-copilot-seat-details-for-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "get-copilot-seat-details-for-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--username"
+        },
+        {
+          "config_key": "username",
+          "default": "polymetrics-ai-certification"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_list_copilot_coding_agent_selected_repositories_for_organization",
+      "command": "copilot list-copilot-coding-agent-selected-repositories-for-organization",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "list-copilot-coding-agent-selected-repositories-for-organization"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_list_copilot_seats",
+      "command": "copilot list-copilot-seats",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot"
+        },
+        {
+          "literal": "list-copilot-seats"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_for_org",
+      "command": "copilot-spaces get-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "get-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--space-number"
+        },
+        {
+          "config_key": "space-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_for_user",
+      "command": "copilot-spaces get-for-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "get-for-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--username"
+        },
+        {
+          "config_key": "username",
+          "default": "polymetrics-ai-certification"
+        },
+        {
+          "literal": "--space-number"
+        },
+        {
+          "config_key": "space-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_resource_for_org",
+      "command": "copilot-spaces get-resource-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "get-resource-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--space-number"
+        },
+        {
+          "config_key": "space-number",
+          "default": "1"
+        },
+        {
+          "literal": "--space-resource-id"
+        },
+        {
+          "config_key": "space-resource-id",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_get_resource_for_user",
+      "command": "copilot-spaces get-resource-for-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "get-resource-for-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--username"
+        },
+        {
+          "config_key": "username",
+          "default": "polymetrics-ai-certification"
+        },
+        {
+          "literal": "--space-number"
+        },
+        {
+          "config_key": "space-number",
+          "default": "1"
+        },
+        {
+          "literal": "--space-resource-id"
+        },
+        {
+          "config_key": "space-resource-id",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_collaborators_for_org",
+      "command": "copilot-spaces list-collaborators-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "list-collaborators-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--space-number"
+        },
+        {
+          "config_key": "space-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_collaborators_for_user",
+      "command": "copilot-spaces list-collaborators-for-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "list-collaborators-for-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--username"
+        },
+        {
+          "config_key": "username",
+          "default": "polymetrics-ai-certification"
+        },
+        {
+          "literal": "--space-number"
+        },
+        {
+          "config_key": "space-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_for_org",
+      "command": "copilot-spaces list-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "list-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_for_user",
+      "command": "copilot-spaces list-for-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "list-for-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--username"
+        },
+        {
+          "config_key": "username",
+          "default": "polymetrics-ai-certification"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_resources_for_org",
+      "command": "copilot-spaces list-resources-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "list-resources-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--space-number"
+        },
+        {
+          "config_key": "space-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_copilot",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_copilot_spaces_list_resources_for_user",
+      "command": "copilot-spaces list-resources-for-user",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "copilot-spaces"
+        },
+        {
+          "literal": "list-resources-for-user"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--username"
+        },
+        {
+          "config_key": "username",
+          "default": "polymetrics-ai-certification"
+        },
+        {
+          "literal": "--space-number"
+        },
+        {
+          "config_key": "space-number",
+          "default": "1"
         },
         {
           "literal": "--json"
@@ -1643,6 +4021,260 @@
       "generated": true
     },
     {
+      "stage_name": "generated_direct_read_dependabot_get_org_public_key",
+      "command": "dependabot get-org-public-key",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "get-org-public-key"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_get_org_secret",
+      "command": "dependabot get-org-secret",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "get-org-secret"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_list_alerts_for_enterprise",
+      "command": "dependabot list-alerts-for-enterprise",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "list-alerts-for-enterprise"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_list_alerts_for_org",
+      "command": "dependabot list-alerts-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "list-alerts-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_list_org_secrets",
+      "command": "dependabot list-org-secrets",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "list-org-secrets"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_list_selected_repos_for_org_secret",
+      "command": "dependabot list-selected-repos-for-org-secret",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "list-selected-repos-for-org-secret"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--secret-name"
+        },
+        {
+          "config_key": "secret-name",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
       "stage_name": "generated_direct_read_dependabot_public_key_view",
       "command": "dependabot public-key view",
       "args": [
@@ -1654,6 +4286,122 @@
         },
         {
           "literal": "public-key"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_repository_access_for_enterprise",
+      "command": "dependabot repository-access-for-enterprise",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "repository-access-for-enterprise"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_repository_access_for_org",
+      "command": "dependabot repository-access-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "repository-access-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_dependabot_secrets_view",
+      "command": "dependabot secrets view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "dependabot"
+        },
+        {
+          "literal": "secrets"
         },
         {
           "literal": "view"
@@ -1722,6 +4470,335 @@
       "generated": true
     },
     {
+      "stage_name": "generated_direct_read_enterprise_team_memberships_get",
+      "command": "enterprise-team-memberships get",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "enterprise-team-memberships"
+        },
+        {
+          "literal": "get"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--enterprise-team"
+        },
+        {
+          "config_key": "enterprise-team",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--username"
+        },
+        {
+          "config_key": "username",
+          "default": "polymetrics-ai-certification"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_enterprise_team_memberships_list",
+      "command": "enterprise-team-memberships list",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "enterprise-team-memberships"
+        },
+        {
+          "literal": "list"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--enterprise-team"
+        },
+        {
+          "config_key": "enterprise-team",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_enterprise_team_organizations_get_assignment",
+      "command": "enterprise-team-organizations get-assignment",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "enterprise-team-organizations"
+        },
+        {
+          "literal": "get-assignment"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--enterprise-team"
+        },
+        {
+          "config_key": "enterprise-team",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_enterprise_team_organizations_get_assignments",
+      "command": "enterprise-team-organizations get-assignments",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "enterprise-team-organizations"
+        },
+        {
+          "literal": "get-assignments"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--enterprise-team"
+        },
+        {
+          "config_key": "enterprise-team",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_enterprise_teams_get",
+      "command": "enterprise-teams get",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "enterprise-teams"
+        },
+        {
+          "literal": "get"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--team-slug"
+        },
+        {
+          "config_key": "team-slug",
+          "default": "pm-cert-generated-read"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_enterprise_teams_list",
+      "command": "enterprise-teams list",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "enterprise-teams"
+        },
+        {
+          "literal": "list"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_oidc_list_oidc_custom_property_inclusions_for_enterprise",
+      "command": "oidc list-oidc-custom-property-inclusions-for-enterprise",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "oidc"
+        },
+        {
+          "literal": "list-oidc-custom-property-inclusions-for-enterprise"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise"
+        },
+        {
+          "config_key": "enterprise",
+          "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_enterprise",
+      "generated": true
+    },
+    {
       "stage_name": "generated_direct_read_secret_scanning_alerts_view",
       "command": "secret-scanning alerts view",
       "args": [
@@ -1733,6 +4810,202 @@
         },
         {
           "literal": "alerts"
+        },
+        {
+          "literal": "view"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--alert-number"
+        },
+        {
+          "config_key": "alert-number",
+          "default": "1"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_secret_scanning_list_alerts_for_org",
+      "command": "secret-scanning list-alerts-for-org",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "secret-scanning"
+        },
+        {
+          "literal": "list-alerts-for-org"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_secret_scanning_list_org_custom_patterns",
+      "command": "secret-scanning list-org-custom-patterns",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "secret-scanning"
+        },
+        {
+          "literal": "list-org-custom-patterns"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_secret_scanning_list_org_pattern_configs",
+      "command": "secret-scanning list-org-pattern-configs",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "secret-scanning"
+        },
+        {
+          "literal": "list-org-pattern-configs"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--org"
+        },
+        {
+          "config_key": "org",
+          "default": "Polymetrics-Cert"
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_secret_scanning_list_repo_custom_patterns",
+      "command": "secret-scanning list-repo-custom-patterns",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "secret-scanning"
+        },
+        {
+          "literal": "list-repo-custom-patterns"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "trial_advanced_security",
+      "generated": true
+    },
+    {
+      "stage_name": "generated_direct_read_secret_scanning_locations_view",
+      "command": "secret-scanning locations view",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "secret-scanning"
+        },
+        {
+          "literal": "locations"
         },
         {
           "literal": "view"
@@ -1811,6 +5084,7 @@
       "day": "2026-08-16",
       "devcontainer-path": ".devcontainer/devcontainer.json",
       "enterprise": "polymetrics-cert",
+      "enterprise-team": "pm-cert-generated-read",
       "export-id": "pm-cert-generated-read",
       "language": "javascript",
       "org": "Polymetrics-Cert",

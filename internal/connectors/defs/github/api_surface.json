@@ -1607,253 +1607,148 @@
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/actions/cache/retention-limit",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-actions-cache-retention-limit-for-enterprise has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-actions-cache-retention-limit-for-enterprise"
+      "covered_by": {
+        "direct_read": "actions get-actions-cache-retention-limit-for-enterprise"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/actions/cache/storage-limit",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation actions/get-actions-cache-storage-limit-for-enterprise has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=actions/get-actions-cache-storage-limit-for-enterprise"
+      "covered_by": {
+        "direct_read": "actions get-actions-cache-storage-limit-for-enterprise"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/actions/oidc/customization/properties/repo",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation oidc/list-oidc-custom-property-inclusions-for-enterprise has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=oidc/list-oidc-custom-property-inclusions-for-enterprise"
+      "covered_by": {
+        "direct_read": "oidc list-oidc-custom-property-inclusions-for-enterprise"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/code-security/configurations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-security/get-configurations-for-enterprise has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-security/get-configurations-for-enterprise"
+      "covered_by": {
+        "direct_read": "code-security get-configurations-for-enterprise"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/code-security/configurations/{configuration_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-security/get-single-configuration-for-enterprise has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-security/get-single-configuration-for-enterprise"
+      "covered_by": {
+        "direct_read": "code-security get-single-configuration-for-enterprise"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/code-security/configurations/{configuration_id}/repositories",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-security/get-repositories-for-enterprise-configuration has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-security/get-repositories-for-enterprise-configuration"
+      "covered_by": {
+        "direct_read": "code-security get-repositories-for-enterprise-configuration"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/code-security/configurations/defaults",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-security/get-default-configurations-for-enterprise has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-security/get-default-configurations-for-enterprise"
+      "covered_by": {
+        "direct_read": "code-security get-default-configurations-for-enterprise"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/copilot/metrics/reports/enterprise-1-day",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-enterprise-one-day-usage-metrics has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-enterprise-one-day-usage-metrics"
+      "covered_by": {
+        "direct_read": "copilot copilot-enterprise-one-day-usage-metrics"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/copilot/metrics/reports/enterprise-28-day/latest",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-enterprise-usage-metrics has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-enterprise-usage-metrics"
+      "covered_by": {
+        "direct_read": "copilot copilot-enterprise-usage-metrics"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/copilot/metrics/reports/repos-1-day",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-enterprise-repos-one-day-report has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-enterprise-repos-one-day-report"
+      "covered_by": {
+        "direct_read": "copilot copilot-enterprise-repos-one-day-report"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/copilot/metrics/reports/user-teams-1-day",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-enterprise-user-teams-one-day-report has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-enterprise-user-teams-one-day-report"
+      "covered_by": {
+        "direct_read": "copilot copilot-enterprise-user-teams-one-day-report"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/copilot/metrics/reports/users-1-day",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-users-one-day-usage-metrics has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-users-one-day-usage-metrics"
+      "covered_by": {
+        "direct_read": "copilot copilot-users-one-day-usage-metrics"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/copilot/metrics/reports/users-28-day/latest",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-users-usage-metrics has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-users-usage-metrics"
+      "covered_by": {
+        "direct_read": "copilot copilot-users-usage-metrics"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/dependabot/alerts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/list-alerts-for-enterprise has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/list-alerts-for-enterprise"
+      "covered_by": {
+        "direct_read": "dependabot list-alerts-for-enterprise"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/dependabot/repository-access",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/repository-access-for-enterprise has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/repository-access-for-enterprise"
+      "covered_by": {
+        "direct_read": "dependabot repository-access-for-enterprise"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/teams",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation enterprise-teams/list has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=enterprise-teams/list"
+      "covered_by": {
+        "direct_read": "enterprise-teams list"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/teams/{enterprise-team}/memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation enterprise-team-memberships/list has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=enterprise-team-memberships/list"
+      "covered_by": {
+        "direct_read": "enterprise-team-memberships list"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/teams/{enterprise-team}/memberships/{username}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation enterprise-team-memberships/get has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=enterprise-team-memberships/get"
+      "covered_by": {
+        "direct_read": "enterprise-team-memberships get"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/teams/{enterprise-team}/organizations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation enterprise-team-organizations/get-assignments has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=enterprise-team-organizations/get-assignments"
+      "covered_by": {
+        "direct_read": "enterprise-team-organizations get-assignments"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/teams/{enterprise-team}/organizations/{org}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation enterprise-team-organizations/get-assignment has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=enterprise-team-organizations/get-assignment"
+      "covered_by": {
+        "direct_read": "enterprise-team-organizations get-assignment"
       }
     },
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/teams/{team_slug}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation enterprise-teams/get has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=enterprise-teams/get"
+      "covered_by": {
+        "direct_read": "enterprise-teams get"
       }
     },
     {
@@ -3002,25 +2897,15 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/code-scanning/alerts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/list-alerts-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/list-alerts-for-org"
+      "covered_by": {
+        "direct_read": "code-scanning list-alerts-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/code-security/configurations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-security/get-configurations-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-security/get-configurations-for-org"
+      "covered_by": {
+        "direct_read": "code-security get-configurations-for-org"
       }
     },
     {
@@ -3050,337 +2935,197 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/code-security/configurations/defaults",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-security/get-default-configurations has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-security/get-default-configurations"
+      "covered_by": {
+        "direct_read": "code-security get-default-configurations"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/codespaces",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/list-in-organization has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/list-in-organization"
+      "covered_by": {
+        "direct_read": "codespaces list-in-organization"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/codespaces/secrets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/list-org-secrets has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/list-org-secrets"
+      "covered_by": {
+        "direct_read": "codespaces list-org-secrets"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/codespaces/secrets/{secret_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/get-org-secret has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/get-org-secret"
+      "covered_by": {
+        "direct_read": "codespaces get-org-secret"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/codespaces/secrets/{secret_name}/repositories",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/list-selected-repos-for-org-secret has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/list-selected-repos-for-org-secret"
+      "covered_by": {
+        "direct_read": "codespaces list-selected-repos-for-org-secret"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/codespaces/secrets/public-key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/get-org-public-key has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/get-org-public-key"
+      "covered_by": {
+        "direct_read": "codespaces get-org-public-key"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot-spaces",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/list-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/list-for-org"
+      "covered_by": {
+        "direct_read": "copilot-spaces list-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot-spaces/{space_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/get-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/get-for-org"
+      "covered_by": {
+        "direct_read": "copilot-spaces get-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot-spaces/{space_number}/collaborators",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/list-collaborators-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/list-collaborators-for-org"
+      "covered_by": {
+        "direct_read": "copilot-spaces list-collaborators-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot-spaces/{space_number}/resources",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/list-resources-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/list-resources-for-org"
+      "covered_by": {
+        "direct_read": "copilot-spaces list-resources-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot-spaces/{space_number}/resources/{space_resource_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/get-resource-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/get-resource-for-org"
+      "covered_by": {
+        "direct_read": "copilot-spaces get-resource-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/billing",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/get-copilot-organization-details has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/get-copilot-organization-details"
+      "covered_by": {
+        "direct_read": "copilot get-copilot-organization-details"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/billing/seats",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/list-copilot-seats has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/list-copilot-seats"
+      "covered_by": {
+        "direct_read": "copilot list-copilot-seats"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/coding-agent/permissions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/get-copilot-coding-agent-permissions-organization has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/get-copilot-coding-agent-permissions-organization"
+      "covered_by": {
+        "direct_read": "copilot get-copilot-coding-agent-permissions-organization"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/coding-agent/permissions/repositories",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/list-copilot-coding-agent-selected-repositories-for-organization has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/list-copilot-coding-agent-selected-repositories-for-organization"
+      "covered_by": {
+        "direct_read": "copilot list-copilot-coding-agent-selected-repositories-for-organization"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/content_exclusion",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-content-exclusion-for-organization has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-content-exclusion-for-organization"
+      "covered_by": {
+        "direct_read": "copilot copilot-content-exclusion-for-organization"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/metrics/reports/organization-1-day",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-organization-one-day-usage-metrics has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-organization-one-day-usage-metrics"
+      "covered_by": {
+        "direct_read": "copilot copilot-organization-one-day-usage-metrics"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/metrics/reports/organization-28-day/latest",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-organization-usage-metrics has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-organization-usage-metrics"
+      "covered_by": {
+        "direct_read": "copilot copilot-organization-usage-metrics"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/metrics/reports/repos-1-day",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-organization-repos-one-day-report has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-organization-repos-one-day-report"
+      "covered_by": {
+        "direct_read": "copilot copilot-organization-repos-one-day-report"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/metrics/reports/user-teams-1-day",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-organization-user-teams-one-day-report has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-organization-user-teams-one-day-report"
+      "covered_by": {
+        "direct_read": "copilot copilot-organization-user-teams-one-day-report"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/metrics/reports/users-1-day",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-organization-users-one-day-usage-metrics has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-organization-users-one-day-usage-metrics"
+      "covered_by": {
+        "direct_read": "copilot copilot-organization-users-one-day-usage-metrics"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/copilot/metrics/reports/users-28-day/latest",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/copilot-organization-users-usage-metrics has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/copilot-organization-users-usage-metrics"
+      "covered_by": {
+        "direct_read": "copilot copilot-organization-users-usage-metrics"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/dependabot/alerts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/list-alerts-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/list-alerts-for-org"
+      "covered_by": {
+        "direct_read": "dependabot list-alerts-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/dependabot/repository-access",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/repository-access-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/repository-access-for-org"
+      "covered_by": {
+        "direct_read": "dependabot repository-access-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/dependabot/secrets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/list-org-secrets has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/list-org-secrets"
+      "covered_by": {
+        "direct_read": "dependabot list-org-secrets"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/dependabot/secrets/{secret_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/get-org-secret has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/get-org-secret"
+      "covered_by": {
+        "direct_read": "dependabot get-org-secret"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/dependabot/secrets/{secret_name}/repositories",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/list-selected-repos-for-org-secret has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/list-selected-repos-for-org-secret"
+      "covered_by": {
+        "direct_read": "dependabot list-selected-repos-for-org-secret"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/dependabot/secrets/public-key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/get-org-public-key has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/get-org-public-key"
+      "covered_by": {
+        "direct_read": "dependabot get-org-public-key"
       }
     },
     {
@@ -3719,25 +3464,15 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/members/{username}/codespaces",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/get-codespaces-for-user-in-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/get-codespaces-for-user-in-org"
+      "covered_by": {
+        "direct_read": "codespaces get-codespaces-for-user-in-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/members/{username}/copilot",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot/get-copilot-seat-details-for-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot/get-copilot-seat-details-for-user"
+      "covered_by": {
+        "direct_read": "copilot get-copilot-seat-details-for-user"
       }
     },
     {
@@ -4220,37 +3955,22 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/secret-scanning/alerts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation secret-scanning/list-alerts-for-org has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=secret-scanning/list-alerts-for-org"
+      "covered_by": {
+        "direct_read": "secret-scanning list-alerts-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/secret-scanning/custom-patterns",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation secret-scanning/list-org-custom-patterns has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=secret-scanning/list-org-custom-patterns"
+      "covered_by": {
+        "direct_read": "secret-scanning list-org-custom-patterns"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/secret-scanning/pattern-configurations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation secret-scanning/list-org-pattern-configs has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=secret-scanning/list-org-pattern-configs"
+      "covered_by": {
+        "direct_read": "secret-scanning list-org-pattern-configs"
       }
     },
     {
@@ -4463,7 +4183,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
       "covered_by": {
-        "direct_read": "artifact download-2"
+        "direct_reads": [
+          "artifact download-2"
+        ]
       }
     },
     {
@@ -4482,21 +4204,27 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
       "covered_by": {
-        "direct_read": "actions retention-limit view"
+        "direct_reads": [
+          "actions retention-limit view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
       "covered_by": {
-        "direct_read": "actions storage-limit view"
+        "direct_reads": [
+          "actions storage-limit view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/cache/usage",
       "covered_by": {
-        "direct_read": "actions usage view"
+        "direct_reads": [
+          "actions usage view"
+        ]
       }
     },
     {
@@ -4527,14 +4255,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
       "covered_by": {
-        "direct_read": "actions concurrency_groups view-2"
+        "direct_reads": [
+          "actions concurrency_groups view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}",
       "covered_by": {
-        "direct_read": "actions jobs view"
+        "direct_reads": [
+          "actions jobs view"
+        ]
       }
     },
     {
@@ -4553,7 +4285,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
       "covered_by": {
-        "direct_read": "actions sub view"
+        "direct_reads": [
+          "actions sub view"
+        ]
       }
     },
     {
@@ -4584,49 +4318,63 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions",
       "covered_by": {
-        "direct_read": "actions permissions view"
+        "direct_reads": [
+          "actions permissions view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/access",
       "covered_by": {
-        "direct_read": "actions access view"
+        "direct_reads": [
+          "actions access view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
       "covered_by": {
-        "direct_read": "actions artifact-and-log-retention view"
+        "direct_reads": [
+          "actions artifact-and-log-retention view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
       "covered_by": {
-        "direct_read": "actions fork-pr-contributor-approval view"
+        "direct_reads": [
+          "actions fork-pr-contributor-approval view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
       "covered_by": {
-        "direct_read": "actions fork-pr-workflows-private-repos view"
+        "direct_reads": [
+          "actions fork-pr-workflows-private-repos view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
       "covered_by": {
-        "direct_read": "actions selected-actions view"
+        "direct_reads": [
+          "actions selected-actions view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
       "covered_by": {
-        "direct_read": "actions workflow view"
+        "direct_reads": [
+          "actions workflow view"
+        ]
       }
     },
     {
@@ -4645,21 +4393,27 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
       "covered_by": {
-        "direct_read": "actions runners view-2"
+        "direct_reads": [
+          "actions runners view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
       "covered_by": {
-        "direct_read": "actions labels view"
+        "direct_reads": [
+          "actions labels view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runners/downloads",
       "covered_by": {
-        "direct_read": "actions downloads view"
+        "direct_reads": [
+          "actions downloads view"
+        ]
       }
     },
     {
@@ -4683,7 +4437,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
       "covered_by": {
-        "direct_read": "actions approvals view"
+        "direct_reads": [
+          "actions approvals view"
+        ]
       }
     },
     {
@@ -4702,7 +4458,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}",
       "covered_by": {
-        "direct_read": "actions attempts view"
+        "direct_reads": [
+          "actions attempts view"
+        ]
       }
     },
     {
@@ -4769,14 +4527,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
       "covered_by": {
-        "direct_read": "actions pending_deployments view"
+        "direct_reads": [
+          "actions pending_deployments view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing",
       "covered_by": {
-        "direct_read": "actions timing view"
+        "direct_reads": [
+          "actions timing view"
+        ]
       }
     },
     {
@@ -4795,14 +4557,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
       "covered_by": {
-        "direct_read": "actions secrets view-2"
+        "direct_reads": [
+          "actions secrets view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/secrets/public-key",
       "covered_by": {
-        "direct_read": "actions public-key view"
+        "direct_reads": [
+          "actions public-key view"
+        ]
       }
     },
     {
@@ -4860,7 +4626,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
       "covered_by": {
-        "direct_read": "actions timing view-2"
+        "direct_reads": [
+          "actions timing view-2"
+        ]
       }
     },
     {
@@ -4915,14 +4683,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
       "covered_by": {
-        "direct_read": "agents secrets view-2"
+        "direct_reads": [
+          "agents secrets view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/secrets/public-key",
       "covered_by": {
-        "direct_read": "agents public-key view"
+        "direct_reads": [
+          "agents public-key view"
+        ]
       }
     },
     {
@@ -4941,7 +4713,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/variables/{name}",
       "covered_by": {
-        "direct_read": "agents variables view-2"
+        "direct_reads": [
+          "agents variables view-2"
+        ]
       }
     },
     {
@@ -4960,7 +4734,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/assignees/{assignee}",
       "covered_by": {
-        "direct_read": "assignees view"
+        "direct_reads": [
+          "assignees view"
+        ]
       }
     },
     {
@@ -4986,14 +4762,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
       "covered_by": {
-        "direct_read": "autolinks view"
+        "direct_reads": [
+          "autolinks view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/automated-security-fixes",
       "covered_by": {
-        "direct_read": "automated-security-fixes view"
+        "direct_reads": [
+          "automated-security-fixes view"
+        ]
       }
     },
     {
@@ -5007,84 +4787,108 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}",
       "covered_by": {
-        "direct_read": "branches view"
+        "direct_reads": [
+          "branches view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
       "covered_by": {
-        "direct_read": "branches protection view"
+        "direct_reads": [
+          "branches protection view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
       "covered_by": {
-        "direct_read": "branches enforce_admins view"
+        "direct_reads": [
+          "branches enforce_admins view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
       "covered_by": {
-        "direct_read": "branches required_pull_request_reviews view"
+        "direct_reads": [
+          "branches required_pull_request_reviews view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
       "covered_by": {
-        "direct_read": "branches required_signatures view"
+        "direct_reads": [
+          "branches required_signatures view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
       "covered_by": {
-        "direct_read": "branches required_status_checks view"
+        "direct_reads": [
+          "branches required_status_checks view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
       "covered_by": {
-        "direct_read": "branches contexts view"
+        "direct_reads": [
+          "branches contexts view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
       "covered_by": {
-        "direct_read": "branches restrictions view"
+        "direct_reads": [
+          "branches restrictions view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
       "covered_by": {
-        "direct_read": "branches apps view"
+        "direct_reads": [
+          "branches apps view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
       "covered_by": {
-        "direct_read": "branches teams view"
+        "direct_reads": [
+          "branches teams view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
       "covered_by": {
-        "direct_read": "branches users view"
+        "direct_reads": [
+          "branches users view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
       "covered_by": {
-        "direct_read": "check-runs view"
+        "direct_reads": [
+          "check-runs view"
+        ]
       }
     },
     {
@@ -5103,7 +4907,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}",
       "covered_by": {
-        "direct_read": "check-suites view"
+        "direct_reads": [
+          "check-suites view"
+        ]
       }
     },
     {
@@ -5134,14 +4940,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}",
       "covered_by": {
-        "direct_read": "code-quality findings view-2"
+        "direct_reads": [
+          "code-quality findings view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-quality/setup",
       "covered_by": {
-        "direct_read": "code-quality setup view"
+        "direct_reads": [
+          "code-quality setup view"
+        ]
       }
     },
     {
@@ -5155,172 +4965,189 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
       "covered_by": {
-        "direct_read": "code-scanning alerts view"
+        "direct_reads": [
+          "code-scanning alerts view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
       "covered_by": {
-        "direct_read": "code-scanning autofix view"
+        "direct_reads": [
+          "code-scanning autofix view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/list-alert-instances has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/list-alert-instances"
+      "covered_by": {
+        "direct_reads": [
+          "code-scanning instances view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/analyses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation code-scanning/list-recent-analyses has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=code-scanning/list-recent-analyses"
+      "covered_by": {
+        "direct_reads": [
+          "code-scanning analyses view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
       "covered_by": {
-        "direct_read": "code-scanning analyses view-2"
+        "direct_reads": [
+          "code-scanning analyses view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases",
       "covered_by": {
-        "direct_read": "code-scanning databases view"
+        "direct_reads": [
+          "code-scanning databases view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
       "covered_by": {
-        "direct_read": "code-scanning databases view-2"
+        "direct_reads": [
+          "code-scanning databases view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}",
       "covered_by": {
-        "direct_read": "code-scanning variant-analyses view"
+        "direct_reads": [
+          "code-scanning variant-analyses view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
       "covered_by": {
-        "direct_read": "code-scanning repos view"
+        "direct_reads": [
+          "code-scanning repos view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
       "covered_by": {
-        "direct_read": "code-scanning default-setup view"
+        "direct_reads": [
+          "code-scanning default-setup view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
       "covered_by": {
-        "direct_read": "code-scanning sarifs view"
+        "direct_reads": [
+          "code-scanning sarifs view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-security-configuration",
       "covered_by": {
-        "direct_read": "code-security-configuration view"
+        "direct_reads": [
+          "code-security-configuration view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codeowners/errors",
       "covered_by": {
-        "direct_read": "codeowners errors view"
+        "direct_reads": [
+          "codeowners errors view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/list-in-repository-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/list-in-repository-for-authenticated-user"
+      "covered_by": {
+        "direct_reads": [
+          "codespaces view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/devcontainers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/list-devcontainers-in-repository-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/list-devcontainers-in-repository-for-authenticated-user"
+      "covered_by": {
+        "direct_reads": [
+          "codespaces devcontainers view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/machines",
       "covered_by": {
-        "direct_read": "codespaces machines view"
+        "direct_reads": [
+          "codespaces machines view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/new",
       "covered_by": {
-        "direct_read": "codespaces new view"
+        "direct_reads": [
+          "codespaces new view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/permissions_check",
       "covered_by": {
-        "direct_read": "codespaces permissions_check view"
+        "direct_reads": [
+          "codespaces permissions_check view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/secrets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/list-repo-secrets has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/list-repo-secrets"
+      "covered_by": {
+        "direct_reads": [
+          "codespaces secrets view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
       "covered_by": {
-        "direct_read": "codespaces secrets view-2"
+        "direct_reads": [
+          "codespaces secrets view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key",
       "covered_by": {
-        "direct_read": "codespaces public-key view"
+        "direct_reads": [
+          "codespaces public-key view"
+        ]
       }
     },
     {
@@ -5334,14 +5161,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/collaborators/{username}",
       "covered_by": {
-        "direct_read": "collaborators view"
+        "direct_reads": [
+          "collaborators view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/collaborators/{username}/permission",
       "covered_by": {
-        "direct_read": "collaborators permission view"
+        "direct_reads": [
+          "collaborators permission view"
+        ]
       }
     },
     {
@@ -5355,7 +5186,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/comments/{comment_id}",
       "covered_by": {
-        "direct_read": "comments view"
+        "direct_reads": [
+          "comments view"
+        ]
       }
     },
     {
@@ -5381,7 +5214,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
       "covered_by": {
-        "direct_read": "commits branches-where-head view"
+        "direct_reads": [
+          "commits branches-where-head view"
+        ]
       }
     },
     {
@@ -5472,7 +5307,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/community/profile",
       "covered_by": {
-        "direct_read": "community profile view"
+        "direct_reads": [
+          "community profile view"
+        ]
       }
     },
     {
@@ -5510,7 +5347,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration",
       "covered_by": {
-        "direct_read": "copilot configuration view"
+        "direct_reads": [
+          "copilot configuration view"
+        ]
       }
     },
     {
@@ -5524,40 +5363,45 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
       "covered_by": {
-        "direct_read": "dependabot alerts view"
+        "direct_reads": [
+          "dependabot alerts view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependabot/secrets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation dependabot/list-repo-secrets has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=dependabot/list-repo-secrets"
+      "covered_by": {
+        "direct_reads": [
+          "dependabot secrets view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
       "covered_by": {
-        "direct_read": "dependabot secrets view-2"
+        "direct_reads": [
+          "dependabot secrets view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key",
       "covered_by": {
-        "direct_read": "dependabot public-key view"
+        "direct_reads": [
+          "dependabot public-key view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
       "covered_by": {
-        "direct_read": "dependency-graph compare view"
+        "direct_reads": [
+          "dependency-graph compare view"
+        ]
       }
     },
     {
@@ -5607,7 +5451,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
       "covered_by": {
-        "direct_read": "deployments view"
+        "direct_reads": [
+          "deployments view"
+        ]
       }
     },
     {
@@ -5626,7 +5472,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
       "covered_by": {
-        "direct_read": "deployments statuses view-2"
+        "direct_reads": [
+          "deployments statuses view-2"
+        ]
       }
     },
     {
@@ -5640,21 +5488,27 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}",
       "covered_by": {
-        "direct_read": "environments view"
+        "direct_reads": [
+          "environments view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
       "covered_by": {
-        "direct_read": "environments deployment_protection_rules view"
+        "direct_reads": [
+          "environments deployment_protection_rules view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
       "covered_by": {
-        "direct_read": "environments deployment_protection_rules view-2"
+        "direct_reads": [
+          "environments deployment_protection_rules view-2"
+        ]
       }
     },
     {
@@ -5685,7 +5539,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
       "covered_by": {
-        "direct_read": "environments deployment-branch-policies view-2"
+        "direct_reads": [
+          "environments deployment-branch-policies view-2"
+        ]
       }
     },
     {
@@ -5704,14 +5560,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
       "covered_by": {
-        "direct_read": "environments secrets view-2"
+        "direct_reads": [
+          "environments secrets view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
       "covered_by": {
-        "direct_read": "environments public-key view"
+        "direct_reads": [
+          "environments public-key view"
+        ]
       }
     },
     {
@@ -5730,7 +5590,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
       "covered_by": {
-        "direct_read": "environments variables view-2"
+        "direct_reads": [
+          "environments variables view-2"
+        ]
       }
     },
     {
@@ -5756,49 +5618,63 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}",
       "covered_by": {
-        "direct_read": "git blobs view"
+        "direct_reads": [
+          "git blobs view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}",
       "covered_by": {
-        "direct_read": "git commits view"
+        "direct_reads": [
+          "git commits view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}",
       "covered_by": {
-        "direct_read": "git matching-refs view"
+        "direct_reads": [
+          "git matching-refs view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/ref/{ref}",
       "covered_by": {
-        "direct_read": "git ref view"
+        "direct_reads": [
+          "git ref view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}",
       "covered_by": {
-        "direct_read": "git tags view"
+        "direct_reads": [
+          "git tags view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}",
       "covered_by": {
-        "direct_read": "git trees view"
+        "direct_reads": [
+          "git trees view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hash-algorithm",
       "covered_by": {
-        "direct_read": "hash-algorithm view"
+        "direct_reads": [
+          "hash-algorithm view"
+        ]
       }
     },
     {
@@ -5812,14 +5688,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}",
       "covered_by": {
-        "direct_read": "hooks view"
+        "direct_reads": [
+          "hooks view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config",
       "covered_by": {
-        "direct_read": "hooks config view"
+        "direct_reads": [
+          "hooks config view"
+        ]
       }
     },
     {
@@ -5838,56 +5718,72 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
       "covered_by": {
-        "direct_read": "hooks deliveries view-2"
+        "direct_reads": [
+          "hooks deliveries view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/immutable-releases",
       "covered_by": {
-        "direct_read": "immutable-releases view"
+        "direct_reads": [
+          "immutable-releases view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/import",
       "covered_by": {
-        "direct_read": "import view"
+        "direct_reads": [
+          "import view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/import/authors",
       "covered_by": {
-        "direct_read": "import authors view"
+        "direct_reads": [
+          "import authors view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/import/large_files",
       "covered_by": {
-        "direct_read": "import large_files view"
+        "direct_reads": [
+          "import large_files view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/installation",
       "covered_by": {
-        "direct_read": "installation view"
+        "direct_reads": [
+          "installation view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/interaction-limits",
       "covered_by": {
-        "direct_read": "interaction-limits view"
+        "direct_reads": [
+          "interaction-limits view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
       "covered_by": {
-        "direct_read": "interaction-limits bypass-list view"
+        "direct_reads": [
+          "interaction-limits bypass-list view"
+        ]
       }
     },
     {
@@ -5913,7 +5809,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issue-types",
       "covered_by": {
-        "direct_read": "issue-types view"
+        "direct_reads": [
+          "issue-types view"
+        ]
       }
     },
     {
@@ -5937,7 +5835,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
       "covered_by": {
-        "direct_read": "issues assignees view"
+        "direct_reads": [
+          "issues assignees view"
+        ]
       }
     },
     {
@@ -6016,7 +5916,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent",
       "covered_by": {
-        "direct_read": "issues parent view"
+        "direct_reads": [
+          "issues parent view"
+        ]
       }
     },
     {
@@ -6078,7 +5980,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
       "covered_by": {
-        "direct_read": "issues comments view"
+        "direct_reads": [
+          "issues comments view"
+        ]
       }
     },
     {
@@ -6104,7 +6008,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/events/{event_id}",
       "covered_by": {
-        "direct_read": "issues events view"
+        "direct_reads": [
+          "issues events view"
+        ]
       }
     },
     {
@@ -6118,7 +6024,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/keys/{key_id}",
       "covered_by": {
-        "direct_read": "keys view"
+        "direct_reads": [
+          "keys view"
+        ]
       }
     },
     {
@@ -6132,7 +6040,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/labels/{name}",
       "covered_by": {
-        "direct_read": "labels view"
+        "direct_reads": [
+          "labels view"
+        ]
       }
     },
     {
@@ -6146,7 +6056,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/license",
       "covered_by": {
-        "direct_read": "license view"
+        "direct_reads": [
+          "license view"
+        ]
       }
     },
     {
@@ -6160,7 +6072,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/milestones/{milestone_number}",
       "covered_by": {
-        "direct_read": "milestones view"
+        "direct_reads": [
+          "milestones view"
+        ]
       }
     },
     {
@@ -6191,7 +6105,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages",
       "covered_by": {
-        "direct_read": "pages view"
+        "direct_reads": [
+          "pages view"
+        ]
       }
     },
     {
@@ -6210,42 +6126,54 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages/builds/{build_id}",
       "covered_by": {
-        "direct_read": "pages builds view-2"
+        "direct_reads": [
+          "pages builds view-2"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages/builds/latest",
       "covered_by": {
-        "direct_read": "pages latest view"
+        "direct_reads": [
+          "pages latest view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
       "covered_by": {
-        "direct_read": "pages deployments view"
+        "direct_reads": [
+          "pages deployments view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages/health",
       "covered_by": {
-        "direct_read": "pages health view"
+        "direct_reads": [
+          "pages health view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
       "covered_by": {
-        "direct_read": "private-vulnerability-reporting view"
+        "direct_reads": [
+          "private-vulnerability-reporting view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/properties/values",
       "covered_by": {
-        "direct_read": "properties values view"
+        "direct_reads": [
+          "properties values view"
+        ]
       }
     },
     {
@@ -6318,14 +6246,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
       "covered_by": {
-        "direct_read": "pulls merge view"
+        "direct_reads": [
+          "pulls merge view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
       "covered_by": {
-        "direct_read": "pulls requested_reviewers view"
+        "direct_reads": [
+          "pulls requested_reviewers view"
+        ]
       }
     },
     {
@@ -6344,7 +6276,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
       "covered_by": {
-        "direct_read": "pulls reviews view-2"
+        "direct_reads": [
+          "pulls reviews view-2"
+        ]
       }
     },
     {
@@ -6370,7 +6304,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}",
       "covered_by": {
-        "direct_read": "pulls comments view-2"
+        "direct_reads": [
+          "pulls comments view-2"
+        ]
       }
     },
     {
@@ -6389,14 +6325,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/readme",
       "covered_by": {
-        "direct_read": "readme view"
+        "direct_reads": [
+          "readme view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/readme/{dir}",
       "covered_by": {
-        "direct_read": "readme view-2"
+        "direct_reads": [
+          "readme view-2"
+        ]
       }
     },
     {
@@ -6454,14 +6394,18 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/latest",
       "covered_by": {
-        "direct_read": "releases latest view"
+        "direct_reads": [
+          "releases latest view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/tags/{tag}",
       "covered_by": {
-        "direct_read": "releases tags view"
+        "direct_reads": [
+          "releases tags view"
+        ]
       }
     },
     {
@@ -6509,7 +6453,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
       "covered_by": {
-        "direct_read": "rulesets history view-2"
+        "direct_reads": [
+          "rulesets history view-2"
+        ]
       }
     },
     {
@@ -6528,7 +6474,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}",
       "covered_by": {
-        "direct_read": "rulesets rule-suites view-2"
+        "direct_reads": [
+          "rulesets rule-suites view-2"
+        ]
       }
     },
     {
@@ -6542,38 +6490,34 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
       "covered_by": {
-        "direct_read": "secret-scanning alerts view"
+        "direct_reads": [
+          "secret-scanning alerts view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation secret-scanning/list-locations-for-alert has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=secret-scanning/list-locations-for-alert"
+      "covered_by": {
+        "direct_reads": [
+          "secret-scanning locations view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation secret-scanning/list-repo-custom-patterns has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=secret-scanning/list-repo-custom-patterns"
+      "covered_by": {
+        "direct_read": "secret-scanning list-repo-custom-patterns"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/secret-scanning/scan-history",
       "covered_by": {
-        "direct_read": "secret-scanning scan-history view"
+        "direct_reads": [
+          "secret-scanning scan-history view"
+        ]
       }
     },
     {
@@ -6587,7 +6531,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
       "covered_by": {
-        "direct_read": "security-advisories view"
+        "direct_reads": [
+          "security-advisories view"
+        ]
       }
     },
     {
@@ -6625,35 +6571,45 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/code_frequency",
       "covered_by": {
-        "direct_read": "stats code_frequency view"
+        "direct_reads": [
+          "stats code_frequency view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/commit_activity",
       "covered_by": {
-        "direct_read": "stats commit_activity view"
+        "direct_reads": [
+          "stats commit_activity view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/contributors",
       "covered_by": {
-        "direct_read": "stats contributors view"
+        "direct_reads": [
+          "stats contributors view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/participation",
       "covered_by": {
-        "direct_read": "stats participation view"
+        "direct_reads": [
+          "stats participation view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/punch_card",
       "covered_by": {
-        "direct_read": "stats punch_card view"
+        "direct_reads": [
+          "stats punch_card view"
+        ]
       }
     },
     {
@@ -6667,7 +6623,9 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/subscription",
       "covered_by": {
-        "direct_read": "subscription view"
+        "direct_reads": [
+          "subscription view"
+        ]
       }
     },
     {
@@ -6717,35 +6675,45 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/traffic/clones",
       "covered_by": {
-        "direct_read": "traffic clones view"
+        "direct_reads": [
+          "traffic clones view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/traffic/popular/paths",
       "covered_by": {
-        "direct_read": "traffic paths view"
+        "direct_reads": [
+          "traffic paths view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/traffic/popular/referrers",
       "covered_by": {
-        "direct_read": "traffic referrers view"
+        "direct_reads": [
+          "traffic referrers view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/traffic/views",
       "covered_by": {
-        "direct_read": "traffic views view"
+        "direct_reads": [
+          "traffic views view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/vulnerability-alerts",
       "covered_by": {
-        "direct_read": "vulnerability-alerts view"
+        "direct_reads": [
+          "vulnerability-alerts view"
+        ]
       }
     },
     {
@@ -6997,97 +6965,60 @@
     {
       "method": "GET",
       "path": "/user/codespaces",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/list-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/list-for-authenticated-user"
+      "covered_by": {
+        "direct_reads": [
+          "codespace list",
+          "codespaces list-for-authenticated-user"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/user/codespaces/{codespace_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/get-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/get-for-authenticated-user"
+      "covered_by": {
+        "direct_read": "codespaces get-for-authenticated-user"
       }
     },
     {
       "method": "GET",
       "path": "/user/codespaces/{codespace_name}/exports/{export_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/get-export-details-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/get-export-details-for-authenticated-user"
+      "covered_by": {
+        "direct_read": "codespaces get-export-details-for-authenticated-user"
       }
     },
     {
       "method": "GET",
       "path": "/user/codespaces/{codespace_name}/machines",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/codespace-machines-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/codespace-machines-for-authenticated-user"
+      "covered_by": {
+        "direct_read": "codespaces codespace-machines-for-authenticated-user"
       }
     },
     {
       "method": "GET",
       "path": "/user/codespaces/secrets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/list-secrets-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/list-secrets-for-authenticated-user"
+      "covered_by": {
+        "direct_read": "codespaces list-secrets-for-authenticated-user"
       }
     },
     {
       "method": "GET",
       "path": "/user/codespaces/secrets/{secret_name}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/get-secret-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/get-secret-for-authenticated-user"
+      "covered_by": {
+        "direct_read": "codespaces get-secret-for-authenticated-user"
       }
     },
     {
       "method": "GET",
       "path": "/user/codespaces/secrets/{secret_name}/repositories",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/list-repositories-for-secret-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/list-repositories-for-secret-for-authenticated-user"
+      "covered_by": {
+        "direct_read": "codespaces list-repositories-for-secret-for-authenticated-user"
       }
     },
     {
       "method": "GET",
       "path": "/user/codespaces/secrets/public-key",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation codespaces/get-public-key-for-authenticated-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=codespaces/get-public-key-for-authenticated-user"
+      "covered_by": {
+        "direct_read": "codespaces get-public-key-for-authenticated-user"
       }
     },
     {
@@ -7555,61 +7486,36 @@
     {
       "method": "GET",
       "path": "/users/{username}/copilot-spaces",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/list-for-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/list-for-user"
+      "covered_by": {
+        "direct_read": "copilot-spaces list-for-user"
       }
     },
     {
       "method": "GET",
       "path": "/users/{username}/copilot-spaces/{space_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/get-for-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/get-for-user"
+      "covered_by": {
+        "direct_read": "copilot-spaces get-for-user"
       }
     },
     {
       "method": "GET",
       "path": "/users/{username}/copilot-spaces/{space_number}/collaborators",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/list-collaborators-for-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/list-collaborators-for-user"
+      "covered_by": {
+        "direct_read": "copilot-spaces list-collaborators-for-user"
       }
     },
     {
       "method": "GET",
       "path": "/users/{username}/copilot-spaces/{space_number}/resources",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/list-resources-for-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/list-resources-for-user"
+      "covered_by": {
+        "direct_read": "copilot-spaces list-resources-for-user"
       }
     },
     {
       "method": "GET",
       "path": "/users/{username}/copilot-spaces/{space_number}/resources/{space_resource_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Locked source operation copilot-spaces/get-resource-for-user has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=copilot-spaces/get-resource-for-user"
+      "covered_by": {
+        "direct_read": "copilot-spaces get-resource-for-user"
       }
     },
     {

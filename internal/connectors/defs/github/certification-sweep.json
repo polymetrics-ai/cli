@@ -1586,7 +1586,7 @@
       "summary": "Get GitHub Actions cache retention limit for an enterprise",
       "path": "actions get-actions-cache-retention-limit-for-enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -1603,11 +1603,20 @@
           "path": "/enterprises/{enterprise}/actions/cache/retention-limit"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get GitHub Actions cache retention limit for an organization",
@@ -1640,7 +1649,7 @@
       "summary": "Get GitHub Actions cache storage limit for an enterprise",
       "path": "actions get-actions-cache-storage-limit-for-enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -1657,11 +1666,20 @@
           "path": "/enterprises/{enterprise}/actions/cache/storage-limit"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get GitHub Actions cache storage limit for an organization",
@@ -13499,7 +13517,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses",
       "path": "code-scanning analyses view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13559,8 +13577,17 @@
           "path": "/repos/{owner}/{repo}/code-scanning/analyses"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
@@ -13893,7 +13920,7 @@
       "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
       "path": "code-scanning instances view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13922,17 +13949,26 @@
           "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List code scanning alerts for an organization",
       "path": "code-scanning list-alerts-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -13949,11 +13985,20 @@
           "path": "/orgs/{org}/code-scanning/alerts"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
@@ -14928,7 +14973,7 @@
       "summary": "Get code security configurations for an enterprise",
       "path": "code-security get-configurations-for-enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -14945,17 +14990,26 @@
           "path": "/enterprises/{enterprise}/code-security/configurations"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get code security configurations for an organization",
       "path": "code-security get-configurations-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -14972,17 +15026,26 @@
           "path": "/orgs/{org}/code-security/configurations"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Get default code security configurations",
       "path": "code-security get-default-configurations",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -14999,17 +15062,26 @@
           "path": "/orgs/{org}/code-security/configurations/defaults"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Get default code security configurations for an enterprise",
       "path": "code-security get-default-configurations-for-enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -15026,11 +15098,20 @@
           "path": "/enterprises/{enterprise}/code-security/configurations/defaults"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get repositories associated with a code security configuration",
@@ -15070,7 +15151,7 @@
       "summary": "Get repositories associated with an enterprise code security configuration",
       "path": "code-security get-repositories-for-enterprise-configuration",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -15093,18 +15174,27 @@
           "path": "/enterprises/{enterprise}/code-security/configurations/{configuration_id}/repositories"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--configuration-id",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Retrieve a code security configuration of an enterprise",
       "path": "code-security get-single-configuration-for-enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -15127,12 +15217,21 @@
           "path": "/enterprises/{enterprise}/code-security/configurations/{configuration_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--configuration-id",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Set a code security configuration as a default for an organization",
@@ -15965,7 +16064,7 @@
       "summary": "List codespaces",
       "path": "codespace list",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -15975,8 +16074,8 @@
           "path": "/user/codespaces"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
     },
     {
       "summary": "SSH into a codespace",
@@ -16071,7 +16170,7 @@
       "summary": "List machine types for a codespace",
       "path": "codespaces codespace-machines-for-authenticated-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16088,11 +16187,20 @@
           "path": "/user/codespaces/{codespace_name}/machines"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codespace-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/codespaces",
@@ -16627,7 +16735,7 @@
       "summary": "Read /repos/{owner}/{repo}/codespaces/devcontainers",
       "path": "codespaces devcontainers view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -16637,8 +16745,17 @@
           "path": "/repos/{owner}/{repo}/codespaces/devcontainers"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Export a codespace for the authenticated user",
@@ -16672,7 +16789,7 @@
       "summary": "List codespaces for a user in organization",
       "path": "codespaces get-codespaces-for-user-in-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16695,18 +16812,27 @@
           "path": "/orgs/{org}/members/{username}/codespaces"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get details about a codespace export",
       "path": "codespaces get-export-details-for-authenticated-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16729,18 +16855,27 @@
           "path": "/user/codespaces/{codespace_name}/exports/{export_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codespace-name",
         "--export-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get a codespace for the authenticated user",
       "path": "codespaces get-for-authenticated-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16757,17 +16892,26 @@
           "path": "/user/codespaces/{codespace_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--codespace-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get an organization public key",
       "path": "codespaces get-org-public-key",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16784,17 +16928,26 @@
           "path": "/orgs/{org}/codespaces/secrets/public-key"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get an organization secret",
       "path": "codespaces get-org-secret",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16817,18 +16970,27 @@
           "path": "/orgs/{org}/codespaces/secrets/{secret_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get public key for the authenticated user",
       "path": "codespaces get-public-key-for-authenticated-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -16838,14 +17000,23 @@
           "path": "/user/codespaces/secrets/public-key"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Get a secret for the authenticated user",
       "path": "codespaces get-secret-for-authenticated-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16862,17 +17033,26 @@
           "path": "/user/codespaces/secrets/{secret_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List codespaces for the authenticated user",
       "path": "codespaces list-for-authenticated-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -16882,14 +17062,23 @@
           "path": "/user/codespaces"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List codespaces for the organization",
       "path": "codespaces list-in-organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16906,17 +17095,26 @@
           "path": "/orgs/{org}/codespaces"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List organization secrets",
       "path": "codespaces list-org-secrets",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16933,17 +17131,26 @@
           "path": "/orgs/{org}/codespaces/secrets"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List selected repositories for a user secret",
       "path": "codespaces list-repositories-for-secret-for-authenticated-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -16960,17 +17167,26 @@
           "path": "/user/codespaces/secrets/{secret_name}/repositories"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List secrets for the authenticated user",
       "path": "codespaces list-secrets-for-authenticated-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -16980,14 +17196,23 @@
           "path": "/user/codespaces/secrets"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "List selected repositories for an organization secret",
       "path": "codespaces list-selected-repos-for-org-secret",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -17010,12 +17235,21 @@
           "path": "/orgs/{org}/codespaces/secrets/{secret_name}/repositories"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/machines",
@@ -17291,7 +17525,7 @@
       "summary": "Read /repos/{owner}/{repo}/codespaces/secrets",
       "path": "codespaces secrets view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -17301,8 +17535,17 @@
           "path": "/repos/{owner}/{repo}/codespaces/secrets"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
@@ -17647,7 +17890,7 @@
       "summary": "Read /repos/{owner}/{repo}/codespaces",
       "path": "codespaces view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -17657,8 +17900,17 @@
           "path": "/repos/{owner}/{repo}/codespaces"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_codespaces"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/collaborators/{username}/permission",
@@ -18435,7 +18687,7 @@
       "summary": "Get Copilot content exclusion rules for an organization",
       "path": "copilot copilot-content-exclusion-for-organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18452,17 +18704,26 @@
           "path": "/orgs/{org}/copilot/content_exclusion"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot enterprise usage metrics for a specific day",
       "path": "copilot copilot-enterprise-one-day-usage-metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18485,18 +18746,27 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/enterprise-1-day"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot enterprise repository report for a specific day",
       "path": "copilot copilot-enterprise-repos-one-day-report",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18519,18 +18789,27 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/repos-1-day"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot enterprise usage metrics",
       "path": "copilot copilot-enterprise-usage-metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18547,17 +18826,26 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/enterprise-28-day/latest"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot enterprise user-teams report for a specific day",
       "path": "copilot copilot-enterprise-user-teams-one-day-report",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18580,18 +18868,27 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/user-teams-1-day"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot organization usage metrics for a specific day",
       "path": "copilot copilot-organization-one-day-usage-metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18614,18 +18911,27 @@
           "path": "/orgs/{org}/copilot/metrics/reports/organization-1-day"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization repository report for a specific day",
       "path": "copilot copilot-organization-repos-one-day-report",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18648,18 +18954,27 @@
           "path": "/orgs/{org}/copilot/metrics/reports/repos-1-day"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization usage metrics",
       "path": "copilot copilot-organization-usage-metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18676,17 +18991,26 @@
           "path": "/orgs/{org}/copilot/metrics/reports/organization-28-day/latest"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization user-teams report for a specific day",
       "path": "copilot copilot-organization-user-teams-one-day-report",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18709,18 +19033,27 @@
           "path": "/orgs/{org}/copilot/metrics/reports/user-teams-1-day"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization users usage metrics for a specific day",
       "path": "copilot copilot-organization-users-one-day-usage-metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18743,18 +19076,27 @@
           "path": "/orgs/{org}/copilot/metrics/reports/users-1-day"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot organization users usage metrics",
       "path": "copilot copilot-organization-users-usage-metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18771,17 +19113,26 @@
           "path": "/orgs/{org}/copilot/metrics/reports/users-28-day/latest"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot users usage metrics for a specific day",
       "path": "copilot copilot-users-one-day-usage-metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18804,18 +19155,27 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/users-1-day"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--day",
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get Copilot users usage metrics",
       "path": "copilot copilot-users-usage-metrics",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18832,11 +19192,20 @@
           "path": "/enterprises/{enterprise}/copilot/metrics/reports/users-28-day/latest"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Disable a repository for Copilot cloud agent in an organization",
@@ -18912,7 +19281,7 @@
       "summary": "Get Copilot cloud agent permissions for an organization",
       "path": "copilot get-copilot-coding-agent-permissions-organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18929,17 +19298,26 @@
           "path": "/orgs/{org}/copilot/coding-agent/permissions"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot seat information and settings for an organization",
       "path": "copilot get-copilot-organization-details",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18956,17 +19334,26 @@
           "path": "/orgs/{org}/copilot/billing"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get Copilot seat assignment details for a user",
       "path": "copilot get-copilot-seat-details-for-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -18989,18 +19376,27 @@
           "path": "/orgs/{org}/members/{username}/copilot"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List repositories enabled for Copilot cloud agent in an organization",
       "path": "copilot list-copilot-coding-agent-selected-repositories-for-organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -19017,17 +19413,26 @@
           "path": "/orgs/{org}/copilot/coding-agent/permissions/repositories"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List all Copilot seat assignments for an organization",
       "path": "copilot list-copilot-seats",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -19044,11 +19449,20 @@
           "path": "/orgs/{org}/copilot/billing/seats"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Remove organizations from the enterprise coding agent policy",
@@ -19762,7 +20176,7 @@
       "summary": "Get an organization Copilot Space",
       "path": "copilot-spaces get-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -19785,18 +20199,27 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--space-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get a Copilot Space for a user",
       "path": "copilot-spaces get-for-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -19819,18 +20242,27 @@
           "path": "/users/{username}/copilot-spaces/{space_number}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--space-number",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get a resource for an organization Copilot Space",
       "path": "copilot-spaces get-resource-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -19859,19 +20291,28 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}/resources/{space_resource_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--space-number",
         "--space-resource-id"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Get a resource for a Copilot Space for a user",
       "path": "copilot-spaces get-resource-for-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -19900,19 +20341,28 @@
           "path": "/users/{username}/copilot-spaces/{space_number}/resources/{space_resource_id}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--space-number",
         "--space-resource-id",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List collaborators for an organization Copilot Space",
       "path": "copilot-spaces list-collaborators-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -19935,18 +20385,27 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}/collaborators"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--space-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List collaborators for a Copilot Space for a user",
       "path": "copilot-spaces list-collaborators-for-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -19969,18 +20428,27 @@
           "path": "/users/{username}/copilot-spaces/{space_number}/collaborators"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--space-number",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List organization Copilot Spaces",
       "path": "copilot-spaces list-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -19997,17 +20465,26 @@
           "path": "/orgs/{org}/copilot-spaces"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List Copilot Spaces for a user",
       "path": "copilot-spaces list-for-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20024,17 +20501,26 @@
           "path": "/users/{username}/copilot-spaces"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List resources for an organization Copilot Space",
       "path": "copilot-spaces list-resources-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20057,18 +20543,27 @@
           "path": "/orgs/{org}/copilot-spaces/{space_number}/resources"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--space-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "List resources for a Copilot Space for a user",
       "path": "copilot-spaces list-resources-for-user",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20091,12 +20586,21 @@
           "path": "/users/{username}/copilot-spaces/{space_number}/resources"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--space-number",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_copilot"
     },
     {
       "summary": "Remove a collaborator from an organization Copilot Space",
@@ -20782,7 +21286,7 @@
       "summary": "Get an organization public key",
       "path": "dependabot get-org-public-key",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20799,17 +21303,26 @@
           "path": "/orgs/{org}/dependabot/secrets/public-key"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Get an organization secret",
       "path": "dependabot get-org-secret",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20832,18 +21345,27 @@
           "path": "/orgs/{org}/dependabot/secrets/{secret_name}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List Dependabot alerts for an enterprise",
       "path": "dependabot list-alerts-for-enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20860,17 +21382,26 @@
           "path": "/enterprises/{enterprise}/dependabot/alerts"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "List Dependabot alerts for an organization",
       "path": "dependabot list-alerts-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20887,17 +21418,26 @@
           "path": "/orgs/{org}/dependabot/alerts"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List organization secrets",
       "path": "dependabot list-org-secrets",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20914,17 +21454,26 @@
           "path": "/orgs/{org}/dependabot/secrets"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List selected repositories for an organization secret",
       "path": "dependabot list-selected-repos-for-org-secret",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -20947,12 +21496,21 @@
           "path": "/orgs/{org}/dependabot/secrets/{secret_name}/repositories"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org",
         "--secret-name"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/public-key",
@@ -21026,7 +21584,7 @@
       "summary": "Lists the repositories Dependabot can access in an enterprise",
       "path": "dependabot repository-access-for-enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -21043,17 +21601,26 @@
           "path": "/enterprises/{enterprise}/dependabot/repository-access"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Lists the repositories Dependabot can access in an organization",
       "path": "dependabot repository-access-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -21070,17 +21637,26 @@
           "path": "/orgs/{org}/dependabot/repository-access"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets",
       "path": "dependabot secrets view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -21090,8 +21666,17 @@
           "path": "/repos/{owner}/{repo}/dependabot/secrets"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
@@ -21885,7 +22470,7 @@
       "summary": "Get enterprise team membership",
       "path": "enterprise-team-memberships get",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -21894,6 +22479,12 @@
           "type": "string",
           "required": true,
           "maps_to": "path.enterprise"
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.enterprise-team"
         },
         {
           "name": "username",
@@ -21908,18 +22499,28 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/memberships/{username}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--username"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "List members in an enterprise team",
       "path": "enterprise-team-memberships list",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -21928,6 +22529,12 @@
           "type": "string",
           "required": true,
           "maps_to": "path.enterprise"
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.enterprise-team"
         }
       ],
       "api_surface": [
@@ -21936,11 +22543,21 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/memberships"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
-        "--enterprise"
-      ]
+        "--enterprise",
+        "--enterprise-team"
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Remove team membership",
@@ -22156,7 +22773,7 @@
       "summary": "Get organization assignment",
       "path": "enterprise-team-organizations get-assignment",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22165,6 +22782,12 @@
           "type": "string",
           "required": true,
           "maps_to": "path.enterprise"
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.enterprise-team"
         },
         {
           "name": "org",
@@ -22179,18 +22802,28 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/organizations/{org}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Get organization assignments",
       "path": "enterprise-team-organizations get-assignments",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22199,6 +22832,12 @@
           "type": "string",
           "required": true,
           "maps_to": "path.enterprise"
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.enterprise-team"
         }
       ],
       "api_surface": [
@@ -22207,11 +22846,21 @@
           "path": "/enterprises/{enterprise}/teams/{enterprise-team}/organizations"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
-        "--enterprise"
-      ]
+        "--enterprise",
+        "--enterprise-team"
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Create an enterprise team",
@@ -22330,7 +22979,7 @@
       "summary": "Get an enterprise team",
       "path": "enterprise-teams get",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22353,18 +23002,27 @@
           "path": "/enterprises/{enterprise}/teams/{team_slug}"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise",
         "--team-slug"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "List enterprise teams",
       "path": "enterprise-teams list",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -22381,11 +23039,20 @@
           "path": "/enterprises/{enterprise}/teams"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "Update an enterprise team",
@@ -37070,7 +37737,7 @@
       "summary": "List OIDC custom property inclusions for an enterprise",
       "path": "oidc list-oidc-custom-property-inclusions-for-enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -37087,11 +37754,20 @@
           "path": "/enterprises/{enterprise}/actions/oidc/customization/properties/repo"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_enterprise"
     },
     {
       "summary": "List OIDC custom property inclusions for an organization",
@@ -51539,7 +52215,7 @@
       "summary": "List secret scanning alerts for an organization",
       "path": "secret-scanning list-alerts-for-org",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -51556,17 +52232,26 @@
           "path": "/orgs/{org}/secret-scanning/alerts"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List organization custom patterns",
       "path": "secret-scanning list-org-custom-patterns",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -51583,17 +52268,26 @@
           "path": "/orgs/{org}/secret-scanning/custom-patterns"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List organization pattern configurations",
       "path": "secret-scanning list-org-pattern-configs",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -51610,17 +52304,26 @@
           "path": "/orgs/{org}/secret-scanning/pattern-configurations"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--org"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "List repository custom patterns",
       "path": "secret-scanning list-repo-custom-patterns",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [],
@@ -51630,14 +52333,23 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented"
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
       "path": "secret-scanning locations view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "operation_kind": "rest_read",
       "op_class": "direct_read",
       "flags": [
@@ -51654,11 +52366,20 @@
           "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"
         }
       ],
-      "status": "not_applicable",
-      "reason": "declared availability is \"partial\", not implemented",
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--alert-number"
-      ]
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates generated from cli_surface.json",
+      "certification_cohort": "trial_advanced_security"
     },
     {
       "summary": "POST /repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",

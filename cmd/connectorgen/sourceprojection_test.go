@@ -226,6 +226,80 @@ func TestSourceProjectionDowngradesUnboundImplementedAPICommandForSourceGap(t *t
 	}
 }
 
+func TestSourceProjectionDoesNotBlockReadForUnusedOptionalAmbiguousParameter(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/orgs/{org}/widgets",
+		Request: sourceRequestDescriptor{
+			Path: []sourceParameterDescriptor{{Name: "org", Required: true, Schema: map[string]any{"type": "string"}}},
+			Query: []sourceParameterDescriptor{{Name: "has", Required: false, Schema: map[string]any{"oneOf": []any{
+				map[string]any{"type": "string"},
+				map[string]any{"type": "array", "items": map[string]any{"type": "string"}},
+			}}}},
+		},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+			Foundation: "cli-request-schema-foundation-r1",
+			Location:   "parameter has",
+			Reason:     "ambiguous request schema uses oneOf",
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	if blocked := sourceProjectionBlockedReadSources(result); len(blocked) != 0 {
+		t.Fatalf("unused optional ambiguous query parameter blocked executable read: %+v", blocked)
+	}
+	if reachable := sourceProjectionReachableReadSources(result); reachable[source.SourceID].SourceID != source.SourceID {
+		t.Fatalf("read with only an unused optional ambiguous parameter was not reachable: %+v", reachable)
+	}
+}
+
+func TestSourceProjectionDoesNotBlockReadForOmittedOptionalRequestBody(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.get", Method: "get", Path: "/widgets/{id}",
+		Request: sourceRequestDescriptor{
+			Path: []sourceParameterDescriptor{{Name: "id", Required: true, Schema: map[string]any{"type": "string"}}},
+			Body: &sourceRequestBodyDescriptor{Required: false, Schema: true},
+		},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+			Foundation: "cli-request-schema-foundation-r1",
+			Location:   "request body",
+			Reason:     "unsupported openapi boolean schema",
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	if blocked := sourceProjectionBlockedReadSources(result); len(blocked) != 0 {
+		t.Fatalf("omitted optional request body blocked executable read: %+v", blocked)
+	}
+	if reachable := sourceProjectionReachableReadSources(result); reachable[source.SourceID].SourceID != source.SourceID {
+		t.Fatalf("read with an omitted optional body was not reachable: %+v", reachable)
+	}
+}
+
+func TestSourceProjectionNormalizesOnlyOptionalReadSchemaGaps(t *testing.T) {
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{
+		{
+			Connector: "alpha", SourceID: "alpha.widgets.list", Method: "GET", Path: "/widgets",
+			Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "has", Required: false}}},
+			Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+				Foundation: "cli-request-schema-foundation-r1", Location: "parameter has", Reason: "ambiguous request schema uses oneOf",
+			}}},
+		},
+		{
+			Connector: "alpha", SourceID: "alpha.widgets.get", Method: "GET", Path: "/widgets/{id}",
+			Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "id", Required: true}}},
+			Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+				Foundation: "cli-request-schema-foundation-r1", Location: "parameter id", Reason: "ambiguous request schema uses oneOf",
+			}}},
+		},
+	}}
+
+	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	if got := result.Operations[0].Runtime; got.MergeBlocked || len(got.Gaps) != 0 {
+		t.Fatalf("optional omitted input runtime = %+v, want no availability gap", got)
+	}
+	if got := result.Operations[1].Runtime; !got.MergeBlocked || len(got.Gaps) != 1 {
+		t.Fatalf("required input runtime = %+v, want retained gap", got)
+	}
+}
+
 func TestSourceProjectionKeepsIndependentSurfaceCoverageWhenBlockingReadCommand(t *testing.T) {
 	source := sourceOperationDescriptor{
 		Connector: "alpha", SourceID: "alpha.widgets.get", Method: "get", Path: "/widgets/{id}",
@@ -338,6 +412,79 @@ func TestSourceProjectionAnnotatesUnreachableReadWithConcreteSourceGap(t *testin
 	sourceProjectionAnnotateUnreachableReadGaps(partial, &result)
 	if !result.Operations[0].Runtime.MergeBlocked || !sourceOperationHasFoundationGap(result.Operations[0], sourceOperationExecutionFoundation) {
 		t.Fatalf("incomplete declared read was not marked source-bound partial: %+v", result.Operations[0].Runtime)
+	}
+}
+
+func TestSourceProjectionRetainsRequiredFieldCompleteSourceBoundDirectRead(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "GET", Path: "/widgets/{owner}",
+		Request: sourceRequestDescriptor{
+			Path:  []sourceParameterDescriptor{{Name: "owner", Required: true, Schema: map[string]any{"type": "string"}}},
+			Query: []sourceParameterDescriptor{{Name: "state", Required: false, Schema: map[string]any{"type": "string"}}},
+		},
+	}
+	spec, err := engine.CompileSchema(json.RawMessage(`{
+  "type":"object","additionalProperties":false,
+  "required":["owner"],"properties":{"owner":{"type":"string"}}
+}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	bundle := engine.Bundle{
+		Name: "alpha", Spec: spec,
+		Certification: &engine.CertificationSpec{DirectReadGeneration: &engine.CertificationReadCandidateGeneration{Cohorts: []engine.CertificationReadCandidateCohort{{
+			Name: "fixture", CommandCount: 1, Commands: []string{"widgets list"},
+		}}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "widgets list", Intent: "direct_read", Availability: "partial",
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/widgets/{owner}"}},
+			Notes:      sourceProjectionBlockedReadCommandNote(source.SourceID),
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	sourceProjectionAnnotateUnreachableReadGaps(bundle, &result)
+	if sourceProjectionHasBlockingGap(result.Operations[0].Runtime.Gaps) {
+		t.Fatalf("required-field-complete source-bound direct read was marked unreachable: %+v", result.Operations[0].Runtime.Gaps)
+	}
+}
+
+func TestSourceProjectionRestoresRequiredPathFlagForSourceBoundDirectRead(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.get", Method: "GET", Path: "/accounts/{account}/widgets/{widget}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{
+			{Name: "account", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "widget", Required: true, Schema: map[string]any{"type": "string"}},
+		}},
+	}
+	spec, err := engine.CompileSchema(json.RawMessage(`{
+  "type":"object","additionalProperties":false,
+  "required":["account"],"properties":{"account":{"type":"string"}}
+}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	bundle := engine.Bundle{
+		Name: "alpha", Spec: spec,
+		Certification: &engine.CertificationSpec{DirectReadGeneration: &engine.CertificationReadCandidateGeneration{Cohorts: []engine.CertificationReadCandidateCohort{{
+			Name: "fixture", CommandCount: 1, Commands: []string{"widgets get"},
+		}}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "widgets get", Intent: "direct_read", Availability: "partial",
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/accounts/{account}/widgets/{widget}"}},
+			Notes:      sourceProjectionBlockedReadCommandNote(source.SourceID),
+		}}},
+	}
+	if changed := sourceProjectionRestoreSourceBoundDirectReadPathFlags(&bundle, sourceImportResult{Operations: []sourceOperationDescriptor{source}}); changed != 1 {
+		t.Fatalf("restored source-bound direct-read path flags = %d, want 1", changed)
+	}
+	flags := bundle.CLISurface.Commands[0].Flags
+	if len(flags) != 1 || flags[0].Name != "widget" || flags[0].MapsTo != "path.widget" || !flags[0].Required {
+		t.Fatalf("restored source-bound direct-read path flags = %+v, want required path.widget", flags)
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	sourceProjectionAnnotateUnreachableReadGaps(bundle, &result)
+	if sourceProjectionHasBlockingGap(result.Operations[0].Runtime.Gaps) {
+		t.Fatalf("restored required path flag left source-bound direct read unreachable: %+v", result.Operations[0].Runtime.Gaps)
 	}
 }
 
@@ -1025,6 +1172,12 @@ func TestSourceProjectionRestoresReachableSourceBoundRead(t *testing.T) {
     "notes": %q
   }]
 }`, sourceProjectionBlockedReadCommandNote(source.SourceID)))
+	writeProjectionFixture(t, filepath.Join(bundleDir, "certification.json"), `{
+  "schema_version": 1,
+  "direct_read_generation": {
+    "cohorts": [{"name":"fixture","command_count":1,"commands":["widgets list"]}]
+  }
+}`)
 	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), fmt.Sprintf(`{
   "api": "alpha",
   "endpoints": [{
