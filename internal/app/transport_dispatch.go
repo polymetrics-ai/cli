@@ -16,6 +16,8 @@ var errTransportStreamStateConflict = errors.New("transport stream state changed
 
 var errTransportStreamWorkInProgress = errors.New("transport stream work is already owned by another process")
 var errTransportStreamWorkFenceLost = errors.New("transport stream work fence was lost before I/O")
+var errTransportStreamReconciliationPending = errors.New("transport stream reconciliation is pending before I/O")
+var errTransportStreamAdmissionStale = errors.New("transport stream admission changed before I/O")
 
 func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	_, sourceDeclared := connectors.SyncTransportDescriptorOf(source)
@@ -210,7 +212,7 @@ func validateClosedTransportBatchSize(source, destination connectors.Connector, 
 // action. Real durable warehouse/apply adapters remain separate foundations;
 // this seam therefore fails closed unless a stage and externally verified
 // transports are registered.
-func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval, rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope) (etlExecutionResult, error) {
+func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, admissionFence int64, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval, rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope) (etlExecutionResult, error) {
 	emptyResult := etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}
 	if a.transports == nil {
 		return emptyResult, fmt.Errorf("closed transport registry is unavailable")
@@ -254,7 +256,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	if rateParkingResumeCheckpoint != nil && !transportCheckpointEqual(prior.Checkpoint, rateParkingResumeCheckpoint) {
 		return emptyResult, errors.New("rate-limit resume checkpoint changed")
 	}
-	workLease, err := a.claimTransportWorkLease(ctx, stateKey, conn.Name, streamName, runID, sourceExpectation, mode.IsOverwrite())
+	workLease, err := a.claimTransportWorkLease(ctx, stateKey, conn.Name, streamName, runID, sourceExpectation, mode.IsOverwrite(), admissionFence)
 	if err != nil {
 		return emptyResult, err
 	}

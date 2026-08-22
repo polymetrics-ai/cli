@@ -1418,6 +1418,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if delivered, pending := a.deliveredReconciliationFor(req.Connection, req.Stream); pending {
 		return a.reconcileDeliveredTransportRun(ctx, delivered)
 	}
+	transportAdmissionFence := a.state.StreamStates[streamStateKey(req.Connection, req.Stream)].ActiveWorkFence
 	if a.connectionMaterializesLocalWarehouse(conn) {
 		if err := a.validateConfiguredLocalWarehouseDestinationTables(); err != nil {
 			return Run{}, err
@@ -1500,6 +1501,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		destination:                 destination,
 		destinationRuntime:          destRuntime,
 		sourceExpectation:           sourceExpectation,
+		transportAdmissionFence:     transportAdmissionFence,
 		streamName:                  req.Stream,
 		stream:                      stream,
 		mode:                        mode,
@@ -3643,18 +3645,20 @@ func (a *App) failRun(runID string, runErr error) (Run, error) {
 func (a *App) failRunWithResult(runID string, result etlExecutionResult, runErr error) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
-	transportStateConflict := errors.Is(runErr, errTransportStreamStateConflict)
+	transportRunFinalizationRebase := errors.Is(runErr, errTransportStreamStateConflict) ||
+		errors.Is(runErr, errTransportStreamReconciliationPending) ||
+		errors.Is(runErr, errTransportStreamAdmissionStale)
 	transitionedInCallback := false
 	targetAlreadyTerminal := false
 	updated, persistErr := a.updateState(func(current state) (state, error) {
-		if !transportStateConflict && current.Revision != expectedRevision {
+		if !transportRunFinalizationRebase && current.Revision != expectedRevision {
 			return current, errStateRevisionConflict
 		}
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
 			}
-			if transportStateConflict && current.Runs[i].Status != "running" {
+			if transportRunFinalizationRebase && current.Runs[i].Status != "running" {
 				targetAlreadyTerminal = true
 				return current, fmt.Errorf("transport conflict run %q has status %q, want running before finalization", runID, current.Runs[i].Status)
 			}
@@ -3675,7 +3679,7 @@ func (a *App) failRunWithResult(runID string, result etlExecutionResult, runErr 
 		return current, fmt.Errorf("run %q not found", runID)
 	})
 	if persistErr != nil {
-		if transportStateConflict && targetAlreadyTerminal {
+		if transportRunFinalizationRebase && targetAlreadyTerminal {
 			if run, storedErr := terminalETLRunFromState(updated, runID); storedErr == nil {
 				return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 			} else {

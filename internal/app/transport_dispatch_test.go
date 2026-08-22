@@ -2318,8 +2318,115 @@ func TestCompleteAcknowledgedEmptyPublicationPostCommitFenceSurvivesCrash(t *tes
 		t.Fatalf("crash-reopened empty publication run = %#v, want durable replay fence", durable)
 	}
 	state := reopened.state.StreamStates[streamStateKey(fixture.connection, "records")]
-	if state.ActiveWorkID != "" || state.ActiveWorkLeaseUntil != nil {
+	if state.ActiveWorkID != "" || state.ActiveWorkLeaseUntil != nil || state.ActiveWorkFence != 2 {
 		t.Fatalf("crash-reopened empty publication state = %#v, want released lease behind replay fence", state)
+	}
+	fixture.configureRuntime(t, reopened, fixture.sourceExecutor, fixture.destinationExecutor)
+	repaired, err := reopened.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	if err != nil || repaired.ID != runID || repaired.Status != "completed" || repaired.DeliveryReconciliation != nil {
+		t.Fatalf("crash-reopened empty publication repair run/error = %#v / %v, want original completed run", repaired, err)
+	}
+	if fixture.sourceExecutor.readCalls != 0 || fixture.destinationExecutor.applyCalls != 0 || fixture.destinationExecutor.publishCalls != 0 || fixture.destinationExecutor.readBackCalls != 0 {
+		t.Fatalf("crash-reopened empty publication repair source/apply/publish/read-back = %d/%d/%d/%d, want no replay", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls, fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls)
+	}
+}
+
+func TestCompleteAcknowledgedEmptyPublicationFenceRejectsStaleClaimAdmissions(t *testing.T) {
+	tests := []struct {
+		name              string
+		repairBeforeClaim bool
+		wantErr           error
+	}{
+		{
+			name:    "before repair",
+			wantErr: errTransportStreamReconciliationPending,
+		},
+		{
+			name:              "after repair before claim",
+			repairBeforeClaim: true,
+			wantErr:           errTransportStreamAdmissionStale,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fixture, runID, result := setupAcknowledgedEmptyPublicationCompletion(t)
+			contender, err := Open(fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			fixture.configureRuntime(t, contender, fixture.sourceExecutor, fixture.destinationExecutor)
+			claimEntered := make(chan struct{})
+			releaseClaim := make(chan struct{})
+			claimReleased := false
+			t.Cleanup(func() {
+				if !claimReleased {
+					close(releaseClaim)
+				}
+			})
+			contender.store.Locker = &appTransportPauseAtLockLocker{pauseAt: 2, entered: claimEntered, release: releaseClaim}
+
+			var contenderRun Run
+			var contenderErr error
+			contenderDone := make(chan struct{})
+			go func() {
+				contenderRun, contenderErr = contender.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+				close(contenderDone)
+			}()
+			waitForTransportSignal(t, claimEntered)
+			if len(contender.state.Runs) != 2 || contender.state.Runs[1].Status != "running" {
+				t.Fatalf("contender did not persist a running admission before the replay fence: %#v", contender.state.Runs)
+			}
+			contenderRunID := contender.state.Runs[1].ID
+
+			fixture.app.store.Locker = &appTransportPostCommitThenLockFailureLocker{secondLockErr: errors.New("unexpected second replay-fence write")}
+			fenced, err := fixture.app.completeAcknowledgedTransportRun(runID, result)
+			var reconciliation *synctransport.DeliveredReconciliationRequiredError
+			if !errors.As(err, &reconciliation) || fenced.ID != runID || fenced.Status != ETLRunStatusDeliveredReconciliationRequired {
+				t.Fatalf("empty publication fence run/error = %#v / %v, want durable replay fence", fenced, err)
+			}
+
+			if tt.repairBeforeClaim {
+				repairer, err := Open(fixture.app.root)
+				if err != nil {
+					t.Fatal(err)
+				}
+				fixture.configureRuntime(t, repairer, fixture.sourceExecutor, fixture.destinationExecutor)
+				repaired, err := repairer.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+				if err != nil || repaired.ID != runID || repaired.Status != "completed" || repaired.DeliveryReconciliation != nil {
+					t.Fatalf("empty publication repair run/error = %#v / %v, want original completed run", repaired, err)
+				}
+			}
+
+			close(releaseClaim)
+			claimReleased = true
+			waitForTransportSignal(t, contenderDone)
+			if !errors.Is(contenderErr, tt.wantErr) {
+				t.Fatalf("stale contender RunETL() error = %v, want %v", contenderErr, tt.wantErr)
+			}
+			if errors.Is(contenderErr, errStateRevisionConflict) {
+				t.Fatalf("stale contender RunETL() error = %v, want terminal admission without a revision conflict", contenderErr)
+			}
+			if contenderRun.ID != contenderRunID || contenderRun.Status != "failed" || contenderRun.CompletedAt.IsZero() {
+				t.Fatalf("stale contender run = %#v, want failed terminal admission", contenderRun)
+			}
+
+			reopened, err := Open(fixture.app.root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			durableContender, err := reopened.GetRun(contenderRunID)
+			if err != nil || durableContender.Status != "failed" || durableContender.CompletedAt.IsZero() {
+				t.Fatalf("durable stale contender run/error = %#v / %v, want failed terminal admission", durableContender, err)
+			}
+			state := reopened.state.StreamStates[streamStateKey(fixture.connection, "records")]
+			if state.ActiveWorkID != "" || state.ActiveWorkLeaseUntil != nil || state.ActiveWorkFence != 2 {
+				t.Fatalf("stale contender acquired a post-fence work lease: %#v", state)
+			}
+			if fixture.sourceExecutor.readCalls != 0 || fixture.destinationExecutor.applyCalls != 0 || fixture.destinationExecutor.publishCalls != 0 || fixture.destinationExecutor.readBackCalls != 0 {
+				t.Fatalf("stale contender source/apply/publish/read-back = %d/%d/%d/%d, want no replay", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.applyCalls, fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls)
+			}
+		})
 	}
 }
 
@@ -4398,6 +4505,22 @@ func (l *appTransportFailAtLockLocker) Lock() (func() error, error) {
 type appTransportPostCommitThenLockFailureLocker struct {
 	calls         int
 	secondLockErr error
+}
+
+type appTransportPauseAtLockLocker struct {
+	calls   int
+	pauseAt int
+	entered chan<- struct{}
+	release <-chan struct{}
+}
+
+func (l *appTransportPauseAtLockLocker) Lock() (func() error, error) {
+	l.calls++
+	if l.calls == l.pauseAt {
+		close(l.entered)
+		<-l.release
+	}
+	return func() error { return nil }, nil
 }
 
 func (l *appTransportPostCommitThenLockFailureLocker) Lock() (func() error, error) {

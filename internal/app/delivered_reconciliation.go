@@ -16,8 +16,12 @@ import (
 // It intentionally consults only persisted state; it does not resolve an
 // endpoint, credential, operation, or provider route.
 func (a *App) deliveredReconciliationFor(connection, stream string) (Run, bool) {
-	for index := len(a.state.Runs) - 1; index >= 0; index-- {
-		run := a.state.Runs[index]
+	return deliveredReconciliationForState(a.state, connection, stream)
+}
+
+func deliveredReconciliationForState(loaded state, connection, stream string) (Run, bool) {
+	for index := len(loaded.Runs) - 1; index >= 0; index-- {
+		run := loaded.Runs[index]
 		if run.Connection == connection && run.Stream == stream && run.Status == ETLRunStatusDeliveredReconciliationRequired && run.DeliveryReconciliation != nil {
 			return run, true
 		}
@@ -38,6 +42,12 @@ func (a *App) persistDeliveredReconciliationRun(runID string, result etlExecutio
 	}
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
+	pendingStreamState := cloneStreamState(result.PendingStreamState.State)
+	nextFence, err := nextTransportWorkFence(pendingStreamState.ActiveWorkFence)
+	if err != nil {
+		return Run{}, err
+	}
+	pendingStreamState.ActiveWorkFence = nextFence
 	transitionedInCallback := false
 	updated, persistErr := a.updateState(func(current state) (state, error) {
 		rebased := current.Revision != expectedRevision
@@ -83,7 +93,7 @@ func (a *App) persistDeliveredReconciliationRun(runID string, result etlExecutio
 		if current.StreamStates == nil {
 			current.StreamStates = map[string]StreamState{}
 		}
-		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
+		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(pendingStreamState)
 		return current, nil
 	})
 	if persistErr != nil {

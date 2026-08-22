@@ -17,6 +17,8 @@ import (
 // takeover.
 const transportWorkLeaseDuration = 2 * time.Minute
 
+const transportWorkFenceLimit = int64(^uint64(0) >> 1)
+
 type transportWorkLease struct {
 	app          *App
 	key          string
@@ -29,7 +31,7 @@ type transportWorkLease struct {
 	state StreamState
 }
 
-func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stream, workID string, source synccontract.ResumeExpectation, overwrite bool) (*transportWorkLease, error) {
+func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stream, workID string, source synccontract.ResumeExpectation, overwrite bool, admissionFence int64) (*transportWorkLease, error) {
 	if a == nil || key == "" || connection == "" || stream == "" || workID == "" {
 		return nil, errors.New("transport stream work lease is invalid")
 	}
@@ -42,10 +44,16 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 	var prior StreamState
 	var priorPresent bool
 	if _, err := a.updateState(func(current state) (state, error) {
+		if _, pending := deliveredReconciliationForState(current, connection, stream); pending {
+			return current, errTransportStreamReconciliationPending
+		}
 		currentState, present := current.StreamStates[key]
 		currentState = cloneStreamState(currentState)
 		prior = cloneStreamState(currentState)
 		priorPresent = present
+		if currentState.ActiveWorkFence != admissionFence {
+			return current, fmt.Errorf("%w: expected fence %d, found %d", errTransportStreamAdmissionStale, admissionFence, currentState.ActiveWorkFence)
+		}
 		if currentState.Checkpoint != nil {
 			if err := validateStreamStateResume(currentState, source); err != nil {
 				return current, err
@@ -60,8 +68,9 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 				return current, errTransportStreamWorkInProgress
 			}
 		}
-		if currentState.ActiveWorkFence == int64(^uint64(0)>>1) {
-			return current, errors.New("transport stream work fences are exhausted")
+		nextFence, err := nextTransportWorkFence(currentState.ActiveWorkFence)
+		if err != nil {
+			return current, err
 		}
 		currentState.Connection = connection
 		currentState.Stream = stream
@@ -69,7 +78,7 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 			currentState.GenerationID++
 		}
 		currentState.ActiveWorkID = workID
-		currentState.ActiveWorkFence++
+		currentState.ActiveWorkFence = nextFence
 		currentState.ActiveWorkLeaseUntil = &until
 		if current.StreamStates == nil {
 			current.StreamStates = map[string]StreamState{}
@@ -85,6 +94,13 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 		app: a, key: key, workID: workID, fence: claimed.ActiveWorkFence,
 		prior: prior, priorPresent: priorPresent, state: claimed,
 	}, nil
+}
+
+func nextTransportWorkFence(fence int64) (int64, error) {
+	if fence == transportWorkFenceLimit {
+		return 0, errors.New("transport stream work fences are exhausted")
+	}
+	return fence + 1, nil
 }
 
 func transportWorkOwnerTerminal(runs []Run, workID string) bool {
