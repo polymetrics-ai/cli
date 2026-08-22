@@ -1204,22 +1204,7 @@ func sanitizeProviderResponseRaw(value, encoding string, secrets []string) strin
 		if err != nil {
 			return redactWriteResultString(value, secrets)
 		}
-		return base64.StdEncoding.EncodeToString([]byte(sanitizeProviderResponseText(string(raw), secrets)))
-	}
-	return sanitizeProviderResponseText(value, secrets)
-}
-
-func sanitizeProviderResponseText(value string, secrets []string) string {
-	decoder := json.NewDecoder(strings.NewReader(value))
-	decoder.UseNumber()
-	var decoded any
-	if err := decoder.Decode(&decoded); err == nil {
-		var trailing any
-		if err := decoder.Decode(&trailing); errors.Is(err, io.EOF) {
-			if encoded, marshalErr := json.Marshal(sanitizeProviderResponseValue(decoded, secrets)); marshalErr == nil {
-				return string(encoded)
-			}
-		}
+		return base64.StdEncoding.EncodeToString([]byte(redactWriteResultString(string(raw), secrets)))
 	}
 	return redactWriteResultString(value, secrets)
 }

@@ -187,16 +187,16 @@ func TestOperationDirectWriteResultOutputMasksConfiguredTextInsideJSONDiagnostic
 
 func TestPublicWriteReceiptsMaskConfiguredBinaryBodies(t *testing.T) {
 	const credential = "configured-binary-material"
-	raw := []byte{0xff}
-	raw = append(raw, []byte("occurrence_id=occurrence-9007199254740993;credential=")...)
+	raw := []byte(`{"occurrence_id":"occurrence-9007199254740993","duplicate":"first","duplicate":"second","credential":"`)
+	raw = append(raw, 0xff)
 	raw = append(raw, []byte(credential)...)
-	raw = append(raw, []byte(";token_type=unconfigured-provider-token")...)
 	raw = append(raw, 0xfe)
-	expected := []byte{0xff}
-	expected = append(expected, []byte("occurrence_id=occurrence-9007199254740993;credential=")...)
+	raw = append(raw, []byte(`","token_type":"unconfigured-provider-token"}`)...)
+	expected := []byte(`{"occurrence_id":"occurrence-9007199254740993","duplicate":"first","duplicate":"second","credential":"`)
+	expected = append(expected, 0xff)
 	expected = append(expected, []byte("[masked]")...)
-	expected = append(expected, []byte(";token_type=unconfigured-provider-token")...)
 	expected = append(expected, 0xfe)
+	expected = append(expected, []byte(`","token_type":"unconfigured-provider-token"}`)...)
 	encoded := base64.StdEncoding.EncodeToString(raw)
 
 	tests := []struct {
