@@ -993,19 +993,28 @@ func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResu
 	out.BodyRaw = redactWriteResultString(result.BodyRaw, masked)
 	out.Body = sanitizeProviderOutputValue(body, masked)
 	out.OutputSecretFields = append([]string(nil), result.OutputSecretFields...)
-	if result.GraphQL != nil {
-		graphql := *result.GraphQL
-		graphql.Errors = append([]GraphQLResultError(nil), result.GraphQL.Errors...)
-		for i := range graphql.Errors {
-			graphql.Errors[i].Message = redactWriteResultString(graphql.Errors[i].Message, masked)
-		}
-		if result.GraphQL.RateLimit != nil {
-			rateLimit := *result.GraphQL.RateLimit
-			graphql.RateLimit = &rateLimit
-		}
-		out.GraphQL = &graphql
-	}
+	out.GraphQL = sanitizeGraphQLResponseMetadataForOutput(result.GraphQL, masked)
 	return out
+}
+
+func SanitizeGraphQLResponseMetadataForOutput(metadata *GraphQLResponseMetadata, secrets map[string]string) *GraphQLResponseMetadata {
+	return sanitizeGraphQLResponseMetadataForOutput(metadata, configuredWriteResultSecrets(secrets))
+}
+
+func sanitizeGraphQLResponseMetadataForOutput(metadata *GraphQLResponseMetadata, secrets []string) *GraphQLResponseMetadata {
+	if metadata == nil {
+		return nil
+	}
+	out := *metadata
+	out.Errors = append([]GraphQLResultError(nil), metadata.Errors...)
+	for i := range out.Errors {
+		out.Errors[i].Message = redactWriteResultString(out.Errors[i].Message, secrets)
+	}
+	if metadata.RateLimit != nil {
+		rateLimit := *metadata.RateLimit
+		out.RateLimit = &rateLimit
+	}
+	return &out
 }
 
 func sanitizeWriteProviderResponse(response WriteProviderResponse, secrets []string) WriteProviderResponse {
@@ -1098,6 +1107,44 @@ func sanitizeProviderOutputValue(value any, secrets []string) any {
 	}
 }
 
+func sanitizeProviderResponseValue(value any, secrets []string) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			out[key] = sanitizeProviderResponseValue(item, secrets)
+		}
+		return out
+	case map[string]string:
+		out := make(map[string]string, len(typed))
+		for key, item := range typed {
+			out[key] = redactWriteResultString(item, secrets)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = sanitizeProviderResponseValue(item, secrets)
+		}
+		return out
+	case []string:
+		out := make([]string, len(typed))
+		for i, item := range typed {
+			out[i] = redactWriteResultString(item, secrets)
+		}
+		return out
+	case string:
+		return redactWriteResultString(typed, secrets)
+	case json.Number:
+		if masked := redactWriteResultString(typed.String(), secrets); masked != typed.String() {
+			return masked
+		}
+		return typed
+	default:
+		return cloneProviderOutputValue(value)
+	}
+}
+
 func sanitizeProviderOutputScalar(value string, secrets []string) string {
 	if masked, ok := configuredSecretMask(value, secrets); ok {
 		return masked
@@ -1141,7 +1188,7 @@ func SanitizeProviderResponseReceiptForOutput(receipt ProviderResponseReceipt, s
 	out := receipt
 	out.Headers = sanitizeProviderHeaders(receipt.Headers, masked)
 	out.BodyRaw = sanitizeProviderResponseRaw(receipt.BodyRaw, receipt.BodyRawEncoding, masked)
-	out.Body = sanitizeProviderOutputValue(receipt.Body, masked)
+	out.Body = sanitizeProviderResponseValue(receipt.Body, masked)
 	if rawBody, ok := receipt.Body.(string); ok {
 		if rawBody == receipt.BodyRaw {
 			out.Body = out.BodyRaw
@@ -1170,7 +1217,7 @@ func sanitizeProviderResponseText(value string, secrets []string) string {
 	if err := decoder.Decode(&decoded); err == nil {
 		var trailing any
 		if err := decoder.Decode(&trailing); errors.Is(err, io.EOF) {
-			if encoded, marshalErr := json.Marshal(sanitizeProviderOutputValue(decoded, secrets)); marshalErr == nil {
+			if encoded, marshalErr := json.Marshal(sanitizeProviderResponseValue(decoded, secrets)); marshalErr == nil {
 				return string(encoded)
 			}
 		}

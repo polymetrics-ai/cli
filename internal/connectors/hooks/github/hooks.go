@@ -46,7 +46,10 @@ var (
 	_ engine.WriteHook                = (*Hooks)(nil)
 )
 
-const githubInstallationTokenDeclaredPath = "/app/installations/{installation_id}/access_tokens"
+const (
+	githubInstallationTokenDeclaredPath          = "/app/installations/{installation_id}/access_tokens"
+	githubInstallationRepositoryRestrictionLimit = 500
+)
 
 // Authenticator remains the base AuthHook implementation for compatibility,
 // but deliberately refuses a direct GitHub App exchange. The token request is
@@ -216,6 +219,9 @@ func installationRepositories(raw string) ([]string, error) {
 		if _, duplicate := seen[repository]; duplicate {
 			return nil, fmt.Errorf("github installation_repositories repeats %q", repository)
 		}
+		if len(out) >= githubInstallationRepositoryRestrictionLimit {
+			return nil, fmt.Errorf("github installation_repositories supports at most %d repositories", githubInstallationRepositoryRestrictionLimit)
+		}
 		seen[repository] = struct{}{}
 		out = append(out, repository)
 	}
@@ -252,6 +258,9 @@ func installationRepositoryIDs(raw string) ([]int64, error) {
 		if _, duplicate := seen[id]; duplicate {
 			return nil, fmt.Errorf("github installation_repository_ids repeats %d", id)
 		}
+		if len(ids) >= githubInstallationRepositoryRestrictionLimit {
+			return nil, fmt.Errorf("github installation_repository_ids supports at most %d repositories", githubInstallationRepositoryRestrictionLimit)
+		}
 		seen[id] = struct{}{}
 		ids = append(ids, id)
 	}
@@ -286,12 +295,19 @@ func installationPermissions(raw string) (map[string]string, error) {
 		if !ok || !githubPermissionName(name) {
 			return nil, errors.New("github installation_permissions contains an invalid permission name")
 		}
+		allowed, supported := githubInstallationPermissionMatrix[name]
+		if !supported {
+			return nil, fmt.Errorf("github installation_permissions.%s is not supported", name)
+		}
 		if _, duplicate := permissions[name]; duplicate {
 			return nil, fmt.Errorf("github installation_permissions repeats %q", name)
 		}
 		var level string
 		if err := decoder.Decode(&level); err != nil || !githubPermissionLevel(level) {
 			return nil, fmt.Errorf("github installation_permissions.%s must be read, write, or admin", name)
+		}
+		if allowed&githubInstallationPermissionLevel(level) == 0 {
+			return nil, fmt.Errorf("github installation_permissions.%s does not support %q", name, level)
 		}
 		permissions[name] = level
 	}
@@ -320,6 +336,85 @@ func githubPermissionName(value string) bool {
 
 func githubPermissionLevel(value string) bool {
 	return value == "read" || value == "write" || value == "admin"
+}
+
+type githubInstallationPermissionLevels uint8
+
+const (
+	githubInstallationPermissionRead githubInstallationPermissionLevels = 1 << iota
+	githubInstallationPermissionWrite
+	githubInstallationPermissionAdmin
+)
+
+var githubInstallationPermissionMatrix = map[string]githubInstallationPermissionLevels{
+	"actions":                             githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"administration":                      githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"artifact_metadata":                   githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"attestations":                        githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"checks":                              githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"code_quality":                        githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"codespaces":                          githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"contents":                            githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"custom_properties_for_organizations": githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"dependabot_secrets":                  githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"deployments":                         githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"discussions":                         githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"email_addresses":                     githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"enterprise_custom_properties_for_organizations": githubInstallationPermissionRead | githubInstallationPermissionWrite | githubInstallationPermissionAdmin,
+	"environments":                                githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"followers":                                   githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"git_ssh_keys":                                githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"gpg_keys":                                    githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"interaction_limits":                          githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"issues":                                      githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"members":                                     githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"merge_queues":                                githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"metadata":                                    githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_administration":                 githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_announcement_banners":           githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_copilot_agent_settings":         githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_copilot_seat_management":        githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_custom_org_roles":               githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_custom_properties":              githubInstallationPermissionRead | githubInstallationPermissionWrite | githubInstallationPermissionAdmin,
+	"organization_custom_roles":                   githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_events":                         githubInstallationPermissionRead,
+	"organization_hooks":                          githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_packages":                       githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_personal_access_token_requests": githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_personal_access_tokens":         githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_plan":                           githubInstallationPermissionRead,
+	"organization_projects":                       githubInstallationPermissionRead | githubInstallationPermissionWrite | githubInstallationPermissionAdmin,
+	"organization_secrets":                        githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_self_hosted_runners":            githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"organization_user_blocking":                  githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"packages":                                    githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"pages":                                       githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"profile":                                     githubInstallationPermissionWrite,
+	"pull_requests":                               githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"repository_custom_properties":                githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"repository_hooks":                            githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"repository_projects":                         githubInstallationPermissionRead | githubInstallationPermissionWrite | githubInstallationPermissionAdmin,
+	"secret_scanning_alerts":                      githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"secrets":                                     githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"security_events":                             githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"single_file":                                 githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"starring":                                    githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"statuses":                                    githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"vulnerability_alerts":                        githubInstallationPermissionRead | githubInstallationPermissionWrite,
+	"workflows":                                   githubInstallationPermissionWrite,
+}
+
+func githubInstallationPermissionLevel(value string) githubInstallationPermissionLevels {
+	switch value {
+	case "read":
+		return githubInstallationPermissionRead
+	case "write":
+		return githubInstallationPermissionWrite
+	case "admin":
+		return githubInstallationPermissionAdmin
+	default:
+		return 0
+	}
 }
 
 // --- WriteHook: compound writes + label color-strip normalization --------

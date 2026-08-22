@@ -487,6 +487,70 @@ func TestOperationDirectReadExecutesFixedGraphQLQueryAndPreservesPartialData(t *
 	}
 }
 
+func TestOperationDirectReadMasksConfiguredGraphQLDiagnosticsAndReceipts(t *testing.T) {
+	const credential = "opaque-provider-value-77"
+	encoded := base64.RawURLEncoding.EncodeToString([]byte(credential))
+	diagnostic := "provider diagnostic " + credential + " encoded " + encoded + " occurrence_id=graphql-occurrence-9007199254740993"
+	response, err := json.Marshal(map[string]any{
+		"data": map[string]any{
+			"widget": map[string]any{
+				"id": "ghs_unconfigured_provider_value",
+				"items": map[string]any{
+					"nodes":    []any{},
+					"pageInfo": map[string]any{"hasNextPage": false},
+				},
+			},
+			"rateLimit": map[string]any{"limit": 5000, "cost": 1, "remaining": 4999, "resetAt": "2026-08-09T00:00:00Z"},
+		},
+		"errors": []map[string]string{{"message": diagnostic}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPost || r.URL.Path != "/graphql" {
+			t.Fatalf("request = %s %s, want POST /graphql", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write(response)
+	}))
+	defer server.Close()
+
+	result, err := OperationDirectRead(context.Background(), graphQLOperationBundle(server.URL, "graphql_query"), connectors.OperationDirectReadRequest{
+		Operation: "acme.widgets.query",
+		Body:      map[string]any{"id": "widget-1"},
+		Config:    connectors.RuntimeConfig{Secrets: map[string]string{"credential": credential}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("requests = %d, want 1", calls)
+	}
+	public, err := json.Marshal(result)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, value := range []string{credential, encoded} {
+		if strings.Contains(string(public), value) {
+			t.Fatal("public GraphQL result exposed configured material")
+		}
+	}
+	if result.GraphQL == nil || len(result.GraphQL.Errors) != 1 || !strings.Contains(result.GraphQL.Errors[0].Message, "occurrence_id=graphql-occurrence-9007199254740993") || !strings.Contains(result.GraphQL.Errors[0].Message, "[masked]") {
+		t.Fatal("GraphQL metadata did not preserve ordinary context and redact configured material")
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("result body type = %T, want map", result.Body)
+	}
+	widget, ok := body["widget"].(map[string]any)
+	if !ok || widget["id"] != "ghs_unconfigured_provider_value" {
+		t.Fatalf("result body = %#v", body)
+	}
+}
+
 func TestOperationDirectReadRejectsUntypedGraphQLInputsBeforeNetwork(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { calls++ }))

@@ -159,3 +159,44 @@ func TestPublicReceiptSanitizationMasksConcreteSecretRepresentationsWithoutChang
 		t.Fatalf("public pages = %#v, %#v, want exact secret masking with ordinary cursor preservation", page, ordinaryPage)
 	}
 }
+
+func TestPublicReceiptSanitizationMasksConfiguredTextInsideStructuredDiagnostics(t *testing.T) {
+	const credential = "opaque-provider-value-77"
+	encoded := base64.RawURLEncoding.EncodeToString([]byte(credential))
+	diagnostic := "provider diagnostic " + credential + " encoded " + encoded + " occurrence_id=occurrence-9007199254740993"
+	body := map[string]any{
+		"diagnostic":    diagnostic,
+		"occurrence_id": "occurrence-9007199254740993",
+		"token_type":    "unconfigured-provider-token",
+	}
+	raw, err := json.Marshal(body)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := SanitizeProviderResponseReceiptForOutput(ProviderResponseReceipt{
+		BodyPresent:     true,
+		BodyRaw:         string(raw),
+		BodyRawEncoding: "text",
+		Body:            body,
+	}, map[string]string{"credential": credential})
+	public, err := json.Marshal(got)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, value := range []string{credential, encoded} {
+		if strings.Contains(string(public), value) {
+			t.Fatal("public receipt exposed configured material")
+		}
+	}
+	gotBody, ok := got.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("receipt body type = %T, want map", got.Body)
+	}
+	if gotBody["diagnostic"] != "provider diagnostic [masked] encoded [masked] occurrence_id=occurrence-9007199254740993" {
+		t.Fatal("receipt diagnostic did not mask configured material")
+	}
+	if gotBody["occurrence_id"] != "occurrence-9007199254740993" || gotBody["token_type"] != "unconfigured-provider-token" {
+		t.Fatalf("receipt body changed ordinary provider values: %#v", gotBody)
+	}
+}
