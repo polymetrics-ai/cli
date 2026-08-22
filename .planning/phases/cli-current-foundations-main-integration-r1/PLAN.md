@@ -59,3 +59,33 @@
 - [x] Component history is preserved through exact merge ancestry, with focused red-green-refactor evidence for both shared seams.
 - [ ] Focused local combined checks pass from one provisional composite SHA (in progress).
 - [ ] Independent-review evidence manifest/report is complete, branch is clean, and the checkpoint is committed and unpushed.
+
+---
+
+## Foundation 0.3.0 release-candidate r1 integration contract
+
+### Task Delivery Header
+
+- Issue: Refs #4305 — declaration-bound structured REST bodies; Refs #4306 — hash-locked provider operation contracts; Refs #4307 — closed operation runtime. This release-candidate only composes their already-reachable inputs plus the audited canonical, reverse-action, and public-output successors.
+- Base branch: `fm/cli-current-foundations-main-integration-r1`.
+- Merges into: `fm/cli-foundation-release-candidate-r1` → `fm/cli-current-foundations-main-integration-r1` → `main` (human-gated); this task opens no merge and never pushes a default branch.
+- Delivery: An unmerged Foundation PR against `fm/cli-current-foundations-main-integration-r1`, whose head is the immutable schema-3 evidence closure commit after all specified local gates pass.
+- Working branch: `fm/cli-foundation-release-candidate-r1`, created at `041d2ec7ed986aea15d2d3d64f2076b484c3f999`.
+- Task: Compose exactly core `041d2ec7ed986aea15d2d3d64f2076b484c3f999`, reverse action `487ec14e01c90f31a71b1cb5de060b8c66a203e9`, and public output `7fdef00d7e758cb4a3c413a16f8452ee0615f0d5` using ancestry-preserving merges; reproduce and close only FND-B09 with an evidence-only schema-3 commit; record FND-W01 without speculative remediation.
+- Verification: Exact ref/ancestry and remote read-back proofs; reverse and public conflict-adjacent test cohorts; all prescribed generation, lint, build, vet, race, documentation, certification, and strict evidence gates; PR API base/head read-back.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Audited branch inputs are exact and publishable without rewriting history | live | `git merge-base --is-ancestor` succeeds for each lagging origin head and `git ls-remote` returns the expected private SHA after non-force push. |
+| Reverse merge retains both transport invariant sets | live | Focused App, transport, Postgres, and CDC tests pass from the merge commit; the merge diff retains empty-publication/auth/deadline/acknowledgement fences and action-owned receipt/readback binding. |
+| Public merge retains masking and declaration authority | live | Engine, connector, commandrunner, SQS, and output tests pass from the merge commit, including exact-secret masking and raw value/key preservation. |
+| FND-B09 is closed against the exact implementation | live | The pre-closure schema-2 manifest fails strict decode; the evidence-only closure has `code_sha` equal to its parent and `connectorgen evidence-gate` reports graph, artifact, ledger, and review agreement. |
+| FND-W01 is not silently expanded into release code | live | Current-code write ordering and existing source-import test evidence are inspected; the review artifact records a deferred/non-reproducing disposition unless a deterministic release failure is demonstrated. |
+
+### Composition guardrails
+
+1. Advance the canonical and public origin refs only after exact identity and fast-forward ancestry proof; use normal `git push` and `git ls-remote`, never force push. The reverse-action origin ref already equals its audited head.
+2. Merge reverse action first. At `internal/app/transport_dispatch.go`, `internal/connectors/native/postgres/arrow_full_overwrite_transport.go`, and `internal/synctransport/types.go`, retain both core empty-publication/auth/deadline/acknowledgement fences and reverse action-owned receipt/readback binding.
+3. Merge public output second. At `internal/connectors/connectors.go`, `internal/connectors/engine/direct_read.go`, `internal/connectors/engine/operation_headers.go`, `internal/connectors/native/amazon-sqs/direct_read.go`, and `internal/connectors/write_result_output_test.go`, retain exact configured-secret masking without ordinary-key, identifier, raw-receipt, or declaration-authority corruption.
+4. The implementation/generated composition is frozen as SHA I before evidence work. The only commit above I may change `data/cli-current-foundations-main-integration-r1/**` and `.planning/phases/cli-current-foundations-main-integration-r1/**`; it binds `code_sha=I` and includes no production/generated implementation change.
+5. Inline/manual GSD execution is the documented fallback: this single-worker RC contract and the current runtime prohibit generated role spawning. Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`, `golang-database`, and `golang-lint`.

@@ -31,3 +31,15 @@ This checkpoint is intentionally limited to exact local-pipeline composition, th
 - [ ] Evidence contains no credentials or secret values.
 - [ ] Temporary credentials, binaries, downloads, declarations, and output files are inventoried and removed recoverably.
 - [ ] `git status --short` is empty except intended committed rollup evidence and integration changes.
+
+## Foundation 0.3.0 RC r1 release checklist
+
+- [x] Isolated worktree verified; `no-mistakes doctor`, GSD command resolution, and `go run ./cmd/agentcontractgen check` pass.
+- [x] Core and public private heads fetched, their predecessor origin heads proved ancestors, and both origin refs advanced non-force with exact `git ls-remote` read-back.
+- [ ] Reverse merge committed, pushed non-force, and read back; focused transport/App/Postgres/CDC boundary suites pass.
+- [ ] Public merge committed, pushed non-force, and read back; focused output/engine/connector/SQS boundary suites pass.
+- [ ] FND-B09 schema-2 failure reproduced before closure; FND-W01 disposition is evidence-backed and does not broaden scope.
+- [ ] Implementation SHA I frozen after all production/generated checks; no production/generated path changes afterwards.
+- [ ] Evidence-only SHA E committed and pushed; strict evidence gate passes from clean E.
+- [ ] `gofmt`/diff check, targeted tests and races, `go vet ./...`, `go build ./cmd/pm`, generation, docs/help/skills/certification, and all individually runnable `make verify` gates pass or are explicitly recorded unavailable.
+- [ ] PR opened only after E is immutable; GitHub API reports its base exactly `fm/cli-current-foundations-main-integration-r1` and head exactly E.

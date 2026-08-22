@@ -253,19 +253,26 @@ func TestCertificationSweepSeparatesProductDefectsAndProviderRefusals(t *testing
 	}
 }
 
-func TestCertificationSweepDropsProviderRefusalObservationWhenTheCommandIsPartial(t *testing.T) {
+func TestCertificationSweepRetainsProviderRefusalObservationWhenTheCommandIsImplemented(t *testing.T) {
 	sweep, err := buildCertificationSweep(repoRootForCertificationTest(t), "github")
 	if err != nil {
 		t.Fatalf("buildCertificationSweep() error = %v", err)
 	}
+	foundRefusal := false
 	for _, refusal := range sweep.ProviderRefusals {
 		if refusal.Command == "actions fork-pr-contributor-approval view" {
-			t.Fatalf("partial command retained stale provider refusal: %#v", refusal)
+			foundRefusal = true
+			if refusal.ProviderStatus != 422 {
+				t.Fatalf("provider refusal status = %d, want 422", refusal.ProviderStatus)
+			}
 		}
 	}
+	if !foundRefusal {
+		t.Fatal("implemented command lost its provider-refusal observation")
+	}
 	for _, command := range sweep.Commands {
-		if command.Path == "actions fork-pr-contributor-approval view" && command.Status != certificationSweepNotApplicable {
-			t.Fatalf("partial command status = %q, want %q", command.Status, certificationSweepNotApplicable)
+		if command.Path == "actions fork-pr-contributor-approval view" && command.Status != certificationSweepProviderRefused {
+			t.Fatalf("implemented command status = %q, want %q", command.Status, certificationSweepProviderRefused)
 		}
 	}
 }
