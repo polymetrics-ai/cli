@@ -436,8 +436,9 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
     "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
     "conformance": {"suite": "synthetic_typed_destination", "run_id": "destination_v1"},
     "acknowledgement": "durable_warehouse",
-    "apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "apply_widget"}],
-    "read_back": {
+    "apply_strategies": [{
+      "mode": "full_append", "strategy": "append", "action": "apply_widget",
+      "read_back": {
       "operation": "widgets",
 	  "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1},
       "identity": [{"provider_field": "id", "expected_field": "target_id"}],
@@ -447,7 +448,8 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
       "timeout_milliseconds": 5000,
       "retry_delay_milliseconds": 1,
       "conformance": {"suite": "synthetic_typed_destination", "run_id": "destination_v1"}
-    },
+      }
+    }],
     "source_bindings": [{
 	  "action": "apply_widget",
       "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
@@ -1811,6 +1813,25 @@ func TestDeclarativeTypedDestinationTombstonesRequireDeclaredDeleteAction(t *tes
 	}
 }
 
+// TestDeclarativeTypedDestinationRequiresActionOwnedReadBackPolicy proves a
+// generic adapter never mutates under one action's mapping and only afterwards
+// discovers that a destination-wide read-back policy names another action's
+// fields. The policy is part of the physical action declaration.
+func TestDeclarativeTypedDestinationRequiresActionOwnedReadBackPolicy(t *testing.T) {
+	bundle, err := engine.Load(declarativeTypedDestinationBundleFS("descriptor-wide-read-back", "source-read-back", "destination-read-back"), "descriptor-wide-read-back")
+	if err != nil {
+		t.Fatalf("load descriptor-wide read-back fixture: %v", err)
+	}
+	contract, err := declarativeTypedDestinationContractFor(engine.New(bundle, nil))
+	if err != nil {
+		t.Fatalf("action-owned read-back contract: %v", err)
+	}
+	strategy, err := contract.descriptor.ApplyStrategyForAction(synccontract.ModeFullAppend, "apply_widget")
+	if err != nil || strategy.ReadBack == nil || strategy.ReadBack.Operation != "widgets" {
+		t.Fatalf("action-owned read-back = %#v, %v, want declaration-owned bounded policy before provider I/O", strategy.ReadBack, err)
+	}
+}
+
 func TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBackAbsence(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
@@ -1868,6 +1889,16 @@ func TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBa
 	plan, err := application.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
 	if err != nil {
 		t.Fatalf("plan tombstone transport: %v", err)
+	}
+	// The approval artifact must name every physical provider action before an
+	// operator can obtain its token.  A primary-action-only plan could hide the
+	// paired delete until after approval.
+	planJSON, err := json.Marshal(plan)
+	if err != nil {
+		t.Fatalf("marshal tombstone plan: %v", err)
+	}
+	if !bytes.Contains(planJSON, []byte(`"delete_widget"`)) {
+		t.Fatalf("tombstone plan JSON = %s, want visible declaration-owned delete action before preview and approval", planJSON)
 	}
 	previewed, _, err := application.PreviewDeclarativeTypedDestinationTransport(ctx, plan.ID)
 	if err != nil {
@@ -2395,8 +2426,9 @@ func declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID str
     "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
     "conformance": {"suite": "typed_destination", "run_id": %q},
     "acknowledgement": "durable_warehouse",
-    "apply_strategies": [{"mode": "full_append", "strategy": "append", "action": "apply_widget"}],
-    "read_back": {
+    "apply_strategies": [{
+      "mode": "full_append", "strategy": "append", "action": "apply_widget",
+      "read_back": {
       "operation": "widgets",
 	  "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1},
       "identity": [{"provider_field": "id", "expected_field": "target_id"}],
@@ -2406,7 +2438,8 @@ func declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID str
       "timeout_milliseconds": 5000,
       "retry_delay_milliseconds": 1,
       "conformance": {"suite": "typed_destination", "run_id": %q}
-    },
+      }
+    }],
     "source_bindings": [{
 	  "action": "apply_widget",
       "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
@@ -2453,26 +2486,15 @@ func declarativeTypedDestinationMultiActionBundleFS(name, sourceRunID, destinati
     "conformance": {"suite": "typed_destination", "run_id": %q},
     "acknowledgement": "durable_warehouse",
     "apply_strategies": [
-      {"mode": "full_append", "strategy": "append", "action": "append_widget"},
-      {"mode": "full_append", "strategy": "append", "action": "replace_widget"}
+      {"mode": "full_append", "strategy": "append", "action": "append_widget", "read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_id"}], "expected": [{"provider_field": "value", "expected_field": "value"}], "max_records": 1000, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1, "conformance": {"suite": "typed_destination", "run_id": %q}}},
+      {"mode": "full_append", "strategy": "append", "action": "replace_widget", "read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_id"}], "expected": [{"provider_field": "value", "expected_field": "value"}], "max_records": 1000, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1, "conformance": {"suite": "typed_destination", "run_id": %q}}}
     ],
-    "read_back": {
-      "operation": "widgets",
-	  "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1},
-      "identity": [{"provider_field": "id", "expected_field": "target_id"}],
-      "expected": [{"provider_field": "value", "expected_field": "value"}],
-      "max_records": 1000,
-      "max_attempts": 2,
-      "timeout_milliseconds": 5000,
-      "retry_delay_milliseconds": 1,
-      "conformance": {"suite": "typed_destination", "run_id": %q}
-    },
     "source_bindings": [
       {"action": "append_widget", "executor": {"family": "declarative_api", "id": "declarative_stream_source"}, "eligible_streams": ["widgets"], "batch": {"disposition": "per_record", "max_records": 1000}, "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}},
       {"action": "replace_widget", "executor": {"family": "declarative_api", "id": "declarative_stream_source"}, "eligible_streams": ["widgets"], "batch": {"disposition": "per_record", "max_records": 1000}, "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}}
     ]
   }
-}`, sourceRunID, destinationRunID, destinationRunID))}
+}`, sourceRunID, destinationRunID, destinationRunID, destinationRunID))}
 	return files
 }
 
@@ -2486,8 +2508,12 @@ func declarativeTypedDestinationThreeActionBundleFS(name, sourceRunID, destinati
 	apiSurface := strings.Replace(string(files[name+"/api_surface.json"].Data), `}}]}`, `}},{"method":"POST","path":"/widgets/archive","covered_by":{"write":"archive_widget"}}]}`, 1)
 	files[name+"/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
 	transport := strings.ReplaceAll(string(files[name+"/sync_transport.json"].Data), `"eligible_actions": ["append_widget", "replace_widget"]`, `"eligible_actions": ["append_widget", "replace_widget", "archive_widget"]`)
-	transport = strings.Replace(transport, `{"mode": "full_append", "strategy": "append", "action": "replace_widget"}`, `{"mode": "full_append", "strategy": "append", "action": "replace_widget"},
-      {"mode": "full_append", "strategy": "append", "action": "archive_widget"}`, 1)
+	transport = strings.Replace(transport, `
+    ],
+    "source_bindings":`, fmt.Sprintf(`,
+      {"mode": "full_append", "strategy": "append", "action": "archive_widget", "read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_ref"}], "expected": [{"provider_field": "state", "expected_field": "state"}], "max_records": 37, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1, "conformance": {"suite": "typed_destination", "run_id": %q}}}
+    ],
+    "source_bindings":`, destinationRunID), 1)
 	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(transport)}
 	return files
 }
@@ -2518,18 +2544,9 @@ func declarativeTypedDestinationTombstoneBundleFS(name, sourceRunID, destination
 	transport := string(files[name+"/sync_transport.json"].Data)
 	transport = strings.Replace(transport, `"eligible_actions": ["apply_widget"]`, `"eligible_actions": ["apply_widget", "delete_widget"]`, 1)
 	transport = strings.ReplaceAll(transport, `"deletes": "not_available"`, `"deletes": "tombstone"`)
-	transport = strings.Replace(transport, `{"mode": "full_append", "strategy": "append", "action": "apply_widget"}`, `{"mode": "full_append", "strategy": "append", "action": "apply_widget", "tombstone_action": "delete_widget"}`, 1)
-	transport = strings.Replace(transport, `    "source_bindings": [{`, `    "tombstone_read_back": {
-      "operation": "widgets",
-      "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1},
-      "identity": [{"provider_field": "id", "expected_field": "target_id"}],
-      "max_records": 1000,
-      "max_attempts": 2,
-      "timeout_milliseconds": 5000,
-      "retry_delay_milliseconds": 1,
-      "conformance": {"suite": "typed_destination", "run_id": "`+destinationRunID+`"}
-    },
-    "source_bindings": [{`, 1)
+	transport = strings.Replace(transport, `"action": "apply_widget",
+      "read_back":`, `"action": "apply_widget", "tombstone_action": "delete_widget", "tombstone_read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_id"}], "max_records": 1000, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1, "conformance": {"suite": "typed_destination", "run_id": "`+destinationRunID+`"}},
+      "read_back":`, 1)
 	transport = strings.Replace(transport, `    }]
   }`, `    },
       {"action": "delete_widget", "executor": {"family": "declarative_api", "id": "declarative_stream_source"}, "eligible_streams": ["widgets"], "batch": {"disposition": "per_record", "max_records": 1000}, "tombstone_mapping": {"image": "key", "inputs": [{"input": "target_id", "field": "id"}]}}

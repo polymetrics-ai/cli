@@ -105,7 +105,8 @@ func (a *App) PlanDeclarativeTypedDestinationTransport(ctx context.Context, conn
 		DestinationConfig: cloneStringMap(prepared.connection.Destination.Config), Action: prepared.resolved.ApplyStrategy.Action,
 		Mappings: map[string]string{}, ConfirmationChallenge: string(confirmation.Kind), ConfirmationPolicy: confirmation,
 		RecordCount: 0, PlanHash: planHash, PlanSeal: &seal, TransportConnectionID: prepared.connection.ID,
-		TransportStream: streamName, TransportBindingSHA256: bindingSHA256, TransportActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256, CreatedAt: seal.IssuedAt, ExpiresAt: seal.ExpiresAt,
+		TransportStream: streamName, TransportBindingSHA256: bindingSHA256, TransportActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
+		TransportPhysicalActions: declarativeTypedDestinationPhysicalActions(prepared.binding), CreatedAt: seal.IssuedAt, ExpiresAt: seal.ExpiresAt,
 	}
 	a.state.ReversePlans = append(a.state.ReversePlans, plan)
 	if err := a.save(); err != nil {
@@ -200,6 +201,7 @@ func (a *App) authorizeDeclarativeTypedDestinationTransport(ctx context.Context,
 	return synctransport.DestinationApproval{
 		PlanID: plan.ID, Evidence: evidence, Target: prepared.target, PreviewDigest: preview.Digest, ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
 		TombstoneActionDefinitionSHA256: prepared.binding.TombstoneActionDefinitionSHA256,
+		PhysicalActions:                 declarativeTypedDestinationPhysicalActions(prepared.binding),
 		IdempotencyProof: synctransport.DestinationIdempotencyProof{
 			Executor:               prepared.binding.DestinationExecutor,
 			ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
@@ -349,10 +351,18 @@ func (a *App) prepareDeclarativeTypedDestinationTransport(ctx context.Context, c
 			return preparedDeclarativeTypedDestinationTransport{}, err
 		}
 	}
+	readBack, err := contract.readBackPolicy(resolved.ApplyStrategy)
+	if err != nil {
+		return preparedDeclarativeTypedDestinationTransport{}, err
+	}
+	tombstoneReadBack, err := contract.tombstoneReadBackPolicy(resolved.ApplyStrategy)
+	if err != nil {
+		return preparedDeclarativeTypedDestinationTransport{}, err
+	}
 	readBackSHA256, err := hashJSON(struct {
-		ReadBack          *connectors.DestinationReadBackPolicy          `json:"read_back"`
+		ReadBack          connectors.DestinationReadBackPolicy           `json:"read_back"`
 		TombstoneReadBack *connectors.DestinationTombstoneReadBackPolicy `json:"tombstone_read_back,omitempty"`
-	}{ReadBack: contract.descriptor.ReadBack, TombstoneReadBack: contract.descriptor.TombstoneReadBack})
+	}{ReadBack: readBack, TombstoneReadBack: tombstoneReadBack})
 	if err != nil {
 		return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("hash declarative typed destination read-back declaration: %w", err)
 	}
@@ -395,6 +405,9 @@ func (a *App) validateDeclarativeTypedDestinationPlan(plan ReversePlan, prepared
 	if plan.Mode != reversePlanModeDeclarativeTypedDestinationTransport || plan.TransportConnectionID != prepared.connection.ID || plan.TransportStream != prepared.binding.Stream || plan.SourceConnection != prepared.connection.Name || plan.DestinationConnector != prepared.destination.Name() || plan.DestinationCredential != prepared.connection.Destination.Credential || plan.Action != prepared.resolved.ApplyStrategy.Action || plan.RecordCount != 0 || len(plan.Mappings) != 0 || validateDeclarativeTypedDestinationPlanBinding(plan, bindingSHA256) != nil || !constantTimeStringEqual(plan.TransportActionDefinitionSHA256, prepared.binding.ActionDefinitionSHA256) || !constantTimeStringEqual(plan.PlanHash, planHash) {
 		return fmt.Errorf("declarative typed destination approval plan does not bind the exact persisted connection action")
 	}
+	if err := validateDeclarativeTypedDestinationPhysicalActions(plan.TransportPhysicalActions, declarativeTypedDestinationPhysicalActions(prepared.binding)); err != nil {
+		return fmt.Errorf("declarative typed destination approval plan %w", err)
+	}
 	if plan.ConfirmationPolicy.Kind != connectors.ConfirmationKindDestructive || a.confirmationPolicyForPlan(plan).Kind != connectors.ConfirmationKindDestructive {
 		return fmt.Errorf("declarative typed destination approval plan does not require destructive confirmation")
 	}
@@ -404,6 +417,35 @@ func (a *App) validateDeclarativeTypedDestinationPlan(plan ReversePlan, prepared
 func validateDeclarativeTypedDestinationPlanBinding(plan ReversePlan, bindingSHA256 string) error {
 	if !constantTimeStringEqual(plan.TransportBindingSHA256, bindingSHA256) {
 		return fmt.Errorf("declarative typed destination approval plan does not bind the exact persisted connection action")
+	}
+	return nil
+}
+
+func declarativeTypedDestinationPhysicalActions(binding declarativeTypedDestinationBinding) []synctransport.DestinationPhysicalAction {
+	actions := []synctransport.DestinationPhysicalAction{{
+		Action: binding.Action, ActionDefinitionSHA256: binding.ActionDefinitionSHA256,
+		IdempotencyKeyHeader: binding.IdempotencyKeyHeader, Kind: "apply", Destructive: true,
+	}}
+	if binding.TombstoneAction != "" {
+		actions = append(actions, synctransport.DestinationPhysicalAction{
+			Action: binding.TombstoneAction, ActionDefinitionSHA256: binding.TombstoneActionDefinitionSHA256,
+			IdempotencyKeyHeader: binding.TombstoneIdempotencyKeyHeader, Kind: "tombstone_delete", Destructive: true,
+		})
+	}
+	return actions
+}
+
+func validateDeclarativeTypedDestinationPhysicalActions(got, want []synctransport.DestinationPhysicalAction) error {
+	gotDigest, err := hashJSON(got)
+	if err != nil {
+		return fmt.Errorf("hash presented physical actions: %w", err)
+	}
+	wantDigest, err := hashJSON(want)
+	if err != nil {
+		return fmt.Errorf("hash declared physical actions: %w", err)
+	}
+	if !constantTimeStringEqual(gotDigest, wantDigest) {
+		return fmt.Errorf("does not bind the complete declaration-owned physical action set")
 	}
 	return nil
 }

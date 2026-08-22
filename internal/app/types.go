@@ -468,7 +468,11 @@ type ReversePlan struct {
 	TransportStream                 string `json:"transport_stream,omitempty"`
 	TransportBindingSHA256          string `json:"transport_binding_sha256,omitempty"`
 	TransportActionDefinitionSHA256 string `json:"transport_action_definition_sha256,omitempty"`
-	TransportForwardPlanID          string `json:"transport_forward_plan_id,omitempty"`
+	// TransportPhysicalActions is the complete provider mutation set visible in
+	// a persisted reverse-ETL plan. A paired tombstone delete is therefore
+	// reviewable before preview/token approval rather than materialized later.
+	TransportPhysicalActions []synctransport.DestinationPhysicalAction `json:"transport_physical_actions,omitempty"`
+	TransportForwardPlanID   string                                    `json:"transport_forward_plan_id,omitempty"`
 	// AuthorizationLifetime is a bounded day-scale lifetime requested when a
 	// PostgreSQL managed-target transport plan is created. It is included in
 	// the sealed plan hash before its single-use approval token is issued.

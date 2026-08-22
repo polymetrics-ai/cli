@@ -463,6 +463,21 @@ type DestinationPlan struct {
 	TransformPlanHash               string
 	ActionDefinitionSHA256          string
 	TombstoneActionDefinitionSHA256 string
+	// PhysicalActions is the complete, declaration-owned provider mutation set
+	// admitted by this plan. It exists beside ApplyStrategy because one logical
+	// strategy may include an independently destructive tombstone delete.
+	PhysicalActions []DestinationPhysicalAction
+}
+
+// DestinationPhysicalAction is the reviewable identity of one provider
+// mutation covered by a destination approval. It names neither a URL nor a
+// request body; those remain owned by the compiled connector declaration.
+type DestinationPhysicalAction struct {
+	Action                 string `json:"action"`
+	ActionDefinitionSHA256 string `json:"action_definition_sha256"`
+	IdempotencyKeyHeader   string `json:"idempotency_key_header"`
+	Kind                   string `json:"kind"`
+	Destructive            bool   `json:"destructive"`
 }
 
 // DestinationIdempotencyProof is carried only from a sealed, independently
@@ -489,8 +504,12 @@ type DestinationApproval struct {
 	PreviewDigest                   string                            `json:"-"`
 	ActionDefinitionSHA256          string                            `json:"-"`
 	TombstoneActionDefinitionSHA256 string                            `json:"-"`
-	IdempotencyProof                DestinationIdempotencyProof       `json:"-"`
-	TombstoneIdempotencyProof       DestinationIdempotencyProof       `json:"-"`
+	// PhysicalActions is the complete set presented and digest-bound before a
+	// token can be consumed. Apply rechecks it so a paired delete cannot be
+	// introduced after approval.
+	PhysicalActions           []DestinationPhysicalAction `json:"-"`
+	IdempotencyProof          DestinationIdempotencyProof `json:"-"`
+	TombstoneIdempotencyProof DestinationIdempotencyProof `json:"-"`
 	// AuthorizeNextUnit rechecks a standing authorization immediately before a
 	// staged batch can cause a destination side effect. It is in-memory only:
 	// receipts and checkpoints retain no token or authorization callback.

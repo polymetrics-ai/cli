@@ -110,6 +110,10 @@ type DestinationApplyStrategy struct {
 	Strategy        ApplyStrategy     `json:"strategy"`
 	Action          string            `json:"action"`
 	TombstoneAction string            `json:"tombstone_action,omitempty"`
+	// ReadBack belongs to this exact physical apply action. A descriptor-wide
+	// policy cannot truthfully validate distinct action schemas after a write.
+	ReadBack          *DestinationReadBackPolicy          `json:"read_back,omitempty"`
+	TombstoneReadBack *DestinationTombstoneReadBackPolicy `json:"tombstone_read_back,omitempty"`
 }
 
 // SourceRecordMappingKind is the closed source-record behavior a destination
@@ -669,6 +673,16 @@ func (d DestinationTransportDescriptor) Validate() error {
 		if err := strategy.Strategy.Validate(); err != nil {
 			return err
 		}
+		if strategy.ReadBack != nil {
+			if err := strategy.ReadBack.Validate(); err != nil {
+				return fmt.Errorf("destination action %q read-back: %w", strategy.Action, err)
+			}
+		}
+		if strategy.TombstoneReadBack != nil {
+			if err := strategy.TombstoneReadBack.Validate(); err != nil {
+				return fmt.Errorf("destination tombstone action %q read-back: %w", strategy.TombstoneAction, err)
+			}
+		}
 		if strategy.Mode == synccontract.ModeChangeCapture && strategy.Strategy != ApplyStrategyChangeApply {
 			return fmt.Errorf("destination change_capture mode requires change_apply strategy, got %q", strategy.Strategy)
 		}
@@ -887,7 +901,21 @@ func (d SyncTransportDescriptor) Clone() *SyncTransportDescriptor {
 		destination := *d.Destination
 		destination.EligibleActions = append([]string(nil), d.Destination.EligibleActions...)
 		destination.Modes = append([]synccontract.Mode(nil), d.Destination.Modes...)
-		destination.ApplyStrategies = append([]DestinationApplyStrategy(nil), d.Destination.ApplyStrategies...)
+		destination.ApplyStrategies = make([]DestinationApplyStrategy, len(d.Destination.ApplyStrategies))
+		for index, strategy := range d.Destination.ApplyStrategies {
+			destination.ApplyStrategies[index] = strategy
+			if strategy.ReadBack != nil {
+				readBack := *strategy.ReadBack
+				readBack.Identity = append([]DestinationReadBackField(nil), strategy.ReadBack.Identity...)
+				readBack.Expected = append([]DestinationReadBackField(nil), strategy.ReadBack.Expected...)
+				destination.ApplyStrategies[index].ReadBack = &readBack
+			}
+			if strategy.TombstoneReadBack != nil {
+				readBack := *strategy.TombstoneReadBack
+				readBack.Identity = append([]DestinationReadBackField(nil), strategy.TombstoneReadBack.Identity...)
+				destination.ApplyStrategies[index].TombstoneReadBack = &readBack
+			}
+		}
 		destination.SourceBindings = make([]DestinationSourceBinding, len(d.Destination.SourceBindings))
 		for index, binding := range d.Destination.SourceBindings {
 			destination.SourceBindings[index] = binding.Clone()

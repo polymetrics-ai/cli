@@ -4,8 +4,8 @@ Every production change begins with a focused production-shaped test added in th
 
 | IDs | Red proof | Green proof | Status |
 | --- | --- | --- | --- |
-| AB-B01 | Preview/JSON/digest omit a paired tombstone DELETE but apply sends it. | Exact ordinary and delete actions with destructive semantics are shown and digest-bound before token issuance. | planned |
-| AB-B02 | A valid multi-action declaration mutates through action A then fails descriptor-wide read-back fields for action B. | Each action owns compatible read-back; incompatible identity/fields fail before I/O. | planned |
+| AB-B01 | Red: `go test -count=1 -timeout 20m ./internal/app -run '^TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBackAbsence$'` failed because persisted plan JSON exposed `apply_widget` only, while the test's later apply sent `delete_widget`. | Green: the same production-shaped plan now exposes a destructive `transport_physical_actions` set containing both actions; the plan binding, authorization, and destination plan all recheck the exact set. | green — focused App/synctransport/connector cohorts passed; commit pending |
+| AB-B02 | Red: `go test -count=1 -timeout 20m ./internal/app -run '^TestDeclarativeTypedDestinationRequiresActionOwnedReadBackPolicy$'` failed because a descriptor-wide policy was admitted. | Green: the same command passes with action-owned policy, and action policy field compatibility is validated from the selected mapping before I/O. | green — focused App/synctransport/connector cohorts passed; commit pending |
 | AB-B03 | Missing-ok delete reports unchanged then fails to read absence/checkpoint. | Complete unchanged+written accounting independently reads absence and checkpoints once without replay. | planned |
 | AB-B04 | Binding/read-back maxima mismatch performs writes before receipt/read-back refusal. | The sealed unit respects all action/read-back bounds before provider I/O. | planned |
 | AB-B05 | Legal escaped locators overflow encoded receipt after provider writes. | Pre-I/O sizing splits/refuses and safe escaped receipts complete. | planned |

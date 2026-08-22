@@ -10,7 +10,7 @@
 
 ## Behavioral proof
 
-- [ ] AB-B01 through AB-B09 resolved with red/green test output linked in `TDD-LEDGER.md`.
+- [ ] AB-B01, AB-B02 resolved with red/green test output linked in `TDD-LEDGER.md`; AB-B03 through AB-B09 pending.
 - [ ] AB-W01 through AB-W05 resolved with red/green test output linked in `TDD-LEDGER.md` (W01–W04 green; W05 pending).
 - [ ] Provider tests are synthetic and assert provider-call, checkpoint, receipt, output, and key behavior; no credentialed call occurred.
 
@@ -26,7 +26,8 @@
 
 ## Delivery
 
-- [ ] Every green dependency group is committed and non-force pushed.
+- [x] W01–W04 declaration/schema group committed and non-force pushed (`4e8b2506d`).
+- [ ] B01–B02 approval/action-owned read-back group is focused-green and awaiting its atomic commit/push.
 - [ ] Branch and remote SHA match after final push.
 - [ ] Worktree is clean.
 - [ ] External fix report crosswalks all AB IDs to code, commits, and proof.
