@@ -80,6 +80,28 @@ jobs:
       - name: Check generated files
         run: git diff --exit-code
 
+  # This fixture starts one fresh pm binary for each source-generated GitHub
+  # direct-read candidate. It is intentionally isolated from `make verify`'s
+  # shared internal/cli package deadline: all 97 behavioral assertions remain
+  # mandatory, while the ordinary Verify job keeps its stable 20-minute suite
+  # budget and the small shared-admission proof.
+  github-generated-direct-read-fixture:
+    name: github-generated-direct-read-fixture
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.26.6'
+          cache: false
+
+      - name: Exhaustive generated GitHub direct-read fixture
+        run: go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli -run '^TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture$'
+
   # pm embeds DuckDB, so every release target must actually link cgo against
   # go-duckdb's bundled library. That is verifiable only on a native runner:
   # cross-compiling cgo to Windows or macOS from Linux needs a toolchain CI does
