@@ -1309,7 +1309,6 @@ func (r *Requester) doWithBodyPolicy(ctx context.Context, method, path string, q
 		terminal := &Response{Status: resp.StatusCode, Header: resp.Header.Clone(), Body: respBody, requestURL: fullURL, rateLimitRoute: route}
 		if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
 			lastProviderResponse = terminal
-			lastProviderErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, respBody, observation)
 		}
 		if resp.StatusCode >= 200 && resp.StatusCode < 300 && !r.acceptsSuccessfulStatus(resp.StatusCode) {
 			statusErr := &UnexpectedStatusError{Status: resp.StatusCode}

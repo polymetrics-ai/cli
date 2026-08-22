@@ -264,7 +264,9 @@ func sortWriteRedactionLiterals(values []string) {
 
 func writeRedactionLiterals(values []string) []string {
 	seen := map[string]bool{}
-	literals := make([]string, 0, len(values)*4)
+	// Values and their encoded forms are deduplicated below. Avoid deriving an
+	// allocation size from an unchecked multiplication of input length.
+	literals := make([]string, 0)
 	for _, value := range values {
 		for _, literal := range writeRedactionLiteralForms(value) {
 			if seen[literal] {
