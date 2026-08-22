@@ -2,8 +2,8 @@
   "schema_version": 3,
   "integration": "cli-current-foundations-main-integration-r1",
   "checkpoint": "foundation-0.3.0-release-candidate-r1-evidence-closure",
-  "code_sha": "a5005fae7f1e92d19ef4b8e82d514050227bec38",
-  "reviewed_sha": "a5005fae7f1e92d19ef4b8e82d514050227bec38",
+  "code_sha": "1d83dd9ab82dbdaf0f19f0f4e0f28446f1c95d91",
+  "reviewed_sha": "1d83dd9ab82dbdaf0f19f0f4e0f28446f1c95d91",
   "base_sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
   "component_inputs": [
     {
@@ -35,11 +35,11 @@
   "input_method": "Fetched private exact heads, proved origin fast-forward ancestry before non-force publication, preserved reverse/public ancestry with merges, and re-read every pushed ref with git ls-remote. The four predecessor components are proven ancestors and were not remerged.",
   "focused_checks": [
     {
-      "command": "go test -timeout 20m ./cmd/connectorgen ./internal/connectors/defs -count=1",
+      "command": "go test -timeout 20m ./cmd/connectorgen -count=1; go test -v -count=1 ./internal/connectors/defs/recurly",
       "status": "passed",
-      "assertion": "RC-05 source-authoritative certification sweep and embedded source-lock regression checks agree with the composed declarations.",
-      "tests": ["TestCertificationSweepRetainsProviderRefusalObservationWhenTheCommandIsImplemented", "TestProductionEmbedPreservesGithubSourceLockBytes"],
-      "modes": ["source_projection", "certification_sweep", "embedded_source_lock"]
+      "assertion": "RC-05 source-authoritative sweep/source-lock checks and RC-06 Recurly binary download path-flag regression agree with the composed declarations.",
+      "tests": ["TestCertificationSweepRetainsProviderRefusalObservationWhenTheCommandIsImplemented", "TestProductionEmbedPreservesGithubSourceLockBytes", "TestBinaryDownloadCommandsExecute"],
+      "modes": ["source_projection", "certification_sweep", "embedded_source_lock", "binary_download.path_binding"]
     },
     {
       "command": "go test -timeout 20m ./internal/app -count=1",
@@ -120,7 +120,7 @@
   "deferred_gates": [
     "No approved non-secret credential reference was supplied, so no real-provider path was inferred, probed, or certified.",
     "CI, no-mistakes review handoff, and PR review remain external gates.",
-    "The predecessor full go test ./... run exposed certification-harness count expectations; they remain visible for disposition and are not represented as green. Recurly is nonblocking under the later independent exact-I review evidence."
+    "The predecessor full go test ./... run exposed certification-harness count expectations; they remain visible for disposition and are not represented as green. The confirmed Recurly path-flag failure is repaired and passes its exact local package proof; it is not a certification claim."
   ],
   "credential_handling": "No credential value was requested, read, printed, stored, or inferred. Local fixture proof, historical provider observations, and certification claims are separately classified in the review record.",
   "temporary_material": [
@@ -131,28 +131,28 @@
     }
   ],
   "artifact_closure": {
-    "implementation_sha": "a5005fae7f1e92d19ef4b8e82d514050227bec38",
-    "subject_fingerprint": "0872f11d2dbfc501be0de7b1850edcee1e618b1438b88f6abc3b62c64a1ccaa4",
+    "implementation_sha": "1d83dd9ab82dbdaf0f19f0f4e0f28446f1c95d91",
+    "subject_fingerprint": "6e718f8cd4b80497467e907ecb8ae49373afb1758920dfe7d18c83340061c86a",
     "artifacts": [
       {
         "category": "certification_subject",
         "path": "internal/connectors/certifications/current-subject.json",
-        "sha256": "06d6ccc42a1bbc97f43f5e9c53732fff883f7c4b5a4d74cdbb53546d6c9e13ab"
+        "sha256": "bf18d1d81f6616916d11b879f62e7972358a5590fe81bc15e0cb3e8ae2591e9c"
       },
       {
         "category": "source",
-        "path": "internal/connectors/defs/github/sources/github-operation-source-lock.json",
-        "sha256": "281b1cfcc67eb63e19ef83daf06197bf3d3b23db0b6bc9b73e02fc18ee278fb6"
+        "path": "internal/connectors/defs/recurly/operations.json",
+        "sha256": "b42f4e0ccc90eaf4f50ce052353cf24b73dbe50489e419601c83101fc8cf6189"
       },
       {
         "category": "cli",
-        "path": "internal/connectors/defs/github/cli_surface.json",
-        "sha256": "ea7ab1d3580cc355ead81e3bc96e921c8a008ddbbef17390bcc0e544cd8c8c99"
+        "path": "internal/connectors/defs/recurly/cli_surface.json",
+        "sha256": "a5e5a426fad0a38ef48b0a3f908f1b687a7935da14ffd984ca90d90ca138c454"
       },
       {
         "category": "docs",
-        "path": "docs/cli/etl.md",
-        "sha256": "0454fadaf5ff71e57d70da6e9f05410160489ae09cab3a262d887a5c65107406"
+        "path": "docs/connectors/recurly/MANUAL.md",
+        "sha256": "b41b2d4987b41a0dc3309b3b7bf80b8bea3879b3d02a7986c9c4b18269061326"
       },
       {
         "category": "website",
@@ -161,13 +161,13 @@
       },
       {
         "category": "skills",
-        "path": "docs/skills/pm-github/SKILL.md",
-        "sha256": "c5aab515bc54cfae7588269a4926fdf64ddd01787e1055d1c660136949945d75"
+        "path": "docs/skills/pm-recurly/SKILL.md",
+        "sha256": "991084e0d4f43f77300160ceddde3f6afd988aada1d76626d775ea92cb1f379c"
       },
       {
         "category": "ledger",
         "path": ".planning/phases/cli-current-foundations-main-integration-r1/TDD-LEDGER.md",
-        "sha256": "236400de008a512b7391a6e610fefa389057cd6bcd1bdbf7c561dd6fdcc4b01e"
+        "sha256": "32d3bca232374b3b1f9397791c523af69ce5ad7dc850ee1cf79ac30257b59ac0"
       },
       {
         "category": "matrix",
@@ -187,7 +187,7 @@
       {
         "category": "foundation_evidence",
         "path": "data/cli-current-foundations-main-integration-r1/report.md",
-        "sha256": "48d6dcd5a87b3722d2377043ea0941578365b3e135b876a6a9f4d3851d665588"
+        "sha256": "c1e33e04d09ef51de3fccb162ec16bace0c071288e392370a0740f27ade6a485"
       }
     ]
   }

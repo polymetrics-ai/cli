@@ -39,7 +39,8 @@ This checkpoint is intentionally limited to exact local-pipeline composition, th
 - [x] Reverse merge committed, pushed non-force, and read back; focused transport/App/Postgres/CDC boundary suites pass.
 - [x] Public merge committed, pushed non-force, and read back; focused output/engine/connector/SQS boundary suites pass.
 - [x] FND-B09 schema-2 failure reproduced before closure; FND-W01 disposition is evidence-backed and does not broaden scope.
-- [x] Implementation SHA I `a5005fae7f1e92d19ef4b8e82d514050227bec38` frozen after all production/generated checks; no production/generated path changes afterwards.
-- [ ] Evidence-only SHA E committed and pushed; strict evidence gate passes from clean E.
+- [x] Prior I/E (`a5005fae…` / `7c3d856…`) superseded by the confirmed Recurly path-flag regression; the unchanged binary regression test is green after the narrow declaration/generation repair.
+- [x] Implementation SHA I `1d83dd9ab82dbdaf0f19f0f4e0f28446f1c95d91` frozen after all production/generated checks; no production/generated path changes afterwards.
+- [ ] Replacement evidence-only SHA E committed and pushed; strict evidence gate passes from clean E.
 - [x] `gofmt`/diff check, targeted tests and races, `go vet ./...`, `go build ./cmd/pm`, generation, docs/help/skills/certification, and individually runnable release gates pass; predecessor aggregate test failures are explicitly documented rather than waived.
 - [ ] PR opened only after E is immutable; GitHub API reports its base exactly `fm/cli-current-foundations-main-integration-r1` and head exactly E.
