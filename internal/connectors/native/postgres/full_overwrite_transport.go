@@ -138,14 +138,15 @@ func (s *managedTargetFullOverwriteRun) publishFullOverwrite(ctx context.Context
 	if acknowledgedAt, found, err := s.lookupReceipt(ctx, receipt); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	} else if found {
+		receipt.PublishedAt = acknowledgedAt
 		s.receipt, s.published = receipt, true
-		return synccontract.NewDurableDownstreamAcknowledgement(s.destination.connector.Name(), acknowledgedAt)
+		return managedTargetFullOverwriteAcknowledgement(s.destination.connector.Name(), receipt, acknowledgedAt)
 	}
 	if err := s.publishShadow(ctx, receipt); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
 	s.receipt, s.published = receipt, true
-	return synccontract.NewDurableDownstreamAcknowledgement(s.destination.connector.Name(), receipt.PublishedAt)
+	return managedTargetFullOverwriteAcknowledgement(s.destination.connector.Name(), receipt, receipt.PublishedAt)
 }
 
 func (s *managedTargetFullOverwriteRun) ReadBackFullOverwrite(ctx context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {
@@ -156,6 +157,71 @@ func (s *managedTargetFullOverwriteRun) ReadBackFullOverwrite(ctx context.Contex
 		return struct{}{}, s.readBackFullOverwrite(admitted, acknowledgement)
 	})
 	return err
+}
+
+func (d *ManagedTargetTransportDestination) ReadBackEmptyFullOverwrite(ctx context.Context, request synctransport.EmptyPublicationReadBackRequest) error {
+	if ctx == nil || d == nil {
+		return ErrManagedTargetTransportReadBackFailed
+	}
+	_, err := executeManagedTargetWithAuthenticationAdmission(ctx, request.Runtime, func(admitted context.Context) (struct{}, error) {
+		return struct{}{}, d.readBackEmptyFullOverwrite(admitted, request)
+	})
+	return err
+}
+
+func (d *ManagedTargetTransportDestination) readBackEmptyFullOverwrite(ctx context.Context, request synctransport.EmptyPublicationReadBackRequest) error {
+	if ctx == nil || d == nil || ctx.Err() != nil || request.Receipt.Validate() != nil || request.Receipt.Witness.Sink != d.connector.Name() {
+		return ErrManagedTargetTransportReadBackFailed
+	}
+	var receipt database.FullOverwriteReceiptV1
+	if len(request.Receipt.Output) == 0 || json.Unmarshal(request.Receipt.Output, &receipt) != nil || receipt.Validate() != nil || !receipt.PublishedAt.Equal(request.Receipt.Witness.AcknowledgedAt) {
+		return ErrManagedTargetTransportReadBackFailed
+	}
+	if (strings.TrimSpace(request.TransformPlanJSON) == "") != (strings.TrimSpace(request.TransformPlanHash) == "") {
+		return ErrManagedTargetTransportReadBackFailed
+	}
+	var (
+		resolved managedTargetTransportResolution
+		err      error
+	)
+	if request.TransformPlanHash == "" {
+		resolved, err = d.resolveManagedTarget(ctx, request.Source, request.SourceRuntime, request.Runtime, request.Binding, request.Stream)
+	} else {
+		transform, parseErr := database.ParseTransformPlanV1([]byte(request.TransformPlanJSON))
+		if parseErr != nil || transform.Hash() != request.TransformPlanHash {
+			return ErrManagedTargetTransportReadBackFailed
+		}
+		resolved, err = d.resolveManagedTargetWithTransform(ctx, request.Source, request.SourceRuntime, request.Runtime, request.Binding, request.Stream, &transform)
+	}
+	if err != nil {
+		return err
+	}
+	defer resolved.close()
+	control, err := resolved.provision(ctx)
+	if err != nil {
+		return err
+	}
+	if err := postgresEnsureFullOverwriteReceiptTable(ctx, resolved.driver, control); err != nil {
+		return err
+	}
+	lookup := managedTargetFullOverwriteRun{resolved: resolved, control: control}
+	acknowledgedAt, found, err := lookup.lookupReceipt(ctx, receipt)
+	if err != nil || !found || !acknowledgedAt.Equal(request.Receipt.Witness.AcknowledgedAt) {
+		return ErrManagedTargetTransportReadBackFailed
+	}
+	return nil
+}
+
+func managedTargetFullOverwriteAcknowledgement(sink string, receipt database.FullOverwriteReceiptV1, acknowledgedAt time.Time) (synccontract.DownstreamAcknowledgement, error) {
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(sink, acknowledgedAt)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	output, err := json.Marshal(receipt)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	return acknowledgement.WithOutput(output)
 }
 
 func (s *managedTargetFullOverwriteRun) readBackFullOverwrite(ctx context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {

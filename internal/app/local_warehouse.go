@@ -63,6 +63,10 @@ func cloneDeliveryReconciliation(reconciliation *DeliveryReconciliation) *Delive
 		witness := *reconciliation.EmptyPublication
 		clone.EmptyPublication = &witness
 	}
+	if reconciliation.EmptyPublicationReadBackPending != nil {
+		receipt := reconciliation.EmptyPublicationReadBackPending.Clone()
+		clone.EmptyPublicationReadBackPending = &receipt
+	}
 	return &clone
 }
 

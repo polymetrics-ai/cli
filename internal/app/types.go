@@ -272,7 +272,8 @@ type DeliveryReconciliation struct {
 	// full-overwrite whose provider receipt has already been read back. It
 	// permits only local terminal-state repair; it never represents a source
 	// checkpoint or permission to re-enter the destination route.
-	EmptyPublication *synccontract.PublicationWitness `json:"empty_publication,omitempty"`
+	EmptyPublication                *synccontract.PublicationWitness               `json:"empty_publication,omitempty"`
+	EmptyPublicationReadBackPending *synctransport.EmptyPublicationReadBackReceipt `json:"empty_publication_read_back_pending,omitempty"`
 }
 
 type Run struct {

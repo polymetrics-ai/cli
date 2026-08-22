@@ -203,6 +203,12 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 	cancelPublish()
 	if publishErr == nil {
 		published = true
+		if lastCandidate == nil {
+			result.WallElapsed = time.Since(started)
+			if err := handoffEmptyPublicationReadBackPending(ctx, request, &result, acknowledgement, request.Destination.Name()); err != nil {
+				return result, err
+			}
+		}
 		readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
 		readBackStarted := time.Now()
 		if request.ReadBackAdmission != nil {
@@ -221,6 +227,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 		result.IndexConstraintElapsed = reporter.ArrowBulkPhaseMeasurement().IndexConstraintBuildElapsed
 	}
 	if lastCandidate == nil {
+		result.WallElapsed = time.Since(started)
 		if err := handoffEmptyPublication(ctx, request, &result, acknowledgement, request.Destination.Name()); err != nil {
 			return result, err
 		}

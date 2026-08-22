@@ -206,14 +206,15 @@ func (s *managedTargetArrowFullOverwriteRun) publishArrowFullOverwrite(ctx conte
 	if acknowledgedAt, found, err := s.lookupArrowReceipt(ctx, receipt); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	} else if found {
+		receipt.PublishedAt = acknowledgedAt
 		s.receipt, s.published = receipt, true
-		return synccontract.NewDurableDownstreamAcknowledgement(s.destination.connector.Name(), acknowledgedAt)
+		return managedTargetFullOverwriteAcknowledgement(s.destination.connector.Name(), receipt, acknowledgedAt)
 	}
 	if err := s.publishArrowShadow(ctx, receipt); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
 	s.receipt, s.published = receipt, true
-	return synccontract.NewDurableDownstreamAcknowledgement(s.destination.connector.Name(), receipt.PublishedAt)
+	return managedTargetFullOverwriteAcknowledgement(s.destination.connector.Name(), receipt, receipt.PublishedAt)
 }
 
 func (s *managedTargetArrowFullOverwriteRun) ReadBackArrowFullOverwrite(ctx context.Context, acknowledgement synccontract.DownstreamAcknowledgement) error {

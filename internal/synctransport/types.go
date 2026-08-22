@@ -248,6 +248,44 @@ type FullOverwriteRun interface {
 	AbortFullOverwrite(context.Context) error
 }
 
+type EmptyPublicationReadBackReceipt struct {
+	Witness synccontract.PublicationWitness `json:"witness"`
+	Output  json.RawMessage                 `json:"output,omitempty"`
+}
+
+func (r EmptyPublicationReadBackReceipt) Validate() error {
+	if err := r.Witness.Validate(); err != nil {
+		return err
+	}
+	if len(r.Output) != 0 && !json.Valid(r.Output) {
+		return fmt.Errorf("empty publication read-back receipt output must be valid JSON")
+	}
+	return nil
+}
+
+func (r EmptyPublicationReadBackReceipt) Clone() EmptyPublicationReadBackReceipt {
+	clone := r
+	clone.Output = append(json.RawMessage(nil), r.Output...)
+	return clone
+}
+
+type EmptyPublicationReadBackDestination interface {
+	ReadBackEmptyFullOverwrite(context.Context, EmptyPublicationReadBackRequest) error
+}
+
+type EmptyPublicationReadBackRequest struct {
+	Runtime           connectors.RuntimeConfig
+	Source            connectors.Connector
+	SourceRuntime     connectors.RuntimeConfig
+	Destination       connectors.Connector
+	Binding           DestinationBinding
+	Stream            string
+	DestinationAction string
+	TransformPlanJSON string
+	TransformPlanHash string
+	Receipt           EmptyPublicationReadBackReceipt
+}
+
 // FullOverwritePublicationRequest is payload-free aggregate evidence supplied
 // only after source emission completed. LastCheckpoint remains source-owned;
 // the destination cannot replace it, and the orchestrator remains responsible
@@ -610,11 +648,12 @@ type RunRequest struct {
 	// immediately before a source executor begins physical I/O; it accepts no
 	// route, credential, or provider authority and is intentionally absent from
 	// receipts and generated declarations.
-	SourceAdmission         func(context.Context) error         `json:"-"`
-	ReadBackAdmission       func(context.Context) error         `json:"-"`
-	EmptyPublicationHandoff func(context.Context, Result) error `json:"-"`
-	Stage                   WarehouseStage
-	Commit                  func(synccontract.CheckpointEnvelope) error
+	SourceAdmission                        func(context.Context) error         `json:"-"`
+	ReadBackAdmission                      func(context.Context) error         `json:"-"`
+	EmptyPublicationReadBackPendingHandoff func(context.Context, Result) error `json:"-"`
+	EmptyPublicationHandoff                func(context.Context, Result) error `json:"-"`
+	Stage                                  WarehouseStage
+	Commit                                 func(synccontract.CheckpointEnvelope) error
 }
 
 type Result struct {
@@ -655,7 +694,8 @@ type Result struct {
 	// from a source checkpoint: no source position was observed or advanced.
 	// App persists it with the exact provider receipt before any local repair,
 	// so retrying the run cannot publish the empty replacement a second time.
-	EmptyPublication *synccontract.PublicationWitness
+	EmptyPublication                *synccontract.PublicationWitness
+	EmptyPublicationReadBackPending *EmptyPublicationReadBackReceipt
 	// DeliveredReconciliationRequired says the destination effect, read-back,
 	// and checkpoint are already durable but a subsequent local bookkeeping
 	// action (for example, retiring a bounded stage receipt) needs repair.

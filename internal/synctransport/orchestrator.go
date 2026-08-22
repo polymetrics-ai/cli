@@ -2,6 +2,7 @@ package synctransport
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -553,6 +554,11 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		// abort before read-back so an ambiguous verification failure cannot
 		// delete or roll back a successfully published destination.
 		published = true
+		if lastCandidate == nil {
+			if err := handoffEmptyPublicationReadBackPending(ctx, request, &result, acknowledgement, request.Destination.Name()); err != nil {
+				return result, err
+			}
+		}
 		readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
 		readBackStarted := time.Now()
 		if request.ReadBackAdmission != nil {
@@ -615,10 +621,36 @@ func handoffEmptyPublication(ctx context.Context, request RunRequest, result *Re
 	if err := sealEmptyPublicationWitness(result, acknowledgement, destination); err != nil {
 		return err
 	}
+	result.EmptyPublicationReadBackPending = nil
 	if request.EmptyPublicationHandoff == nil {
 		return nil
 	}
 	return request.EmptyPublicationHandoff(ctx, *result)
+}
+
+func handoffEmptyPublicationReadBackPending(ctx context.Context, request RunRequest, result *Result, acknowledgement synccontract.DownstreamAcknowledgement, destination string) error {
+	if result == nil {
+		return errors.New("empty publication result is required")
+	}
+	witness, err := acknowledgement.PublicationWitness()
+	if err != nil {
+		return fmt.Errorf("seal empty full-overwrite read-back receipt: %w", err)
+	}
+	if witness.Sink != destination {
+		return fmt.Errorf("durable empty publication sink %q does not match destination %q", witness.Sink, destination)
+	}
+	receipt := EmptyPublicationReadBackReceipt{
+		Witness: witness,
+		Output:  append(json.RawMessage(nil), acknowledgement.Output...),
+	}
+	if err := receipt.Validate(); err != nil {
+		return fmt.Errorf("seal empty full-overwrite read-back receipt: %w", err)
+	}
+	result.EmptyPublicationReadBackPending = &receipt
+	if request.EmptyPublicationReadBackPendingHandoff == nil {
+		return nil
+	}
+	return request.EmptyPublicationReadBackPendingHandoff(ctx, *result)
 }
 
 // collectDestinationResult is the single defensive-copy boundary for every

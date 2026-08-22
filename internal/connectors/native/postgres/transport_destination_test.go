@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"os"
 	"reflect"
@@ -14,6 +15,28 @@ import (
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/synctransport"
 )
+
+func TestManagedTargetFullOverwriteAcknowledgementCarriesReceiptForRecovery(t *testing.T) {
+	publishedAt := time.Date(2026, time.August, 22, 12, 0, 0, 0, time.UTC)
+	receipt, err := database.NewFullOverwriteReceiptV1(strings.Repeat("a", 64), strings.Repeat("b", 64), strings.Repeat("c", 64), 0, publishedAt)
+	if err != nil {
+		t.Fatal(err)
+	}
+	acknowledgement, err := managedTargetFullOverwriteAcknowledgement("postgres", receipt, publishedAt)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if acknowledgement.Sink != "postgres" || !acknowledgement.AcknowledgedAt.Equal(publishedAt) {
+		t.Fatalf("full-overwrite acknowledgement = %#v, want durable target witness", acknowledgement)
+	}
+	var restored database.FullOverwriteReceiptV1
+	if err := json.Unmarshal(acknowledgement.Output, &restored); err != nil {
+		t.Fatalf("decode full-overwrite receipt = %v", err)
+	}
+	if !reflect.DeepEqual(restored, receipt) {
+		t.Fatalf("full-overwrite receipt = %#v, want %#v", restored, receipt)
+	}
+}
 
 func TestManagedTargetTransportDestinationRefusesBeforeSideEffects(t *testing.T) {
 	root := t.TempDir()

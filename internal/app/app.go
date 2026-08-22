@@ -1683,7 +1683,7 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 		key:   result.PendingStreamState.Key,
 		state: cloneStreamState(acknowledged),
 	}
-	if result.DeliveryReconciliation != nil && result.DeliveryReconciliation.EmptyPublication != nil {
+	if result.DeliveryReconciliation != nil && (result.DeliveryReconciliation.EmptyPublication != nil || result.DeliveryReconciliation.EmptyPublicationReadBackPending != nil) {
 		return a.completeEmptyPublicationAcknowledgedTransportRun(runID, result, completion)
 	}
 	return a.completeRunWithAcknowledgedTransportState(runID, result, completion)

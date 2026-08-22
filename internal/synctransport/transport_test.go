@@ -472,6 +472,61 @@ func TestOrchestratorFullOverwriteSealsEmptyPublicationWitness(t *testing.T) {
 	}
 }
 
+func TestOrchestratorFullOverwriteSealsPendingReceiptBeforeReadBackAdmission(t *testing.T) {
+	pair := newTestTransportPair("database", "database")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{
+		Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace",
+	}}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
+	pair.sourceExecutor.pages = nil
+	fullOverwrite := &testFullOverwriteRun{
+		sink:                  pair.destination.Name(),
+		allowEmptyPublication: true,
+		publishOutput:         json.RawMessage(`{"receipt_id":"pending-before-admission"}`),
+	}
+	pair.destinationExecutor.fullOverwrite = fullOverwrite
+	registry := NewRegistry(pair.verifier)
+	if err := registry.RegisterSource(&emptyResultTestSource{testSourceExecutor: pair.sourceExecutor}); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(pair.destinationExecutor); err != nil {
+		t.Fatal(err)
+	}
+
+	admissionErr := errors.New("read-back admission interrupted")
+	admissionCalled := false
+	pendingHandoffs := 0
+	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite,
+		BatchSize: 1, Stage: &testWarehouseStage{}, Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+		EmptyPublicationReadBackPendingHandoff: func(_ context.Context, result Result) error {
+			pendingHandoffs++
+			if admissionCalled {
+				return errors.New("read-back admission ran before the pending publication receipt")
+			}
+			if result.EmptyPublicationReadBackPending == nil || result.EmptyPublication != nil || !reflect.DeepEqual(result.EmptyPublicationReadBackPending.Output, fullOverwrite.publishOutput) {
+				return errors.New("pending publication receipt was not sealed before read-back admission")
+			}
+			return nil
+		},
+		ReadBackAdmission: func(context.Context) error {
+			admissionCalled = true
+			return admissionErr
+		},
+	})
+	if !errors.Is(err, admissionErr) {
+		t.Fatalf("Run(empty full-overwrite) error = %v, want read-back admission failure", err)
+	}
+	if pendingHandoffs != 1 || !admissionCalled || result.EmptyPublicationReadBackPending == nil || result.EmptyPublication != nil {
+		t.Fatalf("pending handoff/admission/result = %d/%t/%#v, want one pending receipt before the admission failure", pendingHandoffs, admissionCalled, result)
+	}
+	if fullOverwrite.publishCalls != 1 || fullOverwrite.readBackCalls != 0 || fullOverwrite.abortCalls != 0 {
+		t.Fatalf("pending publication publish/read-back/abort = %d/%d/%d, want 1/0/0", fullOverwrite.publishCalls, fullOverwrite.readBackCalls, fullOverwrite.abortCalls)
+	}
+}
+
 func TestOrchestratorFullOverwriteRefusesUnmarkedEmptySourceBeforePublication(t *testing.T) {
 	pair := newTestTransportPair("database", "database")
 	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullOverwrite}
@@ -1396,7 +1451,10 @@ func TestOrchestratorArrowFullOverwritePublishesZeroSourceWithNoCreditLeak(t *te
 	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
 	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
 	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}}
-	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name()}}
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name(), publishContext: func(context.Context, int) error {
+		time.Sleep(time.Millisecond)
+		return nil
+	}}}
 	registry := NewRegistry(pair.verifier)
 	if err := registry.RegisterSource(source); err != nil {
 		t.Fatal(err)
@@ -1409,16 +1467,34 @@ func TestOrchestratorArrowFullOverwritePublishesZeroSourceWithNoCreditLeak(t *te
 	if err != nil {
 		t.Fatal(err)
 	}
+	var pendingWall, finalWall time.Duration
 	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
 		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1,
 		TransformPlanJSON: plan, TransformPlanHash: hash, FastSegments: &testFastSegmentStore{},
 		Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+		EmptyPublicationReadBackPendingHandoff: func(_ context.Context, result Result) error {
+			pendingWall = result.WallElapsed
+			if result.EmptyPublicationReadBackPending == nil || result.WallElapsed <= 0 {
+				return errors.New("serial Arrow pending handoff has no critical path measurement")
+			}
+			return nil
+		},
+		EmptyPublicationHandoff: func(_ context.Context, result Result) error {
+			finalWall = result.WallElapsed
+			if result.EmptyPublication == nil || result.WallElapsed <= 0 {
+				return errors.New("serial Arrow final handoff has no critical path measurement")
+			}
+			return nil
+		},
 	})
 	if err != nil {
 		t.Fatalf("Run(zero source) error = %v", err)
 	}
 	if destination.run.publishCalls != 1 || result.PeakCreditBytes != 0 || result.RecordsApplied != 0 || result.CommittedCheckpoint != nil || result.EmptyPublication == nil || result.EmptyPublication.Sink != pair.destination.Name() {
 		t.Fatalf("zero-source Arrow result = %#v, publish calls=%d", result, destination.run.publishCalls)
+	}
+	if pendingWall <= 0 || finalWall <= 0 {
+		t.Fatalf("zero-source Arrow pending/final critical path = %s/%s, want persisted handoff measurements", pendingWall, finalWall)
 	}
 }
 
@@ -1431,7 +1507,10 @@ func TestOrchestratorArrowFullOverwritePipelineSealsZeroSourcePublicationWitness
 	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullOverwrite, Strategy: connectors.ApplyStrategyReplace, Action: "stage_replace"}}
 	pair.destination.descriptor.Destination.EligibleActions = []string{"stage_replace"}
 	source := &testArrowSource{testSourceExecutor: &testSourceExecutor{reference: pair.sourceExecutor.reference}}
-	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name(), publishOutput: json.RawMessage(`{"receipt_id":"empty-pipeline-publication-once"}`)}}
+	destination := &testArrowDestination{testDestinationExecutor: &testDestinationExecutor{reference: pair.destinationExecutor.reference, sink: pair.destination.Name()}, run: &testArrowFullOverwriteRun{sink: pair.destination.Name(), publishOutput: json.RawMessage(`{"receipt_id":"empty-pipeline-publication-once"}`), publishContext: func(context.Context, int) error {
+		time.Sleep(time.Millisecond)
+		return nil
+	}}}
 	registry := NewRegistry(pair.verifier)
 	if err := registry.RegisterSource(source); err != nil {
 		t.Fatal(err)
@@ -1444,16 +1523,34 @@ func TestOrchestratorArrowFullOverwritePipelineSealsZeroSourcePublicationWitness
 	if err != nil {
 		t.Fatal(err)
 	}
+	var pendingWall, finalWall time.Duration
 	result, err := NewOrchestrator(registry).Run(context.Background(), RunRequest{
 		Source: pair.source, Destination: pair.destination, Stream: "records", Mode: synccontract.ModeFullOverwrite, BatchSize: 1,
 		MaxInFlightBatches: 2, TransformPlanJSON: plan, TransformPlanHash: hash, FastSegments: &testFastSegmentStore{},
 		Commit: func(synccontract.CheckpointEnvelope) error { return nil },
+		EmptyPublicationReadBackPendingHandoff: func(_ context.Context, result Result) error {
+			pendingWall = result.WallElapsed
+			if result.EmptyPublicationReadBackPending == nil || result.WallElapsed <= 0 {
+				return errors.New("pipeline Arrow pending handoff has no critical path measurement")
+			}
+			return nil
+		},
+		EmptyPublicationHandoff: func(_ context.Context, result Result) error {
+			finalWall = result.WallElapsed
+			if result.EmptyPublication == nil || result.WallElapsed <= 0 {
+				return errors.New("pipeline Arrow final handoff has no critical path measurement")
+			}
+			return nil
+		},
 	})
 	if err != nil {
 		t.Fatalf("Run(zero-source Arrow pipeline) = %v", err)
 	}
 	if destination.run.publishCalls != 1 || destination.run.readBackCalls != 1 || result.CommittedCheckpoint != nil || result.EmptyPublication == nil || result.EmptyPublication.Sink != pair.destination.Name() || result.EmptyPublication.AcknowledgedAt.IsZero() {
 		t.Fatalf("zero-source Arrow pipeline result = %#v, publish/read-back=%d/%d", result, destination.run.publishCalls, destination.run.readBackCalls)
+	}
+	if pendingWall <= 0 || finalWall <= 0 {
+		t.Fatalf("zero-source Arrow pipeline pending/final critical path = %s/%s, want persisted handoff measurements", pendingWall, finalWall)
 	}
 }
 

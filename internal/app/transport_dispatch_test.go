@@ -2532,6 +2532,121 @@ func TestRunETLTransportCompletesExplicitEmptyFullOverwriteWithPublicationWitnes
 	}
 }
 
+func TestRunETLEmptyFullOverwritePersistsPendingReceiptBeforeReadBackAdmission(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullOverwrite)
+	started := time.Date(2026, time.August, 22, 12, 0, 0, 0, time.UTC)
+	clock := &appTransportLeaseClock{now: started}
+	previousNow := transportWorkLeaseNow
+	transportWorkLeaseNow = clock.Now
+	t.Cleanup(func() { transportWorkLeaseNow = previousNow })
+	ctx, cancel := context.WithCancel(context.Background())
+	fixture.sourceExecutor.read = func(context.Context, synctransport.SourceRequest, func(synctransport.SourcePage) error) error {
+		return nil
+	}
+	fixture.destinationExecutor.output = json.RawMessage(`{"receipt_id":"empty-admission-once"}`)
+	fixture.destinationExecutor.afterPublish = cancel
+	registry := synctransport.NewRegistry(fixture.verifier)
+	if err := registry.RegisterSource(&emptyAppTransportSourceExecutor{appTransportSourceExecutor: fixture.sourceExecutor}); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(fixture.destinationExecutor); err != nil {
+		t.Fatal(err)
+	}
+	fixture.app.transports = registry
+
+	fenced, err := fixture.app.RunETL(ctx, RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("RunETL() error = %v, want cancellation after acknowledgement", err)
+	}
+	if fenced.Status != ETLRunStatusDeliveredReconciliationRequired || fenced.DeliveryReconciliation == nil || fenced.DeliveryReconciliation.EmptyPublicationReadBackPending == nil || fenced.DeliveryReconciliation.EmptyPublication != nil {
+		t.Fatalf("post-acknowledgement run = %#v, want durable pending read-back receipt", fenced)
+	}
+	if fixture.destinationExecutor.publishCalls != 1 || fixture.destinationExecutor.readBackCalls != 0 || fixture.destinationExecutor.recoveryReadBackCalls != 0 {
+		t.Fatalf("post-acknowledgement publish/read-back/recovery = %d/%d/%d, want 1/0/0", fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls, fixture.destinationExecutor.recoveryReadBackCalls)
+	}
+	stateKey := streamStateKey(fixture.connection, "records")
+	state := fixture.app.state.StreamStates[stateKey]
+	if state.ActiveWorkID != fenced.ID || state.ActiveWorkLeaseUntil == nil {
+		t.Fatalf("post-acknowledgement stream state = %#v, want retained owner lease", state)
+	}
+
+	contender, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, claimErr := contender.claimTransportWorkLease(context.Background(), stateKey, fixture.connection, "records", "competing-empty-publication", synccontract.ResumeExpectation{}, true, state.ActiveWorkFence)
+	if !errors.Is(claimErr, errTransportStreamReconciliationPending) {
+		t.Fatalf("competing claim error = %v, want pending reconciliation refusal", claimErr)
+	}
+	if fixture.sourceExecutor.readCalls != 1 || fixture.destinationExecutor.publishCalls != 1 || fixture.destinationExecutor.readBackCalls != 0 || fixture.destinationExecutor.recoveryReadBackCalls != 0 {
+		t.Fatalf("competing claim source/publish/read-back/recovery = %d/%d/%d/%d, want 1/1/0/0", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls, fixture.destinationExecutor.recoveryReadBackCalls)
+	}
+	clock.Set(started.Add(transportWorkLeaseDuration + time.Second))
+
+	reopened, err := Open(fixture.app.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fixture.configureRuntime(t, reopened, fixture.sourceExecutor, fixture.destinationExecutor)
+	repaired, err := reopened.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	if err != nil {
+		t.Fatalf("RunETL(recover pending read-back) = %v", err)
+	}
+	if repaired.ID != fenced.ID || repaired.Status != "completed" || repaired.DeliveryReconciliation != nil {
+		t.Fatalf("recovered empty publication run = %#v, want original completed run", repaired)
+	}
+	if fixture.sourceExecutor.readCalls != 1 || fixture.destinationExecutor.publishCalls != 1 || fixture.destinationExecutor.readBackCalls != 0 || fixture.destinationExecutor.recoveryReadBackCalls != 1 {
+		t.Fatalf("recovered source/publish/read-back/recovery = %d/%d/%d/%d, want 1/1/0/1", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls, fixture.destinationExecutor.recoveryReadBackCalls)
+	}
+}
+
+func TestRunETLEmptyFullOverwriteRecoversPendingReceiptAfterPostPublishStateCommitError(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullOverwrite)
+	started := time.Date(2026, time.August, 22, 12, 0, 0, 0, time.UTC)
+	clock := &appTransportLeaseClock{now: started}
+	previousNow := transportWorkLeaseNow
+	transportWorkLeaseNow = clock.Now
+	t.Cleanup(func() { transportWorkLeaseNow = previousNow })
+	fixture.sourceExecutor.read = func(context.Context, synctransport.SourceRequest, func(synctransport.SourcePage) error) error {
+		return nil
+	}
+	fixture.destinationExecutor.output = json.RawMessage(`{"receipt_id":"empty-state-save-once"}`)
+	fixture.destinationExecutor.afterPublish = func() {
+		fixture.app.store.Locker = &postCommitUnlockFailureLocker{failAt: 1}
+	}
+	registry := synctransport.NewRegistry(fixture.verifier)
+	if err := registry.RegisterSource(&emptyAppTransportSourceExecutor{appTransportSourceExecutor: fixture.sourceExecutor}); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(fixture.destinationExecutor); err != nil {
+		t.Fatal(err)
+	}
+	fixture.app.transports = registry
+
+	fenced, err := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	var outcome *statestore.CommitOutcomeError
+	if !errors.As(err, &outcome) || outcome.Outcome != statestore.CommitOutcomeCommitted {
+		t.Fatalf("RunETL() error = %T %v, want committed post-publish state-save outcome", err, err)
+	}
+	if fenced.Status != ETLRunStatusDeliveredReconciliationRequired || fenced.DeliveryReconciliation == nil || fenced.DeliveryReconciliation.EmptyPublicationReadBackPending == nil {
+		t.Fatalf("post-publish state-save run = %#v, want durable pending read-back receipt", fenced)
+	}
+	clock.Set(started.Add(transportWorkLeaseDuration + time.Second))
+
+	reopened, reopenErr := Open(fixture.app.root)
+	if reopenErr != nil {
+		t.Fatal(reopenErr)
+	}
+	fixture.configureRuntime(t, reopened, fixture.sourceExecutor, fixture.destinationExecutor)
+	repaired, repairErr := reopened.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	if repairErr != nil || repaired.ID != fenced.ID || repaired.Status != "completed" || repaired.DeliveryReconciliation != nil {
+		t.Fatalf("post-publish state-save repair run/error = %#v / %v, want original completed run", repaired, repairErr)
+	}
+	if fixture.sourceExecutor.readCalls != 1 || fixture.destinationExecutor.publishCalls != 1 || fixture.destinationExecutor.readBackCalls != 0 || fixture.destinationExecutor.recoveryReadBackCalls != 1 {
+		t.Fatalf("post-publish state-save source/publish/read-back/recovery = %d/%d/%d/%d, want 1/1/0/1", fixture.sourceExecutor.readCalls, fixture.destinationExecutor.publishCalls, fixture.destinationExecutor.readBackCalls, fixture.destinationExecutor.recoveryReadBackCalls)
+	}
+}
+
 func TestRunETLEmptyFullOverwritePreventsPostReadBackExpiredLeaseReplay(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeFullOverwrite)
 	started := time.Date(2026, time.August, 22, 12, 0, 0, 0, time.UTC)
@@ -2551,8 +2666,6 @@ func TestRunETLEmptyFullOverwritePreventsPostReadBackExpiredLeaseReplay(t *testi
 	}
 	fixture.app.transports = registry
 
-	claimEntered := make(chan struct{})
-	releaseClaim := make(chan struct{})
 	fixture.destinationExecutor.afterPublish = func() {
 		clock.Set(started.Add(90 * time.Second))
 	}
@@ -2582,26 +2695,18 @@ func TestRunETLEmptyFullOverwritePreventsPostReadBackExpiredLeaseReplay(t *testi
 			t.Fatal(err)
 		}
 		contender.transports = contenderRegistry
-		contender.store.Locker = &appTransportPauseAtLockLocker{pauseAt: 2, entered: claimEntered, release: releaseClaim}
-		contenderDone := make(chan struct{})
-		go func() {
-			contenderRun, contenderErr = contender.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
-			close(contenderDone)
-		}()
-		waitForTransportSignal(t, claimEntered)
+		contenderRun, contenderErr = contender.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
 		state := contender.state.StreamStates[streamStateKey(fixture.connection, "records")]
 		if state.ActiveWorkID == "" || state.ActiveWorkFence != 1 || state.ActiveWorkLeaseUntil == nil || !state.ActiveWorkLeaseUntil.After(clock.Now()) {
 			t.Fatalf("post-read-back owner lease = %#v, want renewed active owner", state)
 		}
-		close(releaseClaim)
-		waitForTransportSignal(t, contenderDone)
 	}
 
 	owner, err := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
 	if err != nil || owner.Status != "completed" || owner.DeliveryReconciliation != nil {
 		t.Fatalf("owner empty full-overwrite run/error = %#v / %v, want completed durable handoff", owner, err)
 	}
-	if !errors.Is(contenderErr, errTransportStreamWorkInProgress) || contenderRun.Status != "failed" {
+	if !errors.Is(contenderErr, errTransportStreamWorkInProgress) || contenderRun.Status != ETLRunStatusDeliveredReconciliationRequired {
 		t.Fatalf("post-read-back contender run/error = %#v / %v, want pre-I/O work-fence refusal", contenderRun, contenderErr)
 	}
 	if contenderSource == nil || contenderDestination == nil {
@@ -4106,22 +4211,24 @@ func (e *appTransportSourceExecutor) ReadTransport(ctx context.Context, request 
 }
 
 type appTransportDestinationExecutor struct {
-	reference            connectors.TransportExecutorReference
-	sink                 string
-	plan                 synctransport.DestinationPlanRequest
-	planCalls            int
-	applyCalls           int
-	acknowledgementCalls int
-	publishCalls         int
-	readBackCalls        int
-	abortCalls           int
-	afterApply           func()
-	afterPageApply       func()
-	afterPublish         func()
-	afterReadBack        func()
-	failApplyAt          int
-	applyErr             error
-	output               json.RawMessage
+	reference             connectors.TransportExecutorReference
+	sink                  string
+	plan                  synctransport.DestinationPlanRequest
+	planCalls             int
+	applyCalls            int
+	acknowledgementCalls  int
+	publishCalls          int
+	readBackCalls         int
+	recoveryReadBackCalls int
+	abortCalls            int
+	afterApply            func()
+	afterPageApply        func()
+	afterPublish          func()
+	afterReadBack         func()
+	failApplyAt           int
+	applyErr              error
+	output                json.RawMessage
+	recoveryReadBackErr   error
 }
 
 func (e *appTransportDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -4167,6 +4274,29 @@ func (e *appTransportDestinationExecutor) ApplyDestination(_ context.Context, _ 
 func (e *appTransportDestinationExecutor) ReadBackDestination(_ context.Context, _ synctransport.DestinationReadBackRequest) error {
 	e.readBackCalls++
 	return nil
+}
+
+func (e *appTransportDestinationExecutor) ReadBackEmptyFullOverwrite(_ context.Context, request synctransport.EmptyPublicationReadBackRequest) error {
+	e.recoveryReadBackCalls++
+	if err := request.Receipt.Validate(); err != nil {
+		return err
+	}
+	if request.Receipt.Witness.Sink != e.sink {
+		return errors.New("test empty publication read-back sink does not match destination")
+	}
+	if len(e.output) != 0 {
+		var want, got any
+		if err := json.Unmarshal(e.output, &want); err != nil {
+			return err
+		}
+		if err := json.Unmarshal(request.Receipt.Output, &got); err != nil {
+			return err
+		}
+		if !reflect.DeepEqual(got, want) {
+			return errors.New("test empty publication read-back receipt does not match publication")
+		}
+	}
+	return e.recoveryReadBackErr
 }
 
 func (e *appTransportDestinationExecutor) BeginFullOverwrite(_ context.Context, request synctransport.FullOverwriteRunRequest) (synctransport.FullOverwriteRun, error) {
