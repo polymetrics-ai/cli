@@ -901,6 +901,14 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   record-driven destination actions for the same sync mode; no action is
   inferred from declaration order.
 
+  Plan and preview output list and digest-bind every declaration-owned
+  physical action, including any independently destructive tombstone delete.
+  The runtime may clamp --batch-size to the selected action's acknowledgement,
+  read-back, and bounded private-receipt capacity; it never creates a larger
+  provider mutation unit. A tombstone is a separately approved tombstone
+  delete with a distinct mapping, idempotency key, and independent absence
+  read-back before checkpoint.
+
   Create and preview the connection-owned plan, then use the ordinary approved
   ETL run:
 

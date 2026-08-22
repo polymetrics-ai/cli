@@ -1,9 +1,14 @@
 {
   "issue": 4303,
   "phase": "issue-4303-action-binding-canonical-fix-r2",
-  "status": "planning",
+  "status": "executing",
   "source_sha": "846ff9e5d9f56cef3f9835d35b57b1b4d468b379",
   "authority": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-reverse-etl-action-binding-final-review-r1/report.md",
   "execution_mode": "inline_manual_gsd_fallback",
-  "reason": "issue is not a registered roadmap phase and compatible isolated GSD workers are unavailable"
+  "reason": "issue is not a registered roadmap phase and compatible isolated GSD workers are unavailable",
+  "completed_groups": [
+    {"ids": ["AB-W01", "AB-W02", "AB-W03", "AB-W04"], "commit": "4e8b2506d"},
+    {"ids": ["AB-B01", "AB-B02"], "commit": "3a72b6ab4c0f3811b31b32da1b15423a68780e36"}
+  ],
+  "pending_green_group": ["AB-B03", "AB-B04", "AB-B05", "AB-B06", "AB-B07", "AB-B08", "AB-B09", "AB-W05"]
 }

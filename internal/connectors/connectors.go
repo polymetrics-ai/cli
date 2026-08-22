@@ -967,13 +967,18 @@ func legacyBareConnectorName(name string) string {
 }
 
 type WriteRequest struct {
-	Stream     string
-	Table      string
-	Action     string
-	Overwrite  bool
-	Config     RuntimeConfig
-	PrimaryKey []string
-	Approval   *WriteApprovalEvidence
+	Stream    string
+	Table     string
+	Action    string
+	Overwrite bool
+	// DeliveryOccurrence is an internal, durable-workset identity supplied by
+	// checkpointed destinations. It is never a provider parameter or a
+	// caller-selected idempotency key; the engine hashes it with the sealed
+	// preview/action/index so retries stay stable without aliasing worksets.
+	DeliveryOccurrence string
+	Config             RuntimeConfig
+	PrimaryKey         []string
+	Approval           *WriteApprovalEvidence
 }
 
 // ConfirmationKind is the closed runtime vocabulary for an explicit write
@@ -1852,7 +1857,7 @@ func NewDeclarativeTypedDestinationReadBackReceipt(actionDefinitionSHA256 string
 	if err != nil {
 		return nil, fmt.Errorf("encode declarative destination read-back receipt: %w", err)
 	}
-	if len(receipt) > 8<<10 {
+	if len(receipt) > synccontract.MaxPrivateReceiptBytes {
 		return nil, fmt.Errorf("declarative destination receipt exceeds its byte bound")
 	}
 	return receipt, nil
@@ -1862,7 +1867,7 @@ func NewDeclarativeTypedDestinationReadBackReceipt(actionDefinitionSHA256 string
 // receipt before it can drive a declared query parameter. It never accepts a
 // fallback output body, route, or user-provided selector.
 func ParseDeclarativeTypedDestinationReadBackReceipt(raw json.RawMessage, actionDefinitionSHA256 string, locator DestinationReceiptLocator, maxRecords int) ([]string, error) {
-	if len(raw) == 0 || len(raw) > 8<<10 {
+	if len(raw) == 0 || len(raw) > synccontract.MaxPrivateReceiptBytes {
 		return nil, fmt.Errorf("declarative destination read-back requires a bounded private receipt")
 	}
 	if err := locator.Validate(); err != nil {

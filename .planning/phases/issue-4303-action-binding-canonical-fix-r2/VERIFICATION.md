@@ -10,24 +10,25 @@
 
 ## Behavioral proof
 
-- [ ] AB-B01, AB-B02 resolved with red/green test output linked in `TDD-LEDGER.md`; AB-B03 through AB-B09 pending.
-- [ ] AB-W01 through AB-W05 resolved with red/green test output linked in `TDD-LEDGER.md` (W01–W04 green; W05 pending).
-- [ ] Provider tests are synthetic and assert provider-call, checkpoint, receipt, output, and key behavior; no credentialed call occurred.
+- [x] AB-B01 through AB-B09 red/green evidence is linked in `TDD-LEDGER.md` (B01–B02 commit `3a72b6ab4c0f3811b31b32da1b15423a68780e36`; B03–B09 pending this atomic delivery commit).
+- [x] AB-W01 through AB-W05 red/green evidence is linked in `TDD-LEDGER.md` (W01–W04 commit `4e8b2506d`; W05 pending this atomic delivery commit).
+- [x] Provider tests are synthetic and assert provider-call, checkpoint, receipt, output, and key behavior; no credentialed call occurred.
 
 ## Local gates
 
-- [ ] `gofmt -w` changed Go files and `git diff --check` pass.
-- [ ] Focused `go test -timeout 20m` App/engine/connectors/synctransport/CLI cohorts pass.
-- [ ] Relevant focused `go test -race -timeout 20m` cohorts pass.
-- [ ] `go vet` and `go build ./cmd/pm` pass.
-- [ ] Generator/docs/surface/contract/boundary/release gates pass.
+- [x] `gofmt -w` changed Go files and `git diff --check` pass.
+- [x] Focused `go test -timeout 20m` App/engine/connectors/synccontract/CLI cohorts pass.
+- [x] Relevant focused `go test -race -timeout 20m` App receipt/output and engine idempotency cohorts pass.
+- [ ] `go vet` passed for changed packages; `go build -o ./pm ./cmd/pm` passed.
+- [x] Generated CLI docs and `make docs-check-no-build` pass; remaining generator/surface/contract/boundary/release gates are final-pipeline work.
 - [ ] Deep code review has no unresolved actionable finding.
 - [ ] Complete no-mistakes pipeline has a successful terminal/checks-passed result without opening a PR.
 
 ## Delivery
 
 - [x] W01–W04 declaration/schema group committed and non-force pushed (`4e8b2506d`).
-- [ ] B01–B02 approval/action-owned read-back group is focused-green and awaiting its atomic commit/push.
+- [x] B01–B02 approval/action-owned read-back group committed and non-force pushed (`3a72b6ab4c0f3811b31b32da1b15423a68780e36`).
+- [ ] B03–B09 and W05 receipt/output/idempotency/operator-parity group is focused-green and awaiting its atomic commit/push.
 - [ ] Branch and remote SHA match after final push.
 - [ ] Worktree is clean.
 - [ ] External fix report crosswalks all AB IDs to code, commits, and proof.

@@ -1461,7 +1461,7 @@ func TestDeclarativeTypedDestinationApprovalBindsActionDefinition(t *testing.T) 
 	}
 }
 
-func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(t *testing.T) {
+func TestDeclarativeTypedDestinationPersistsProviderResultsAfterPostSuccessLocalFailure(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
@@ -1481,14 +1481,10 @@ func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(
 			posts++
 			w.Header().Set("Content-Type", "application/json")
 			w.Header().Set("X-Credential-Echo", "destination-secret")
-			if posts == 1 {
-				_, _ = w.Write([]byte(`{"provider_id":"first","echo":"destination-secret"}`))
-				return
-			}
-			w.Header().Add("X-Provider-Receipt", "receipt-one")
-			w.Header().Add("X-Provider-Receipt", "receipt-two")
-			w.WriteHeader(http.StatusInternalServerError)
-			_, _ = w.Write([]byte(`{"provider_id":"second","echo":"destination-secret"}`))
+			// Both mutations succeed, then the adapter fails locally because the
+			// declared private receipt locator is absent. Its public sanitized
+			// provider results must still reach the failed run for reconciliation.
+			_ = json.NewEncoder(w).Encode(map[string]string{"provider_id": fmt.Sprintf("provider-%d", posts), "echo": "destination-secret"})
 		default:
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -1535,11 +1531,11 @@ func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(
 			Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 		},
 	})
-	if err == nil || !strings.Contains(err.Error(), "HTTP status 500") {
-		t.Fatalf("RunETL error = %v, want failed provider response", err)
+	if err == nil || !strings.Contains(err.Error(), "locator field") {
+		t.Fatalf("RunETL error = %v, want post-success private receipt failure", err)
 	}
-	if run.Status != "failed" || run.RecordsLoaded != 0 || posts != 6 || len(run.DestinationResults) != 1 {
-		t.Fatalf("failed partial-result run status/loaded/posts/results = %q/%d/%d/%d, want failed/0/6/1", run.Status, run.RecordsLoaded, posts, len(run.DestinationResults))
+	if run.Status != "failed" || run.RecordsLoaded != 0 || posts != 2 || len(run.DestinationResults) != 1 {
+		t.Fatalf("post-success failed run status/loaded/posts/results = %q/%d/%d/%d, want failed/0/2/1", run.Status, run.RecordsLoaded, posts, len(run.DestinationResults))
 	}
 	var output struct {
 		RecordsWritten    int `json:"records_written"`
@@ -1562,8 +1558,8 @@ func TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply(
 	if len(output.ProviderResponses) == 2 {
 		secondBody, secondBodyOK = output.ProviderResponses[1].Body.(map[string]any)
 	}
-	if output.RecordsWritten != 1 || output.RecordsFailed != 1 || len(output.ProviderResponses) != 2 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[1].RecordIndex != 1 || output.ProviderResponses[1].Status != http.StatusInternalServerError || output.ProviderResponses[1].BodyEncoding != "" || !reflect.DeepEqual(output.ProviderResponses[1].Headers["X-Provider-Receipt"].Values, []string{"receipt-one", "receipt-two"}) || !secondBodyOK || secondBody["provider_id"] != "second" || secondBody["echo"] != "[masked]" {
-		t.Fatal("failed partial provider output did not retain ordered results")
+	if output.RecordsWritten != 2 || output.RecordsFailed != 0 || len(output.ProviderResponses) != 2 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[1].RecordIndex != 1 || output.ProviderResponses[1].Status != http.StatusOK || !secondBodyOK || secondBody["provider_id"] != "provider-2" || secondBody["echo"] != "[masked]" {
+		t.Fatal("post-success failed provider output did not retain ordered sanitized results")
 	}
 	serialized, err := json.Marshal(run)
 	if err != nil || bytes.Contains(serialized, []byte("destination-secret")) {
@@ -1848,8 +1844,9 @@ func TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBa
 		switch {
 		case request.Method == http.MethodDelete && request.URL.Path == "/widgets/widget-1":
 			deletes++
-			writer.Header().Set("Content-Type", "application/json")
-			_, _ = writer.Write([]byte(`{"receipt_id":"widget-1"}`))
+			// A declared missing_ok response is an idempotent delete success. The
+			// adapter must still prove independent absence and must not replay it.
+			writer.WriteHeader(http.StatusNotFound)
 		case request.Method == http.MethodPost:
 			creates++
 			writer.Header().Set("Content-Type", "application/json")
@@ -1939,6 +1936,30 @@ func TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBa
 	if err := resolved.Destination.ReadBackDestination(ctx, synctransport.DestinationReadBackRequest{Plan: destinationPlan, Workset: workset, Acknowledgement: acknowledgement, Runtime: runtime, Source: source, Destination: destination, Stream: "widgets", Mode: synccontract.ModeFullAppend}); err != nil {
 		t.Fatalf("read back declared tombstone absence: %v", err)
 	}
+	var output struct {
+		RecordsWritten   int `json:"records_written"`
+		RecordsUnchanged int `json:"records_unchanged"`
+		RecordsFailed    int `json:"records_failed"`
+	}
+	if err := json.Unmarshal(acknowledgement.Output, &output); err != nil {
+		t.Fatalf("decode missing-ok tombstone output: %v", err)
+	}
+	if output.RecordsWritten != 0 || output.RecordsUnchanged != 1 || output.RecordsFailed != 0 {
+		t.Fatalf("missing-ok tombstone output = %#v, want unchanged durable outcome", output)
+	}
+	commits := 0
+	if err := synccontract.CommitAfterDownstreamAcknowledgement(syntheticDefinitionCheckpoint(), acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
+		commits++
+		if checkpoint.CommittedAt == nil {
+			return errors.New("tombstone checkpoint was not acknowledged")
+		}
+		return nil
+	}); err != nil {
+		t.Fatalf("commit independently read-back missing-ok tombstone: %v", err)
+	}
+	if commits != 1 || deletes != 1 {
+		t.Fatalf("missing-ok tombstone commits/deletes = %d/%d, want one checkpoint and no replayed delete", commits, deletes)
+	}
 }
 
 func TestDeclarativeTypedDestinationBatchLimitIsDefinitionOwned(t *testing.T) {
@@ -1976,15 +1997,62 @@ func TestDeclarativeTypedDestinationBatchLimitIsDefinitionOwned(t *testing.T) {
 		Receipt:      synctransport.WarehouseReceipt{ID: "batch-workset", Owner: "batch-owner", Generation: 1, Stream: "widgets", Mode: synccontract.ModeFullAppend, CheckpointSHA256: "checkpoint", TombstonesSHA256: "tombstones", ManifestSHA256: "manifest", ContentSHA256: "content", ParquetSHA256: "parquet", Records: 3},
 		Workset:      synctransport.WarehouseWorkset{ID: "batch-workset", Records: []connectors.Record{{"id": "one"}, {"id": "two"}, {"id": "three"}}},
 	}
-	if err := validateDeclarativeTypedDestinationWorkset(request, binding, &tombstoneBinding); err == nil || !strings.Contains(err.Error(), "batch maximum 2") {
+	if err := validateDeclarativeTypedDestinationWorkset(request, binding, &tombstoneBinding, *strategy.ReadBack, strategy.TombstoneReadBack); err == nil || !strings.Contains(err.Error(), "batch maximum 2") {
 		t.Fatalf("oversized ordinary workset error = %v, want declaration batch refusal before provider I/O", err)
 	}
 	request.Receipt.Records = 0
 	request.Receipt.Tombstones = 3
 	request.Workset.Records = nil
 	request.Workset.Tombstones = []synccontract.Tombstone{{}, {}, {}}
-	if err := validateDeclarativeTypedDestinationWorkset(request, binding, &tombstoneBinding); err == nil || !strings.Contains(err.Error(), "batch maximum 2") {
+	if err := validateDeclarativeTypedDestinationWorkset(request, binding, &tombstoneBinding, *strategy.ReadBack, strategy.TombstoneReadBack); err == nil || !strings.Contains(err.Error(), "batch maximum 2") {
 		t.Fatalf("oversized tombstone workset error = %v, want declaration batch refusal before provider I/O", err)
+	}
+}
+
+func TestDeclarativeTypedDestinationBatchLimitIncludesActionReadBack(t *testing.T) {
+	name := "typed-read-back-batch-bound"
+	files := declarativeTypedDestinationBundleFS(name, "read-back-batch-source", "read-back-batch-destination")
+	path := name + "/sync_transport.json"
+	transport := strings.Replace(string(files[path].Data), `"max_records": 1000`, `"max_records": 1`, 1)
+	transport = strings.Replace(transport, `"batch": {"disposition": "per_record", "max_records": 1000}`, `"batch": {"disposition": "per_record", "max_records": 2}`, 1)
+	files[path] = &fstest.MapFile{Data: []byte(transport)}
+	bundle, err := engine.Load(files, name)
+	if err != nil {
+		t.Fatalf("load read-back bounded typed destination: %v", err)
+	}
+	connector := engine.New(bundle, nil)
+	contract, err := declarativeTypedDestinationContractFor(connector)
+	if err != nil {
+		t.Fatalf("read-back bounded typed destination contract: %v", err)
+	}
+	strategy, err := contract.descriptor.ApplyStrategyForAction(synccontract.ModeFullAppend, "apply_widget")
+	if err != nil {
+		t.Fatalf("resolve read-back bounded action strategy: %v", err)
+	}
+	effective, err := declarativeTypedDestinationEffectiveBatchSize(connector, connector, "widgets", synccontract.ModeFullAppend, strategy, 99)
+	if err != nil || effective != 1 {
+		t.Fatalf("effective batch = %d, %v, want action read-back bounded one-record unit before provider I/O", effective, err)
+	}
+}
+
+func TestDeclarativeTypedDestinationReceiptBudgetReservesCompositeAcknowledgement(t *testing.T) {
+	digest := strings.Repeat("a", 64)
+	recordPolicy := connectors.DestinationReadBackPolicy{
+		ReceiptLocator: connectors.DestinationReceiptLocator{ResponseIndex: 0, BodyField: "receipt_id", QueryParameter: "id", MaxValueBytes: 256, MaxPages: 1},
+	}
+	tombstonePolicy := &connectors.DestinationTombstoneReadBackPolicy{
+		ReceiptLocator: connectors.DestinationReceiptLocator{ResponseIndex: 0, BodyField: "receipt_id", QueryParameter: "id", MaxValueBytes: 256, MaxPages: 1},
+	}
+	maximum, err := declarativeTypedDestinationMaximumReceiptUnit(digest, recordPolicy, digest, tombstonePolicy, 33)
+	if err != nil || maximum != 2 {
+		t.Fatalf("paired receipt maximum = %d, %v, want 2 after exact composite/private acknowledgement accounting", maximum, err)
+	}
+	if err := validateDeclarativeTypedDestinationReceiptBudget(3, digest, recordPolicy, 3, digest, tombstonePolicy); err == nil || !strings.Contains(err.Error(), "before provider I/O") {
+		t.Fatalf("three-by-three paired receipt budget error = %v, want pre-I/O acknowledgement-bound refusal", err)
+	}
+	part := json.RawMessage(`"` + strings.Repeat("x", synccontract.MaxPrivateReceiptBytes/2) + `"`)
+	if _, err := declarativeTypedDestinationCompositeReceipt(part, part); err == nil {
+		t.Fatal("composite receipt above the acknowledgement private limit was accepted")
 	}
 }
 
@@ -2301,11 +2369,13 @@ func TestDeclarativeTypedDestinationAcceptsDefinitionOwningNativeConnector(t *te
 
 func TestDeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite(t *testing.T) {
 	for _, testCase := range []struct {
-		name    string
-		mutate  func(fstest.MapFS, string)
-		record  connectors.Record
-		tombs   []synccontract.Tombstone
-		planErr bool
+		name            string
+		mutate          func(fstest.MapFS, string)
+		record          connectors.Record
+		recordCount     int
+		tombs           []synccontract.Tombstone
+		planErr         bool
+		providerReceipt bool
 	}{
 		{
 			name: "mapped record misses required action field",
@@ -2321,6 +2391,12 @@ func TestDeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite(t 
 			record: connectors.Record{"id": "widget-1", "value": "definition-owned"},
 			tombs:  []synccontract.Tombstone{{}},
 		},
+		{
+			name:            "escaped receipt capacity",
+			record:          connectors.Record{"id": "widget-1", "value": "definition-owned"},
+			recordCount:     33,
+			providerReceipt: true,
+		},
 	} {
 		t.Run(testCase.name, func(t *testing.T) {
 			root := t.TempDir()
@@ -2335,6 +2411,11 @@ func TestDeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite(t 
 			server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 				if request.Method == http.MethodPost {
 					writes++
+					if testCase.providerReceipt {
+						writer.Header().Set("Content-Type", "application/json")
+						_ = json.NewEncoder(writer).Encode(map[string]any{"receipt_id": strings.Repeat("\x00", 256)})
+						return
+					}
 				}
 				writer.WriteHeader(http.StatusNoContent)
 			}))
@@ -2377,14 +2458,22 @@ func TestDeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite(t 
 			if testCase.planErr {
 				t.Fatal("invalid typed destination mapping was planned")
 			}
+			recordCount := testCase.recordCount
+			if recordCount == 0 {
+				recordCount = 1
+			}
+			records := make([]connectors.Record, recordCount)
+			for index := range records {
+				records[index] = testCase.record
+			}
 			receipt := synctransport.WarehouseReceipt{
 				ID: "typed-destination-workset", Owner: "typed-destination-workset", Generation: 1, Stream: "widgets", Mode: synccontract.ModeFullAppend,
 				CheckpointSHA256: "checkpoint", TombstonesSHA256: "tombstones", ManifestSHA256: "manifest", ContentSHA256: "content", ParquetSHA256: "parquet",
-				Records: 1, Tombstones: len(testCase.tombs),
+				Records: recordCount, Tombstones: len(testCase.tombs),
 			}
 			_, err = resolved.Destination.ApplyDestination(context.Background(), synctransport.DestinationApplyRequest{
 				ConnectionID: receipt.Owner, Plan: plan, Receipt: receipt,
-				Workset: synctransport.WarehouseWorkset{ID: receipt.ID, Records: []connectors.Record{testCase.record}, Tombstones: testCase.tombs},
+				Workset: synctransport.WarehouseWorkset{ID: receipt.ID, Records: records, Tombstones: testCase.tombs},
 				Runtime: connectors.RuntimeConfig{ProjectDir: root, Config: map[string]string{"base_url": server.URL}},
 				Source:  connector, Destination: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend,
 				Approval: approval,

@@ -104,10 +104,15 @@ generic HTTP writer:
   preflight before any source, stage, or provider I/O.
 - Declare `acknowledgement: "durable_warehouse"` and
   `delivery.idempotency: "keyed"`. Each action binding declares
-  `batch: {"disposition":"per_record","max_records":N}`; callers may
-  request fewer source rows but cannot enlarge the declared acknowledgement
-  unit. The adapter sends one declaration-owned request per record and retains
-  the full ordered provider receipt for every 2xx/4xx/5xx attempt.
+  `batch: {"disposition":"per_record","max_records":N}` and an
+  action-owned read-back policy. Before provider I/O, the runtime validates
+  both ordinary and tombstone policies and clamps a caller's `--batch-size` to
+  every selected acknowledgement/read-back and encoded private-receipt bound;
+  callers may request fewer source rows but can never enlarge the declared
+  acknowledgement unit. The adapter sends one declaration-owned request per
+  record and retains the full ordered provider receipt for every 2xx/4xx/5xx
+  attempt. The canonical private receipt limit is 8 KiB, including escaped
+  provider output and the composite durable acknowledgement envelope.
 - `delivery.deletes: "not_available"` requires every strategy to omit a
   tombstone action. `delivery.deletes: "tombstone"` requires every selected
   strategy to name a distinct `tombstone_action`, whose binding has
@@ -115,8 +120,11 @@ generic HTTP writer:
   `tombstone_read_back` policy. The named action must be a `writes.json`
   `kind: "delete"` action with its own stable idempotency header. Tombstones
   never use the ordinary record mapping and cannot be sent to create/update
-  actions. Provider read-back proves the mapped destination identity is absent
-  before the source checkpoint advances.
+  actions. Every ordinary action and paired tombstone delete is listed and
+  digest-bound in plan and preview before approval. A declared missing-ok
+  tombstone outcome is an independently proven absent identity, not a replayed
+  mutation; provider read-back proves that absence before the source checkpoint
+  advances.
 - Record conformance evidence from the declaring connector. Composition
   gathers all exact evidence references for this executor and registers one
   shared factory; evidence from a different connector is not interchangeable.

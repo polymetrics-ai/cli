@@ -288,6 +288,14 @@ source allowlist and mapping, approval, workset ownership, durable
 acknowledgement, and read-back. Wrong-mode, missing, malformed, or cross-
 connector declarations fail before provider I/O.
 
+Plan and preview output list and digest-bind every declaration-owned physical
+action, including any independently destructive tombstone delete. The runtime
+may clamp `--batch-size` to the selected action's acknowledgement, read-back,
+and bounded private-receipt capacity; it never creates a larger provider
+mutation unit. A tombstone is a separately approved tombstone delete with a
+distinct mapping, idempotency key, and independent absence read-back before
+checkpoint.
+
 ### Complete reverse-ETL result output
 
 For a completed declarative typed destination, `pm etl run --json` and
