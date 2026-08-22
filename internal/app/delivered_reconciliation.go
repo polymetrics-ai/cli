@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"reflect"
 	"strings"
 	"time"
 
@@ -31,19 +30,11 @@ func (a *App) deliveredReconciliationFor(connection, stream string) (Run, bool) 
 // bookkeeping error. The terminal record is the anti-replay fence: future
 // calls can repair only the declared cleanup named in it.
 func (a *App) persistDeliveredReconciliationRun(runID string, result etlExecutionResult, runErr error, acknowledged *acknowledgedTransportCompletion) (Run, error) {
-	return a.persistDeliveredReconciliationRunWithCompleted(runID, result, runErr, acknowledged, nil)
-}
-
-func (a *App) persistCompletedDeliveredReconciliationRun(completed Run, runID string, result etlExecutionResult, runErr error, acknowledged *acknowledgedTransportCompletion) (Run, error) {
-	return a.persistDeliveredReconciliationRunWithCompleted(runID, result, runErr, acknowledged, &completed)
-}
-
-func (a *App) persistDeliveredReconciliationRunWithCompleted(runID string, result etlExecutionResult, runErr error, acknowledged *acknowledgedTransportCompletion, completed *Run) (Run, error) {
 	if result.PendingStreamState == nil || result.DeliveryReconciliation == nil || acknowledged == nil {
+		if runErr == nil {
+			return Run{}, errors.New("delivered reconciliation is missing terminal transport state")
+		}
 		return a.failRunWithResult(runID, result, runErr)
-	}
-	if completed != nil && (completed.ID != runID || completed.Status != "completed") {
-		return Run{}, errors.Join(runErr, fmt.Errorf("acknowledged transport run %q is not an exact completed terminal result", runID))
 	}
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
@@ -51,12 +42,8 @@ func (a *App) persistDeliveredReconciliationRunWithCompleted(runID string, resul
 	updated, persistErr := a.updateState(func(current state) (state, error) {
 		rebased := current.Revision != expectedRevision
 		if rebased {
-			expectedStreamState := acknowledged.state
-			if completed != nil {
-				expectedStreamState = result.PendingStreamState.State
-			}
 			currentStreamState, present := current.StreamStates[acknowledged.key]
-			if !present || !transportStreamStateEqual(currentStreamState, expectedStreamState) {
+			if !present || !transportStreamStateEqual(currentStreamState, acknowledged.state) {
 				return current, fmt.Errorf("acknowledged transport stream state changed before delivered reconciliation: %w", errStateRevisionConflict)
 			}
 		}
@@ -64,10 +51,7 @@ func (a *App) persistDeliveredReconciliationRunWithCompleted(runID string, resul
 			if current.Runs[i].ID != runID {
 				continue
 			}
-			if completed != nil && !reflect.DeepEqual(current.Runs[i], *completed) {
-				return current, fmt.Errorf("acknowledged transport run %q changed before delivered reconciliation: %w", runID, errStateRevisionConflict)
-			}
-			if completed == nil && current.Runs[i].Status != "running" {
+			if current.Runs[i].Status != "running" {
 				return current, fmt.Errorf("acknowledged transport run %q has status %q, want running before delivered reconciliation: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
 			}
 			current.Runs[i].Status = ETLRunStatusDeliveredReconciliationRequired
@@ -80,7 +64,11 @@ func (a *App) persistDeliveredReconciliationRunWithCompleted(runID string, resul
 			current.Runs[i].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
 			current.Runs[i].DestinationResults = cloneDestinationResults(result.DestinationResults)
 			current.Runs[i].DeliveryReconciliation = cloneDeliveryReconciliation(result.DeliveryReconciliation)
-			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
+			if runErr == nil {
+				current.Runs[i].Error = ""
+			} else {
+				current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
+			}
 			current.Runs[i].CompletedAt = completedAt
 			transitionedInCallback = true
 			break

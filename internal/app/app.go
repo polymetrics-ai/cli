@@ -1681,26 +1681,33 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 		key:   result.PendingStreamState.Key,
 		state: cloneStreamState(acknowledged),
 	}
-	completed, err := a.completeRunWithAcknowledgedTransportState(runID, result, completion)
-	if err == nil || result.DeliveryReconciliation == nil || result.DeliveryReconciliation.EmptyPublication == nil {
-		return completed, err
+	if result.DeliveryReconciliation != nil && result.DeliveryReconciliation.EmptyPublication != nil {
+		return a.completeEmptyPublicationAcknowledgedTransportRun(runID, result, completion)
 	}
-	// A verified empty full-overwrite has no source checkpoint to recover from.
-	// If only the final local status write failed, seal its already-read-back
-	// receipt and terminal stream state as repair work rather than allowing a
-	// retry to publish the empty replacement again.
-	reconciliationErr := synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite terminal state: %w", err))
-	var delivered Run
-	var persistErr error
-	if completed.ID == runID && completed.Status == "completed" {
-		delivered, persistErr = a.persistCompletedDeliveredReconciliationRun(completed, runID, result, reconciliationErr, completion)
-	} else {
-		delivered, persistErr = a.persistDeliveredReconciliationRun(runID, result, reconciliationErr, completion)
+	return a.completeRunWithAcknowledgedTransportState(runID, result, completion)
+}
+
+func (a *App) completeEmptyPublicationAcknowledgedTransportRun(runID string, result etlExecutionResult, completion *acknowledgedTransportCompletion) (Run, error) {
+	fenced, persistErr := a.persistDeliveredReconciliationRun(runID, result, nil, completion)
+	if persistErr != nil {
+		if fenced.ID != "" || stateStoreCommitMayHaveSucceeded(persistErr) || errors.Is(persistErr, errStateRevisionConflict) {
+			return fenced, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", persistErr))
+		}
+		retried, retryErr := a.persistDeliveredReconciliationRun(runID, result, nil, completion)
+		if retried.ID != "" {
+			return retried, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", errors.Join(persistErr, retryErr)))
+		}
+		return Run{}, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", errors.Join(persistErr, retryErr)))
 	}
-	if delivered.ID != "" {
-		return delivered, persistErr
+	completed, finalizeErr := a.reconcileDeliveredTransportRun(context.Background(), fenced)
+	if finalizeErr != nil {
+		if completed.ID != "" && completed.Status == "completed" {
+			return completed, finalizeErr
+		}
+		return fenced, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("finalize empty full-overwrite replay fence: %w", finalizeErr))
 	}
-	return Run{}, errors.Join(reconciliationErr, persistErr)
+	completed.DestinationResults = cloneDestinationResults(result.DestinationResults)
+	return completed, nil
 }
 
 // failAcknowledgedTransportRun uses a completed checkpoint only as an
