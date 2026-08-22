@@ -2,8 +2,8 @@
   "schema_version": 3,
   "integration": "cli-current-foundations-main-integration-r1",
   "checkpoint": "foundation-0.3.0-release-candidate-r1-evidence-closure",
-  "code_sha": "1d83dd9ab82dbdaf0f19f0f4e0f28446f1c95d91",
-  "reviewed_sha": "1d83dd9ab82dbdaf0f19f0f4e0f28446f1c95d91",
+  "code_sha": "368f21f4e874a262cf2b4fc8d13186474dfd2159",
+  "reviewed_sha": "368f21f4e874a262cf2b4fc8d13186474dfd2159",
   "base_sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
   "component_inputs": [
     {
@@ -70,11 +70,11 @@
       "modes": ["postgres.transport", "cdc"]
     },
     {
-      "command": "gofmt -d cmd internal; go mod tidy -diff; go vet ./...; go build -o ./pm ./cmd/pm; make docs-check-no-build; make smoke-no-build; make lint; make agent-contract-check; make connectorgen-validate; make connectorgen-surface-sync; make connectorgen-certification-subject; make connectorgen-certification-matrix; make connectorgen-certification-candidates; make connectorgen-certification-sweep",
+      "command": "gofmt -d cmd internal; go mod tidy -diff; go vet ./...; go build -o ./pm ./cmd/pm; make docs-check-no-build; make smoke-no-build; make lint; make agent-contract-check; make connectorgen-validate; make connectorgen-surface-sync; make connectorgen-certification-subject; make connectorgen-certification-matrix; make connectorgen-certification-candidates; make connectorgen-certification-sweep; cd website && npm run gen:website-data",
       "status": "passed",
-      "assertion": "Formatting, module, vet, build, docs, smoke, lint, agent contract, declaration validation, surface synchronization, and generated certification gates agree at I; matrix reports certified=0.",
+      "assertion": "Formatting, module, vet, build, docs, smoke, lint, agent contract, declaration validation, surface synchronization, generated certification gates, and CI-required website projection agree at I; matrix reports certified=0.",
       "tests": ["gofmt-diff", "go-vet", "docs-validate", "smoke-no-build", "connectorgen-certification-matrix"],
-      "modes": ["build", "docs", "generated_surfaces", "certification_metadata"]
+      "modes": ["build", "docs", "generated_surfaces", "website_generated_data", "certification_metadata"]
     }
   ],
   "gate_ledger": [
@@ -131,7 +131,7 @@
     }
   ],
   "artifact_closure": {
-    "implementation_sha": "1d83dd9ab82dbdaf0f19f0f4e0f28446f1c95d91",
+    "implementation_sha": "368f21f4e874a262cf2b4fc8d13186474dfd2159",
     "subject_fingerprint": "6e718f8cd4b80497467e907ecb8ae49373afb1758920dfe7d18c83340061c86a",
     "artifacts": [
       {
@@ -156,8 +156,8 @@
       },
       {
         "category": "website",
-        "path": "website/lib/docs.generated.ts",
-        "sha256": "5be055614aaf162ca90d6b0790ab5be3fac416156768f31dd073df04daf22142"
+        "path": "website/data/connectors.generated.json",
+        "sha256": "785c2431a3fecb894411e27cab2652d48d393aaad2deb6ede62bb7d7fe2049db"
       },
       {
         "category": "skills",
@@ -187,7 +187,7 @@
       {
         "category": "foundation_evidence",
         "path": "data/cli-current-foundations-main-integration-r1/report.md",
-        "sha256": "c1e33e04d09ef51de3fccb162ec16bace0c071288e392370a0740f27ade6a485"
+        "sha256": "93b6015a13fe45e6ae82509b0d75577e38d5300e7012c25ffae73db7c3e5d9dd"
       }
     ]
   }

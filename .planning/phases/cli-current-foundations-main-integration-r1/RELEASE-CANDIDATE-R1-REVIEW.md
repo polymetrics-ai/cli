@@ -1,6 +1,6 @@
 # Foundation 0.3.0 release-candidate r1 review record
 
-source_sha: 1d83dd9ab82dbdaf0f19f0f4e0f28446f1c95d91
+source_sha: 368f21f4e874a262cf2b4fc8d13186474dfd2159
 
 This is final code-and-generated implementation SHA **I**. Its schema-3 evidence closure is deliberately the next commit: an evidence file cannot truthfully name the Git object that contains itself.
 
@@ -14,6 +14,7 @@ This is final code-and-generated implementation SHA **I**. Its schema-3 evidence
 | RC-05 current-code witness | The earlier exact gate found a stale certification-sweep expectation and a public-predecessor source-lock digest; the narrow test-only correction added no runtime authority. |
 | RC-06 Recurly confirmation | At old closure `7c3d856…`, unchanged `TestBinaryDownloadCommandsExecute` failed: `invoice pdf get` rejected `--invoice-id` and `export files get` rejected `--export-date`. Direct witness `d3bf5da0` had removed five still-required path flags: `account-id`, `invoice-id`, two `subscription-id` bindings, and `export-date`. |
 | RC-06 minimal repair | Each affected Recurly operation declares its exact required `path` parameter in `operations.json`; `connectorgen surface-sync` generated the five flags and derived manual/skill output. No runtime branch, mapping expansion, provider call, or test weakening occurred. |
+| CI website-data parity | Fresh CI directly failed because generator-owned website data was stale. A local `website` generator run reproduced it and changed only four generated website artifacts; its data now includes the required Recurly flags and current source-projection statuses. No provider/runtime declaration was altered. |
 
 ## Conflict-invariant preservation
 
@@ -24,7 +25,7 @@ This is final code-and-generated implementation SHA **I**. Its schema-3 evidence
 
 ## FND-B09 and FND-W01
 
-- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closure `7c3d856…` is superseded after the confirmed Recurly correction. This schema-3 closure binds I, five typed component identities, current subject fingerprint, and exact artifact digests.
+- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closures `7c3d856…` and `133afe481…` are superseded after the confirmed Recurly correction and the CI-proven generated website-data drift. This schema-3 closure binds I, five typed component identities, current subject fingerprint, and exact artifact digests.
 - **FND-W01 — deferred / non-reproducing:** current `sourceimport` flow and hermetic `TestSourceImport.*` evidence were inspected. No deterministic externally observable publication-order defect was established, so no speculative publication rewrite was made.
 
 ## Behavioral proof, provider proof, and certification claim
@@ -53,6 +54,7 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 | Formatting, diff, tidy, vet, and build | PASS. |
 | `make tidy-check lint docs-check-no-build smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check` | PASS. |
 | Certification subject/matrix/candidates/sweep | PASS; matrix remains `certified=0`; no live certification performed. |
+| `cd website && npm run gen:website-data`; `make docs-check-no-build` | PASS and idempotent; CI-required website data projection is current. |
 
 ## Merge recommendation
 
