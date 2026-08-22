@@ -85,6 +85,11 @@ func (s *connectionWarehouseStage) Stage(ctx context.Context, request synctransp
 	if err != nil {
 		return synctransport.WarehouseReceipt{}, err
 	}
+	if receipt, found, err := s.recoverUncommittedReceipt(ctx, conn, request); err != nil {
+		return synctransport.WarehouseReceipt{}, err
+	} else if found {
+		return receipt, nil
+	}
 	stageID, err := prefixedID("stage")
 	if err != nil {
 		return synctransport.WarehouseReceipt{}, err
@@ -163,6 +168,119 @@ func (s *connectionWarehouseStage) Stage(ctx context.Context, request synctransp
 		}
 	}
 	return manifest.receipt(manifestSHA256), nil
+}
+
+func (s *connectionWarehouseStage) recoverUncommittedReceipt(ctx context.Context, conn Connection, request synctransport.WarehouseStageRequest) (synctransport.WarehouseReceipt, bool, error) {
+	if err := ctx.Err(); err != nil {
+		return synctransport.WarehouseReceipt{}, false, err
+	}
+	checkpointSHA256, err := connectionWarehouseStageRetryCheckpointSHA256(request.Page.CandidateCheckpoint)
+	if err != nil {
+		return synctransport.WarehouseReceipt{}, false, fmt.Errorf("hash staged retry checkpoint: %w", err)
+	}
+	tombstones := cloneConnectionStageTombstones(request.Page.Tombstones)
+	tombstonesSHA256, err := hashJSON(tombstones)
+	if err != nil {
+		return synctransport.WarehouseReceipt{}, false, fmt.Errorf("hash staged retry tombstones: %w", err)
+	}
+	location, err := s.app.warehouseLocation(filepath.Join(s.app.projectDir, "warehouse"), conn)
+	if err != nil {
+		return synctransport.WarehouseReceipt{}, false, err
+	}
+	entries, err := os.ReadDir(filepath.Join(location.ConnectionDir, connectionWarehouseStageManifestDir))
+	if errors.Is(err, os.ErrNotExist) {
+		return synctransport.WarehouseReceipt{}, false, nil
+	}
+	if err != nil {
+		return synctransport.WarehouseReceipt{}, false, fmt.Errorf("read staged receipt directory: %w", err)
+	}
+	var recovered synctransport.WarehouseReceipt
+	for _, entry := range entries {
+		if err := ctx.Err(); err != nil {
+			return synctransport.WarehouseReceipt{}, false, err
+		}
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".json" {
+			continue
+		}
+		stageID := strings.TrimSuffix(entry.Name(), ".json")
+		artifact, err := s.artifactFor(conn, stageID)
+		if err != nil {
+			continue
+		}
+		manifest, err := readConnectionStageManifest(artifact.manifestPath)
+		if err != nil {
+			continue
+		}
+		if manifest.Version != connectionWarehouseStageManifestVersion ||
+			manifest.Owner != conn.ID ||
+			manifest.Generation != request.Generation ||
+			manifest.SourceName != request.SourceName ||
+			manifest.DestinationName != request.DestinationName ||
+			manifest.Stream != request.Stream ||
+			manifest.Mode != request.Mode ||
+			manifest.Records != len(request.Page.Records) ||
+			len(manifest.Tombstones) != len(tombstones) ||
+			manifest.TombstonesSHA256 != tombstonesSHA256 {
+			continue
+		}
+		if streamState, present := s.app.state.StreamStates[streamStateKey(conn.Name, manifest.Stream)]; present && committedStageCheckpointMatches(manifest.CandidateCheckpoint, streamState.Checkpoint) {
+			continue
+		}
+		manifestCheckpointSHA256, err := connectionWarehouseStageRetryCheckpointSHA256(manifest.CandidateCheckpoint)
+		if err != nil {
+			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("hash staged receipt %q retry checkpoint: %w", manifest.ID, err)
+		}
+		if manifestCheckpointSHA256 != checkpointSHA256 {
+			continue
+		}
+		manifestSHA256, _, err := digestPayloadFile(artifact.manifestPath)
+		if err != nil {
+			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("digest staged receipt %q manifest: %w", manifest.ID, err)
+		}
+		receipt := manifest.receipt(manifestSHA256)
+		workset, err := s.Reopen(ctx, receipt)
+		if err != nil {
+			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("reopen staged receipt %q for retry: %w", receipt.ID, err)
+		}
+		equal, err := connectionWarehouseStageRecordsEqual(workset.Records, request.Page.Records)
+		if err != nil {
+			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("compare staged receipt %q records for retry: %w", receipt.ID, err)
+		}
+		if !equal {
+			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("staged receipt %q matches retry source identity but has different records", receipt.ID)
+		}
+		if recovered.ID != "" {
+			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("multiple staged receipts match one retry source workset")
+		}
+		recovered = receipt
+	}
+	if recovered.ID == "" {
+		return synctransport.WarehouseReceipt{}, false, nil
+	}
+	return recovered, true, nil
+}
+
+func connectionWarehouseStageRetryCheckpointSHA256(checkpoint synccontract.CheckpointEnvelope) (string, error) {
+	checkpoint = checkpoint.Clone()
+	checkpoint.ObservedAt = time.Time{}
+	checkpoint.CommittedAt = nil
+	return hashJSON(checkpoint)
+}
+
+func connectionWarehouseStageRecordsEqual(left, right []connectors.Record) (bool, error) {
+	if len(left) != len(right) {
+		return false, nil
+	}
+	for index := range left {
+		equal, err := declarativeReadBackValuesEqual(left[index], right[index])
+		if err != nil {
+			return false, err
+		}
+		if !equal {
+			return false, nil
+		}
+	}
+	return true, nil
 }
 
 func (s *connectionWarehouseStage) Reopen(ctx context.Context, receipt synctransport.WarehouseReceipt) (synctransport.WarehouseWorkset, error) {

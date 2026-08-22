@@ -840,16 +840,11 @@ func matchDeclarativeTypedDestinationProviderAbsence(expected, provider []connec
 		}
 		providerByIdentity[identity] = struct{}{}
 	}
-	seenExpected := make(map[string]struct{}, len(expected))
 	for _, record := range expected {
 		identity, err := declarativeDestinationReadBackIdentity(record, policy.Identity, false)
 		if err != nil {
 			return err
 		}
-		if _, duplicate := seenExpected[identity]; duplicate {
-			return fmt.Errorf("destination tombstone workset contains duplicate read-back identity")
-		}
-		seenExpected[identity] = struct{}{}
 		if _, found := providerByIdentity[identity]; found {
 			return fmt.Errorf("provider tombstone read-back still contains an expected deleted destination identity")
 		}

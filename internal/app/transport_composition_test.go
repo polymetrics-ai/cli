@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
@@ -1567,6 +1569,143 @@ func TestDeclarativeTypedDestinationPersistsProviderResultsAfterPostSuccessLocal
 	}
 }
 
+func TestDeclarativeTypedDestinationReopensUncommittedWorksetAfterLocalReceiptFailure(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	application, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	providerCalls := 0
+	mutations := 0
+	keys := make([]string, 0, 2)
+	seenKeys := make(map[string]struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/widgets":
+			w.Header().Set("Content-Type", "application/json")
+			if r.URL.Query().Get("id") == "" {
+				_, _ = w.Write([]byte(`{"data":[{"id":"widget-1","value":"value"}]}`))
+				return
+			}
+			if r.URL.Query().Get("id") != "receipt-widget-1" {
+				w.WriteHeader(http.StatusNotFound)
+				return
+			}
+			_, _ = w.Write([]byte(`{"data":[{"id":"widget-1","value":"value"}]}`))
+		case r.Method == http.MethodPost && r.URL.Path == "/widgets/target":
+			providerCalls++
+			key := r.Header.Get("Idempotency-Key")
+			keys = append(keys, key)
+			if _, found := seenKeys[key]; !found {
+				seenKeys[key] = struct{}{}
+				mutations++
+			}
+			w.Header().Set("Content-Type", "application/json")
+			if providerCalls == 1 {
+				_, _ = w.Write([]byte(`{"provider_id":"provider-widget-1"}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"receipt_id":"receipt-widget-1","provider_id":"provider-widget-1"}`))
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	}))
+	t.Cleanup(server.Close)
+	name := "typed-uncommitted-workset"
+	bundle, err := engine.Load(declarativeTypedDestinationBundleFS(name, "uncommitted_source", "uncommitted_destination"), name)
+	if err != nil {
+		t.Fatalf("load typed destination bundle: %v", err)
+	}
+	application.registry.Register(engine.New(bundle, nil))
+	if err := application.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose typed destination transport: %v", err)
+	}
+	for _, credential := range []string{name + "-source", name + "-destination"} {
+		if _, err := application.AddCredential(ctx, AddCredentialRequest{Name: credential, Connector: name, Config: map[string]string{"base_url": server.URL}}); err != nil {
+			t.Fatalf("add %s credential: %v", credential, err)
+		}
+	}
+	connection, err := application.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "typed_uncommitted_workset",
+		Source:      EndpointConfig{Connector: name, Credential: name + "-source"},
+		Destination: EndpointConfig{Connector: name, Credential: name + "-destination"},
+		Streams: map[string]StreamConfig{"widgets": {
+			SyncMode: string(synccontract.ModeFullAppend), PrimaryKey: []string{"id"}, DestinationAction: "apply_widget",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create typed destination connection: %v", err)
+	}
+	plan, err := application.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
+	if err != nil {
+		t.Fatalf("plan typed destination transport: %v", err)
+	}
+	previewed, _, err := application.PreviewDeclarativeTypedDestinationTransport(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("preview typed destination transport: %v", err)
+	}
+	request := RunETLRequest{
+		Connection: connection.Name, Stream: "widgets", BatchSize: 1,
+		DestinationApproval: synctransport.DestinationApproval{
+			PlanID: plan.ID, ApprovalToken: previewed.ApprovalToken, Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+		},
+	}
+	first, err := application.RunETL(ctx, request)
+	if err == nil || !strings.Contains(err.Error(), "locator field") {
+		t.Fatalf("first RunETL error = %v, want post-success local receipt failure", err)
+	}
+	if first.Status != "failed" || first.RecordsLoaded != 0 || providerCalls != 1 {
+		t.Fatalf("first RunETL = %#v with provider calls %d, want one uncommitted failed provider success", first, providerCalls)
+	}
+	location, err := application.warehouseLocation(application.warehouseRoot(), connection)
+	if err != nil {
+		t.Fatal(err)
+	}
+	manifestDir := filepath.Join(location.ConnectionDir, connectionWarehouseStageManifestDir)
+	entries, err := os.ReadDir(manifestDir)
+	if err != nil || len(entries) != 1 {
+		t.Fatalf("uncommitted staged manifests = %#v, %v, want one durable receipt", entries, err)
+	}
+	firstManifest := entries[0].Name()
+
+	reopened, err := Open(root)
+	if err != nil {
+		t.Fatalf("reopen after local receipt failure: %v", err)
+	}
+	reopened.registry.Register(engine.New(bundle, nil))
+	if err := reopened.composeTransportRegistry(); err != nil {
+		t.Fatalf("compose reopened typed destination transport: %v", err)
+	}
+	retryPlan, err := reopened.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
+	if err != nil {
+		t.Fatalf("plan retry typed destination transport: %v", err)
+	}
+	retryPreview, _, err := reopened.PreviewDeclarativeTypedDestinationTransport(ctx, retryPlan.ID)
+	if err != nil {
+		t.Fatalf("preview retry typed destination transport: %v", err)
+	}
+	request.DestinationApproval.PlanID = retryPlan.ID
+	request.DestinationApproval.ApprovalToken = retryPreview.ApprovalToken
+	second, err := reopened.RunETL(ctx, request)
+	if err != nil {
+		t.Fatalf("retry RunETL: %v", err)
+	}
+	if second.Status != "completed" || second.RecordsLoaded != 1 {
+		t.Fatalf("retry RunETL = %#v, want one completed workset", second)
+	}
+	entries, err = os.ReadDir(manifestDir)
+	if err != nil || len(entries) != 1 || entries[0].Name() != firstManifest {
+		t.Fatalf("retry staged manifests = %#v, %v, want original durable receipt %q", entries, err, firstManifest)
+	}
+	if providerCalls != 2 || mutations != 1 || len(keys) != 2 || keys[0] == "" || keys[0] != keys[1] {
+		t.Fatalf("retry provider calls/mutations/keys = %d/%d/%#v, want same workset key and one mutation", providerCalls, mutations, keys)
+	}
+}
+
 // TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields
 // pins the declaration-time field boundary for the reusable destination
 // adapter. Field spelling belongs to the selected writes.json action schema,
@@ -1924,14 +2063,17 @@ func TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBa
 		t.Fatalf("plan tombstone destination: %v", err)
 	}
 	tombstone := synccontract.Tombstone{Operation: synccontract.OperationDelete, EventID: synccontract.OpaqueToken("delete-widget-1"), Key: json.RawMessage(`{"id":"widget-1"}`), DeleteImage: synccontract.DeleteImageKeyOnly, Position: synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken("1"), TieBreaker: synccontract.OpaqueToken("1")}}
-	receipt := synctransport.WarehouseReceipt{ID: "typed-tombstone-workset", Owner: connection.ID, Generation: 1, Stream: "widgets", Mode: synccontract.ModeFullAppend, CheckpointSHA256: "checkpoint", TombstonesSHA256: "tombstones", ManifestSHA256: "manifest", ContentSHA256: "content", ParquetSHA256: "parquet", Tombstones: 1}
-	workset := synctransport.WarehouseWorkset{ID: receipt.ID, Tombstones: []synccontract.Tombstone{tombstone}}
+	duplicate := tombstone.Clone()
+	duplicate.EventID = synccontract.OpaqueToken("delete-widget-2")
+	duplicate.Position = synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken("2"), TieBreaker: synccontract.OpaqueToken("2")}
+	receipt := synctransport.WarehouseReceipt{ID: "typed-tombstone-workset", Owner: connection.ID, Generation: 1, Stream: "widgets", Mode: synccontract.ModeFullAppend, CheckpointSHA256: "checkpoint", TombstonesSHA256: "tombstones", ManifestSHA256: "manifest", ContentSHA256: "content", ParquetSHA256: "parquet", Tombstones: 2}
+	workset := synctransport.WarehouseWorkset{ID: receipt.ID, Tombstones: []synccontract.Tombstone{tombstone, duplicate}}
 	acknowledgement, err := resolved.Destination.ApplyDestination(ctx, synctransport.DestinationApplyRequest{ConnectionID: connection.ID, Plan: destinationPlan, Receipt: receipt, Workset: workset, Runtime: runtime, Source: source, Destination: destination, Stream: "widgets", Mode: synccontract.ModeFullAppend, Approval: approval})
 	if err != nil {
 		t.Fatalf("apply declared tombstone: %v", err)
 	}
-	if deletes != 1 || creates != 0 {
-		t.Fatalf("tombstone provider calls delete/create = %d/%d, want 1/0", deletes, creates)
+	if deletes != 2 || creates != 0 {
+		t.Fatalf("tombstone provider calls delete/create = %d/%d, want 2/0", deletes, creates)
 	}
 	if err := resolved.Destination.ReadBackDestination(ctx, synctransport.DestinationReadBackRequest{Plan: destinationPlan, Workset: workset, Acknowledgement: acknowledgement, Runtime: runtime, Source: source, Destination: destination, Stream: "widgets", Mode: synccontract.ModeFullAppend}); err != nil {
 		t.Fatalf("read back declared tombstone absence: %v", err)
@@ -1944,7 +2086,7 @@ func TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBa
 	if err := json.Unmarshal(acknowledgement.Output, &output); err != nil {
 		t.Fatalf("decode missing-ok tombstone output: %v", err)
 	}
-	if output.RecordsWritten != 0 || output.RecordsUnchanged != 1 || output.RecordsFailed != 0 {
+	if output.RecordsWritten != 0 || output.RecordsUnchanged != 2 || output.RecordsFailed != 0 {
 		t.Fatalf("missing-ok tombstone output = %#v, want unchanged durable outcome", output)
 	}
 	commits := 0
@@ -1957,8 +2099,8 @@ func TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBa
 	}); err != nil {
 		t.Fatalf("commit independently read-back missing-ok tombstone: %v", err)
 	}
-	if commits != 1 || deletes != 1 {
-		t.Fatalf("missing-ok tombstone commits/deletes = %d/%d, want one checkpoint and no replayed delete", commits, deletes)
+	if commits != 1 || deletes != 2 {
+		t.Fatalf("missing-ok tombstone commits/deletes = %d/%d, want two valid deletes and one checkpoint", commits, deletes)
 	}
 }
 
