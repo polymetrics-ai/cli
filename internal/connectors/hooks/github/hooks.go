@@ -188,14 +188,21 @@ func parsePrivateKey(cfg connectors.RuntimeConfig) (*rsa.PrivateKey, error) {
 
 func installationTokenPayload(cfg connectors.RuntimeConfig) (map[string]any, error) {
 	payload := map[string]any{}
-	if repos, err := installationRepositories(cfg.Config["installation_repositories"]); err != nil {
+	repos, err := installationRepositories(cfg.Config["installation_repositories"])
+	if err != nil {
 		return nil, err
-	} else if len(repos) > 0 {
+	}
+	ids, err := installationRepositoryIDs(cfg.Config["installation_repository_ids"])
+	if err != nil {
+		return nil, err
+	}
+	if len(repos)+len(ids) > githubInstallationRepositoryRestrictionLimit {
+		return nil, fmt.Errorf("github installation_repositories and installation_repository_ids support at most %d repositories combined", githubInstallationRepositoryRestrictionLimit)
+	}
+	if len(repos) > 0 {
 		payload["repositories"] = repos
 	}
-	if ids, err := installationRepositoryIDs(cfg.Config["installation_repository_ids"]); err != nil {
-		return nil, err
-	} else if len(ids) > 0 {
+	if len(ids) > 0 {
 		payload["repository_ids"] = ids
 	}
 	if permissions, err := installationPermissions(cfg.Config["installation_permissions"]); err != nil {

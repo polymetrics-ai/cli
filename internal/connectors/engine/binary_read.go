@@ -209,7 +209,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
 		return result, errors.Join(err, captureErr)
 	}
-	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header, cfg.Secrets)
 	if err != nil {
 		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
 		return result, errors.Join(err, captureErr)

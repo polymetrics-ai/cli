@@ -17,6 +17,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf16"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/synccontract"
@@ -1030,13 +1032,12 @@ func sanitizeProviderHeaders(headers map[string]OperationResponseHeader, secrets
 	out := make(map[string]OperationResponseHeader, len(headers))
 	for name, header := range headers {
 		clone := header
-		clone.Values = make([]string, len(header.Values))
-		for i, value := range header.Values {
-			clone.Values[i] = redactWriteResultString(value, secrets)
+		if header.Values != nil {
+			clone.Values = make([]string, len(header.Values))
+			for i, value := range header.Values {
+				clone.Values[i] = sanitizeProviderOutputScalar(value, secrets)
+			}
 		}
-		// Header names are provider output, not credential material. Redacting
-		// name-shaped values such as X-Occurrence-ID changes ordinary output and
-		// cannot protect a configured secret that is only present in a value.
 		out[name] = clone
 	}
 	return out
@@ -1168,6 +1169,10 @@ func SanitizeProviderOutputForOutput(value any, secrets map[string]string) any {
 	return sanitizeProviderOutputValue(value, configuredWriteResultSecrets(secrets))
 }
 
+func SanitizeProviderResponseHeadersForOutput(headers map[string]OperationResponseHeader, secrets map[string]string) map[string]OperationResponseHeader {
+	return sanitizeProviderHeaders(headers, configuredWriteResultSecrets(secrets))
+}
+
 // SanitizeDirectReadPageForOutput returns page navigation that is safe to
 // publish with a direct-read result. A next cursor is an opaque provider value
 // and stays intact unless it is exactly one configured credential or one of
@@ -1209,36 +1214,41 @@ func sanitizeProviderResponseRaw(value, encoding string, secrets []string) strin
 	return redactProviderResponseText(value, secrets)
 }
 
-type providerResponseJSONKeySpan struct {
+type providerResponseJSONStringSpan struct {
 	start int
 	end   int
+	key   bool
 }
 
 func redactProviderResponseText(value string, secrets []string) string {
 	if len(secrets) == 0 {
 		return value
 	}
-	keySpans, isJSON := providerResponseJSONKeySpans(value)
-	if !isJSON || len(keySpans) == 0 {
+	stringSpans, isJSON := providerResponseJSONStrings(value)
+	if !isJSON || len(stringSpans) == 0 {
 		return redactWriteResultString(value, secrets)
 	}
 	var out strings.Builder
 	out.Grow(len(value))
 	offset := 0
-	for _, span := range keySpans {
+	for _, span := range stringSpans {
 		out.WriteString(redactWriteResultString(value[offset:span.start], secrets))
-		out.WriteString(value[span.start:span.end])
+		if span.key {
+			out.WriteString(value[span.start:span.end])
+		} else {
+			out.WriteString(redactProviderResponseJSONString(value[span.start:span.end], secrets))
+		}
 		offset = span.end
 	}
 	out.WriteString(redactWriteResultString(value[offset:], secrets))
 	return out.String()
 }
 
-func providerResponseJSONKeySpans(value string) ([]providerResponseJSONKeySpan, bool) {
+func providerResponseJSONStrings(value string) ([]providerResponseJSONStringSpan, bool) {
 	if !json.Valid([]byte(value)) {
 		return nil, false
 	}
-	spans := make([]providerResponseJSONKeySpan, 0)
+	spans := make([]providerResponseJSONStringSpan, 0)
 	for offset := 0; offset < len(value); {
 		if value[offset] != '"' {
 			offset++
@@ -1268,15 +1278,175 @@ func providerResponseJSONKeySpans(value string) ([]providerResponseJSONKeySpan, 
 		for next < len(value) && isProviderResponseJSONWhitespace(value[next]) {
 			next++
 		}
-		if next < len(value) && value[next] == ':' {
-			spans = append(spans, providerResponseJSONKeySpan{start: start, end: offset})
-		}
+		spans = append(spans, providerResponseJSONStringSpan{start: start, end: offset, key: next < len(value) && value[next] == ':'})
 	}
 	return spans, true
 }
 
 func isProviderResponseJSONWhitespace(value byte) bool {
 	return value == ' ' || value == '\t' || value == '\n' || value == '\r'
+}
+
+type providerResponseDecodedByteSpan struct {
+	start int
+	end   int
+}
+
+type providerResponseTextSpan struct {
+	start int
+	end   int
+}
+
+func redactProviderResponseJSONString(value string, secrets []string) string {
+	decoded, decodedSpans, ok := decodeProviderResponseJSONString(value)
+	if !ok {
+		return redactWriteResultString(value, secrets)
+	}
+	matches := providerResponseSecretTextSpans(decoded, secrets)
+	if len(matches) == 0 {
+		return value
+	}
+	var out strings.Builder
+	out.Grow(len(value))
+	offset := 0
+	for _, match := range matches {
+		start := decodedSpans[match.start].start
+		end := decodedSpans[match.end-1].end
+		out.WriteString(value[offset:start])
+		out.WriteString("[masked]")
+		offset = end
+	}
+	out.WriteString(value[offset:])
+	return out.String()
+}
+
+func decodeProviderResponseJSONString(value string) (string, []providerResponseDecodedByteSpan, bool) {
+	if len(value) < 2 || value[0] != '"' || value[len(value)-1] != '"' {
+		return "", nil, false
+	}
+	decoded := make([]byte, 0, len(value)-2)
+	spans := make([]providerResponseDecodedByteSpan, 0, len(value)-2)
+	appendBytes := func(start, end int, bytes []byte) {
+		decoded = append(decoded, bytes...)
+		for range bytes {
+			spans = append(spans, providerResponseDecodedByteSpan{start: start, end: end})
+		}
+	}
+	for offset := 1; offset < len(value)-1; {
+		if value[offset] != '\\' {
+			appendBytes(offset, offset+1, []byte{value[offset]})
+			offset++
+			continue
+		}
+		if offset+1 >= len(value)-1 {
+			return "", nil, false
+		}
+		start := offset
+		switch value[offset+1] {
+		case '"', '\\', '/':
+			appendBytes(start, offset+2, []byte{value[offset+1]})
+			offset += 2
+		case 'b':
+			appendBytes(start, offset+2, []byte{'\b'})
+			offset += 2
+		case 'f':
+			appendBytes(start, offset+2, []byte{'\f'})
+			offset += 2
+		case 'n':
+			appendBytes(start, offset+2, []byte{'\n'})
+			offset += 2
+		case 'r':
+			appendBytes(start, offset+2, []byte{'\r'})
+			offset += 2
+		case 't':
+			appendBytes(start, offset+2, []byte{'\t'})
+			offset += 2
+		case 'u':
+			if offset+6 > len(value)-1 {
+				return "", nil, false
+			}
+			r, ok := providerResponseJSONHexRune(value[offset+2 : offset+6])
+			if !ok {
+				return "", nil, false
+			}
+			offset += 6
+			end := offset
+			if r >= 0xD800 && r <= 0xDBFF && offset+6 <= len(value)-1 && value[offset] == '\\' && value[offset+1] == 'u' {
+				low, validLow := providerResponseJSONHexRune(value[offset+2 : offset+6])
+				if validLow && low >= 0xDC00 && low <= 0xDFFF {
+					r = utf16.DecodeRune(r, low)
+					offset += 6
+					end = offset
+				} else {
+					r = utf8.RuneError
+				}
+			} else if r >= 0xD800 && r <= 0xDFFF {
+				r = utf8.RuneError
+			}
+			appendBytes(start, end, []byte(string(r)))
+		default:
+			return "", nil, false
+		}
+	}
+	return string(decoded), spans, true
+}
+
+func providerResponseJSONHexRune(value string) (rune, bool) {
+	if len(value) != 4 {
+		return 0, false
+	}
+	var result rune
+	for _, digit := range value {
+		result <<= 4
+		switch {
+		case digit >= '0' && digit <= '9':
+			result += digit - '0'
+		case digit >= 'a' && digit <= 'f':
+			result += digit - 'a' + 10
+		case digit >= 'A' && digit <= 'F':
+			result += digit - 'A' + 10
+		default:
+			return 0, false
+		}
+	}
+	return result, true
+}
+
+func providerResponseSecretTextSpans(value string, secrets []string) []providerResponseTextSpan {
+	spans := make([]providerResponseTextSpan, 0)
+	for _, secret := range secrets {
+		if secret == "" {
+			continue
+		}
+		for offset := 0; offset < len(value); {
+			index := strings.Index(value[offset:], secret)
+			if index < 0 {
+				break
+			}
+			start := offset + index
+			end := start + len(secret)
+			if providerOutputTokenBoundary(value, start, end) && !providerResponseTextSpanOverlaps(spans, start, end) {
+				spans = append(spans, providerResponseTextSpan{start: start, end: end})
+			}
+			offset = end
+		}
+	}
+	sort.Slice(spans, func(i, j int) bool {
+		if spans[i].start == spans[j].start {
+			return spans[i].end < spans[j].end
+		}
+		return spans[i].start < spans[j].start
+	})
+	return spans
+}
+
+func providerResponseTextSpanOverlaps(spans []providerResponseTextSpan, start, end int) bool {
+	for _, span := range spans {
+		if start < span.end && span.start < end {
+			return true
+		}
+	}
+	return false
 }
 
 func providerOutputValueAtPath(value any, path string) (any, bool) {

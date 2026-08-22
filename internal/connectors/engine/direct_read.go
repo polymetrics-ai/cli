@@ -185,34 +185,13 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
 	decoded = connectors.SanitizeProviderOutputForOutput(decoded, req.Config.Secrets)
-	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header, cfg.Secrets)
 	if err != nil {
 		return readResult, err
 	}
 	readResult.Body = decoded
-	readResult.Headers = sanitizeDirectReadResponseHeadersForOutput(responseHeaders, req.Config.Secrets)
+	readResult.Headers = responseHeaders
 	return readResult, nil
-}
-
-func sanitizeDirectReadResponseHeadersForOutput(headers map[string]connectors.OperationResponseHeader, secrets map[string]string) map[string]connectors.OperationResponseHeader {
-	if headers == nil {
-		return nil
-	}
-	out := make(map[string]connectors.OperationResponseHeader, len(headers))
-	for name, header := range headers {
-		clone := header
-		if header.Values != nil {
-			values, ok := connectors.SanitizeProviderOutputForOutput(header.Values, secrets).([]string)
-			if !ok {
-				clone.Values = nil
-				clone.Redacted = true
-			} else {
-				clone.Values = values
-			}
-		}
-		out[name] = clone
-	}
-	return out
 }
 
 // PreflightOperationDirectRead proves a command's named operation can reach

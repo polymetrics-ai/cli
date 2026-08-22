@@ -2,8 +2,10 @@ package engine
 
 import (
 	"context"
+	"encoding/base64"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -65,6 +67,45 @@ func TestOperationStatusCheckUsesDeclaredHEADWithoutJSONBody(t *testing.T) {
 	}
 	if token, ok := result.Headers["X-Token"]; !ok || !token.Redacted {
 		t.Fatalf("X-Token = %#v, want explicit redaction marker", token)
+	}
+}
+
+func TestOperationStatusCheckMasksConfiguredResponseHeaderValues(t *testing.T) {
+	const credential = "configured-header-material"
+	const occurrenceID = "occurrence-9007199254740993"
+	const unconfiguredToken = "ghp_unconfigured_provider_token"
+	encoded := base64.StdEncoding.EncodeToString([]byte(credential))
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodHead {
+			t.Fatalf("method = %s, want HEAD", r.Method)
+		}
+		w.Header().Add("X-Provider-Metadata", credential)
+		w.Header().Add("X-Provider-Metadata", occurrenceID)
+		w.Header().Add("X-Provider-Metadata", encoded)
+		w.Header().Add("X-Provider-Metadata", unconfiguredToken)
+		w.Header().Add("X-Provider-Metadata", credential)
+		w.Header().Set(credential, occurrenceID)
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	t.Cleanup(srv.Close)
+	bundle := statusCheckBundle(srv.URL, http.MethodHead)
+	bundle.Operations[0].REST.Response = &OperationResponseSpec{SuccessStatuses: []string{"204"}, Headers: []OperationResponseHeaderSpec{
+		{Name: "X-Provider-Metadata", MaxBytes: 512},
+		{Name: credential, MaxBytes: 64},
+	}}
+	result, err := OperationStatusCheck(context.Background(), bundle, connectors.OperationStatusCheckRequest{
+		Operation: "acme.tags.status",
+		Config:    connectors.RuntimeConfig{Secrets: map[string]string{"credential": credential}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationStatusCheck: %v", err)
+	}
+	want := []string{"[masked]", occurrenceID, "[masked]", unconfiguredToken, "[masked]"}
+	if !reflect.DeepEqual(result.Headers["X-Provider-Metadata"].Values, want) {
+		t.Fatalf("header values = %#v, want %#v", result.Headers["X-Provider-Metadata"].Values, want)
+	}
+	if result.Headers[credential].Values[0] != occurrenceID {
+		t.Fatalf("configured header name was changed: %#v", result.Headers)
 	}
 }
 

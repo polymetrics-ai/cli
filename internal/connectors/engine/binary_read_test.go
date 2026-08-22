@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"net/http"
 	"net/http/httptest"
@@ -113,6 +114,45 @@ func TestBinaryDownloadWritesBoundedFile(t *testing.T) {
 	}
 	if !strings.HasPrefix(path, dest) {
 		t.Fatalf("file escaped the destination root: %s", path)
+	}
+}
+
+func TestOperationBinaryDownloadMasksConfiguredResponseHeaderValues(t *testing.T) {
+	const credential = "configured-header-material"
+	const occurrenceID = "occurrence-9007199254740993"
+	const unconfiguredToken = "ghp_unconfigured_provider_token"
+	encoded := base64.StdEncoding.EncodeToString([]byte(credential))
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Header().Add("X-Provider-Metadata", credential)
+		w.Header().Add("X-Provider-Metadata", occurrenceID)
+		w.Header().Add("X-Provider-Metadata", encoded)
+		w.Header().Add("X-Provider-Metadata", unconfiguredToken)
+		w.Header().Add("X-Provider-Metadata", credential)
+		w.Header().Set(credential, occurrenceID)
+		_, _ = w.Write([]byte("fixture"))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := binaryBundle(srv, &BinaryOperationSpec{
+		Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
+			{Name: "X-Provider-Metadata", MaxBytes: 512},
+			{Name: credential, MaxBytes: 64},
+		}},
+	})
+	req := downloadReq(t.TempDir())
+	req.Config.Secrets = map[string]string{"credential": credential}
+	result, err := OperationBinaryDownload(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("OperationBinaryDownload: %v", err)
+	}
+	want := []string{"[masked]", occurrenceID, "[masked]", unconfiguredToken, "[masked]"}
+	for _, headers := range []map[string]connectors.OperationResponseHeader{result.Headers, result.Receipt.Headers} {
+		if !reflect.DeepEqual(headers["X-Provider-Metadata"].Values, want) {
+			t.Fatalf("header values = %#v, want %#v", headers["X-Provider-Metadata"].Values, want)
+		}
+	}
+	if result.Headers[credential].Values[0] != occurrenceID {
+		t.Fatalf("configured header name was changed: %#v", result.Headers)
 	}
 }
 

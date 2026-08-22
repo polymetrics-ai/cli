@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strconv"
 	"strings"
 	"testing"
@@ -514,6 +515,11 @@ func TestOperationDirectReadMasksConfiguredGraphQLDiagnosticsAndReceipts(t *test
 			t.Fatalf("request = %s %s, want POST /graphql", r.Method, r.URL.Path)
 		}
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Add("X-GraphQL-Metadata", credential)
+		w.Header().Add("X-GraphQL-Metadata", "graphql-occurrence-9007199254740993")
+		w.Header().Add("X-GraphQL-Metadata", encoded)
+		w.Header().Add("X-GraphQL-Metadata", "ghp_unconfigured_provider_token")
+		w.Header().Add("X-GraphQL-Metadata", credential)
 		_, _ = w.Write(response)
 	}))
 	defer server.Close()
@@ -540,6 +546,10 @@ func TestOperationDirectReadMasksConfiguredGraphQLDiagnosticsAndReceipts(t *test
 	}
 	if result.GraphQL == nil || len(result.GraphQL.Errors) != 1 || !strings.Contains(result.GraphQL.Errors[0].Message, "occurrence_id=graphql-occurrence-9007199254740993") || !strings.Contains(result.GraphQL.Errors[0].Message, "[masked]") {
 		t.Fatal("GraphQL metadata did not preserve ordinary context and redact configured material")
+	}
+	wantHeaders := []string{"[masked]", "graphql-occurrence-9007199254740993", "[masked]", "ghp_unconfigured_provider_token", "[masked]"}
+	if result.Receipt == nil || !reflect.DeepEqual(result.Receipt.Headers[http.CanonicalHeaderKey("X-GraphQL-Metadata")].Values, wantHeaders) {
+		t.Fatalf("GraphQL receipt headers = %#v, want %#v", result.Receipt, wantHeaders)
 	}
 	body, ok := result.Body.(map[string]any)
 	if !ok {

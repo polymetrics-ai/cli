@@ -199,7 +199,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if responseBodyErr != nil {
 			return operationDirectWritePostResponseError(prepared.op.ID, responseBodyErr, response, prepared.identity)
 		}
-		responseHeaders, headerErr := operationResponseHeaders(b, prepared.op, response.Header)
+		responseHeaders, headerErr := operationResponseHeaders(b, prepared.op, response.Header, prepared.cfg.Secrets)
 		if headerErr != nil {
 			return headerErr
 		}

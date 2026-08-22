@@ -351,6 +351,159 @@ func TestPublicWriteReceiptsPreserveRawJSONFieldNames(t *testing.T) {
 	}
 }
 
+func TestPublicWriteReceiptsMaskEscapedJSONValuesWithoutChangingOtherBytes(t *testing.T) {
+	const credential = "secret"
+	const escapedCredential = `\u0073\u0065\u0063\u0072\u0065\u0074`
+	const raw = "{\n  \"id\" : \"ordinary-occurrence-id\",\n  \"diagnostic\" : \"provider " + escapedCredential + " occurrence_id=occurrence-9007199254740993\",\n  \"token_type\" : \"unconfigured-provider-token\"\n}"
+	const expected = "{\n  \"id\" : \"ordinary-occurrence-id\",\n  \"diagnostic\" : \"provider [masked] occurrence_id=occurrence-9007199254740993\",\n  \"token_type\" : \"unconfigured-provider-token\"\n}"
+
+	tests := []struct {
+		name     string
+		raw      string
+		encoding string
+		expected string
+		sanitize func(string, string) (string, any)
+	}{
+		{
+			name:     "text write receipt",
+			raw:      raw,
+			encoding: "text",
+			expected: expected,
+			sanitize: func(value, encoding string) (string, any) {
+				result := WriteResult{ProviderResponses: []WriteProviderResponse{{BodyPresent: true, BodyBytes: len(raw), BodyRaw: value, BodyRawEncoding: encoding, Body: value, BodyEncoding: encoding}}}
+				got := SanitizeWriteResultForOutput(result, map[string]string{"key_collision": "id", "credential": credential})
+				return got.ProviderResponses[0].BodyRaw, got.ProviderResponses[0].Body
+			},
+		},
+		{
+			name:     "base64 write receipt",
+			raw:      base64.StdEncoding.EncodeToString([]byte(raw)),
+			encoding: "base64",
+			expected: base64.StdEncoding.EncodeToString([]byte(expected)),
+			sanitize: func(value, encoding string) (string, any) {
+				result := WriteResult{ProviderResponses: []WriteProviderResponse{{BodyPresent: true, BodyBytes: len(raw), BodyRaw: value, BodyRawEncoding: encoding, Body: value, BodyEncoding: encoding}}}
+				got := SanitizeWriteResultForOutput(result, map[string]string{"key_collision": "id", "credential": credential})
+				return got.ProviderResponses[0].BodyRaw, got.ProviderResponses[0].Body
+			},
+		},
+		{
+			name:     "text direct operation",
+			raw:      raw,
+			encoding: "text",
+			expected: expected,
+			sanitize: func(value, encoding string) (string, any) {
+				result := OperationDirectWriteResult{BodyPresent: true, BodyBytes: len(raw), BodyRaw: value, BodyRawEncoding: encoding, Body: value}
+				got := SanitizeOperationDirectWriteResultForOutput(result, map[string]string{"key_collision": "id", "credential": credential})
+				return got.BodyRaw, got.Body
+			},
+		},
+		{
+			name:     "base64 direct operation",
+			raw:      base64.StdEncoding.EncodeToString([]byte(raw)),
+			encoding: "base64",
+			expected: base64.StdEncoding.EncodeToString([]byte(expected)),
+			sanitize: func(value, encoding string) (string, any) {
+				result := OperationDirectWriteResult{BodyPresent: true, BodyBytes: len(raw), BodyRaw: value, BodyRawEncoding: encoding, Body: value}
+				got := SanitizeOperationDirectWriteResultForOutput(result, map[string]string{"key_collision": "id", "credential": credential})
+				return got.BodyRaw, got.Body
+			},
+		},
+		{
+			name:     "text direct read receipt",
+			raw:      raw,
+			encoding: "text",
+			expected: expected,
+			sanitize: func(value, encoding string) (string, any) {
+				receipt := ProviderResponseReceipt{BodyPresent: true, BodyBytes: int64(len(raw)), BodyRaw: value, BodyRawEncoding: encoding, Body: value}
+				got := SanitizeProviderResponseReceiptForOutput(receipt, map[string]string{"key_collision": "id", "credential": credential})
+				return got.BodyRaw, got.Body
+			},
+		},
+		{
+			name:     "base64 direct read receipt",
+			raw:      base64.StdEncoding.EncodeToString([]byte(raw)),
+			encoding: "base64",
+			expected: base64.StdEncoding.EncodeToString([]byte(expected)),
+			sanitize: func(value, encoding string) (string, any) {
+				receipt := ProviderResponseReceipt{BodyPresent: true, BodyBytes: int64(len(raw)), BodyRaw: value, BodyRawEncoding: encoding, Body: value}
+				got := SanitizeProviderResponseReceiptForOutput(receipt, map[string]string{"key_collision": "id", "credential": credential})
+				return got.BodyRaw, got.Body
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			bodyRaw, body := test.sanitize(test.raw, test.encoding)
+			bodyText, ok := body.(string)
+			if !ok || bodyRaw != test.expected || bodyText != test.expected {
+				t.Fatalf("sanitized receipt = raw %q body %#v, want byte-preserving %q", bodyRaw, body, test.expected)
+			}
+			if strings.Contains(bodyRaw, escapedCredential) {
+				t.Fatal("sanitized receipt retained the reversible escaped credential")
+			}
+		})
+	}
+}
+
+func TestPublicResponseHeaderSanitizationMasksOnlyExactConfiguredValues(t *testing.T) {
+	const credential = "configured-header-material"
+	const occurrenceID = "occurrence-9007199254740993"
+	const unconfiguredToken = "ghp_unconfigured_provider_token"
+	encoded := base64.StdEncoding.EncodeToString([]byte(credential))
+	newHeaders := func() map[string]OperationResponseHeader {
+		return map[string]OperationResponseHeader{
+			credential: {Values: []string{occurrenceID}},
+			"X-Provider-Metadata": {Values: []string{
+				"first",
+				credential,
+				encoded,
+				occurrenceID,
+				unconfiguredToken,
+				"prefix-" + credential,
+				credential,
+			}},
+		}
+	}
+	want := []string{"first", "[masked]", "[masked]", occurrenceID, unconfiguredToken, "prefix-" + credential, "[masked]"}
+	tests := []struct {
+		name     string
+		sanitize func(map[string]OperationResponseHeader) map[string]OperationResponseHeader
+	}{
+		{
+			name: "write receipt",
+			sanitize: func(headers map[string]OperationResponseHeader) map[string]OperationResponseHeader {
+				result := WriteResult{ProviderResponses: []WriteProviderResponse{{Headers: headers}}}
+				return SanitizeWriteResultForOutput(result, map[string]string{"credential": credential}).ProviderResponses[0].Headers
+			},
+		},
+		{
+			name: "direct operation",
+			sanitize: func(headers map[string]OperationResponseHeader) map[string]OperationResponseHeader {
+				return SanitizeOperationDirectWriteResultForOutput(OperationDirectWriteResult{Headers: headers}, map[string]string{"credential": credential}).Headers
+			},
+		},
+		{
+			name: "provider receipt",
+			sanitize: func(headers map[string]OperationResponseHeader) map[string]OperationResponseHeader {
+				return SanitizeProviderResponseReceiptForOutput(ProviderResponseReceipt{Headers: headers}, map[string]string{"credential": credential}).Headers
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := test.sanitize(newHeaders())
+			if !reflect.DeepEqual(got["X-Provider-Metadata"].Values, want) {
+				t.Fatalf("header values = %#v, want %#v", got["X-Provider-Metadata"].Values, want)
+			}
+			if got[credential].Values[0] != occurrenceID {
+				t.Fatalf("configured header name was changed: %#v", got)
+			}
+		})
+	}
+}
+
 func TestSanitizeWriteErrorForOutputKeepsSystemDiagnosticsSecretFree(t *testing.T) {
 	credential := "client-secret"
 	output := SanitizeWriteErrorForOutput(errors.New("system diagnostic "+credential), map[string]string{"token": credential})

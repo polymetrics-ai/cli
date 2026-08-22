@@ -82,7 +82,7 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if len(response.Body) > cap {
 		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status response exceeded metadata cap")
 	}
-	responseHeaders, err := operationResponseHeaders(b, op, response.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, response.Header, cfg.Secrets)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}

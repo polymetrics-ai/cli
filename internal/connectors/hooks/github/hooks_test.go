@@ -508,6 +508,7 @@ func TestAuthenticatorGithubAppRestrictionParsingFailsClosedBeforeDeclaredRouteI
 	}{
 		{name: "valid restrictions", valid: true, extra: map[string]string{"valid": "true", "installation_repositories": "alpha,beta", "installation_repository_ids": "7,9", "installation_permissions": `{"contents":"read","issues":"write"}`}},
 		{name: "valid maximum repository names", valid: true, extra: map[string]string{"valid": "true", "installation_repositories": repositories(500)}},
+		{name: "valid combined repository restrictions", valid: true, extra: map[string]string{"valid": "true", "installation_repositories": repositories(250), "installation_repository_ids": repositoryIDs(250)}},
 		{name: "valid provider permission matrix", valid: true, extra: map[string]string{"valid": "true", "installation_permissions": `{"repository_projects":"admin","workflows":"write","organization_events":"read"}`}},
 		{name: "empty repository member", extra: map[string]string{"installation_repositories": "alpha,,beta"}},
 		{name: "unsafe repository name", extra: map[string]string{"installation_repositories": "alpha/../beta"}},
@@ -515,6 +516,7 @@ func TestAuthenticatorGithubAppRestrictionParsingFailsClosedBeforeDeclaredRouteI
 		{name: "non-numeric repository id", extra: map[string]string{"installation_repository_ids": "7,not-a-number"}},
 		{name: "duplicate repository id", extra: map[string]string{"installation_repository_ids": "7,7"}},
 		{name: "too many repository ids", extra: map[string]string{"installation_repository_ids": repositoryIDs(501)}},
+		{name: "too many combined repository restrictions", extra: map[string]string{"installation_repositories": repositories(250), "installation_repository_ids": repositoryIDs(251)}},
 		{name: "permissions not json", extra: map[string]string{"installation_permissions": "not-json"}},
 		{name: "permissions wrong value type", extra: map[string]string{"installation_permissions": `{"contents":false}`}},
 		{name: "permissions duplicate key", extra: map[string]string{"installation_permissions": `{"contents":"read","contents":"write"}`}},

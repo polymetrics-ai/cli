@@ -334,7 +334,7 @@ func operationResponseSpec(op OperationSpec) *OperationResponseSpec {
 // map, so an endpoint cannot turn response metadata into an arbitrary output
 // channel. Each admitted ordinary value is preserved exactly and a known
 // credential/transport value is represented by an explicit redaction marker.
-func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header) (map[string]connectors.OperationResponseHeader, error) {
+func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header, secrets map[string]string) (map[string]connectors.OperationResponseHeader, error) {
 	if err := validateOperationResponseContract(op); err != nil {
 		return nil, fmt.Errorf("operation %q response headers: %w", op.ID, err)
 	}
@@ -380,7 +380,7 @@ func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header) (
 		}
 		result[declared.Name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
 	}
-	return result, nil
+	return connectors.SanitizeProviderResponseHeadersForOutput(result, secrets), nil
 }
 
 func operationRuntimeHeaderNames(b Bundle) map[string]struct{} {
