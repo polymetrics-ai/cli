@@ -791,11 +791,15 @@ func TestGitHubCommandSurfaceClampsOversizedLimit(t *testing.T) {
 	}
 }
 
-func TestGitHubCommandSurfaceBlocksUndeclaredContentReadBeforeIO(t *testing.T) {
+func TestGitHubCommandSurfaceExecutesDeclaredContentRead(t *testing.T) {
 	var requests int
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		if request.Method != http.MethodGet || request.URL.Path != "/repos/octocat/hello-world/contents/README.md" {
+			t.Fatalf("request = %s %s, want declared GitHub content GET", request.Method, request.URL.Path)
+		}
 		requests++
-		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"type":"file","fixture":"declared-content-read"}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -820,11 +824,11 @@ func TestGitHubCommandSurfaceBlocksUndeclaredContentReadBeforeIO(t *testing.T) {
 		"--root", root,
 		"--json",
 	}, &stdout, &stderr)
-	if code != 7 || !strings.Contains(stdout.String()+stderr.String(), "availability=partial") {
-		t.Fatalf("repo read-file result code=%d stdout=%s stderr=%s, want declared partial refusal", code, stdout.String(), stderr.String())
+	if code != 0 || !strings.Contains(stdout.String(), `"fixture": "declared-content-read"`) {
+		t.Fatalf("repo read-file result code=%d stdout=%s stderr=%s, want declared successful response", code, stdout.String(), stderr.String())
 	}
-	if requests != 0 {
-		t.Fatalf("partial repo read-file reached provider %d times", requests)
+	if requests != 1 {
+		t.Fatalf("declared repo read-file provider requests = %d, want 1", requests)
 	}
 }
 
@@ -897,14 +901,15 @@ func TestGitHubCommandSurfacePreservesGraphQLResponseMetadata(t *testing.T) {
 	}
 }
 
-// TestGitHubPartialDirectReadsAreBlockedBeforeIO proves a locked source
-// operation cannot become an executable provider route merely because its
-// historical CLI spelling and parameters remain documented in cli_surface.
-func TestGitHubPartialDirectReadsAreBlockedBeforeIO(t *testing.T) {
+// TestGitHubSourceBoundDirectReadsExecuteBeforeIO proves the restored locked
+// source routes make their declared requests rather than stopping as stale
+// partial commands before the provider boundary.
+func TestGitHubSourceBoundDirectReadsExecuteBeforeIO(t *testing.T) {
 	var requests int
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		requests++
-		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"fixture":"restored-source-read"}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -921,23 +926,23 @@ func TestGitHubPartialDirectReadsAreBlockedBeforeIO(t *testing.T) {
 		"--json",
 	})
 
-	// Each source-locked command is refused before its historical flags can
-	// reach a provider. The parameters remain visible for documentation only.
+	// Both historical spellings are source-bound and now field-complete, so
+	// their declared flags must reach the provider and return a direct-read
+	// result rather than a partial-command refusal.
 	for _, tc := range []struct {
 		args []string
 	}{
-		{args: []string{"github", "repo", "read-file", "--credential", "github-local", "--path", "README.md", "--root", root, "--json"}},
 		{args: []string{"github", "notifications", "view", "--credential", "github-local", "--since", "2026-01-02T03:04:05Z", "--root", root, "--json"}},
 		{args: []string{"github", "pulls", "files", "view", "--credential", "github-local", "--pull-number", "42", "--page", "2", "--root", root, "--json"}},
 	} {
 		var stdout, stderr bytes.Buffer
 		code := cli.Run(tc.args, &stdout, &stderr)
-		if code != 7 || !strings.Contains(stdout.String()+stderr.String(), "availability=partial") {
-			t.Fatalf("Run(%v) code=%d stdout=%s stderr=%s, want declared partial refusal", tc.args, code, stdout.String(), stderr.String())
+		if code != 0 || !strings.Contains(stdout.String(), `"kind": "ConnectorCommandDirectRead"`) || !strings.Contains(stdout.String(), `"fixture": "restored-source-read"`) {
+			t.Fatalf("Run(%v) code=%d stdout=%s stderr=%s, want declared successful direct read", tc.args, code, stdout.String(), stderr.String())
 		}
 	}
-	if requests != 0 {
-		t.Fatalf("partial direct reads reached provider %d times", requests)
+	if requests != 2 {
+		t.Fatalf("restored direct reads reached provider %d times, want 2", requests)
 	}
 
 }

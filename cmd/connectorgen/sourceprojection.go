@@ -101,15 +101,11 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	if err != nil {
 		return sourceProjectionStats{}, err
 	}
-	certifiedReadCommands, err := sourceProjectionCertifiedReadCommandPaths(bundleDir)
-	if err != nil {
-		return sourceProjectionStats{}, err
-	}
 	blockedReads := sourceProjectionBlockedReadSources(result)
 	reachableReads := sourceProjectionReachableReadSources(result)
-	stats := sourceProjectionStats{CLI: sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli.root, spec, result, certifiedReadCommands)}
+	stats := sourceProjectionStats{CLI: sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli.root, spec, result)}
 	stats.CLI += sourceProjectionDowngradeUnreachableReadCommands(cli.root, blockedReads)
-	stats.CLI += sourceProjectionRestoreReachableReadCommands(cli.root, blockedReads, reachableReads, certifiedReadCommands)
+	stats.CLI += sourceProjectionRestoreReachableReadCommands(cli.root, blockedReads, reachableReads)
 	if api.root != nil {
 		stats.Surface = sourceProjectionBlockUnreachableReadSurfaceEndpoints(api.root, blockedReads)
 		stats.Surface += sourceProjectionRestoreReachableReadSurfaceEndpoints(api.root, cli.root, blockedReads, reachableReads)
@@ -249,34 +245,6 @@ func sourceProjectionBundleSpec(bundleDir string) (*engine.Schema, error) {
 		return nil, fmt.Errorf("spec.json: %w", err)
 	}
 	return spec, nil
-}
-
-// sourceProjectionCertifiedReadCommandPaths exposes only the existing,
-// connector-owned direct-read certification cohort. It is an explicit
-// declaration of executable fixture inputs, not an inferred broad promotion
-// of every legacy direct-read command.
-func sourceProjectionCertifiedReadCommandPaths(bundleDir string) (map[string]bool, error) {
-	raw, err := os.ReadFile(filepath.Join(bundleDir, "certification.json"))
-	if os.IsNotExist(err) {
-		return nil, nil
-	}
-	if err != nil {
-		return nil, fmt.Errorf("certification.json: %w", err)
-	}
-	var certification engine.CertificationSpec
-	if err := json.Unmarshal(raw, &certification); err != nil {
-		return nil, fmt.Errorf("certification.json: %w", err)
-	}
-	paths := make(map[string]bool)
-	if certification.DirectReadGeneration == nil {
-		return paths, nil
-	}
-	for _, cohort := range certification.DirectReadGeneration.Cohorts {
-		for _, command := range cohort.Commands {
-			paths[command] = true
-		}
-	}
-	return paths, nil
 }
 
 // sourceProjectionBlockedReadSources indexes source operations which are
@@ -423,7 +391,12 @@ func sourceProjectionDowngradeUnreachableReadCommands(cli *orderedObject, blocke
 	return changed
 }
 
-func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked map[string]sourceOperationDescriptor, reachable map[string]sourceOperationDescriptor, certifiedReadCommands map[string]bool) int {
+// sourceProjectionRestoreReachableReadCommands restores an existing
+// source-bound direct-read command when its endpoint's full required caller
+// contract is declared. Certification cohorts choose which routes receive
+// additional test evidence; they do not restrict the command's runtime
+// authority or API-surface coverage.
+func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked map[string]sourceOperationDescriptor, reachable map[string]sourceOperationDescriptor) int {
 	changed := 0
 	for _, raw := range arrayField(cli, "commands") {
 		command, ok := raw.(*orderedObject)
@@ -432,9 +405,6 @@ func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked ma
 		}
 		sourceID, ok := sourceProjectionBlockedReadCommandSourceID(command)
 		if !ok {
-			continue
-		}
-		if !certifiedReadCommands[stringField(command, "path")] {
 			continue
 		}
 		source, found := reachable[sourceID]
@@ -448,7 +418,7 @@ func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked ma
 	return changed
 }
 
-func sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli *orderedObject, spec *engine.Schema, result sourceImportResult, certifiedReadCommands map[string]bool) int {
+func sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli *orderedObject, spec *engine.Schema, result sourceImportResult) int {
 	operations := sourceProjectionOperationsByID(result)
 	changed := 0
 	for _, raw := range arrayField(cli, "commands") {
@@ -460,23 +430,40 @@ func sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli *orderedObj
 		if !ok {
 			continue
 		}
-		if !certifiedReadCommands[stringField(command, "path")] {
-			continue
-		}
 		source, found := operations[sourceID]
 		if !found || source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, source.Path)) {
 			continue
 		}
+		commandChanged := false
+		for _, rawFlag := range arrayField(command, "flags") {
+			flag, ok := rawFlag.(*orderedObject)
+			if !ok || !sourceProjectionRequiredDirectReadPathParameter(source, stringField(flag, "maps_to")) {
+				continue
+			}
+			if required, _ := flag.get("required"); required != true {
+				flag.set("required", true)
+				commandChanged = true
+			}
+		}
 		flags := sourceProjectionOrderedCommandFlags(command)
 		missing := sourceProjectionMissingRequiredDirectReadPathParameters(spec, source, flags)
-		if len(missing) == 0 {
-			continue
+		if len(missing) > 0 && setOrderedIfDifferent(command, "flags", sourceProjectionInsertDirectReadPathFlagObjects(arrayField(command, "flags"), source, missing)) {
+			commandChanged = true
 		}
-		if setOrderedIfDifferent(command, "flags", sourceProjectionInsertDirectReadPathFlagObjects(arrayField(command, "flags"), source, missing)) {
+		if commandChanged {
 			changed++
 		}
 	}
 	return changed
+}
+
+func sourceProjectionRequiredDirectReadPathParameter(source sourceOperationDescriptor, mapsTo string) bool {
+	for _, parameter := range source.Request.Path {
+		if parameter.Required && mapsTo == "path."+parameter.Name {
+			return true
+		}
+	}
+	return false
 }
 
 func sourceProjectionOrderedCommandFlags(command *orderedObject) []engine.CLIFlag {
@@ -643,12 +630,12 @@ func sourceProjectionRestoreReachableReadSurfaceEndpoints(surface, cli *orderedO
 		if !found || sourceProjectionEndpointKey(source.Method, source.Path) != endpointKey {
 			continue
 		}
-		commands := sourceProjectionDirectReadCommandPaths(cli, endpointKey)
+		commands := sourceProjectionReadSurfaceCommandPaths(cli, endpointKey)
 		if len(commands) == 0 {
 			continue
 		}
 		endpoint.remove("operation")
-		endpoint.set("covered_by", directReadCoverage(commands))
+		endpoint.set("covered_by", sourceProjectionReadSurfaceCoverage(source, cli, endpointKey, commands))
 		changed++
 	}
 	return changed
@@ -675,11 +662,15 @@ func sourceProjectionBlockedReadSurfaceSourceID(endpoint *orderedObject) (string
 	return sourceID, true
 }
 
-func sourceProjectionDirectReadCommandPaths(cli *orderedObject, endpoint string) []string {
+// sourceProjectionReadSurfaceCommandPaths returns installed command paths for
+// every executable read intent. API-surface coverage calls these historical
+// binary and status routes direct_read, but their runtime executor remains the
+// command's declared intent.
+func sourceProjectionReadSurfaceCommandPaths(cli *orderedObject, endpoint string) []string {
 	paths := map[string]bool{}
 	for _, raw := range arrayField(cli, "commands") {
 		command, ok := raw.(*orderedObject)
-		if !ok || stringField(command, "intent") != "direct_read" || stringField(command, "availability") != "implemented" || len(arrayField(command, "api_surface")) != 1 || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+		if !ok || !engine.IsReadSurfaceIntent(stringField(command, "intent")) || stringField(command, "availability") != "implemented" || len(arrayField(command, "api_surface")) != 1 || !sourceProjectionCommandHasEndpoint(command, endpoint) {
 			continue
 		}
 		if path := stringField(command, "path"); path != "" {
@@ -692,6 +683,32 @@ func sourceProjectionDirectReadCommandPaths(cli *orderedObject, endpoint string)
 	}
 	sort.Strings(commands)
 	return commands
+}
+
+// sourceProjectionReadSurfaceCoverage preserves the established collection
+// spelling for a repository-scoped, declaration-owned operation route. Those
+// routes are intentionally alias-capable in the GitHub ledger, including a
+// route with one current command; reducing them to direct_read during a
+// temporary source block loses that source-owned surface shape. A source-only
+// direct command without an operation remains a singular binding.
+func sourceProjectionReadSurfaceCoverage(source sourceOperationDescriptor, cli *orderedObject, endpoint string, commands []string) *orderedObject {
+	if len(commands) == 1 && strings.HasPrefix(source.Path, "/repos/{owner}/{repo}/") && sourceProjectionReadSurfaceCommandOwnsOperation(cli, endpoint, commands[0]) {
+		coverage := newOrderedObject()
+		coverage.set("direct_reads", []any{commands[0]})
+		return coverage
+	}
+	return directReadCoverage(commands)
+}
+
+func sourceProjectionReadSurfaceCommandOwnsOperation(cli *orderedObject, endpoint, path string) bool {
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "path") != path || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+			continue
+		}
+		return strings.TrimSpace(stringField(command, "operation")) != ""
+	}
+	return false
 }
 
 func sourceOperationHasFoundationGap(operation sourceOperationDescriptor, foundation string) bool {
@@ -1935,6 +1952,12 @@ func sourceRESTOperationIsDeclaredReachable(bundle engine.Bundle, source sourceO
 				return true
 			}
 		}
+		if operation.Binary != nil && sourceProjectionEndpointKey(operation.Binary.Method, operation.Binary.Path) == endpoint {
+			flags, implemented := sourceProjectionOperationFlags(bundle, operation.ID, source.SourceID, allowSourceBoundPartial)
+			if implemented && sourceBinaryOperationCoversSource(bundle, operation.Binary, source, flags) {
+				return true
+			}
+		}
 	}
 	for _, stream := range bundle.Streams {
 		method := stream.Method
@@ -1965,9 +1988,6 @@ func sourceProjectionDeclaredDirectRead(bundle engine.Bundle, source sourceOpera
 	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
 	for _, command := range bundle.CLISurface.Commands {
 		if command.Intent != "direct_read" || len(command.APISurface) != 1 || !sourceProjectionCommandHasEndpointRef(command, endpoint) {
-			continue
-		}
-		if !sourceProjectionReadCandidateCommandDeclared(bundle, command.Path) {
 			continue
 		}
 		if command.Availability != "implemented" && (!allowSourceBoundPartial || command.Availability != "partial" || !sourceProjectionCommandIsSourceBoundPartial(command, source.SourceID)) {
@@ -2235,6 +2255,17 @@ func sourceRESTOperationCoversSource(bundle engine.Bundle, operation *engine.RES
 				}
 			}
 		}
+	}
+	for _, flag := range flags {
+		covered[flag.MapsTo] = true
+	}
+	return sourceCallerFieldsCovered(source, covered)
+}
+
+func sourceBinaryOperationCoversSource(bundle engine.Bundle, operation *engine.BinaryOperationSpec, source sourceOperationDescriptor, flags []engine.CLIFlag) bool {
+	covered := sourceProjectionDeclaredConfigPathFields(bundle.Spec, operation.Path)
+	for _, parameter := range operation.Parameters {
+		covered[parameter.In+"."+parameter.Name] = true
 	}
 	for _, flag := range flags {
 		covered[flag.MapsTo] = true
