@@ -2,8 +2,8 @@
   "schema_version": 3,
   "integration": "cli-current-foundations-main-integration-r1",
   "checkpoint": "foundation-0.3.0-release-candidate-r1-evidence-closure",
-  "code_sha": "6fef1f48a5626c0b7b836b06ccbed3305551dde9",
-  "reviewed_sha": "6fef1f48a5626c0b7b836b06ccbed3305551dde9",
+  "code_sha": "91c8b6f71c2894848de5271560671b8dfb42a1af",
+  "reviewed_sha": "91c8b6f71c2894848de5271560671b8dfb42a1af",
   "base_sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
   "component_inputs": [
     {
@@ -72,7 +72,7 @@
     {
       "command": "gofmt -d cmd internal; go mod tidy -diff; go vet ./...; go build -o ./pm ./cmd/pm; make docs-check-no-build; make smoke-no-build; make lint; make agent-contract-check; make connectorgen-validate; make connectorgen-surface-sync; make connectorgen-certification-subject; make connectorgen-certification-matrix; make connectorgen-certification-candidates; make connectorgen-certification-sweep; cd website && npm run gen:website-data",
       "status": "passed",
-      "assertion": "Formatting, module, vet, build, docs, smoke, lint, agent contract, declaration validation, surface synchronization, generated certification gates, and CI-required website projection agree at I; matrix reports certified=0.",
+      "assertion": "Formatting, module, vet, build, docs/manual generation, smoke, lint, agent contract, declaration validation, surface synchronization, generated certification gates, and CI-required website projection agree at I7; matrix reports certified=0.",
       "tests": ["gofmt-diff", "go-vet", "docs-validate", "smoke-no-build", "connectorgen-certification-matrix"],
       "modes": ["build", "docs", "generated_surfaces", "website_generated_data", "certification_metadata"]
     },
@@ -98,11 +98,11 @@
       "modes": ["direct_read.fixture_behavior", "cli.stdout_stderr_separation", "github.declared_verdict", "implemented_but_uncertified"]
     },
     {
-      "command": "PM_DRAGONFLY_ADDR=127.0.0.1:1 go test -timeout 8m -count=1 -v ./internal/cli -run '^(TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture)$'; go test -timeout 20m -count=1 ./internal/connectors/commandrunner; go test -timeout 20m -count=1 ./internal/cli; go test -timeout 20m -count=1 ./cmd/connectorgen; go vet ./...; go build ./cmd/pm; go run ./cmd/connectorgen surface-sync --check",
+      "command": "POLYMETRICS_DRAGONFLY_ADDR=127.0.0.1:1 go test -timeout 8m -count=1 -v ./internal/cli -run '^TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture$'; PM_DRAGONFLY_ADDR=127.0.0.1:1 go test -timeout 8m -count=1 -v ./internal/cli -run '^TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture$'; go test -timeout 20m -count=1 ./internal/connectors/commandrunner; go test -timeout 20m -count=1 ./internal/cli; go test -timeout 20m -count=1 ./cmd/connectorgen; go vet ./...; go build ./cmd/pm; make tidy-check lint docs-check-no-build smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check",
       "status": "passed",
-      "assertion": "RC-11 reproduces the correct production shared-coordinator refusal under an unreachable inherited endpoint, then removes only that endpoint from the fixture child. With the parent still set to the invalid endpoint, all 97 fresh-binary candidate stages make their authenticated declared requests and pass their declared output assertions; the shared-coordinator runtime fence is unchanged.",
+      "assertion": "RC-11 preserves the declared require_shared fence: the fixture starts an ephemeral loopback Redis-compatible coordinator, injects only its address into the fresh child while either inherited alias is unreachable, and proves all 97 stages make authenticated declared requests, pass declared output assertions, and write shared-admission state. RC-12 leaves source projection behavior unchanged while making exact lint clean; RC-13 restores only generated manual/skill parity.",
       "tests": ["TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture", "TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryRefusesRequiredSharedRateBudgetBeforeSend"],
-      "modes": ["direct_read.fixture_behavior", "rate_limit.local_in_process_fixture", "shared_coordinator.refusal_preserved", "implemented_but_uncertified"]
+      "modes": ["direct_read.fixture_behavior", "rate_limit.local_redis_fixture", "shared_coordinator.refusal_preserved", "implemented_but_uncertified", "lint.exact_gate", "docs.generated_parity"]
     }
   ],
   "gate_ledger": [
@@ -155,11 +155,11 @@
     {
       "path": "./pm",
       "purpose": "local build consumed by documentation validation and hermetic smoke",
-      "disposition": "ignored build output moved recoverably to Trash before evidence commit"
+      "disposition": "ignored build output retained only inside this disposable isolated worktree and never committed"
     }
   ],
   "artifact_closure": {
-    "implementation_sha": "6fef1f48a5626c0b7b836b06ccbed3305551dde9",
+    "implementation_sha": "91c8b6f71c2894848de5271560671b8dfb42a1af",
     "subject_fingerprint": "6e718f8cd4b80497467e907ecb8ae49373afb1758920dfe7d18c83340061c86a",
     "artifacts": [
       {
@@ -169,18 +169,18 @@
       },
       {
         "category": "source",
-        "path": "internal/connectors/engine/write.go",
-        "sha256": "fd15f92058d06dcdaef3a2ca9780edd5d06db6f137e91396994dd3c7130646ae"
+        "path": "cmd/connectorgen/sourceprojection.go",
+        "sha256": "2e38d55cf0beafe50b25217747b4c7705555c4206fad23d98c38cdb7579ba6b3"
       },
       {
         "category": "cli",
         "path": "internal/cli/github_direct_read_certification_binary_test.go",
-        "sha256": "5c4ad1c429184d1ec475224d238d345c47cce978ce60bf5b9c111556bca1b522"
+        "sha256": "284c1d63ffeba3891753b601451995ae0b2a11ddd048736ab52f2d8989d2672f"
       },
       {
         "category": "docs",
-        "path": "website/content/docs/github-cli-surface.mdx",
-        "sha256": "509a20061c7ede83437f1ff361240f943a352e7f48ec8d902c5cb1085f789566"
+        "path": "docs/connectors/github/MANUAL.md",
+        "sha256": "de82be077b4aad75b0f2edb07371e90850b6b1f66d44b3b5a7320d3ccb572b65"
       },
       {
         "category": "website",
@@ -189,13 +189,13 @@
       },
       {
         "category": "skills",
-        "path": "docs/skills/pm-github/SKILL.md",
+        "path": "docs/connectors/github/SKILL.md",
         "sha256": "54c54688ca2edb343788f24504d21cde47b4924d5750dcff511debce038ff621"
       },
       {
         "category": "ledger",
         "path": ".planning/phases/cli-current-foundations-main-integration-r1/TDD-LEDGER.md",
-        "sha256": "f1a92c299550589f2018c4b306cba041a7d934d8e90f50c1fcfb117a999d582a"
+        "sha256": "680778fdb231482d73eddbb0edf0bb609caf3e201a53948f8b1ebe8e1b3b8589"
       },
       {
         "category": "matrix",
@@ -215,7 +215,7 @@
       {
         "category": "foundation_evidence",
         "path": "data/cli-current-foundations-main-integration-r1/report.md",
-        "sha256": "53d3067c6a8ec2a061d16d04c974428ca72d09bc4315998e2181b3cfb8b6e51e"
+        "sha256": "547b3cc70d0ed70a3321303803876ce313c1668cac72dd76f84cd579459007a4"
       }
     ]
   }
