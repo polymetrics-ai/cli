@@ -14,6 +14,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
 	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -23,6 +24,7 @@ const (
 	sourceProjectionDefaultStringBytes      = 8 << 10
 	sourceProjectionDefaultArrayItems       = 256
 	sourceProjectionDefaultObjectProperties = 256
+	sourceOperationExecutionFoundation      = "closed-source-operation-execution-foundation-r1"
 	// JSON-valued command flags carry a complete named field through the
 	// declaration-owned body path. They are not an unbounded replacement for a
 	// request body, so keep their encoded input explicitly bounded.
@@ -39,10 +41,11 @@ var (
 type sourceProjectionStats struct {
 	Writes  int
 	CLI     int
+	Surface int
 	Missing int
 }
 
-func (s sourceProjectionStats) Changed() bool { return s.Writes+s.CLI+s.Missing > 0 }
+func (s sourceProjectionStats) Changed() bool { return s.Writes+s.CLI+s.Surface+s.Missing > 0 }
 
 type sourceActionContract struct {
 	Fields           map[string]any
@@ -83,6 +86,22 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	if err := json.Unmarshal(cliRaw, &cli); err != nil {
 		return sourceProjectionStats{}, fmt.Errorf("cli_surface.json: %w", err)
 	}
+	apiPath := filepath.Join(bundleDir, "api_surface.json")
+	apiRaw, err := os.ReadFile(apiPath)
+	if err != nil && !os.IsNotExist(err) {
+		return sourceProjectionStats{}, err
+	}
+	var api orderedJSON
+	if err == nil {
+		if err := json.Unmarshal(apiRaw, &api); err != nil {
+			return sourceProjectionStats{}, fmt.Errorf("api_surface.json: %w", err)
+		}
+	}
+	blockedReads := sourceProjectionBlockedReadSources(result)
+	stats := sourceProjectionStats{CLI: sourceProjectionDowngradeUnreachableReadCommands(cli.root, blockedReads)}
+	if api.root != nil {
+		stats.Surface = sourceProjectionBlockUnreachableReadSurfaceEndpoints(api.root, blockedReads)
+	}
 
 	actionsByEndpoint := map[string][]*orderedObject{}
 	for _, raw := range arrayField(writes.root, "actions") {
@@ -103,7 +122,6 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		commandsByWrite[write] = append(commandsByWrite[write], command)
 	}
 
-	stats := sourceProjectionStats{}
 	for _, operation := range result.Operations {
 		if operation.Protocol == "graphql" || !sourceProjectionMutationMethod(operation.Method) {
 			continue
@@ -198,7 +216,131 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 			return stats, err
 		}
 	}
+	if stats.Surface > 0 {
+		if err := writeBundleJSON(apiPath, api, apiRaw); err != nil {
+			return stats, err
+		}
+	}
 	return stats, nil
+}
+
+// sourceProjectionBlockedReadSources indexes source operations which are
+// explicitly blocked because no field-complete declaration-owned read route
+// exists. It is source-derived and connector-neutral so the CLI and endpoint
+// ledger receive the exact same disposition.
+func sourceProjectionBlockedReadSources(result sourceImportResult) map[string]sourceOperationDescriptor {
+	blocked := map[string]sourceOperationDescriptor{}
+	for _, operation := range result.Operations {
+		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || !sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
+			continue
+		}
+		blocked[sourceProjectionEndpointKey(operation.Method, operation.Path)] = operation
+	}
+	return blocked
+}
+
+// sourceProjectionDowngradeUnreachableReadCommands prevents a direct-read
+// command from claiming implementation after the source projection has
+// recorded that its provider operation has no field-complete
+// declaration-owned route.
+// The relationship comes entirely from the source endpoint and api_surface
+// declaration; it intentionally has no connector-specific command knowledge.
+func sourceProjectionDowngradeUnreachableReadCommands(cli *orderedObject, blocked map[string]sourceOperationDescriptor) int {
+	changed := 0
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "availability") != "implemented" || stringField(command, "intent") != "direct_read" {
+			continue
+		}
+		var source sourceOperationDescriptor
+		matched := false
+		for _, rawSurface := range arrayField(command, "api_surface") {
+			surface, ok := rawSurface.(*orderedObject)
+			if !ok {
+				continue
+			}
+			source, matched = blocked[sourceProjectionEndpointKey(stringField(surface, "method"), stringField(surface, "path"))]
+			if matched {
+				break
+			}
+		}
+		if !matched {
+			continue
+		}
+		commandChanged := setOrderedIfDifferent(command, "availability", "partial")
+		if setOrderedIfDifferent(command, "notes", "Blocked: locked source operation "+source.SourceID+" has no declaration-owned executable stream, direct-read, binary, or status route.") {
+			commandChanged = true
+		}
+		if commandChanged {
+			changed++
+		}
+	}
+	return changed
+}
+
+// sourceProjectionBlockUnreachableReadSurfaceEndpoints replaces stale
+// direct_read coverage with the source-owned blocked-operation classification.
+// A coverage row is an executable claim, so it cannot remain alongside the
+// source gap or a partial command.
+func sourceProjectionBlockUnreachableReadSurfaceEndpoints(surface *orderedObject, blocked map[string]sourceOperationDescriptor) int {
+	changed := 0
+	for _, raw := range arrayField(surface, "endpoints") {
+		endpoint, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		source, found := blocked[sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path"))]
+		if !found {
+			continue
+		}
+		endpointChanged := false
+		stillCovered := false
+		if rawCoverage, ok := endpoint.get("covered_by"); ok {
+			if coverage, ok := rawCoverage.(*orderedObject); ok {
+				removedDirectRead := coverage.remove("direct_read")
+				removedDirectReads := coverage.remove("direct_reads")
+				if removedDirectRead || removedDirectReads {
+					endpointChanged = true
+				}
+				if len(coverage.keys) == 0 && endpoint.remove("covered_by") {
+					endpointChanged = true
+				}
+				stillCovered = len(coverage.keys) > 0
+			}
+		}
+		if stillCovered {
+			if endpoint.remove("operation") {
+				endpointChanged = true
+			}
+			if endpointChanged {
+				changed++
+			}
+			continue
+		}
+		operation := newOrderedObject()
+		operation.set("model", "direct_read")
+		operation.set("status", "blocked")
+		operation.set("risk", "low")
+		operation.set("blocked_by_default", true)
+		operation.set("reason", "Locked source operation "+source.SourceID+" has no field-complete declaration-owned executable route.")
+		operation.set("notes", "Named dependency: source_operation="+source.SourceID)
+		if setOrderedIfDifferent(endpoint, "operation", operation) {
+			endpointChanged = true
+		}
+		if endpointChanged {
+			changed++
+		}
+	}
+	return changed
+}
+
+func sourceOperationHasFoundationGap(operation sourceOperationDescriptor, foundation string) bool {
+	for _, gap := range operation.Runtime.Gaps {
+		if gap.Foundation == foundation {
+			return true
+		}
+	}
+	return false
 }
 
 // sourceProjectionSealExistingActionRecordSchema closes an action root only
@@ -1366,11 +1508,23 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 	var findings []Finding
 	for _, operation := range descriptor.Operations {
 		if operation.Protocol == "graphql" {
+			if sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
+				continue
+			}
+			if !sourceGraphQLOperationIsReachable(bundle, operation) {
+				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source operation has no reachable executable operation: "+operation.SourceID))
+			}
 			continue
 		}
 		if !sourceProjectionMutationMethod(operation.Method) {
-			if sourceProjectionHasBlockingGap(operation.Runtime.Gaps) && sourceGapDirectOperationIsImplementedIncompletely(bundle, operation) {
-				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "implemented source operation retains an unresolved source-bound gap: "+operation.SourceID))
+			if sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
+				if sourceGapDirectOperationIsImplementedIncompletely(bundle, operation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "implemented source operation retains an unresolved source-bound gap: "+operation.SourceID))
+				}
+				continue
+			}
+			if !sourceRESTOperationIsReachable(bundle, operation) {
+				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source operation has no reachable executable operation: "+operation.SourceID))
 			}
 			continue
 		}
@@ -1401,6 +1555,253 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 		}
 	}
 	return findings
+}
+
+func sourceRESTOperationIsReachable(bundle engine.Bundle, source sourceOperationDescriptor) bool {
+	return sourceRESTOperationIsDeclaredReachable(bundle, source, false)
+}
+
+// sourceRESTOperationIsDeclaredReachable evaluates the same closed route as
+// validation. During source import it may additionally recognize a command
+// which this projection itself previously marked partial for this exact source
+// operation; otherwise repeated generation would turn an unrelated source gap
+// into a cascading new execution gap.
+func sourceRESTOperationIsDeclaredReachable(bundle engine.Bundle, source sourceOperationDescriptor, allowSourceBoundPartial bool) bool {
+	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
+	for _, operation := range bundle.Operations {
+		if operation.REST == nil || sourceProjectionEndpointKey(operation.REST.Method, operation.REST.Path) != endpoint {
+			continue
+		}
+		flags, implemented := sourceProjectionOperationFlags(bundle, operation.ID, source.SourceID, allowSourceBoundPartial)
+		if !implemented {
+			continue
+		}
+		if sourceRESTOperationCoversSource(bundle, operation.REST, source, flags) {
+			return true
+		}
+	}
+	for _, stream := range bundle.Streams {
+		method := stream.Method
+		if method == "" {
+			method = "GET"
+		}
+		if sourceProjectionEndpointKey(method, stream.Path) == endpoint && sourceProjectionDeclaredStream(bundle, stream.Name, source.SourceID, allowSourceBoundPartial) {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceGraphQLOperationIsReachable(bundle engine.Bundle, source sourceOperationDescriptor) bool {
+	if source.GraphQL == nil {
+		return false
+	}
+	expectedID := source.Connector + ".graphql." + strings.ToLower(source.GraphQL.Root) + "." + sourceProjectionKebab(source.GraphQL.Name)
+	for _, operation := range bundle.Operations {
+		if operation.GraphQL == nil || (operation.ID != source.SourceID && operation.ID != expectedID) {
+			continue
+		}
+		if operation.OutputPolicy == "" || (len(source.GraphQL.Arguments) > 0 && len(operation.GraphQL.VariablesSchema) == 0) {
+			continue
+		}
+		if _, implemented := sourceProjectionImplementedOperationFlags(bundle, operation.ID); implemented {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceProjectionImplementedOperationFlags(bundle engine.Bundle, operationID string) ([]engine.CLIFlag, bool) {
+	return sourceProjectionOperationFlags(bundle, operationID, "", false)
+}
+
+func sourceProjectionOperationFlags(bundle engine.Bundle, operationID, sourceID string, allowSourceBoundPartial bool) ([]engine.CLIFlag, bool) {
+	if bundle.CLISurface == nil {
+		return nil, false
+	}
+	var flags []engine.CLIFlag
+	implemented := false
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Operation != operationID || (command.Availability != "implemented" && (!allowSourceBoundPartial || command.Availability != "partial" || !sourceProjectionCommandIsSourceBoundPartial(command, sourceID))) {
+			continue
+		}
+		implemented = true
+		flags = append(flags, command.Flags...)
+	}
+	return flags, implemented
+}
+
+func sourceProjectionImplementedStream(bundle engine.Bundle, streamName string) bool {
+	return sourceProjectionDeclaredStream(bundle, streamName, "", false)
+}
+
+func sourceProjectionDeclaredStream(bundle engine.Bundle, streamName, sourceID string, allowSourceBoundPartial bool) bool {
+	if bundle.CLISurface == nil {
+		return false
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Stream == streamName && (command.Availability == "implemented" || (allowSourceBoundPartial && command.Availability == "partial" && sourceProjectionCommandIsSourceBoundPartial(command, sourceID))) {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceProjectionCommandIsSourceBoundPartial(command engine.CLICommand, sourceID string) bool {
+	return sourceID != "" && strings.Contains(command.Notes, "locked source operation "+sourceID+" ")
+}
+
+func sourceRESTOperationCoversSource(bundle engine.Bundle, operation *engine.RESTOperationSpec, source sourceOperationDescriptor, flags []engine.CLIFlag) bool {
+	covered := sourceProjectionDeclaredConfigPathFields(bundle.Spec, operation.Path)
+	for _, parameter := range operation.Parameters {
+		covered[parameter.In+"."+parameter.Name] = true
+	}
+	for _, parameter := range operation.PaginationParameters {
+		covered[parameter.In+"."+parameter.Name] = true
+	}
+	if len(operation.BodySchema) > 0 {
+		var schema map[string]any
+		decoder := json.NewDecoder(bytes.NewReader(operation.BodySchema))
+		decoder.UseNumber()
+		if decoder.Decode(&schema) == nil {
+			if properties, ok := schema["properties"].(map[string]any); ok {
+				for name := range properties {
+					covered["body."+name] = true
+				}
+			}
+		}
+	}
+	for _, flag := range flags {
+		covered[flag.MapsTo] = true
+	}
+	return sourceCallerFieldsCovered(source, covered)
+}
+
+func sourceProjectionKebab(value string) string {
+	var builder strings.Builder
+	for index, runeValue := range value {
+		if unicode.IsUpper(runeValue) {
+			if index > 0 {
+				builder.WriteByte('-')
+			}
+			builder.WriteRune(unicode.ToLower(runeValue))
+			continue
+		}
+		builder.WriteRune(runeValue)
+	}
+	return builder.String()
+}
+
+// sourceProjectionAnnotateUnreachableReadGaps makes an omitted locked read
+// visible as a source-bound, non-implemented capability instead of allowing it
+// to disappear from validation, generated guidance, and certification. It does
+// not manufacture a generic request path: only a declaration-owned operation
+// or stream with an implemented command can keep a source read executable.
+func sourceProjectionAnnotateUnreachableReadGaps(bundle engine.Bundle, result *sourceImportResult) {
+	if result == nil {
+		return
+	}
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if len(operation.Runtime.Gaps) > 0 || (operation.Protocol != "graphql" && sourceProjectionMutationMethod(operation.Method)) {
+			continue
+		}
+		reachable := false
+		if operation.Protocol == "graphql" {
+			reachable = sourceGraphQLOperationIsReachable(bundle, *operation)
+		} else {
+			reachable = sourceRESTOperationIsDeclaredReachable(bundle, *operation, true)
+		}
+		if reachable {
+			continue
+		}
+		operation.Runtime = sourceRuntimeReachability{
+			MergeBlocked: true,
+			Gaps: []sourceContractGap{sourceContractGapFor(
+				sourceOperationExecutionFoundation,
+				"source operation "+operation.SourceID,
+				"locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route",
+			)},
+		}
+	}
+}
+
+// sourceRESTOperationHasDeclaredRoute deliberately distinguishes route
+// existence from caller-field coverage. The importer marks only a genuinely
+// absent execution route as deferred; validation then reports a separately
+// incomplete declared route without hiding it behind a new gap.
+func sourceRESTOperationHasDeclaredRoute(bundle engine.Bundle, source sourceOperationDescriptor) bool {
+	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
+	for _, operation := range bundle.Operations {
+		if operation.REST != nil && sourceProjectionEndpointKey(operation.REST.Method, operation.REST.Path) == endpoint {
+			if _, implemented := sourceProjectionImplementedOperationFlags(bundle, operation.ID); implemented {
+				return true
+			}
+		}
+	}
+	for _, stream := range bundle.Streams {
+		method := stream.Method
+		if method == "" {
+			method = "GET"
+		}
+		if sourceProjectionEndpointKey(method, stream.Path) == endpoint && sourceProjectionImplementedStream(bundle, stream.Name) {
+			return true
+		}
+	}
+	return false
+}
+
+// sourceProjectionExecutionSurface reads only the declaration-owned execution
+// surfaces needed to classify a locked source operation. Source import must
+// keep working for a descriptor-only fixture, so absent optional runtime files
+// mean that no executable route has been declared rather than a raw fallback.
+func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundle, error) {
+	bundle := engine.Bundle{Name: connector}
+	for _, document := range []struct {
+		path   string
+		decode func([]byte) error
+	}{
+		{path: "operations.json", decode: func(raw []byte) error {
+			var value struct {
+				Operations []engine.OperationSpec `json:"operations"`
+			}
+			if err := json.Unmarshal(raw, &value); err != nil {
+				return err
+			}
+			bundle.Operations = value.Operations
+			return nil
+		}},
+		{path: "streams.json", decode: func(raw []byte) error {
+			var value struct {
+				Streams []engine.StreamSpec `json:"streams"`
+			}
+			if err := json.Unmarshal(raw, &value); err != nil {
+				return err
+			}
+			bundle.Streams = value.Streams
+			return nil
+		}},
+		{path: "cli_surface.json", decode: func(raw []byte) error {
+			var value engine.CLISurface
+			if err := json.Unmarshal(raw, &value); err != nil {
+				return err
+			}
+			bundle.CLISurface = &value
+			return nil
+		}},
+	} {
+		raw, err := os.ReadFile(filepath.Join(bundleDir, document.path))
+		if os.IsNotExist(err) {
+			continue
+		}
+		if err != nil {
+			return engine.Bundle{}, fmt.Errorf("read %s: %w", document.path, err)
+		}
+		if err := document.decode(raw); err != nil {
+			return engine.Bundle{}, fmt.Errorf("parse %s: %w", document.path, err)
+		}
+	}
+	return bundle, nil
 }
 
 func sourceGapMutationOperationIsImplementedIncompletely(bundle engine.Bundle, candidates []engine.WriteAction, commands map[string]engine.CLICommand, source sourceOperationDescriptor) bool {
@@ -1478,6 +1879,9 @@ func sourceCallerFieldsCovered(source sourceOperationDescriptor, covered map[str
 }
 
 func sourceGapDirectOperationIsImplementedIncompletely(bundle engine.Bundle, source sourceOperationDescriptor) bool {
+	if sourceGapHasImplementedAPICommand(bundle, source) {
+		return true
+	}
 	implemented := map[string][]engine.CLIFlag{}
 	if bundle.CLISurface != nil {
 		for _, command := range bundle.CLISurface.Commands {
@@ -1500,6 +1904,9 @@ func sourceGapDirectOperationIsImplementedIncompletely(bundle engine.Bundle, sou
 		for _, parameter := range operation.REST.Parameters {
 			covered[parameter.In+"."+parameter.Name] = true
 		}
+		for _, parameter := range operation.REST.PaginationParameters {
+			covered[parameter.In+"."+parameter.Name] = true
+		}
 		if len(operation.REST.BodySchema) > 0 {
 			var schema map[string]any
 			decoder := json.NewDecoder(bytes.NewReader(operation.REST.BodySchema))
@@ -1516,6 +1923,24 @@ func sourceGapDirectOperationIsImplementedIncompletely(bundle engine.Bundle, sou
 			covered[flag.MapsTo] = true
 		}
 		return !sourceCallerFieldsCovered(source, covered)
+	}
+	return false
+}
+
+func sourceGapHasImplementedAPICommand(bundle engine.Bundle, source sourceOperationDescriptor) bool {
+	if bundle.CLISurface == nil {
+		return false
+	}
+	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Availability != "implemented" || command.Intent != "direct_read" {
+			continue
+		}
+		for _, surface := range command.APISurface {
+			if sourceProjectionEndpointKey(surface.Method, surface.Path) == endpoint {
+				return true
+			}
+		}
 	}
 	return false
 }

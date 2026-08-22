@@ -277,13 +277,25 @@ func TestCertificationEvidenceReportUsesSecondConnectorDefinitionWithoutSharedBr
 func TestCertificationEvidenceReportRequiresObservedExchangeForEachBoundStage(t *testing.T) {
 	root := t.TempDir()
 	reportPath := writeCompletedReadEvidenceReport(t, root, "github")
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("load github bundle: %v", err)
+	}
+	report, err := loadCertificationEvidenceReport(reportPath)
+	if err != nil {
+		t.Fatalf("load report: %v", err)
+	}
+	wantStages, err := completedEvidenceBindingStages(report, *bundle.Certification, bundle.Certification.EvidenceImport.Bindings[0])
+	if err != nil {
+		t.Fatalf("completedEvidenceBindingStages() error = %v", err)
+	}
 	proofPath := writeImportedEvidenceProofWithExchangeCount(t, root, "github", "cert-evidence-short-proof-canary", 1)
 	var stdout, stderr bytes.Buffer
 	code := run([]string{
 		"certification-evidence", "report", "--connector", "github", "--report", reportPath,
 		"--external-proof", proofPath, "--record-prefix", "github_short_proof", "--repo-root", root,
 	}, &stdout, &stderr)
-	if code != 1 || !strings.Contains(stderr.String(), "observed proof has 1 HTTP exchanges, want at least 120") {
+	if code != 1 || !strings.Contains(stderr.String(), fmt.Sprintf("observed proof has 1 HTTP exchanges, want at least %d", len(wantStages))) {
 		t.Fatalf("short-proof importer exit=%d stderr=%q", code, stderr.String())
 	}
 	items, err := loadAcceptedEvidence(root, []string{"github"})

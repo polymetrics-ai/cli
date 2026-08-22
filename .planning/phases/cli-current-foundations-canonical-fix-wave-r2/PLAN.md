@@ -47,7 +47,7 @@ The repository GSD adapter was healthy; its sources for `discuss-phase`, `plan-p
 | FND-B03 | Locked GraphQL `Query.widgets` disappears generically. | Protocol-neutral identity validates typed operation/output/command or concrete gap. |
 | FND-B09 | Checked-in Foundation manifest cannot decode/close through schema-3 gate. | Exact-subject manifest validates; each mutated identity/digest/category/worktree input fails. |
 
-Commit and non-force push immediately after focused Green, generators, source/certification checks, and a current evidence-only closure are green.
+Commit and non-force push immediately after focused Green, generators, and source/certification checks are green. B09's evidence-only closure is necessarily the final commit after Groups 2–4: its gate requires that commit's parent to be the completed code subject, so recording it earlier would be invalid rather than an evidence shortcut.
 
 ### Group 2 — declaration reachability and honest proof inputs
 

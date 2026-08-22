@@ -2319,6 +2319,9 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
+		if sourceBoundPartialReadCommand(cmd) {
+			continue
+		}
 		if cmd.Operation != "" && slices.Contains(state.coveredBy.OperationTargets(), cmd.Operation) {
 			continue
 		}
@@ -2361,6 +2364,16 @@ func checkCLISurfaceEndpointCoverage(
 		}
 	}
 	return findings
+}
+
+// sourceBoundPartialReadCommand is the generated, non-executable companion
+// to a source descriptor gap. Its api_surface reference remains useful for
+// documentation and provenance even though it deliberately cannot claim an
+// executable endpoint.
+func sourceBoundPartialReadCommand(cmd engine.CLICommand) bool {
+	return cmd.Availability == "partial" && cmd.Intent == "direct_read" &&
+		strings.HasPrefix(cmd.Notes, "Blocked: locked source operation ") &&
+		strings.Contains(cmd.Notes, "declaration-owned executable")
 }
 
 func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceEndpointState {
