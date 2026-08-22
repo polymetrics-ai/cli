@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -90,7 +91,7 @@ func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) 
 	binary := buildTransportPM(t)
 	root := filepath.Join(t.TempDir(), "project")
 	generatedStages := githubGeneratedDirectReadStageSelection(t)
-	output, diagnostics, err := runTransportPMJSON(binary, "",
+	output, diagnostics, err := runFixtureTransportPMJSON(binary, "",
 		"connectors", "certify", "github",
 		"--direct-read-only",
 		"--config", "base_url="+server.URL,
@@ -239,7 +240,7 @@ func TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture(t *testing.
 			args = append(args, "--root", root, "--json")
 
 			before := githubReleasedReadFixtureRequestCount(&observed)
-			output, diagnostics, err := runTransportPMJSON(binary, "", args...)
+			output, diagnostics, err := runFixtureTransportPMJSON(binary, "", args...)
 			if err != nil {
 				t.Fatalf("pm %s failed: %v\nstderr:\n%s", command.Path, err, redactTransportFailureOutput(diagnostics, token))
 			}
@@ -269,12 +270,17 @@ func TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture(t *testing.
 	}
 }
 
-// runTransportPMJSON keeps a command's machine-readable stdout separate from
-// diagnostics. runTransportPM intentionally uses CombinedOutput for legacy
-// failure assertions, but decoding that combined stream as JSON makes a valid
-// certification result fail whenever a diagnostic is emitted on stderr.
-func runTransportPMJSON(binary, stdin string, args ...string) (stdout, stderr string, err error) {
+// runFixtureTransportPMJSON keeps a fixture child's machine-readable stdout
+// separate from diagnostics and gives it a self-contained process environment.
+// runTransportPM intentionally uses CombinedOutput for legacy failure
+// assertions, but decoding that combined stream as JSON makes a valid
+// certification result fail whenever a diagnostic is emitted on stderr. The
+// fixture also must not inherit an unrelated test's coordinator endpoint: a
+// certification-tier command correctly refuses before transport when that
+// endpoint is unreachable, which would make this local HTTP proof nonhermetic.
+func runFixtureTransportPMJSON(binary, stdin string, args ...string) (stdout, stderr string, err error) {
 	command := exec.Command(binary, args...)
+	command.Env = withoutTransportFixtureEnvironment(os.Environ(), "PM_DRAGONFLY_ADDR")
 	if stdin != "" {
 		command.Stdin = strings.NewReader(stdin)
 	}
@@ -283,6 +289,18 @@ func runTransportPMJSON(binary, stdin string, args ...string) (stdout, stderr st
 	command.Stderr = &stderrBuffer
 	err = command.Run()
 	return stdoutBuffer.String(), stderrBuffer.String(), err
+}
+
+func withoutTransportFixtureEnvironment(environment []string, names ...string) []string {
+	filtered := make([]string, 0, len(environment))
+	for _, entry := range environment {
+		name, _, found := strings.Cut(entry, "=")
+		if found && slices.Contains(names, name) {
+			continue
+		}
+		filtered = append(filtered, entry)
+	}
+	return filtered
 }
 
 func githubGeneratedDirectReadStageSelection(t *testing.T) string {
