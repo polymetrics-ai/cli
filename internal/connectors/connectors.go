@@ -1116,7 +1116,7 @@ func sanitizeProviderResponseValue(value any, secrets []string) any {
 	case map[string]string:
 		out := make(map[string]string, len(typed))
 		for key, item := range typed {
-			out[key] = redactWriteResultString(item, secrets)
+			out[key] = redactProviderResponseText(item, secrets)
 		}
 		return out
 	case []any:
@@ -1128,11 +1128,11 @@ func sanitizeProviderResponseValue(value any, secrets []string) any {
 	case []string:
 		out := make([]string, len(typed))
 		for i, item := range typed {
-			out[i] = redactWriteResultString(item, secrets)
+			out[i] = redactProviderResponseText(item, secrets)
 		}
 		return out
 	case string:
-		return redactWriteResultString(typed, secrets)
+		return redactProviderResponseText(typed, secrets)
 	case json.Number:
 		if masked := redactWriteResultString(typed.String(), secrets); masked != typed.String() {
 			return masked
@@ -1202,11 +1202,81 @@ func sanitizeProviderResponseRaw(value, encoding string, secrets []string) strin
 	if encoding == "base64" {
 		raw, err := base64.StdEncoding.DecodeString(value)
 		if err != nil {
-			return redactWriteResultString(value, secrets)
+			return redactProviderResponseText(value, secrets)
 		}
-		return base64.StdEncoding.EncodeToString([]byte(redactWriteResultString(string(raw), secrets)))
+		return base64.StdEncoding.EncodeToString([]byte(redactProviderResponseText(string(raw), secrets)))
 	}
-	return redactWriteResultString(value, secrets)
+	return redactProviderResponseText(value, secrets)
+}
+
+type providerResponseJSONKeySpan struct {
+	start int
+	end   int
+}
+
+func redactProviderResponseText(value string, secrets []string) string {
+	if len(secrets) == 0 {
+		return value
+	}
+	keySpans, isJSON := providerResponseJSONKeySpans(value)
+	if !isJSON || len(keySpans) == 0 {
+		return redactWriteResultString(value, secrets)
+	}
+	var out strings.Builder
+	out.Grow(len(value))
+	offset := 0
+	for _, span := range keySpans {
+		out.WriteString(redactWriteResultString(value[offset:span.start], secrets))
+		out.WriteString(value[span.start:span.end])
+		offset = span.end
+	}
+	out.WriteString(redactWriteResultString(value[offset:], secrets))
+	return out.String()
+}
+
+func providerResponseJSONKeySpans(value string) ([]providerResponseJSONKeySpan, bool) {
+	if !json.Valid([]byte(value)) {
+		return nil, false
+	}
+	spans := make([]providerResponseJSONKeySpan, 0)
+	for offset := 0; offset < len(value); {
+		if value[offset] != '"' {
+			offset++
+			continue
+		}
+		start := offset
+		offset++
+		terminated := false
+		for offset < len(value) {
+			switch value[offset] {
+			case '\\':
+				offset += 2
+			case '"':
+				offset++
+				terminated = true
+			default:
+				offset++
+			}
+			if terminated {
+				break
+			}
+		}
+		if !terminated {
+			return nil, false
+		}
+		next := offset
+		for next < len(value) && isProviderResponseJSONWhitespace(value[next]) {
+			next++
+		}
+		if next < len(value) && value[next] == ':' {
+			spans = append(spans, providerResponseJSONKeySpan{start: start, end: offset})
+		}
+	}
+	return spans, true
+}
+
+func isProviderResponseJSONWhitespace(value byte) bool {
+	return value == ' ' || value == '\t' || value == '\n' || value == '\r'
 }
 
 func providerOutputValueAtPath(value any, path string) (any, bool) {
