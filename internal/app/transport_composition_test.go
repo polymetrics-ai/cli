@@ -869,11 +869,10 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 	}
 
 	const appendProviderResponse = "{\n  \"id\": \"provider-append-1\",\n  \"receipt_id\": \"widget-1\",\n  \"large_provider_id\": 9007199254740993,\n  \"rare_field\": {\"enabled\": true},\n  \"paid_tier\": \"enterprise\",\n  \"echoed_secret\": \"destination-secret\",\n  \"duplicate\": \"first\",\n  \"duplicate\": \"second\"\n}\n"
-	// A configured scalar requires structured masking, so the public raw
-	// result is the exact JSON encoder form of the masked object. BodyBytes
-	// remains the verbatim provider byte count above; the companion Group-3
-	// regression covers byte-for-byte raw preservation when no value is masked.
-	const publicAppendProviderResponse = `{"duplicate":"second","echoed_secret":"[masked]","id":"provider-append-1","large_provider_id":9007199254740993,"paid_tier":"enterprise","rare_field":{"enabled":true},"receipt_id":"widget-1"}`
+	// Public output preserves the provider's raw receipt bytes, including
+	// formatting and duplicate keys, while masking only the configured value.
+	// BodyBytes remains the verbatim provider byte count above.
+	const publicAppendProviderResponse = "{\n  \"id\": \"provider-append-1\",\n  \"receipt_id\": \"widget-1\",\n  \"large_provider_id\": 9007199254740993,\n  \"rare_field\": {\"enabled\": true},\n  \"paid_tier\": \"enterprise\",\n  \"echoed_secret\": \"[masked]\",\n  \"duplicate\": \"first\",\n  \"duplicate\": \"second\"\n}\n"
 	var reads, appendWrites, replaceWrites, otherWrites int
 	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		switch {
