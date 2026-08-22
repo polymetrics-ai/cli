@@ -1220,19 +1220,40 @@ type providerResponseJSONStringSpan struct {
 	key   bool
 }
 
+type providerResponseJSONContainerState uint8
+
+const (
+	providerResponseJSONObjectKeyOrEnd providerResponseJSONContainerState = iota
+	providerResponseJSONObjectColon
+	providerResponseJSONObjectValue
+	providerResponseJSONObjectCommaOrEnd
+	providerResponseJSONArrayValueOrEnd
+	providerResponseJSONArrayCommaOrEnd
+	providerResponseJSONContainerInvalid
+)
+
+type providerResponseJSONContainer struct {
+	kind  byte
+	state providerResponseJSONContainerState
+}
+
+type providerResponseJSONScanner struct {
+	containers []providerResponseJSONContainer
+}
+
 func redactProviderResponseText(value string, secrets []string) string {
 	if len(secrets) == 0 {
 		return value
 	}
 	stringSpans, isJSON := providerResponseJSONStrings(value)
 	if !isJSON || len(stringSpans) == 0 {
-		return redactWriteResultString(value, secrets)
+		return redactProviderResponseTextSegment(value, secrets)
 	}
 	var out strings.Builder
 	out.Grow(len(value))
 	offset := 0
 	for _, span := range stringSpans {
-		out.WriteString(redactWriteResultString(value[offset:span.start], secrets))
+		out.WriteString(redactProviderResponseTextSegment(value[offset:span.start], secrets))
 		if span.key {
 			out.WriteString(value[span.start:span.end])
 		} else {
@@ -1240,15 +1261,27 @@ func redactProviderResponseText(value string, secrets []string) string {
 		}
 		offset = span.end
 	}
-	out.WriteString(redactWriteResultString(value[offset:], secrets))
+	out.WriteString(redactProviderResponseTextSegment(value[offset:], secrets))
 	return out.String()
+}
+
+func redactProviderResponseTextSegment(value string, secrets []string) string {
+	for _, secret := range secrets {
+		value = redactConcreteSecretTextWithBoundary(value, secret, providerResponseTokenBoundary)
+	}
+	return value
 }
 
 func providerResponseJSONStrings(value string) ([]providerResponseJSONStringSpan, bool) {
 	spans := make([]providerResponseJSONStringSpan, 0)
+	scanner := providerResponseJSONScanner{}
 	for offset := 0; offset < len(value); {
-		if value[offset] != '"' {
+		if isProviderResponseJSONWhitespace(value[offset]) {
 			offset++
+			continue
+		}
+		if value[offset] != '"' {
+			scanner.consume(value, &offset)
 			continue
 		}
 		start := offset
@@ -1271,13 +1304,172 @@ func providerResponseJSONStrings(value string) ([]providerResponseJSONStringSpan
 		if !terminated {
 			break
 		}
-		next := offset
-		for next < len(value) && isProviderResponseJSONWhitespace(value[next]) {
-			next++
-		}
-		spans = append(spans, providerResponseJSONStringSpan{start: start, end: offset, key: next < len(value) && value[next] == ':'})
+		spans = append(spans, providerResponseJSONStringSpan{start: start, end: offset, key: scanner.consumeString(value, offset)})
 	}
 	return spans, len(spans) != 0
+}
+
+func (scanner *providerResponseJSONScanner) consume(value string, offset *int) {
+	switch value[*offset] {
+	case '{', '[':
+		scanner.open(value[*offset])
+		*offset = *offset + 1
+	case '}', ']':
+		scanner.close(value[*offset])
+		*offset = *offset + 1
+	case ':':
+		scanner.colon()
+		*offset = *offset + 1
+	case ',':
+		scanner.comma()
+		*offset = *offset + 1
+	default:
+		start := *offset
+		for *offset < len(value) && !isProviderResponseJSONWhitespace(value[*offset]) && !isProviderResponseJSONStructuralByte(value[*offset]) {
+			*offset = *offset + 1
+		}
+		scanner.literal(value[start:*offset])
+	}
+}
+
+func (scanner *providerResponseJSONScanner) consumeString(value string, end int) bool {
+	container := scanner.top()
+	if container == nil {
+		return false
+	}
+	next := end
+	for next < len(value) && isProviderResponseJSONWhitespace(value[next]) {
+		next++
+	}
+	if container.kind == '{' && container.state == providerResponseJSONObjectKeyOrEnd && next < len(value) && value[next] == ':' {
+		container.state = providerResponseJSONObjectColon
+		return true
+	}
+	switch container.state {
+	case providerResponseJSONObjectValue:
+		container.state = providerResponseJSONObjectCommaOrEnd
+	case providerResponseJSONArrayValueOrEnd:
+		container.state = providerResponseJSONArrayCommaOrEnd
+	default:
+		container.state = providerResponseJSONContainerInvalid
+	}
+	return false
+}
+
+func (scanner *providerResponseJSONScanner) open(kind byte) {
+	if container := scanner.top(); container != nil {
+		switch container.state {
+		case providerResponseJSONObjectValue:
+			container.state = providerResponseJSONObjectCommaOrEnd
+		case providerResponseJSONArrayValueOrEnd:
+			container.state = providerResponseJSONArrayCommaOrEnd
+		default:
+			container.state = providerResponseJSONContainerInvalid
+			return
+		}
+	}
+	state := providerResponseJSONObjectKeyOrEnd
+	if kind == '[' {
+		state = providerResponseJSONArrayValueOrEnd
+	}
+	scanner.containers = append(scanner.containers, providerResponseJSONContainer{kind: kind, state: state})
+}
+
+func (scanner *providerResponseJSONScanner) close(kind byte) {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	if (kind != '}' || container.kind != '{') && (kind != ']' || container.kind != '[') {
+		container.state = providerResponseJSONContainerInvalid
+		return
+	}
+	complete := providerResponseJSONContainerComplete(*container)
+	scanner.containers = scanner.containers[:len(scanner.containers)-1]
+	if !complete {
+		if parent := scanner.top(); parent != nil {
+			parent.state = providerResponseJSONContainerInvalid
+		}
+	}
+}
+
+func (scanner *providerResponseJSONScanner) colon() {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	if container.kind == '{' && container.state == providerResponseJSONObjectColon {
+		container.state = providerResponseJSONObjectValue
+		return
+	}
+	container.state = providerResponseJSONContainerInvalid
+}
+
+func (scanner *providerResponseJSONScanner) comma() {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	switch container.kind {
+	case '{':
+		if container.state == providerResponseJSONObjectCommaOrEnd {
+			container.state = providerResponseJSONObjectKeyOrEnd
+			return
+		}
+		container.state = providerResponseJSONContainerInvalid
+	case '[':
+		if container.state == providerResponseJSONArrayCommaOrEnd {
+			container.state = providerResponseJSONArrayValueOrEnd
+			return
+		}
+		container.state = providerResponseJSONContainerInvalid
+	}
+}
+
+func (scanner *providerResponseJSONScanner) literal(value string) {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	if !json.Valid([]byte(value)) {
+		container.state = providerResponseJSONContainerInvalid
+		return
+	}
+	switch container.state {
+	case providerResponseJSONObjectValue:
+		container.state = providerResponseJSONObjectCommaOrEnd
+	case providerResponseJSONArrayValueOrEnd:
+		container.state = providerResponseJSONArrayCommaOrEnd
+	default:
+		container.state = providerResponseJSONContainerInvalid
+	}
+}
+
+func (scanner *providerResponseJSONScanner) top() *providerResponseJSONContainer {
+	if len(scanner.containers) == 0 {
+		return nil
+	}
+	return &scanner.containers[len(scanner.containers)-1]
+}
+
+func providerResponseJSONContainerComplete(container providerResponseJSONContainer) bool {
+	switch container.kind {
+	case '{':
+		return container.state == providerResponseJSONObjectKeyOrEnd || container.state == providerResponseJSONObjectCommaOrEnd
+	case '[':
+		return container.state == providerResponseJSONArrayValueOrEnd || container.state == providerResponseJSONArrayCommaOrEnd
+	default:
+		return false
+	}
+}
+
+func isProviderResponseJSONStructuralByte(value byte) bool {
+	switch value {
+	case '{', '}', '[', ']', ':', ',', '"':
+		return true
+	default:
+		return false
+	}
 }
 
 func isProviderResponseJSONWhitespace(value byte) bool {
@@ -1297,7 +1489,7 @@ type providerResponseTextSpan struct {
 func redactProviderResponseJSONString(value string, secrets []string) string {
 	decoded, decodedSpans, ok := decodeProviderResponseJSONString(value)
 	if !ok {
-		return redactWriteResultString(value, secrets)
+		return redactProviderResponseTextSegment(value, secrets)
 	}
 	matches := providerResponseSecretTextSpans(decoded, secrets)
 	if len(matches) == 0 {
@@ -1544,6 +1736,10 @@ func redactWriteResultString(value string, secrets []string) string {
 }
 
 func redactConcreteSecretText(value, secret string) string {
+	return redactConcreteSecretTextWithBoundary(value, secret, providerOutputTokenBoundary)
+}
+
+func redactConcreteSecretTextWithBoundary(value, secret string, boundary func(string, int, int) bool) string {
 	if secret == "" {
 		return value
 	}
@@ -1557,7 +1753,7 @@ func redactConcreteSecretText(value, secret string) string {
 		start := offset + index
 		end := start + len(secret)
 		out.WriteString(value[offset:start])
-		if providerOutputTokenBoundary(value, start, end) {
+		if boundary(value, start, end) {
 			out.WriteString("[masked]")
 		} else {
 			out.WriteString(secret)
@@ -1569,6 +1765,58 @@ func redactConcreteSecretText(value, secret string) string {
 func providerOutputTokenBoundary(value string, start, end int) bool {
 	return (start == 0 || !isProviderOutputTokenByte(value[start-1])) &&
 		(end == len(value) || !isProviderOutputTokenByte(value[end]))
+}
+
+func providerResponseTokenBoundary(value string, start, end int) bool {
+	return providerResponseTokenBoundaryBefore(value, start) && providerResponseTokenBoundaryAfter(value, end)
+}
+
+func providerResponseTokenBoundaryBefore(value string, start int) bool {
+	if start == 0 {
+		return true
+	}
+	if decoded, ok := providerResponseEscapedRuneBefore(value, start); ok {
+		return !isProviderResponseTokenRune(decoded)
+	}
+	return !isProviderOutputTokenByte(value[start-1])
+}
+
+func providerResponseTokenBoundaryAfter(value string, end int) bool {
+	if end == len(value) {
+		return true
+	}
+	if decoded, ok := providerResponseEscapedRuneAfter(value, end); ok {
+		return !isProviderResponseTokenRune(decoded)
+	}
+	return !isProviderOutputTokenByte(value[end])
+}
+
+func providerResponseEscapedRuneBefore(value string, end int) (rune, bool) {
+	start := end - 6
+	if start < 0 || value[start] != '\\' || value[start+1] != 'u' || providerResponseEscapedBackslash(value, start) {
+		return 0, false
+	}
+	return providerResponseJSONHexRune(value[start+2 : end])
+}
+
+func providerResponseEscapedRuneAfter(value string, start int) (rune, bool) {
+	end := start + 6
+	if end > len(value) || value[start] != '\\' || value[start+1] != 'u' || providerResponseEscapedBackslash(value, start) {
+		return 0, false
+	}
+	return providerResponseJSONHexRune(value[start+2 : end])
+}
+
+func providerResponseEscapedBackslash(value string, slash int) bool {
+	count := 0
+	for offset := slash; offset >= 0 && value[offset] == '\\'; offset-- {
+		count++
+	}
+	return count%2 == 0
+}
+
+func isProviderResponseTokenRune(value rune) bool {
+	return value < utf8.RuneSelf && isProviderOutputTokenByte(byte(value))
 }
 
 func isProviderOutputTokenByte(value byte) bool {

@@ -485,6 +485,56 @@ func TestPublicReceiptsMaskEscapedValuesInMalformedOrMultiValueJSON(t *testing.T
 	}
 }
 
+func TestPublicReceiptsMaskNonJSONQuotedSecretsAndPreserveJSONKeys(t *testing.T) {
+	const credential = "configured-secret"
+	const occurrenceID = "occurrence-9007199254740993"
+	tests := []struct {
+		name     string
+		raw      string
+		expected string
+		mustMask bool
+	}{
+		{
+			name:     "non JSON diagnostic and escaped authorization envelope",
+			raw:      `provider said "configured-secret": denied; Authorization: Bearer \u003cconfigured-secret\u003e; occurrence_id=occurrence-9007199254740993`,
+			expected: `provider said "[masked]": denied; Authorization: Bearer \u003c[masked]\u003e; occurrence_id=occurrence-9007199254740993`,
+			mustMask: true,
+		},
+		{
+			name:     "non JSON object lookalike",
+			raw:      `provider said { not-json, "configured-secret": denied; occurrence_id=occurrence-9007199254740993`,
+			expected: `provider said { not-json, "[masked]": denied; occurrence_id=occurrence-9007199254740993`,
+			mustMask: true,
+		},
+		{
+			name:     "true object member key",
+			raw:      `{"configured-secret":"ordinary-occurrence-id","occurrence_id":"occurrence-9007199254740993","token_type":"unconfigured-provider-token"}`,
+			expected: `{"configured-secret":"ordinary-occurrence-id","occurrence_id":"occurrence-9007199254740993","token_type":"unconfigured-provider-token"}`,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := SanitizeProviderResponseReceiptForOutput(ProviderResponseReceipt{
+				BodyPresent:     true,
+				BodyBytes:       int64(len(test.raw)),
+				BodyRaw:         test.raw,
+				BodyRawEncoding: "text",
+				Body:            test.raw,
+			}, map[string]string{"credential": credential})
+			body, ok := got.Body.(string)
+			if !ok || got.BodyRaw != test.expected || body != test.expected {
+				t.Fatalf("sanitized receipt = raw %q body %#v, want %q", got.BodyRaw, got.Body, test.expected)
+			}
+			if test.mustMask && strings.Contains(got.BodyRaw, credential) {
+				t.Fatalf("sanitized non-JSON diagnostic retained configured material: %q", got.BodyRaw)
+			}
+			if !strings.Contains(got.BodyRaw, occurrenceID) {
+				t.Fatalf("sanitized receipt changed ordinary occurrence ID: %q", got.BodyRaw)
+			}
+		})
+	}
+}
+
 func TestPublicResponseHeaderSanitizationMasksOnlyExactConfiguredValues(t *testing.T) {
 	const credential = "configured-header-material"
 	const occurrenceID = "occurrence-9007199254740993"
