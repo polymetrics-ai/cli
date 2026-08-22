@@ -105,11 +105,16 @@ func (l *transportWorkLease) renew(ctx context.Context) error {
 	return err
 }
 
-func (l *transportWorkLease) commit(ctx context.Context, checkpoint synccontract.CheckpointEnvelope) (StreamState, error) {
+func (l *transportWorkLease) commit(ctx context.Context, checkpoint synccontract.CheckpointEnvelope, receipts []TransportReceiptCommit) (StreamState, error) {
 	return l.mutate(ctx, func(current StreamState) (StreamState, error) {
 		updated := cloneStreamState(current)
 		copy := checkpoint.Clone()
 		updated.Checkpoint = &copy
+		committedReceipts, err := appendTransportReceiptCommits(updated.CommittedTransportReceipts, receipts)
+		if err != nil {
+			return StreamState{}, fmt.Errorf("record committed transport receipts: %w", err)
+		}
+		updated.CommittedTransportReceipts = committedReceipts
 		if checkpoint.CommittedAt != nil {
 			updated.UpdatedAt = checkpoint.CommittedAt.UTC()
 		}
@@ -122,10 +127,10 @@ func (l *transportWorkLease) commit(ctx context.Context, checkpoint synccontract
 // and read-back operation; after a destination acknowledgement returns, it
 // must not turn a verified external effect into a replayable prefix merely by
 // interrupting this bounded local checkpoint write.
-func (l *transportWorkLease) commitAfterAcknowledgement(ctx context.Context, checkpoint synccontract.CheckpointEnvelope) (StreamState, error) {
+func (l *transportWorkLease) commitAfterAcknowledgement(ctx context.Context, checkpoint synccontract.CheckpointEnvelope, receipts []TransportReceiptCommit) (StreamState, error) {
 	persistCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), transportWorkLeaseDuration)
 	defer cancel()
-	return l.commit(persistCtx, checkpoint)
+	return l.commit(persistCtx, checkpoint, receipts)
 }
 
 // abandonUncommitted releases only this exact active lease after the

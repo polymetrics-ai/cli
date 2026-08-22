@@ -635,6 +635,7 @@ type RunRequest struct {
 	SourceAdmission func(context.Context) error `json:"-"`
 	Stage           WarehouseStage
 	Commit          func(synccontract.CheckpointEnvelope) error
+	CommitWorksets  func(synccontract.CheckpointEnvelope, []WarehouseReceipt) error
 }
 
 type Result struct {
@@ -742,10 +743,20 @@ func (r RunRequest) unitDeadline() time.Duration {
 // absent stage cannot hide a missing executor, invalid mode, or unsafe
 // acknowledgement declaration. None of these checks can cause source I/O.
 func (r RunRequest) validateDispatchDependencies() error {
-	if r.Commit == nil {
+	if r.Commit == nil && r.CommitWorksets == nil {
 		return fmt.Errorf("checkpoint committer is required for transport dispatch")
 	}
 	return nil
+}
+
+func (r RunRequest) commitAcknowledgedWorksets(checkpoint synccontract.CheckpointEnvelope, receipts []WarehouseReceipt) error {
+	if len(receipts) != 0 && r.CommitWorksets != nil {
+		return r.CommitWorksets(checkpoint, append([]WarehouseReceipt(nil), receipts...))
+	}
+	if r.Commit != nil {
+		return r.Commit(checkpoint)
+	}
+	return r.CommitWorksets(checkpoint, nil)
 }
 
 func (r RunRequest) validateLegacyDispatchDependencies() error {

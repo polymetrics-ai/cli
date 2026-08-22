@@ -220,7 +220,7 @@ func (o *Orchestrator) runArrowFullOverwrite(ctx context.Context, request RunReq
 		if acknowledgement.Sink != request.Destination.Name() {
 			return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
 		}
-		return request.Commit(checkpoint)
+		return request.commitAcknowledgedWorksets(checkpoint, nil)
 	}); err != nil {
 		result.CheckpointElapsed += time.Since(checkpointStarted)
 		return result, err

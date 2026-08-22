@@ -3800,8 +3800,8 @@ func (s *appTransportStage) Stage(_ context.Context, request synctransport.Wareh
 	s.worksets[workset.ID] = workset
 	return synctransport.WarehouseReceipt{
 		ID:               workset.ID,
-		Owner:            "app-test-owner",
-		Generation:       1,
+		Owner:            request.ConnectionID,
+		Generation:       request.Generation,
 		Stream:           request.Stream,
 		Mode:             request.Mode,
 		CheckpointSHA256: "app-test-checkpoint",

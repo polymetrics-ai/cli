@@ -1569,7 +1569,7 @@ func TestDeclarativeTypedDestinationPersistsProviderResultsAfterPostSuccessLocal
 	}
 }
 
-func TestDeclarativeTypedDestinationReopensUncommittedWorksetAfterLocalReceiptFailure(t *testing.T) {
+func TestDeclarativeTypedDestinationReopensRepeatedFullAppendWorksetAfterLocalReceiptFailure(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
@@ -1605,7 +1605,7 @@ func TestDeclarativeTypedDestinationReopensUncommittedWorksetAfterLocalReceiptFa
 				mutations++
 			}
 			w.Header().Set("Content-Type", "application/json")
-			if providerCalls == 1 {
+			if providerCalls == 2 {
 				_, _ = w.Write([]byte(`{"provider_id":"provider-widget-1"}`))
 				return
 			}
@@ -1655,11 +1655,32 @@ func TestDeclarativeTypedDestinationReopensUncommittedWorksetAfterLocalReceiptFa
 		},
 	}
 	first, err := application.RunETL(ctx, request)
-	if err == nil || !strings.Contains(err.Error(), "locator field") {
-		t.Fatalf("first RunETL error = %v, want post-success local receipt failure", err)
+	if err != nil {
+		t.Fatalf("first full-append RunETL: %v", err)
 	}
-	if first.Status != "failed" || first.RecordsLoaded != 0 || providerCalls != 1 {
-		t.Fatalf("first RunETL = %#v with provider calls %d, want one uncommitted failed provider success", first, providerCalls)
+	if first.Status != "completed" || first.RecordsLoaded != 1 || providerCalls != 1 {
+		t.Fatalf("first RunETL = %#v with provider calls %d, want one committed provider success", first, providerCalls)
+	}
+	firstState := application.state.StreamStates[streamStateKey(connection.Name, "widgets")]
+	if len(firstState.CommittedTransportReceipts) != 1 {
+		t.Fatalf("first committed transport receipts = %#v, want one exact receipt association", firstState.CommittedTransportReceipts)
+	}
+	failedPlan, err := application.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
+	if err != nil {
+		t.Fatalf("plan repeated full-append workset: %v", err)
+	}
+	failedPreview, _, err := application.PreviewDeclarativeTypedDestinationTransport(ctx, failedPlan.ID)
+	if err != nil {
+		t.Fatalf("preview repeated full-append workset: %v", err)
+	}
+	request.DestinationApproval.PlanID = failedPlan.ID
+	request.DestinationApproval.ApprovalToken = failedPreview.ApprovalToken
+	failed, err := application.RunETL(ctx, request)
+	if err == nil || !strings.Contains(err.Error(), "locator field") {
+		t.Fatalf("second RunETL error = %v, want post-success local receipt failure", err)
+	}
+	if failed.Status != "failed" || failed.RecordsLoaded != 0 || providerCalls != 2 {
+		t.Fatalf("second RunETL = %#v with provider calls %d, want one uncommitted failed provider success", failed, providerCalls)
 	}
 	location, err := application.warehouseLocation(application.warehouseRoot(), connection)
 	if err != nil {
@@ -1670,11 +1691,11 @@ func TestDeclarativeTypedDestinationReopensUncommittedWorksetAfterLocalReceiptFa
 	if err != nil || len(entries) != 1 {
 		t.Fatalf("uncommitted staged manifests = %#v, %v, want one durable receipt", entries, err)
 	}
-	firstManifest := entries[0].Name()
+	failedManifest := entries[0].Name()
 
 	reopened, err := Open(root)
 	if err != nil {
-		t.Fatalf("reopen after local receipt failure: %v", err)
+		t.Fatalf("reopen after repeated local receipt failure: %v", err)
 	}
 	reopened.registry.Register(engine.New(bundle, nil))
 	if err := reopened.composeTransportRegistry(); err != nil {
@@ -1682,27 +1703,31 @@ func TestDeclarativeTypedDestinationReopensUncommittedWorksetAfterLocalReceiptFa
 	}
 	retryPlan, err := reopened.PlanDeclarativeTypedDestinationTransport(ctx, connection.Name, "widgets")
 	if err != nil {
-		t.Fatalf("plan retry typed destination transport: %v", err)
+		t.Fatalf("plan repeated retry typed destination transport: %v", err)
 	}
 	retryPreview, _, err := reopened.PreviewDeclarativeTypedDestinationTransport(ctx, retryPlan.ID)
 	if err != nil {
-		t.Fatalf("preview retry typed destination transport: %v", err)
+		t.Fatalf("preview repeated retry typed destination transport: %v", err)
 	}
 	request.DestinationApproval.PlanID = retryPlan.ID
 	request.DestinationApproval.ApprovalToken = retryPreview.ApprovalToken
 	second, err := reopened.RunETL(ctx, request)
 	if err != nil {
-		t.Fatalf("retry RunETL: %v", err)
+		t.Fatalf("repeated retry RunETL: %v", err)
 	}
 	if second.Status != "completed" || second.RecordsLoaded != 1 {
-		t.Fatalf("retry RunETL = %#v, want one completed workset", second)
+		t.Fatalf("repeated retry RunETL = %#v, want one completed workset", second)
 	}
 	entries, err = os.ReadDir(manifestDir)
-	if err != nil || len(entries) != 1 || entries[0].Name() != firstManifest {
-		t.Fatalf("retry staged manifests = %#v, %v, want original durable receipt %q", entries, err, firstManifest)
+	if err != nil || len(entries) != 1 || entries[0].Name() != failedManifest {
+		t.Fatalf("repeated retry staged manifests = %#v, %v, want original durable receipt %q", entries, err, failedManifest)
 	}
-	if providerCalls != 2 || mutations != 1 || len(keys) != 2 || keys[0] == "" || keys[0] != keys[1] {
-		t.Fatalf("retry provider calls/mutations/keys = %d/%d/%#v, want same workset key and one mutation", providerCalls, mutations, keys)
+	if providerCalls != 3 || mutations != 2 || len(keys) != 3 || keys[0] == "" || keys[1] == "" || keys[0] == keys[1] || keys[1] != keys[2] {
+		t.Fatalf("repeated retry provider calls/mutations/keys = %d/%d/%#v, want distinct committed workset then a stable retried workset key", providerCalls, mutations, keys)
+	}
+	finalState := reopened.state.StreamStates[streamStateKey(connection.Name, "widgets")]
+	if len(finalState.CommittedTransportReceipts) != 1 || finalState.CommittedTransportReceipts[0].ReceiptID+".json" != failedManifest {
+		t.Fatalf("retried committed transport receipts = %#v, want durable association for %q", finalState.CommittedTransportReceipts, failedManifest)
 	}
 }
 

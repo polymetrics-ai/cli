@@ -222,15 +222,6 @@ func (s *connectionWarehouseStage) recoverUncommittedReceipt(ctx context.Context
 			manifest.TombstonesSHA256 != tombstonesSHA256 {
 			continue
 		}
-		if streamState, present := s.app.state.StreamStates[streamStateKey(conn.Name, manifest.Stream)]; present {
-			alreadyCommitted, err := committedStageCheckpointMatches(manifest.CandidateCheckpoint, streamState.Checkpoint)
-			if err != nil {
-				return synctransport.WarehouseReceipt{}, false, fmt.Errorf("compare staged receipt %q with committed checkpoint: %w", manifest.ID, err)
-			}
-			if alreadyCommitted {
-				continue
-			}
-		}
 		manifestCheckpointSHA256, err := connectionWarehouseStageRetryCheckpointSHA256(manifest.CandidateCheckpoint)
 		if err != nil {
 			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("hash staged receipt %q retry checkpoint: %w", manifest.ID, err)
@@ -243,6 +234,9 @@ func (s *connectionWarehouseStage) recoverUncommittedReceipt(ctx context.Context
 			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("digest staged receipt %q manifest: %w", manifest.ID, err)
 		}
 		receipt := manifest.receipt(manifestSHA256)
+		if streamState, present := s.app.state.StreamStates[streamStateKey(conn.Name, manifest.Stream)]; present && streamState.hasCommittedTransportReceipt(receipt) {
+			continue
+		}
 		workset, err := s.Reopen(ctx, receipt)
 		if err != nil {
 			return synctransport.WarehouseReceipt{}, false, fmt.Errorf("reopen staged receipt %q for retry: %w", receipt.ID, err)
@@ -417,12 +411,9 @@ func (s *connectionWarehouseStage) retire(ctx context.Context, receipt synctrans
 	return removeConnectionStageArtifact(ctx, artifact)
 }
 
-// ReconcileCommitted retires only receipts whose candidate checkpoint is
-// already durably committed in this project. It is intentionally bounded per
-// open and leaves malformed, foreign, active, or newer receipts untouched.
-// Thus a process killed after checkpoint persistence cannot repeat a
-// destination effect, while a process killed before persistence retains the
-// workset for later investigation/recovery.
+// ReconcileCommitted retires only receipts durably associated with a committed
+// transport workset. It is intentionally bounded per open and leaves malformed,
+// foreign, active, or newer receipts untouched.
 func (s *connectionWarehouseStage) ReconcileCommitted(ctx context.Context) error {
 	if s == nil || s.app == nil {
 		return fmt.Errorf("connection-owned warehouse stage is unavailable")
@@ -465,23 +456,45 @@ func (s *connectionWarehouseStage) ReconcileCommitted(ctx context.Context) error
 			if !present {
 				continue
 			}
-			matches, err := committedStageCheckpointMatches(manifest.CandidateCheckpoint, streamState.Checkpoint)
-			if err != nil {
-				return fmt.Errorf("compare staged receipt %q with committed checkpoint: %w", manifest.ID, err)
-			}
-			if !matches {
-				continue
-			}
 			manifestSHA256, _, err := digestPayloadFile(artifact.manifestPath)
 			if err != nil {
 				continue
 			}
-			if err := s.retire(ctx, manifest.receipt(manifestSHA256)); err != nil {
+			receipt := manifest.receipt(manifestSHA256)
+			if !streamState.hasCommittedTransportReceipt(receipt) {
+				continue
+			}
+			if err := s.retire(ctx, receipt); err != nil {
 				return fmt.Errorf("retire reconciled warehouse stage receipt %q: %w", manifest.ID, err)
+			}
+			if err := s.forgetCommittedTransportReceipt(ctx, conn.Name, manifest.Stream, receipt); err != nil {
+				return fmt.Errorf("forget reconciled warehouse stage receipt %q: %w", manifest.ID, err)
 			}
 		}
 	}
 	return nil
+}
+
+func (s *connectionWarehouseStage) forgetCommittedTransportReceipt(ctx context.Context, connection, stream string, receipt synctransport.WarehouseReceipt) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	_, err := s.app.updateState(func(current state) (state, error) {
+		key := streamStateKey(connection, stream)
+		streamState, present := current.StreamStates[key]
+		if !present {
+			return current, nil
+		}
+		remaining, removed := removeTransportReceiptCommit(streamState.CommittedTransportReceipts, receipt)
+		if !removed {
+			return current, nil
+		}
+		streamState = cloneStreamState(streamState)
+		streamState.CommittedTransportReceipts = remaining
+		current.StreamStates[key] = streamState
+		return current, nil
+	})
+	return err
 }
 
 func (s *connectionWarehouseStage) connectionForStageRequest(request synctransport.WarehouseStageRequest) (Connection, error) {
@@ -554,21 +567,6 @@ func (m connectionWarehouseStageManifest) belongsToConnection(conn Connection) b
 		return false
 	}
 	return m.Generation > 0 && m.Records >= 0 && m.Mode.Validate() == nil
-}
-
-func committedStageCheckpointMatches(candidate synccontract.CheckpointEnvelope, committed *synccontract.CheckpointEnvelope) (bool, error) {
-	if committed == nil || committed.CommittedAt == nil {
-		return false, nil
-	}
-	candidateSHA256, err := connectionWarehouseStageRetryCheckpointSHA256(candidate)
-	if err != nil {
-		return false, err
-	}
-	committedSHA256, err := connectionWarehouseStageRetryCheckpointSHA256(*committed)
-	if err != nil {
-		return false, err
-	}
-	return candidateSHA256 == committedSHA256, nil
 }
 
 func removeConnectionStageArtifact(ctx context.Context, artifact connectionWarehouseStageArtifact) error {

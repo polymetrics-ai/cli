@@ -283,6 +283,29 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 
 	var committed *synccontract.CheckpointEnvelope
+	persistAcknowledgedWorksets := func(checkpoint synccontract.CheckpointEnvelope, receipts []synctransport.WarehouseReceipt) error {
+		interim := checkpoint.Clone()
+		if interim.CommittedAt == nil {
+			return fmt.Errorf("closed transport committed checkpoint is missing its acknowledgement timestamp")
+		}
+		if err := interim.ValidateResume(sourceExpectation); err != nil {
+			return err
+		}
+		committedReceipts, err := transportReceiptCommitsForRun(conn, streamName, generationID, mode.ContractMode, receipts)
+		if err != nil {
+			return fmt.Errorf("bind acknowledged transport worksets: %w", err)
+		}
+		_, err = workLease.commitAfterAcknowledgement(ctx, interim, committedReceipts)
+		if err != nil {
+			if errors.Is(err, errTransportStreamWorkFenceLost) {
+				err = fmt.Errorf("%w: %w", errTransportStreamStateConflict, err)
+			}
+			return fmt.Errorf("persist acknowledged transport checkpoint: %w", err)
+		}
+		copy := interim.Clone()
+		committed = &copy
+		return nil
+	}
 	transportRequest := synctransport.RunRequest{
 		ConnectionID:       conn.ID,
 		Generation:         generationID,
@@ -313,24 +336,9 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		Stage:                     a.transportStage,
 		SourceAdmission:           workLease.renew,
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
-			interim := checkpoint.Clone()
-			if interim.CommittedAt == nil {
-				return fmt.Errorf("closed transport committed checkpoint is missing its acknowledgement timestamp")
-			}
-			if err := interim.ValidateResume(sourceExpectation); err != nil {
-				return err
-			}
-			_, err := workLease.commitAfterAcknowledgement(ctx, interim)
-			if err != nil {
-				if errors.Is(err, errTransportStreamWorkFenceLost) {
-					err = fmt.Errorf("%w: %w", errTransportStreamStateConflict, err)
-				}
-				return fmt.Errorf("persist acknowledged transport checkpoint: %w", err)
-			}
-			copy := interim.Clone()
-			committed = &copy
-			return nil
+			return persistAcknowledgedWorksets(checkpoint, nil)
 		},
+		CommitWorksets: persistAcknowledgedWorksets,
 	}
 	transportResult, err := synctransport.NewOrchestrator(a.transports).Run(ctx, transportRequest)
 	if err != nil {
@@ -471,6 +479,27 @@ func (a *App) reconcileCommittedTransportStages(ctx context.Context) error {
 	return nil
 }
 
+func transportReceiptCommitsForRun(conn Connection, stream string, generation int64, mode synccontract.Mode, receipts []synctransport.WarehouseReceipt) ([]TransportReceiptCommit, error) {
+	if len(receipts) == 0 {
+		return nil, nil
+	}
+	commits := make([]TransportReceiptCommit, 0, len(receipts))
+	for _, receipt := range receipts {
+		if err := receipt.Validate(); err != nil {
+			return nil, err
+		}
+		if receipt.Owner != conn.ID || receipt.Generation != generation || receipt.Stream != stream || receipt.Mode != mode {
+			return nil, fmt.Errorf("warehouse receipt %q does not belong to the committed transport workset", receipt.ID)
+		}
+		commit, err := transportReceiptCommitFromWarehouseReceipt(receipt)
+		if err != nil {
+			return nil, err
+		}
+		commits = append(commits, commit)
+	}
+	return cloneTransportReceiptCommits(commits)
+}
+
 func transportPhaseMeasurement(result synctransport.Result) *TransportPhaseMeasurement {
 	measurement := &TransportPhaseMeasurement{
 		ExtractedRecords: result.RecordsRead, WarehouseParquetRecords: result.RecordsStaged, PostgreSQLAppliedRecords: result.RecordsApplied,
@@ -505,7 +534,19 @@ func transportStreamStateEqual(left, right StreamState) bool {
 		!left.UpdatedAt.Equal(right.UpdatedAt) {
 		return false
 	}
-	return transportCheckpointEqual(left.Checkpoint, right.Checkpoint)
+	return transportCheckpointEqual(left.Checkpoint, right.Checkpoint) && transportReceiptCommitsEqual(left.CommittedTransportReceipts, right.CommittedTransportReceipts)
+}
+
+func transportReceiptCommitsEqual(left, right []TransportReceiptCommit) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for index := range left {
+		if left[index] != right[index] {
+			return false
+		}
+	}
+	return true
 }
 
 func transportCheckpointEqual(left, right *synccontract.CheckpointEnvelope) bool {

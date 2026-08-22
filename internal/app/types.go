@@ -148,10 +148,11 @@ type StreamConfig struct {
 }
 
 type StreamState struct {
-	Connection   string                           `json:"connection"`
-	Stream       string                           `json:"stream"`
-	Checkpoint   *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
-	GenerationID int64                            `json:"generation_id"`
+	Connection                 string                           `json:"connection"`
+	Stream                     string                           `json:"stream"`
+	Checkpoint                 *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
+	CommittedTransportReceipts []TransportReceiptCommit         `json:"committed_transport_receipts,omitempty"`
+	GenerationID               int64                            `json:"generation_id"`
 	// ActiveWorkID and ActiveWorkFence form one durable, connection-and-stream
 	// scoped work lease. They are present only while a source/stage/destination
 	// run owns the stream; effects and checkpoint commits renew the same fence
@@ -163,6 +164,21 @@ type StreamState struct {
 	LastSuccessfulRunID  string     `json:"last_successful_run_id,omitempty"`
 	RecordsLoaded        int        `json:"records_loaded,omitempty"`
 	UpdatedAt            time.Time  `json:"updated_at"`
+}
+
+type TransportReceiptCommit struct {
+	ReceiptID        string            `json:"receipt_id"`
+	Owner            string            `json:"owner"`
+	Generation       int64             `json:"generation"`
+	Stream           string            `json:"stream"`
+	Mode             synccontract.Mode `json:"mode"`
+	CheckpointSHA256 string            `json:"checkpoint_sha256"`
+	TombstonesSHA256 string            `json:"tombstones_sha256"`
+	ManifestSHA256   string            `json:"manifest_sha256"`
+	ContentSHA256    string            `json:"content_sha256"`
+	ParquetSHA256    string            `json:"parquet_sha256"`
+	Records          int               `json:"records"`
+	Tombstones       int               `json:"tombstones"`
 }
 
 type CreateConnectionRequest struct {
