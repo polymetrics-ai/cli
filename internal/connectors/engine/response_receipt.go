@@ -28,10 +28,6 @@ func providerResponseReceiptFromHTTPError(b Bundle, err error, secrets map[strin
 }
 
 func providerResponseReceipt(b Bundle, status int, headers http.Header, raw []byte, secrets map[string]string) *connectors.ProviderResponseReceipt {
-	// Receipts are internal immutable evidence. Configured and declared secret
-	// masking happens only when commandrunner projects this value for public
-	// output; mutating it here loses the proof needed by retries and App state.
-	_ = secrets
 	receipt := connectors.ProviderResponseReceipt{
 		ResponseReceived: true,
 		Status:           status,
@@ -47,7 +43,12 @@ func providerResponseReceipt(b Bundle, status int, headers http.Header, raw []by
 			receipt.Body = receipt.BodyRaw
 		}
 	}
-	return &receipt
+	// Engine direct-read results are also returned by native adapters, so this
+	// boundary cannot rely on commandrunner being the sole public projection.
+	// The sanitizer replaces only configured credential material and preserves
+	// all other receipt bytes and provider metadata for readback binding.
+	safe := connectors.SanitizeProviderResponseReceiptForOutput(receipt, secrets)
+	return &safe
 }
 
 func completeProviderResponseHeaders(b Bundle, headers http.Header) map[string]connectors.OperationResponseHeader {

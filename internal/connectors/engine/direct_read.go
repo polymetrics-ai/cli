@@ -83,10 +83,11 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 	cfg := materializeConfigDefaults(b, req.Config)
-	if err := validateOperationDirectReadPathParams(op, req.PathParams); err != nil {
+	effectivePathParams, err := materializeOperationDirectReadPathParams(op, cfg, req.PathParams)
+	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
+	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, effectivePathParams)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -105,7 +106,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if policy == "" {
 		policy = op.OutputPolicy
 	}
-	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, req.PathParams, cfg); err != nil {
+	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, effectivePathParams, cfg); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
@@ -140,7 +141,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		pageCursor:      req.PageCursor,
 		pagination:      op.REST.Pagination,
 	})
-	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: method, Path: resolvedPath, Page: pageInfo, OutputSecretFields: operationDirectReadOutputSecretFields(op)}
+	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: method, Path: resolvedPath, Page: connectors.SanitizeDirectReadPageForOutput(pageInfo, cfg.Secrets), OutputSecretFields: operationDirectReadOutputSecretFields(op)}
 	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
 	if readResult.Receipt == nil && err != nil {
 		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
@@ -187,7 +188,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	// Convenience response output is public-facing and may hide configured
 	// credentials, but Receipt remains the immutable pre-projection response.
 	decoded = connectors.SanitizeProviderOutputForOutput(decoded, req.Config.Secrets)
-	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header, cfg.Secrets)
 	if err != nil {
 		return readResult, err
 	}
@@ -489,7 +490,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		page:         req.Page,
 		pageCursor:   req.PageCursor,
 	})
-	readResult := connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Page: pageInfo, OutputSecretFields: append([]string(nil), req.RedactFields...)}
+	readResult := connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Page: connectors.SanitizeDirectReadPageForOutput(pageInfo, cfg.Secrets), OutputSecretFields: append([]string(nil), req.RedactFields...)}
 	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
 	if readResult.Receipt == nil && err != nil {
 		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
@@ -633,29 +634,12 @@ func validateOperationDirectReadPathFields(op OperationSpec, pathFields []string
 	return nil
 }
 
-func validateOperationDirectReadPathParams(op OperationSpec, pathParams map[string]string) error {
-	fields := make([]string, 0, len(pathParams))
-	for field := range pathParams {
-		fields = append(fields, field)
-	}
-	sort.Strings(fields)
-	if err := validateOperationDirectReadPathFields(op, fields); err != nil {
-		return err
-	}
-	parameters, err := operationParametersForLocation(op, "path")
+func materializeOperationDirectReadPathParams(op OperationSpec, cfg connectors.RuntimeConfig, pathParams map[string]string) (map[string]string, error) {
+	declared, err := operationDirectWritePathParameterNames(op)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	for _, field := range fields {
-		parameter, declared := parameters[field]
-		if !declared {
-			parameter = OperationParameter{Name: field, In: "path", Type: "string"}
-		}
-		if err := validateOperationParameterWireValue(op, parameter, "path", pathParams[field]); err != nil {
-			return err
-		}
-	}
-	return nil
+	return materializeOperationPathParams(op, declared, cfg, pathParams)
 }
 
 func operationDirectReadQueryParameters(op OperationSpec) (map[string]OperationParameter, error) {

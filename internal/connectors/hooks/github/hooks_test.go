@@ -12,6 +12,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -467,6 +468,86 @@ func TestAuthenticatorGithubApp_HonorsContextCancellation(t *testing.T) {
 	_, err := h.AuthenticatorWithDeclaredRoute(ctx, cfg, engine.AuthSpec{Mode: "custom", Hook: "github"}, &githubAppDeclaredRouteRecorder{})
 	if err == nil {
 		t.Fatal("Authenticator() error = nil for an already-cancelled context, want an error (F8: ctx must be honored, not context.Background())")
+	}
+}
+
+func TestAuthenticatorGithubAppRestrictionParsingFailsClosedBeforeDeclaredRouteIO(t *testing.T) {
+	privateKey := testPrivateKeyPEM(t)
+	newConfig := func(t *testing.T, extra map[string]string) connectors.RuntimeConfig {
+		t.Helper()
+		key := privateKey
+		if extra["valid"] != "true" {
+			key = "invalid-private-key"
+		}
+		return newRuntimeConfig("https://example.invalid", map[string]string{
+			"app_id":                      "12345",
+			"installation_id":             "67890",
+			"installation_repositories":   extra["installation_repositories"],
+			"installation_repository_ids": extra["installation_repository_ids"],
+			"installation_permissions":    extra["installation_permissions"],
+		}, map[string]string{"private_key": key})
+	}
+	repositories := func(count int) string {
+		values := make([]string, count)
+		for i := range values {
+			values[i] = "repository-" + strconv.Itoa(i+1)
+		}
+		return strings.Join(values, ",")
+	}
+	repositoryIDs := func(count int) string {
+		values := make([]string, count)
+		for i := range values {
+			values[i] = strconv.Itoa(i + 1)
+		}
+		return strings.Join(values, ",")
+	}
+	for _, tc := range []struct {
+		name  string
+		extra map[string]string
+		valid bool
+	}{
+		{name: "valid restrictions", valid: true, extra: map[string]string{"valid": "true", "installation_repositories": "alpha,beta", "installation_repository_ids": "7,9", "installation_permissions": `{"contents":"read","issues":"write"}`}},
+		{name: "valid maximum repository names", valid: true, extra: map[string]string{"valid": "true", "installation_repositories": repositories(500)}},
+		{name: "valid combined repository restrictions", valid: true, extra: map[string]string{"valid": "true", "installation_repositories": repositories(250), "installation_repository_ids": repositoryIDs(250)}},
+		{name: "valid provider permission matrix", valid: true, extra: map[string]string{"valid": "true", "installation_permissions": `{"repository_projects":"admin","workflows":"write","organization_events":"read"}`}},
+		{name: "empty repository member", extra: map[string]string{"installation_repositories": "alpha,,beta"}},
+		{name: "unsafe repository name", extra: map[string]string{"installation_repositories": "alpha/../beta"}},
+		{name: "case insensitive duplicate repository name", extra: map[string]string{"installation_repositories": "Widget,widget"}},
+		{name: "too many repository names", extra: map[string]string{"installation_repositories": repositories(501)}},
+		{name: "non-numeric repository id", extra: map[string]string{"installation_repository_ids": "7,not-a-number"}},
+		{name: "duplicate repository id", extra: map[string]string{"installation_repository_ids": "7,7"}},
+		{name: "too many repository ids", extra: map[string]string{"installation_repository_ids": repositoryIDs(501)}},
+		{name: "too many combined repository restrictions", extra: map[string]string{"installation_repositories": repositories(250), "installation_repository_ids": repositoryIDs(251)}},
+		{name: "permissions not json", extra: map[string]string{"installation_permissions": "not-json"}},
+		{name: "permissions wrong value type", extra: map[string]string{"installation_permissions": `{"contents":false}`}},
+		{name: "permissions duplicate key", extra: map[string]string{"installation_permissions": `{"contents":"read","contents":"write"}`}},
+		{name: "unsupported permission name", extra: map[string]string{"installation_permissions": `{"unsupported_permission":"read"}`}},
+		{name: "unsupported permission level", extra: map[string]string{"installation_permissions": `{"actions":"admin"}`}},
+		{name: "write-only permission read", extra: map[string]string{"installation_permissions": `{"workflows":"read"}`}},
+		{name: "read-only permission write", extra: map[string]string{"installation_permissions": `{"organization_events":"write"}`}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			route := &githubAppDeclaredRouteRecorder{responseBody: []byte(`{"token":"synthetic-installation-token"}`)}
+			_, err := githubhooks.New().AuthenticatorWithDeclaredRoute(context.Background(), newConfig(t, tc.extra), engine.AuthSpec{Mode: "custom", Hook: "github"}, route)
+			if tc.valid {
+				if err != nil {
+					t.Fatalf("AuthenticatorWithDeclaredRoute: %v", err)
+				}
+				if route.method != http.MethodPost {
+					t.Fatal("valid restrictions did not reach the declared route")
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("malformed restriction was accepted")
+			}
+			if !strings.Contains(err.Error(), "github installation_") {
+				t.Fatalf("malformed restriction did not fail before private-key processing: %v", err)
+			}
+			if route.method != "" || route.path != "" || route.hasBearerJWT {
+				t.Fatal("malformed restriction reached authenticated declared-route I/O")
+			}
+		})
 	}
 }
 

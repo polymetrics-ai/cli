@@ -53,8 +53,8 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 	if !ok {
 		return result, fmt.Errorf("redact sqs direct read %s: unexpected root type %T", req.Operation, redacted)
 	}
-	result.Body = body
-	result.Page = page
+	result.Body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets).(map[string]any)
+	result.Page = connectors.SanitizeDirectReadPageForOutput(page, req.Config.Secrets)
 	return result, nil
 }
 
@@ -521,10 +521,9 @@ func redactDirectBody(value any, fields []string) any {
 	explicit := map[string]bool{}
 	for _, field := range fields {
 		field = strings.TrimSpace(field)
-		if field == "" {
-			continue
+		if field != "" {
+			explicit[normalizeField(field)] = true
 		}
-		explicit[normalizeField(field)] = true
 	}
 	return redactDirectValue("", value, explicit, 0)
 }
@@ -537,18 +536,18 @@ func redactDirectValue(key string, value any, explicit map[string]bool, depth in
 	case map[string]any:
 		out := make(map[string]any, len(typed))
 		keys := make([]string, 0, len(typed))
-		for k := range typed {
-			keys = append(keys, k)
+		for key := range typed {
+			keys = append(keys, key)
 		}
 		sort.Strings(keys)
-		for _, k := range keys {
-			out[k] = redactDirectValue(k, typed[k], explicit, depth+1)
+		for _, key := range keys {
+			out[key] = redactDirectValue(key, typed[key], explicit, depth+1)
 		}
 		return out
 	case []any:
 		out := make([]any, len(typed))
-		for i, item := range typed {
-			out[i] = redactDirectValue("", item, explicit, depth+1)
+		for index, item := range typed {
+			out[index] = redactDirectValue("", item, explicit, depth+1)
 		}
 		return out
 	default:
@@ -557,19 +556,11 @@ func redactDirectValue(key string, value any, explicit map[string]bool, depth in
 }
 
 func shouldRedactDirectField(key string, explicit map[string]bool, topLevel bool) bool {
-	normalized := normalizeField(key)
-	if explicit[normalized] {
-		return true
-	}
-	if normalized == "next_token" && topLevel {
-		return false
-	}
-	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "token", "password", "api_key", "apikey", "access_key", "accesskey", "credential"} {
-		if strings.Contains(normalized, marker) {
-			return true
-		}
-	}
-	return false
+	_ = topLevel
+	// Names are provider-owned data, not sensitivity evidence. Only the
+	// action's declared redaction fields can suppress a response value; this
+	// keeps Policy, TaskHandle, and ordinary token-shaped identifiers intact.
+	return explicit[normalizeField(key)]
 }
 
 func normalizeField(key string) string {
