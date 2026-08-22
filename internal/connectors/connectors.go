@@ -991,7 +991,7 @@ func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResu
 	out := result
 	out.Headers = sanitizeProviderHeaders(result.Headers, masked)
 	out.BodyRaw = redactWriteResultString(result.BodyRaw, masked)
-	out.Body = sanitizeProviderOutputValue(body, masked)
+	out.Body = sanitizeProviderResponseValue(body, masked)
 	out.OutputSecretFields = append([]string(nil), result.OutputSecretFields...)
 	out.GraphQL = sanitizeGraphQLResponseMetadataForOutput(result.GraphQL, masked)
 	return out
@@ -1021,7 +1021,7 @@ func sanitizeWriteProviderResponse(response WriteProviderResponse, secrets []str
 	out := response
 	out.Headers = sanitizeProviderHeaders(response.Headers, secrets)
 	out.BodyRaw = redactWriteResultString(response.BodyRaw, secrets)
-	out.Body = sanitizeProviderOutputValue(response.Body, secrets)
+	out.Body = sanitizeProviderResponseValue(response.Body, secrets)
 	return out
 }
 

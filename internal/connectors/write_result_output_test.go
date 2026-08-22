@@ -94,6 +94,96 @@ func TestOperationDirectWriteResultOutputMasksConfiguredAndDeclaredSecrets(t *te
 	}
 }
 
+func TestWriteResultOutputMasksConfiguredTextInsidePrintableReceiptBody(t *testing.T) {
+	const credential = "opaque-provider-value-77"
+	encodedCredential := base64.RawURLEncoding.EncodeToString([]byte(credential))
+	diagnostic := "provider diagnostic " + credential + " encoded " + encodedCredential + " occurrence_id=occurrence-9007199254740993"
+	const expectedDiagnostic = "provider diagnostic [masked] encoded [masked] occurrence_id=occurrence-9007199254740993"
+	result := WriteResult{
+		RecordsWritten: 1,
+		ProviderResponses: []WriteProviderResponse{{
+			Status:          201,
+			BodyPresent:     true,
+			BodyBytes:       len(diagnostic),
+			BodyRaw:         diagnostic,
+			BodyRawEncoding: "text",
+			Body:            diagnostic,
+			BodyEncoding:    "text",
+		}},
+	}
+
+	got := SanitizeWriteResultForOutput(result, map[string]string{"credential": credential})
+	public, err := json.Marshal(got)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, value := range []string{credential, encodedCredential} {
+		if strings.Contains(string(public), value) {
+			t.Fatal("public write receipt exposed configured material")
+		}
+	}
+	response := got.ProviderResponses[0]
+	if response.BodyRaw != expectedDiagnostic {
+		t.Fatal("public write receipt raw body did not mask configured material")
+	}
+	body, ok := response.Body.(string)
+	if !ok || body != expectedDiagnostic {
+		t.Fatal("public write receipt body did not mask configured material")
+	}
+	if result.ProviderResponses[0].Body != diagnostic {
+		t.Fatal("sanitizer mutated the complete internal receipt")
+	}
+}
+
+func TestOperationDirectWriteResultOutputMasksConfiguredTextInsideJSONDiagnostic(t *testing.T) {
+	const credential = "opaque-provider-value-77"
+	encodedCredential := base64.RawURLEncoding.EncodeToString([]byte(credential))
+	diagnostic := "provider diagnostic " + credential + " encoded " + encodedCredential + " occurrence_id=occurrence-9007199254740993"
+	const expectedDiagnostic = "provider diagnostic [masked] encoded [masked] occurrence_id=occurrence-9007199254740993"
+	body := map[string]any{
+		"diagnostic":    diagnostic,
+		"occurrence_id": "occurrence-9007199254740993",
+		"token_type":    "unconfigured-provider-token",
+	}
+	raw, err := json.Marshal(body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	result := OperationDirectWriteResult{
+		Connector:        "fixture",
+		Operation:        "fixture.create",
+		Method:           "POST",
+		Path:             "/fixed",
+		ResponseReceived: true,
+		Status:           201,
+		BodyPresent:      true,
+		BodyRaw:          string(raw),
+		BodyRawEncoding:  "text",
+		Body:             body,
+	}
+
+	got := SanitizeOperationDirectWriteResultForOutput(result, map[string]string{"credential": credential})
+	public, err := json.Marshal(got)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, value := range []string{credential, encodedCredential} {
+		if strings.Contains(string(public), value) {
+			t.Fatal("public direct-write result exposed configured material")
+		}
+	}
+	gotBody, ok := got.Body.(map[string]any)
+	if !ok || gotBody["diagnostic"] != expectedDiagnostic {
+		t.Fatal("public direct-write diagnostic did not mask configured material")
+	}
+	if gotBody["occurrence_id"] != "occurrence-9007199254740993" || gotBody["token_type"] != "unconfigured-provider-token" {
+		t.Fatal("public direct-write result changed ordinary provider output")
+	}
+	if result.Body.(map[string]any)["diagnostic"] != diagnostic {
+		t.Fatal("sanitizer mutated the complete internal receipt")
+	}
+}
+
 func TestSanitizeWriteErrorForOutputKeepsSystemDiagnosticsSecretFree(t *testing.T) {
 	credential := "client-secret"
 	output := SanitizeWriteErrorForOutput(errors.New("system diagnostic "+credential), map[string]string{"token": credential})
