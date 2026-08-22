@@ -1,98 +1,86 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "integration": "cli-current-foundations-main-integration-r1",
-  "branch": "fm/cli-current-foundations-main-integration-r1",
-  "target_branch": "main",
+  "branch": "fm/cli-foundation-release-candidate-r1",
+  "target_branch": "fm/cli-current-foundations-main-integration-r1",
   "base": {
-    "ref": "provisional integration base",
-    "sha": "114a67727f2ef60b132054091c73987be4118a9b",
-    "verified_remote": false,
-    "provenance": "Firstmate-approved clean integration branch base; parent is preserved #4308 integration merge 9e3cd99b7ebd2ebac2303ad8770e50fee85c92c6",
-    "included_foundations": [
-      {
-        "pr": 4310,
-        "issue": 4301,
-        "sha": "e62ae21d428f0d27225f9bff564dc2cd797f6b65",
-        "description": "non-empty credential-input foundation"
-      },
-      {
-        "pr": 4309,
-        "issue": 4299,
-        "sha": "484c18cf30cb77244d2e7d2c5194a55338b40209",
-        "description": "slim production source-lock embed"
-      }
-    ]
+    "ref": "fm/cli-current-foundations-canonical-fix-wave-r2",
+    "sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
+    "verified_remote": true,
+    "provenance": "Exact private no-mistakes core head; origin predecessor 524850d58a3a495e3ff865adc4a9734e0202d00e was proven an ancestor, pushed non-force, and re-read with git ls-remote."
   },
-  "composition_order": [4306, 4307, 4302, 4305, 4303],
   "inputs": [
     {
-      "issue": 4306,
-      "pr": 4312,
-      "remote_ref": "refs/pull/4312/head",
-      "sha": "19a32bd0bc08faf217be8f45b39841b5ff589a92",
-      "remote_ref_verified": true,
-      "qualification": "firstmate-issued exact published head; remote ref re-read",
-      "state": "merged_preserved_history",
-      "integration_merge_commit": "223f7b126eb4039f5c940a3cf233b15d6a18eff6",
-      "component_head_is_ancestor": true
-    },
-    {
-      "issue": 4307,
-      "pr": 4311,
-      "remote_ref": "refs/pull/4311/head",
-      "sha": "3c768cade6703426afd2272fbc01bfd60583e04f",
-      "remote_ref_verified": true,
-      "qualification": "firstmate-issued exact published head; remote ref re-read",
-      "state": "merged_preserved_history",
-      "integration_merge_commit": "1cb9cdb31c2fc446fe1da0b176b7422f04e81111",
-      "component_head_is_ancestor": true
-    },
-    {
       "issue": 4302,
-      "pr": 4308,
-      "remote_ref": "refs/pull/4308/head",
-      "sha": "fe5b8e18788538c4fcce34969da7ff88a7fa66d6",
-      "remote_ref_verified": true,
-      "qualification": "firstmate terminal gate: Verify run 32354323284 succeeded; real-provider qualification supplied",
-      "qualification_evidence": {
-        "verify_run": 32354323284,
-        "checks": ["verify", "linux-amd64 native-build", "darwin-arm64 native-build"],
-        "live_assertions": ["HEAD 200", "HEAD 404", "exact text export", "exact binary export", "missing-path error with no artifact"]
-      },
-      "state": "merged_preserved_history_targeted_green",
-      "integration_merge_commit": "9e3cd99b7ebd2ebac2303ad8770e50fee85c92c6",
-      "component_head_is_ancestor": true,
-      "integration_correction": "closed rest_status response path preserves final non-2xx metadata while retaining declaration-owned response headers"
-    },
-    {
-      "issue": 4305,
-      "branch": "fm/cli-rest-structured-body-r1",
-      "sha": "55ddb650aa5594ddd156b0939cb1df6027a31d56",
-      "source": "Firstmate-supplied local no-mistakes pipeline worktree",
-      "pipeline_worktree": "/Users/karthiksivadas/.no-mistakes/worktrees/e56f7e7b3cf6/01M0DY0HM9HNZVNKJ2J9Z9SCG7",
-      "remote_ref": "not used; older visible branch head explicitly not substituted",
-      "qualification": "captain-approved provisional exact local-pipeline head",
-      "state": "merged_preserved_history_provisional",
-      "integration_merge_commit": "0eb98d3844da7b48d0ca27f51ba7deb46d8f5d1b",
+      "sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
+      "integration_merge_commit": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
+      "role": "canonical core implementation base",
       "component_head_is_ancestor": true
     },
     {
       "issue": 4303,
-      "supersedes_visible_pr": 4304,
-      "sha": "e7f474375af969555efd82f684ad6d0b8a26cfc0",
-      "source": "Firstmate-supplied local no-mistakes pipeline worktree",
-      "pipeline_worktree": "/Users/karthiksivadas/.no-mistakes/worktrees/e56f7e7b3cf6/01M0DYNQ9HSJBYS9YQ4MJR4JGR",
-      "remote_ref": "not used; older visible pull head explicitly not substituted",
-      "qualification": "captain-approved provisional exact local-pipeline head",
-      "state": "merged_preserved_history_provisional",
-      "integration_merge_commit": "808896a28873c5f0479fa10e2f798da56f885b5e",
+      "sha": "487ec14e01c90f31a71b1cb5de060b8c66a203e9",
+      "integration_merge_commit": "50e90fa854635b7c8b295b7090034b82a52e4e03",
+      "role": "reverse action binding preserving merge",
+      "component_head_is_ancestor": true
+    },
+    {
+      "issue": 4305,
+      "sha": "66b4c3cbea00bf71cfc4082d09cd7f72917e08b5",
+      "integration_merge_commit": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
+      "role": "structured body component already inherited by core",
+      "component_head_is_ancestor": true
+    },
+    {
+      "issue": 4306,
+      "sha": "19a32bd0bc08faf217be8f45b39841b5ff589a92",
+      "integration_merge_commit": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
+      "role": "source import component already inherited by core",
+      "component_head_is_ancestor": true
+    },
+    {
+      "issue": 4307,
+      "sha": "3c768cade6703426afd2272fbc01bfd60583e04f",
+      "integration_merge_commit": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
+      "role": "closed operation component already inherited by core",
       "component_head_is_ancestor": true
     }
   ],
-  "intake": {
-    "gh_axi_reread": [4308, 4311, 4312, 4304],
-    "remote_ref_verification": "git ls-remote origin",
-    "local_pipeline_fetch": "git fetch --no-tags <Firstmate-supplied local worktree> <exact SHA>; neither pipeline worktree was modified",
-    "status": "provisional_local_pipeline_composite_ready_for_independent_review"
+  "active_release_inputs": [
+    {
+      "role": "core canonical",
+      "sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
+      "origin_predecessor": "524850d58a3a495e3ff865adc4a9734e0202d00e",
+      "origin_ref": "fm/cli-current-foundations-canonical-fix-wave-r2",
+      "remote_verified": true
+    },
+    {
+      "role": "reverse action binding",
+      "sha": "487ec14e01c90f31a71b1cb5de060b8c66a203e9",
+      "preserving_merge": "50e90fa854635b7c8b295b7090034b82a52e4e03",
+      "origin_ref": "fm/cli-reverse-etl-action-binding-foundation-r1",
+      "remote_verified": true
+    },
+    {
+      "role": "public output hardening",
+      "sha": "7fdef00d7e758cb4a3c413a16f8452ee0615f0d5",
+      "origin_predecessor": "2d6143b016c4c08ce203acc9fe0533d21c0cb96c",
+      "preserving_merge": "e18f4372f4f65ae5e42265f237abad79473a7425",
+      "origin_ref": "fm/cli-foundation-public-output-fix-r1",
+      "remote_verified": true
+    }
+  ],
+  "inherited_without_remerge": [
+    {
+      "role": "reverse destination",
+      "sha": "d814875a902be684cb2a38b94f7a8077f66b70b1",
+      "ancestor_of_core": true
+    }
+  ],
+  "composition": {
+    "reverse_merge": "50e90fa854635b7c8b295b7090034b82a52e4e03",
+    "public_merge": "e18f4372f4f65ae5e42265f237abad79473a7425",
+    "implementation_sha": "a5005fae7f1e92d19ef4b8e82d514050227bec38",
+    "method": "private heads fetched normally; preserving merges only; no dirty-worktree harvest, cherry-pick, force push, or default-branch change"
   }
 }
