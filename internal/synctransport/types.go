@@ -664,11 +664,12 @@ type Result struct {
 	ParquetBytes           int64
 	PeakCreditBytes        int64
 	CreditWaitElapsed      time.Duration
-	// DestinationResults retain every provider-returned response field, key,
-	// value, receipt, status, body, occurrence ID, and credential-equal byte
-	// verbatim. They remain opaque to the transport core: mapping and provider
-	// protocol stay connector-owned. Only system-generated diagnostics, plans,
-	// logs, and errors are rendered secret-safely.
+	// DestinationResults retain each adapter-returned provider response, including
+	// field names, ordinary values, receipts, status, body, and occurrence IDs.
+	// Adapters mask concrete configured credential material before placing results
+	// here; the transport core otherwise keeps them opaque so mapping and provider
+	// protocol stay connector-owned. System-generated diagnostics, plans, logs,
+	// and errors are rendered secret-safely.
 	DestinationResults  []json.RawMessage
 	CommittedCheckpoint *synccontract.CheckpointEnvelope
 	// DeliveredReconciliationRequired says the destination effect, read-back,
