@@ -104,6 +104,31 @@ jobs:
           go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli
           -run '^(TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'
 
+  # This is a measurement gate, not a replacement for Verify. The ordinary
+  # package remains under Verify's fixed deadline until a hosted-runner result
+  # establishes whether its complete workload needs a larger honest budget.
+  internal-cli-wall-clock-measurement:
+    name: internal-cli-wall-clock-measurement
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.26.6'
+          cache: false
+
+      - name: Measure ordinary internal/cli wall clock
+        run: |
+          started_at=$(date +%s)
+          go test -timeout 35m -count=1 ./internal/cli
+          elapsed_seconds=$(( $(date +%s) - started_at ))
+          echo "internal_cli_wall_seconds=${elapsed_seconds}"
+          echo "internal_cli_wall_seconds=${elapsed_seconds}" >> "$GITHUB_STEP_SUMMARY"
+
   # pm embeds DuckDB, so every release target must actually link cgo against
   # go-duckdb's bundled library. That is verifiable only on a native runner:
   # cross-compiling cgo to Windows or macOS from Linux needs a toolchain CI does
