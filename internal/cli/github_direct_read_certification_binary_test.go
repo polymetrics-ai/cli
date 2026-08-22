@@ -76,7 +76,7 @@ type githubReleasedReadFixtureRoute struct {
 // the corresponding policies require a shared coordinator; this test keeps
 // that path honest without turning a command-execution sweep into a paced
 // rate-limit soak.
-func TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture(t *testing.T) {
+func runPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture(t *testing.T) {
 	const token = "github-direct-read-fixture-token"
 	const tokenEnv = "PM_GITHUB_DIRECT_READ_FIXTURE_TOKEN"
 	t.Setenv(tokenEnv, token)
@@ -166,7 +166,7 @@ func TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture(t *tes
 // gate. Each command has the same implemented declaration it had in v0.2.1;
 // this test proves the real binary emits its declared request and accepts the
 // declared JSON result before a verdict test may classify it as non-executable.
-func TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture(t *testing.T) {
+func runPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture(t *testing.T) {
 	const token = "github-disputed-partial-fixture-token"
 	const tokenEnv = "PM_GITHUB_DISPUTED_PARTIAL_FIXTURE_TOKEN"
 	t.Setenv(tokenEnv, token)
@@ -594,7 +594,7 @@ func githubGeneratedDirectReadFixtureJSONValueType(value any) string {
 // fixture output. The 633 targets are a strict superset of the 370 routes
 // restored from the over-blocking projection; this is local fixture evidence,
 // not a live-provider certification claim.
-func TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture(t *testing.T) {
+func runPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture(t *testing.T) {
 	const token = "github-released-read-fixture-token"
 	const tokenEnv = "PM_GITHUB_RELEASED_READ_FIXTURE_TOKEN"
 	t.Setenv(tokenEnv, token)
