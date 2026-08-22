@@ -1968,10 +1968,7 @@ func sourceRESTOperationIsDeclaredReachable(bundle engine.Bundle, source sourceO
 			return true
 		}
 	}
-	if sourceProjectionDeclaredDirectRead(bundle, source, allowSourceBoundPartial) {
-		return true
-	}
-	return false
+	return sourceProjectionDeclaredDirectRead(bundle, source, allowSourceBoundPartial)
 }
 
 // sourceProjectionDeclaredDirectRead recognizes an existing closed direct-read
