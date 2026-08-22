@@ -11,4 +11,13 @@
 
 ## Actual evidence
 
-Pending red-first execution. Each command and result is appended as its slice becomes green.
+### Slice 1 — FND-B10, FND-B11, FND-B13 public output
+
+- Red: `go test -count=1 -timeout 20m ./internal/connectors/native/amazon-sqs -run 'TestOperationDirectReadListQueuesPreservesOrdinaryNameShapedProviderValues'` failed because the native field-name heuristic replaced the ordinary `Policy` value.
+- Red: `go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestOperationDirectReadMasksConfiguredCursorAtThePublicBoundary'` failed because `next_cursor` was returned unchanged.
+- Red: the receipt test failed against the pre-fix printable/substring sanitizer, demonstrating that a configured short value corrupts ordinary `occurrence_id` output instead of retaining the provider response faithfully.
+- Green: `go test -count=1 -timeout 20m ./internal/connectors -run 'Test(PublicReceiptSanitizationMasksConcreteSecretRepresentationsWithoutChangingProviderNames|WriteResultOutputMasksConfiguredSecretsAndPreservesOrdinaryProviderTruth|OperationDirectWriteResultOutputMasksConfiguredAndDeclaredSecrets|SanitizeWriteErrorForOutputKeepsSystemDiagnosticsSecretFree)'`.
+- Green: `go test -count=1 -timeout 20m ./internal/connectors/native/amazon-sqs -run 'TestOperationDirectReadListQueuesPreservesOrdinaryNameShapedProviderValues'`.
+- Green: `go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestOperationDirectReadMasksConfiguredCursorAtThePublicBoundary'`.
+
+FND-B12, FND-B14, and FND-W02 remain pending their separate red-green slices.

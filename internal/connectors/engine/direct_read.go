@@ -191,6 +191,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	}
 	readResult.Body = decoded
 	readResult.Headers = responseHeaders
+	readResult.Page = connectors.SanitizeDirectReadPageForOutput(readResult.Page, cfg.Secrets)
 	return readResult, nil
 }
 
@@ -529,6 +530,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
 	readResult.Body = body
+	readResult.Page = connectors.SanitizeDirectReadPageForOutput(readResult.Page, cfg.Secrets)
 	return readResult, nil
 }
 

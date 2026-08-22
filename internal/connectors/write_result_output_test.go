@@ -101,3 +101,50 @@ func TestSanitizeWriteErrorForOutputKeepsSystemDiagnosticsSecretFree(t *testing.
 		t.Fatal("system diagnostic leaked a configured credential")
 	}
 }
+
+func TestPublicReceiptSanitizationMasksConcreteSecretRepresentationsWithoutChangingProviderNames(t *testing.T) {
+	credential := "id"
+	encoded := base64.StdEncoding.EncodeToString([]byte(credential))
+	escaped, err := json.Marshal(credential)
+	if err != nil {
+		t.Fatal(err)
+	}
+	receipt := ProviderResponseReceipt{
+		ResponseReceived: true,
+		Status:           400,
+		Headers: map[string]OperationResponseHeader{
+			"X-occurrence-id": {Values: []string{"occurrence_id"}},
+			"X-Diagnostic":    {Values: []string{"provider said " + credential + " while retaining occurrence_id"}},
+		},
+		BodyPresent:     true,
+		BodyRaw:         `{"credential":` + string(escaped) + `,"occurrence_id":"occurrence-9007199254740993","token_type":"ordinary"}`,
+		BodyRawEncoding: "text",
+		Body: map[string]any{
+			"credential":    credential,
+			"encoded":       encoded,
+			"occurrence_id": "occurrence-9007199254740993",
+			"token_type":    "ordinary",
+		},
+	}
+
+	got := SanitizeProviderResponseReceiptForOutput(receipt, map[string]string{"credential": credential})
+	if strings.Contains(got.BodyRaw, `"credential":"id"`) || got.Headers["X-Diagnostic"].Values[0] != "provider said [masked] while retaining occurrence_id" {
+		t.Fatal("public receipt retained a configured secret representation")
+	}
+	if _, ok := got.Headers["X-occurrence-id"]; !ok {
+		t.Fatal("public receipt changed an ordinary provider header name")
+	}
+	body, ok := got.Body.(map[string]any)
+	if !ok || body["credential"] != "[masked]" || body["encoded"] != "[masked]" || body["occurrence_id"] != "occurrence-9007199254740993" || body["token_type"] != "ordinary" {
+		t.Fatal("public receipt changed ordinary provider output")
+	}
+	if !strings.Contains(got.BodyRaw, "occurrence-9007199254740993") {
+		t.Fatal("public JSON receipt lost an ordinary occurrence identifier")
+	}
+
+	printable := ProviderResponseReceipt{BodyPresent: true, BodyRaw: "provider diagnostic id for occurrence_id", BodyRawEncoding: "text", Body: "provider diagnostic id for occurrence_id"}
+	gotPrintable := SanitizeProviderResponseReceiptForOutput(printable, map[string]string{"credential": credential})
+	if gotPrintable.BodyRaw != "provider diagnostic [masked] for occurrence_id" || gotPrintable.Body != "provider diagnostic [masked] for occurrence_id" {
+		t.Fatalf("printable receipt = %#v, want concrete secret masking without changing occurrence_id", gotPrintable)
+	}
+}

@@ -40,11 +40,8 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 		return connectors.DirectReadResult{}, err
 	}
 	page := sqsDirectReadPage(req.Operation, body)
-	redacted := redactDirectBody(body, req.RedactFields)
-	body, ok := redacted.(map[string]any)
-	if !ok {
-		return connectors.DirectReadResult{}, fmt.Errorf("redact sqs direct read %s: unexpected root type %T", req.Operation, redacted)
-	}
+	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets).(map[string]any)
+	page = connectors.SanitizeDirectReadPageForOutput(page, req.Config.Secrets)
 	return connectors.DirectReadResult{Connector: c.Name(), Method: "POST", Path: "SQS." + directReadAction(req.Operation), Status: resp.status, Body: body, Page: page}, nil
 }
 
@@ -478,63 +475,4 @@ func setIfNotEmpty(out map[string]any, key, value string) {
 	if strings.TrimSpace(value) != "" {
 		out[key] = value
 	}
-}
-
-func redactDirectBody(value any, fields []string) any {
-	explicit := map[string]bool{}
-	for _, field := range fields {
-		field = strings.TrimSpace(field)
-		if field == "" {
-			continue
-		}
-		explicit[normalizeField(field)] = true
-	}
-	return redactDirectValue("", value, explicit, 0)
-}
-
-func redactDirectValue(key string, value any, explicit map[string]bool, depth int) any {
-	if key != "" && shouldRedactDirectField(key, explicit, depth == 1) {
-		return "***"
-	}
-	switch typed := value.(type) {
-	case map[string]any:
-		out := make(map[string]any, len(typed))
-		keys := make([]string, 0, len(typed))
-		for k := range typed {
-			keys = append(keys, k)
-		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			out[k] = redactDirectValue(k, typed[k], explicit, depth+1)
-		}
-		return out
-	case []any:
-		out := make([]any, len(typed))
-		for i, item := range typed {
-			out[i] = redactDirectValue("", item, explicit, depth+1)
-		}
-		return out
-	default:
-		return value
-	}
-}
-
-func shouldRedactDirectField(key string, explicit map[string]bool, topLevel bool) bool {
-	normalized := normalizeField(key)
-	if explicit[normalized] {
-		return true
-	}
-	if normalized == "next_token" && topLevel {
-		return false
-	}
-	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "token", "password", "api_key", "apikey", "access_key", "accesskey", "credential"} {
-		if strings.Contains(normalized, marker) {
-			return true
-		}
-	}
-	return false
-}
-
-func normalizeField(key string) string {
-	return strings.ToLower(strings.NewReplacer("-", "_", ".", "_", " ", "_").Replace(key))
 }

@@ -708,7 +708,7 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
 	readResult.Body = body
 	readResult.GraphQL = metadata
-	readResult.Page = page
+	readResult.Page = connectors.SanitizeDirectReadPageForOutput(page, req.Config.Secrets)
 	return readResult, nil
 }
 

@@ -558,7 +558,7 @@ func TestManifestWriteActionsAndDestructiveConfirmations(t *testing.T) {
 	}
 }
 
-func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
+func TestOperationDirectReadListQueuesPreservesOrdinaryNameShapedProviderValues(t *testing.T) {
 	var sawActions []string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
@@ -585,7 +585,7 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 
 	c := native.New()
 	cfg := testRuntimeConfig(srv.URL)
-	res, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queues", Config: cfg, Body: map[string]any{"max_results": 25}, RedactFields: []string{"", "policy"}})
+	res, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queues", Config: cfg, Body: map[string]any{"max_results": 25}})
 	if err != nil {
 		t.Fatalf("OperationDirectRead list_queues: %v", err)
 	}
@@ -593,7 +593,7 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	if urls := body["queue_urls"].([]string); len(urls) != 1 || body["next_token"] != "next" {
 		t.Fatalf("list_queues body = %#v", body)
 	}
-	res, err = c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_dead_letter_source_queues", Config: cfg, Body: map[string]any{"max_results": 25}, RedactFields: []string{"policy"}})
+	res, err = c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_dead_letter_source_queues", Config: cfg, Body: map[string]any{"max_results": 25}})
 	if err != nil {
 		t.Fatalf("OperationDirectRead list_dead_letter_source_queues: %v", err)
 	}
@@ -601,21 +601,21 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	if urls := body["queue_urls"].([]string); len(urls) != 1 || body["next_token"] != "dead-letter-next" {
 		t.Fatalf("list_dead_letter_source_queues body = %#v", body)
 	}
-	res, err = c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "get_queue_attributes", Config: cfg, RedactFields: []string{"policy"}})
+	res, err = c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "get_queue_attributes", Config: cfg})
 	if err != nil {
 		t.Fatalf("OperationDirectRead get_queue_attributes: %v", err)
 	}
 	attrs := res.Body.(map[string]any)["attributes"].(map[string]any)
-	if attrs["Policy"] != "***" || attrs["QueueArn"] == "***" {
-		t.Fatalf("attributes redaction = %#v", attrs)
+	if attrs["Policy"] != `{"Statement":"fixture"}` || attrs["QueueArn"] != "arn:aws:sqs:us-east-1:123:orders" {
+		t.Fatalf("attributes = %#v, want complete ordinary provider values", attrs)
 	}
 	res, err = c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queue_tags", Config: cfg})
 	if err != nil {
 		t.Fatalf("OperationDirectRead list_queue_tags: %v", err)
 	}
 	tags := res.Body.(map[string]any)["tags"].(map[string]any)
-	if tags["api_key"] != "***" || tags["access_key"] != "***" || tags["credential_id"] != "***" || tags["next_token"] != "***" || tags["environment"] != "prod" {
-		t.Fatalf("tag redaction = %#v", tags)
+	if tags["api_key"] != "abc" || tags["access_key"] != "def" || tags["credential_id"] != "ghi" || tags["next_token"] != "nested-secret-token" || tags["environment"] != "prod" {
+		t.Fatalf("tags = %#v, want complete ordinary provider values", tags)
 	}
 	if strings.Join(sawActions, ",") != "ListQueues,ListDeadLetterSourceQueues,GetQueueAttributes,ListQueueTags" {
 		t.Fatalf("actions = %v", sawActions)

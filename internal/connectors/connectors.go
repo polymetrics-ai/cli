@@ -1027,7 +1027,10 @@ func sanitizeProviderHeaders(headers map[string]OperationResponseHeader, secrets
 		for i, value := range header.Values {
 			clone.Values[i] = redactWriteResultString(value, secrets)
 		}
-		out[redactWriteResultString(name, secrets)] = clone
+		// Header names are provider output, not credential material. Redacting
+		// name-shaped values such as X-Occurrence-ID changes ordinary output and
+		// cannot protect a configured secret that is only present in a value.
+		out[name] = clone
 	}
 	return out
 }
@@ -1060,7 +1063,9 @@ func sanitizeProviderOutputValue(value any, secrets []string) any {
 	case map[string]any:
 		out := make(map[string]any, len(typed))
 		for key, item := range typed {
-			out[redactWriteResultString(key, secrets)] = sanitizeProviderOutputValue(item, secrets)
+			// Field names are structural provider output. Only concrete values can
+			// be configured credentials, so retain the provider's schema exactly.
+			out[key] = sanitizeProviderOutputValue(item, secrets)
 		}
 		return out
 	case []any:
@@ -1070,16 +1075,37 @@ func sanitizeProviderOutputValue(value any, secrets []string) any {
 		}
 		return out
 	case string:
-		return redactWriteResultString(typed, secrets)
+		return sanitizeProviderOutputScalar(typed, secrets)
 	case json.Number:
-		masked := redactWriteResultString(typed.String(), secrets)
-		if masked != typed.String() {
+		if masked, ok := configuredSecretMask(typed.String(), secrets); ok {
 			return masked
 		}
 		return typed
+	case []string:
+		out := make([]string, len(typed))
+		for i, item := range typed {
+			out[i] = sanitizeProviderOutputScalar(item, secrets)
+		}
+		return out
 	default:
 		return cloneProviderOutputValue(value)
 	}
+}
+
+func sanitizeProviderOutputScalar(value string, secrets []string) string {
+	if masked, ok := configuredSecretMask(value, secrets); ok {
+		return masked
+	}
+	return value
+}
+
+func configuredSecretMask(value string, secrets []string) (string, bool) {
+	for _, secret := range secrets {
+		if value == secret {
+			return "[masked]", true
+		}
+	}
+	return value, false
 }
 
 // SanitizeProviderOutputForOutput deep-clones an arbitrary decoded provider
@@ -1089,6 +1115,15 @@ func sanitizeProviderOutputValue(value any, secrets []string) any {
 // otherwise.
 func SanitizeProviderOutputForOutput(value any, secrets map[string]string) any {
 	return sanitizeProviderOutputValue(value, configuredWriteResultSecrets(secrets))
+}
+
+// SanitizeDirectReadPageForOutput returns page navigation that is safe to
+// publish with a direct-read result. A next cursor is an opaque provider value
+// and stays intact unless it is exactly one configured credential or one of
+// that credential's concrete wire encodings.
+func SanitizeDirectReadPageForOutput(page DirectReadPage, secrets map[string]string) DirectReadPage {
+	page.NextCursor = sanitizeProviderOutputScalar(page.NextCursor, configuredWriteResultSecrets(secrets))
+	return page
 }
 
 // SanitizeProviderResponseReceiptForOutput clones a complete response receipt
@@ -1101,22 +1136,40 @@ func SanitizeProviderResponseReceiptForOutput(receipt ProviderResponseReceipt, s
 	out.Headers = sanitizeProviderHeaders(receipt.Headers, masked)
 	out.BodyRaw = sanitizeProviderResponseRaw(receipt.BodyRaw, receipt.BodyRawEncoding, masked)
 	out.Body = sanitizeProviderOutputValue(receipt.Body, masked)
-	if rawBody, ok := receipt.Body.(string); ok && receipt.BodyRawEncoding == "base64" && rawBody == receipt.BodyRaw {
-		out.Body = out.BodyRaw
+	if rawBody, ok := receipt.Body.(string); ok {
+		if rawBody == receipt.BodyRaw {
+			out.Body = out.BodyRaw
+		} else {
+			out.Body = redactWriteResultString(rawBody, masked)
+		}
 	}
 	return out
 }
 
 func sanitizeProviderResponseRaw(value, encoding string, secrets []string) string {
-	if encoding != "base64" {
-		return redactWriteResultString(value, secrets)
+	if encoding == "base64" {
+		raw, err := base64.StdEncoding.DecodeString(value)
+		if err != nil {
+			return redactWriteResultString(value, secrets)
+		}
+		return base64.StdEncoding.EncodeToString([]byte(sanitizeProviderResponseText(string(raw), secrets)))
 	}
-	raw, err := base64.StdEncoding.DecodeString(value)
-	if err != nil {
-		return redactWriteResultString(value, secrets)
+	return sanitizeProviderResponseText(value, secrets)
+}
+
+func sanitizeProviderResponseText(value string, secrets []string) string {
+	decoder := json.NewDecoder(strings.NewReader(value))
+	decoder.UseNumber()
+	var decoded any
+	if err := decoder.Decode(&decoded); err == nil {
+		var trailing any
+		if err := decoder.Decode(&trailing); errors.Is(err, io.EOF) {
+			if encoded, marshalErr := json.Marshal(sanitizeProviderOutputValue(decoded, secrets)); marshalErr == nil {
+				return string(encoded)
+			}
+		}
 	}
-	masked := redactWriteResultString(string(raw), secrets)
-	return base64.StdEncoding.EncodeToString([]byte(masked))
+	return redactWriteResultString(value, secrets)
 }
 
 func providerOutputValueAtPath(value any, path string) (any, bool) {
@@ -1194,7 +1247,7 @@ func configuredSecretVariants(value string) []string {
 		return nil
 	}
 	bytes := []byte(value)
-	return []string{
+	variants := []string{
 		value,
 		url.QueryEscape(value),
 		url.PathEscape(value),
@@ -1203,13 +1256,50 @@ func configuredSecretVariants(value string) []string {
 		base64.URLEncoding.EncodeToString(bytes),
 		base64.RawURLEncoding.EncodeToString(bytes),
 	}
+	if escaped, err := json.Marshal(value); err == nil && len(escaped) >= 2 {
+		variants = append(variants, string(escaped[1:len(escaped)-1]))
+	}
+	return variants
 }
 
 func redactWriteResultString(value string, secrets []string) string {
 	for _, secret := range secrets {
-		value = strings.ReplaceAll(value, secret, "[masked]")
+		value = redactConcreteSecretText(value, secret)
 	}
 	return value
+}
+
+func redactConcreteSecretText(value, secret string) string {
+	if secret == "" {
+		return value
+	}
+	var out strings.Builder
+	for offset := 0; ; {
+		index := strings.Index(value[offset:], secret)
+		if index < 0 {
+			out.WriteString(value[offset:])
+			return out.String()
+		}
+		start := offset + index
+		end := start + len(secret)
+		out.WriteString(value[offset:start])
+		if providerOutputTokenBoundary(value, start, end) {
+			out.WriteString("[masked]")
+		} else {
+			out.WriteString(secret)
+		}
+		offset = end
+	}
+}
+
+func providerOutputTokenBoundary(value string, start, end int) bool {
+	return (start == 0 || !isProviderOutputTokenByte(value[start-1])) &&
+		(end == len(value) || !isProviderOutputTokenByte(value[end]))
+}
+
+func isProviderOutputTokenByte(value byte) bool {
+	return value >= 'a' && value <= 'z' || value >= 'A' && value <= 'Z' || value >= '0' && value <= '9' ||
+		value == '_' || value == '-' || value == '.' || value == '~' || value == '%'
 }
 
 type QueryRequest struct {

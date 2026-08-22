@@ -1386,6 +1386,40 @@ func TestDirectReadReceiptPreservesAbsentAndInvalidBodiesAndMasksExactSecrets(t 
 	})
 }
 
+func TestOperationDirectReadMasksConfiguredCursorAtThePublicBoundary(t *testing.T) {
+	const configuredValue = "fixture-cursor-material"
+	issued := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"results":[{"occurrence_id":"occurrence-9007199254740993","token_type":"ordinary"}],"next_cursor":"fixture-cursor-material"}`))
+	}))
+	t.Cleanup(srv.Close)
+	b := paginatedOperationBundle(srv.URL, &PaginationSpec{Type: "cursor", CursorParam: "cursor", TokenPath: "next_cursor"}, "/v1/results")
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list",
+		Config:    connectors.RuntimeConfig{Secrets: map[string]string{"credential": configuredValue}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if issued != 1 {
+		t.Fatalf("requests = %d, want 1", issued)
+	}
+	public, err := json.Marshal(result)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Contains(public, []byte(configuredValue)) {
+		t.Fatal("public direct-read result exposed configured cursor material")
+	}
+	body := result.Body.(map[string]any)
+	row := body["results"].([]any)[0].(map[string]any)
+	if row["occurrence_id"] != "occurrence-9007199254740993" || row["token_type"] != "ordinary" {
+		t.Fatal("cursor masking changed ordinary provider output")
+	}
+}
+
 // --- required_query any-of groups ------------------------------------------
 //
 // Airtable's ledger blocks GET /v0/meta/enterpriseAccounts/{id}/users until the
