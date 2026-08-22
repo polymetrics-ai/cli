@@ -6260,6 +6260,7 @@
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
       "covered_by": {
         "direct_reads": [
+          "pr diff",
           "pr view",
           "pulls view"
         ]
@@ -6443,7 +6444,10 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
       "covered_by": {
-        "direct_read": "releases assets view"
+        "direct_reads": [
+          "release download",
+          "releases assets view"
+        ]
       }
     },
     {
