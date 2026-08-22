@@ -80,7 +80,7 @@
   "composition": {
     "reverse_merge": "50e90fa854635b7c8b295b7090034b82a52e4e03",
     "public_merge": "e18f4372f4f65ae5e42265f237abad79473a7425",
-    "implementation_sha": "298a519de14b98cef5e1d8e20cd43b6d0ab42d84",
+    "implementation_sha": "ad8bff65958a20924aff43d9aea3ea42301e9703",
     "method": "private heads fetched normally; preserving merges only; no dirty-worktree harvest, cherry-pick, force push, or default-branch change"
   }
 }
