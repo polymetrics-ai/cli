@@ -41,7 +41,7 @@ This checkpoint is intentionally limited to exact local-pipeline composition, th
 - [x] FND-B09 schema-2 failure reproduced before closure; FND-W01 disposition is evidence-backed and does not broaden scope.
 - [x] Prior I/E (`a5005fae…` / `7c3d856…`) superseded by the confirmed Recurly path-flag regression; the unchanged binary regression test is green after the narrow declaration/generation repair.
 - [x] Prior I/E (`1d83dd9…` / `133afe481…`) superseded by CI-proven generated website-data drift; generator output is now committed and locally idempotent.
-- [x] Implementation SHA I `368f21f4e874a262cf2b4fc8d13186474dfd2159` frozen after all production/generated checks; no production/generated path changes afterwards.
-- [ ] Replacement evidence-only SHA E committed and pushed; strict evidence gate passes from clean E.
+- [x] Implementation SHA I `bbbfc67002363b35c6f9ac5ca340a1886523039c` frozen after all production/generated checks; no production/generated path changes afterwards. Its tag-versus-head GitHub parity is exact: endpoints=1,225, blocked=1 with the same retired POST identity, candidates=120.
+- [x] Replacement evidence-only closure is prepared above I; strict evidence gate is run only from the resulting clean E commit.
 - [x] `gofmt`/diff check, targeted tests and races, `go vet ./...`, `go build ./cmd/pm`, generation, docs/help/skills/certification, and individually runnable release gates pass; predecessor aggregate test failures are explicitly documented rather than waived.
 - [ ] PR opened only after E is immutable; GitHub API reports its base exactly `fm/cli-current-foundations-main-integration-r1` and head exactly E.
