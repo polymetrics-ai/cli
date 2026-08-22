@@ -2,8 +2,8 @@
   "schema_version": 3,
   "integration": "cli-current-foundations-main-integration-r1",
   "checkpoint": "foundation-0.3.0-release-candidate-r1-evidence-closure",
-  "code_sha": "ad8bff65958a20924aff43d9aea3ea42301e9703",
-  "reviewed_sha": "ad8bff65958a20924aff43d9aea3ea42301e9703",
+  "code_sha": "6fef1f48a5626c0b7b836b06ccbed3305551dde9",
+  "reviewed_sha": "6fef1f48a5626c0b7b836b06ccbed3305551dde9",
   "base_sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
   "component_inputs": [
     {
@@ -96,6 +96,13 @@
       "assertion": "RC-10 executes every disputed GitHub command through a fresh initialized pm binary and authenticated fixture. Each observed request matches the declared GET path template, and each declared JSON output assertion passes; the stale partial verdicts are corrected without changing declarations, generated surface, or runtime authority. Candidate certification JSON decodes stdout apart from diagnostics.",
       "tests": ["TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture", "TestGitHubDeclaredParityVerdicts", "TestGitHubLegacyAliasesPassRuntimePreflight"],
       "modes": ["direct_read.fixture_behavior", "cli.stdout_stderr_separation", "github.declared_verdict", "implemented_but_uncertified"]
+    },
+    {
+      "command": "PM_DRAGONFLY_ADDR=127.0.0.1:1 go test -timeout 8m -count=1 -v ./internal/cli -run '^(TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture)$'; go test -timeout 20m -count=1 ./internal/connectors/commandrunner; go test -timeout 20m -count=1 ./internal/cli; go test -timeout 20m -count=1 ./cmd/connectorgen; go vet ./...; go build ./cmd/pm; go run ./cmd/connectorgen surface-sync --check",
+      "status": "passed",
+      "assertion": "RC-11 reproduces the correct production shared-coordinator refusal under an unreachable inherited endpoint, then removes only that endpoint from the fixture child. With the parent still set to the invalid endpoint, all 97 fresh-binary candidate stages make their authenticated declared requests and pass their declared output assertions; the shared-coordinator runtime fence is unchanged.",
+      "tests": ["TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture", "TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryRefusesRequiredSharedRateBudgetBeforeSend"],
+      "modes": ["direct_read.fixture_behavior", "rate_limit.local_in_process_fixture", "shared_coordinator.refusal_preserved", "implemented_but_uncertified"]
     }
   ],
   "gate_ledger": [
@@ -152,7 +159,7 @@
     }
   ],
   "artifact_closure": {
-    "implementation_sha": "ad8bff65958a20924aff43d9aea3ea42301e9703",
+    "implementation_sha": "6fef1f48a5626c0b7b836b06ccbed3305551dde9",
     "subject_fingerprint": "6e718f8cd4b80497467e907ecb8ae49373afb1758920dfe7d18c83340061c86a",
     "artifacts": [
       {
@@ -168,7 +175,7 @@
       {
         "category": "cli",
         "path": "internal/cli/github_direct_read_certification_binary_test.go",
-        "sha256": "49e7867a97fa23f117cbfd6989c93cf04094a3b4c1f65718bd857296ead38d15"
+        "sha256": "5c4ad1c429184d1ec475224d238d345c47cce978ce60bf5b9c111556bca1b522"
       },
       {
         "category": "docs",
@@ -188,7 +195,7 @@
       {
         "category": "ledger",
         "path": ".planning/phases/cli-current-foundations-main-integration-r1/TDD-LEDGER.md",
-        "sha256": "5c5035358107325136bb4c332d50bef216ae052536b8bd748a897fbaec6d26d6"
+        "sha256": "f1a92c299550589f2018c4b306cba041a7d934d8e90f50c1fcfb117a999d582a"
       },
       {
         "category": "matrix",
@@ -208,7 +215,7 @@
       {
         "category": "foundation_evidence",
         "path": "data/cli-current-foundations-main-integration-r1/report.md",
-        "sha256": "cad413eb4a854be5b780ee83242811f42108e7ae4881fbe514692c15fdbdbe86"
+        "sha256": "53d3067c6a8ec2a061d16d04c974428ca72d09bc4315998e2181b3cfb8b6e51e"
       }
     ]
   }

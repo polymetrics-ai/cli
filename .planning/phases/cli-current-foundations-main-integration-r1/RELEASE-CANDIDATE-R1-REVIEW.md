@@ -1,8 +1,8 @@
 # Foundation 0.3.0 release-candidate r1 review record
 
-source_sha: ad8bff65958a20924aff43d9aea3ea42301e9703
+source_sha: 6fef1f48a5626c0b7b836b06ccbed3305551dde9
 
-This is final code-and-generated implementation SHA **I3**. Its schema-3 evidence closure is deliberately the next commit: an evidence file cannot truthfully name the Git object that contains itself.
+This is final code-and-generated implementation SHA **I4**. Its schema-3 evidence closure is deliberately the next commit: an evidence file cannot truthfully name the Git object that contains itself.
 
 ## Intake and composition crosswalk
 
@@ -23,6 +23,7 @@ This is final code-and-generated implementation SHA **I3**. Its schema-3 evidenc
 | RC-10 GitHub verdict correction | Verify at E2 failed two hard-coded assertions that fifteen already-implemented GitHub reads must be `partial`: eleven list commands plus `issue status`, `pr checks`, `ruleset check`, and `search prs`. The captain's artifact comparison proves the eleven lists are unchanged at `v0.2.1`, `origin/main`, and I3; they use valid API-surface bindings even without an `operation`/`stream`/`write` field. No declaration, generated surface, or runtime code changed. |
 | RC-10 behavioral adjudication | `TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture` builds and runs a fresh `pm` for every disputed command. Each invocation initializes an isolated project with a fixture credential, reaches exactly one authenticated GET, matches the resolved request path to its declared API-surface template, and validates the emitted direct-read envelope and declared JSON output. All 15 pass (39.16s). That direct execution evidence—not inventory count—authorizes correcting the stale test expectations. |
 | Candidate-output decoder | The reported non-JSON failure did not reproduce locally, but `runTransportPM` directly used `CombinedOutput` before JSON decoding. The candidate test now isolates stdout for JSON and reports independently redacted stderr. The full 97-stage fresh-binary candidate fixture proof passes after this change (70.30s); it remains behavioral fixture proof, not live certification. |
+| RC-11 fixture-admission containment | Verify `32589551092` then directly failed the new 97-stage candidate proof: an unrelated test exported unreachable `PM_DRAGONFLY_ADDR`, so the certification-tier child correctly returned `shared_coordinator_unavailable` before fixture I/O at `secret-scanning scan-history view`. The same failure reproduces locally in 242.393s. The fixture child now removes only that inherited endpoint and thereby uses the existing local in-process admission path; it retains its fixture token, request assertions, and declared output assertions. With the unreachable parent value still present, all 97 stages pass in 70.21s. The production shared-coordinator refusal remains unchanged and is separately covered by `TestPMBinaryRefusesRequiredSharedRateBudgetBeforeSend`. |
 | CI website-data parity | Fresh CI directly failed because generator-owned website data was stale. A local `website` generator run reproduced it and changed only four generated website artifacts; its data now includes the required Recurly flags and current source-projection statuses. No provider/runtime declaration was altered. |
 
 ## Conflict-invariant preservation
@@ -34,7 +35,7 @@ This is final code-and-generated implementation SHA **I3**. Its schema-3 evidenc
 
 ## FND-B09 and FND-W01
 
-- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closures `7c3d856…`, `133afe481…`, `596c90c…`, `25b2f844…`, and `8ed5ab93…` are superseded after the confirmed Recurly correction, CI-proven website-data drift, GitHub reachability regression, RC-09 CodeQL repair, and RC-10 behavioral verdict correction. This schema-3 closure binds I3, five typed component identities, current subject fingerprint, and exact artifact digests.
+- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closures `7c3d856…`, `133afe481…`, `596c90c…`, `25b2f844…`, `8ed5ab93…`, and `4058b2fe…` are superseded after the confirmed Recurly correction, CI-proven website-data drift, GitHub reachability regression, RC-09 CodeQL repair, RC-10 behavioral verdict correction, and RC-11 fixture-admission containment. This schema-3 closure binds I4, five typed component identities, current subject fingerprint, and exact artifact digests.
 - **FND-W01 — deferred / non-reproducing:** current `sourceimport` flow and hermetic `TestSourceImport.*` evidence were inspected. No deterministic externally observable publication-order defect was established, so no speculative publication rewrite was made.
 
 ## Behavioral proof, provider proof, and certification claim
@@ -46,6 +47,7 @@ This is final code-and-generated implementation SHA **I3**. Its schema-3 evidenc
 | GitHub generated direct reads | Fresh-binary fixture proof executes all 97 generated candidates through CLI parsing, commandrunner, engine, GitHub transport, declared auth, resolved path binding, and the declared object-or-array output assertion. Source import, surface sync, candidates, and sweep generation checks are current. | No current provider evidence; retained historical 422 is not new live proof. | **Implemented but uncertified.** This is behavioral fixture proof, not live certification. |
 | GitHub released API read surface | Fresh-binary fixture proof executes 633 unique API-surface targets, a strict superset of the 370 restored endpoints. It asserts one resolved request per command, declared method, and declared JSON/text/status-only/repository-content/binary output behavior. | No approved GitHub credential reference was available or inferred. | **Implemented but uncertified.** The fixture proves executable local behavior only. |
 | GitHub RC-10 disputed reads: `agent-task list`, `cache list`, `codespace list`, `gist list`, `gpg-key list`, `issue status`, `org list`, `pr checks`, `repo gitignore list`, `repo license list`, `ruleset check`, `search prs`, `secret list`, `ssh-key list`, `variable list` | Fresh-binary fixture proof executes every listed command. Each makes one authenticated GET with declared resolved path and a validated declared JSON result. | No approved GitHub credential reference was available or inferred. | **Implemented but uncertified.** All 15 are locally behaviorally proven; none is claimed live certified. |
+| GitHub generated direct reads under inherited unavailable coordinator state | The isolated fixture child removes only `PM_DRAGONFLY_ADDR`; with parent `PM_DRAGONFLY_ADDR=127.0.0.1:1`, all 97 candidate stages send authenticated declared requests and pass declared output assertions. | No approved GitHub credential reference was available or inferred. | **Implemented but uncertified.** This proves fixture isolation and local execution; it neither disables nor certifies shared coordination. |
 
 The certification matrix reports `connectors=3 capability_complete=0 certified=0`. No command is certified from source mapping, fixture proof, or historical provider output.
 
@@ -66,6 +68,7 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 | `go test -timeout 20m -count=1 ./internal/cli` | PASS (1061.223s). |
 | `go test -timeout 20m -count=1 ./cmd/connectorgen` after cache repair | PASS (143.786s) from I3. |
 | `go vet ./...`; `go build ./cmd/pm`; `go run ./cmd/connectorgen surface-sync --check` | PASS; surface sync reports 552 connectors and zero corrected fields. |
+| RC-11 red/green coordinator fixture proof | RED: `PM_DRAGONFLY_ADDR=127.0.0.1:1 go test -timeout 8m -count=1 -v ./internal/cli -run '^TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture$'` refused `shared_coordinator_unavailable` at 242.393s, before provider I/O. GREEN: the same command passes all 97 stages in 70.21s after child-only environment isolation; the 15-command companion fixture passes (26.88s), full commandrunner passes (21.548s), full CLI passes (1054.801s), and full `cmd/connectorgen` passes (139.953s). |
 | GitHub `source-import --check`, `surface-sync --check`, `certification-candidates --check`, generated `certification-sweep`, and direct-read candidate/cohort tests | PASS: 120 total direct-read candidates (23 manual, 97 generated); unchanged expectations. |
 | Exact GitHub release-surface parity at I | PASS: `v0.2.1` and I both have `endpoints=1225`, `blocked=1`, and `direct_read_candidates=120`; the sole blocked identity is `POST /user/{user_id}/projectsV2/{project_number}/drafts`, duplicate of `POST /graphql (github.graphql.mutation.add-project-v2-draft-issue)`. |
 | `go test -timeout 20m ./cmd/connectorgen -count=1` | PASS (151.700s). |
@@ -80,4 +83,4 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 
 ## Merge recommendation
 
-The local Foundation implementation and the targeted GitHub candidate and RC-10 verdict gates are green. Recurly and GitHub reads are implemented but explicitly not live certified. Do not merge this PR from this record: remaining gates are the strict evidence gate on the replacement closure, fresh automated review, and GitHub CI. PR #4314 remains unmerged against `fm/cli-current-foundations-main-integration-r1`.
+The local Foundation implementation, targeted GitHub candidate/RC-10 gates, and RC-11 fixture-admission containment are green. Recurly and GitHub reads are implemented but explicitly not live certified. Do not merge this PR from this record: remaining gates are the strict evidence gate on the replacement closure, fresh automated review, and GitHub CI. PR #4314 remains unmerged against `fm/cli-current-foundations-main-integration-r1`.
