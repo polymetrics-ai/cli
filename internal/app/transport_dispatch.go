@@ -226,6 +226,12 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 	_, requiresManagedTargetApproval := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
 	_, requiresDefinitionOwnedApproval := resolved.Destination.(synctransport.DefinitionOwnedApprovalDestination)
+	if requiresDefinitionOwnedApproval && resolved.Destination.TransportExecutorReference() == declarativeTypedDestinationReference {
+		batchSize, err = declarativeTypedDestinationEffectiveBatchSize(source, destination, streamName, mode.ContractMode, resolved.ApplyStrategy, batchSize)
+		if err != nil {
+			return emptyResult, err
+		}
+	}
 	if err := validateClosedTransportBatchSize(source, destination, batchSize); err != nil {
 		return emptyResult, err
 	}

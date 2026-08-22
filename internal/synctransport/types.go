@@ -459,9 +459,10 @@ type DestinationPlanRequest struct {
 }
 
 type DestinationPlan struct {
-	ApplyStrategy          connectors.DestinationApplyStrategy
-	TransformPlanHash      string
-	ActionDefinitionSHA256 string
+	ApplyStrategy                   connectors.DestinationApplyStrategy
+	TransformPlanHash               string
+	ActionDefinitionSHA256          string
+	TombstoneActionDefinitionSHA256 string
 }
 
 // DestinationIdempotencyProof is carried only from a sealed, independently
@@ -480,14 +481,16 @@ type DestinationIdempotencyProof struct {
 // non-serializable: warehouse receipts, runtime configuration, destination
 // plans, and evidence artifacts never retain the operator token.
 type DestinationApproval struct {
-	PlanID                 string                            `json:"-"`
-	ApprovalToken          string                            `json:"-"`
-	Confirmation           connectors.WriteConfirmation      `json:"-"`
-	Evidence               *connectors.WriteApprovalEvidence `json:"-"`
-	Target                 connectors.WriteApprovalTarget    `json:"-"`
-	PreviewDigest          string                            `json:"-"`
-	ActionDefinitionSHA256 string                            `json:"-"`
-	IdempotencyProof       DestinationIdempotencyProof       `json:"-"`
+	PlanID                          string                            `json:"-"`
+	ApprovalToken                   string                            `json:"-"`
+	Confirmation                    connectors.WriteConfirmation      `json:"-"`
+	Evidence                        *connectors.WriteApprovalEvidence `json:"-"`
+	Target                          connectors.WriteApprovalTarget    `json:"-"`
+	PreviewDigest                   string                            `json:"-"`
+	ActionDefinitionSHA256          string                            `json:"-"`
+	TombstoneActionDefinitionSHA256 string                            `json:"-"`
+	IdempotencyProof                DestinationIdempotencyProof       `json:"-"`
+	TombstoneIdempotencyProof       DestinationIdempotencyProof       `json:"-"`
 	// AuthorizeNextUnit rechecks a standing authorization immediately before a
 	// staged batch can cause a destination side effect. It is in-memory only:
 	// receipts and checkpoints retain no token or authorization callback.

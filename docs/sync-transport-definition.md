@@ -55,7 +55,9 @@ A `destination_transport` must supply the same `executor`, `modes`,
   more than one declared action.
 - `source_bindings` when the destination only accepts particular sources. Each
   binding identifies an exact source executor, a positive stream allowlist,
-  and a closed record mapping (`config_match` or `input_fields`).
+  one exact destination `action`, a bounded `batch`, and either a closed
+  ordinary record mapping (`config_match` or `input_fields`) or an explicit
+  tombstone mapping. A binding cannot carry both mapping forms.
 
 A destination cannot declare `change_capture`: capture is source-only into the
 connection warehouse. A declaration with a destination `change_capture` mode,
@@ -80,7 +82,8 @@ generic HTTP writer:
   with a concrete method and path. It must not carry `transport_binding`:
   that field selects a different, specialized closed adapter such as the
   issue-label destination.
-- Supply at least one `source_bindings` entry, all with `input_fields`. Its
+- Supply one action-owned ordinary `source_bindings` entry for every selected
+  apply action, all with `input_fields`. Its
   `input` is an action record field and its `field` is a source record field.
   The input name is matched byte-for-byte against the selected action's
   top-level `record_schema.properties`: both `target_id`, a provider's
@@ -90,18 +93,30 @@ generic HTTP writer:
   property needs exactly one mapping. Empty, duplicate, unknown, cross-action,
   and undeclared names fail before source or provider I/O. A provider property
   that the declaration model cannot represent is a foundation gap, never a
-  silently renamed field.
+  silently renamed field. A source executor/stream may serve several actions,
+  but each action needs its own binding: a mapping never falls back from one
+  action to another.
   The adapter copies only those declared values and validates every result
   against the selected action's `record_schema` before it constructs a
   provider request.
 - The declarative typed destination has no run-scoped full-overwrite protocol.
   A `full_overwrite` destination declaration is therefore rejected during
   preflight before any source, stage, or provider I/O.
-- Declare `acknowledgement: "durable_warehouse"`,
-  `delivery.idempotency: "keyed"`, and
-  `delivery.deletes: "not_available"`. This adapter does not accept
-  tombstones, so a connector must not claim delete propagation it cannot
-  perform.
+- Declare `acknowledgement: "durable_warehouse"` and
+  `delivery.idempotency: "keyed"`. Each action binding declares
+  `batch: {"disposition":"per_record","max_records":N}`; callers may
+  request fewer source rows but cannot enlarge the declared acknowledgement
+  unit. The adapter sends one declaration-owned request per record and retains
+  the full ordered provider receipt for every 2xx/4xx/5xx attempt.
+- `delivery.deletes: "not_available"` requires every strategy to omit a
+  tombstone action. `delivery.deletes: "tombstone"` requires every selected
+  strategy to name a distinct `tombstone_action`, whose binding has
+  `tombstone_mapping` with `image: "key"` or `"before"`, and a
+  `tombstone_read_back` policy. The named action must be a `writes.json`
+  `kind: "delete"` action with its own stable idempotency header. Tombstones
+  never use the ordinary record mapping and cannot be sent to create/update
+  actions. Provider read-back proves the mapped destination identity is absent
+  before the source checkpoint advances.
 - Record conformance evidence from the declaring connector. Composition
   gathers all exact evidence references for this executor and registers one
   shared factory; evidence from a different connector is not interchangeable.
@@ -126,8 +141,9 @@ pm etl run --connection <name> --stream <stream> --batch-size <n> \
   --approval-plan <plan-id> --approval-token-stdin --confirm destructive
 ```
 
-Those commands carry no connector, action, route, verb, body, mapping, or
-evidence override. They resolve the saved stream, seal its selected action and
+Those commands carry no connector, action, route, verb, body, mapping, batch,
+or evidence override. They resolve the saved stream, seal its selected action,
+ordinary/tombstone mappings, batch disposition, read-back policy and
 definition binding, stage/reopen the connection-owned workset, issue fresh
 typed evidence for each acknowledged unit, and invoke the already named
 `writes.json` action. Certification can therefore prove dispatch, plan/preview

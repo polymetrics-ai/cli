@@ -58410,6 +58410,10 @@
               "kind": "config_match",
               "config_key": "transport_source_issue_number",
               "record_field": "number"
+            },
+            "batch": {
+              "disposition": "",
+              "max_records": 0
             }
           },
           {
@@ -58432,6 +58436,10 @@
                   "field": "label"
                 }
               ]
+            },
+            "batch": {
+              "disposition": "",
+              "max_records": 0
             }
           }
         ]

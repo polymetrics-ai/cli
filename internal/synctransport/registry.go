@@ -187,17 +187,21 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	if !containsName(sourceDescriptor.EligibleStreams, request.Stream) {
 		return ResolvedTransport{}, &SourceStreamIneligibleError{Connector: request.Source.Name(), Stream: request.Stream}
 	}
+	// Resolve the defaulted persisted selection before consulting the
+	// action-owned binding. A blank request action means the descriptor's
+	// uniquely declared action, not an action named ""; using the raw request
+	// here would make a valid one-action definition unreachable before I/O.
+	strategy, err := destinationDescriptor.ApplyStrategyForAction(request.Mode, request.DestinationAction)
+	if err != nil {
+		return ResolvedTransport{}, err
+	}
 	if len(destinationDescriptor.SourceBindings) != 0 {
-		if _, admitted := destinationDescriptor.SourceBindingFor(sourceDescriptor.Executor, request.Stream); !admitted {
+		if _, admitted := destinationDescriptor.SourceBindingForAction(sourceDescriptor.Executor, request.Stream, strategy.Action); !admitted {
 			return ResolvedTransport{}, &DestinationSourceIneligibleError{Destination: request.Destination.Name(), SourceExecutor: sourceDescriptor.Executor, Stream: request.Stream}
 		}
 	}
 	if destinationDescriptor.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
 		return ResolvedTransport{}, fmt.Errorf("destination transport requires durable warehouse acknowledgement")
-	}
-	strategy, err := destinationDescriptor.ApplyStrategyForAction(request.Mode, request.DestinationAction)
-	if err != nil {
-		return ResolvedTransport{}, err
 	}
 	r.mu.RLock()
 	source, sourceRegistered := r.sources[sourceDescriptor.Executor]

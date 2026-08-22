@@ -21,25 +21,32 @@ const (
 // It intentionally carries no URL, request body, arbitrary action, or source
 // record. Those stay in the bundle and the reopened warehouse workset.
 type declarativeTypedDestinationBinding struct {
-	Domain                 string                                  `json:"domain"`
-	ConnectionID           string                                  `json:"connection_id"`
-	Stream                 string                                  `json:"stream"`
-	StreamID               string                                  `json:"stream_id"`
-	Mode                   synccontract.Mode                       `json:"mode"`
-	Source                 string                                  `json:"source"`
-	SourceExecutor         connectors.TransportExecutorReference   `json:"source_executor"`
-	SourceEvidence         connectors.ConformanceEvidenceReference `json:"source_evidence"`
-	Destination            string                                  `json:"destination"`
-	DestinationExecutor    connectors.TransportExecutorReference   `json:"destination_executor"`
-	DestinationEvidence    connectors.ConformanceEvidenceReference `json:"destination_evidence"`
-	Action                 string                                  `json:"action"`
-	ActionDefinitionSHA256 string                                  `json:"action_definition_sha256"`
-	IdempotencyKeyHeader   string                                  `json:"idempotency_key_header"`
-	Strategy               connectors.ApplyStrategy                `json:"strategy"`
-	SourceMapping          connectors.SourceRecordMapping          `json:"source_mapping"`
-	CredentialRevision     string                                  `json:"credential_revision"`
-	ConfigurationDigest    string                                  `json:"configuration_digest"`
-	ApprovalScope          string                                  `json:"approval_scope"`
+	Domain                          string                                  `json:"domain"`
+	ConnectionID                    string                                  `json:"connection_id"`
+	Stream                          string                                  `json:"stream"`
+	StreamID                        string                                  `json:"stream_id"`
+	Mode                            synccontract.Mode                       `json:"mode"`
+	Source                          string                                  `json:"source"`
+	SourceExecutor                  connectors.TransportExecutorReference   `json:"source_executor"`
+	SourceEvidence                  connectors.ConformanceEvidenceReference `json:"source_evidence"`
+	Destination                     string                                  `json:"destination"`
+	DestinationExecutor             connectors.TransportExecutorReference   `json:"destination_executor"`
+	DestinationEvidence             connectors.ConformanceEvidenceReference `json:"destination_evidence"`
+	Action                          string                                  `json:"action"`
+	ActionDefinitionSHA256          string                                  `json:"action_definition_sha256"`
+	IdempotencyKeyHeader            string                                  `json:"idempotency_key_header"`
+	Strategy                        connectors.ApplyStrategy                `json:"strategy"`
+	SourceMapping                   connectors.SourceRecordMapping          `json:"source_mapping"`
+	Batch                           connectors.DestinationBatch             `json:"batch"`
+	TombstoneAction                 string                                  `json:"tombstone_action,omitempty"`
+	TombstoneActionDefinitionSHA256 string                                  `json:"tombstone_action_definition_sha256,omitempty"`
+	TombstoneIdempotencyKeyHeader   string                                  `json:"tombstone_idempotency_key_header,omitempty"`
+	TombstoneSourceMapping          *connectors.TombstoneRecordMapping      `json:"tombstone_source_mapping,omitempty"`
+	TombstoneBatch                  *connectors.DestinationBatch            `json:"tombstone_batch,omitempty"`
+	ReadBackSHA256                  string                                  `json:"read_back_sha256"`
+	CredentialRevision              string                                  `json:"credential_revision"`
+	ConfigurationDigest             string                                  `json:"configuration_digest"`
+	ApprovalScope                   string                                  `json:"approval_scope"`
 }
 
 type preparedDeclarativeTypedDestinationTransport struct {
@@ -192,10 +199,16 @@ func (a *App) authorizeDeclarativeTypedDestinationTransport(ctx context.Context,
 	}
 	return synctransport.DestinationApproval{
 		PlanID: plan.ID, Evidence: evidence, Target: prepared.target, PreviewDigest: preview.Digest, ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
+		TombstoneActionDefinitionSHA256: prepared.binding.TombstoneActionDefinitionSHA256,
 		IdempotencyProof: synctransport.DestinationIdempotencyProof{
 			Executor:               prepared.binding.DestinationExecutor,
 			ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
 			EffectiveHeader:        prepared.binding.IdempotencyKeyHeader,
+		},
+		TombstoneIdempotencyProof: synctransport.DestinationIdempotencyProof{
+			Executor:               prepared.binding.DestinationExecutor,
+			ActionDefinitionSHA256: prepared.binding.TombstoneActionDefinitionSHA256,
+			EffectiveHeader:        prepared.binding.TombstoneIdempotencyKeyHeader,
 		},
 		AuthorizeNextUnit: func(unitCtx context.Context) error {
 			if unitCtx == nil {
@@ -240,6 +253,17 @@ func (a *App) declarativeTypedDestinationAuthorizationScope(prepared preparedDec
 	for _, input := range prepared.binding.SourceMapping.Inputs {
 		fieldMappings["input/"+input.Input] = input.Field
 	}
+	allowedWriteActions := []string{prepared.resolved.ApplyStrategy.Action}
+	enabledOperations := []string{string(prepared.binding.Mode), prepared.resolved.ApplyStrategy.Action, string(prepared.binding.Strategy)}
+	if prepared.binding.TombstoneSourceMapping != nil {
+		fieldMappings["tombstone_action_definition_sha256"] = prepared.binding.TombstoneActionDefinitionSHA256
+		fieldMappings["tombstone_idempotency_key_header"] = prepared.binding.TombstoneIdempotencyKeyHeader
+		for _, input := range prepared.binding.TombstoneSourceMapping.Inputs {
+			fieldMappings["tombstone_input/"+input.Input] = input.Field
+		}
+		allowedWriteActions = append(allowedWriteActions, prepared.binding.TombstoneAction)
+		enabledOperations = append(enabledOperations, prepared.binding.TombstoneAction)
+	}
 	return canonicalAuthorizationScope(AuthorizationScope{
 		SourceConnection:              prepared.connection.ID,
 		DestinationConnection:         prepared.credential.ID,
@@ -249,8 +273,9 @@ func (a *App) declarativeTypedDestinationAuthorizationScope(prepared preparedDec
 		}},
 		FieldMappings:                  fieldMappings,
 		WriteAction:                    prepared.resolved.ApplyStrategy.Action,
+		AllowedWriteActions:            allowedWriteActions,
 		DestinationConfigurationDigest: prepared.runtime.ConfigurationDigest,
-		EnabledOperations:              []string{string(prepared.binding.Mode), prepared.resolved.ApplyStrategy.Action, string(prepared.binding.Strategy)},
+		EnabledOperations:              enabledOperations,
 		ConfirmationPolicy:             plan.ConfirmationPolicy,
 		ExpiresAt:                      plan.ExpiresAt,
 	})
@@ -307,12 +332,45 @@ func (a *App) prepareDeclarativeTypedDestinationTransport(ctx context.Context, c
 	if err != nil {
 		return preparedDeclarativeTypedDestinationTransport{}, err
 	}
+	var tombstoneBinding *connectors.DestinationSourceBinding
+	var tombstoneActionDefinitionSHA256, tombstoneIdempotencyKeyHeader string
+	if resolved.ApplyStrategy.TombstoneAction != "" {
+		resolvedTombstoneBinding, bindingErr := contract.tombstoneBinding(source, streamName, mode.ContractMode, resolved.ApplyStrategy)
+		if bindingErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, bindingErr
+		}
+		tombstoneBinding = &resolvedTombstoneBinding
+		tombstoneActionDefinitionSHA256, err = contract.actionDefinitionDigest(resolved.ApplyStrategy.TombstoneAction)
+		if err != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, err
+		}
+		tombstoneIdempotencyKeyHeader, err = contract.idempotencyHeader(resolved.ApplyStrategy.TombstoneAction)
+		if err != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, err
+		}
+	}
+	readBackSHA256, err := hashJSON(struct {
+		ReadBack          *connectors.DestinationReadBackPolicy          `json:"read_back"`
+		TombstoneReadBack *connectors.DestinationTombstoneReadBackPolicy `json:"tombstone_read_back,omitempty"`
+	}{ReadBack: contract.descriptor.ReadBack, TombstoneReadBack: contract.descriptor.TombstoneReadBack})
+	if err != nil {
+		return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("hash declarative typed destination read-back declaration: %w", err)
+	}
 	declaration := declarativeTypedDestinationBinding{
 		Domain: declarativeTypedDestinationBindingDomain, ConnectionID: conn.ID, Stream: streamName, StreamID: stream.StreamID, Mode: mode.ContractMode,
 		Source: source.Name(), SourceExecutor: resolved.SourceDescriptor.Executor, SourceEvidence: resolved.SourceDescriptor.Conformance,
 		Destination: destination.Name(), DestinationExecutor: resolved.DestinationDescriptor.Executor, DestinationEvidence: resolved.DestinationDescriptor.Conformance,
-		Action: resolved.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, IdempotencyKeyHeader: idempotencyKeyHeader, Strategy: resolved.ApplyStrategy.Strategy, SourceMapping: binding.RecordMapping.Clone(),
+		Action: resolved.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, IdempotencyKeyHeader: idempotencyKeyHeader, Strategy: resolved.ApplyStrategy.Strategy, SourceMapping: binding.RecordMapping.Clone(), Batch: binding.Batch, ReadBackSHA256: readBackSHA256,
 		CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest, ApprovalScope: runtime.WriteApprovalScope,
+	}
+	if tombstoneBinding != nil {
+		mapping := tombstoneBinding.TombstoneMapping.Clone()
+		batch := tombstoneBinding.Batch
+		declaration.TombstoneAction = resolved.ApplyStrategy.TombstoneAction
+		declaration.TombstoneActionDefinitionSHA256 = tombstoneActionDefinitionSHA256
+		declaration.TombstoneIdempotencyKeyHeader = tombstoneIdempotencyKeyHeader
+		declaration.TombstoneSourceMapping = &mapping
+		declaration.TombstoneBatch = &batch
 	}
 	bindingSHA256, err := hashJSON(declaration)
 	if err != nil {
