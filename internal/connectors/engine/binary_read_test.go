@@ -555,7 +555,7 @@ func TestBinaryDownloadHTTPErrorKeepsProviderQueryAndBodyPrivateAndLeavesNoFile(
 	}))
 	t.Cleanup(srv.Close)
 	dest := t.TempDir()
-	b := binaryBundle(srv, &BinaryOperationSpec{})
+	b := binaryBundle(srv, &BinaryOperationSpec{Parameters: []OperationParameter{{Name: "trace", In: "query", Type: "string", MaxBytes: 64}}})
 	req := downloadReq(dest)
 	req.Query = map[string]string{"trace": "binary-download-fixture"}
 	_, err := OperationBinaryDownload(context.Background(), b, req, nil)

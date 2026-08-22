@@ -664,7 +664,7 @@ func TestOperationDirectReadGetQueueURL(t *testing.T) {
 	}
 }
 
-func TestOperationDirectReadListMessageMoveTasksDecodesResults(t *testing.T) {
+func TestOperationDirectReadListMessageMoveTasksPreservesOrdinaryTaskHandle(t *testing.T) {
 	sourceArn := "arn:aws:sqs:us-east-1:123456789012:orders-dlq"
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
@@ -681,7 +681,7 @@ func TestOperationDirectReadListMessageMoveTasksDecodesResults(t *testing.T) {
 	defer srv.Close()
 
 	c := native.New()
-	res, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_message_move_tasks", Config: testRuntimeConfig(srv.URL), Body: map[string]any{"source_arn": sourceArn}, RedactFields: []string{"task_handle"}})
+	res, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_message_move_tasks", Config: testRuntimeConfig(srv.URL), Body: map[string]any{"source_arn": sourceArn}})
 	if err != nil {
 		t.Fatalf("OperationDirectRead list_message_move_tasks: %v", err)
 	}
@@ -690,8 +690,8 @@ func TestOperationDirectReadListMessageMoveTasksDecodesResults(t *testing.T) {
 		t.Fatalf("results = %#v, want one decoded task", results)
 	}
 	task := results[0].(map[string]any)
-	if task["task_handle"] != "***" || task["status"] != "RUNNING" || task["source_arn"] != sourceArn || task["approximate_number_of_messages_moved"] != "42" {
-		t.Fatalf("task = %#v, want decoded redacted ListMessageMoveTasks result", task)
+	if task["task_handle"] != "task-handle-fixture" || task["status"] != "RUNNING" || task["source_arn"] != sourceArn || task["approximate_number_of_messages_moved"] != "42" {
+		t.Fatalf("task = %#v, want complete ordinary ListMessageMoveTasks result", task)
 	}
 }
 
