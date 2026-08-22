@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -41,9 +42,24 @@ type githubReleasedReadFixtureJob struct {
 }
 
 type githubReleasedReadFixtureResult struct {
-	job    githubReleasedReadFixtureJob
-	output string
-	err    error
+	job         githubReleasedReadFixtureJob
+	output      string
+	diagnostics string
+	err         error
+}
+
+type githubGeneratedDirectReadFixtureJob struct {
+	candidate engine.CertificationCommandCandidate
+	command   engine.CLICommand
+	args      []string
+	index     int
+}
+
+type githubGeneratedDirectReadFixtureResult struct {
+	job         githubGeneratedDirectReadFixtureJob
+	output      string
+	diagnostics string
+	err         error
 }
 
 type githubReleasedReadFixtureRoute struct {
@@ -54,14 +70,13 @@ type githubReleasedReadFixtureRoute struct {
 	literalSegments int
 }
 
-// TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture is a local
-// behavioral proof for the declaration-generated GitHub read surface. It
-// drives a freshly built pm binary through the real certification runner,
-// command parser, direct-read engine, and GitHub HTTP transport. The fixture
-// deliberately returns a concrete JSON object for every declared candidate so
-// the runner's output assertions execute rather than merely inspecting the
-// candidate ledger.
-func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) {
+// TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture proves
+// the production-only certification admission path with a deliberately small
+// declared-stage cohort. Certification fixes the tier to "certification", and
+// the corresponding policies require a shared coordinator; this test keeps
+// that path honest without turning a command-execution sweep into a paced
+// rate-limit soak.
+func TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture(t *testing.T) {
 	const token = "github-direct-read-fixture-token"
 	const tokenEnv = "PM_GITHUB_DIRECT_READ_FIXTURE_TOKEN"
 	t.Setenv(tokenEnv, token)
@@ -93,7 +108,7 @@ func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) 
 
 	binary := buildTransportPM(t)
 	root := filepath.Join(t.TempDir(), "project")
-	generatedStages := githubGeneratedDirectReadStageSelection(t)
+	generatedStages := githubGeneratedDirectReadStageSelection(t, 3)
 	coordinator := startFixtureSharedRateLimitCoordinator(t)
 	output, diagnostics, err := runFixtureTransportPMJSONWithEnvironment(binary, "", map[string]string{
 		"POLYMETRICS_DRAGONFLY_ADDR": coordinator.address,
@@ -120,8 +135,8 @@ func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) 
 	if envelope.Kind != "ConnectorCertification" {
 		t.Fatalf("GitHub direct-read fixture certification kind = %q, want ConnectorCertification", envelope.Kind)
 	}
-	if envelope.Report.Capabilities.DirectRead == nil || envelope.Report.Capabilities.DirectRead.Result != "pass" || envelope.Report.Capabilities.DirectRead.StagesChecked != 97 {
-		t.Fatalf("GitHub direct-read fixture capability = %+v (command error=%v), want 97 passing generated candidate executions", envelope.Report.Capabilities.DirectRead, err)
+	if envelope.Report.Capabilities.DirectRead == nil || envelope.Report.Capabilities.DirectRead.Result != "pass" || envelope.Report.Capabilities.DirectRead.StagesChecked != 3 {
+		t.Fatalf("GitHub direct-read fixture capability = %+v (command error=%v), want 3 passing generated candidate executions", envelope.Report.Capabilities.DirectRead, err)
 	}
 	generatedStageCount := 0
 	for _, stage := range envelope.Report.Stages {
@@ -132,17 +147,155 @@ func TestPMBinaryExecutesGitHubDirectReadCandidatesAgainstFixture(t *testing.T) 
 			generatedStageCount++
 		}
 	}
-	if generatedStageCount != 97 {
-		t.Fatalf("generated direct-read fixture stages = %d, want 97 including all 77 restored commands", generatedStageCount)
+	if generatedStageCount != 3 {
+		t.Fatalf("generated direct-read fixture stages = %d, want 3 shared-admission command executions", generatedStageCount)
 	}
 	observed.Lock()
 	requestCount := len(observed.paths)
 	observed.Unlock()
-	if requestCount < 98 { // 97 direct-read stages plus credential validation.
-		t.Fatalf("GitHub direct-read fixture requests = %d, want at least 98 real connector HTTP requests", requestCount)
+	if requestCount < 4 { // Three direct-read stages plus credential validation.
+		t.Fatalf("GitHub direct-read fixture requests = %d, want at least 4 real connector HTTP requests", requestCount)
 	}
 	if keys := coordinator.keyCount(t); keys == 0 {
 		t.Fatal("GitHub direct-read fixture made provider requests without storing any declared shared-admission state")
+	}
+}
+
+// TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture is
+// the exhaustive executable-surface proof for all 97 generated candidates.
+// It invokes each declared command directly through a fresh pm process. That
+// deliberately selects ordinary local admission: fixture commands still cross
+// the real admission seam, but do not consume the production certification
+// budget that the focused shared-admission test above proves separately.
+func TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture(t *testing.T) {
+	const token = "github-generated-direct-read-fixture-token"
+	const tokenEnv = "PM_GITHUB_GENERATED_DIRECT_READ_FIXTURE_TOKEN"
+	t.Setenv(tokenEnv, token)
+
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("load GitHub generated direct-read candidates: %v", err)
+	}
+	candidates := githubGeneratedDirectReadCandidates(t, bundle)
+	if len(candidates) != 97 {
+		t.Fatalf("GitHub generated direct-read candidates = %d, want 97", len(candidates))
+	}
+	if bundle.CLISurface == nil {
+		t.Fatal("GitHub bundle has no CLI surface")
+	}
+	commands := make(map[string]engine.CLICommand, len(bundle.CLISurface.Commands))
+	for _, command := range bundle.CLISurface.Commands {
+		commands[command.Path] = command
+	}
+
+	var observed githubReleasedReadFixtureObserved
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		if request.Method != http.MethodGet {
+			http.Error(w, "generated direct-read fixture received a non-GET request", http.StatusMethodNotAllowed)
+			return
+		}
+		if strings.Contains(request.URL.EscapedPath(), "{") || strings.Contains(request.URL.EscapedPath(), "}") {
+			http.Error(w, "generated direct-read fixture received an unresolved path parameter", http.StatusBadRequest)
+			return
+		}
+		if request.Header.Get("Authorization") != "Bearer "+token {
+			http.Error(w, "generated direct-read fixture received no declared bearer authentication", http.StatusUnauthorized)
+			return
+		}
+		observed.Lock()
+		observed.requests = append(observed.requests, githubReleasedReadFixtureRequest{Method: request.Method, Path: request.URL.EscapedPath()})
+		observed.Unlock()
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, `{"fixture":"github-released-read","method":"`+request.Method+`","path":"`+request.URL.EscapedPath()+`"}`)
+	}))
+	t.Cleanup(server.Close)
+
+	binary := buildTransportPM(t)
+	root := filepath.Join(t.TempDir(), "project")
+	mustRunFixtureTransportPM(t, binary, token, "init", "--root", root, "--json")
+	mustRunFixtureTransportPM(t, binary, token,
+		"credentials", "add", "github-generated-direct-read",
+		"--connector", "github",
+		"--config", "base_url="+server.URL,
+		"--config", "auth_type=token",
+		"--config", "rate_limit_account=generated-direct-read-fixture",
+		"--config", "owner=Polymetrics-Cert",
+		"--config", "repo=pm-cert-3993-20260810-wz0fru",
+		"--from-env", "token="+tokenEnv,
+		"--root", root,
+		"--json",
+	)
+
+	jobs := make([]githubGeneratedDirectReadFixtureJob, 0, len(candidates))
+	for index, candidate := range candidates {
+		command, found := commands[candidate.Command]
+		if !found {
+			t.Fatalf("generated candidate %q names absent CLI command %q", candidate.StageName, candidate.Command)
+		}
+		if command.Availability != "implemented" || command.Intent != "direct_read" || len(command.APISurface) != 1 {
+			t.Fatalf("generated candidate %q command = %+v, want one implemented direct-read API surface", candidate.StageName, command)
+		}
+		args := githubGeneratedDirectReadCandidateArgs(t, candidate, "github-generated-direct-read")
+		args = append(args, "--root", root)
+		jobs = append(jobs, githubGeneratedDirectReadFixtureJob{candidate: candidate, command: command, args: args, index: index})
+	}
+
+	// Each command is an independent read-only fresh-binary invocation. Bound
+	// concurrency keeps this exhaustive local-admission proof a practical CI
+	// gate without removing a single candidate or its output assertion.
+	const workers = 12
+	queue := make(chan githubGeneratedDirectReadFixtureJob)
+	results := make(chan githubGeneratedDirectReadFixtureResult, len(jobs))
+	var group sync.WaitGroup
+	for range workers {
+		group.Add(1)
+		go func() {
+			defer group.Done()
+			for job := range queue {
+				output, diagnostics, err := runFixtureTransportPMJSON(binary, "", job.args...)
+				results <- githubGeneratedDirectReadFixtureResult{job: job, output: output, diagnostics: diagnostics, err: err}
+			}
+		}()
+	}
+	for _, job := range jobs {
+		queue <- job
+	}
+	close(queue)
+	group.Wait()
+	close(results)
+
+	emittedRequests := make(map[githubReleasedReadFixtureRequest]int, len(jobs))
+	for result := range results {
+		if result.err != nil {
+			t.Fatalf("pm %s (%s) failed: %v\nstdout:\n%s\nstderr:\n%s", result.job.candidate.Command, result.job.candidate.StageName, result.err, redactTransportFailureOutput(result.output, token), redactTransportFailureOutput(result.diagnostics, token))
+		}
+		githubReleasedReadFixtureAssertOutput(t, result.job.command, result.output, root, result.job.index)
+		githubGeneratedDirectReadFixtureAssertOutputAssertions(t, result.job.candidate, result.output)
+
+		var envelope struct {
+			Method string `json:"method"`
+			Path   string `json:"path"`
+		}
+		if err := json.Unmarshal([]byte(result.output), &envelope); err != nil {
+			t.Fatalf("decode %s emitted command output: %v\n%s", result.job.candidate.Command, err, result.output)
+		}
+		wantMethod := strings.ToUpper(result.job.command.APISurface[0].Method)
+		if envelope.Method != wantMethod || !githubReleasedReadFixturePathMatches(result.job.command.APISurface[0].Path, envelope.Path) {
+			t.Fatalf("%s emitted request = %s %s, want declared %s %s with all path parameters resolved", result.job.candidate.Command, envelope.Method, envelope.Path, wantMethod, result.job.command.APISurface[0].Path)
+		}
+		emittedRequests[githubReleasedReadFixtureRequest{Method: envelope.Method, Path: envelope.Path}]++
+	}
+	if got := githubReleasedReadFixtureRequestCount(&observed); got != len(candidates) {
+		t.Fatalf("GitHub generated direct-read fixture requests = %d, want %d one-request candidate executions", got, len(candidates))
+	}
+	observed.Lock()
+	fixtureRequests := make(map[githubReleasedReadFixtureRequest]int, len(observed.requests))
+	for _, request := range observed.requests {
+		fixtureRequests[request]++
+	}
+	observed.Unlock()
+	if !reflect.DeepEqual(fixtureRequests, emittedRequests) {
+		t.Fatalf("GitHub generated direct-read fixture requests = %#v, want emitted declared requests %#v", fixtureRequests, emittedRequests)
 	}
 }
 
@@ -442,23 +595,134 @@ func fixtureSharedRateLimitCoordinatorCommand(address, command string, check fun
 	return check(strings.TrimSpace(response))
 }
 
-func githubGeneratedDirectReadStageSelection(t *testing.T) string {
+func githubGeneratedDirectReadCandidates(t *testing.T, bundle engine.Bundle) []engine.CertificationCommandCandidate {
+	t.Helper()
+	if bundle.Certification == nil {
+		t.Fatal("GitHub certification definition is absent")
+	}
+	candidates := make([]engine.CertificationCommandCandidate, 0, len(bundle.Certification.DirectReadCandidates))
+	for _, candidate := range bundle.Certification.DirectReadCandidates {
+		if candidate.Generated {
+			candidates = append(candidates, candidate)
+		}
+	}
+	sort.Slice(candidates, func(i, j int) bool { return candidates[i].StageName < candidates[j].StageName })
+	return candidates
+}
+
+func githubGeneratedDirectReadStageSelection(t *testing.T, count int) string {
 	t.Helper()
 	bundle, err := engine.Load(defs.FS, "github")
 	if err != nil {
 		t.Fatalf("load GitHub certification candidates: %v", err)
 	}
-	if bundle.Certification == nil {
-		t.Fatal("GitHub certification definition is absent")
+	candidates := githubGeneratedDirectReadCandidates(t, bundle)
+	if count <= 0 || count > len(candidates) {
+		t.Fatalf("GitHub generated direct-read stage selection count = %d, want 1..%d", count, len(candidates))
 	}
-	stages := make([]string, 0, len(bundle.Certification.DirectReadCandidates))
-	for _, candidate := range bundle.Certification.DirectReadCandidates {
-		if candidate.Generated {
-			stages = append(stages, candidate.StageName)
+	stages := make([]string, count)
+	for index, candidate := range candidates[:count] {
+		stages[index] = candidate.StageName
+	}
+	return strings.Join(stages, ",")
+}
+
+func githubGeneratedDirectReadCandidateArgs(t *testing.T, candidate engine.CertificationCommandCandidate, credential string) []string {
+	t.Helper()
+	args := make([]string, 0, len(candidate.Args)+2)
+	for _, argument := range candidate.Args {
+		switch {
+		case argument.Literal != "":
+			args = append(args, argument.Literal)
+		case argument.Connector:
+			args = append(args, "github")
+		case argument.SourceCredential:
+			args = append(args, credential)
+		case argument.ConfigKey != "":
+			if argument.Default == "" && !argument.OmitWhenEmpty {
+				t.Fatalf("generated candidate %q config argument %q lacks a fixture default", candidate.StageName, argument.ConfigKey)
+			}
+			if argument.Default != "" {
+				args = append(args, argument.Default)
+			}
+		default:
+			t.Fatalf("generated candidate %q has an unresolvable fixture argument %+v", candidate.StageName, argument)
 		}
 	}
-	sort.Strings(stages)
-	return strings.Join(stages, ",")
+	return args
+}
+
+func githubGeneratedDirectReadFixtureAssertOutputAssertions(t *testing.T, candidate engine.CertificationCommandCandidate, output string) {
+	t.Helper()
+	var envelope any
+	if err := json.Unmarshal([]byte(output), &envelope); err != nil {
+		t.Fatalf("decode %s fixture output for declared assertions: %v\n%s", candidate.StageName, err, output)
+	}
+	for _, assertion := range candidate.OutputAssertions {
+		actual, found := githubGeneratedDirectReadFixtureJSONPointer(envelope, assertion.JSONPointer)
+		if !found {
+			t.Fatalf("%s declared output at %s is absent", candidate.StageName, assertion.JSONPointer)
+		}
+		if assertion.ValueType != "" {
+			actualType := githubGeneratedDirectReadFixtureJSONValueType(actual)
+			matches := actualType == assertion.ValueType || (assertion.ValueType == "object_or_array" && (actualType == "object" || actualType == "array"))
+			if !matches {
+				t.Fatalf("%s declared output at %s type = %s, want %s", candidate.StageName, assertion.JSONPointer, actualType, assertion.ValueType)
+			}
+		}
+		if assertion.Equals != nil && !reflect.DeepEqual(actual, assertion.Equals) {
+			t.Fatalf("%s declared output at %s does not match its declaration", candidate.StageName, assertion.JSONPointer)
+		}
+	}
+}
+
+func githubGeneratedDirectReadFixtureJSONPointer(value any, pointer string) (any, bool) {
+	if pointer == "" {
+		return value, true
+	}
+	if !strings.HasPrefix(pointer, "/") {
+		return nil, false
+	}
+	current := value
+	for _, rawToken := range strings.Split(strings.TrimPrefix(pointer, "/"), "/") {
+		token := strings.ReplaceAll(strings.ReplaceAll(rawToken, "~1", "/"), "~0", "~")
+		switch node := current.(type) {
+		case map[string]any:
+			var found bool
+			current, found = node[token]
+			if !found {
+				return nil, false
+			}
+		case []any:
+			index, err := strconv.Atoi(token)
+			if err != nil || index < 0 || index >= len(node) {
+				return nil, false
+			}
+			current = node[index]
+		default:
+			return nil, false
+		}
+	}
+	return current, true
+}
+
+func githubGeneratedDirectReadFixtureJSONValueType(value any) string {
+	switch value.(type) {
+	case nil:
+		return "null"
+	case bool:
+		return "boolean"
+	case float64:
+		return "number"
+	case string:
+		return "string"
+	case []any:
+		return "array"
+	case map[string]any:
+		return "object"
+	default:
+		return "unknown"
+	}
 }
 
 // TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture is the release
@@ -565,8 +829,8 @@ func TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture(t *testing.T) {
 		go func() {
 			defer group.Done()
 			for job := range queue {
-				output, err := runTransportPM(binary, "", job.args...)
-				results <- githubReleasedReadFixtureResult{job: job, output: output, err: err}
+				output, diagnostics, err := runFixtureTransportPMJSON(binary, "", job.args...)
+				results <- githubReleasedReadFixtureResult{job: job, output: output, diagnostics: diagnostics, err: err}
 			}
 		}()
 	}
@@ -579,7 +843,7 @@ func TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture(t *testing.T) {
 
 	for result := range results {
 		if result.err != nil {
-			t.Fatalf("pm %s failed: %v\n%s", result.job.command.Path, result.err, redactTransportFailureOutput(result.output, token))
+			t.Fatalf("pm %s failed: %v\nstdout:\n%s\nstderr:\n%s", result.job.command.Path, result.err, redactTransportFailureOutput(result.output, token), redactTransportFailureOutput(result.diagnostics, token))
 		}
 		githubReleasedReadFixtureAssertOutput(t, result.job.command, result.output, root, result.job.index)
 	}
@@ -851,8 +1115,16 @@ func githubReleasedReadFixtureAssertOutput(t *testing.T, command engine.CLIComma
 
 func mustRunReleasedReadPM(t *testing.T, binary, token string, args ...string) {
 	t.Helper()
-	output, err := runTransportPM(binary, "", args...)
+	output, diagnostics, err := runFixtureTransportPMJSON(binary, "", args...)
 	if err != nil {
-		t.Fatalf("pm %s failed: %v\n%s", transportCommandName(args), err, redactTransportFailureOutput(output, token))
+		t.Fatalf("pm %s failed: %v\nstdout:\n%s\nstderr:\n%s", transportCommandName(args), err, redactTransportFailureOutput(output, token), redactTransportFailureOutput(diagnostics, token))
+	}
+}
+
+func mustRunFixtureTransportPM(t *testing.T, binary, token string, args ...string) {
+	t.Helper()
+	output, diagnostics, err := runFixtureTransportPMJSON(binary, "", args...)
+	if err != nil {
+		t.Fatalf("pm %s failed: %v\nstdout:\n%s\nstderr:\n%s", transportCommandName(args), err, redactTransportFailureOutput(output, token), redactTransportFailureOutput(diagnostics, token))
 	}
 }
