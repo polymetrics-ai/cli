@@ -1690,6 +1690,18 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 }
 
 func (a *App) completeEmptyPublicationAcknowledgedTransportRun(runID string, result etlExecutionResult, completion *acknowledgedTransportCompletion) (Run, error) {
+	if result.persistedDeliveryReconciliation != nil {
+		fenced := *result.persistedDeliveryReconciliation
+		completed, finalizeErr := a.reconcileDeliveredTransportRun(context.Background(), fenced)
+		if finalizeErr != nil {
+			if completed.ID != "" && completed.Status == "completed" {
+				return completed, finalizeErr
+			}
+			return fenced, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("finalize empty full-overwrite replay fence: %w", finalizeErr))
+		}
+		completed.DestinationResults = cloneDestinationResults(result.DestinationResults)
+		return completed, nil
+	}
 	fenced, persistErr := a.persistDeliveredReconciliationRun(runID, result, nil, completion)
 	if persistErr != nil {
 		if fenced.ID != "" || stateStoreCommitMayHaveSucceeded(persistErr) || errors.Is(persistErr, errStateRevisionConflict) {
@@ -1716,6 +1728,9 @@ func (a *App) completeEmptyPublicationAcknowledgedTransportRun(runID string, res
 // eligibility witness for terminal failure. It does not refresh state, retry a
 // checkpoint, or replay destination work.
 func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResult, runErr error) (Run, error) {
+	if result.persistedDeliveryReconciliation != nil {
+		return *result.persistedDeliveryReconciliation, runErr
+	}
 	if errors.Is(runErr, errTransportStreamStateConflict) {
 		return a.failRunWithResult(runID, result, runErr)
 	}

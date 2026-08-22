@@ -2532,6 +2532,90 @@ func TestRunETLTransportCompletesExplicitEmptyFullOverwriteWithPublicationWitnes
 	}
 }
 
+func TestRunETLEmptyFullOverwritePreventsPostReadBackExpiredLeaseReplay(t *testing.T) {
+	fixture := setupAppTransportFixture(t, synccontract.ModeFullOverwrite)
+	started := time.Date(2026, time.August, 22, 12, 0, 0, 0, time.UTC)
+	clock := &appTransportLeaseClock{now: started}
+	previousNow := transportWorkLeaseNow
+	transportWorkLeaseNow = clock.Now
+	t.Cleanup(func() { transportWorkLeaseNow = previousNow })
+	fixture.sourceExecutor.read = func(context.Context, synctransport.SourceRequest, func(synctransport.SourcePage) error) error {
+		return nil
+	}
+	registry := synctransport.NewRegistry(fixture.verifier)
+	if err := registry.RegisterSource(&emptyAppTransportSourceExecutor{appTransportSourceExecutor: fixture.sourceExecutor}); err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.RegisterDestination(fixture.destinationExecutor); err != nil {
+		t.Fatal(err)
+	}
+	fixture.app.transports = registry
+
+	claimEntered := make(chan struct{})
+	releaseClaim := make(chan struct{})
+	fixture.destinationExecutor.afterPublish = func() {
+		clock.Set(started.Add(90 * time.Second))
+	}
+	var contenderSource *appTransportSourceExecutor
+	var contenderDestination *appTransportDestinationExecutor
+	var contenderRun Run
+	var contenderErr error
+	fixture.destinationExecutor.afterReadBack = func() {
+		clock.Set(started.Add(2*time.Minute + time.Second))
+		contender, err := Open(fixture.app.root)
+		if err != nil {
+			t.Fatal(err)
+		}
+		contenderSource = &appTransportSourceExecutor{
+			reference: fixture.sourceExecutor.reference,
+			read: func(context.Context, synctransport.SourceRequest, func(synctransport.SourcePage) error) error {
+				return nil
+			},
+		}
+		contenderDestination = &appTransportDestinationExecutor{reference: fixture.destinationExecutor.reference, sink: fixture.destination.Name()}
+		fixture.configureRuntime(t, contender, contenderSource, contenderDestination)
+		contenderRegistry := synctransport.NewRegistry(fixture.verifier)
+		if err := contenderRegistry.RegisterSource(&emptyAppTransportSourceExecutor{appTransportSourceExecutor: contenderSource}); err != nil {
+			t.Fatal(err)
+		}
+		if err := contenderRegistry.RegisterDestination(contenderDestination); err != nil {
+			t.Fatal(err)
+		}
+		contender.transports = contenderRegistry
+		contender.store.Locker = &appTransportPauseAtLockLocker{pauseAt: 2, entered: claimEntered, release: releaseClaim}
+		contenderDone := make(chan struct{})
+		go func() {
+			contenderRun, contenderErr = contender.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+			close(contenderDone)
+		}()
+		waitForTransportSignal(t, claimEntered)
+		state := contender.state.StreamStates[streamStateKey(fixture.connection, "records")]
+		if state.ActiveWorkID == "" || state.ActiveWorkFence != 1 || state.ActiveWorkLeaseUntil == nil || !state.ActiveWorkLeaseUntil.After(clock.Now()) {
+			t.Fatalf("post-read-back owner lease = %#v, want renewed active owner", state)
+		}
+		close(releaseClaim)
+		waitForTransportSignal(t, contenderDone)
+	}
+
+	owner, err := fixture.app.RunETL(context.Background(), RunETLRequest{Connection: fixture.connection, Stream: "records", BatchSize: 1})
+	if err != nil || owner.Status != "completed" || owner.DeliveryReconciliation != nil {
+		t.Fatalf("owner empty full-overwrite run/error = %#v / %v, want completed durable handoff", owner, err)
+	}
+	if !errors.Is(contenderErr, errTransportStreamWorkInProgress) || contenderRun.Status != "failed" {
+		t.Fatalf("post-read-back contender run/error = %#v / %v, want pre-I/O work-fence refusal", contenderRun, contenderErr)
+	}
+	if contenderSource == nil || contenderDestination == nil {
+		t.Fatal("post-read-back contender was not configured")
+	}
+	if contenderSource.readCalls != 0 || contenderDestination.applyCalls != 0 || contenderDestination.publishCalls != 0 || contenderDestination.readBackCalls != 0 {
+		t.Fatalf("post-read-back contender source/apply/publish/read-back = %d/%d/%d/%d, want no replay", contenderSource.readCalls, contenderDestination.applyCalls, contenderDestination.publishCalls, contenderDestination.readBackCalls)
+	}
+	state := fixture.app.state.StreamStates[streamStateKey(fixture.connection, "records")]
+	if state.ActiveWorkID != "" || state.ActiveWorkLeaseUntil != nil || state.ActiveWorkFence != 2 {
+		t.Fatalf("owner empty full-overwrite terminal state = %#v, want released replay fence", state)
+	}
+}
+
 func TestRunETLTransportTreatsIndeterminateCheckpointPersistenceAsFailure(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
 	fixture.destinationExecutor.afterApply = func() {
@@ -4432,6 +4516,23 @@ func waitForTransportSignal(t *testing.T, signal <-chan struct{}) {
 	case <-time.After(20 * time.Second):
 		t.Fatal("timed out waiting for transport synchronization")
 	}
+}
+
+type appTransportLeaseClock struct {
+	mu  sync.Mutex
+	now time.Time
+}
+
+func (c *appTransportLeaseClock) Now() time.Time {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.now
+}
+
+func (c *appTransportLeaseClock) Set(now time.Time) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.now = now
 }
 
 type appRateParkingTestScheduler struct {

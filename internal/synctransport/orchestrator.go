@@ -555,7 +555,12 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		published = true
 		readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
 		readBackStarted := time.Now()
-		publishErr = session.ReadBackFullOverwrite(readBackCtx, acknowledgement)
+		if request.ReadBackAdmission != nil {
+			publishErr = request.ReadBackAdmission(readBackCtx)
+		}
+		if publishErr == nil {
+			publishErr = session.ReadBackFullOverwrite(readBackCtx, acknowledgement)
+		}
 		result.ReadBackElapsed += time.Since(readBackStarted)
 		cancelReadBack()
 	}
@@ -563,7 +568,7 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		return result, fmt.Errorf("publish destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}
 	if lastCandidate == nil {
-		if err := sealEmptyPublicationWitness(&result, acknowledgement, request.Destination.Name()); err != nil {
+		if err := handoffEmptyPublication(ctx, request, &result, acknowledgement, request.Destination.Name()); err != nil {
 			return result, err
 		}
 		return result, nil
@@ -604,6 +609,16 @@ func sealEmptyPublicationWitness(result *Result, acknowledgement synccontract.Do
 	}
 	result.EmptyPublication = &witness
 	return nil
+}
+
+func handoffEmptyPublication(ctx context.Context, request RunRequest, result *Result, acknowledgement synccontract.DownstreamAcknowledgement, destination string) error {
+	if err := sealEmptyPublicationWitness(result, acknowledgement, destination); err != nil {
+		return err
+	}
+	if request.EmptyPublicationHandoff == nil {
+		return nil
+	}
+	return request.EmptyPublicationHandoff(ctx, *result)
 }
 
 // collectDestinationResult is the single defensive-copy boundary for every

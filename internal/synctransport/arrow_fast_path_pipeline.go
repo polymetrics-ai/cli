@@ -139,7 +139,12 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 		published = true
 		readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
 		readBackStarted := time.Now()
-		publishErr = session.ReadBackArrowFullOverwrite(readBackCtx, acknowledgement)
+		if request.ReadBackAdmission != nil {
+			publishErr = request.ReadBackAdmission(readBackCtx)
+		}
+		if publishErr == nil {
+			publishErr = session.ReadBackArrowFullOverwrite(readBackCtx, acknowledgement)
+		}
 		result.ReadBackElapsed += time.Since(readBackStarted)
 		cancelReadBack()
 	}
@@ -150,7 +155,7 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 		result.IndexConstraintElapsed = reporter.ArrowBulkPhaseMeasurement().IndexConstraintBuildElapsed
 	}
 	if lastCandidate == nil {
-		if err := sealEmptyPublicationWitness(&result, acknowledgement, request.Destination.Name()); err != nil {
+		if err := handoffEmptyPublication(ctx, request, &result, acknowledgement, request.Destination.Name()); err != nil {
 			return result, err
 		}
 		return result, nil

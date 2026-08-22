@@ -279,6 +279,45 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 
 	var committed *synccontract.CheckpointEnvelope
+	var persistedEmptyPublication *Run
+	var persistedEmptyPublicationResult etlExecutionResult
+	emptyPublicationResult := func(transportResult synctransport.Result) (etlExecutionResult, error) {
+		if transportResult.EmptyPublication == nil {
+			return etlExecutionResult{}, errors.New("closed transport returned no empty publication witness")
+		}
+		witness := *transportResult.EmptyPublication
+		if err := witness.Validate(); err != nil {
+			return etlExecutionResult{}, fmt.Errorf("closed transport returned an invalid empty publication witness: %w", err)
+		}
+		if witness.Sink != destination.Name() {
+			return etlExecutionResult{}, fmt.Errorf("closed transport empty publication sink %q does not match destination %q", witness.Sink, destination.Name())
+		}
+		updated := workLease.stateForTerminalRun()
+		updated.Connection = conn.Name
+		updated.Stream = streamName
+		updated.GenerationID = generationID
+		updated.LastSuccessfulRunID = runID
+		updated.RecordsLoaded = 0
+		updated.UpdatedAt = witness.AcknowledgedAt
+		deliveryReconciliation := &DeliveryReconciliation{
+			State:            ETLRunStatusDeliveredReconciliationRequired,
+			EmptyPublication: &witness,
+		}
+		if requiresManagedTargetApproval {
+			deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+		}
+		if requiresDefinitionOwnedApproval {
+			deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+		}
+		result := etlExecutionResult{
+			TransportPhaseMeasurement: transportPhaseMeasurement(transportResult),
+			DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+			DeliveryReconciliation:    deliveryReconciliation,
+			PendingStreamState:        &pendingStreamState{Key: stateKey, State: updated},
+		}
+		result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+		return result, nil
+	}
 	transportRequest := synctransport.RunRequest{
 		ConnectionID:       conn.ID,
 		Generation:         generationID,
@@ -308,6 +347,32 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		Approval:                  approval,
 		Stage:                     a.transportStage,
 		SourceAdmission:           workLease.renew,
+		ReadBackAdmission:         workLease.renew,
+		EmptyPublicationHandoff: func(handoffCtx context.Context, transportResult synctransport.Result) error {
+			persistCtx, cancel := context.WithTimeout(context.WithoutCancel(handoffCtx), transportWorkLeaseDuration)
+			defer cancel()
+			if err := workLease.renew(persistCtx); err != nil {
+				return fmt.Errorf("renew empty full-overwrite work lease after read-back: %w", err)
+			}
+			result, err := emptyPublicationResult(transportResult)
+			if err != nil {
+				return err
+			}
+			fenced, persistErr := a.persistDeliveredReconciliationRunWithWorkLease(persistCtx, workLease, runID, result)
+			if persistErr != nil && fenced.ID == "" && !stateStoreCommitMayHaveSucceeded(persistErr) && !errors.Is(persistErr, errStateRevisionConflict) {
+				fenced, persistErr = a.persistDeliveredReconciliationRunWithWorkLease(persistCtx, workLease, runID, result)
+			}
+			if fenced.ID != "" {
+				stored := fenced
+				result.persistedDeliveryReconciliation = &stored
+				persistedEmptyPublication = &stored
+				persistedEmptyPublicationResult = result
+			}
+			if persistErr != nil {
+				return synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", persistErr))
+			}
+			return nil
+		},
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			interim := checkpoint.Clone()
 			if interim.CommittedAt == nil {
@@ -333,8 +398,22 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		err = sanitizeRuntimeError(err, sourceRuntime, destRuntime)
 	}
 	transportMeasurement := transportPhaseMeasurement(transportResult)
+	if persistedEmptyPublication != nil {
+		persistedEmptyPublicationResult.TransportPhaseMeasurement = transportMeasurement
+		if err != nil {
+			return persistedEmptyPublicationResult, err
+		}
+		return persistedEmptyPublicationResult, nil
+	}
 	if committed == nil || committed.CommittedAt == nil {
 		if err != nil {
+			if mode.IsOverwrite() && transportResult.EmptyPublication != nil {
+				result, resultErr := emptyPublicationResult(transportResult)
+				if resultErr != nil {
+					return emptyResult, errors.Join(err, resultErr)
+				}
+				return result, err
+			}
 			result := etlExecutionResult{
 				RecordsRead: transportResult.RecordsRead, RecordsLoaded: transportResult.RecordsApplied,
 				BatchCount: transportResult.Pages, TransportPhaseMeasurement: transportMeasurement,

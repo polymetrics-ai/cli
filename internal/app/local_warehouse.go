@@ -22,16 +22,17 @@ import (
 )
 
 type etlExecutionResult struct {
-	RecordsRead               int
-	RecordsTransformed        int
-	RecordsLoaded             int
-	RecordsFailed             int
-	BatchCount                int
-	Checkpoint                map[string]string
-	TransportPhaseMeasurement *TransportPhaseMeasurement
-	DestinationResults        []json.RawMessage
-	DeliveryReconciliation    *DeliveryReconciliation
-	PendingStreamState        *pendingStreamState
+	RecordsRead                     int
+	RecordsTransformed              int
+	RecordsLoaded                   int
+	RecordsFailed                   int
+	BatchCount                      int
+	Checkpoint                      map[string]string
+	TransportPhaseMeasurement       *TransportPhaseMeasurement
+	DestinationResults              []json.RawMessage
+	DeliveryReconciliation          *DeliveryReconciliation
+	PendingStreamState              *pendingStreamState
+	persistedDeliveryReconciliation *Run
 }
 
 func cloneDestinationResults(results []json.RawMessage) []json.RawMessage {

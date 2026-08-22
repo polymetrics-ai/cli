@@ -610,9 +610,11 @@ type RunRequest struct {
 	// immediately before a source executor begins physical I/O; it accepts no
 	// route, credential, or provider authority and is intentionally absent from
 	// receipts and generated declarations.
-	SourceAdmission func(context.Context) error `json:"-"`
-	Stage           WarehouseStage
-	Commit          func(synccontract.CheckpointEnvelope) error
+	SourceAdmission         func(context.Context) error         `json:"-"`
+	ReadBackAdmission       func(context.Context) error         `json:"-"`
+	EmptyPublicationHandoff func(context.Context, Result) error `json:"-"`
+	Stage                   WarehouseStage
+	Commit                  func(synccontract.CheckpointEnvelope) error
 }
 
 type Result struct {

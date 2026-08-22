@@ -115,6 +115,94 @@ func (a *App) persistDeliveredReconciliationRun(runID string, result etlExecutio
 	return Run{}, errors.Join(runErr, fmt.Errorf("delivered reconciliation run %q was not stored", runID))
 }
 
+func (a *App) persistDeliveredReconciliationRunWithWorkLease(ctx context.Context, lease *transportWorkLease, runID string, result etlExecutionResult) (Run, error) {
+	if a == nil || lease == nil || lease.app != a || result.PendingStreamState == nil || result.DeliveryReconciliation == nil || result.PendingStreamState.Key != lease.key {
+		return Run{}, errors.New("lease-owned delivered reconciliation is invalid")
+	}
+	persistCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), transportWorkLeaseDuration)
+	defer cancel()
+	if err := persistCtx.Err(); err != nil {
+		return Run{}, err
+	}
+	lease.mu.Lock()
+	defer lease.mu.Unlock()
+	pendingStreamState := cloneStreamState(result.PendingStreamState.State)
+	if pendingStreamState.ActiveWorkFence != lease.fence {
+		return Run{}, errTransportStreamWorkFenceLost
+	}
+	nextFence, err := nextTransportWorkFence(lease.fence)
+	if err != nil {
+		return Run{}, err
+	}
+	pendingStreamState.ActiveWorkID = ""
+	pendingStreamState.ActiveWorkLeaseUntil = nil
+	pendingStreamState.ActiveWorkFence = nextFence
+	completedAt := time.Now().UTC()
+	transitionedInCallback := false
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		if err := persistCtx.Err(); err != nil {
+			return current, err
+		}
+		now := transportWorkLeaseNow()
+		actual, present := current.StreamStates[lease.key]
+		if !present || actual.ActiveWorkID != lease.workID || actual.ActiveWorkFence != lease.fence || actual.ActiveWorkLeaseUntil == nil || !actual.ActiveWorkLeaseUntil.After(now) {
+			return current, errTransportStreamWorkFenceLost
+		}
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			if current.Runs[i].Status != "running" {
+				return current, fmt.Errorf("lease-owned transport run %q has status %q, want running before delivered reconciliation: %w", runID, current.Runs[i].Status, errStateRevisionConflict)
+			}
+			current.Runs[i].Status = ETLRunStatusDeliveredReconciliationRequired
+			current.Runs[i].RecordsRead = result.RecordsRead
+			current.Runs[i].RecordsTransformed = result.RecordsTransformed
+			current.Runs[i].RecordsLoaded = result.RecordsLoaded
+			current.Runs[i].RecordsFailed = result.RecordsFailed
+			current.Runs[i].BatchCount = result.BatchCount
+			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[i].TransportPhaseMeasurement = cloneTransportPhaseMeasurement(result.TransportPhaseMeasurement)
+			current.Runs[i].DestinationResults = cloneDestinationResults(result.DestinationResults)
+			current.Runs[i].DeliveryReconciliation = cloneDeliveryReconciliation(result.DeliveryReconciliation)
+			current.Runs[i].Error = ""
+			current.Runs[i].CompletedAt = completedAt
+			transitionedInCallback = true
+			break
+		}
+		if !transitionedInCallback {
+			return current, fmt.Errorf("lease-owned transport run %q not found before delivered reconciliation: %w", runID, errStateRevisionConflict)
+		}
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates[lease.key] = cloneStreamState(pendingStreamState)
+		return current, nil
+	})
+	if persistErr != nil {
+		if transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
+			reloaded, reloadErr := a.reloadExactTerminalState(persistErr)
+			if reloadErr == nil {
+				if durableRun, terminalErr := terminalETLRunFromState(reloaded.State, runID); terminalErr == nil {
+					return durableRun, fmt.Errorf("persist lease-owned delivered reconciliation run: %w", persistErr)
+				}
+			}
+		}
+		return Run{}, fmt.Errorf("persist lease-owned delivered reconciliation run: %w", persistErr)
+	}
+	lease.state = cloneStreamState(pendingStreamState)
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, nil
+		}
+	}
+	return Run{}, fmt.Errorf("lease-owned delivered reconciliation run %q was not stored", runID)
+}
+
 // reconcileDeliveredTransportRun repairs only the local, recorded aftermath of
 // a delivery. It runs before endpoint resolution and therefore cannot replay
 // source reads, destination writes, or a declaration-selected action.

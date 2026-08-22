@@ -19,6 +19,8 @@ const transportWorkLeaseDuration = 2 * time.Minute
 
 const transportWorkFenceLimit = int64(^uint64(0) >> 1)
 
+var transportWorkLeaseNow = func() time.Time { return time.Now().UTC() }
+
 type transportWorkLease struct {
 	app          *App
 	key          string
@@ -38,7 +40,7 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	now := time.Now().UTC()
+	now := transportWorkLeaseNow()
 	until := now.Add(transportWorkLeaseDuration)
 	var claimed StreamState
 	var prior StreamState
@@ -157,7 +159,7 @@ func (l *transportWorkLease) abandonUncommitted(ctx context.Context) error {
 	defer cancel()
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	now := time.Now().UTC()
+	now := transportWorkLeaseNow()
 	if _, err := l.app.updateState(func(current state) (state, error) {
 		actual, present := current.StreamStates[l.key]
 		if !present || actual.ActiveWorkID != l.workID || actual.ActiveWorkFence != l.fence || actual.ActiveWorkLeaseUntil == nil || !actual.ActiveWorkLeaseUntil.After(now) {
@@ -193,7 +195,7 @@ func (l *transportWorkLease) mutate(ctx context.Context, change func(StreamState
 	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	now := time.Now().UTC()
+	now := transportWorkLeaseNow()
 	until := now.Add(transportWorkLeaseDuration)
 	var updated StreamState
 	if _, err := l.app.updateState(func(current state) (state, error) {
