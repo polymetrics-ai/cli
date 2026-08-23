@@ -16,6 +16,13 @@ No unresolved actionable findings.
   and remains `merge_blocked`; unused schemas are retained through the existing
   descriptor-level `gaps` aggregation. No operation is skipped.
 - Non-cyclic schemas continue through the previous bounded-schema validation.
+- OpenAPI 3.0 support is a closed sibling set: `description`, `summary`,
+  schema `readOnly`, and schema `type`. A type that differs from its resolved
+  target is never silently treated as supported: the exact overlay remains in
+  the descriptor and a source-pointer-named runtime gap blocks merge. Other
+  semantic response siblings still fail grammar validation.
+- Preflight-discovered sibling evidence is copied to the shared resolver and
+  is emitted through existing top-level gaps when no operation consumes it.
 - The change adds no dependencies, credentials, network-write behavior, or
   changes to the v3 source-lock/provenance structures.
 
@@ -25,6 +32,9 @@ No unresolved actionable findings.
   control coverage use the real source-import path.
 - A pinned public Grafana artifact retained 314 operations while exposing 52
   recursive-schema gaps.
-- `go vet ./...`, `go build ./cmd/pm`, and full `make verify` passed; the
+- Pinned Asana import retained and checked all 249 operations. GitLab source
+  lock drift and Docker Hub's unrelated dangling provider reference were
+  recorded without source mutation or suppression.
+- `go vet ./...`, `go build ./cmd/pm`, and final full `make verify` passed; the
   latter includes formatting, tests, generated/snapshot, lint, certification,
   boundary, docs, and release checks.

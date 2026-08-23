@@ -13,8 +13,9 @@
 - Task: Make the shared source importer preserve recursive schema references as
   existing missing-foundation gap evidence with schema/pointer provenance,
   without losing operations or changing the v3 source-lock/provenance model;
-  also retain OpenAPI 3.0 reference descriptions and summaries while refusing
-  reference siblings that alter resolved semantics.
+  also retain bounded OpenAPI 3.0 reference descriptions and summaries, and
+  retain a non-equivalent schema `type` sibling as merge-blocking source-bound
+  evidence while refusing other semantic reference siblings.
 - Verification: Red and green real-import-path Go tests, an affected connector
   import, frozen GitHub artifact hash/byte measurements, generated checks, full
   `make verify`, diff review, and PR base/review-route checks.
@@ -42,9 +43,11 @@
 4. **Review:** inspect the diff for v3/provenance regression, run inline code
    review under the GSD fallback, and record dispositions before opening the PR.
 5. **Widened slice (#4326):** red-test OpenAPI 3.0 response references carrying
-   safe `description`/`summary` siblings, preserve the rejection of semantic
-   siblings, and prove public Asana, GitLab, and Docker Hub source imports;
-   then implement and verify this resolver-only extension in its own commit.
+   safe `description`/`summary` siblings, retain an unequal schema `type`
+   assertion only as source-bound merge-blocking evidence, preserve rejection
+   of other semantic siblings, and exercise public Asana, GitLab, and Docker
+   Hub sources; then implement and verify this resolver-only extension in its
+   own commit.
 
 ## CLI docs parity
 
