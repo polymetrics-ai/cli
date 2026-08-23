@@ -27,6 +27,18 @@
 - [x] `scripts/gsd prompt execute-phase 4333`, `verify-work 4333`, and
       `code-review 4333` executed inline and recorded.
 
+## Merge revalidation
+
+`origin/main` advanced with #4327 while this branch was in progress. The
+branch merged `e338cd301` without conflict, then passed:
+
+```sh
+go test -timeout 20m ./cmd/connectorgen -count=1  # 206.088s
+go vet ./cmd/connectorgen
+go build ./cmd/connectorgen
+git diff --check origin/main...HEAD
+```
+
 ## CLI help/manual/website parity
 
 Not applicable: no public runtime command, flag, help topic, output contract,

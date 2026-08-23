@@ -35,6 +35,12 @@ No connector-specific path, credential input, generic HTTP capability, or
 runtime query argument was added. The source-lock convention now documents the
 declaration and its retained URL/DNS security limits.
 
+## Merge revalidation
+
+Merged current `origin/main` (`e338cd301`, #4327) without conflict before
+publication. The full affected package suite then passed in 206.088 seconds,
+along with package vet/build and a three-dot diff check.
+
 ## GSD lifecycle
 
 The generated `discuss-phase`, `plan-phase --tdd`, `execute-phase`,
