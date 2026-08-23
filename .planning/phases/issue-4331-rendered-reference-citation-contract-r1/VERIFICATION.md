@@ -64,16 +64,16 @@ These are migration-owned schema collisions, not missing foundation kinds: mainl
 
 The prior raw preflight intentionally stopped at names that the migration drops. The corrective dry-run used a temporary Go test (deleted before commit) to read each consumer lock, write only its decided v3 mapping to `t.TempDir`, and invoke the production `parseSourceImportLock` strict parser on that copy. It did not fetch any provider URL or write to a consumer worktree. Full `connectorgen validate` is not the right structural command for these copies because the consumer lanes have not yet produced their canonical source descriptors.
 
-`GOFLAGS='-p=3' go test -timeout 20m -run '^TestMigrationDryRunConsumerLocks$' -v ./cmd/connectorgen`: **PASS** — 47 / 70 mapped lock copies validate on the final contract revision. The temporary test and all its copied locks were deleted before commit.
+`GOFLAGS='-p=3' go test -timeout 20m -run '^TestMigrationDryRunConsumerLocks$' -count=1 -v ./cmd/connectorgen`: **PASS** — 49 / 70 mapped lock copies validate on the final contract revision. The temporary test and all its copied locks were deleted before commit.
 
 | Lane | Mapped copies passing | Remaining migration correction |
 | --- | ---: | --- |
-| Batch 2/3 | 13 / 19 | Four non-OpenAPI provider models were mapped as OpenAPI (`amazon-sqs` service model `2012-11-05`, Gmail discovery `v1`, unpinned Google Ads discovery, Google Calendar discovery `v3`); `miro` has a path ending in `?`; `trello` repeats an operation identity. Slack Swagger `2.0` validates with its explicit Swagger form pin. |
+| Batch 2/3 | 15 / 19 | Amazon SQS is an explicitly excluded native AWS Query contract gap; Google Ads has rendered-reference route aliases to collapse; `miro` has a path ending in `?`; `trello` repeats an operation identity. Gmail and Google Calendar pass when correctly mapped as rendered references. Slack Swagger `2.0` validates with its explicit Swagger form pin. |
 | Batch 6/7 | 18 / 20 | `iterable` repeats source operation identities; one Outreach operation cites `developers.outreach.io` while the sole captured document publishes under `api.outreach.io`. |
 | Batch 8/9/10 | 15 / 30 | Fifteen machine-readable documents have no recorded 3.0/3.1 pin: `auth0`, `brex`, `calendly`, `coda`, `commercetools`, `datadog`, `dbt`, `docuseal`, `firehydrant`, `looker`, `metabase`, `mode`, `okta`, `pagerduty`, and `posthog`. |
 | Zoom | 1 / 1 | None. |
 
-The dry-run covers the 889 rendered-reference documents (including JSON/YAML and zero-operation navigation pages), the ZIP/gzip bundles, all three unavailable declarations, 63 n8n path fragments, and Zoom's 35 Next-data documents. Slack exposed the sole contract gap and is now supported by the existing Swagger 2.0 parser with a strict form pin. The final 23 remaining locks are not contract gaps: 20 are mapping gaps (four non-OpenAPI models, the cross-origin Outreach citation, and 15 omitted OpenAPI-version pins) and three are source defects (Miro's malformed route plus duplicate source IDs in Trello and Iterable).
+The dry-run covers the 889 rendered-reference documents (including JSON/YAML and zero-operation navigation pages), the ZIP/gzip bundles, all three unavailable declarations, 63 n8n path fragments, and Zoom's 35 Next-data documents. Slack exposed the sole former contract gap and is now supported by the existing Swagger 2.0 parser with a strict form pin. The final full-corpus result is 49 PASS, one excluded native/AWS-Query contract gap (Amazon SQS), 17 mapping gaps, and three source defects. Across the 69 consumers in this PR's scope, there are **zero contract gaps**.
 
 ## Final local regression after the dry-run refinement
 
@@ -96,29 +96,36 @@ The consumer dry-run classified Slack's `swagger: "2.0"` source as a genuine con
 ## Final consumer failure classification and batch 6/7 delta
 
 The final migration dry-run intentionally wrote every mapped lock only below
-`t.TempDir` and parsed it through the production strict importer. The following
-is the complete classification of the 23 copies that remain invalid at
-`9df9e058e`. Consumer paths and line numbers name the read-only input evidence;
-the final column names the production contract check which refused the mapped
-copy.
+`t.TempDir` and parsed it through the production strict importer. A fresh
+full-corpus rerun at `429ea1bf1` corrects the earlier masked Amazon SQS result:
+49 copies pass and 21 fail. Consumer paths and line numbers name the read-only
+input evidence; the final column names the production contract check which
+refused the mapped copy.
 
-### Contract gap — none remaining
+### Contract gap — Amazon SQS, explicitly excluded from this PR
 
-Slack was the one genuine contract gap discovered by the first dry-run: its
-standalone `swagger: "2.0"` source was neither a rendered reference nor a 3.0/3.1
-OpenAPI document. Commit `9df9e058e` resolves that gap by retaining the existing
-strict Swagger parser with an explicit `artifact.swagger` form pin. It is now in
-the passing batch 2/3 count. No remaining copied lock needs a new document kind,
-weakened provenance check, or alternate projection path.
+Slack was the one genuine REST-document contract gap discovered by the first
+dry-run: its standalone `swagger: "2.0"` source was neither a rendered reference
+nor a 3.0/3.1 OpenAPI document. Commit `9df9e058e` resolves that gap by retaining
+the existing strict Swagger parser with an explicit `artifact.swagger` form pin.
 
-### Mapping gaps — 20
+Amazon SQS is not a REST-route mapping gap. Its Botocore service-model capture
+at `.../46/cli/internal/connectors/defs/amazon-sqs/sources/amazon-sqs-operation-source-lock.json:6-10`
+correctly maps as a rendered reference, but then its intentional native operation
+identity `POST SQS.<Action>` (for example `SQS.AddPermission` at `:16-23`) is
+rejected by `cmd/connectorgen/sourceimport.go:800-801`: v3 REST operations must
+have slash-prefixed connector-relative paths. Rewriting it as a REST path would
+misrepresent the native AWS Query runtime identity. Amazon SQS is therefore
+removed from this PR's 69-consumer gate and is owned by
+`cli-native-query-source-operation-contract-r1`; this PR does not implement that
+native/action-addressed representation. Consequently, there are **zero contract
+gaps across the 69 in-scope consumers**.
+
+### Mapping gaps — 17
 
 | Connector | Lane | Exact unmapped shape and read-only evidence | Production refusal |
 | --- | --- | --- | --- |
-| amazon-sqs | 2/3 | Botocore service-model JSON was mapped as `kind: openapi` with version `2012-11-05` at `.../46/cli/internal/connectors/defs/amazon-sqs/sources/amazon-sqs-operation-source-lock.json:6-10`. It is not an OpenAPI version. | `cmd/connectorgen/sourceimport.go:764-765` — OpenAPI version is outside the aggregate inventory. Map it as a rendered reference with captured evidence and citations instead. |
-| gmail | 2/3 | Google Discovery JSON was mapped as `kind: openapi` with version `v1` at `.../46/cli/internal/connectors/defs/gmail/sources/gmail-operation-source-lock.json:6-10`. It is not an OpenAPI version. | `cmd/connectorgen/sourceimport.go:764-765` — same refusal. Map it as a rendered reference with captured evidence and citations instead. |
-| google-ads | 2/3 | Google Discovery JSON at `.../46/cli/internal/connectors/defs/google-ads/sources/google-ads-operation-source-lock.json:6-13` has no OpenAPI pin; mapping it as `kind: openapi` does not establish one. | `cmd/connectorgen/sourceimport.go:764-765` — missing version is outside the aggregate inventory. Map it as a rendered reference with captured evidence and citations instead. |
-| google-calendar | 2/3 | Google Discovery JSON was mapped as `kind: openapi` with version `v3` at `.../46/cli/internal/connectors/defs/google-calendar/sources/google-calendar-operation-source-lock.json:6-10`. It is not an OpenAPI version. | `cmd/connectorgen/sourceimport.go:764-765` — same refusal. Map it as a rendered reference with captured evidence and citations instead. |
+| google-ads | 2/3 | Google Discovery JSON at `.../46/cli/internal/connectors/defs/google-ads/sources/google-ads-operation-source-lock.json:6-13` correctly maps as a rendered reference, which exposes repeated provider route aliases at `:873-890`, `:1033-1069`, and `:1433-1449`. | `cmd/connectorgen/sourceimport.go:809-810` — the mapper must collapse or otherwise resolve the duplicate routes; it must not mislabel Discovery JSON as OpenAPI. |
 | outreach | 6/7 | The source artifact publishes under `https://api.outreach.io` at `.../12/cli/internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json:6`, but `outreach.rest.delete.ApiV2CustomObjectsObjectNameId8` cites `https://developers.outreach.io/api/custom-objects` at `:93-100`. One rendered-reference document cannot legitimately vouch for both origins. | `cmd/connectorgen/sourceimport.go:804-805` — citation must be a well-formed absolute URL under its document's published-source origin. The mapping needs a separately captured `developers.outreach.io` document (or a retraced same-origin source), not a relaxed origin check. |
 | auth0 | 8/9/10 | The migrated `documents` entry has content/hash/bytes but no retained verified form/version pin: `.../54/cli/internal/connectors/defs/auth0/sources/auth0-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — the mapped OpenAPI branch lacks its required version. |
 | brex | 8/9/10 | The `machine-readable-spec` document retains no verified form/version pin at `.../54/cli/internal/connectors/defs/brex/sources/brex-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — the mapped OpenAPI branch lacks its required version. |
@@ -167,6 +174,8 @@ production same-origin check correctly rejects the operation at Outreach line
 2.0 `artifact.swagger` handling in `sourceimport.go:756-765` and its projected
 form in `sourceprojection.go:1869-1877`; neither executes for batch 6/7's
 rendered-reference documents. That Swagger correction gained Slack in batch
-2/3, while the mapper correction exposed Outreach in batch 6/7, leaving the
-total at 47/70. This is deliberately classified as a **mapping gap**, not a
-reason to weaken the contract's cross-origin citation protection.
+2/3, while the mapper correction exposed Outreach in batch 6/7. The fresh
+full-corpus rerun additionally maps Gmail and Google Calendar as rendered
+references, raising the overall result to 49/70. Outreach remains deliberately
+classified as a **mapping gap**, not a reason to weaken the contract's
+cross-origin citation protection.
