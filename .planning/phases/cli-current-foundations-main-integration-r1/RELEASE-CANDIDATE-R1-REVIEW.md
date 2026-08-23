@@ -1,8 +1,8 @@
 # Foundation 0.3.0 release-candidate r1 review record
 
-source_sha: d7cde239ae64b9508f44704f38e81ae0e1c19720
+source_sha: 763282e4d1bc528a36e5e388c09976e0c406a0e7
 
-This is final code-and-generated implementation SHA **I12**. Its schema-3 evidence closure is deliberately the next commit: an evidence file cannot truthfully name the Git object that contains itself.
+This is final code-and-generated implementation SHA **I13**. Its schema-3 evidence closure is deliberately the next commit: an evidence file cannot truthfully name the Git object that contains itself.
 
 ## Intake and composition crosswalk
 
@@ -29,6 +29,7 @@ This is final code-and-generated implementation SHA **I12**. Its schema-3 eviden
 | CI website-data parity | Fresh CI directly failed because generator-owned website data was stale. A local `website` generator run reproduced it and changed only four generated website artifacts; its data now includes the required Recurly flags and current source-projection statuses. No provider/runtime declaration was altered. |
 | RC-18 skills-generator stall | Hosted Verify named `TestSkillsGenerateMatchesTrackedSkills` at its 20-minute alarm twice. Direct current-code inspection found no subprocess, network, prompt, or external lock: `runSkills` built a registry once, then `connectorSkill` rebuilt the complete registry once for each manifest. The real `cli.Run skills generate` test still produced the complete tracked tree but failed its new 30-second behavioral budget at 2m37.16s. The narrow fix passes the original registry into all connector-skill renders. The same full generated-tree assertion now passes in 2.09s; the ordinary package keeps its original 20-minute deadline and passes in 465.340s. |
 | RC-19 generated GitHub operation ledger | Exact-head Verify at `c1ba37348…` failed `github-combined-operation-ledger --check`. The local check reproduced it. The owning `--refresh` command changed only the combined planning ledger, and the full 17-test parity/source-drift cohort plus `make github-parity-artifacts-check` pass afterward. Its 1,525 source-locked operations report 1,495 implemented mappings but **zero** live proofs and 1,525 `not_attempted` terminal-evidence states: this is explicitly implemented-but-uncertified metadata, not provider certification. |
+| RC-20 generated website surface | Exact-head Website Data and Website CI/CD at `d7cde239…` each reported two stale generator-owned website artifacts after RC-19. The owning `pnpm run gen:website-data` command changed only `github-cli-surface.mdx` and its generated docs index, from 1,059/1,525 to the already-proven 1,495/1,525 mapping count. It retains current-head live proof 0/1,525: this is generated documentation, not a certification claim. |
 
 ## Conflict-invariant preservation
 
@@ -39,7 +40,7 @@ This is final code-and-generated implementation SHA **I12**. Its schema-3 eviden
 
 ## FND-B09 and FND-W01
 
-- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closures `7c3d856…`, `133afe481…`, `596c90c…`, `25b2f844…`, `8ed5ab93…`, `4058b2fe…`, `30f944ca…`, `3e63dfdf…`, and the superseded I9/I10/I11 closures are replaced after the confirmed Recurly correction, CI-proven website-data drift, GitHub reachability regression, RC-09 CodeQL repair, RC-10 behavioral verdict correction, RC-11/14/15/16/17 fixture proof, RC-12 exact lint correction, RC-13 generated-manual correction, RC-18 skills-generator correction, and RC-19 source-derived ledger refresh. This schema-3 closure binds I12, five typed component identities, current subject fingerprint, and exact artifact digests.
+- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closures `7c3d856…`, `133afe481…`, `596c90c…`, `25b2f844…`, `8ed5ab93…`, `4058b2fe…`, `30f944ca…`, `3e63dfdf…`, and the superseded I9/I10/I11/I12 closures are replaced after the confirmed Recurly correction, CI-proven website-data drift, GitHub reachability regression, RC-09 CodeQL repair, RC-10 behavioral verdict correction, RC-11/14/15/16/17 fixture proof, RC-12 exact lint correction, RC-13 generated-manual correction, RC-18 skills-generator correction, RC-19 source-derived ledger refresh, and RC-20 website-surface refresh. This schema-3 closure binds I13, five typed component identities, current subject fingerprint, and exact artifact digests.
 - **FND-W01 — deferred / non-reproducing:** current `sourceimport` flow and hermetic `TestSourceImport.*` evidence were inspected. No deterministic externally observable publication-order defect was established, so no speculative publication rewrite was made.
 
 ## Behavioral proof, provider proof, and certification claim
@@ -68,6 +69,7 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 | RC-18 skills-generator Red/Green | RED: `go test -timeout 5m -count=1 -v ./internal/cli -run '^TestSkillsGenerateMatchesTrackedSkills$'` completed the unchanged tree comparison but failed the new 30-second behavioral budget at 2m37.16s. GREEN: the same command passes in 2.09s after registry reuse; no subprocess, network, prompt, or external coordinator participates. |
 | `go test -timeout 20m -count=1 ./internal/cli` at I11 | PASS (465.340s): the normal package retains its unchanged 20-minute deadline. |
 | RC-19 combined-ledger Red/Green | RED: exact `node scripts/github-combined-operation-ledger.mjs --check` failed locally and in Verify. GREEN: `node scripts/github-combined-operation-ledger.mjs --refresh`, its second `--check`, and `make github-parity-artifacts-check` pass. The generator reports REST=1,220, GraphQL queries=31, mutations=274, total=1,525; implementation=1,495 and live proof=0. |
+| RC-20 website-surface Red/Green | RED: Website Data and Website CI/CD each failed on exact I12, naming only `website/content/docs/github-cli-surface.mdx` and `website/lib/docs.generated.ts`. GREEN: `cd website && pnpm run gen:website-data` updates only those files; its second run is idempotent and `make docs-check-no-build` passes. The visible live-proof count remains 0/1,525. |
 | RC-09 focused behavioral suites | PASS: write redaction preserves overlapping-mask behavior; parked rate-limit post-commit claim reconciliation preserves the durable retry; terminal requester retry retains its provider receipt and typed error. |
 | `TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture` in the tagged dedicated suite | PASS (28.45s): a fresh `pm` executes all fifteen disputed commands against the isolated authenticated fixture; each request matches the declared GET path template and its direct-read result validates. |
 | Candidate-output decoder | The historical malformed JSON report did not reproduce; stdout remains separated from diagnostics before JSON decode. Current candidate execution evidence is the split 97-command direct fixture proof above; no count-only result is used. |
@@ -79,7 +81,7 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 | RC-12 exact lint proof | RED: CI-pinned staticcheck S1008 at `sourceprojection.go:1971`. GREEN: the exact predicate return makes `make lint` report zero issues; `surface-sync --check` and candidate checks have zero drift; full `cmd/connectorgen` passes (146.778s), followed by the 97-stage real-binary fixture (70.72s). |
 | RC-13 generated-manual proof | RED: `make docs-check-no-build` reported the GitHub manual stale. GREEN: `./pm docs generate --dir docs/cli --connectors-dir docs/connectors` changed only its two generated files, the second run was idempotent, docs validation passed, and current namespace help rendered. |
 | GitHub `source-import --check`, `surface-sync --check`, `certification-candidates --check`, generated `certification-sweep`, and direct-read candidate/cohort tests | PASS: 120 total direct-read candidates (23 manual, 97 generated); unchanged expectations. |
-| Exact GitHub release-surface parity at I12 | PASS: `v0.2.1` and I12 both have `endpoints=1225`, `blocked=1`, and `direct_read_candidates=120`; endpoint identity diff, blocked endpoint identity diff, and candidate identity diff are each zero. The sole blocked identity is `POST /user/{user_id}/projectsV2/{project_number}/drafts`. |
+| Exact GitHub release-surface parity at I13 | PASS: `v0.2.1` and I13 both have `endpoints=1225`, `blocked=1`, and `direct_read_candidates=120`; endpoint identity diff, blocked endpoint identity diff, and candidate identity diff are each zero. The sole blocked identity is `POST /user/{user_id}/projectsV2/{project_number}/drafts`. |
 | `go test -timeout 20m ./cmd/connectorgen -count=1` | PASS (152.312s). |
 | `go test -timeout 20m ./internal/app -count=1` | PASS (275.715s). |
 | `go test -timeout 20m ./internal/cli -count=1` | PASS (765.837s). |
@@ -92,4 +94,4 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 
 ## Merge recommendation
 
-The local Foundation implementation, all six dedicated GitHub fixture proofs, exact parity, lint, generated-manual/website parity, release workflow gates, RC-18 skills generation behavior, and RC-19 source-derived ledger gate are green at I12. Recurly and GitHub reads are implemented but explicitly not live certified. After the evidence-only closure’s strict gate, fresh automated review and GitHub CI remain the merge gates. PR #4314 remains unmerged against `fm/cli-current-foundations-main-integration-r1`.
+The local Foundation implementation, all six dedicated GitHub fixture proofs, exact parity, lint, generated-manual/website parity, release workflow gates, RC-18 skills generation behavior, RC-19 source-derived ledger gate, and RC-20 website-surface gate are green at I13. Recurly and GitHub reads are implemented but explicitly not live certified. After the evidence-only closure’s strict gate, fresh automated review and GitHub CI remain the merge gates. PR #4314 remains unmerged against `fm/cli-current-foundations-main-integration-r1`.
