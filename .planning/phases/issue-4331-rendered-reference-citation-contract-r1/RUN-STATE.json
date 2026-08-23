@@ -2,7 +2,7 @@
   "issue": 4331,
   "workflow": "discuss-phase -> plan-phase --tdd -> execute-phase -> verify-work -> code-review",
   "execution": "inline/manual fallback: compatible Pi isolated runtime is unavailable",
-  "state": "verified-and-reviewed",
+  "state": "verified-and-reviewed-on-merged-main",
   "branch": "fm/cli-rendered-reference-citation-contract-r1",
   "base": "main",
   "required_base_ancestor": "486b92b42",

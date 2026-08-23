@@ -35,3 +35,14 @@ The full `go test ./...` and `make verify` commands are intentionally not run as
 - `go run ./cmd/connectorgen validate`: **PASS** — `552 connector(s) checked, 0 findings`.
 - `go run ./cmd/connectorgen surface-sync --check`: **PASS** — `552 connector(s) scanned`, zero changes.
 - `make connector-boundary && make lint && make tidy-check && make docs-check && make smoke-no-build && make agent-contract-check && make release-workflow-check`: **PASS**. The release check was rerun in an attached terminal session and exited 0 with `installed GitHub certification archive proof passed`.
+
+## Merged-main revalidation
+
+After `origin/main` advanced with the cyclic source-import resolver, it was merged into this branch (no rebase). The combined head passed:
+
+- `go test -timeout 20m ./cmd/connectorgen`: **PASS** — `ok polymetrics.ai/cmd/connectorgen 262.671s`.
+- focused rendered-reference, standalone-vs-fragment, gzip-bundle, legacy, and OpenAPI byte-stability suite: **PASS**.
+- `go vet ./cmd/connectorgen && go build ./cmd/connectorgen && git diff --check`: **PASS**.
+- `go run ./cmd/connectorgen validate`: **PASS** — `552 connector(s) checked, 0 findings`.
+- `go run ./cmd/connectorgen surface-sync --check`: **PASS** — 552 connectors scanned with zero changes.
+- `go run ./cmd/agentcontractgen check`: **PASS**.
