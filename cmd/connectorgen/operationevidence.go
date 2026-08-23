@@ -156,6 +156,7 @@ type operationEvidenceReadOnly struct {
 }
 
 type operationEvidenceReadOnlyRollup struct {
+	Connector string   `json:"connector"`
 	Policy    string   `json:"policy"`
 	SourceIDs []string `json:"source_ids"`
 }
@@ -1137,29 +1138,36 @@ func operationEvidenceRollups(rows []operationEvidenceRow) []operationEvidenceRo
 }
 
 func operationEvidenceReadOnlyRollups(rows []operationEvidenceRow) []operationEvidenceReadOnlyRollup {
-	groups := map[string]map[string]bool{}
+	type group struct {
+		connector string
+		policy    string
+		sources   map[string]bool
+	}
+	groups := map[string]*group{}
 	for _, row := range rows {
 		if row.ReadOnly == nil {
 			continue
 		}
-		if groups[row.ReadOnly.Policy] == nil {
-			groups[row.ReadOnly.Policy] = map[string]bool{}
+		key := row.Connector + "\x00" + row.ReadOnly.Policy
+		if groups[key] == nil {
+			groups[key] = &group{connector: row.Connector, policy: row.ReadOnly.Policy, sources: map[string]bool{}}
 		}
-		groups[row.ReadOnly.Policy][row.SourceID] = true
+		groups[key].sources[row.SourceID] = true
 	}
-	policies := make([]string, 0, len(groups))
-	for policy := range groups {
-		policies = append(policies, policy)
+	keys := make([]string, 0, len(groups))
+	for key := range groups {
+		keys = append(keys, key)
 	}
-	sort.Strings(policies)
-	rollups := make([]operationEvidenceReadOnlyRollup, 0, len(policies))
-	for _, policy := range policies {
-		sourceIDs := make([]string, 0, len(groups[policy]))
-		for sourceID := range groups[policy] {
+	sort.Strings(keys)
+	rollups := make([]operationEvidenceReadOnlyRollup, 0, len(keys))
+	for _, key := range keys {
+		group := groups[key]
+		sourceIDs := make([]string, 0, len(group.sources))
+		for sourceID := range group.sources {
 			sourceIDs = append(sourceIDs, sourceID)
 		}
 		sort.Strings(sourceIDs)
-		rollups = append(rollups, operationEvidenceReadOnlyRollup{Policy: policy, SourceIDs: sourceIDs})
+		rollups = append(rollups, operationEvidenceReadOnlyRollup{Connector: group.connector, Policy: group.policy, SourceIDs: sourceIDs})
 	}
 	return rollups
 }

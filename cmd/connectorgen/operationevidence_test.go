@@ -23,9 +23,9 @@ func (artifact operationEvidenceArtifact) rollupContaining(rollups []operationEv
 	return operationEvidenceRollup{}, false
 }
 
-func (artifact operationEvidenceArtifact) readOnlyRollup(policy string) (operationEvidenceReadOnlyRollup, bool) {
+func (artifact operationEvidenceArtifact) readOnlyRollup(connector, policy string) (operationEvidenceReadOnlyRollup, bool) {
 	for _, rollup := range artifact.IntentionallyReadOnly {
-		if rollup.Policy == policy {
+		if rollup.Connector == connector && rollup.Policy == policy {
 			return rollup, true
 		}
 	}
@@ -234,7 +234,7 @@ func TestOperationEvidenceSeparatesDeclaredReadOnlyFromFoundations(t *testing.T)
 	if _, found := artifact.rollupContaining(artifact.MissingFoundations, githubReadOnlySourceID); found {
 		t.Fatalf("read-only source row leaked into missing-foundation rollups: %+v", artifact.MissingFoundations)
 	}
-	rollup, found := artifact.readOnlyRollup("source-cited-read-only-operations-r1")
+	rollup, found := artifact.readOnlyRollup("github", "source-cited-read-only-operations-r1")
 	if !found || !slices.Contains(rollup.SourceIDs, githubReadOnlySourceID) {
 		t.Fatalf("read-only rollup = %+v, want %q", artifact.IntentionallyReadOnly, githubReadOnlySourceID)
 	}
