@@ -426,17 +426,18 @@ func TestSourceImportImportsLockedRESTAndGraphQLIdentities(t *testing.T) {
 	}
 }
 
-func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
+func TestSourceImportRejectsUnsafeOrRetainsMalformedSourceForms(t *testing.T) {
 	t.Parallel()
 	baseLimits := defaultSourceImportLimits()
 	cases := []struct {
 		name     string
 		artifact string
 		want     string
+		wantGap  string
 		limits   sourceImportLimits
 	}{
 		{name: "external reference", artifact: "external-ref.json", want: "external reference", limits: baseLimits},
-		{name: "unresolved reference", artifact: "unresolved-ref.json", want: "unresolved reference", limits: baseLimits},
+		{name: "unresolved response schema reference", artifact: "unresolved-ref.json", want: "unresolved reference", wantGap: sourceMalformedReferenceFoundation, limits: baseLimits},
 		{name: "ambiguous request", artifact: "ambiguous-request.json", want: "ambiguous request schema", limits: baseLimits},
 		{name: "duplicate identity", artifact: "duplicate-id.json", want: "duplicate source identity", limits: baseLimits},
 		{name: "unbounded request", artifact: "unbounded-request.json", want: "unbounded request schema", limits: baseLimits},
@@ -444,7 +445,7 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 		{name: "unsupported encoding", artifact: "unsupported-encoding.json", want: "unsupported request encoding", limits: baseLimits},
 		{name: "invalid relative path", artifact: "invalid-relative-path.json", want: "connector-relative", limits: baseLimits},
 		{name: "whitespace path", artifact: "whitespace-path.json", want: "connector-relative", limits: baseLimits},
-		{name: "missing path parameter", artifact: "missing-path-parameter.json", want: "path placeholder", limits: baseLimits},
+		{name: "missing path parameter", artifact: "missing-path-parameter.json", want: "path placeholder", wantGap: sourceMalformedPathParameterFoundation, limits: baseLimits},
 		{name: "multiple YAML documents", artifact: "multiple-documents.yaml", want: "multiple YAML documents", limits: baseLimits},
 		{name: "reference depth", artifact: "deep-reference.json", want: "reference depth limit", limits: sourceImportLimits{MaxArtifactBytes: baseLimits.MaxArtifactBytes, MaxSchemaBytes: baseLimits.MaxSchemaBytes, MaxOperations: baseLimits.MaxOperations, MaxReferences: baseLimits.MaxReferences, MaxReferenceDepth: 1}},
 		{name: "reference count", artifact: "many-references.json", want: "reference count limit", limits: sourceImportLimits{MaxArtifactBytes: baseLimits.MaxArtifactBytes, MaxSchemaBytes: baseLimits.MaxSchemaBytes, MaxOperations: baseLimits.MaxOperations, MaxReferences: 1, MaxReferenceDepth: baseLimits.MaxReferenceDepth}},
@@ -458,7 +459,21 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 			t.Parallel()
 			raw := loadSourceImportFixture(t, filepath.Join("invalid", tc.artifact))
 			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/invalid/"+tc.artifact, raw)
-			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), tc.limits)
+			result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), tc.limits)
+			if tc.wantGap != "" {
+				if err != nil {
+					t.Fatalf("retained malformed source import: %v", err)
+				}
+				if len(result.Operations) != 1 || !result.Operations[0].Runtime.MergeBlocked {
+					t.Fatalf("retained malformed operation = %#v", result.Operations)
+				}
+				for _, gap := range result.Operations[0].Runtime.Gaps {
+					if gap.Foundation == tc.wantGap && strings.Contains(gap.Location, result.Operations[0].Source.Location) && strings.Contains(gap.Reason, tc.want) {
+						return
+					}
+				}
+				t.Fatalf("retained malformed source gaps = %#v", result.Operations[0].Runtime.Gaps)
+			}
 			if err == nil || !strings.Contains(err.Error(), tc.want) {
 				t.Fatalf("import error = %v, want %q", err, tc.want)
 			}
