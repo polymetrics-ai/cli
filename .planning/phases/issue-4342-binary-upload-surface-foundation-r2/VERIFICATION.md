@@ -22,6 +22,10 @@
 
 - Merged current `origin/main` cleanly before publication, then reran `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/engine`, `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/commandrunner ./internal/connectors/certify`, and `GOFLAGS='-p=3' go test -timeout 20m ./cmd/connectorgen` — all passed. Regenerated `operation-evidence --write-fixed-100` for the merged declaration fingerprint; its check and the certification subject/matrix/candidates/sweep checks then passed.
 
+## Post-PR website correction
+
+- GitHub's `Website checks` and `Website generated data` initially failed because this intent changed three generated website artifacts. Ran `cd website && pnpm run gen:website-data`, then verified `pnpm run lint` (warnings only, exit 0), `pnpm run typecheck`, `pnpm run test:unit` (80 tests), `pnpm run test:scripts` (34 tests), and `pnpm run build` — all passed. The build emits existing Better Auth default-secret warnings while statically collecting pages but exits 0.
+
 ## Constraint
 
 No credentialed provider call is authorized for this task. Tests must use the existing declaration-bound fixture/provider doubles and assert actual byte transfer through that real application path. A missing live candidate is `not_live`, not a passing transfer assertion.

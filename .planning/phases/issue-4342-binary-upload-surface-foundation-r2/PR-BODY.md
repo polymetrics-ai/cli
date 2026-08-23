@@ -16,6 +16,7 @@ Refs #4342
 
 - Passed: `go test` for engine, commandrunner, certify, and connectorgen (rerun after merging current main); `go vet ./...`; `go build ./cmd/pm`; and individual `make verify` component gates including lint, docs, certification projections, connector boundary, and release workflow.
 - `pm github`, `pm help github`, and `pm github releases assets upload --help` confirmed contextual/bare help and the new public intent/approval text.
+- Refreshed the three generated website artifacts after CI identified their drift; `pnpm run lint`, `typecheck`, `test:unit` (80 tests), `test:scripts` (34 tests), and `build` all pass locally.
 - Attempted `go test ./internal/cli`: generated skills were refreshed, but unrelated runtime tests require unavailable Redis endpoints `127.0.0.1:1` and `127.0.0.1:2`. Aggregate `go test ./...` and `make verify` were not run as single commands per repository memory-bound guidance; CI retains them.
 
 ## Delivery record
