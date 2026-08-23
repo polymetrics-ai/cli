@@ -136,6 +136,77 @@ func TestSourceImportAcceptsStringScalarUnionPathWireContract(t *testing.T) {
 	}
 }
 
+func TestSourceImportVersion3RepresentsGongWorkspaceQueryWithPMExecutionEnvelope(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3",
+  "info":{"title":"Gong API","version":"V2"},
+  "paths":{
+    "/v2/all-permission-profiles":{
+      "get":{
+        "operationId":"shared",
+        "parameters":[{
+          "name":"workspaceId",
+          "in":"query",
+          "required":true,
+          "schema":{"type":"string"}
+        }],
+        "responses":{"200":{"description":"ok"}}
+      }
+    }
+  }
+}`)
+	document := sourceImportV3FixtureDocument{
+		ID:       "gong-v2",
+		Path:     "/v2/all-permission-profiles",
+		Artifact: artifact,
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "gong", []sourceImportV3FixtureDocument{document}), "gong")
+	if err != nil {
+		t.Fatalf("parse Gong-shaped v3 source lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return artifact, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import Gong-shaped source: %v", err)
+	}
+	if len(result.Operations) != 1 {
+		t.Fatalf("operations = %d, want 1", len(result.Operations))
+	}
+	operation := result.Operations[0]
+	if operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 {
+		t.Fatalf("ordinary unbounded Gong query must be represented, runtime = %+v", operation.Runtime)
+	}
+	if len(operation.Request.Query) != 1 || operation.Request.Query[0].Name != "workspaceId" || !operation.Request.Query[0].Required {
+		t.Fatalf("Gong query descriptor = %#v", operation.Request.Query)
+	}
+	parameterRaw, err := json.Marshal(operation.Request.Query[0])
+	if err != nil {
+		t.Fatalf("marshal Gong query descriptor: %v", err)
+	}
+	var parameter map[string]any
+	if err := json.Unmarshal(parameterRaw, &parameter); err != nil {
+		t.Fatalf("decode Gong query descriptor: %v", err)
+	}
+	schema, _ := parameter["schema"].(map[string]any)
+	if !reflect.DeepEqual(schema, map[string]any{"type": "string"}) {
+		t.Fatalf("provider schema = %#v, want exact source schema without synthetic maxLength", schema)
+	}
+	execution, _ := parameter["execution_envelope"].(map[string]any)
+	if execution["policy_version"] != "pm-request-contract-bounds-v1" || execution["origin"] != "pm_policy" || execution["source_location"] != `request.query["workspaceId"]` {
+		t.Fatalf("execution envelope provenance = %#v", execution)
+	}
+	limits, _ := execution["limits"].([]any)
+	if len(limits) != 1 {
+		t.Fatalf("execution limits = %#v, want one encoded-byte limit", limits)
+	}
+	encodedBytes, _ := limits[0].(map[string]any)
+	if encodedBytes["kind"] != "wire_value" || encodedBytes["unit"] != "encoded_bytes" || encodedBytes["default"] != float64(4096) || encodedBytes["hard_ceiling"] != float64(65536) || encodedBytes["effective"] != float64(4096) {
+		t.Fatalf("encoded-byte execution limit = %#v", encodedBytes)
+	}
+}
+
 func TestSourceImportRetainsRecursiveSchemaReferencesAsSourceBoundGaps(t *testing.T) {
 	t.Parallel()
 	tests := []struct {

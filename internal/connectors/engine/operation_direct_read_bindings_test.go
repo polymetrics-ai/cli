@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -75,6 +76,83 @@ func TestOperationParametersEnforceEncodedPathAndQueryByteCaps(t *testing.T) {
 	}
 	if hits.Load() != 1 {
 		t.Fatalf("provider hits after rejected values = %d, want 1", hits.Load())
+	}
+}
+
+func TestOperationParametersReportPMExecutionCapBeforeIO(t *testing.T) {
+	var hits atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	op := OperationSpec{
+		ID: "acme.search", Kind: "rest_read", Summary: "search", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+		REST: &RESTOperationSpec{
+			Method: http.MethodGet, Path: "/search", MaxBytes: 1024,
+			Parameters: []OperationParameter{{Name: "workspaceId", In: "query", Type: "string", Required: true, MaxBytes: 6}},
+		},
+	}
+	bundle := operationBindingTestBundle(srv.URL, op)
+	if _, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation: op.ID,
+		Query:     map[string]string{"workspaceId": "é"},
+	}, nil); err != nil {
+		t.Fatalf("exact encoded cap: %v", err)
+	}
+	if hits.Load() != 1 {
+		t.Fatalf("provider hits = %d, want 1", hits.Load())
+	}
+	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation: op.ID,
+		Query:     map[string]string{"workspaceId": "éé"},
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "PM execution limit") || !strings.Contains(err.Error(), "encoded_bytes") || !strings.Contains(err.Error(), "6") {
+		t.Fatalf("over-cap error = %v, want PM execution limit, encoded_bytes, and effective cap", err)
+	}
+	if hits.Load() != 1 {
+		t.Fatalf("over-cap value reached provider; hits = %d, want 1", hits.Load())
+	}
+}
+
+func TestOperationParametersPreserveExactFiniteNumericLexemes(t *testing.T) {
+	var hits atomic.Int32
+	var gotQuery atomic.Value
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		hits.Add(1)
+		gotQuery.Store(request.URL.Query())
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	op := OperationSpec{
+		ID: "acme.numeric", Kind: "rest_read", Summary: "numeric", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+		REST: &RESTOperationSpec{
+			Method: http.MethodGet, Path: "/numeric", MaxBytes: 1024,
+			Parameters: []OperationParameter{
+				{Name: "integer", In: "query", Type: "integer", Required: true, MaxBytes: 128},
+				{Name: "number", In: "query", Type: "number", Required: true, MaxBytes: 128},
+			},
+		},
+	}
+	integer := "9999999999999999999999999999999999999999"
+	number := "0.123456789012345678901234567890123456789"
+	_, err := OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{
+		Operation: op.ID,
+		Query:     map[string]string{"integer": integer, "number": number},
+	}, nil)
+	if err != nil {
+		t.Fatalf("exact finite numerics: %v", err)
+	}
+	query, _ := gotQuery.Load().(url.Values)
+	if query.Get("integer") != integer || query.Get("number") != number {
+		t.Fatalf("wire numerics = integer %q number %q, want exact source lexemes", query.Get("integer"), query.Get("number"))
+	}
+	if hits.Load() != 1 {
+		t.Fatalf("provider hits = %d, want 1", hits.Load())
 	}
 }
 

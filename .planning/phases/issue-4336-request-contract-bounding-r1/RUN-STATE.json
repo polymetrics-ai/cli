@@ -1,14 +1,14 @@
 {
   "issue": 4336,
   "phase": "request-contract-bounding-r1",
-  "status": "planned",
+  "status": "red_proven",
   "delivery": "direct-pr",
   "base": "main@8127de418",
   "branch": "fm/cli-request-contract-bounding-design-r1",
   "gsd_execution": "inline-manual-fallback",
   "concurrency": "GOFLAGS=-p=3; one heavy suite at a time",
   "red_green_refactor": {
-    "red": "pending Gong-shaped importer and envelope failure",
+    "red": "Gong-shaped v3 import fails at missing maxLength; runtime error lacks PM provenance; finite integer beyond int64 is rejected",
     "green": "pending typed disposition, explicit envelope, exact runtime enforcement",
     "refactor": "pending removal of error-string classification and numeric narrowing"
   },

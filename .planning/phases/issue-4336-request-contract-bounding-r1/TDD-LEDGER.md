@@ -12,8 +12,17 @@
 
 ## Red evidence
 
-Pending. The first production-behavior change begins only after B1/B2 tests are
-added and run failing with `GOFLAGS=-p=3`.
+Before production edits, the Gong-shaped v3 importer test failed at the current
+strict `maxLength` preflight, the runtime provenance test exposed the generic
+unattributed error, and the exact numeric test exposed int64 narrowing:
+
+```sh
+GOFLAGS=-p=3 go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportVersion3RepresentsGongWorkspaceQueryWithPMExecutionEnvelope$' -count=1
+GOFLAGS=-p=3 go test -timeout 20m ./internal/connectors/engine -run '^(TestOperationParametersReportPMExecutionCapBeforeIO|TestOperationParametersPreserveExactFiniteNumericLexemes)$' -count=1
+```
+
+Full outputs are retained in `traces/red-source-import.txt` and
+`traces/red-runtime.txt`.
 
 ## Green evidence
 
