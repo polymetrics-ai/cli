@@ -26,10 +26,25 @@ Full outputs are retained in `traces/red-source-import.txt` and
 
 ## Green evidence
 
-Pending implementation.
+Focused green after implementation:
+
+```sh
+GOFLAGS=-p=3 go test -timeout 20m ./cmd/connectorgen \
+  -run '^(TestSourceImportVersion3RepresentsGongWorkspaceQueryWithPMExecutionEnvelope|TestSourceParameterExecutionEnvelopeUsesTighterProviderDerivedByteCap|TestSourceRequestSchemaDispositionSeparatesPolicyBoundsFromMalformedInput|TestSourceImportVersion3KeepsUnboundedHeaderAsMergeBlockingGap|TestSourceImportVersion3RepresentsCommonBodyBoundsWithSeparateEnvelope)$' -count=1
+GOFLAGS=-p=3 go test -timeout 20m ./internal/connectors ./internal/connectors/engine ./internal/cli \
+  -run '^(TestCommandSurfaceSectionNamesPMEncodedBytePolicy|TestCommandSurfaceProjectsOperationParameterByteCaps|TestConnectorInspectJSONIncludesRequestExecutionLimits|TestOperationParametersReportPMExecutionCapBeforeIO|TestOperationParametersPreserveExactFiniteNumericLexemes)$' -count=1
+```
+
+These prove the exact Gong-shaped import, source/envelope separation, typed
+schema dispositions, header quarantine, body envelopes, help/inspection
+provenance, pre-I/O caps, and exact numeric request lexemes. Full-package and
+repository gates remain pending final verification.
 
 ## Deliberate sabotage evidence
 
-Pending after green. The new envelope/enforcement path will be intentionally
-broken, the focused new tests must fail, and the production code will then be
-restored before final verification.
+After green, the runtime's `len(encoded) > capBytes` condition was temporarily
+disabled. `TestOperationParametersReportPMExecutionCapBeforeIO` failed because
+the cap+1 request returned no error instead of the PM policy error. The guard
+was restored immediately; the same test passed and a path-scoped `git diff
+--exit-code` proved no sabotage remained. Full output is retained in
+`traces/sabotage-runtime-cap.txt`.
