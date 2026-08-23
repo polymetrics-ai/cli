@@ -26,7 +26,7 @@
     "audit_record": "SOURCE-AUDIT.md",
     "source_import": {
       "status": "blocked_provider_neutral_common_input_preflight",
-      "detail": "PR #4335 merged at 8127de418. The v3 gong-v2 document declares identity_query=true and source-import now fetches/parses the fixed ?version= artifact, then stops at GET /v2/all-permission-profiles parameter 0: unbounded request schema string has no maxLength. The generic importer must retain or typed-gap ordinary common-bound inputs before descriptor projection; no Gong maximum or bypass is permitted."
+      "detail": "PR #4335 merged at 8127de418. The v3 gong-v2 document declares identity_query=true and source-import now fetches/parses the fixed ?version= artifact, then stops at GET /v2/all-permission-profiles parameter 0: required query workspaceId has schema type:string without maxLength, yielding unbounded request schema string has no maxLength. The generic importer must retain or typed-gap ordinary common-bound inputs before descriptor projection; no Gong maximum or bypass is permitted."
     },
     "output_preservation": {
       "status": "blocked_provider_neutral_collision_masking",

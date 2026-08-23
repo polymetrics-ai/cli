@@ -43,10 +43,10 @@ parity dependencies are resolved.
 ### Current open blockers
 
 - The #4335 source-query foundation is merged at `8127de418`, but source-import now stops at its
-  next provider-neutral boundary: `GET /v2/all-permission-profiles` parameter 0 has an ordinary
-  string without `maxLength`, which the importer rejects before it can write the canonical
-  descriptor. The required generic behavior is to retain or type-gap that provider contract; no
-  Gong max length or shared-code exception has been added.
+  next provider-neutral boundary: `GET /v2/all-permission-profiles` parameter 0 is required query
+  `workspaceId`, whose official schema is `type: string` with no `maxLength`. The importer rejects
+  it before it can write the canonical descriptor. The required generic behavior is to retain or
+  type-gap that provider contract; no Gong max length or shared-code exception has been added.
 - Foundation #4337 must prevent account-scoped non-secret configuration values from entering an
   external-proof process command. The current serializer retains that command verbatim, so the
   planned tenant endpoint cannot be passed to a proof-producing run until the provider-neutral

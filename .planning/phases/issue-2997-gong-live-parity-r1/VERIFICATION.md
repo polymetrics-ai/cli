@@ -23,6 +23,10 @@
   evidence.
 - [x] Full direct-read reconciliation: all 30 implemented direct-read commands ran through the built binary in a fresh initialized project with no credential and each reached `missing --credential`; none was unknown or exact-endpoint blocked.
 - [x] Focused Gong full-surface, commandrunner, and multipart conformance tests pass with `-timeout 20m`; the three multipart actions use the merged generic approval-digest path.
+- [x] On the branch merged through `8127de418`, credential-free focused checks passed again:
+  `TestGongFullSurfaceCommandAndOperationCoverage`, `TestGongMetadataEnablesWriteCapability`,
+  `TestGongCertificationDeclarationUsesOnlyOrdinaryRESTLiveCandidates`, the real
+  `TestEveryImplementedCommandPassesRuntimePreflight`, and `TestConformance/gong`.
 - [x] Batch 2/3 parity-map verification passes for 19 connectors / 5,127 documented operations; its regenerated foundation ledger contains zero Gong gap rows.
 - [x] Built `pm` credential-free command sweep classified all 69 implemented Gong paths (30 direct reads, 27 reverse-ETL writes, 12 ETL streams) as `missing --credential`; it made no provider request and saw zero unknown, partial, or unbound results.
 - [x] `pm help gong`, `pm gong`, and `pm gong calls get --help` render contextual help; manual, skill, and website generated artifacts were regenerated after the declaration changes.

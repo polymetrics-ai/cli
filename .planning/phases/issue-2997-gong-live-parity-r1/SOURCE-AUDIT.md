@@ -48,13 +48,15 @@ with typed destructive confirmation.
   version are all locked. The fresh scoped import traversed that declared query and parsed the
   official document; it therefore no longer fails URL policy.
 - The scoped import is deliberately **not** marked green: its next failure is provider-neutral
-  source-import preflight, at `GET /v2/all-permission-profiles` parameter 0, with
-  `unbounded request schema string has no maxLength`. The runtime already has a common bounded
-  input boundary classification, but the earlier descriptor-building stage rejects the ordinary
-  provider string before it can preserve and classify the contract. The required foundation is to
-  retain such source-declared common-bound inputs through descriptor projection (or emit a typed
-  source-bound gap), without inventing a Gong maximum, bypass, or provider branch. Until then no
-  canonical Gong descriptor or derived required-input projection can be claimed.
+  source-import preflight, at `GET /v2/all-permission-profiles` parameter 0: the official
+  `workspaceId` required query input has schema `{ "type": "string" }` with no `maxLength`, so
+  `sourceValidateLengthBounds` returns `unbounded request schema string has no maxLength`. The
+  runtime already has a common bounded input boundary classification, but the earlier
+  descriptor-building stage rejects the ordinary provider string before it can preserve and
+  classify the contract. The required foundation is to retain such source-declared common-bound
+  inputs through descriptor projection (or emit a typed source-bound gap), without inventing a
+  Gong maximum, bypass, or provider branch. Until then no canonical Gong descriptor or derived
+  required-input projection can be claimed.
 - A fresh initialized project with no credential ran the built `pm` binary against all 69
   implemented Gong command paths: 30 direct reads, 27 reverse-ETL writes, and 12 ETL streams.
   Every command reached `missing --credential`; none returned `unknown command`, a partial-command

@@ -97,6 +97,9 @@
   that query and parsed the source, then stopped at the generic
   `/v2/all-permission-profiles` parameter-0 `maxLength` preflight limit. This is green evidence
   for query identity retrieval, not a false source-projection or validation success.
+- On the merged branch, the independent declaration/runtime checks remain green without source
+  import or external proof: the three focused Gong `cmd/connectorgen` tests, real
+  `TestEveryImplementedCommandPassesRuntimePreflight`, and `TestConformance/gong` all passed.
 
 ## Green evidence to record during execution
 
