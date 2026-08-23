@@ -1735,3 +1735,373 @@ func readProjectionFixture(t *testing.T, path string) string {
 	}
 	return string(raw)
 }
+
+func TestSourceProjectionSourceCitedNonExecutableMutationDispositionsCoverAbsentAndIncompleteActions(t *testing.T) {
+	tests := []struct {
+		name       string
+		connector  string
+		operation  sourceOperationDescriptor
+		writes     string
+		cli        string
+		bundle     engine.Bundle
+		wantBase   string
+		wantReason string
+	}{
+		{
+			name:       "asana absent action",
+			connector:  "asana",
+			operation:  sourceCitedMutationTestOperation("asana", "asana.create_access_request", "POST", "/access_requests"),
+			writes:     `{"schema_version":1,"actions":[]}`,
+			cli:        `{"schema_version":1,"commands":[]}`,
+			bundle:     engine.Bundle{Name: "asana", CLISurface: &engine.CLISurface{}},
+			wantBase:   "no executable action",
+			wantReason: "provider exposes the access-request mutation, but the connector has no declaration-owned action",
+		},
+		{
+			name:      "jira incomplete contract",
+			connector: "jira",
+			operation: sourceCitedMutationTestOperation("jira", "jira.bulk_submit_bulk_edit", "POST", "/rest/api/3/bulk/issues/fields"),
+			writes:    `{"schema_version":1,"actions":[{"name":"bulk_submit_bulk_edit","kind":"create","method":"POST","path":"/rest/api/3/bulk/issues/fields","body_type":"json","record_schema":{"type":"object","additionalProperties":false,"properties":{"selectedActions":{"type":"array","items":{"type":"string"}},"selectedIssueIdsOrKeys":{"type":"array","items":{"type":"string"}}}},"risk":"standard"}]}`,
+			cli:       `{"schema_version":1,"commands":[{"path":"bulk submit-bulk-edit","summary":"bulk edit issues","intent":"reverse_etl","availability":"partial","write":"bulk_submit_bulk_edit","flags":[{"name":"selected-actions","type":"string_array","maps_to":"record.selectedActions","required":true},{"name":"selected-issue-ids-or-keys","type":"string_array","maps_to":"record.selectedIssueIdsOrKeys","required":true}]}]}`,
+			bundle: engine.Bundle{Name: "jira", Writes: []engine.WriteAction{{
+				Name: "bulk_submit_bulk_edit", Kind: "create", Method: "POST", Path: "/rest/api/3/bulk/issues/fields", BodyType: "json",
+				RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"selectedActions":{"type":"array","items":{"type":"string"}},"selectedIssueIdsOrKeys":{"type":"array","items":{"type":"string"}}}}`),
+			}}, CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+				Path: "bulk submit-bulk-edit", Intent: "reverse_etl", Availability: "partial", Write: "bulk_submit_bulk_edit",
+				Flags: []engine.CLIFlag{{Name: "selected-actions", Type: "string_array", MapsTo: "record.selectedActions", Required: true}, {Name: "selected-issue-ids-or-keys", Type: "string_array", MapsTo: "record.selectedIssueIdsOrKeys", Required: true}},
+			}}}},
+			wantBase:   "source request fields are missing",
+			wantReason: "provider request body uses an unbounded object that has no complete declared action contract",
+		},
+		{
+			name:       "sentry scim patch absent action",
+			connector:  "sentry",
+			operation:  sourceCitedMutationTestOperation("sentry", "sentry.rest.updateOrganizationScimV2Group", "PATCH", "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}"),
+			writes:     `{"schema_version":1,"actions":[]}`,
+			cli:        `{"schema_version":1,"commands":[]}`,
+			bundle:     engine.Bundle{Name: "sentry", CLISurface: &engine.CLISurface{}},
+			wantBase:   "no executable action",
+			wantReason: "Sentry SCIM group update is provider-cited but has no declaration-owned action",
+		},
+		{
+			name:       "sentry dashboard post absent action",
+			connector:  "sentry",
+			operation:  sourceCitedMutationTestOperation("sentry", "sentry.rest.createOrganizationDashboard", "POST", "/api/0/organizations/{organization_id_or_slug}/dashboards/"),
+			writes:     `{"schema_version":1,"actions":[]}`,
+			cli:        `{"schema_version":1,"commands":[]}`,
+			bundle:     engine.Bundle{Name: "sentry", CLISurface: &engine.CLISurface{}},
+			wantBase:   "no executable action",
+			wantReason: "Sentry dashboard creation is provider-cited but has no declaration-owned action",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			operation := tc.operation
+			if tc.connector == "asana" {
+				operation.Source.URL = "https://developers.asana.com/reference/createaccessrequest"
+				operation.Request.Body = &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+					"type": "object", "properties": map[string]any{"data": map[string]any{"type": "object", "additionalProperties": true}},
+				}}
+			} else if tc.connector == "jira" {
+				operation.Source.URL = "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/"
+				operation.Request.Body = &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+					"type": "object", "properties": map[string]any{"editedFieldsInput": map[string]any{"type": "object"}, "selectedActions": map[string]any{"type": "array", "items": map[string]any{"type": "string"}}, "selectedIssueIdsOrKeys": map[string]any{"type": "array", "items": map[string]any{"type": "string"}}},
+				}}
+			} else if operation.Method == "PATCH" {
+				operation.Source.URL = "https://sentry.io/api/0/"
+				operation.Request.Path = []sourceParameterDescriptor{{Name: "organization_id_or_slug", Required: true, Schema: map[string]any{"type": "string"}}, {Name: "team_id_or_slug", Required: true, Schema: map[string]any{"type": "string"}}}
+				operation.Request.Body = &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+					"type": "object", "properties": map[string]any{"displayName": map[string]any{"type": "string"}},
+				}}
+			} else {
+				operation.Source.URL = "https://sentry.io/api/0/"
+				operation.Request.Path = []sourceParameterDescriptor{{Name: "organization_id_or_slug", Required: true, Schema: map[string]any{"type": "string"}}}
+				operation.Request.Body = &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+					"type": "object", "properties": map[string]any{"title": map[string]any{"type": "string"}},
+				}}
+			}
+			if findings := validateSourceExecutableCoverage(tc.bundle, "sources/"+tc.connector+"-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{operation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, tc.wantBase) {
+				t.Fatalf("undisposed source finding = %+v, want %q", findings, tc.wantBase)
+			}
+			disposition := sourceNonExecutableMutationDisposition{Source: sourceOperationCitation{
+				SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path,
+			}, Reason: tc.wantReason}
+			bundleDir := filepath.Join(t.TempDir(), tc.connector)
+			if err := os.MkdirAll(filepath.Join(bundleDir, "sources"), 0o755); err != nil {
+				t.Fatal(err)
+			}
+			dispositionRaw, err := json.Marshal(sourceNonExecutableMutationDispositionDocument{
+				SchemaVersion: 1,
+				Dispositions:  []sourceNonExecutableMutationDisposition{disposition},
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			writeProjectionFixture(t, filepath.Join(bundleDir, "sources", tc.connector+"-mutation-dispositions.json"), string(dispositionRaw))
+			dispositions, err := sourceProjectionReadNonExecutableMutationDispositions(bundleDir)
+			if err != nil {
+				t.Fatalf("read source-cited dispositions: %v", err)
+			}
+			result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+			if err := sourceProjectionApplyNonExecutableMutationDispositions(tc.bundle, &result, dispositions); err != nil {
+				t.Fatalf("apply source-cited disposition: %v", err)
+			}
+			descriptorRaw, err := marshalSourceImportResult(result)
+			if err != nil {
+				t.Fatalf("marshal source descriptor: %v", err)
+			}
+			var descriptor sourceImportDescriptorDocument
+			if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
+				t.Fatalf("decode source descriptor: %v", err)
+			}
+			got := descriptor.Operations[0]
+			if !got.Runtime.MergeBlocked || got.Runtime.NonExecutableMutation == nil || got.Runtime.NonExecutableMutation.Source != disposition.Source {
+				t.Fatalf("runtime disposition = %#v, want source-cited non-executable mutation", got.Runtime)
+			}
+			if len(got.Runtime.Gaps) != 1 || got.Runtime.Gaps[0].Foundation != sourceNonExecutableMutationDispositionFoundation || !strings.Contains(got.Runtime.Gaps[0].Location, got.Source.URL) || !strings.Contains(got.Runtime.Gaps[0].Reason, tc.wantReason) {
+				t.Fatalf("runtime gap = %#v, want provider-cited mutation gap", got.Runtime.Gaps)
+			}
+
+			writesPath := filepath.Join(bundleDir, "writes.json")
+			cliPath := filepath.Join(bundleDir, "cli_surface.json")
+			writeProjectionFixture(t, writesPath, tc.writes)
+			writeProjectionFixture(t, cliPath, tc.cli)
+			stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: descriptor.Operations}, false)
+			if err != nil {
+				t.Fatalf("source projection: %v", err)
+			}
+			if stats.Missing != 0 {
+				t.Fatalf("source projection reported disposed mutation as missing: %+v", stats)
+			}
+			if gotWrites, gotCLI := readProjectionFixture(t, writesPath), readProjectionFixture(t, cliPath); gotWrites != tc.writes || gotCLI != tc.cli {
+				t.Fatalf("source projection fabricated an action or command:\nwrites=%s\ncli=%s", gotWrites, gotCLI)
+			}
+			if findings := validateSourceExecutableCoverage(tc.bundle, "sources/"+tc.connector+"-operation-descriptor.json", descriptor); len(findings) != 0 {
+				t.Fatalf("executable coverage findings = %+v", findings)
+			}
+		})
+	}
+}
+
+func TestSourceProjectionSourceCitedNonExecutableMutationDispositionRejectsCompleteAction(t *testing.T) {
+	operation := sourceProjectionTestOperation()
+	operation.Connector = "sentry"
+	operation.SourceID = "sentry.items.create"
+	operation.Source = sourceCitedMutationTestOperation("sentry", operation.SourceID, operation.Method, operation.Path).Source
+	bundleDir := filepath.Join(t.TempDir(), "sentry")
+	if err := os.MkdirAll(bundleDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, writesPath, `{"schema_version":1,"actions":[{"name":"items","kind":"custom","method":"POST","path":"/items/{{ record.owner }}","path_fields":["owner"],"body_type":"json","body_fields":["stale"],"record_schema":{"type":"object","additionalProperties":false,"properties":{"stale":{"type":"string"}}},"risk":"standard"}]}`)
+	writeProjectionFixture(t, cliPath, `{"schema_version":1,"commands":[{"path":"items create","summary":"create","intent":"reverse_etl","availability":"implemented","write":"items","flags":[{"name":"stale","type":"string","maps_to":"record.stale"}]}]}`)
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
+	if err != nil {
+		t.Fatalf("materialize complete source action: %v", err)
+	}
+	if stats.Missing != 0 {
+		t.Fatalf("complete action source projection missing = %+v", stats)
+	}
+	var writes struct {
+		Actions []engine.WriteAction `json:"actions"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, writesPath)), &writes); err != nil {
+		t.Fatal(err)
+	}
+	var cli engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &cli); err != nil {
+		t.Fatal(err)
+	}
+	bundle := engine.Bundle{Name: "sentry", Writes: writes.Actions, CLISurface: &cli}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/sentry-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{operation}}); len(findings) != 0 {
+		t.Fatalf("complete action became unreachable without a disposition: %+v", findings)
+	}
+	disposition := sourceNonExecutableMutationDisposition{Source: sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path}, Reason: "must not hide a complete action"}
+	if err := sourceProjectionApplyNonExecutableMutationDispositions(bundle, &sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, []sourceNonExecutableMutationDisposition{disposition}); err == nil || !strings.Contains(err.Error(), "complete executable action") {
+		t.Fatalf("complete action disposition error = %v, want refusal", err)
+	}
+	operation.Runtime = sourceRuntimeReachability{
+		MergeBlocked:          true,
+		NonExecutableMutation: &disposition,
+		Gaps:                  []sourceContractGap{sourceProjectionNonExecutableMutationRuntimeGap(operation, disposition)},
+	}
+	if _, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, true); err == nil || !strings.Contains(err.Error(), "claims a complete executable action") {
+		t.Fatalf("source projection complete-action disposition error = %v, want refusal", err)
+	}
+	findings := validateSourceExecutableCoverage(bundle, "sources/sentry-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{operation}})
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "claims a complete executable action") {
+		t.Fatalf("executable coverage complete-action findings = %+v, want refusal", findings)
+	}
+	if bundle.CLISurface.Commands[0].Availability != "implemented" {
+		t.Fatalf("complete action command availability = %q, want implemented", bundle.CLISurface.Commands[0].Availability)
+	}
+}
+
+func TestSourceProjectionSourceCitedNonExecutableMutationDispositionRejectsImplementedIncompleteActionClaim(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("sentry", "sentry.items.update", "PATCH", "/items/{item_id}")
+	operation.Request.Path = []sourceParameterDescriptor{{Name: "item_id", Required: true, Schema: map[string]any{"type": "string"}}}
+	operation.Request.Body = &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+		"type": "object", "properties": map[string]any{"payload": map[string]any{"type": "object"}},
+	}}
+	disposition := sourceNonExecutableMutationDisposition{Source: sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path}, Reason: "an incomplete action must not hide an implemented command claim"}
+	bundle := engine.Bundle{Name: "sentry", Writes: []engine.WriteAction{{
+		Name: "update-item", Kind: "update", Method: "PATCH", Path: "/items/{{ record.item_id }}", PathFields: []string{"item_id"}, BodyType: "json",
+		RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"item_id":{"type":"string"}}}`),
+	}}, CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+		Path: "items update", Intent: "reverse_etl", Availability: "implemented", Write: "update-item",
+		Flags: []engine.CLIFlag{{Name: "item-id", Type: "string", MapsTo: "record.item_id", Required: true}},
+	}}}}
+	if err := sourceProjectionApplyNonExecutableMutationDispositions(bundle, &sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, []sourceNonExecutableMutationDisposition{disposition}); err == nil || !strings.Contains(err.Error(), "implemented executable action") {
+		t.Fatalf("implemented incomplete action disposition error = %v, want refusal", err)
+	}
+	operation.Runtime = sourceRuntimeReachability{
+		MergeBlocked:          true,
+		NonExecutableMutation: &disposition,
+		Gaps:                  []sourceContractGap{sourceProjectionNonExecutableMutationRuntimeGap(operation, disposition)},
+	}
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[{"name":"update-item","kind":"update","method":"PATCH","path":"/items/{{ record.item_id }}","path_fields":["item_id"],"body_type":"json","record_schema":{"type":"object","additionalProperties":false,"properties":{"item_id":{"type":"string"}}},"risk":"standard"}]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{"schema_version":1,"commands":[{"path":"items update","summary":"update","intent":"reverse_etl","availability":"implemented","write":"update-item","flags":[{"name":"item-id","type":"string","maps_to":"record.item_id","required":true}]}]}`)
+	if _, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, true); err == nil || !strings.Contains(err.Error(), "claims an implemented executable action") {
+		t.Fatalf("source projection implemented incomplete action error = %v, want refusal", err)
+	}
+	findings := validateSourceExecutableCoverage(bundle, "sources/sentry-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{operation}})
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "claims an implemented executable action") {
+		t.Fatalf("executable coverage implemented incomplete action findings = %+v, want refusal", findings)
+	}
+	if bundle.CLISurface.Commands[0].Availability != "implemented" {
+		t.Fatalf("implemented command availability = %q, want preserved implementation claim", bundle.CLISurface.Commands[0].Availability)
+	}
+}
+
+func TestSourceProjectionSourceCitedNonExecutableMutationDispositionScalesAcrossVercelMutationShapes(t *testing.T) {
+	seeds := []sourceOperationDescriptor{
+		sourceCitedMutationTestOperation("vercel", "vercel.rest.editRedirect", "PATCH", "/v1/bulk-redirects"),
+		sourceCitedMutationTestOperation("vercel", "vercel.rest.restoreRedirects", "POST", "/v1/bulk-redirects/restore"),
+		sourceCitedMutationTestOperation("vercel", "vercel.rest.writeSessionFiles", "POST", "/v2/sandboxes/sessions/{sessionId}/fs/write"),
+		sourceCitedMutationTestOperation("vercel", "vercel.rest.dangerouslyDeleteByTags", "POST", "/v1/edge-cache/dangerously-delete-by-tags"),
+	}
+	operations := make([]sourceOperationDescriptor, 0, 159)
+	for index := 0; index < cap(operations); index++ {
+		operation := seeds[index%len(seeds)]
+		operation.SourceID += ".handoff." + fmt.Sprintf("%03d", index)
+		operation.Source.URL = "https://openapi.vercel.sh/"
+		operations = append(operations, operation)
+	}
+	dispositions := make([]sourceNonExecutableMutationDisposition, 0, len(operations))
+	for _, operation := range operations {
+		dispositions = append(dispositions, sourceNonExecutableMutationDisposition{
+			Source: sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path},
+			Reason: "Vercel provider mutation is cited but has no declaration-owned executable action",
+		})
+	}
+	bundleDir := filepath.Join(t.TempDir(), "vercel")
+	if err := os.MkdirAll(filepath.Join(bundleDir, "sources"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	dispositionRaw, err := json.Marshal(sourceNonExecutableMutationDispositionDocument{SchemaVersion: 1, Dispositions: dispositions})
+	if err != nil {
+		t.Fatal(err)
+	}
+	writeProjectionFixture(t, filepath.Join(bundleDir, "sources", "vercel-mutation-dispositions.json"), string(dispositionRaw))
+	dispositions, err = sourceProjectionReadNonExecutableMutationDispositions(bundleDir)
+	if err != nil {
+		t.Fatalf("read Vercel source-cited dispositions: %v", err)
+	}
+	result := sourceImportResult{Operations: operations}
+	bundle := engine.Bundle{Name: "vercel", CLISurface: &engine.CLISurface{}}
+	if err := sourceProjectionApplyNonExecutableMutationDispositions(bundle, &result, dispositions); err != nil {
+		t.Fatalf("apply Vercel source-cited dispositions: %v", err)
+	}
+	for _, operation := range result.Operations {
+		if !sourceProjectionHasNonExecutableMutationDisposition(operation) {
+			t.Fatalf("Vercel source operation %q did not retain its cited non-executable mutation gap", operation.SourceID)
+		}
+	}
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	const emptyWrites = "{\"schema_version\":1,\"actions\":[]}"
+	const emptyCLI = "{\"schema_version\":1,\"commands\":[]}"
+	writeProjectionFixture(t, writesPath, emptyWrites)
+	writeProjectionFixture(t, cliPath, emptyCLI)
+	stats, err := projectSourceDescriptorToBundle(bundleDir, result, false)
+	if err != nil || stats.Missing != 0 {
+		t.Fatalf("Vercel source projection = stats:%+v err:%v, want every cited mutation retained without a generated action", stats, err)
+	}
+	if gotWrites, gotCLI := readProjectionFixture(t, writesPath), readProjectionFixture(t, cliPath); gotWrites != emptyWrites || gotCLI != emptyCLI {
+		t.Fatalf("Vercel source projection fabricated an action or command:\nwrites=%s\ncli=%s", gotWrites, gotCLI)
+	}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/vercel-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations}); len(findings) != 0 {
+		t.Fatalf("Vercel executable coverage findings = %+v", findings)
+	}
+}
+
+func TestSourceProjectionReadOnlyFoundationCannotSatisfyMutationCoverage(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("sentry", "sentry.issues.delete", "DELETE", "/issues/{issue_id}")
+	operation.Runtime = sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+		Foundation: sourceReadOnlyOperationFoundation,
+		Location:   "source operation sentry.issues.delete",
+		Reason:     "provider source was incorrectly classified as read-only",
+	}}}
+	bundle := engine.Bundle{Name: "sentry", CLISurface: &engine.CLISurface{}}
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{"schema_version":1,"commands":[]}`)
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, true)
+	if err == nil || stats.Missing != 1 {
+		t.Fatalf("source projection read-only mutation result = stats:%+v err:%v, want visible missing mutation", stats, err)
+	}
+	findings := validateSourceExecutableCoverage(bundle, "sources/sentry-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{operation}})
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "read-only disposition cannot cover a mutating source operation") {
+		t.Fatalf("read-only mutation findings = %+v, want mutation-only refusal", findings)
+	}
+}
+
+func TestSourceProjectionSourceCitedMutationDispositionRejectsPOSTGraphQLQuery(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("sentry", "sentry.graphql.query.issue", "POST", "/graphql")
+	operation.Protocol = "graphql"
+	operation.GraphQL = &sourceGraphQLOperationDescriptor{Root: "query", Name: "issue"}
+	disposition := sourceNonExecutableMutationDisposition{Source: sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path}, Reason: "a query cannot be treated as a mutation gap"}
+	err := sourceProjectionApplyNonExecutableMutationDispositions(engine.Bundle{Name: "sentry", CLISurface: &engine.CLISurface{}}, &sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, []sourceNonExecutableMutationDisposition{disposition})
+	if err == nil || !strings.Contains(err.Error(), "not mutating") {
+		t.Fatalf("GraphQL query mutation-disposition error = %v, want non-mutating refusal", err)
+	}
+}
+
+func TestSourceProjectionSourceCitedMutationDispositionLeavesExistingProjectionByteIdentical(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, descriptor := loadInstalledGitHubSourceProjection(t)
+	bundleDir := filepath.Join(root, "internal", "connectors", "defs", "github")
+	paths := []string{filepath.Join(bundleDir, "writes.json"), filepath.Join(bundleDir, "cli_surface.json"), filepath.Join(bundleDir, "api_surface.json")}
+	before := make([]string, len(paths))
+	for index, path := range paths {
+		before[index] = readProjectionFixture(t, path)
+	}
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: descriptor.Operations}, true)
+	if err != nil {
+		t.Fatalf("existing GitHub source projection: %v", err)
+	}
+	if stats.Changed() {
+		t.Fatalf("existing GitHub source projection changed without a mutation disposition: %+v", stats)
+	}
+	for index, path := range paths {
+		if after := readProjectionFixture(t, path); after != before[index] {
+			t.Fatalf("existing GitHub projection changed %s", filepath.Base(path))
+		}
+	}
+}
+
+func sourceCitedMutationTestOperation(connector, sourceID, method, path string) sourceOperationDescriptor {
+	return sourceOperationDescriptor{
+		Connector: connector, SourceID: sourceID, Method: method, Path: path,
+		Source: sourceImportSource{
+			URL: "https://provider.example.test/openapi.json", SHA256: strings.Repeat("a", 64), Bytes: 1024,
+			Location: "#/paths/~1mutation/" + strings.ToLower(method),
+		},
+	}
+}
