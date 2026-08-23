@@ -3,8 +3,8 @@
 Manual GSD review fallback: no compatible isolated reviewer runtime is available,
 and the delivery contract forbids role spawning. Review covers the materializer,
 all twenty generated source locks/disposition maps and source-bound partial CLI
-surfaces, plus planning evidence. Final repository-gate evidence is recorded in
-`VERIFICATION.md` before PR update.
+surfaces, plus planning evidence and generated artifacts. The final repository
+gate evidence is recorded in `VERIFICATION.md`.
 
 ## Findings
 
@@ -24,5 +24,8 @@ No actionable findings.
 ## Automated backstop
 
 Focused connector validation and representative no-credential partial dispatch
-pass as recorded in `TDD-LEDGER.md`. The final generated/docs and repository
-backstop runs are recorded in `VERIFICATION.md` before PR update.
+pass as recorded in `TDD-LEDGER.md`. Batch checks, seven-surface, foundation-gap,
+and hard-gate deterministic checks pass; every mapped row has a CLI declaration
+and 7,054 connector commands are explicitly partial. Final `make verify` passes
+after its prescribed transcript, certification-subject, and operation-evidence
+artifact regenerations.
