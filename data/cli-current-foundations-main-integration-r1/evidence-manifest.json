@@ -2,8 +2,8 @@
   "schema_version": 3,
   "integration": "cli-current-foundations-main-integration-r1",
   "checkpoint": "foundation-0.3.0-release-candidate-r1-evidence-closure",
-  "code_sha": "da16e35b0f801f1b1f49f23651e33ee9e338cf37",
-  "reviewed_sha": "da16e35b0f801f1b1f49f23651e33ee9e338cf37",
+  "code_sha": "d7cde239ae64b9508f44704f38e81ae0e1c19720",
+  "reviewed_sha": "d7cde239ae64b9508f44704f38e81ae0e1c19720",
   "base_sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
   "component_inputs": [
     {
@@ -110,6 +110,13 @@
       "assertion": "RC-18 keeps the exact full tracked-skill tree assertion while requiring ordinary skills generation to complete within 30 seconds. Red was 2m37.16s because each connector skill rebuilt the complete registry; Green reuses the registry created for the invocation, completes the exact assertion in 2.09s, and leaves the ordinary package at its unchanged 20-minute deadline (465.340s).",
       "tests": ["TestSkillsGenerateMatchesTrackedSkills", "TestSkillsGenerateWritesAgentSkills", "TestETLManualAndSkillDescribeDeliveredReconciliationTerminalRun"],
       "modes": ["cli.skills_generation", "connector_registry.reuse", "generated_skill_tree"]
+    },
+    {
+      "command": "node scripts/github-combined-operation-ledger.mjs --check (Red); node scripts/github-combined-operation-ledger.mjs --refresh; make github-parity-artifacts-check",
+      "status": "passed",
+      "assertion": "RC-19 refreshes only the source-derived combined GitHub operation ledger after its exact release check reported drift. The green artifact has REST=1220, GraphQL queries=31, mutations=274, total=1525; implementation=1495 but live_proof.proven=0 and every terminal-evidence state remains not_attempted, so no certification claim is promoted.",
+      "tests": ["github-combined-operation-ledger.test.mjs", "gen-github-graphql-parity.test.mjs", "github-source-drift.test.mjs"],
+      "modes": ["generated_operation_ledger", "source_lock.parity", "implemented_but_uncertified"]
     }
   ],
   "gate_ledger": [
@@ -166,7 +173,7 @@
     }
   ],
   "artifact_closure": {
-    "implementation_sha": "da16e35b0f801f1b1f49f23651e33ee9e338cf37",
+    "implementation_sha": "d7cde239ae64b9508f44704f38e81ae0e1c19720",
     "subject_fingerprint": "6e718f8cd4b80497467e907ecb8ae49373afb1758920dfe7d18c83340061c86a",
     "artifacts": [
       {
@@ -176,8 +183,8 @@
       },
       {
         "category": "source",
-        "path": "cmd/connectorgen/sourceprojection.go",
-        "sha256": "2e38d55cf0beafe50b25217747b4c7705555c4206fad23d98c38cdb7579ba6b3"
+        "path": ".planning/phases/github-parity-extract-r1/GITHUB-COMBINED-OPERATION-LEDGER.json",
+        "sha256": "c4a904a919f30065fcc8453c6689e1a3dcc7be5ac8e11a7154d310b334972de3"
       },
       {
         "category": "cli",
@@ -202,7 +209,7 @@
       {
         "category": "ledger",
         "path": ".planning/phases/cli-current-foundations-main-integration-r1/TDD-LEDGER.md",
-        "sha256": "9c689224c5942196b4d6fe43e19818fb67a7bb8fa45bac18ea8a22e1a8ce1fb9"
+        "sha256": "a1d1a2a5838a2206832bd23ac1257a47a7a4ab464db0db610d3c0e28dab4e545"
       },
       {
         "category": "matrix",
