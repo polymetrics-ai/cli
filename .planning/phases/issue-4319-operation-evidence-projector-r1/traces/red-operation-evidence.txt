@@ -1,0 +1,14 @@
+# polymetrics.ai/cmd/connectorgen [polymetrics.ai/cmd/connectorgen.test]
+cmd/connectorgen/operationevidence_test.go:47:32: undefined: operationEvidenceClassETL
+cmd/connectorgen/operationevidence_test.go:50:24: undefined: operationEvidenceClasses
+cmd/connectorgen/operationevidence_test.go:74:10: undefined: operationEvidenceGapSourceTrace
+cmd/connectorgen/operationevidence_test.go:83:10: undefined: operationEvidenceGapCanonicalMapping
+cmd/connectorgen/operationevidence_test.go:92:10: undefined: operationEvidenceGapRuntimeReachability
+cmd/connectorgen/operationevidence_test.go:101:10: undefined: operationEvidenceGapCLICommand
+cmd/connectorgen/operationevidence_test.go:117:10: undefined: operationEvidenceGapWebsiteRow
+cmd/connectorgen/operationevidence_test.go:127:10: undefined: operationEvidenceGapFixtureProof
+cmd/connectorgen/operationevidence_test.go:136:10: undefined: operationEvidenceGapConformanceProof
+cmd/connectorgen/operationevidence_test.go:276:73: undefined: operationEvidenceArtifact
+cmd/connectorgen/operationevidence_test.go:136:10: too many errors
+FAIL	polymetrics.ai/cmd/connectorgen [build failed]
+FAIL
