@@ -1,0 +1,8 @@
+{
+  "issue": 4319,
+  "phase": "issue-4319-operation-evidence-projector-r1",
+  "state": "verified",
+  "base": "cf493b83455aca3dc38164cee01520f5be5803cf",
+  "execution": "inline-manual-gsd-fallback",
+  "reason": "compatible isolated GSD runtime unavailable; repository contract prohibits role spawning"
+}

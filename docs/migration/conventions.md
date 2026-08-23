@@ -1639,12 +1639,30 @@ go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-p
 go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path> --check
 ```
 
-The first command retrieves only the lock's fixed public URL without credentials
-and verifies the exact locked byte count and SHA-256 before parsing. A mismatch
-is a **source-lock refresh** decision: do not infer a replacement schema or
-accept source drift. The generated descriptor is an intermediate provider
-contract for later fixed declaration materializers, never an execution command
-or a generic HTTP escape hatch.
+Version 1 and 2 locks pin one fixed public artifact URL. Version 3 locks retain
+that wire contract for existing locks but use `rest.retrieval`, a sorted aggregate
+`rest.openapi` array, and sorted `rest.source_documents`. Each v3 document owns a
+queryless immutable `artifact`, its exact operation inventory, and a
+`published_source` record identifying the provider document from which it was
+captured. The importer retrieves only each document's fixed artifact URL without
+credentials and verifies its exact locked byte count and SHA-256 before parsing.
+A mismatch is a **source-lock refresh** decision: do not infer a replacement
+schema or accept source drift. The generated descriptor preserves each
+operation's document ID, stable artifact, published URL, capture identity, and
+provider operation ID; a document-qualified locked `id` is the descriptor source
+identity even when the provider repeats an `operationId` in another document.
+
+A v3 `published_source.source_url` is a historical citation, not a retrieval
+endpoint. It may carry only a bounded, non-secret provider query (for example a
+fixed `slug`); it must not contain userinfo, fragments, controls, repeated keys,
+oversized values, or credential-like parameter names. Its `capture_url` and the
+imported `artifact.source_url` remain absolute public HTTPS URLs with no query,
+and only the artifact is fetched by `source-import`. This preserves provenance
+when a provider's rendered documentation URLs expire or rotate.
+
+The generated descriptor is an intermediate provider contract for later fixed
+declaration materializers, never an execution command or a generic HTTP escape
+hatch.
 
 A cold source fetch has a three-minute upper bound. After a successful fetch,
 the generator stores the public artifact in a content-addressed cache keyed by
