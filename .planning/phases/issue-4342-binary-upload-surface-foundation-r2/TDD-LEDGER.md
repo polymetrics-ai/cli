@@ -11,6 +11,12 @@
 
 - [ ] Production implementation for every red assertion.
 
+### Public planner route execution record
+
+- **Red:** `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/commandrunner -run '^TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions$' -count=1` failed as intended. A declared `binary_upload` command was blocked with `only implemented ETL stream commands are executable` before it could create the approval-bound plan.
+- **Green:** Pending the binary-upload preflight and write-plan route.
+- **Refactor:** Pending.
+
 ## Refactor
 
 - [ ] Reuse the existing write-command plan and engine binary payload preparation; no parallel raw upload/requester or generic CLI surface.

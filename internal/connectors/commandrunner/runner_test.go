@@ -1516,6 +1516,71 @@ func TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags(t *testi
 	}
 }
 
+// binary_upload is a public command intent, but it is still a reverse-plan
+// write. This exercises the real commandrunner boundary: a declared file flag
+// must produce a plan, while a normal JSON write must not be promoted merely
+// by changing its CLI intent.
+func TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions(t *testing.T) {
+	newConnector := func(action engine.WriteAction, flagTarget string) connectors.Connector {
+		return engine.New(engine.Bundle{
+			Name: "widgets",
+			Writes: []engine.WriteAction{action},
+			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+				Path: "assets upload", Intent: "binary_upload", Availability: "implemented", Write: action.Name,
+				Flags: []engine.CLIFlag{{Name: "file", Type: "string", MapsTo: flagTarget, Required: true}},
+			}}},
+		}, nil)
+	}
+
+	binary := engine.WriteAction{
+		Name: "upload_asset", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "binary_upload",
+		RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+		BinaryUpload: &engine.BinaryUploadSpec{SourceField: "file_path", MaxBytes: 1024},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), newConnector(binary, "record.file_path"), Request{
+		Path: []string{"assets", "upload"}, Flags: map[string][]string{"file": {"release.bin"}},
+	})
+	if err != nil {
+		t.Fatalf("binary_upload BuildWriteCommand: %v", err)
+	}
+	if command.Write != "upload_asset" || command.Record["file_path"] != "release.bin" || !command.ApprovalRequired {
+		t.Fatalf("binary_upload plan = %+v, want approval-bound upload_asset with declared source", command)
+	}
+
+	for _, tt := range []struct {
+		name       string
+		action     engine.WriteAction
+		flagTarget string
+		want       string
+	}{
+		{
+			name: "ordinary JSON writes cannot impersonate an upload",
+			action: engine.WriteAction{
+				Name: "create_asset", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "json",
+				RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+			},
+			flagTarget: "record.file_path",
+			want:       "binary upload",
+		},
+		{
+			name:       "source field must be the action declaration",
+			action:     binary,
+			flagTarget: "record.other_path",
+			want:       "source",
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := BuildWriteCommand(context.Background(), newConnector(tt.action, tt.flagTarget), Request{
+				Path: []string{"assets", "upload"}, Flags: map[string][]string{"file": {"release.bin"}},
+			})
+			if err == nil || !strings.Contains(strings.ToLower(err.Error()), tt.want) {
+				t.Fatalf("BuildWriteCommand error = %v, want %q", err, tt.want)
+			}
+		})
+	}
+}
+
 func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
 	record, err := recordOverrides(connectors.CommandSurfaceCommand{
 		Path:         "diagnoses create",
