@@ -8,11 +8,6 @@
     "bytes": 7967776,
     "openapi": "3.0.0",
     "info_version": "2026-07-29.dahlia",
-    "operation_counts": {
-      "GET": 263,
-      "POST": 294,
-      "DELETE": 32
-    },
     "operations": [
       {
         "id": "stripe.rest.GetAccount",
@@ -5322,14 +5317,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 589
-  },
-  "source_completeness": {
-    "coverage_confidence": "high",
-    "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree",
-    "verified_counts": {
-      "total": 589,
-      "per_method_sum": 589,
-      "operation_inventory_rows": 589
-    }
   }
 }

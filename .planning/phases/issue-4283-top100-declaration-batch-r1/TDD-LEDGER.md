@@ -486,6 +486,59 @@ use an exact source operation, fixed method/path, declared input schemas,
 bounded values, existing policy, and real provider I/O. No raw/generic
 transport or caller-selected metadata is introduced.
 
+## Main-base source-import compatibility — 2026-08-23
+
+### Red
+
+After the main-base merge, `go run ./cmd/connectorgen validate` rejects the
+Batch-1 source-lock presentation and `go run ./cmd/connectorgen source-import
+dockerhub` refuses the exact hash-pinned public YAML before emitting its
+canonical descriptor. The reproduction needs no credential or provider write.
+
+### Diagnosed boundary
+
+Removing stale, derivable `operation_counts` and `source_completeness`
+metadata lets the lock reach the importer. The exact public artifact then
+fails at `cmd/connectorgen/sourceimport.go:1305-1318`: Docker Hub uses numeric
+response-status YAML keys, and the importer accepts only string YAML scalar
+keys. A connector-local source rewrite would sever the pin, so this lane
+records `source-import-yaml-scalar-key-normalization` as a shared foundation
+gap instead of guessing a descriptor.
+
+### Separate Docker Hub SCIM validation diagnosis
+
+`go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub` also
+reports an independent body-schema failure before its missing-descriptor
+finding: commands 43 and 44 (`scim user create` and `scim user update`) expose
+OpenAPI `example` annotations inside their canonical `body_schema`, while the
+engine compiler rejects `example` as an unknown JSON Schema keyword. The exact
+operation IDs are `dockerhub.post__v2_scim_2.0_users` and
+`dockerhub.put__v2_scim_2.0_users__id_`. This is not the YAML numeric-key
+importer gap; source projection must reconcile the annotation only from the
+future canonical descriptor, rather than a hand-authored body mutation.
+
+### Main-base nine-connector source-import sweep
+
+**Red:** a public, credential-free source-import run produced one descriptor
+and eight explicit refusals. Notion, Bitbucket, GitLab, CircleCI, Vercel, and
+Jira returned `source-lock refresh required: fetched artifact does not match
+locked bytes and SHA-256`; Stripe refused `reference cycle at
+"#/components/schemas/file"` while preflighting `GET /v1/account` response
+`200`; Asana reached its pinned YAML and hit the same non-string response-key
+refusal as Docker Hub at `/paths/~1access_requests/get/responses`.
+
+**Observed result:** Sentry imported all 223 locked operations without
+credentials, but its canonical source projection exposed a separate reachability
+gap: `connectorgen validate internal/connectors/defs/sentry` reports 34 source
+operations with no executable action, including documented DELETE operations.
+This confirms the saved 223/223 declaration inventory is not sufficient proof
+of installed-binary reachability on current main.
+
+**Green pending decision/foundation:** preserve all existing denominators and
+source pins. Resume source refresh only under an explicit captain decision;
+resume Stripe/Asana/Docker Hub after their precise importer gaps land; derive
+Sentry operation actions only from its emitted canonical descriptor.
+
 ## Captain hard pre-merge gate — 2026-08-20
 
 ### Red

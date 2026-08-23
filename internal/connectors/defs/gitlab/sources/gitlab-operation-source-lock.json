@@ -8,14 +8,6 @@
     "bytes": 3500933,
     "openapi": "3.0.0",
     "info_version": "v4",
-    "operation_counts": {
-      "POST": 438,
-      "PUT": 329,
-      "GET": 746,
-      "PATCH": 27,
-      "DELETE": 212,
-      "HEAD": 3
-    },
     "operations": [
       {
         "id": "gitlab.rest.postApiV4NamespacesIdGitlabSubscription",
@@ -15819,14 +15811,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 1755
-  },
-  "source_completeness": {
-    "coverage_confidence": "high",
-    "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree",
-    "verified_counts": {
-      "total": 1755,
-      "per_method_sum": 1755,
-      "operation_inventory_rows": 1755
-    }
   }
 }

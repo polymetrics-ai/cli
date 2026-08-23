@@ -8,12 +8,6 @@
     "bytes": 2455064,
     "openapi": "3.0.1",
     "info_version": "1001.0.0-SNAPSHOT-e54f3aeddae545dd970b98a1ac06d32cf9f54b1a",
-    "operation_counts": {
-      "GET": 276,
-      "PUT": 118,
-      "POST": 134,
-      "DELETE": 89
-    },
     "operations": [
       {
         "id": "jira.rest.getBanner",
@@ -5575,14 +5569,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 617
-  },
-  "source_completeness": {
-    "coverage_confidence": "high",
-    "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree",
-    "verified_counts": {
-      "total": 617,
-      "per_method_sum": 617,
-      "operation_inventory_rows": 617
-    }
   }
 }

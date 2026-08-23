@@ -8,12 +8,6 @@
     "bytes": 3066750,
     "openapi": "3.0.0",
     "info_version": "1.0",
-    "operation_counts": {
-      "GET": 119,
-      "POST": 81,
-      "PUT": 26,
-      "DELETE": 23
-    },
     "operations": [
       {
         "id": "asana.rest.getAccessRequests",
@@ -2263,14 +2257,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 249
-  },
-  "source_completeness": {
-    "coverage_confidence": "high",
-    "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree",
-    "verified_counts": {
-      "total": 249,
-      "per_method_sum": 249,
-      "operation_inventory_rows": 249
-    }
   }
 }

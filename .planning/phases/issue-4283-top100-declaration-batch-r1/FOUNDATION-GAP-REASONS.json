@@ -11860,6 +11860,51 @@
           "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json"
         }
       ]
+    },
+    {
+      "foundation_gap_id": "source-import-yaml-scalar-key-normalization",
+      "reason": "Docker Hub's pinned public OpenAPI YAML uses numeric response-status mapping keys. The current source importer rejects every non-string YAML scalar before descriptor generation, so no hash-matched canonical descriptor can be produced for this provider document.",
+      "evidence": "cmd/connectorgen/sourceimport.go:1053-1065 routes the locked artifact through YAML decoding; cmd/connectorgen/sourceimport.go:1305-1318 rejects a numeric scalar key. Reproduced without credentials: connectorgen source-import dockerhub returns YAML mapping key at /paths/~1v2~1namespaces~1{namespace}~1repositories~1{repository}~1immutabletags/patch/responses must be a string.",
+      "minimal_change": "Teach the closed YAML normalizer to canonicalize scalar mapping keys to their exact string spelling where OpenAPI requires string member names, retaining its duplicate-key and non-scalar-key refusals; add an importer regression test using a numeric response status key.",
+      "recoverability": "Shared source-import foundation change required. A connector-local substitution, source rewrite, or unverified descriptor would violate the pinned-source contract.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "kind": "source_import",
+            "source_document": "https://docs.docker.com/reference/api/hub/latest.yaml",
+            "documented_operations_blocked": 54
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "asana",
+          "operation": {
+            "kind": "source_import",
+            "source_document": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
+            "documented_operations_blocked": 249
+          },
+          "source_lock": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json"
+        }
+      ]
+    },
+    {
+      "foundation_gap_id": "source-import-recursive-schema-reference",
+      "reason": "Stripe's exact pinned public OpenAPI document contains a recursive #/components/schemas/file reference. The source importer rejects that reference cycle during preflight instead of emitting a canonical descriptor that preserves the provider schema.",
+      "evidence": "Reproduced without credentials: connectorgen source-import stripe returns path item \"/v1/account\": get operation: response \"200\": reference cycle at \"#/components/schemas/file\".",
+      "minimal_change": "Represent recursive source schemas in the closed source descriptor with a cycle-safe reference form, preserving operation identity and all declared constraints; add a Stripe-shaped regression test.",
+      "recoverability": "Shared source-import foundation change required. Truncating the schema or inventing a non-recursive body/response contract would violate the pinned-source contract.",
+      "operations": [
+        {
+          "connector": "stripe",
+          "operation": {
+            "kind": "source_import",
+            "source_document": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+            "documented_operations_blocked": 589
+          },
+          "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
+        }
+      ]
     }
   ],
   "complete_map_foundation_gaps": [

@@ -8,14 +8,6 @@
     "bytes": 10420235,
     "openapi": "3.0.3",
     "info_version": "0.0.1",
-    "operation_counts": {
-      "GET": 159,
-      "POST": 120,
-      "DELETE": 56,
-      "PATCH": 43,
-      "PUT": 18,
-      "HEAD": 4
-    },
     "operations": [
       {
         "id": "vercel.rest.readAccessGroup",
@@ -3624,14 +3616,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 400
-  },
-  "source_completeness": {
-    "coverage_confidence": "high",
-    "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree",
-    "verified_counts": {
-      "total": 400,
-      "per_method_sum": 400,
-      "operation_inventory_rows": 400
-    }
   }
 }

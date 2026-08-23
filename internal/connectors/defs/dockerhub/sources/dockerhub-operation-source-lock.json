@@ -8,14 +8,6 @@
     "bytes": 148322,
     "openapi": "3.0.3",
     "info_version": "2-beta",
-    "operation_counts": {
-      "POST": 12,
-      "GET": 24,
-      "PATCH": 5,
-      "DELETE": 6,
-      "PUT": 4,
-      "HEAD": 3
-    },
     "operations": [
       {
         "id": "dockerhub.rest.PostUsersLogin",
@@ -510,14 +502,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 54
-  },
-  "source_completeness": {
-    "coverage_confidence": "high",
-    "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree",
-    "verified_counts": {
-      "total": 54,
-      "per_method_sum": 54,
-      "operation_inventory_rows": 54
-    }
   }
 }

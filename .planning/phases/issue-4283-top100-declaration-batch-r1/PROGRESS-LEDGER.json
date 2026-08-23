@@ -4,6 +4,74 @@
   "cohort": "top100-daily-use-increment-001",
   "scope": "public-source declarations plus complete endpoint-class mapping; source completeness is reported as operations_found plus confidence and basis, never a self-referential declaration percentage; reverse-ETL is an eligibility attribute, not a write endpoint class; only engine-refused shapes are foundation gaps; non-live certification completed without provider I/O",
   "generated_at": "2026-08-19T16:53:31.151Z",
+  "main_base_reconciliation": {
+    "at": "2026-08-23T00:00:00Z",
+    "documented_operations_found": 4378,
+    "declared_operations": 4378,
+    "coverage_statement": "The source-lock and declaration denominators remain equal. Current-main canonical source import and installed-binary reachability are blocked as recorded per connector; no denominator, source URL, SHA-256, or byte count was changed.",
+    "source_import": [
+      {
+        "connector": "dockerhub",
+        "documented_operations": 54,
+        "state": "pending-shared-yaml-scalar-key-normalization",
+        "evidence": "YAML mapping key at immutable-tags PATCH responses must be a string"
+      },
+      {
+        "connector": "notion",
+        "documented_operations": 49,
+        "state": "pending-source-lock-refresh-decision",
+        "evidence": "fetched artifact does not match locked bytes and SHA-256"
+      },
+      {
+        "connector": "stripe",
+        "documented_operations": 589,
+        "state": "pending-shared-recursive-schema-import",
+        "evidence": "GET /v1/account response 200: reference cycle at #/components/schemas/file"
+      },
+      {
+        "connector": "bitbucket",
+        "documented_operations": 331,
+        "state": "pending-source-lock-refresh-decision",
+        "evidence": "fetched artifact does not match locked bytes and SHA-256"
+      },
+      {
+        "connector": "gitlab",
+        "documented_operations": 1755,
+        "state": "pending-source-lock-refresh-decision",
+        "evidence": "fetched artifact does not match locked bytes and SHA-256"
+      },
+      {
+        "connector": "circleci",
+        "documented_operations": 111,
+        "state": "pending-source-lock-refresh-decision",
+        "evidence": "fetched artifact does not match locked bytes and SHA-256"
+      },
+      {
+        "connector": "sentry",
+        "documented_operations": 223,
+        "state": "descriptor-imported-reachability-blocked",
+        "evidence": "source import succeeded; validate reports 34 source operations with no executable action"
+      },
+      {
+        "connector": "vercel",
+        "documented_operations": 400,
+        "state": "pending-source-lock-refresh-decision",
+        "evidence": "fetched artifact does not match locked bytes and SHA-256"
+      },
+      {
+        "connector": "asana",
+        "documented_operations": 249,
+        "state": "pending-shared-yaml-scalar-key-normalization",
+        "evidence": "YAML mapping key at /paths/~1access_requests/get/responses must be a string"
+      },
+      {
+        "connector": "jira",
+        "documented_operations": 617,
+        "state": "pending-source-lock-refresh-decision",
+        "evidence": "fetched artifact does not match locked bytes and SHA-256"
+      }
+    ]
+  },
   "connectors": [
     {
       "connector": "asana",

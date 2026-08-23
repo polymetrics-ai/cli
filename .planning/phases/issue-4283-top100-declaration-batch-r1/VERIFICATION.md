@@ -300,3 +300,56 @@
 - [ ] The remaining 90 fixed-100 connectors emit equivalent rows and an
   integration validator produces the final portfolio verdict after all
   foundations publish.
+
+## Main-base reconciliation verification — 2026-08-23
+
+- [x] `git merge origin/main` completed at `8f2e6f298`; conflicts retained
+  `origin/main` for shared foundation and generated catalog files, with the
+  Batch-1 declaration cohort preserved.
+- [x] PR #4294 was retargeted and API-read back with base `main` at
+  `6410fe59c`.
+- [x] **Red:** `go run ./cmd/connectorgen validate` reproduces the new
+  source-lock/descriptor incompatibility without credentials.
+- [x] **Diagnosed:** after the minimal source-lock schema migration,
+  `go run ./cmd/connectorgen source-import dockerhub` reaches the exact
+  pinned artifact and refuses its numeric YAML response key at
+  `cmd/connectorgen/sourceimport.go:1305-1318`. The foundation gap and its
+  recoverability are recorded as `source-import-yaml-scalar-key-normalization`.
+- [x] **Separate Docker Hub diagnosis:**
+  `go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub`
+  independently rejects SCIM operation IDs
+  `dockerhub.post__v2_scim_2.0_users` and
+  `dockerhub.put__v2_scim_2.0_users__id_`: their derived body schemas retain
+  OpenAPI `example` annotations, which the engine compiler reports as
+  `unknown keyword "example"` at `name.familyName`, `name.givenName`, and
+  `schemas.items`. This is a schema-dialect/projection incompatibility, not
+  the YAML mapping-key import failure; no derived body contract is hand-edited.
+- [ ] **Green, remaining nine:** source-import, source projection, surface
+  synchronization, sweeps, and focused validation continue for Notion,
+  Stripe, Bitbucket, GitLab, CircleCI, Sentry, Vercel, Asana, and Jira.
+- [ ] **Docker Hub pending shared foundation:** rerun its source import and
+  derived projection only after the importer accepts the existing pinned
+  artifact without changing its URL, SHA-256, byte count, or operation
+  inventory; then reconcile the separate SCIM schema-dialect finding.
+
+## Nine-connector public source-import sweep — 2026-08-23
+
+- [x] **Sentry import:** `go run ./cmd/connectorgen source-import sentry
+  --defs internal/connectors/defs --out
+  internal/connectors/defs/sentry/sources/sentry-operation-descriptor.json`
+  imported 223 locked operations without credentials.
+- [x] **Sentry reachability red:**
+  `go run ./cmd/connectorgen validate internal/connectors/defs/sentry` reports
+  34 source operations with no executable action. The retained 223/223
+  source/declaration denominator therefore does not establish current-main
+  installed-binary reachability.
+- [x] **Pinned-source drift preserved:** Notion, Bitbucket, GitLab, CircleCI,
+  Vercel, and Jira each return `source-lock refresh required: fetched artifact
+  does not match locked bytes and SHA-256`; no lock or denominator was changed.
+- [x] **Independent parser reds:** Stripe rejects its public reference cycle at
+  `#/components/schemas/file` from `GET /v1/account` response `200`; Asana
+  rejects its numeric YAML response key at `/paths/~1access_requests/get/responses`.
+- [ ] `make verify` is intentionally not started while these repeated
+  source-import blockers make its `connectorgen validate` gate deterministically
+  fail. No push is attempted before captain decides the source-lock refresh and
+  shared-importer recovery path.

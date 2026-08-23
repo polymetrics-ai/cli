@@ -8,12 +8,6 @@
     "bytes": 884260,
     "openapi": "3.1.0",
     "info_version": "1.0.0",
-    "operation_counts": {
-      "GET": 20,
-      "POST": 17,
-      "PATCH": 8,
-      "DELETE": 4
-    },
     "operations": [
       {
         "id": "notion.rest.get-self",
@@ -463,14 +457,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 49
-  },
-  "source_completeness": {
-    "coverage_confidence": "high",
-    "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree",
-    "verified_counts": {
-      "total": 49,
-      "per_method_sum": 49,
-      "operation_inventory_rows": 49
-    }
   }
 }

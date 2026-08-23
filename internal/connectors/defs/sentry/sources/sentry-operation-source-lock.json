@@ -8,13 +8,6 @@
     "bytes": 3868570,
     "openapi": "3.0.3",
     "info_version": "v0",
-    "operation_counts": {
-      "GET": 120,
-      "PUT": 32,
-      "POST": 34,
-      "DELETE": 35,
-      "PATCH": 2
-    },
     "operations": [
       {
         "id": "sentry.rest.listOrganizations",
@@ -2030,14 +2023,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 223
-  },
-  "source_completeness": {
-    "coverage_confidence": "high",
-    "basis": "complete provider-published machine-readable OpenAPI document; counts.total, per-method counts, and operation inventory agree",
-    "verified_counts": {
-      "total": 223,
-      "per_method_sum": 223,
-      "operation_inventory_rows": 223
-    }
   }
 }
