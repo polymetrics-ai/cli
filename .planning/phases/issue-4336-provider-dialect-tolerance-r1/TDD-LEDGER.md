@@ -2,7 +2,7 @@
 
 | Slice | Red evidence | Green evidence | Refactor / scope evidence |
 | --- | --- | --- | --- |
-| Real provider dialects and bounds | Pending: add and run real-document importer tests before production edits. | Pending | Must record measured current and new finite schema/reference bounds. |
-| Supported schema constructs | Pending: Vercel `patternProperties` and Docker Hub SCIM `example`. | Pending | Preserve unknown/dynamic schema keyword rejection. |
-| Retained malformed provider contracts | Pending: Docker Hub dangling response ref and GitLab missing path parameter. | Pending | Gaps name source pointer and response/path location; operation remains merge-blocked. |
-| Regression and pathological controls | Pending: byte-identical existing projection and deeper-than-new-limit document. | Pending | No connector definitions change. |
+| Real provider dialects and bounds | `go test -timeout 20m ./cmd/connectorgen -run 'TestSourceImportProviderDialectContracts\|TestSourceImportKeepsDepthBoundFiniteAfterProviderIncrease' -count=1` exited 1: Bitbucket and Notion exceeded schema depth; Stripe exceeded reference depth. The reduced operation fixtures retain each provider path, operation ID, and source construct from the pinned 2026-08-23 artifacts recorded in issue #4325. | Pending | Must record measured current and new finite schema/reference bounds. |
+| Supported schema constructs | `go test -timeout 20m ./internal/connectors/engine -run 'TestSchemaCompileKeywordMatrix\|TestSchemaValidateInstances' -count=1` exited 1: `example` and `patternProperties` were unknown keywords. The importer red suite also rejected Vercel's response `patternProperties`. | Pending | Preserve unknown/dynamic schema keyword rejection. |
+| Retained malformed provider contracts | The importer red suite exited 1: Docker Hub's `#/components/responses/team_repo` resolved to response rather than schema; GitLab's `epic_issue_id` had no required path parameter. | Pending | Gaps name source pointer and response/path location; operation remains merge-blocked. |
+| Regression and pathological controls | `TestSourceImportKeepsDepthBoundFiniteAfterProviderIncrease` is present before production edits; it will prove a document above the new finite bound remains rejected. Existing-projection byte identity remains pending. | Pending | No connector definitions change. |

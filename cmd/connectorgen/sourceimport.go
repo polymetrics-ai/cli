@@ -59,10 +59,14 @@ const (
 	// Aggregate descriptor accounting is deliberately independent from both
 	// artifact and index size. The pinned GitHub inventory expands referenced
 	// request/response declarations well beyond the compressed source bytes.
-	defaultSourceImportDescriptorBytes    = int64(128 << 20)
-	defaultSourceImportOperations         = 10_000
-	defaultSourceImportReferences         = 50_000
-	defaultSourceImportReferenceDepth     = 32
+	defaultSourceImportDescriptorBytes = int64(128 << 20)
+	defaultSourceImportOperations      = 10_000
+	defaultSourceImportReferences      = 50_000
+	// Provider OpenAPI documents legitimately reach 40 schema/reference levels
+	// (Bitbucket, Notion, and Stripe in the Batch-1 source set). Sixty-four
+	// leaves headroom for those declarations while retaining a finite bound
+	// against pathological expansion.
+	defaultSourceImportReferenceDepth     = 64
 	defaultSourceImportSchemaNodes        = 100_000
 	defaultSourceImportDocuments          = 256
 	defaultSourceImportTotalArtifactBytes = int64(256 << 20)
@@ -2009,6 +2013,8 @@ type sourceReferenceResolver struct {
 const (
 	sourceRecursiveSchemaFoundation           = "cli-recursive-schema-foundation-r1"
 	sourceOpenAPI30ReferenceSiblingFoundation = "cli-openapi30-reference-sibling-foundation-r1"
+	sourceMalformedReferenceFoundation        = "cli-malformed-source-reference-foundation-r1"
+	sourceMalformedPathParameterFoundation    = "cli-malformed-path-parameter-foundation-r1"
 )
 
 type sourceSchemaReferenceCycleError struct {
@@ -2017,6 +2023,37 @@ type sourceSchemaReferenceCycleError struct {
 
 func (err *sourceSchemaReferenceCycleError) Error() string {
 	return fmt.Sprintf("reference cycle at %q", err.Reference)
+}
+
+// sourceReferenceResolutionError preserves the declared local pointer and its
+// grammar position when the pointer cannot be followed. It lets response
+// retention distinguish a provider's malformed schema reference from every
+// other import error without weakening validation elsewhere.
+type sourceReferenceResolutionError struct {
+	Reference string
+	Kind      sourceReferenceKind
+	Err       error
+}
+
+func (err *sourceReferenceResolutionError) Error() string {
+	return err.Err.Error()
+}
+
+func (err *sourceReferenceResolutionError) Unwrap() error {
+	return err.Err
+}
+
+// sourceReferenceTargetKindError records a local pointer which resolves but
+// occupies a different OpenAPI grammar position from the one its caller
+// declared. This is malformed provider input, not an interchangeable schema.
+type sourceReferenceTargetKindError struct {
+	Reference string
+	Expected  sourceReferenceKind
+	Actual    string
+}
+
+func (err *sourceReferenceTargetKindError) Error() string {
+	return fmt.Sprintf("%s reference %q resolves to %s rather than the expected kind", err.Expected, err.Reference, err.Actual)
 }
 
 type sourceReferenceKind string
@@ -2252,7 +2289,7 @@ func sourceSchemaGrammarFor(form sourceDocumentForm) sourceSchemaGrammar {
 	}
 	if form.isOpenAPI() && !form.isOpenAPI31() {
 		return sourceSchemaGrammar{
-			mapChildren:    []string{"properties"},
+			mapChildren:    []string{"properties", "patternProperties"},
 			schemaChildren: []string{"items", "additionalProperties", "not"},
 			arrayChildren:  []string{"allOf", "anyOf", "oneOf"},
 		}
@@ -3306,10 +3343,30 @@ func (r *sourceReferenceResolver) preflightResponses(value any) error {
 			continue
 		}
 		if _, err := r.resolveResponse(responses[status], nil, 0); err != nil {
+			if _, retained := sourceRetainedResponseSchemaReference(err); retained {
+				continue
+			}
 			return fmt.Errorf("response %q: %w", status, err)
 		}
 	}
 	return nil
+}
+
+func sourceRetainedResponseSchemaReference(err error) (string, bool) {
+	var resolution *sourceReferenceResolutionError
+	if errors.As(err, &resolution) && resolution.Kind == sourceReferenceSchema {
+		return resolution.Reference, true
+	}
+	var target *sourceReferenceTargetKindError
+	if errors.As(err, &target) && target.Expected == sourceReferenceSchema {
+		return target.Reference, true
+	}
+	return "", false
+}
+
+func sourceMalformedResponseSchemaGap(err error, location string) sourceContractGap {
+	reference, _ := sourceRetainedResponseSchemaReference(err)
+	return sourceContractGapFor(sourceMalformedReferenceFoundation, location, fmt.Sprintf("provider response schema reference %s is retained without resolution: %v", reference, err))
 }
 
 func (r *sourceReferenceResolver) preflightCallbacks(value any) error {
@@ -5171,7 +5228,7 @@ func (r *sourceReferenceResolver) referenceTargetWithCount(object map[string]any
 	}
 	target, err := sourcePointer(r.root, ref)
 	if err != nil {
-		return nil, nil, nil, false, err
+		return nil, nil, nil, false, &sourceReferenceResolutionError{Reference: ref, Kind: kind, Err: err}
 	}
 	if err := r.validateReferenceTargetKind(target, kind, ref); err != nil {
 		return nil, nil, nil, false, err
@@ -5237,10 +5294,10 @@ func (r *sourceReferenceResolver) validateReferenceTargetKind(target any, kind s
 	}
 	actual, indexed := r.referenceIndex.positions[ref]
 	if !indexed {
-		return fmt.Errorf("%s reference %q does not resolve to a grammar-defined %s position", kind, ref, kind)
+		return &sourceReferenceTargetKindError{Reference: ref, Expected: kind, Actual: "no grammar-defined position"}
 	}
 	if actual != kind {
-		return fmt.Errorf("%s reference %q resolves to %s rather than the expected kind", kind, ref, actual)
+		return &sourceReferenceTargetKindError{Reference: ref, Expected: kind, Actual: string(actual)}
 	}
 	if kind == sourceReferenceSchema {
 		if _, isObject := target.(map[string]any); isObject {
@@ -5672,10 +5729,13 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 		return sourceOperationDescriptor{}, fmt.Errorf("%s parameters: %w", location, err)
 	}
 	request, err := sourceRequestDescriptorFrom(path, pathParameters, operationParameters, operation, doc, form, resolver, limits)
+	var pathContract *sourcePathParameterContractError
 	if err != nil {
-		return sourceOperationDescriptor{}, fmt.Errorf("%s request: %w", location, err)
+		if !errors.As(err, &pathContract) {
+			return sourceOperationDescriptor{}, fmt.Errorf("%s request: %w", location, err)
+		}
 	}
-	responses, _, err := sourceResponses(operation, doc, form, resolver, limits, remainingDescriptorBytes)
+	responses, _, responseGaps, err := sourceResponses(location, operation, doc, form, resolver, limits, remainingDescriptorBytes)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s responses: %w", location, err)
 	}
@@ -5751,6 +5811,10 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 	}
 	servers.Gaps = sourceSortedGaps(servers.Gaps)
 	runtimeGaps := append(sourceRequestGaps(request, form, limits, method), servers.Gaps...)
+	if pathContract != nil {
+		runtimeGaps = append(runtimeGaps, sourceMalformedPathParameterGap(location, pathContract))
+	}
+	runtimeGaps = append(runtimeGaps, responseGaps...)
 	runtimeGaps = append(runtimeGaps, resolver.requestSchemaCycleGaps(request)...)
 	runtimeGaps = append(runtimeGaps, resolver.responseSchemaCycleGaps(responses)...)
 	runtimeGaps = append(runtimeGaps, resolver.schemaReferenceSiblingGaps[schemaReferenceSiblingGapsStart:]...)
@@ -5893,15 +5957,12 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 			request.Header = append(request.Header, descriptor)
 		}
 	}
-	if err := validateSourcePathParameters(path, parameters); err != nil {
-		return sourceRequestDescriptor{}, err
-	}
 	for _, group := range [][]sourceParameterDescriptor{request.Path, request.Query, request.Header} {
 		sort.Slice(group, func(i, j int) bool { return group[i].Name < group[j].Name })
 	}
 	if form.isSwagger2() {
 		if len(bodyParameters) == 0 {
-			return request, nil
+			return sourceCompleteRequestDescriptor(path, parameters, request)
 		}
 		if len(bodyParameters) != 1 {
 			return sourceRequestDescriptor{}, fmt.Errorf("swagger request body is ambiguous")
@@ -5918,14 +5979,14 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 		}
 		request.Body = &sourceRequestBodyDescriptor{Required: body.Required, Schema: body.Schema}
 		request.MediaType = mediaType
-		return request, nil
+		return sourceCompleteRequestDescriptor(path, parameters, request)
 	}
 	if len(bodyParameters) > 0 {
 		return sourceRequestDescriptor{}, fmt.Errorf("request body parameter is only supported by Swagger 2")
 	}
 	rawBody, ok := operation["requestBody"]
 	if !ok {
-		return request, nil
+		return sourceCompleteRequestDescriptor(path, parameters, request)
 	}
 	body, err := resolver.resolveRequestBody(rawBody, nil, 0)
 	if err != nil {
@@ -5974,6 +6035,13 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 		request.Body = &sourceRequestBodyDescriptor{Required: media.Required, Schema: media.Schema, Encoding: media.Encoding}
 		request.MediaType = media.MediaType
 		request.Media = nil
+	}
+	return sourceCompleteRequestDescriptor(path, parameters, request)
+}
+
+func sourceCompleteRequestDescriptor(path string, parameters []sourceParameterValue, request sourceRequestDescriptor) (sourceRequestDescriptor, error) {
+	if err := validateSourcePathParameters(path, parameters); err != nil {
+		return request, err
 	}
 	return request, nil
 }
@@ -6028,6 +6096,26 @@ func sourceEffectiveParameters(pathParameters, operationParameters []sourceParam
 	return parameters, nil
 }
 
+type sourcePathParameterContractError struct {
+	Parameter string
+	Problem   string
+}
+
+func sourceMalformedPathParameterGap(location string, err *sourcePathParameterContractError) sourceContractGap {
+	return sourceContractGapFor(sourceMalformedPathParameterFoundation, location+".request.path", fmt.Sprintf("provider path contract is retained without a generated path binding: %v", err))
+}
+
+func (err *sourcePathParameterContractError) Error() string {
+	switch err.Problem {
+	case "not_required":
+		return fmt.Sprintf("path parameter %q must be required", err.Parameter)
+	case "not_in_template":
+		return fmt.Sprintf("path parameter %q is not present in the path template", err.Parameter)
+	default:
+		return fmt.Sprintf("path placeholder %q has no required path parameter", err.Parameter)
+	}
+}
+
 func validateSourcePathParameters(path string, parameters []sourceParameterValue) error {
 	placeholders, err := sourcePathTemplateParameters(path)
 	if err != nil {
@@ -6039,18 +6127,18 @@ func validateSourcePathParameters(path string, parameters []sourceParameterValue
 			continue
 		}
 		if !parameter.Required {
-			return fmt.Errorf("path parameter %q must be required", parameter.Name)
+			return &sourcePathParameterContractError{Parameter: parameter.Name, Problem: "not_required"}
 		}
 		pathParameters[parameter.Name] = true
 	}
 	for _, placeholder := range placeholders {
 		if !pathParameters[placeholder] {
-			return fmt.Errorf("path placeholder %q has no required path parameter", placeholder)
+			return &sourcePathParameterContractError{Parameter: placeholder, Problem: "missing"}
 		}
 	}
 	for _, parameter := range parameters {
 		if parameter.In == "path" && !containsSourceString(placeholders, parameter.Name) {
-			return fmt.Errorf("path parameter %q is not present in the path template", parameter.Name)
+			return &sourcePathParameterContractError{Parameter: parameter.Name, Problem: "not_in_template"}
 		}
 	}
 	return nil
@@ -7054,10 +7142,10 @@ func sourceExactDecimal(value string) (*big.Rat, bool) {
 	return new(big.Rat).SetFrac(numerator, denominator), true
 }
 
-func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, limits sourceImportLimits, remainingDescriptorBytes int64) ([]sourceResponseDescriptor, []string, error) {
+func sourceResponses(location string, operation, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, limits sourceImportLimits, remainingDescriptorBytes int64) ([]sourceResponseDescriptor, []string, []sourceContractGap, error) {
 	rawResponses, ok := operation["responses"].(map[string]any)
 	if !ok || len(rawResponses) == 0 {
-		return nil, nil, fmt.Errorf("missing responses")
+		return nil, nil, nil, fmt.Errorf("missing responses")
 	}
 	responses := make([]sourceResponseDescriptor, 0, len(rawResponses))
 	responseLimit := sourceResolvedDescriptorLimit(limits)
@@ -7070,6 +7158,7 @@ func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, res
 	resolver.responseScope = &responseExpansion
 	defer func() { resolver.responseScope = previousScope }()
 	mediaSet := map[string]bool{}
+	var gaps []sourceContractGap
 	var swaggerProduces []string
 	if form.isSwagger2() {
 		produces, declared := operation["produces"]
@@ -7080,7 +7169,7 @@ func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, res
 			var err error
 			swaggerProduces, err = sourceStringArray(produces, "Swagger produces")
 			if err != nil {
-				return nil, nil, err
+				return nil, nil, nil, err
 			}
 		}
 	}
@@ -7090,21 +7179,29 @@ func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, res
 		}
 		resolved, err := resolver.resolveResponse(rawResponses[status], nil, 0)
 		if err != nil {
-			return nil, nil, err
+			if _, retained := sourceRetainedResponseSchemaReference(err); !retained {
+				return nil, nil, nil, err
+			}
+			response, ok := rawResponses[status].(map[string]any)
+			if !ok {
+				return nil, nil, nil, fmt.Errorf("response %q must be an object", status)
+			}
+			resolved = sourceCloneMap(response)
+			gaps = append(gaps, sourceMalformedResponseSchemaGap(err, fmt.Sprintf("%s.responses[%q]", location, status)))
 		}
 		encoded, err := sourceMarshalCompact(resolved)
 		if err != nil {
-			return nil, nil, fmt.Errorf("encode response %q: %w", status, err)
+			return nil, nil, nil, fmt.Errorf("encode response %q: %w", status, err)
 		}
 		if int64(len(encoded)) > limits.MaxSchemaBytes {
-			return nil, nil, fmt.Errorf("schema byte limit exceeded for response %q", status)
+			return nil, nil, nil, fmt.Errorf("schema byte limit exceeded for response %q", status)
 		}
 		media, err := sourceResponseMedia(resolved, swaggerProduces)
 		if err != nil {
-			return nil, nil, fmt.Errorf("response %q: %w", status, err)
+			return nil, nil, nil, fmt.Errorf("response %q: %w", status, err)
 		}
 		if err := responseBudget.reserve(sourceResponseDescriptorEstimate(status, int64(len(encoded)), media), "response"); err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 		responses = append(responses, sourceResponseDescriptor{Status: status, Declaration: resolved, Media: media})
 		for _, item := range media {
@@ -7116,7 +7213,7 @@ func sourceResponses(operation, doc map[string]any, form sourceDocumentForm, res
 		mediaTypes = append(mediaTypes, mediaType)
 	}
 	sort.Strings(mediaTypes)
-	return responses, mediaTypes, nil
+	return responses, mediaTypes, sourceSortedGaps(gaps), nil
 }
 
 func sourceResponseDescriptorEstimate(status string, declarationBytes int64, media []sourceResponseMediaDescriptor) int64 {
