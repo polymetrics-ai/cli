@@ -62,14 +62,15 @@ declared secret fields may be masked. Foundation #4321 owns the shared runtime c
   `SOURCE-AUDIT.md`.
 - The Batch 2/3 lock at
   `internal/connectors/defs/gong/sources/gong-operation-source-lock.json` has the same complete
-  69-row method/path/operation-ID/deprecation inventory. The source lock is refreshed to the
-  current exact artifact and normalized to the strict source-import schema; the semantic
-  comparison prevents a serialization-only change from being mistaken for an operation change.
+  69-row method/path/operation-ID/deprecation inventory. It is now a v3 `gong-v2` source document
+  that declares the fixed identity-bearing `version` query while retaining the exact digest, byte
+  count, provider version, and operation IDs; the semantic comparison prevents a
+  serialization-only change from being mistaken for an operation change.
 
 ## Execution slices
 
 1. Reconcile foundations without discarding the preserved branch. Merge `origin/main` tree
-   `6410fe59c` without rewriting history; it contains the final squashed structured-body,
+   `8127de418` without rewriting history; it contains the final squashed structured-body,
    source-importer, typed-header/binary/status/text, reverse-action binding, and declaration-route
    foundations. Resolve only Gong- and evidence-related conflicts, and retain `main` for shared
    runtime and unrelated connector content.
@@ -113,8 +114,10 @@ declared secret fields may be masked. Foundation #4321 owns the shared runtime c
 - The verification commands are recorded in `VERIFICATION.md`. Focused Gong gates, static gates,
   connector boundary, release workflow, generated candidates/sweep/subject, and the 69-command
   dispatch sweep passed. `go test ./...` and `make verify` both stop at unrelated generated-skill
-  drift; source-import, validate, and surface-sync remain blocked by the fixed query-bearing Gong
-  source URL. The shared certification matrix rejects Gong because it is not allowlisted.
+  drift. After #4335 merged, source-import reaches the official v3 identity-bearing document and
+  then stops at generic common-input preflight before it can write the canonical descriptor;
+  validate and surface-sync consequently remain blocked. The shared certification matrix rejects
+  Gong because it is not allowlisted.
 
 ## Captain hard certification gate
 

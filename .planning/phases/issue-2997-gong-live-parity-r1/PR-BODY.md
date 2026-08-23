@@ -3,13 +3,17 @@
 Refs #2997
 
 This PR is intentionally a draft and is **not merge-ready**. It preserves the Gong certification
-branch and its source-mapping evidence while the remaining source-import URL-policy and full live
+branch and its source-mapping evidence while the remaining generic source-import and full live
 parity dependencies are resolved.
 
 ### Delivered evidence
 
 - Re-audited Gong's public OpenAPI V2 source: a current 453,797-byte pinned artifact has 69 exact
   method/path/operation-ID/deprecation rows and matches the committed semantic fingerprint.
+- After #4335 merged, converted that unchanged ledger into the importer’s v3 `gong-v2` document
+  contract with the exact fixed `?version=` query declared as identity-bearing. The real importer
+  now traverses the query and parses the official document, proving the source-query foundation is
+  wired without a Gong-specific bypass.
 - Merged `origin/main` tree `6410fe59c` (the final squashed shared-foundation rollup) without
   discarding the preserved branch.
 - Promoted all 27 named write actions to implemented declaration-owned reverse-ETL commands;
@@ -38,10 +42,11 @@ parity dependencies are resolved.
 
 ### Current open blockers
 
-- PR #4335 is the provider-neutral source-import fix for Gong's required versioned official
-  OpenAPI document; it changes the real artifact-query identity gate, not a Gong fallback. Live
-  certification remains paused until it lands and the scoped source-import/validation proof is
-  rerun.
+- The #4335 source-query foundation is merged at `8127de418`, but source-import now stops at its
+  next provider-neutral boundary: `GET /v2/all-permission-profiles` parameter 0 has an ordinary
+  string without `maxLength`, which the importer rejects before it can write the canonical
+  descriptor. The required generic behavior is to retain or type-gap that provider contract; no
+  Gong max length or shared-code exception has been added.
 - Foundation #4337 must prevent account-scoped non-secret configuration values from entering an
   external-proof process command. The current serializer retains that command verbatim, so the
   planned tenant endpoint cannot be passed to a proof-producing run until the provider-neutral

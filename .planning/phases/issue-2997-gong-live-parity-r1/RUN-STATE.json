@@ -3,7 +3,7 @@
   "branch": "fm/cli-gong-parity-wave01-r1",
   "pull_request": 3552,
   "base_branch": "main",
-  "status": "live_certification_paused_pending_foundations",
+  "status": "blocked_provider_neutral_source_import_and_proof_privacy",
   "lifecycle": {
     "discuss_phase": "inline: locked user decisions recorded in PLAN.md",
     "plan_phase_tdd": "inline: PLAN.md and TDD-LEDGER.md created before production edits",
@@ -25,8 +25,8 @@
     "semantic_inventory_sha256": "46cc30f319526572258d56293795c9036ea11b0ebee16919c7bb498b020f61e5",
     "audit_record": "SOURCE-AUDIT.md",
     "source_import": {
-      "status": "pending_provider_neutral_query_identity_foundation",
-      "detail": "PR #4335 targets parseBatchArtifactURL so a versioned official artifact query can retain its identity through fetch. No Gong-specific source-import change is planned."
+      "status": "blocked_provider_neutral_common_input_preflight",
+      "detail": "PR #4335 merged at 8127de418. The v3 gong-v2 document declares identity_query=true and source-import now fetches/parses the fixed ?version= artifact, then stops at GET /v2/all-permission-profiles parameter 0: unbounded request schema string has no maxLength. The generic importer must retain or typed-gap ordinary common-bound inputs before descriptor projection; no Gong maximum or bypass is permitted."
     },
     "output_preservation": {
       "status": "blocked_provider_neutral_collision_masking",
@@ -34,8 +34,8 @@
     }
   },
   "live_certification": {
-    "status": "paused_no_provider_calls_before_pr_4335",
-    "detail": "persisted App authentication, one bounded ETL read, and one bounded typed direct read passed; the next clean run is prepared in LIVE-CERTIFICATION-RUNBOOK.md and stays paused until the versioned-artifact foundation lands. It must also use provider-neutral foundation #4337 so an account-scoped base URL cannot enter generated evidence."
+    "status": "blocked_external_proof_privacy_foundation",
+    "detail": "persisted App authentication, one bounded ETL read, and one bounded typed direct read passed. A new full run must not start: #4337 has no implementation lane, and the external-proof serializer would retain the account-scoped base_url argument verbatim. It prevents producing a compliant published external proof, not credential storage or credential-free reconciliation."
   },
   "captain_hard_gate": {
     "status": "pending",

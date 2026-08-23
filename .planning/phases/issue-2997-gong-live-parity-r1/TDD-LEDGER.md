@@ -11,6 +11,7 @@
 | Provider output preservation | Gong command metadata described ordinary provider response fields as redacted, and the shared result boundary masks an undeclared provider value that happens to equal a credential. | A focused Gong surface test fails on direct-read redaction language or read-field declarations; the provider-neutral foundation test for #4321 fails until an undeclared matching scalar, header, raw body, and cursor remain exact while an explicitly declared secret field stays visibly masked. | Keep declared-secret masking at the generic output boundary; do not create field-name heuristics or a Gong branch. |
 | Eight-surface enabled parity | A source-locked operation or application workflow can be structurally declared yet be absent from CLI/App dispatch, generated docs, or a supported ETL, reverse-ETL, direct, binary, flow, or schedule path. | Generated inventory-to-surface evidence and built-CLI/App checks classify each of ETL, reverse ETL, direct read, direct write, binary download, binary upload, flow, and schedule as proven or exact-source/application-contract `not_applicable`. | Safety, scope, tier, and destructive metadata can add confirmation; they cannot disable a provider-defined operation or workflow. |
 | External-proof configuration privacy | The external-proof artifact stores its outer process command verbatim. An account-scoped connector `--config` value would therefore become generated evidence even when every secret is fingerprinted. | Provider-neutral foundation #4337 must retain only safe argument structure/fingerprints before a tenant-scoped base URL is used in a proof-producing run. | Do not bypass this by using a Gong branch, a generic public endpoint, or an untracked proof. |
+| Source-document identity query | The legacy v2 Gong lock reaches `artifact URL must not include a query`, so its required fixed `?version=` document cannot be retrieved. | The v3 `gong-v2` document declares `identity_query: true`; the real scoped importer fetches and parses the locked artifact before reaching an unrelated generic request-schema limit. | Retain the exact 69 rows, digest, bytes, and fixed query; do not invent a queryless mirror, a Gong exception, or a provider schema bound. |
 | Certification evidence | No credential reference means live stages cannot assert persisted provider state. | Credential-free gates are green and the remaining external block is explicit and secret-free. | Do not substitute browser authentication or fixtures for live certification. |
 
 ## Recorded red evidence
@@ -32,17 +33,18 @@
   its generated ledger still carried the now-obsolete Gong F4 rows. Removing that stale special
   case and regenerating the ledger made the 19-connector/5,127-operation check pass with zero
   Gong gap rows.
-- `go run ./cmd/connectorgen source-import gong --check` now reaches the strict lock validator but
-  fails before fetch because the official fixed URL contains `?version=`. This is recorded as the
-  remaining provider-neutral source-import URL-policy dependency, not a Gong-specific fallback.
+- Before #4335, `go run ./cmd/connectorgen source-import gong --check` rejected the legacy v2
+  lock before fetch because the official fixed URL contains `?version=`. The red case establishes
+  why merely retaining the historical v2 ledger was insufficient.
 - `go run ./cmd/connectorgen params-import gong --artifact /tmp/gong-openapi-20260823.json --check`
   reported three declaration drifts. The generator identified the three multipart operations, not
   an inferred provider policy; its first green run is recorded below.
 - A live `pm gong targets list` reached Gong but returned only the safe HTTP-400 classification.
   The current official contract says `workspaceId` is required for `GET /v2/targets`, while the
   generated direct-read flag is still optional. The canonical source descriptor needed for
-  `surface-sync` cannot be generated until the query-bearing source-lock URL policy is fixed, so
-  this is visible as a source-projection dependency rather than hand-authoring a flag.
+  `surface-sync` cannot be generated until generic source-import common-input preflight retains
+  the provider contract, so this is visible as a source-projection dependency rather than
+  hand-authoring a flag.
 - The initial certification declaration named that invalid target-list call. The focused
   certification test went red until the declaration selected the ordinary, bounded
   `users extensive` typed read instead.
@@ -90,6 +92,11 @@
   reads, 12 ETL streams, and 27 reverse-ETL writes) all reached the credential gate; unknown,
   partial, unbound, and unexpected-success counts were zero. This was credential-free and made no
   provider request.
+- After merging #4335 at `8127de418`, the v3 Gong lock preserved all 69 rows and declared its
+  sole fixed artifact query as `identity_query: true`. A real `source-import --check` traversed
+  that query and parsed the source, then stopped at the generic
+  `/v2/all-permission-profiles` parameter-0 `maxLength` preflight limit. This is green evidence
+  for query identity retrieval, not a false source-projection or validation success.
 
 ## Green evidence to record during execution
 

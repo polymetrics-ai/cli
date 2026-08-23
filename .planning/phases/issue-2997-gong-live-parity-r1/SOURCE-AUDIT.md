@@ -1,4 +1,4 @@
-# Gong source audit — 2026-08-23 UTC
+# Gong source audit — 2026-08-24 UTC
 
 ## Locked official source
 
@@ -42,12 +42,19 @@ with typed destructive confirmation.
   source-import, typed-header/binary/status/text, action-binding, and declaration-route heads.
   The branch merge preserves that shared tree and retains only Gong-owned declarations and
   evidence in the PR diff. Focused Gong multipart conformance must be re-run against this tree.
-- The strict source-importer lock schema is now used by the Gong source lock. Its scoped command
-  is deliberately **not** marked green: `connectorgen source-import gong --check` rejects the
-  official fixed query-bearing source URL with `artifact URL must not include a query`. Gong has
-  no query-free official equivalent (the query-free route returns 404). This is a
-  provider-neutral source-import URL-policy dependency, not a connector workaround or a reason
-  to omit any Gong operation.
+- PR #4335 is merged at `8127de418`. The Gong source lock now uses its v3 document form: the
+  single `gong-v2` document retains all 69 existing rows, the fixed `?version=` URL is explicitly
+  `identity_query: true`, and its queryless capture citation, digest, byte count, and provider
+  version are all locked. The fresh scoped import traversed that declared query and parsed the
+  official document; it therefore no longer fails URL policy.
+- The scoped import is deliberately **not** marked green: its next failure is provider-neutral
+  source-import preflight, at `GET /v2/all-permission-profiles` parameter 0, with
+  `unbounded request schema string has no maxLength`. The runtime already has a common bounded
+  input boundary classification, but the earlier descriptor-building stage rejects the ordinary
+  provider string before it can preserve and classify the contract. The required foundation is to
+  retain such source-declared common-bound inputs through descriptor projection (or emit a typed
+  source-bound gap), without inventing a Gong maximum, bypass, or provider branch. Until then no
+  canonical Gong descriptor or derived required-input projection can be claimed.
 - A fresh initialized project with no credential ran the built `pm` binary against all 69
   implemented Gong command paths: 30 direct reads, 27 reverse-ETL writes, and 12 ETL streams.
   Every command reached `missing --credential`; none returned `unknown command`, a partial-command
@@ -84,8 +91,8 @@ never written to evidence. Gong agentic endpoints are excluded because they cons
   HTTP-400 classification. `params-import` reconciled the three multipart operation parameter
   blocks (17 scanned, then zero drift), but the required direct-read flag must be projected by
   `surface-sync`. That command is blocked because the canonical source descriptor cannot be
-  generated while the importer rejects Gong's fixed query-bearing source URL. No manual flag was
-  authored.
+  generated while source-import rejects the ordinary unbounded input before projection. No manual
+  flag was authored.
 - There are no declaration-owned, self-cleaning Gong write pairings for safe live create,
   readback, and cleanup. All 27 provider writes stay implemented and certification-visible as
   unassessed; none was sent. The three multipart writes retain generic conformance coverage, but

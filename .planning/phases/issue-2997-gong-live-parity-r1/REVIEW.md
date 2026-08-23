@@ -23,9 +23,12 @@
    value equals configured credential material. The current shared output boundary violates that
    rule by collision-masking values, headers, raw receipts, and cursors. Foundation issue #4321
    owns the generic red/green correction; the Gong PR contains no provider-specific exception.
-5. **Open, external — source importer URL policy.** The generic importer rejects the official
-   fixed query-bearing Gong artifact URL. No connector-specific exception was added. See
-   `SOURCE-AUDIT.md` for the exact failure and safe required foundation change.
+5. **Open, shared foundation — source-import common-input preflight.** #4335 is merged and the
+   v3 `gong-v2` declaration now makes the importer fetch/parse the fixed official query-bearing
+   artifact. It then rejects `GET /v2/all-permission-profiles` parameter 0 for a missing
+   `maxLength` before any descriptor can be projected. The generic importer must retain or emit a
+   typed gap for such common-bound provider inputs; no Gong maximum or connector exception was
+   added. See `SOURCE-AUDIT.md` for the exact failure.
 6. **Open — source-projected required input.** The current source says `GET /v2/targets` requires
    `workspaceId`, while the generated direct command has not yet received that marker. The missing
    canonical descriptor prevents `surface-sync` from deriving it. The live HTTP-400 classification
@@ -60,5 +63,6 @@
 ## Review result
 
 No remaining connector-local correctness or safety finding was identified beyond the source
-projection gap above. The branch remains draft/non-merge-ready until the generic source-import URL
-policy, foundation #4321 output-policy correction, and full live certification gates are resolved.
+projection gap above. The branch remains draft/non-merge-ready until generic source-import
+common-input preflight, foundation #4321 output-policy correction, #4337 external-proof privacy,
+and full live certification gates are resolved.

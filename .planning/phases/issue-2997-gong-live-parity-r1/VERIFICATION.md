@@ -7,10 +7,20 @@
 - [x] `scripts/gsd doctor` passed and command sources were resolved.
 - [x] Current official OpenAPI refetch returned 69 operations with the current GET/POST/PUT/PATCH/DELETE distribution and a current strict source lock.
 - [x] Exact method/path/operation-ID/deprecation comparison against the refreshed Gong source lock passed; the canonical inventory fingerprint is recorded in `SOURCE-AUDIT.md`.
-- [x] `origin/main` tree `6410fe59c` is merged without rewriting preserved history; shared/runtime and unrelated connector conflicts resolve to that final foundation tree, while the PR diff remains Gong-owned.
-- [ ] `go run ./cmd/connectorgen source-import gong --check` is blocked by the provider-neutral artifact URL policy: Gong's official fixed source requires `?version=`, while the importer rejects query-bearing artifact URLs and the query-free route is 404.
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs/gong --json` remains blocked only by that same source-importer URL-policy dependency.
-- [ ] Scoped `surface-sync --check` remains pending after source-import support accepts the fixed official URL. Its current exact blocker is the missing canonical Gong source descriptor; the unscoped command also has unrelated Aircall source-projection drift and is not claimed as Gong evidence.
+- [x] `origin/main` through `8127de418` is merged without rewriting preserved history; shared/runtime
+  and unrelated connector conflicts resolve to main, while the PR diff remains Gong-owned.
+- [x] PR #4335 merged at `8127de418`; the Gong source lock is a v3 `gong-v2` document with the
+  exact fixed `?version=` query marked `identity_query: true`. The real scoped importer gets past
+  URL validation and parses the official source.
+- [ ] `go run ./cmd/connectorgen source-import gong --check` now stops at the provider-neutral
+  source-import preflight for `GET /v2/all-permission-profiles` parameter 0:
+  `unbounded request schema string has no maxLength`. It must retain or type-gap this ordinary
+  provider input before descriptor projection; no Gong-local maximum/bypass is valid.
+- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs/gong --json` reports only the
+  resulting missing `sources/gong-operation-descriptor.json` canonical descriptor.
+- [ ] Scoped `surface-sync --check` remains pending on that missing canonical descriptor. The
+  unscoped command also has unrelated Aircall source-projection drift and is not claimed as Gong
+  evidence.
 - [x] Full direct-read reconciliation: all 30 implemented direct-read commands ran through the built binary in a fresh initialized project with no credential and each reached `missing --credential`; none was unknown or exact-endpoint blocked.
 - [x] Focused Gong full-surface, commandrunner, and multipart conformance tests pass with `-timeout 20m`; the three multipart actions use the merged generic approval-digest path.
 - [x] Batch 2/3 parity-map verification passes for 19 connectors / 5,127 documented operations; its regenerated foundation ledger contains zero Gong gap rows.
@@ -35,15 +45,15 @@
 - [ ] `make verify` was attempted. It reaches formatting, tidy, vet, then fails at the same
   repository-wide generated-skill drift before later gates; no Gong files outside this task were
   altered to mask that baseline failure.
-- [ ] `make connectorgen-validate` is blocked by the single Gong query-bearing source-lock URL
-  policy finding. `make connectorgen-surface-sync` is blocked by the resulting missing canonical
-  source descriptor. `certification-matrix --connector gong --check` is blocked because Gong is
+- [ ] `make connectorgen-validate` is blocked by the resulting missing Gong source descriptor
+  after generic source-import common-input preflight. `make connectorgen-surface-sync` is blocked
+  by that same missing descriptor. `certification-matrix --connector gong --check` is blocked because Gong is
   not in the shared static allowlist; no allowlist change was made. Gong certification candidates,
   71-row sweep, and regenerated current subject all pass their `--check` modes.
-- [ ] Latest scoped `go run ./cmd/connectorgen source-import gong --check` still returns
-  `source lock has invalid public artifact URL: artifact URL must not include a query`. PR #4320
-  remains open, so this is recorded as the same provider-neutral dependency rather than a claim
-  that its multi-document source-lock change has been empirically tested for Gong.
+- [ ] Latest scoped `go run ./cmd/connectorgen source-import gong --check` fetches the declared
+  v3 identity-query document and returns only `GET /v2/all-permission-profiles` parameter 0
+  `unbounded request schema string has no maxLength`. This is a provider-neutral descriptor-stage
+  gap; it does not reopen the query policy or license a Gong-specific workaround.
 - [ ] Inline code review is recorded in `REVIEW.md`; automated-review route/dispositions are recorded in PR #3552.
 
 ## Captain hard certification gate
@@ -97,7 +107,9 @@ uncertified pending a captain decision.
 
 ## Accepted shared dependency
 
-The remaining credential-free dependency is the provider-neutral `connectorgen source-import`
-artifact URL policy. It must support the official, fixed, query-bearing Gong source URL without
-opening arbitrary query input. No connector-specific importer bypass is present. The live
-certification credential-reference gate remains independent.
+The remaining credential-free dependency is provider-neutral `connectorgen source-import` common
+input preflight: it must retain or type-gap an ordinary provider string without a declared
+`maxLength` before descriptor projection. Query identity is now declaration-bound and exercised
+through #4335's merged v3 contract; no connector-specific importer bypass or invented Gong input
+bound is present. Separately, #4337 blocks a new proof-producing live run because the current
+external-proof serializer would retain the account-scoped base URL argument verbatim.
