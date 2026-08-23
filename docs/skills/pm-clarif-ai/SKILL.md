@@ -1,0 +1,110 @@
+---
+name: pm-clarif-ai
+description: Clarif-ai connector knowledge and safe action guide.
+---
+
+# pm-clarif-ai
+
+## Purpose
+
+Reads Clarifai applications, datasets, models, model versions, and workflows, and writes application/dataset lifecycle mutations, through the Clarifai v2 REST API.
+
+## Icon
+
+- id: simple-icons-clarifai
+- asset: icons/simple-icons/clarifai.svg
+- title: Clarifai
+- simple_icon_slug: clarifai
+- simple_icon_hex: 1955FF
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Clarifai
+- match: curated-alias
+- matched_by: clarifai
+
+## Capabilities
+
+- check=true catalog=true read=true write=true query=false
+- Integration type: api
+
+## Authentication
+
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
+
+## Configuration
+
+- app_id
+- base_url
+- mode
+- user_id (required)
+- api_key (secret) (required)
+
+## ETL Streams
+
+- applications:
+  - primary key: id
+  - fields: created_at(string), default_language(string), description(string), id(string), modified_at(string), name(string), user_id(string)
+- datasets:
+  - primary key: id
+  - fields: app_id(string), created_at(string), default_processing_info(object), description(string), id(string), modified_at(string), user_id(string)
+- models:
+  - primary key: id
+  - fields: app_id(string), created_at(string), id(string), model_type_id(string), modified_at(string), name(string), user_id(string), visibility(object)
+- model_versions:
+  - primary key: id
+  - fields: app_id(string), created_at(string), description(string), id(string), modified_at(string), status(object), user_id(string)
+- workflows:
+  - primary key: id
+  - fields: app_id(string), created_at(string), id(string), modified_at(string), user_id(string), version(object)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
+
+## Reverse ETL Actions
+
+- create_application:
+  - endpoint: POST /users/{{ config.user_id }}/apps
+  - required fields: apps
+  - risk: creates a new Clarifai application (workspace for datasets/models/workflows); low-risk (additive, no data loss)
+- update_application:
+  - endpoint: PATCH /users/{{ config.user_id }}/apps
+  - required fields: action, apps
+  - risk: updates an existing Clarifai application's settings (description, default workflow, notes); action=overwrite fully replaces the named fields rather than merging, so review the action value before use; approval required
+- create_dataset:
+  - endpoint: POST /users/{{ config.user_id }}/apps/{{ config.app_id }}/datasets
+  - required fields: datasets
+  - risk: creates a new Clarifai dataset within the configured app; low-risk (additive, no data loss)
+- delete_dataset:
+  - endpoint: DELETE /users/{{ config.user_id }}/apps/{{ config.app_id }}/datasets
+  - required fields: dataset_ids
+  - risk: permanently deletes one or more Clarifai datasets and their inputs/annotations within the configured app; irreversible; approval required
+
+## Security
+
+- read risk: external Clarifai API read of application, dataset, model, and workflow metadata
+- write risk: external mutation of Clarifai applications and datasets; delete_dataset is irreversible (deletes the dataset and all its inputs/annotations) and update_application's action=overwrite can replace application settings wholesale; every write ships with an explicit per-action risk string
+- approval: required for update_application and delete_dataset (destructive or full-replace semantics); create_application and create_dataset are low-risk (additive only)
+- Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Commands
+
+### Inspect as a manual
+
+```bash
+pm connectors inspect clarif-ai
+```
+
+### Inspect as structured JSON
+
+```bash
+pm connectors inspect clarif-ai --json
+```
+
+## Agent Rules
+
+- Run pm connectors inspect clarif-ai before creating credentials or plans.
+- Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+- Never ask the user to paste secret values into chat.
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

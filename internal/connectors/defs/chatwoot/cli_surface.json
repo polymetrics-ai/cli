@@ -376,15 +376,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.agent_bots_get",
-      "flags": [
-        {
-          "name": "id",
-          "type": "integer",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -716,15 +708,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.automation_rules_get",
-      "flags": [
-        {
-          "name": "id",
-          "type": "integer",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1077,15 +1061,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.contacts_get",
-      "flags": [
-        {
-          "name": "id",
-          "type": "number",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1120,15 +1096,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.contacts_list_contactable_inboxes",
-      "flags": [
-        {
-          "name": "id",
-          "type": "number",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1147,15 +1115,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.contacts_list_conversations",
-      "flags": [
-        {
-          "name": "id",
-          "type": "number",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1174,15 +1134,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.contacts_list_labels",
-      "flags": [
-        {
-          "name": "id",
-          "type": "number",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1235,20 +1187,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.contacts_search",
-      "flags": [
-        {
-          "name": "q",
-          "type": "string",
-          "summary": "Search using contact `name`, `identifier`, `email` or `phone number`",
-          "maps_to": "query.q"
-        },
-        {
-          "name": "sort",
-          "type": "string",
-          "summary": "The attribute by which list should be sorted",
-          "maps_to": "query.sort"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1512,15 +1451,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.conversations_get",
-      "flags": [
-        {
-          "name": "conversation-id",
-          "type": "integer",
-          "summary": "Path parameter `conversation_id`.",
-          "maps_to": "path.conversation_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1555,15 +1486,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.conversations_list_labels",
-      "flags": [
-        {
-          "name": "conversation-id",
-          "type": "integer",
-          "summary": "Path parameter `conversation_id`.",
-          "maps_to": "path.conversation_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1582,15 +1505,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.conversations_list_reporting_events",
-      "flags": [
-        {
-          "name": "conversation-id",
-          "type": "integer",
-          "summary": "Path parameter `conversation_id`.",
-          "maps_to": "path.conversation_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1609,38 +1524,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.conversations_meta",
-      "flags": [
-        {
-          "name": "status",
-          "type": "string",
-          "summary": "Filter by conversation status.",
-          "maps_to": "query.status"
-        },
-        {
-          "name": "q",
-          "type": "string",
-          "summary": "Filters conversations with messages containing the search term",
-          "maps_to": "query.q"
-        },
-        {
-          "name": "inbox-id",
-          "type": "integer",
-          "summary": "Query parameter `inbox_id`.",
-          "maps_to": "query.inbox_id"
-        },
-        {
-          "name": "team-id",
-          "type": "integer",
-          "summary": "Query parameter `team_id`.",
-          "maps_to": "query.team_id"
-        },
-        {
-          "name": "labels",
-          "type": "string_array",
-          "summary": "Query parameter `labels`.",
-          "maps_to": "query.labels"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1975,15 +1859,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.custom_attributes_get",
-      "flags": [
-        {
-          "name": "id",
-          "type": "integer",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -2002,14 +1878,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.custom_attributes_list",
-      "flags": [
-        {
-          "name": "attribute-model",
-          "type": "string",
-          "summary": "conversation_attribute(0)/contact_attribute(1)",
-          "maps_to": "query.attribute_model"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -2162,15 +2031,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.custom_filters_get",
-      "flags": [
-        {
-          "name": "custom-filter-id",
-          "type": "integer",
-          "summary": "Path parameter `custom_filter_id`.",
-          "maps_to": "path.custom_filter_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -2189,14 +2050,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.custom_filters_list",
-      "flags": [
-        {
-          "name": "filter-type",
-          "type": "string",
-          "summary": "The type of custom filter",
-          "maps_to": "query.filter_type"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -2288,15 +2142,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.inbox_members_list",
-      "flags": [
-        {
-          "name": "inbox-id",
-          "type": "integer",
-          "summary": "Path parameter `inbox_id`.",
-          "maps_to": "path.inbox_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -2383,15 +2229,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.inboxes_get",
-      "flags": [
-        {
-          "name": "id",
-          "type": "number",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -2410,15 +2248,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.inboxes_get_agent_bot",
-      "flags": [
-        {
-          "name": "id",
-          "type": "number",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -2453,21 +2283,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.inboxes_list_message_templates",
-      "flags": [
-        {
-          "name": "id",
-          "type": "number",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Exact template name to filter by",
-          "maps_to": "query.name"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -2709,15 +2525,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.labels_get",
-      "flags": [
-        {
-          "name": "id",
-          "type": "number",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -3229,38 +3037,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.reporting_events_list",
-      "flags": [
-        {
-          "name": "since",
-          "type": "string",
-          "summary": "The timestamp from where events should start (Unix timestamp in seconds)",
-          "maps_to": "query.since"
-        },
-        {
-          "name": "until",
-          "type": "string",
-          "summary": "The timestamp from where events should stop (Unix timestamp in seconds)",
-          "maps_to": "query.until"
-        },
-        {
-          "name": "inbox-id",
-          "type": "number",
-          "summary": "Filter events by inbox ID",
-          "maps_to": "query.inbox_id"
-        },
-        {
-          "name": "user-id",
-          "type": "number",
-          "summary": "Filter events by user/agent ID",
-          "maps_to": "query.user_id"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Filter events by event name (e.g., first_response, resolution, reply_time)",
-          "maps_to": "query.name"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -3378,15 +3155,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.teams_get",
-      "flags": [
-        {
-          "name": "team-id",
-          "type": "integer",
-          "summary": "Path parameter `team_id`.",
-          "maps_to": "path.team_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -3421,15 +3190,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.teams_list_members",
-      "flags": [
-        {
-          "name": "team-id",
-          "type": "integer",
-          "summary": "Path parameter `team_id`.",
-          "maps_to": "path.team_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [

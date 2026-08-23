@@ -151,6 +151,47 @@ func TestDeclarativeWriteRetryPolicy(t *testing.T) {
 	})
 }
 
+func TestDeclarativeWriteIdempotencyRetriesOriginalURLOnly(t *testing.T) {
+	var attempts int
+	var keys []string
+	var paths []string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		attempts++
+		keys = append(keys, r.Header.Get("Idempotency-Key"))
+		paths = append(paths, r.URL.RequestURI())
+		if attempts == 1 {
+			w.Header().Set("X-Request-ID", "first-failure")
+			http.Error(w, "retry", http.StatusServiceUnavailable)
+			return
+		}
+		w.Header().Set("X-Request-ID", "terminal-success")
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	action := WriteAction{
+		Name: "create_widget", Method: http.MethodPost, Path: "/widgets",
+		IdempotencyKeyHeader: "Idempotency-Key",
+	}
+	bundle := newWriteTestBundle(srv, action)
+	records := []connectors.Record{{"name": "fixture"}}
+	req := connectors.WriteRequest{Action: action.Name}
+	preview, err := DryRunWrite(context.Background(), bundle, req, records, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	if _, err := Write(context.Background(), bundle, req, records, nil); err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	wantKey := writeIdempotencyKey(bundle.Name, action, preview.Digest, "", 0)
+	if wantKey == "" || len(keys) != 2 || keys[0] != wantKey || keys[1] != wantKey {
+		t.Fatalf("idempotency keys = %#v, want preview-bound %q", keys, wantKey)
+	}
+	if len(paths) != 2 || paths[0] != "/widgets" || paths[1] != "/widgets" {
+		t.Fatalf("retry paths = %#v, want original URL only", paths)
+	}
+}
+
 func TestRequiredJSONWriteSendsEmptyObject(t *testing.T) {
 	var body []byte
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

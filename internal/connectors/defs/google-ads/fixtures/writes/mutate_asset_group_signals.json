@@ -1,0 +1,24 @@
+{
+  "record": {
+    "operations": [
+      {
+        "create": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/assetGroupSignals:mutate",
+    "body": {
+      "operations": [
+        {
+          "create": {}
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

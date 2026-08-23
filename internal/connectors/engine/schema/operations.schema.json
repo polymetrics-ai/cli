@@ -149,11 +149,15 @@
                   "additionalProperties": false,
                   "properties": {
                     "name": { "type": "string" },
-                    "in": { "type": "string", "enum": ["query", "path"] },
+                    "in": { "type": "string", "enum": ["query", "path", "header"] },
+                    "cli_name": { "type": "string" },
                     "type": { "type": "string" },
                     "required": { "type": "boolean" },
+                    "repeatable": { "type": "boolean" },
                     "values": { "type": "array", "items": { "type": "string" } },
-                    "summary": { "type": "string" }
+                    "summary": { "type": "string" },
+                    "schema": { "type": "object" },
+                    "max_bytes": { "type": "integer" }
                   }
                 }
               },
@@ -210,7 +214,36 @@
                     }
                   }
                 }
-              }
+              },
+              "response": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+				  "success_statuses": { "type": "array", "items": { "type": "string" } },
+                  "headers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["name", "max_bytes"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": { "type": "string" },
+                        "max_bytes": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+			  },
+			  "redirect": {
+				"type": "object",
+				"required": ["max_hops"],
+				"additionalProperties": false,
+				"properties": {
+			  "max_hops": { "type": "integer" },
+				  "allow_same_origin": { "type": "boolean" },
+				  "allowed_hosts": { "type": "array", "items": { "type": "string" } }
+				}
+			  }
             }
           },
           "graphql": {
@@ -231,6 +264,8 @@
                   "connection_path": { "type": "string" },
                   "cursor_variable": { "type": "string" },
                   "page_size_variable": { "type": "string" },
+                  "backward_cursor_variable": { "type": "string" },
+                  "backward_page_size_variable": { "type": "string" },
                   "max_page_size": { "type": "integer" }
                 }
               }
@@ -257,12 +292,62 @@
               "method": { "type": "string" },
               "path": { "type": "string" },
               "max_bytes": { "type": "integer" },
+			  "parameters": {
+				"type": "array",
+				"items": {
+				  "type": "object",
+				  "required": ["name", "in"],
+				  "additionalProperties": false,
+				  "properties": {
+					"name": { "type": "string" },
+					"in": { "type": "string", "enum": ["query", "path", "header"] },
+					"cli_name": { "type": "string" },
+					"type": { "type": "string" },
+					"required": { "type": "boolean" },
+					"repeatable": { "type": "boolean" },
+					"values": { "type": "array", "items": { "type": "string" } },
+					"summary": { "type": "string" },
+					"schema": { "type": "object" },
+					"max_bytes": { "type": "integer" }
+				  }
+				}
+			  },
+			  "response": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+				  "success_statuses": { "type": "array", "items": { "type": "string" } },
+				  "headers": {
+					"type": "array",
+					"items": {
+					  "type": "object",
+					  "required": ["name", "max_bytes"],
+					  "additionalProperties": false,
+					  "properties": {
+						"name": { "type": "string" },
+						"max_bytes": { "type": "integer" }
+					  }
+					}
+				  }
+				}
+			  },
+			  "redirect": {
+				"type": "object",
+				"required": ["max_hops"],
+				"additionalProperties": false,
+				"properties": {
+			  "max_hops": { "type": "integer" },
+				  "allow_same_origin": { "type": "boolean" },
+				  "allowed_hosts": { "type": "array", "items": { "type": "string" } }
+				}
+			  },
 			  "accept": { "type": "string" },
               "allow_overwrite": { "type": "boolean" },
               "extract_archives": { "type": "boolean" },
               "allow_cross_host": { "type": "boolean" },
               "allowed_hosts": { "type": "array", "items": { "type": "string" } },
               "content_types": { "type": "array", "items": { "type": "string" } },
+			  "charset": { "type": "string" },
               "stall_timeout_seconds": { "type": "integer" }
             }
           },

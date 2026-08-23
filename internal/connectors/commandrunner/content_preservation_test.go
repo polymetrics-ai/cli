@@ -178,6 +178,101 @@ func TestCommandRunnerReturnsOriginalExecutorErrorsAndOmitsRedactFields(t *testi
 	}
 }
 
+func TestCommandRunnerPreservesTerminalReadReceiptsWithExecutorErrors(t *testing.T) {
+	tests := []struct {
+		name string
+		run  func(*fakeConnector, error) (Result, error)
+		want func(Result) *connectors.ProviderResponseReceipt
+	}{
+		{
+			name: "operation direct read",
+			run: func(connector *fakeConnector, source error) (Result, error) {
+				connector.operationDirectReadErr = source
+				connector.operationDirectReadResult = &connectors.DirectReadResult{
+					Connector: "fixture", Operation: "fixture.records_lookup", Method: http.MethodGet, Path: "/records", Status: http.StatusBadGateway,
+					Receipt: &connectors.ProviderResponseReceipt{ResponseReceived: true, Status: http.StatusBadGateway, BodyPresent: true, BodyBytes: 34, Body: map[string]any{"occurrence_id": "read-occurrence-9007199254740993"}},
+				}
+				return Run(context.Background(), connector, Request{
+					Path:  []string{"records", "lookup"},
+					Flags: map[string][]string{"token": {"fixture-token"}, "content": {"fixture-content"}},
+				}, func(connectors.Record) error { return nil })
+			},
+			want: func(result Result) *connectors.ProviderResponseReceipt {
+				if result.DirectRead == nil {
+					return nil
+				}
+				return result.DirectRead.Receipt
+			},
+		},
+		{
+			name: "binary download",
+			run: func(connector *fakeConnector, source error) (Result, error) {
+				connector.binaryDownloadErr = source
+				connector.binaryDownloadResult = &connectors.OperationBinaryDownloadResult{
+					Connector: "fixture", Operation: "fixture.records_download", Method: http.MethodGet, Path: "/records/download", Status: http.StatusNotFound,
+					Receipt: &connectors.ProviderResponseReceipt{ResponseReceived: true, Status: http.StatusNotFound, BodyPresent: true, BodyBytes: 38, Body: map[string]any{"occurrence_id": "download-occurrence-9007199254740993"}},
+				}
+				return Run(context.Background(), connector, Request{
+					Path:     []string{"records", "download"},
+					Flags:    map[string][]string{"token": {"fixture-token"}, "content": {"fixture-content"}},
+					DestRoot: t.TempDir(),
+				}, func(connectors.Record) error { return nil })
+			},
+			want: func(result Result) *connectors.ProviderResponseReceipt {
+				if result.BinaryDownload == nil {
+					return nil
+				}
+				return result.BinaryDownload.Receipt
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			connector := contentErrorConnector(test.name)
+			source := errors.New("provider rejected request")
+			result, err := test.run(connector, source)
+			if err != source {
+				t.Fatalf("Run error = %v, want original %v", err, source)
+			}
+			receipt := test.want(result)
+			if receipt == nil || !receipt.ResponseReceived || receipt.Status == 0 {
+				t.Fatalf("Run terminal receipt = %#v", receipt)
+			}
+		})
+	}
+}
+
+func TestCommandRunnerPreservesLegacyPostProviderResultWithoutReceipt(t *testing.T) {
+	providerErr := errors.New("provider returned malformed JSON after receipt parsing")
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "records lookup", Intent: "direct_read", Availability: "implemented", OutputPolicy: "json_redacted",
+			APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/records/{id}"}},
+			Flags:      []connectors.CommandSurfaceFlag{{Name: "id", Type: "string", MapsTo: "query.id", Required: true}},
+		}}},
+		directReadErr: providerErr,
+		directReadResult: &connectors.DirectReadResult{
+			Connector: "github", Method: http.MethodGet, Path: "/records/fixture", Status: http.StatusBadGateway,
+			Body: map[string]any{"occurrence_id": "direct-read-occurrence-9007199254740993"},
+		},
+	}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:  []string{"records", "lookup"},
+		Flags: map[string][]string{"id": {"fixture"}},
+	}, func(connectors.Record) error { return nil })
+	if err != providerErr {
+		t.Fatalf("Run error = %v, want original provider error %v", err, providerErr)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("Run result = %#v, want post-provider direct-read result", result)
+	}
+	if result.DirectRead.Status != http.StatusBadGateway || result.DirectRead.Body.(map[string]any)["occurrence_id"] != "direct-read-occurrence-9007199254740993" {
+		t.Fatalf("retained direct-read result = %#v, want complete provider facts", result.DirectRead)
+	}
+}
+
 func contentErrorConnector(name string) *fakeConnector {
 	flags := []connectors.CommandSurfaceFlag{
 		{Name: "token", Type: "string", MapsTo: "query.token", Required: true},

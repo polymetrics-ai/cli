@@ -1,7 +1,9 @@
 package connsdk
 
 import (
+	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -26,7 +28,14 @@ type StreamOptions struct {
 	AllowCrossHost bool
 	// AllowedHosts permits hops to exactly these hosts (host or host:port).
 	// Credentials are stripped on such a hop regardless.
-	AllowedHosts []string
+	AllowedHosts   []string
+	RedirectPolicy *RedirectPolicy
+}
+
+type RedirectPolicy struct {
+	MaxHops         int
+	AllowSameOrigin bool
+	AllowedHosts    []string
 }
 
 // StreamResponse is a response whose body is still OPEN. The caller owns it
@@ -94,9 +103,10 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 
 	attempts := r.maxRetries() + 1
 	var lastErr error
+	var lastProviderErr error
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
-			return nil, err
+			return nil, errors.Join(lastProviderErr, err)
 		}
 
 		req, err := http.NewRequestWithContext(ctx, method, fullURL, nil)
@@ -113,13 +123,13 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		// Snapshot the header keys auth contributes, so the redirect policy
 		// can strip exactly those on a cross-origin hop without having to
 		// know which scheme any given connector uses.
-		before := headerKeySet(req.Header)
+		before := req.Header.Clone()
 		if r.Auth != nil {
 			if err := r.Auth.Apply(ctx, req); err != nil {
 				return nil, fmt.Errorf("apply auth: %w", err)
 			}
 		}
-		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders)
+		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders, r.DefaultHeaderValues)
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
@@ -129,17 +139,21 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 
 		resp, err := client.Do(req)
 		if err != nil {
+			terminal := captureTerminalStreamResponse(resp, fullURL)
 			lastErr = fmt.Errorf("send request: %w", err)
-			if isRateLimitAdmissionError(err) {
-				return nil, lastErr
+			if resp != nil {
+				lastProviderErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, streamResponseBody(terminal), RateLimitObservation{})
+			}
+			if isRateLimitAdmissionError(err) || isRequestAdmissionError(err) {
+				return terminal, errors.Join(lastProviderErr, lastErr)
 			}
 			if attempt < attempts-1 && !isRedirectPolicyError(err) {
 				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
-					return nil, werr
+					return terminal, errors.Join(lastProviderErr, lastErr, werr)
 				}
 				continue
 			}
-			return nil, lastErr
+			return terminal, errors.Join(lastProviderErr, lastErr)
 		}
 		observation := r.observeRateLimit(ctx, route, resp.StatusCode, resp.Header, costHeader)
 
@@ -148,9 +162,10 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			// attempt may reach the caller.
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
 			_ = resp.Body.Close()
-			lastErr = responseHTTPError(resp.StatusCode, fullURL, body, observation)
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, body, observation)
+			lastProviderErr = lastErr
 			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
-				return nil, werr
+				return nil, errors.Join(lastProviderErr, werr)
 			}
 			continue
 		}
@@ -158,7 +173,15 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
 			_ = resp.Body.Close()
-			return nil, responseHTTPError(resp.StatusCode, fullURL, body, observation)
+			return nil, responseHTTPError(resp.StatusCode, fullURL, resp.Header, body, observation)
+		}
+		if !r.acceptsSuccessfulStatus(resp.StatusCode) {
+			return &StreamResponse{
+				Status: resp.StatusCode,
+				Header: resp.Header,
+				Body:   resp.Body,
+				URL:    resp.Request.URL.String(),
+			}, &UnexpectedStatusError{Status: resp.StatusCode}
 		}
 
 		return &StreamResponse{
@@ -171,7 +194,39 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 	if lastErr == nil {
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)
 	}
-	return nil, lastErr
+	return nil, errors.Join(lastProviderErr, lastErr)
+}
+
+// captureTerminalStreamResponse turns the response returned alongside a Go
+// redirect-policy error into a bounded replayable body. http.Client closes the
+// original body before returning such an error, so callers must never retain
+// it directly; the copied metadata/body is enough for the receipt boundary
+// and still cannot be read as an unbounded download stream.
+func captureTerminalStreamResponse(resp *http.Response, fullURL string) *StreamResponse {
+	if resp == nil {
+		return nil
+	}
+	var body []byte
+	if resp.Body != nil {
+		body, _ = io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
+		_ = resp.Body.Close()
+	}
+	return &StreamResponse{
+		Status: resp.StatusCode,
+		Header: resp.Header.Clone(),
+		Body:   io.NopCloser(bytes.NewReader(body)),
+		URL:    fullURL,
+	}
+}
+
+func streamResponseBody(resp *StreamResponse) []byte {
+	if resp == nil || resp.Body == nil {
+		return nil
+	}
+	body, _ := io.ReadAll(resp.Body)
+	_ = resp.Body.Close()
+	resp.Body = io.NopCloser(bytes.NewReader(body))
+	return body
 }
 
 // streamClient returns a shallow copy of the configured client carrying the
@@ -180,6 +235,9 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 	clone := *r.client()
 	clone.Timeout = 0
 	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if opts.RedirectPolicy != nil {
+			return checkRedirectPolicy(req, via, base, *opts.RedirectPolicy, credKeys)
+		}
 		if len(via) >= maxRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxRedirects)
 		}
@@ -195,6 +253,45 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 		return nil
 	}
 	return &clone
+}
+
+func (r *Requester) redirectClient(ctx context.Context, base *url.URL, policy *RedirectPolicy, credKeys *[]string) *http.Client {
+	if policy == nil {
+		policy = &RedirectPolicy{MaxHops: maxRedirects, AllowSameOrigin: true}
+	}
+	clone := *r.clientFor(ctx)
+	prior := clone.CheckRedirect
+	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if err := checkRedirectPolicy(req, via, base, *policy, credKeys); err != nil {
+			return err
+		}
+		if prior != nil {
+			return prior(req, via)
+		}
+		return nil
+	}
+	return &clone
+}
+
+func checkRedirectPolicy(req *http.Request, via []*http.Request, base *url.URL, policy RedirectPolicy, credKeys *[]string) error {
+	if policy.MaxHops <= 0 || len(via) > policy.MaxHops {
+		return fmt.Errorf("redirect refused by declared policy")
+	}
+	if strings.EqualFold(base.Scheme, "https") && !strings.EqualFold(req.URL.Scheme, "https") {
+		return fmt.Errorf("scheme downgrade to %q blocked (base origin %s://%s)", req.URL.Redacted(), base.Scheme, base.Host)
+	}
+	sameOrigin := req.URL.Host == base.Host && req.URL.Scheme == base.Scheme
+	if sameOrigin {
+		if !policy.AllowSameOrigin {
+			return fmt.Errorf("redirect refused by declared policy")
+		}
+		return nil
+	}
+	if err := allowCrossOrigin(req.URL, base, StreamOptions{AllowedHosts: policy.AllowedHosts}); err != nil {
+		return err
+	}
+	stripCredentialHeaders(req, *credKeys)
+	return nil
 }
 
 // allowCrossOrigin fails closed: an unparseable or host-less target, a
@@ -224,19 +321,11 @@ func allowCrossOrigin(next, base *url.URL, opts StreamOptions) error {
 // removes any dependence on that behavior staying true.
 var alwaysSensitiveHeaders = []string{"Authorization", "Www-Authenticate", "Cookie", "Proxy-Authorization"}
 
-func headerKeySet(h http.Header) map[string]bool {
-	out := make(map[string]bool, len(h))
-	for k := range h {
-		out[k] = true
-	}
-	return out
-}
-
 // credentialHeaderKeys returns every header key that must not cross an origin
 // boundary: those the Authenticator added, plus every configured default
 // header (a connector may carry its API key there), plus the always-sensitive
 // set.
-func credentialHeaderKeys(before map[string]bool, after http.Header, defaults map[string]string) []string {
+func credentialHeaderKeys(before, after http.Header, defaults map[string]string, defaultValues http.Header) []string {
 	seen := map[string]bool{}
 	add := func(k string) {
 		canonical := http.CanonicalHeaderKey(k)
@@ -244,12 +333,16 @@ func credentialHeaderKeys(before map[string]bool, after http.Header, defaults ma
 			seen[canonical] = true
 		}
 	}
-	for k := range after {
-		if !before[k] {
+	beforeValues := canonicalHeaderValues(before)
+	for k, values := range canonicalHeaderValues(after) {
+		if previous, present := beforeValues[k]; !present || !sameHeaderValues(previous, values) {
 			add(k)
 		}
 	}
 	for k := range defaults {
+		add(k)
+	}
+	for k := range defaultValues {
 		add(k)
 	}
 	for _, k := range alwaysSensitiveHeaders {
@@ -260,6 +353,30 @@ func credentialHeaderKeys(before map[string]bool, after http.Header, defaults ma
 		out = append(out, k)
 	}
 	return out
+}
+
+func canonicalHeaderValues(headers http.Header) map[string][]string {
+	values := make(map[string][]string, len(headers))
+	for key, value := range headers {
+		canonical := http.CanonicalHeaderKey(key)
+		if canonical == "" {
+			continue
+		}
+		values[canonical] = append(values[canonical], value...)
+	}
+	return values
+}
+
+func sameHeaderValues(left, right []string) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for i := range left {
+		if left[i] != right[i] {
+			return false
+		}
+	}
+	return true
 }
 
 // stripCredentialHeaders removes every credential-bearing header from a
@@ -284,5 +401,6 @@ func isRedirectPolicyError(err error) bool {
 	msg := err.Error()
 	return strings.Contains(msg, "cross-host redirect") ||
 		strings.Contains(msg, "scheme downgrade") ||
-		strings.Contains(msg, "stopped after")
+		strings.Contains(msg, "stopped after") ||
+		strings.Contains(msg, "redirect refused")
 }

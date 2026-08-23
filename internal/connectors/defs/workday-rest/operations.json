@@ -12,6 +12,16 @@
         "method": "GET",
         "path": "/api/prismAnalytics/v3/{tenant}/buckets/{id}/errorFile",
         "max_bytes": 104857600,
+        "content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -28,6 +38,19 @@
         "method": "GET",
         "path": "/attachments/v1/graphql/{ID}",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/*",
+          "audio/*",
+          "font/*",
+          "image/*",
+          "text/*",
+          "video/*"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -44,6 +67,14 @@
         "method": "GET",
         "path": "/customerAccounts/v1/invoicePDFs/{ID}",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/pdf"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -60,6 +91,19 @@
         "method": "GET",
         "path": "/procurement/v5/requisitions/{ID}/attachments",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/*",
+          "audio/*",
+          "font/*",
+          "image/*",
+          "text/*",
+          "video/*"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -76,6 +120,19 @@
         "method": "GET",
         "path": "/procurement/v5/requisitions/{ID}/attachments/{subresourceID}",
         "max_bytes": 104857600,
+        "content_types": [
+          "application/*",
+          "audio/*",
+          "font/*",
+          "image/*",
+          "text/*",
+          "video/*"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }

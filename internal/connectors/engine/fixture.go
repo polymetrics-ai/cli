@@ -190,7 +190,7 @@ func (c *Connector) ReadFixture(ctx context.Context, req connectors.ReadRequest,
 		Bundle: &c.bundle,
 		Config: req.Config,
 	}
-	if err := readDeclarative(ctx, c.bundle, stream, req, runtime, c.hooks, emit); err != nil {
+	if err := readDeclarative(ctx, c.bundle, stream, req, runtime, c.hooks, emit, false); err != nil {
 		return err
 	}
 	if remaining := transport.remaining(); remaining != 0 {

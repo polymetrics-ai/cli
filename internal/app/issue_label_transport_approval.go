@@ -337,21 +337,22 @@ func (a *App) ApplyIssueLabelTransport(ctx context.Context, connectionID string,
 		Config:   prepared.runtime,
 		Approval: evidence,
 	}, []connectors.Record{mappedRecord})
+	safeResult := connectors.SanitizeWriteResultForOutput(result, prepared.runtime.Secrets)
 	if err != nil {
-		return connectors.WriteResult{}, fmt.Errorf("execute approved issue-label transport: %w", err)
+		return safeResult, fmt.Errorf("execute approved issue-label transport: %w", sanitizeRuntimeError(err, prepared.runtime))
 	}
 	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-		return connectors.WriteResult{}, fmt.Errorf("approved issue-label result written=%d failed=%d, want one durable write", result.RecordsWritten, result.RecordsFailed)
+		return safeResult, fmt.Errorf("approved issue-label result written=%d failed=%d, want one durable write", result.RecordsWritten, result.RecordsFailed)
 	}
 	// The original plan moves from the consumed approval state to executed only
 	// once. A durable authorization intentionally permits later identical-scope
 	// runs without re-consuming the one-time token or mutating that plan state.
 	if plan.AuthorizationReference == "" {
 		if err := a.markIssueLabelTransportPlanExecuted(plan.ID); err != nil {
-			return connectors.WriteResult{}, err
+			return safeResult, err
 		}
 	}
-	return result, nil
+	return safeResult, nil
 }
 
 // ApplyIssueLabelTransportCleanup executes only the inverse derived from
@@ -422,16 +423,17 @@ func (a *App) ApplyIssueLabelTransportCleanup(ctx context.Context, connectionID 
 		Config:   prepared.runtime,
 		Approval: evidence,
 	}, []connectors.Record{prepared.record})
+	safeResult := connectors.SanitizeWriteResultForOutput(result, prepared.runtime.Secrets)
 	if err != nil {
-		return connectors.WriteResult{}, fmt.Errorf("execute approved issue-label transport cleanup: %w", err)
+		return safeResult, fmt.Errorf("execute approved issue-label transport cleanup: %w", sanitizeRuntimeError(err, prepared.runtime))
 	}
 	if result.RecordsFailed != 0 || result.RecordsWritten+result.RecordsUnchanged != 1 {
-		return connectors.WriteResult{}, fmt.Errorf("approved issue-label cleanup result written=%d unchanged=%d failed=%d, want one deleted or already-absent label", result.RecordsWritten, result.RecordsUnchanged, result.RecordsFailed)
+		return safeResult, fmt.Errorf("approved issue-label cleanup result written=%d unchanged=%d failed=%d, want one deleted or already-absent label", result.RecordsWritten, result.RecordsUnchanged, result.RecordsFailed)
 	}
 	if err := a.markIssueLabelTransportPlanExecuted(plan.ID); err != nil {
-		return connectors.WriteResult{}, err
+		return safeResult, err
 	}
-	return result, nil
+	return safeResult, nil
 }
 
 func (a *App) prepareIssueLabelTransportWrite(ctx context.Context, conn Connection, endpoint EndpointConfig, action issueLabelTransportAction) (issueLabelPreparedWrite, error) {

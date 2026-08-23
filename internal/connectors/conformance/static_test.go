@@ -128,50 +128,83 @@ func TestCheckInterpolationsResolve_AuthWhenClauseUsesFullGrammar(t *testing.T) 
 	}
 }
 
-// TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage pins the
-// covered_by bookkeeping for the binary_download intent. An api_surface row
-// records which CLI command consumes an endpoint; which executor runs that
-// command does not change who covers it, so an implemented binary_download
-// command satisfies covered_by.direct_reads exactly as a direct_read does
-// (the same rule cmd/connectorgen's checkSurfaceComplete already applies).
-// Availability still has to be honoured: a planned command covers nothing.
-func TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage(t *testing.T) {
-	b := engine.Bundle{
-		Name: "acme",
-		Metadata: engine.Metadata{
-			Capabilities: engine.Capabilities{Read: true},
-		},
-		Surface: &engine.APISurface{
-			API: "https://api.acme.test",
-			Endpoints: []engine.SurfaceEndpoint{{
-				Method:    "GET",
-				Path:      "/files/{file_id}/download",
-				CoveredBy: &engine.SurfaceCoverage{DirectReads: []string{"file download"}},
-			}},
-		},
-		CLISurface: &engine.CLISurface{
-			Commands: []engine.CLICommand{{
-				Path:         "file download",
-				Intent:       "binary_download",
-				Availability: "implemented",
-			}},
-		},
-	}
+func TestCheckSurfaceComplete_ClosedReadOperationsSatisfyCoverage(t *testing.T) {
+	for _, tc := range []struct {
+		intent string
+		method string
+	}{
+		{intent: "direct_read", method: "GET"},
+		{intent: "binary_download", method: "GET"},
+		{intent: "text_export", method: "GET"},
+		{intent: "status_check", method: "HEAD"},
+	} {
+		t.Run(tc.intent, func(t *testing.T) {
+			path := "file " + strings.ReplaceAll(tc.intent, "_", "-")
+			b := engine.Bundle{
+				Name: "acme",
+				Metadata: engine.Metadata{
+					Capabilities: engine.Capabilities{Read: true},
+				},
+				Surface: &engine.APISurface{
+					API: "https://api.acme.test",
+					Endpoints: []engine.SurfaceEndpoint{{
+						Method:    tc.method,
+						Path:      "/files/{file_id}/download",
+						CoveredBy: &engine.SurfaceCoverage{DirectReads: []string{path}},
+					}},
+				},
+				CLISurface: &engine.CLISurface{
+					Commands: []engine.CLICommand{{
+						Path:         path,
+						Intent:       tc.intent,
+						Availability: "implemented",
+					}},
+				},
+			}
 
-	if err := checkSurfaceComplete(b); err != nil {
-		t.Fatalf("checkSurfaceComplete: implemented binary_download must cover its covered_by.direct_reads endpoint: %v", err)
-	}
+			if err := checkSurfaceComplete(b); err != nil {
+				t.Fatalf("checkSurfaceComplete: implemented %s must cover its endpoint: %v", tc.intent, err)
+			}
 
-	plannedB := b
-	plannedB.CLISurface = &engine.CLISurface{
-		Commands: []engine.CLICommand{{
-			Path:         "file download",
-			Intent:       "binary_download",
-			Availability: "planned",
-		}},
+			plannedB := b
+			plannedB.CLISurface = &engine.CLISurface{
+				Commands: []engine.CLICommand{{
+					Path:         path,
+					Intent:       tc.intent,
+					Availability: "planned",
+				}},
+			}
+			if err := checkSurfaceComplete(plannedB); err == nil {
+				t.Fatalf("checkSurfaceComplete: a planned %s command must not satisfy covered_by.direct_reads", tc.intent)
+			}
+		})
 	}
-	if err := checkSurfaceComplete(plannedB); err == nil {
-		t.Fatal("checkSurfaceComplete: a planned binary_download command must not satisfy covered_by.direct_reads")
+}
+
+func TestCheckSurfaceComplete_AllowsClosedReadOperationModels(t *testing.T) {
+	for _, model := range []string{"text_export", "status_check"} {
+		t.Run(model, func(t *testing.T) {
+			b := engine.Bundle{
+				Name: "acme",
+				Surface: &engine.APISurface{
+					OperationLedgerVersion: 1,
+					Endpoints: []engine.SurfaceEndpoint{{
+						Method: "GET",
+						Path:   "/files",
+						Operation: &engine.SurfaceOperation{
+							Model:            model,
+							Status:           "blocked",
+							Risk:             "low",
+							BlockedByDefault: true,
+							Reason:           "declaration-only test operation",
+						},
+					}},
+				},
+			}
+			if err := checkSurfaceComplete(b); err != nil {
+				t.Fatalf("checkSurfaceComplete: %s operation model = %v, want pass", model, err)
+			}
+		})
 	}
 }
 

@@ -736,44 +736,7 @@
           "path": "/ws/rest/v1/bahmni/search/patient"
         }
       ],
-      "flags": [
-        {
-          "name": "q",
-          "type": "string",
-          "summary": "Free-text patient name or identifier search term.",
-          "maps_to": "query.q"
-        },
-        {
-          "name": "identifier",
-          "type": "string",
-          "summary": "Exact patient identifier.",
-          "maps_to": "query.identifier"
-        },
-        {
-          "name": "address-field-name",
-          "type": "string",
-          "summary": "Address field to filter on, e.g. city_village.",
-          "maps_to": "query.addressFieldName"
-        },
-        {
-          "name": "address-field-value",
-          "type": "string",
-          "summary": "Address field value to match.",
-          "maps_to": "query.addressFieldValue"
-        },
-        {
-          "name": "login-location-uuid",
-          "type": "string",
-          "summary": "Login/deployment location UUID scoping the search.",
-          "maps_to": "query.loginLocationUuid"
-        },
-        {
-          "name": "start-index",
-          "type": "integer",
-          "summary": "Zero-based result offset for bounded paging.",
-          "maps_to": "query.startIndex"
-        }
-      ],
+      "flags": [],
       "examples": [
         "pm bahmni bahmnicore patient-search --json --q <name> --max-bytes 1048576"
       ],

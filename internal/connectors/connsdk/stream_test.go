@@ -422,19 +422,82 @@ func TestDoStreamDisableRetriesRejectsMutationRedirect(t *testing.T) {
 
 	r := &Requester{BaseURL: srv.URL, DisableRetries: true}
 	resp, err := r.DoStream(context.Background(), http.MethodPost, "/initial", nil, StreamOptions{})
-	if resp != nil {
-		_ = resp.Body.Close()
-		t.Fatal("DoStream returned a response after refusing redirect")
-	}
 	if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
 		t.Fatalf("DoStream error = %v, want redirect refusal", err)
 	}
+	if resp == nil || resp.Status != http.StatusTemporaryRedirect {
+		t.Fatalf("DoStream terminal response = %#v, want retained 307 metadata", resp)
+	}
+	_ = resp.Body.Close()
 	if got, want := atomic.LoadInt32(&initialHits), int32(1); got != want {
 		t.Fatalf("initial hits = %d, want %d", got, want)
 	}
 	if got := atomic.LoadInt32(&targetHits); got != 0 {
 		t.Fatalf("target hits = %d, want no redirected mutation", got)
 	}
+}
+
+// TestDoStreamRetainsLastProviderEvidenceAcrossRedirectAndCancelledRetry
+// covers both terminal transitions the binary receipt path depends on: a
+// refused redirect returns the first 3xx metadata without contacting its
+// target, and a cancellation while parking after 503 still unwraps that 503.
+func TestDoStreamRetainsLastProviderEvidenceAcrossRedirectAndCancelledRetry(t *testing.T) {
+	t.Run("redirect", func(t *testing.T) {
+		var targetHits int32
+		mux := http.NewServeMux()
+		mux.HandleFunc("/initial", func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("X-Request-ID", "redirect-provider-receipt")
+			http.Redirect(w, r, "/target", http.StatusTemporaryRedirect)
+		})
+		mux.HandleFunc("/target", func(w http.ResponseWriter, _ *http.Request) {
+			atomic.AddInt32(&targetHits, 1)
+			w.WriteHeader(http.StatusNoContent)
+		})
+		srv := httptest.NewServer(mux)
+		defer srv.Close()
+
+		r := &Requester{BaseURL: srv.URL, DisableRetries: true}
+		resp, err := r.DoStream(context.Background(), http.MethodPost, "/initial", nil, StreamOptions{})
+		if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
+			t.Fatalf("DoStream redirect error = %v, want redirect refusal", err)
+		}
+		if resp == nil || resp.Status != http.StatusTemporaryRedirect || resp.Header.Get("X-Request-ID") != "redirect-provider-receipt" {
+			t.Fatalf("DoStream redirect response = %#v, want retained 307 receipt", resp)
+		}
+		_ = resp.Body.Close()
+		if got := atomic.LoadInt32(&targetHits); got != 0 {
+			t.Fatalf("redirect target hits = %d, want 0", got)
+		}
+	})
+
+	t.Run("retry cancellation", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			w.Header().Set("Retry-After", "60")
+			w.Header().Set("X-Request-ID", "retry-provider-receipt")
+			http.Error(w, "retry later", http.StatusServiceUnavailable)
+		}))
+		defer srv.Close()
+		cancelled := errors.New("retry parking cancelled")
+		r := &Requester{
+			BaseURL:    srv.URL,
+			MaxRetries: 1,
+			Sleep: func(context.Context, time.Duration) error {
+				return cancelled
+			},
+		}
+		resp, err := r.DoStream(context.Background(), http.MethodGet, "/file", nil, StreamOptions{})
+		if resp != nil {
+			_ = resp.Body.Close()
+			t.Fatalf("DoStream retry response = %#v, want no reusable stream body", resp)
+		}
+		if !errors.Is(err, cancelled) {
+			t.Fatalf("DoStream retry error = %v, want cancellation", err)
+		}
+		var provider *HTTPError
+		if !errors.As(err, &provider) || provider.Status != http.StatusServiceUnavailable || provider.Header.Get("X-Request-ID") != "retry-provider-receipt" {
+			t.Fatalf("DoStream retry provider evidence = %#v, want retained 503 receipt", provider)
+		}
+	})
 }
 
 // TestDoStreamDoesNotMutateSharedClient: the redirect policy must be set on a

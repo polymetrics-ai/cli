@@ -179,6 +179,12 @@ jobs:
       - name: Confirm nfpm is on PATH
         run: nfpm --version
 
+      - name: Install RPM metadata verifier
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rpm
+
       - name: Assemble Linux release assets
         run: |
           set -euo pipefail
@@ -187,6 +193,9 @@ jobs:
             --binaries binaries \
             --out dist \
             --targets linux/amd64,linux/arm64
+
+      - name: Verify assembled Linux release assets
+        run: ./scripts/verify-release-assets.sh dist --targets linux/amd64,linux/arm64
 
       - name: Set up QEMU for Linux package tests
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3

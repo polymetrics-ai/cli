@@ -39,6 +39,9 @@ func (d *DatabaseDriver) AcquireManagedTargetLock(ctx context.Context, target da
 	}
 	d.connMu.Lock()
 	defer d.connMu.Unlock()
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return nil, err
+	}
 	if _, err := d.conn.Exec(ctx, "SELECT pg_advisory_lock(hashtextextended($1, 0))", target.Namespace()); err != nil {
 		if contextErr := ctx.Err(); contextErr != nil {
 			return nil, contextErr
@@ -93,6 +96,9 @@ func (d *DatabaseDriver) ObserveManagedTarget(ctx context.Context, target databa
 	}
 
 	var namespaceOID string
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return database.ManagedTargetObservation{}, err
+	}
 	err = d.conn.QueryRow(ctx, "SELECT oid::text FROM pg_catalog.pg_namespace WHERE nspname = $1", target.Namespace()).Scan(&namespaceOID)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return database.ManagedTargetObservation{
@@ -122,6 +128,9 @@ func (d *DatabaseDriver) ObserveManagedTarget(ctx context.Context, target databa
 	observation.NamespaceOwnerRecord = namespaceOwner
 
 	var relationOID string
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return database.ManagedTargetObservation{}, err
+	}
 	err = d.conn.QueryRow(ctx, `
 		SELECT c.oid::text
 		FROM pg_catalog.pg_class AS c
@@ -205,10 +214,14 @@ func (d *DatabaseDriver) CreateManagedTarget(ctx context.Context, plan database.
 	if err != nil || targetDatabase.Kind() != plan.TargetDatabase().Kind() || targetDatabase.Value() != plan.TargetDatabase().Value() {
 		return errPostgresTargetCreateFailed
 	}
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return err
+	}
 	tx, err := d.conn.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return errPostgresTargetCreateFailed
 	}
+	tx = admitPostgresTx(tx)
 	defer func() { _ = tx.Rollback(context.WithoutCancel(ctx)) }()
 	if _, err := tx.Exec(ctx, "SET LOCAL synchronous_commit = 'on'"); err != nil {
 		return errPostgresTargetCreateFailed
@@ -461,6 +474,9 @@ func postgresCreateManagedTargetLayout(ctx context.Context, tx pgx.Tx, plan data
 
 func (d *DatabaseDriver) targetDatabaseIdentity(ctx context.Context) (database.TargetDatabaseIdentity, error) {
 	var oid string
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return database.TargetDatabaseIdentity{}, err
+	}
 	if err := d.conn.QueryRow(ctx, "SELECT oid::text FROM pg_catalog.pg_database WHERE datname = current_database()").Scan(&oid); err != nil {
 		return database.TargetDatabaseIdentity{}, postgresManagedTargetQueryError(ctx, err)
 	}

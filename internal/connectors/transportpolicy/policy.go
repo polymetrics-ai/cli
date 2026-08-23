@@ -20,6 +20,14 @@ func IsDestructive(ctx context.Context) bool {
 }
 
 func HTTPClient(ctx context.Context, client *http.Client) *http.Client {
+	return httpClient(ctx, client, ErrRedirectRefused)
+}
+
+func HTTPClientRetainingRedirectResponse(ctx context.Context, client *http.Client) *http.Client {
+	return httpClient(ctx, client, http.ErrUseLastResponse)
+}
+
+func httpClient(ctx context.Context, client *http.Client, redirectError error) *http.Client {
 	if client == nil {
 		client = http.DefaultClient
 	}
@@ -28,7 +36,7 @@ func HTTPClient(ctx context.Context, client *http.Client) *http.Client {
 	}
 	clone := *client
 	clone.CheckRedirect = func(*http.Request, []*http.Request) error {
-		return ErrRedirectRefused
+		return redirectError
 	}
 	return &clone
 }

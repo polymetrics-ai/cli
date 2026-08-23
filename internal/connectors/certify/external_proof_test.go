@@ -55,6 +55,7 @@ func TestWriteExternalProofFingerprintsObservedExternalTranscript(t *testing.T) 
 		Connector:      "sample",
 		RunID:          "external-proof-3989",
 		BinarySHA256:   strings.Repeat("a", 64),
+		BuildSHA256:    strings.Repeat("b", 64),
 		Command:        []string{"pm", "connectors", "certify", "sample", "--from-env", "token=PM_CERT_TOKEN"},
 		Stdout:         "external child completed\n",
 		Stderr:         "",
@@ -82,6 +83,13 @@ func TestWriteExternalProofFingerprintsObservedExternalTranscript(t *testing.T) 
 	}
 	if !bytes.Contains(raw, []byte("pmcertfp:v1:")) {
 		t.Fatalf("proof has no fingerprint markers: %s", raw)
+	}
+	imported, err := certify.ReadExternalProof(root, proofPath)
+	if err != nil {
+		t.Fatalf("read external proof: %v", err)
+	}
+	if got, want := imported.PMBuildSHA256, input.BuildSHA256; got != want {
+		t.Fatalf("proof build provenance = %q, want %q", got, want)
 	}
 	if !bytes.Contains(raw, []byte(`"command": [`)) || !bytes.Contains(raw, []byte(`"certify"`)) {
 		t.Fatalf("proof did not retain exact safe process argv: %s", raw)
