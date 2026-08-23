@@ -2063,10 +2063,12 @@ func descriptorResponse(t *testing.T, descriptor sourceOperationDescriptor, stat
 }
 
 type sourceImportV3FixtureDocument struct {
-	ID           string
-	Path         string
-	Artifact     []byte
-	PublishedURL string
+	ID            string
+	Path          string
+	Artifact      []byte
+	ArtifactURL   string
+	IdentityQuery bool
+	PublishedURL  string
 }
 
 func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourceImportV3FixtureDocument) []byte {
@@ -2074,18 +2076,26 @@ func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourc
 	sourceDocuments := make([]any, 0, len(documents))
 	for _, document := range documents {
 		artifactDigest := sha256.Sum256(document.Artifact)
+		artifactURL := document.ArtifactURL
+		if artifactURL == "" {
+			artifactURL = "https://fixtures.polymetrics.invalid/" + document.ID + ".openapi.json"
+		}
 		publishedURL := document.PublishedURL
 		if publishedURL == "" {
 			publishedURL = "https://published.polymetrics.invalid/" + document.ID + "?slug=" + document.ID
 		}
+		artifact := map[string]any{
+			"source_url": artifactURL,
+			"sha256":     hex.EncodeToString(artifactDigest[:]),
+			"bytes":      len(document.Artifact),
+			"openapi":    "3.0.3",
+		}
+		if document.IdentityQuery {
+			artifact["identity_query"] = true
+		}
 		sourceDocuments = append(sourceDocuments, map[string]any{
 			"id": document.ID,
-			"artifact": map[string]any{
-				"source_url": "https://fixtures.polymetrics.invalid/" + document.ID + ".openapi.json",
-				"sha256":     hex.EncodeToString(artifactDigest[:]),
-				"bytes":      len(document.Artifact),
-				"openapi":    "3.0.3",
-			},
+			"artifact": artifact,
 			"published_source": map[string]any{
 				"source_url":  publishedURL,
 				"capture_url": "https://fixtures.polymetrics.invalid/" + document.ID + ".capture.json",
@@ -2119,6 +2129,38 @@ func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourc
 		t.Fatalf("encode v3 fixture lock: %v", err)
 	}
 	return raw
+}
+
+func TestSourceImportVersion3FetchesDeclaredIdentityQuery(t *testing.T) {
+	t.Parallel()
+	document := sourceImportV3FixtureDocument{
+		ID:            "identity",
+		Path:          "/identity",
+		Artifact:      []byte(`{"openapi":"3.0.3","info":{"title":"identity","version":"1"},"paths":{"/identity":{"get":{"operationId":"identity/get","responses":{"200":{"description":"ok"}}}}}}`),
+		ArtifactURL:   "https://fixtures.polymetrics.invalid/identity.openapi.json?version=2026-08-01",
+		IdentityQuery: true,
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 identity-query lock: %v", err)
+	}
+	var fetched []string
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		fetched = append(fetched, sourceURL)
+		if sourceURL != document.ArtifactURL {
+			return nil, fmt.Errorf("unexpected source URL %q", sourceURL)
+		}
+		return document.Artifact, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 identity-query lock: %v", err)
+	}
+	if len(result.Operations) != 1 || result.Operations[0].SourceID != "fixture.rest.identity.shared" {
+		t.Fatalf("identity-query import result = %#v", result.Operations)
+	}
+	if !reflect.DeepEqual(fetched, []string{document.ArtifactURL}) {
+		t.Fatalf("fetched URLs = %#v, want declared identity URL", fetched)
+	}
 }
 
 func TestSourceImportVersion3ImportsDocumentOwnedProvenanceAndDuplicateProviderIDs(t *testing.T) {
