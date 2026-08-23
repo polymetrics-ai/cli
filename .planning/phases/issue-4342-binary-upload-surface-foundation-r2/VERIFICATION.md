@@ -18,6 +18,10 @@
 - `GOFLAGS='-p=3' go test -timeout 20m ./internal/cli` was attempted and ran for 484.491s. It initially identified generated-skill drift, fixed by the documented skills generation above, but the package still exits non-zero because its broader runtime tests repeatedly dial unavailable local Redis endpoints `127.0.0.1:1` and `127.0.0.1:2`. No task code is changed to suppress those integration failures.
 - `GOFLAGS='-p=3' go test -timeout 20m ./...` and aggregate `make verify` were deliberately not invoked as single commands: repository guidance says their 550+ connector suite routinely exceeds the agent command window on this memory-bound machine. All individual non-test gates and every changed-package suite ran; CI retains the aggregate suite.
 
+## Main merge recheck
+
+- Merged current `origin/main` cleanly before publication, then reran `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/engine`, `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/commandrunner ./internal/connectors/certify`, and `GOFLAGS='-p=3' go test -timeout 20m ./cmd/connectorgen` — all passed. Regenerated `operation-evidence --write-fixed-100` for the merged declaration fingerprint; its check and the certification subject/matrix/candidates/sweep checks then passed.
+
 ## Constraint
 
 No credentialed provider call is authorized for this task. Tests must use the existing declaration-bound fixture/provider doubles and assert actual byte transfer through that real application path. A missing live candidate is `not_live`, not a passing transfer assertion.
