@@ -1110,6 +1110,22 @@ func interpolateDeclaredHeader(template string, vars Vars) (string, error) {
 	return value, nil
 }
 
+func validateDeclaredHeaderTemplate(template string) error {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		if err := validateDeclaredHeaderExpression(token.expression); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func validateDeclaredHeaderExpression(expr string) error {
 	if paths, ok, err := coalesceRecordPathsExpression(expr); ok || err != nil {
 		if err != nil {

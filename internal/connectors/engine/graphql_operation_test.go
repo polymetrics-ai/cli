@@ -1133,6 +1133,7 @@ func TestOperationDirectWriteCredentialBoundGraphQLApplicationErrorHidesEchoAndK
 			t.Fatalf("Authorization = %q, want bound credential", got)
 		}
 		w.Header().Set("X-Provider-Trace", "credential-bound")
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(responseBody))
 	}))
 	defer server.Close()
@@ -1183,6 +1184,7 @@ func TestOperationDirectWriteBaseURLSecretGraphQLApplicationErrorHidesEchoAndKee
 			t.Fatalf("path = %q, want declared base URL segment", got)
 		}
 		w.Header().Set("X-Provider-Trace", "base-url-secret")
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(responseBody))
 	}))
 	defer server.Close()
@@ -1233,6 +1235,7 @@ func TestOperationDirectWriteBaseURLConfigGraphQLApplicationErrorHidesEchoAndKee
 			t.Fatalf("path = %q, want declared base URL segment", got)
 		}
 		w.Header().Set("X-Provider-Trace", "base-url-config")
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(responseBody))
 	}))
 	defer server.Close()
@@ -1273,13 +1276,14 @@ func TestOperationDirectWriteBaseURLConfigGraphQLApplicationErrorHidesEchoAndKee
 	}
 }
 
-func TestOperationDirectWriteRetainsGraphQLResponseOnRemarshalFailure(t *testing.T) {
+func TestOperationDirectWriteRetainsGraphQLResponseWithoutRemarshaling(t *testing.T) {
 	providerValue := strings.Repeat("<", 80)
 	responseBody := `{"data":{"deleteWidget":{"value":"` + providerValue + `"}}}`
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calls++
 		w.Header().Set("X-Provider-Trace", "remarshal-failure")
+		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(responseBody))
 	}))
 	defer server.Close()
@@ -1301,19 +1305,15 @@ func TestOperationDirectWriteRetainsGraphQLResponseOnRemarshalFailure(t *testing
 	}
 	req.PreviewDigest = preview.Digest
 	req.Approval = approvedEvidenceForPreview(t, preview)
-	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
-	if err == nil {
-		t.Fatal("OperationDirectWrite accepted expanded GraphQL response")
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectWrite = %v, want exact provider envelope", err)
 	}
-	var providerErr *connsdk.HTTPError
-	if !errors.As(err, &providerErr) {
-		t.Fatalf("error = %T %v, want retained provider response", err, err)
-	}
-	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "remarshal-failure" || providerErr.Body != responseBody {
-		t.Fatal("GraphQL remarshal failure did not retain exact provider response")
+	if !result.ResponseReceived || result.Status != http.StatusOK || result.BodyRaw != responseBody || result.GraphQL == nil {
+		t.Fatalf("GraphQL result = %#v, want exact provider envelope and metadata", result)
 	}
 	if calls != 1 {
-		t.Fatalf("GraphQL remarshal failure calls = %d, want 1", calls)
+		t.Fatalf("GraphQL response calls = %d, want 1", calls)
 	}
 }
 

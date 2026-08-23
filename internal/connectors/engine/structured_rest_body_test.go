@@ -636,7 +636,7 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	collision := structuredRESTBodyRequest()
 	collision.Config.Secrets = map[string]string{"api_key": token}
 	collision.Query["api_key"] = "caller-value"
-	if _, err := PreviewOperationDirectWrite(context.Background(), bundle, collision, nil); err == nil || !strings.Contains(err.Error(), "collides") {
+	if _, err := PreviewOperationDirectWrite(context.Background(), bundle, collision, nil); err == nil || !strings.Contains(err.Error(), "cannot be caller-bound") {
 		t.Fatal("caller API key query override did not fail before transport")
 	}
 	if calls != 1 {
@@ -1187,7 +1187,7 @@ func TestOperationDirectWriteHTTPDiagnosticsRespectSensitiveBindings(t *testing.
 				request.Config.Secrets = map[string]string{"api_key": credential}
 			},
 			responseBody:  "provider diagnostic " + credential,
-			wantPrintable: "provider returned HTTP status 400",
+			wantPrintable: "provider returned an HTTP error",
 			forbid:        credential,
 		},
 	} {

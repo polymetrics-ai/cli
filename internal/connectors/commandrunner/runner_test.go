@@ -2602,8 +2602,8 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 	if !ok || len(targets) != 1 {
 		t.Fatalf("targets = %#v, want one declared array entry", command.Record["targets"])
 	}
-	if got, ok := command.Record["price"].(float64); !ok || got != 12.5 {
-		t.Fatalf("price = %#v, want finite number", command.Record["price"])
+	if got, ok := command.Record["price"].(json.Number); !ok || got != json.Number("12.5") {
+		t.Fatalf("price = %#v, want exact finite JSON number", command.Record["price"])
 	}
 
 	baseFlags := map[string][]string{

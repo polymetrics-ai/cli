@@ -790,12 +790,46 @@ func validateOperationDirectWriteStaticBodyMapping(staticBody map[string]any, pa
 		}
 		if index == len(path.steps)-1 {
 			object, array := operationDirectWriteBodyNodeKinds(path.node)
+			if array {
+				if err := validateOperationDirectWriteStaticArrayContainer(next, path.node); err != nil {
+					return err
+				}
+			}
 			if object != array && (object || array) {
 				return nil
 			}
 			return fmt.Errorf("overlaps a fixed rest.body value")
 		}
 		current = next
+	}
+	return nil
+}
+
+// validateOperationDirectWriteStaticArrayContainer rejects the one array
+// shape a caller can never complete. A caller-provided array must include a
+// value for every fixed prefix index; scalar fixed items cannot be merged.
+// When that prefix is shorter than minItems, no declaration-bound caller value
+// can satisfy the array without overwriting a provider-owned value.
+func validateOperationDirectWriteStaticArrayContainer(value any, node map[string]any) error {
+	items, ok := value.([]any)
+	if !ok {
+		return fmt.Errorf("does not match its fixed rest.body structure")
+	}
+	minimum, err := structuredRESTBodyArrayMinItems(node)
+	if err != nil {
+		return err
+	}
+	if len(items) >= minimum {
+		return nil
+	}
+	for _, item := range items {
+		switch item.(type) {
+		case map[string]any, []any:
+			// Container items can merge with an empty caller fragment while
+			// preserving fixed descendants.
+		default:
+			return fmt.Errorf("cannot merge fixed rest.body container to satisfy declared minItems")
+		}
 	}
 	return nil
 }
@@ -1841,6 +1875,36 @@ func bindOperationDirectWriteHTTPMutations(cfg connectors.RuntimeConfig, httpBas
 	}
 }
 
+// bindOperationDirectWriteDeclaredHTTP resolves the declaration-owned headers
+// only after its declaration-owned query and authentication values are bound.
+// This keeps the prepared request, approval digest, and transmitted request on
+// the same closed set of values, including a header that references an
+// auth-owned query parameter.
+func bindOperationDirectWriteDeclaredHTTP(cfg connectors.RuntimeConfig, httpBase HTTPBase, spec *Schema, query map[string]string) (map[string]string, map[string]string, []AuthSpec, []AuthSpec, error) {
+	runtimeHeaders, boundQuery, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, httpBase, nil, query)
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+	declaredHeaders, err := resolveDirectWriteHeadersWithVars(httpBase.Headers, spec, requestVars(cfg, nil, "", boundQuery))
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+	if declaredHeaders == nil {
+		declaredHeaders = make(map[string]string, len(runtimeHeaders))
+	}
+	names := make([]string, 0, len(runtimeHeaders))
+	for name := range runtimeHeaders {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		if err := bindOperationDirectWriteHeader(declaredHeaders, name, runtimeHeaders[name], "declared HTTP mutation"); err != nil {
+			return nil, nil, nil, nil, err
+		}
+	}
+	return declaredHeaders, boundQuery, runtimeAuth, rateLimitAuth, nil
+}
+
 func selectedOperationDirectWriteAuthSpec(cfg connectors.RuntimeConfig, specs []AuthSpec) (AuthSpec, bool, error) {
 	for _, spec := range specs {
 		matched, err := authSpecMatches(spec, authVars(cfg))
@@ -1920,10 +1984,6 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	}
 	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	identity := operationDirectWriteIdentity(b, op, method)
-	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
-	if err != nil {
-		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
-	}
 	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -1939,7 +1999,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err := requireOperationQueryGroups(op, queryMap); err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, queryMap)
+	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteDeclaredHTTP(cfg, b.HTTP, b.Spec, queryMap)
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP mutations: %w", identity, err)
 	}
@@ -2105,11 +2165,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	}
 	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	identity := operationDirectWriteIdentity(b, op, method)
-	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
-	if err != nil {
-		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
-	}
-	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, nil)
+	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteDeclaredHTTP(cfg, b.HTTP, b.Spec, nil)
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP mutations: %w", identity, err)
 	}
@@ -2564,6 +2620,9 @@ func operationDirectWriteQuery(op OperationSpec, requested map[string]string, au
 	for _, name := range parameterNames {
 		parameter := parameters[name]
 		if parameter.Required && strings.TrimSpace(query[name]) == "" {
+			if _, authOwned := authQueryParameters[name]; authOwned {
+				continue
+			}
 			return nil, fmt.Errorf("operation %q requires query parameter %q", op.ID, name)
 		}
 	}

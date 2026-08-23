@@ -2375,7 +2375,11 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		return json.Number(value), nil
 	case "number":
 		if _, ok := parseExactJSONNumber(value); !ok {
-			return nil, fmt.Errorf("invalid --%s %q, want finite number", flag.Name, value)
+			// Numeric flags can be declaration-bound request-body fields. Do
+			// not reflect an invalid caller value into the public error surface:
+			// it may itself be sensitive, while the flag name and expected
+			// domain remain actionable.
+			return nil, fmt.Errorf("invalid --%s, want finite number", flag.Name)
 		}
 		return json.Number(value), nil
 	case "string_array":
