@@ -21,4 +21,19 @@ The failure is retained in `traces/red-run.txt`.
 
 ## Green evidence
 
-Pending implementation.
+The behavioral source-import suite is green after the declaration-bound URL
+policy, cache propagation, and HTTP fetch changes:
+
+```sh
+go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportVersion3FetchesDeclaredIdentityQuery|TestSourceImportVersion3LeavesCaptureQueryAsProvenanceOnly|TestSourceImportVersion3AbsentOrFalseIdentityQueryProjectsIdentically|TestSourceImportVersion3RejectsUnsafeIdentityArtifactQueries|TestSourceImportIdentityQueryRequiresV3RESTDocument|TestSourceImportIdentityQueryRetainsArtifactURLGuards|TestSourceImportCommandContractAndMigrationDocumentation|TestSourceImportRejectsUnsafeArtifactDestinations)$' -count=1
+```
+
+The final serialized package gate also passed with exit status 0:
+
+```sh
+go test -timeout 20m ./cmd/connectorgen -count=1  # 167.414s
+go test -timeout 20m ./internal/cli -count=1     # 697.549s
+go vet ./...
+go build ./cmd/connectorgen
+go build ./cmd/pm
+```
