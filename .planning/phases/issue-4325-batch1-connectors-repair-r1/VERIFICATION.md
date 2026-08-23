@@ -11,6 +11,9 @@
 
 ## Behavioral checks
 
+- [x] Baseline red: source-import fails because batch connector source locks are
+      absent from current main; built binary probes for CircleCI, Sentry, and
+      Vercel return `unknown command` (2026-08-23).
 - [ ] Fresh credential-free source retrieval and exact method/path comparison
       for each non-GitHub batch lock.
 - [ ] Built-binary probes for a representative implemented command in every
