@@ -344,9 +344,26 @@ type sourceContractGap struct {
 	Reason     string `json:"reason"`
 }
 
+// sourceOperationCitation binds a manual declaration disposition to the exact
+// provider operation retained in the locked source descriptor.
+type sourceOperationCitation struct {
+	SourceID string `json:"source_id"`
+	Method   string `json:"method"`
+	Path     string `json:"path"`
+}
+
+// sourceNonExecutableMutationDisposition records a provider mutation that is
+// deliberately retained as a source-traced runtime gap until a complete
+// declaration-owned action exists. It never represents an action or command.
+type sourceNonExecutableMutationDisposition struct {
+	Source sourceOperationCitation `json:"source"`
+	Reason string                  `json:"reason"`
+}
+
 type sourceRuntimeReachability struct {
-	MergeBlocked bool                `json:"merge_blocked"`
-	Gaps         []sourceContractGap `json:"gaps,omitempty"`
+	MergeBlocked          bool                                    `json:"merge_blocked"`
+	Gaps                  []sourceContractGap                     `json:"gaps,omitempty"`
+	NonExecutableMutation *sourceNonExecutableMutationDisposition `json:"non_executable_mutation,omitempty"`
 }
 
 type sourceParameterWireDescriptor struct {
@@ -7705,9 +7722,18 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
 		return 1
 	}
+	mutationDispositions, err := sourceProjectionReadNonExecutableMutationDispositions(filepath.Join(opts.DefsDir, opts.Connector))
+	if err != nil {
+		logln(stderr, "connectorgen source-import: read source-cited mutation dispositions:", err)
+		return 1
+	}
 	sourceProjectionNormalizeNonBlockingReadGaps(&result)
 	sourceProjectionRestoreSourceBoundDirectReadPathFlags(&surface, result)
 	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
+	if err := sourceProjectionApplyNonExecutableMutationDispositions(surface, &result, mutationDispositions); err != nil {
+		logln(stderr, "connectorgen source-import: apply source-cited mutation dispositions:", err)
+		return 1
+	}
 	raw, err := marshalSourceImportResult(result)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: encode descriptors:", err)
