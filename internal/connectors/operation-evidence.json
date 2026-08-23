@@ -108409,8 +108409,8 @@
           "enabled": false
         },
         "binary_upload": {
-          "declared": false,
-          "enabled": false
+          "declared": true,
+          "enabled": true
         },
         "direct_read": {
           "declared": false,
@@ -108425,8 +108425,8 @@
           "enabled": false
         },
         "reverse_etl": {
-          "declared": true,
-          "enabled": true
+          "declared": false,
+          "enabled": false
         }
       },
       "foundations": null,

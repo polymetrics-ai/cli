@@ -354,6 +354,7 @@ func (r *Runner) Run(ctx context.Context) (rep Report, runErr error) {
 		stageGraphQLSchemaConformance,
 		stageDirectReadSweep,
 		stageBinaryDownloadSweep,
+		stageBinaryUploadSweep,
 		stageWritePlanPreview,
 		stageWriteCreate,
 		stageWriteVerify,
@@ -480,6 +481,9 @@ func stageStatus(passed bool, errMsg string) string {
 	}
 	if strings.HasPrefix(errMsg, "unexecutable:") {
 		return "unexecutable"
+	}
+	if strings.HasPrefix(errMsg, "blocked:") {
+		return "blocked"
 	}
 	if strings.HasPrefix(errMsg, "not_live:") {
 		return "not_live"

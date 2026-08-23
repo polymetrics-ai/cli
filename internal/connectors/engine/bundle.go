@@ -653,6 +653,11 @@ type Base64UploadSpec struct {
 	// APIs document the encoded limit — Airtable's attachment cap is 5 MB of
 	// base64, not 5 MB of file.
 	MaxEncodedBytes int64 `json:"max_encoded_bytes,omitempty"`
+
+	// AllowedMediaTypes is required when this action is exposed as a public
+	// binary_upload command. The action-level field stays optional so existing
+	// internal-only base64 actions retain their declared compatibility.
+	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
 }
 
 // BinaryUploadSpec describes a declaration-owned application/octet-stream
@@ -660,8 +665,9 @@ type Base64UploadSpec struct {
 // Preview binds its normalized identity and approved SHA-256; execution
 // reopens, bounds, and hashes the file before sending the exact bytes once.
 type BinaryUploadSpec struct {
-	SourceField string `json:"source_field"`
-	MaxBytes    int64  `json:"max_bytes"`
+	SourceField       string   `json:"source_field"`
+	MaxBytes          int64    `json:"max_bytes"`
+	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
 }
 
 type MultipartPartSpec struct {
@@ -1171,11 +1177,16 @@ type CertificationSpec struct {
 	MutationCandidates   []CertificationMutationCandidate          `json:"mutation_candidates,omitempty"`
 	MutationGeneration   *CertificationMutationCandidateGeneration `json:"mutation_generation,omitempty"`
 	BinaryCandidates     []CertificationCommandCandidate           `json:"binary_candidates,omitempty"`
-	GraphQL              *CertificationGraphQLSpec                 `json:"graphql,omitempty"`
-	WritePairings        []CertificationWritePairing               `json:"write_pairings,omitempty"`
-	WriteInventory       CertificationWriteInventorySpec           `json:"write_inventory,omitempty"`
-	WriteWave            *CertificationWriteWaveSpec               `json:"write_wave,omitempty"`
-	EvidenceImport       *CertificationEvidenceImportSpec          `json:"evidence_import,omitempty"`
+	// BinaryUploadCandidates are intentionally independent from download
+	// candidates. A plan-only refusal never proves byte transfer, provider
+	// response, read-back, or cleanup, so the certify stage records it as
+	// blocked/not_live rather than borrowing the download cell.
+	BinaryUploadCandidates []CertificationCommandCandidate  `json:"binary_upload_candidates,omitempty"`
+	GraphQL                *CertificationGraphQLSpec        `json:"graphql,omitempty"`
+	WritePairings          []CertificationWritePairing      `json:"write_pairings,omitempty"`
+	WriteInventory         CertificationWriteInventorySpec  `json:"write_inventory,omitempty"`
+	WriteWave              *CertificationWriteWaveSpec      `json:"write_wave,omitempty"`
+	EvidenceImport         *CertificationEvidenceImportSpec `json:"evidence_import,omitempty"`
 }
 
 // CertificationEvidenceImportSpec is connector-owned acceptance metadata for
@@ -2257,6 +2268,9 @@ func validateBinaryUploadSpec(i int, action WriteAction) error {
 	if spec.MaxBytes <= 0 || spec.MaxBytes > maxBinaryUploadBytes {
 		return fmt.Errorf("action %d (%q) binary_upload max_bytes must be between 1 and %d", i, action.Name, maxBinaryUploadBytes)
 	}
+	if err := validateOptionalUploadMediaTypes(spec.AllowedMediaTypes); err != nil {
+		return fmt.Errorf("action %d (%q) binary_upload %w", i, action.Name, err)
+	}
 	return nil
 }
 
@@ -2302,6 +2316,27 @@ func validateBase64UploadSpec(i int, action WriteAction) error {
 		needed := int64(base64.StdEncoding.EncodedLen(int(spec.MaxDecodedBytes)))
 		if spec.MaxEncodedBytes < needed {
 			return fmt.Errorf("action %d (%q) base64_upload max_encoded_bytes %d cannot hold max_decoded_bytes %d (needs %d)", i, action.Name, spec.MaxEncodedBytes, spec.MaxDecodedBytes, needed)
+		}
+	}
+	if err := validateOptionalUploadMediaTypes(spec.AllowedMediaTypes); err != nil {
+		return fmt.Errorf("action %d (%q) base64_upload %w", i, action.Name, err)
+	}
+	return nil
+}
+
+// validateOptionalUploadMediaTypes keeps the action declaration honest when
+// it elects a media policy. Public binary-upload promotion separately requires
+// a non-empty list; leaving it absent remains valid for internal-only writes.
+func validateOptionalUploadMediaTypes(mediaTypes []string) error {
+	if mediaTypes == nil {
+		return nil
+	}
+	if len(mediaTypes) == 0 {
+		return fmt.Errorf("allowed_media_types must not be empty; omit it to leave the action unconstrained")
+	}
+	for _, raw := range mediaTypes {
+		if _, _, err := mime.ParseMediaType(raw); err != nil {
+			return fmt.Errorf("allowed_media_types entry %q is not a valid media type: %w", raw, err)
 		}
 	}
 	return nil
@@ -3308,6 +3343,11 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 			return err
 		}
 	}
+	for i, candidate := range certification.BinaryUploadCandidates {
+		if err := validateCertificationCommandCandidate("binary_upload_candidates", i, candidate); err != nil {
+			return err
+		}
+	}
 	if graphql := certification.GraphQL; graphql != nil {
 		if !fs.ValidPath(graphql.SourceLock) || !strings.HasPrefix(graphql.SourceLock, "sources/") {
 			return fmt.Errorf("graphql.source_lock must be a connector-owned file beneath sources/")
@@ -3417,6 +3457,10 @@ func validateCertificationEvidenceImportBinding(binding CertificationEvidenceImp
 			}
 		case "binary_candidates":
 			if len(certification.BinaryCandidates) == 0 {
+				return fmt.Errorf("stage_set %q has no declared candidates", set)
+			}
+		case "binary_upload_candidates":
+			if len(certification.BinaryUploadCandidates) == 0 {
 				return fmt.Errorf("stage_set %q has no declared candidates", set)
 			}
 		case "graphql_live_candidates":

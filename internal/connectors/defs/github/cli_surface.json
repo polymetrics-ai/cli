@@ -44355,12 +44355,12 @@
     {
       "path": "releases assets upload",
       "summary": "Upload one release asset as exact binary bytes.",
-      "intent": "reverse_etl",
+      "intent": "binary_upload",
       "availability": "implemented",
       "write": "releases_release_id_assets2",
       "source_cli_path": "",
       "risk": "medium: uploads one root-confined local file to uploads.github.com without redirects or automatic retries",
-      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "approval": "Binary uploads require plan, preview, approval, execute.",
       "flags": [
         {
           "name": "file-path",

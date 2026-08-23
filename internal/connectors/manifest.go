@@ -68,6 +68,16 @@ type WriteActionSpec struct {
 	AllowsUnchanged bool `json:"allows_unchanged,omitempty"`
 }
 
+// BinaryUploadSource is the declaration-derived boundary a public
+// binary_upload command must satisfy. It intentionally exposes neither a URL
+// nor a request body: the command runner may only bind its named source field
+// to the existing approval-bound write lifecycle.
+type BinaryUploadSource struct {
+	Field             string   `json:"field"`
+	MaxBytes          int64    `json:"max_bytes"`
+	AllowedMediaTypes []string `json:"allowed_media_types"`
+}
+
 // ConfirmationForWriteAction normalizes manifest metadata into the closed
 // runtime policy. DELETE is destructive by construction, so omission cannot
 // downgrade it. An unknown non-empty legacy declaration also fails closed.

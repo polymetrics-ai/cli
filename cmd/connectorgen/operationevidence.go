@@ -931,7 +931,7 @@ func operationEvidenceClassify(row *operationEvidenceRow, commands []engine.CLIC
 
 func operationEvidenceClassForDisposition(value string) string {
 	switch value {
-	case operationEvidenceClassETL, operationEvidenceClassReverseETL, operationEvidenceClassDirectRead, operationEvidenceClassDirectWrite, operationEvidenceClassBinaryDownload:
+	case operationEvidenceClassETL, operationEvidenceClassReverseETL, operationEvidenceClassDirectRead, operationEvidenceClassDirectWrite, operationEvidenceClassBinaryDownload, operationEvidenceClassBinaryUpload:
 		return value
 	case "binary_read":
 		return operationEvidenceClassBinaryDownload
@@ -952,10 +952,9 @@ func operationEvidenceClassForCommand(intent, operation string) string {
 		return operationEvidenceClassDirectRead
 	case "binary_download":
 		return operationEvidenceClassBinaryDownload
+	case "binary_upload":
+		return operationEvidenceClassBinaryUpload
 	case "direct_write":
-		if strings.Contains(operation, "upload") {
-			return operationEvidenceClassBinaryUpload
-		}
 		return operationEvidenceClassDirectWrite
 	default:
 		return ""
@@ -1028,7 +1027,7 @@ func operationEvidenceFixturePaths(root, connector string, source operationEvide
 
 func operationEvidenceHasDirectCommand(commands []engine.CLICommand) bool {
 	for _, command := range commands {
-		if command.Intent == "direct_read" || command.Intent == "direct_write" || command.Intent == "binary_download" {
+		if command.Intent == "direct_read" || command.Intent == "direct_write" || command.Intent == "binary_download" || command.Intent == "binary_upload" {
 			return true
 		}
 	}

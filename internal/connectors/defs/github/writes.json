@@ -9212,7 +9212,10 @@
       "body_type": "binary_upload",
       "binary_upload": {
         "source_field": "file_path",
-        "max_bytes": 67108864
+        "max_bytes": 67108864,
+        "allowed_media_types": [
+          "application/octet-stream"
+        ]
       },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",

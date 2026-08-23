@@ -1523,7 +1523,7 @@ func TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags(t *testi
 func TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions(t *testing.T) {
 	newConnector := func(action engine.WriteAction, flagTarget string) connectors.Connector {
 		return engine.New(engine.Bundle{
-			Name: "widgets",
+			Name:   "widgets",
 			Writes: []engine.WriteAction{action},
 			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
 				Path: "assets upload", Intent: "binary_upload", Availability: "implemented", Write: action.Name,
@@ -1535,17 +1535,43 @@ func TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions(t *testing.T) {
 	binary := engine.WriteAction{
 		Name: "upload_asset", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "binary_upload",
 		RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
-		BinaryUpload: &engine.BinaryUploadSpec{SourceField: "file_path", MaxBytes: 1024},
+		BinaryUpload: &engine.BinaryUploadSpec{SourceField: "file_path", MaxBytes: 1024, AllowedMediaTypes: []string{"application/octet-stream"}},
 	}
 
-	command, err := BuildWriteCommand(context.Background(), newConnector(binary, "record.file_path"), Request{
-		Path: []string{"assets", "upload"}, Flags: map[string][]string{"file": {"release.bin"}},
-	})
-	if err != nil {
-		t.Fatalf("binary_upload BuildWriteCommand: %v", err)
-	}
-	if command.Write != "upload_asset" || command.Record["file_path"] != "release.bin" || !command.ApprovalRequired {
-		t.Fatalf("binary_upload plan = %+v, want approval-bound upload_asset with declared source", command)
+	for _, tt := range []struct {
+		name   string
+		action engine.WriteAction
+	}{
+		{name: "binary bytes", action: binary},
+		{name: "base64 source", action: engine.WriteAction{
+			Name: "upload_base64", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "base64_upload",
+			RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+			Base64Upload: &engine.Base64UploadSpec{Source: "path", SourceField: "file_path", ContentField: "content", MaxDecodedBytes: 1024, AllowedMediaTypes: []string{"application/octet-stream"}},
+		}},
+		{name: "multipart file part", action: engine.WriteAction{
+			Name: "upload_multipart", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "multipart",
+			RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+			Multipart:    &engine.MultipartSpec{MaxBytes: 1024, Parts: []engine.MultipartPartSpec{{Name: "file", Type: "file", Field: "file_path", Required: true, MaxBytes: 1024, AllowedMediaTypes: []string{"application/octet-stream"}}}},
+		}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := newConnector(tt.action, "record.file_path")
+			command, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path: []string{"assets", "upload"}, Flags: map[string][]string{"file": {"release.bin"}},
+			})
+			if err != nil {
+				t.Fatalf("binary_upload BuildWriteCommand: %v", err)
+			}
+			if command.Write != tt.action.Name || command.Record["file_path"] != "release.bin" || !command.ApprovalRequired {
+				t.Fatalf("binary_upload plan = %+v, want approval-bound declared source", command)
+			}
+			if _, err := Run(context.Background(), connector, Request{Path: []string{"assets", "upload"}}, func(connectors.Record) error {
+				t.Fatal("binary_upload bypassed its required plan lifecycle")
+				return nil
+			}); err == nil || !strings.Contains(err.Error(), "plan, preview, approval, execute") {
+				t.Fatalf("Run(binary_upload) error = %v, want plan lifecycle block", err)
+			}
+		})
 	}
 
 	for _, tt := range []struct {

@@ -48175,10 +48175,10 @@
     {
       "summary": "Upload one release asset as exact binary bytes.",
       "path": "releases assets upload",
-      "intent": "reverse_etl",
+      "intent": "binary_upload",
       "availability": "implemented",
-      "operation_kind": "reverse_etl",
-      "op_class": "reverse_etl",
+      "operation_kind": "binary_upload",
+      "op_class": "binary_upload",
       "write_action_kind": "create",
       "flags": [
         {
@@ -48213,7 +48213,7 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --file-path, --name, --release-id",
+      "reason": "owned binary fixture, plan, preview, approval, exact transmitted bytes and digest, provider response, independent read-back, and cleanup are required; required flags: --file-path, --name, --release-id",
       "required_flags": [
         "--file-path",
         "--name",

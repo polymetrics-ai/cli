@@ -6,24 +6,25 @@
 - `scripts/gsd sources discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, `code-review`: resolved to the pinned official command sources.
 - `scripts/gsd prompt discuss-phase issue-4342-binary-upload-surface-foundation-r2`: generated and executed inline as recorded in `CONTEXT.md`.
 - `scripts/gsd prompt plan-phase issue-4342-binary-upload-surface-foundation-r2 --tdd`: generated and executed inline as recorded in `CONTEXT.md`.
+- `scripts/gsd prompt execute-phase issue-4342-binary-upload-surface-foundation-r2`, `verify-work`, and `code-review`: generated and executed inline. The canonical worker contract forbids role spawning in this direct-PR lane and no compatible isolated Pi runtime was available, so the same worker recorded the red/green evidence, verification, and review below as the documented manual-GSD fallback.
 
 ## Implementation slices
 
-1. **Red — closed command admission.** Add commandrunner/unit tests for `binary_upload` to prove it accepts only an implemented declared write whose body is binary, base64, or multipart with a file part; prove no generic dispatch path exists and bad bindings fail before a provider call.
-2. **Green — runtime and public surface.** Add the intent to schema/model/runtime validation, route it through the existing write-command planner, bind GitHub's declared asset action, and update help/manually rendered command flags. Keep source field, cap, digest, media policy, and confirmation declaration-owned.
-3. **Red — truthful certification.** Add report and stage tests distinguishing a transfer from refusal. Assert response evidence, byte count, digest, read-back/cleanup state, and failure on omitted cleanup or altered bytes.
-4. **Green — candidate, stage, and sweep.** Add a dedicated upload candidate contract and stage; report download/upload independently; add the `binary_upload` sweep class and separate operation-evidence classification. Preserve the `file_upload` no-executor guard.
-5. **Refactor and generated projections.** Regenerate/verify connector manual, skill, and website data using project generators. Update conventions only where the newly public intent changes author guidance.
-6. **Verify/review.** Run GSD verify-work generated prompt inline, resolve any gaps with the required gap workflow, then run GSD code-review generated prompt inline and record dispositions.
+1. **Red — closed command admission.** Complete. Commandrunner tests prove raw binary, base64, and multipart required-file actions plan only through their declaration; malformed mappings and JSON actions fail closed.
+2. **Green — runtime and public surface.** Complete. The schema, engine preflight, commandrunner, static validator, GitHub declaration, help, manuals, and website surface route the command into the existing approval-bound lifecycle.
+3. **Red — truthful certification.** Complete. The stage test drives the actual in-process harness and proves a rejected command records a non-passing `blocked` result. A plan without a live transfer is `not_live`, never `pass`.
+4. **Green — candidate, stage, and sweep.** Complete. Download remains backward-compatible at `binary`; upload is independent at `binary_upload`, with separate candidate/sweep/evidence classes. `file_upload` remains declarable but non-executable.
+5. **Refactor and generated projections.** Complete. Regenerated the GitHub manual/skills/website, certification candidates/sweep, operation evidence fixed-100 projection, and current certification subject.
+6. **Verify/review.** Complete. No review finding remained after manual source/diff review; the only lint finding (a conditional that staticcheck required to be a tagged switch) was corrected and its full generator suite rerun.
 
 ## CLI help/manual/website parity
 
-- [ ] `pm github releases assets upload --help` lists the declared upload source flag and approval behavior.
-- [ ] The same command's help resolves without a credential or project when invoked with `--help`.
-- [ ] Existing bare connector namespace behavior remains unchanged and tests remain green.
-- [ ] `docs/connectors/github/{MANUAL,SKILL}.md` and website generated CLI surface use `binary_upload` and its closed safety rule.
-- [ ] No `docs/cli` generic upload command is added because no generic command exists.
-- [ ] Generated documentation and website drift checks are run.
+- [x] `pm github releases assets upload --help` lists the declared upload source flag and approval behavior.
+- [x] The same command's help resolves without a credential or project when invoked with `--help`.
+- [x] Existing bare connector namespace behavior remains unchanged (`pm github` renders contextual group help at exit 0).
+- [x] `docs/connectors/github/{MANUAL,SKILL}.md` and website generated CLI surface use `binary_upload` and its closed safety rule.
+- [x] No `docs/cli` generic upload command is added because no generic command exists.
+- [x] Generated documentation and website drift checks are run.
 
 ## Verification plan
 

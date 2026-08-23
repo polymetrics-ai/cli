@@ -2,18 +2,21 @@
 
 ## Planned gates
 
-- [ ] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/engine -run 'BinaryUpload|Write' -count=1`
-- [ ] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/commandrunner -run 'BinaryUpload|WriteCommand' -count=1`
-- [ ] `GOFLAGS='-p=3' go test -timeout 20m ./internal/cli -run 'BinaryUpload|Connector.*Upload' -count=1`
-- [ ] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/certify -run 'Binary.*Upload|Report' -count=1`
-- [ ] `GOFLAGS='-p=3' go test -timeout 20m ./cmd/connectorgen -run 'Certification.*Upload|OperationEvidence' -count=1`
-- [ ] `GOFLAGS='-p=3' go run ./cmd/connectorgen validate internal/connectors/defs`
-- [ ] `GOFLAGS='-p=3' go run ./cmd/connectorgen surface-sync --check`
-- [ ] `GOFLAGS='-p=3' go run ./cmd/connectorgen operation-evidence --check`
-- [ ] Generator/docs parity checks located from `make verify` and updated artifacts.
-- [ ] `GOFLAGS='-p=3' go vet ./...`
-- [ ] `GOFLAGS='-p=3' go build ./cmd/pm`
-- [ ] GSD `verify-work` and `code-review` prompts generated and executed inline with dispositions recorded.
+- [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/engine` — pass (11.533s).
+- [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/commandrunner` — pass (39.064s).
+- [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/certify` — pass (14.284s).
+- [x] `GOFLAGS='-p=3' go test -timeout 20m ./cmd/connectorgen` — pass after the final lint refactor (227.914s).
+- [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/cli -run '^TestSkillsGenerateMatchesTrackedSkills$' -count=1` — pass (7.631s) after `GOFLAGS='-p=3' go run ./cmd/pm skills generate --dir docs/skills` regenerated the affected GitHub skill.
+- [x] `GOFLAGS='-p=3' go run ./cmd/connectorgen validate internal/connectors/defs --json` — 552 connectors, 0 findings.
+- [x] `GOFLAGS='-p=3' go run ./cmd/connectorgen surface-sync --check`, `operation-evidence --check`, `certification-candidates --connector github --check`, and `certification-sweep --connector github --check` — all current.
+- [x] Generator/docs parity checks from `make verify`: `make docs-check`, `make connectorgen-certification-subject`, `make connectorgen-certification-matrix`, `make connectorgen-certification-candidates`, `make connectorgen-certification-sweep`, `make github-parity-artifacts-check`, `make connector-boundary`, `make connector-canon-check`, and `make release-workflow-check` — pass.
+- [x] `GOFLAGS='-p=3' go vet ./...`, `GOFLAGS='-p=3' go build ./cmd/pm`, `make tidy-check`, `make lint`, `make smoke-no-build`, and `make agent-contract-check` — pass.
+- [x] GSD `verify-work` and `code-review` prompts generated and executed inline; no gap phase was needed. Manual review checked declaration-only source admission, non-executable `file_upload`, evidence classification by intent (not operation name), no direct upload dispatch, and the no-false-pass certification behavior.
+
+## Non-green whole-suite result
+
+- `GOFLAGS='-p=3' go test -timeout 20m ./internal/cli` was attempted and ran for 484.491s. It initially identified generated-skill drift, fixed by the documented skills generation above, but the package still exits non-zero because its broader runtime tests repeatedly dial unavailable local Redis endpoints `127.0.0.1:1` and `127.0.0.1:2`. No task code is changed to suppress those integration failures.
+- `GOFLAGS='-p=3' go test -timeout 20m ./...` and aggregate `make verify` were deliberately not invoked as single commands: repository guidance says their 550+ connector suite routinely exceeds the agent command window on this memory-bound machine. All individual non-test gates and every changed-package suite ran; CI retains the aggregate suite.
 
 ## Constraint
 

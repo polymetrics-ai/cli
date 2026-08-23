@@ -1,6 +1,7 @@
 package commandrunner
 
 import (
+	"context"
 	"strings"
 	"testing"
 
@@ -22,6 +23,7 @@ import (
 const (
 	githubSafeWriteApproval        = "Reverse ETL writes require plan, approval, execute; preview is optional."
 	githubDestructiveWriteApproval = "Reverse ETL writes require plan, preview, approval, execute."
+	githubBinaryUploadApproval     = "Binary uploads require plan, preview, approval, execute."
 )
 
 func githubCommandSurface(t *testing.T) (connectors.Connector, []connectors.CommandSurfaceCommand) {
@@ -67,6 +69,52 @@ func TestGitHubApprovalTextMatchesTheEnforcedWriteContract(t *testing.T) {
 	}
 	if safe == 0 || destructive == 0 {
 		t.Fatalf("github reverse_etl commands: safe=%d destructive=%d; both classes must exist for this test to mean anything", safe, destructive)
+	}
+}
+
+// This is the installed GitHub bundle's public upload path, rather than a
+// hand-built test connector. It proves the hand-rolled command surface maps
+// only its declared source field into the existing approval-bound write plan,
+// and that Run cannot bypass that plan to send an arbitrary body.
+func TestGitHubReleaseAssetUploadBuildsBoundBinaryPlan(t *testing.T) {
+	connector, commands := githubCommandSurface(t)
+	var surface connectors.CommandSurfaceCommand
+	for _, command := range commands {
+		if command.Path == "releases assets upload" {
+			surface = command
+			break
+		}
+	}
+	if surface.Path == "" {
+		t.Fatal("github release asset upload command is not declared")
+	}
+	if surface.Intent != "binary_upload" || surface.Availability != "implemented" || surface.Write != "releases_release_id_assets2" {
+		t.Fatalf("github release asset upload surface = %+v, want an implemented declared binary-upload write", surface)
+	}
+	if surface.Approval != githubBinaryUploadApproval {
+		t.Fatalf("github release asset upload approval = %q, want %q", surface.Approval, githubBinaryUploadApproval)
+	}
+
+	request := Request{
+		Path: strings.Fields(surface.Path),
+		Flags: map[string][]string{
+			"file-path":  {"release.tgz"},
+			"name":       {"release.tgz"},
+			"release-id": {"42"},
+		},
+	}
+	plan, err := BuildWriteCommand(context.Background(), connector, request)
+	if err != nil {
+		t.Fatalf("BuildWriteCommand(github release asset upload): %v", err)
+	}
+	if plan.Write != surface.Write || !plan.ApprovalRequired || plan.Record["file_path"] != "release.tgz" {
+		t.Fatalf("binary upload plan = %+v, want declared source in an approval-bound plan", plan)
+	}
+	if _, err := Run(context.Background(), connector, request, func(connectors.Record) error {
+		t.Fatal("github release asset upload bypassed plan, preview, approval, execute")
+		return nil
+	}); err == nil || !strings.Contains(err.Error(), "plan, preview, approval, execute") {
+		t.Fatalf("Run(github release asset upload) error = %v, want lifecycle block", err)
 	}
 }
 

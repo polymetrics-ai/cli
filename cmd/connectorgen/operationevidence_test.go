@@ -12,6 +12,15 @@ import (
 
 const githubIssuesSourceID = "github.rest.issues/list-for-repo"
 
+func TestOperationEvidenceClassForCommandUsesIntentNotOperationName(t *testing.T) {
+	if got := operationEvidenceClassForCommand("binary_upload", "releases_upload_asset"); got != operationEvidenceClassBinaryUpload {
+		t.Fatalf("binary_upload classification = %q, want %q", got, operationEvidenceClassBinaryUpload)
+	}
+	if got := operationEvidenceClassForCommand("direct_write", "releases_upload_asset"); got != operationEvidenceClassDirectWrite {
+		t.Fatalf("direct_write classification = %q, want %q; an operation name must not promote an ordinary write", got, operationEvidenceClassDirectWrite)
+	}
+}
+
 func TestOperationEvidenceProjectsGitHubAcrossEveryEvidenceSurface(t *testing.T) {
 	root := operationEvidenceWorkspace(t)
 	artifact, _, stderr := runOperationEvidenceForTest(t, root, "")
