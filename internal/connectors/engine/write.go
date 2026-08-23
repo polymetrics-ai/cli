@@ -559,6 +559,10 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	if err != nil {
 		return nil, err
 	}
+	baseURL, err := resolveWriteActionRoute(b, cfg, action)
+	if err != nil {
+		return nil, err
+	}
 	requesterForAction, err := rt.requesterFor(method, action.Path)
 	if err != nil {
 		return nil, err
@@ -567,9 +571,7 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	if err != nil {
 		return nil, err
 	}
-	if action.BaseURL != "" {
-		requester.BaseURL = action.BaseURL
-	}
+	requester.BaseURL = baseURL
 
 	switch bodyTypeOf(action) {
 	case "form":

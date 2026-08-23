@@ -114,14 +114,30 @@ type RiskSpec struct {
 // HTTPBase is streams.json's "base" section: shared HTTP configuration for
 // every stream in the bundle.
 type HTTPBase struct {
-	URL        string            `json:"url"`
-	UserAgent  string            `json:"user_agent,omitempty"`
-	Headers    map[string]string `json:"headers,omitempty"`
-	Auth       []AuthSpec        `json:"auth,omitempty"`
-	Pagination *PaginationSpec   `json:"pagination,omitempty"`
-	Check      *RequestSpec      `json:"check,omitempty"`
-	ErrorMap   []ErrorRule       `json:"error_map,omitempty"`
-	RateLimit  *RateLimitSpec    `json:"rate_limit,omitempty"`
+	URL string `json:"url"`
+	// Routes are named, connector-definition-owned alternate HTTP origins.
+	// An executor may select one only by its declaration's Route field; callers
+	// never supply either a route name or URL. Versioned routes keep the public
+	// operation path source-locked while resolving against the provider origin.
+	Routes     []OperationRouteSpec `json:"routes,omitempty"`
+	UserAgent  string               `json:"user_agent,omitempty"`
+	Headers    map[string]string    `json:"headers,omitempty"`
+	Auth       []AuthSpec           `json:"auth,omitempty"`
+	Pagination *PaginationSpec      `json:"pagination,omitempty"`
+	Check      *RequestSpec         `json:"check,omitempty"`
+	ErrorMap   []ErrorRule          `json:"error_map,omitempty"`
+	RateLimit  *RateLimitSpec       `json:"rate_limit,omitempty"`
+}
+
+// OperationRouteSpec is one named, declaration-owned provider route. BaseURL
+// is either a fixed HTTP origin or the established connector base template;
+// Version is a source-traced path prefix which must match the selected
+// operation's declared path. The route remains closed because neither field is
+// accepted from a command or record.
+type OperationRouteSpec struct {
+	Name    string `json:"name"`
+	BaseURL string `json:"base_url"`
+	Version string `json:"version,omitempty"`
 }
 
 // RequestSpec is a method+path(+query) request descriptor (used by "check").
@@ -279,6 +295,7 @@ type RateLimitSpec struct {
 // StreamSpec is one entry in streams.json's "streams" array.
 type StreamSpec struct {
 	Name           string                `json:"name"`
+	Route          string                `json:"route,omitempty"`
 	Method         string                `json:"method,omitempty"` // default GET
 	Path           string                `json:"path"`
 	Query          map[string]QueryParam `json:"query,omitempty"`
@@ -460,7 +477,11 @@ type WriteAction struct {
 	// It is an absolute origin (no path/query/userinfo), never caller input. This
 	// covers APIs such as GitHub release uploads whose mutation endpoint is
 	// intentionally hosted away from the connector's ordinary REST origin.
-	BaseURL    string   `json:"base_url,omitempty"`
+	BaseURL string `json:"base_url,omitempty"`
+	// Route selects one HTTPBase.Routes declaration. It is the preferred
+	// declaration-owned routing path for reverse ETL and binary uploads;
+	// BaseURL remains only for existing legacy write declarations.
+	Route      string   `json:"route,omitempty"`
 	PathFields []string `json:"path_fields,omitempty"`
 	// Query is the OPTIONAL write-action query-parameter map. It uses the
 	// same QueryParam string-or-object dialect as stream and check queries;
@@ -787,19 +808,23 @@ type OperationSpec struct {
 	// It is a pointer because false is restrictive while the omitted default is
 	// permissive; see WriteAction.Batchable for the matching write-action
 	// contract. Read it through IsBatchable, never directly.
-	Batchable       *bool                   `json:"batchable,omitempty"`
-	SecretSensitive bool                    `json:"secret_sensitive,omitempty"`
-	SensitivePolicy *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
-	AuditEvent      string                  `json:"audit_event,omitempty"`
-	REST            *RESTOperationSpec      `json:"rest,omitempty"`
-	GraphQL         *GraphQLOperationSpec   `json:"graphql,omitempty"`
-	XML             *XMLOperationSpec       `json:"xml,omitempty"`
-	Binary          *BinaryOperationSpec    `json:"binary,omitempty"`
-	File            *FileOperationSpec      `json:"file,omitempty"`
-	LocalGit        *LocalGitOperationSpec  `json:"local_git,omitempty"`
-	LocalFile       *LocalFileOperationSpec `json:"local_file,omitempty"`
-	Browser         *BrowserOperationSpec   `json:"browser,omitempty"`
-	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
+	Batchable       *bool                `json:"batchable,omitempty"`
+	SecretSensitive bool                 `json:"secret_sensitive,omitempty"`
+	SensitivePolicy *SensitivePolicySpec `json:"sensitive_policy,omitempty"`
+	AuditEvent      string               `json:"audit_event,omitempty"`
+	// Route selects the connector-owned HTTPBase.Routes declaration used by
+	// direct read/write and binary operations. Empty selects the bundle's
+	// ordinary declared base URL.
+	Route     string                  `json:"route,omitempty"`
+	REST      *RESTOperationSpec      `json:"rest,omitempty"`
+	GraphQL   *GraphQLOperationSpec   `json:"graphql,omitempty"`
+	XML       *XMLOperationSpec       `json:"xml,omitempty"`
+	Binary    *BinaryOperationSpec    `json:"binary,omitempty"`
+	File      *FileOperationSpec      `json:"file,omitempty"`
+	LocalGit  *LocalGitOperationSpec  `json:"local_git,omitempty"`
+	LocalFile *LocalFileOperationSpec `json:"local_file,omitempty"`
+	Browser   *BrowserOperationSpec   `json:"browser,omitempty"`
+	Composite *CompositeOperationSpec `json:"composite,omitempty"`
 }
 
 // IsBatchable reports whether the operation may be placed in a bulk plan.
@@ -1648,6 +1673,9 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	operations, rawOperations, err := loadOperations(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
+	}
+	if err := validateOperationRoutes(Bundle{Name: dirName, HTTP: httpBase}, streams, writes, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: declaration routes: %w", dirName, err)
 	}
 	if err := validateOperationRuntimeHeaderIsolation(httpBase, operations); err != nil {
 		return Bundle{}, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)

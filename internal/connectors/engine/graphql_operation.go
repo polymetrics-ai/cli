@@ -658,7 +658,11 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
 	defer cancel()
 	cfg := materializeConfigDefaults(b, req.Config)
-	rt, err := newRuntime(ctx, b, cfg, h)
+	baseURL, err := resolveOperationRoute(b, cfg, op.Route, op.ID, op.GraphQL.Path, op.SourceURL)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, op.GraphQL.Path, op.SourceURL)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -666,7 +670,7 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, baseURL)
 	response, err := requester.DoLimited(ctx, http.MethodPost, requestPath, nil, payload, maxBytes)
 	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: http.MethodPost, Path: op.GraphQL.Path, OutputSecretFields: operationDirectReadOutputSecretFields(op)}
 	readResult.Receipt = providerResponseReceiptFromResponse(b, response, cfg.Secrets)

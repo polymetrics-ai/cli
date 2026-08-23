@@ -270,9 +270,9 @@ func preparedResponseBindingURL(action WriteAction, binding *PreparedWriteRespon
 
 func prepareDeclarativeRequest(b Bundle, action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (PreparedRequest, error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(record)}
-	baseURL, err := Interpolate(writeActionBaseURL(b, action), vars)
+	baseURL, err := resolveWriteActionRoute(b, cfg, action)
 	if err != nil {
-		return PreparedRequest{}, fmt.Errorf("engine: resolve write base url: %w", err)
+		return PreparedRequest{}, fmt.Errorf("engine: resolve write route: %w", err)
 	}
 	path, err := InterpolatePath(action.Path, vars)
 	if err != nil {

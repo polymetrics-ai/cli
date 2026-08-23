@@ -17,6 +17,7 @@
           "method": { "type": "string" },
           "path": { "type": "string" },
           "base_url": { "type": "string", "pattern": "^https?://[^/?#]+/?$" },
+          "route": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
           "path_fields": { "type": "array", "items": { "type": "string" } },
           "query": { "type": "object" },
           "redact_fields": { "type": "array", "items": { "type": "string" } },
