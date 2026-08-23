@@ -79,9 +79,19 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 
 	req.Config = materializeConfigDefaults(b, req.Config)
 
-	rt, err := newRuntime(ctx, b, req.Config, h)
+	routeBaseURL, err := resolveStreamRoute(b, req.Config, stream)
 	if err != nil {
 		return err
+	}
+	rt, err := newRuntimeForOperationRoute(ctx, b, req.Config, h, stream.Route, stream.Name, stream.Path, "")
+	if err != nil {
+		return err
+	}
+	// routeBaseURL is resolved before runtime construction so an unresolved
+	// declaration fails before auth hooks or provider I/O. The runtime owns the
+	// same base; retain the value as a cheap invariant against future drift.
+	if rt.Requester.BaseURL != routeBaseURL {
+		return fmt.Errorf("engine: resolved stream route base changed before execution")
 	}
 	if sleeper != nil {
 		rt.Requester.Sleep = sleeper

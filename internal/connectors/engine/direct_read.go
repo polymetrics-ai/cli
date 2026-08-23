@@ -121,11 +121,15 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 
 	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
 	defer cancel()
-	rt, err := newRuntime(ctx, b, cfg, h)
+	baseURL, err := resolveOperationRoute(b, cfg, op.Route, op.ID, op.REST.Path, op.SourceURL)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, op.REST.Path, op.SourceURL)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL)
 	decoded, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
 		method:          method,
 		declaredPat:     op.REST.Path,
@@ -399,6 +403,9 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 		return OperationSpec{}, err
 	}
 	if op.Kind == "graphql_query" {
+		if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.GraphQL.Path, op.SourceURL); err != nil {
+			return OperationSpec{}, err
+		}
 		if err := validateGraphQLOperationDirectContract(op, "query"); err != nil {
 			return OperationSpec{}, err
 		}
@@ -415,6 +422,9 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 	// bounded read. What differs is its stricter bundle-load contract.
 	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
 		return OperationSpec{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
+	}
+	if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.REST.Path, op.SourceURL); err != nil {
+		return OperationSpec{}, err
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 	if method != http.MethodGet && method != http.MethodPost {
