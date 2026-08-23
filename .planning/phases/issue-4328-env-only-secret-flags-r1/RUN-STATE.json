@@ -1,0 +1,18 @@
+{
+  "issue": 4328,
+  "phase": "issue-4328-env-only-secret-flags-r1",
+  "status": "verification_green",
+  "base_branch": "main",
+  "working_branch": "fm/cli-env-only-secret-flag-generalization-r1",
+  "delivery_mode": "direct_pr",
+  "manual_gsd_fallback": true,
+  "production_scope": [
+    "cmd/connectorgen/validate.go",
+    "cmd/connectorgen/sourceprojection.go",
+    "cmd/connectorgen/*_test.go"
+  ],
+  "forbidden_paths": [
+    "cmd/connectorgen/sourceimport.go",
+    "internal/connectors/defs/github/rate_limits.json"
+  ]
+}
