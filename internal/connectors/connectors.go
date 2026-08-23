@@ -522,8 +522,9 @@ type DirectReadResult struct {
 	// representation and every ordinary response header for audit/retry work.
 	Receipt *ProviderResponseReceipt `json:"receipt,omitempty"`
 	// Headers contains only response headers explicitly admitted by the exact
-	// operation response contract. A redacted header remains present with its
-	// explicit marker; arbitrary provider metadata is never an output channel.
+	// operation response contract. Values are preserved verbatim, even when they
+	// equal configured credential bytes; declared output secret fields are
+	// sanitized separately. Arbitrary provider metadata is never an output channel.
 	Headers map[string]OperationResponseHeader `json:"headers,omitempty"`
 	// GraphQL is present only for a declared fixed-document GraphQL operation.
 	// It deliberately exposes a small, redacted response summary rather than
@@ -556,8 +557,9 @@ type ProviderResponseReceipt struct {
 }
 
 // OperationResponseHeader is one declared provider response header. Values are
-// complete when ordinary; Redacted preserves presence for credential or
-// transport-secret headers without exposing their values.
+// preserved verbatim, including values equal to configured credentials.
+// Redacted and Masked are compatibility markers only; provider headers are
+// sanitized only through an explicit declared output-secret field boundary.
 type OperationResponseHeader struct {
 	Values   []string `json:"values,omitempty"`
 	Redacted bool     `json:"redacted,omitempty"`

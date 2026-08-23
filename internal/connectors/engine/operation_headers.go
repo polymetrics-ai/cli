@@ -327,8 +327,9 @@ func operationResponseSpec(op OperationSpec) *OperationResponseSpec {
 // operationResponseHeaders materializes the declaration's bounded metadata
 // projection. It intentionally iterates the declaration, not the provider
 // map, so an endpoint cannot turn response metadata into an arbitrary output
-// channel. Each admitted ordinary value is preserved exactly and a known
-// credential/transport value is represented by an explicit redaction marker.
+// channel. Each admitted provider header value is preserved verbatim, even
+// when it equals configured credential bytes. Declared output secret fields
+// are sanitized at the public projection boundary.
 func operationResponseHeaders(_ Bundle, op OperationSpec, headers http.Header) (map[string]connectors.OperationResponseHeader, error) {
 	if err := validateOperationResponseContract(op); err != nil {
 		return nil, fmt.Errorf("operation %q response headers: %w", op.ID, err)
