@@ -42,8 +42,15 @@ export type ConnectorCliFlag = {
   mapsTo: string;
   format?: string;
   allowEmpty?: boolean;
+	allowBareString?: boolean;
   minimum?: number;
+	maximum?: number;
   required?: boolean;
+	repeatable?: boolean;
+	envOnly?: boolean;
+	maxItems?: number;
+	minItems?: number;
+	maxBytes?: number;
 };
 
 export type ConnectorCliConstraint = {

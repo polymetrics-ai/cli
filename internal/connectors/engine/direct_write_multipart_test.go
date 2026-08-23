@@ -417,8 +417,12 @@ func TestOperationDirectWriteMultipartNeverRetriesOrReplaysRedirect(t *testing.T
 			}
 			req.PreviewDigest = preview.Digest
 			req.Approval = approvedEvidenceForPreview(t, preview)
-			if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), "provider error content") {
-				t.Fatalf("OperationDirectWrite status %d error = %v, want complete provider error", status, err)
+			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+			if err == nil || strings.Contains(err.Error(), "provider error content") {
+				t.Fatalf("OperationDirectWrite status %d error = %v, want secret-safe diagnostic", status, err)
+			}
+			if !result.ResponseReceived || result.Status != status || result.BodyRaw != `{"error":"provider error content"}` {
+				t.Fatalf("OperationDirectWrite status %d result = %#v, want complete provider response", status, result)
 			}
 			if calls != 1 {
 				t.Fatalf("status %d calls = %d, want 1", status, calls)

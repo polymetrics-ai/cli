@@ -23,6 +23,17 @@ func cloneStringMap(in map[string]string) map[string]string {
 	return out
 }
 
+func cloneStringSliceMap(in map[string][]string) map[string][]string {
+	if len(in) == 0 {
+		return nil
+	}
+	out := make(map[string][]string, len(in))
+	for key, values := range in {
+		out[key] = append([]string(nil), values...)
+	}
+	return out
+}
+
 func cloneRecord(in connectors.Record) connectors.Record {
 	out := make(connectors.Record, len(in))
 	for k, v := range in {
@@ -217,24 +228,52 @@ func asRecordMap(value any) (map[string]any, bool) {
 // namespaces that collide by name in at least one bundle, so a fallback could
 // withhold an unrelated action's fields. An operation whose metadata cannot be
 // resolved is an error, never an empty withhold set.
-func connectorCommandRedactFields(connector connectors.Connector, operation, actionName string) ([]string, error) {
+func connectorCommandRedactFields(connector connectors.Connector, operation, actionName string) ([]string, bool, error) {
 	operation = strings.TrimSpace(operation)
 	prefix := connectorCommandRecordPrefix(operation)
 	if operation == "" {
-		return recordRelativeFields(reversePlanRedactFields(connector, actionName), prefix), nil
+		return recordRelativeFields(reversePlanRedactFields(connector, actionName), prefix), false, nil
 	}
+	metadata, err := connectorCommandDirectWriteMetadata(connector, operation)
+	if err != nil {
+		return nil, false, err
+	}
+	return recordRelativeFields(metadata.RedactFields, prefix), metadata.StructuredBody, nil
+}
+
+func connectorCommandDirectWriteMetadata(connector connectors.Connector, operation string) (connectors.OperationDirectWriteMetadata, error) {
 	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
-		return nil, fmt.Errorf("connector %q does not expose direct-write metadata for operation %q", connector.Name(), operation)
+		return connectors.OperationDirectWriteMetadata{}, fmt.Errorf("connector %q does not expose direct-write metadata for operation %q", connector.Name(), operation)
 	}
 	metadata, err := provider.OperationDirectWriteMetadata(operation)
 	if err != nil {
-		return nil, err
+		return connectors.OperationDirectWriteMetadata{}, err
 	}
 	if metadata.Operation != operation {
-		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
+		return connectors.OperationDirectWriteMetadata{}, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
 	}
-	return recordRelativeFields(metadata.RedactFields, prefix), nil
+	return metadata, nil
+}
+
+func connectorCommandPlanRecords(connector connectors.Connector, operation string, structuredBody bool, record, redacted connectors.Record, fields []string) (connectors.Record, []string, []connectors.Record, error) {
+	if !structuredBody {
+		withheld, withheldFields := withholdRecordFields(record, fields)
+		return withheld, withheldFields, RedactReversePlanRecords([]connectors.Record{cloneRecord(redacted)}, fields), nil
+	}
+	transformer, ok := connector.(connectors.OperationDirectWriteBodyPlanTransformer)
+	if !ok {
+		return nil, nil, nil, fmt.Errorf("connector %q does not expose direct-write body plan transformation", connector.Name())
+	}
+	withheld, withheldFields, err := transformer.WithholdOperationDirectWriteBodyFields(operation, map[string]any(record), fields)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	sample, err := transformer.RedactOperationDirectWriteBodyFields(operation, map[string]any(redacted), fields)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	return connectors.Record(withheld), withheldFields, []connectors.Record{connectors.Record(sample)}, nil
 }
 
 // connectorCommandRecordPrefix is the field-path prefix the declaring surface
@@ -341,7 +380,7 @@ func connectorCommandPlanHash(planName, connector, credential string, config map
 // connector-command plan hash. The path/query/body fields are all part of the
 // approved request, so they must be bound before a preview can mint a
 // single-use approval token.
-func operationConnectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, operation string, pathParams, query map[string]string, body connectors.Record, payloadIdentity []PayloadIdentity) (string, error) {
+func operationConnectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, operation string, pathParams, query, headers map[string]string, headerValues map[string][]string, body connectors.Record, payloadIdentity []PayloadIdentity) (string, error) {
 	payload := map[string]any{
 		"name":         planName,
 		"connector":    connector,
@@ -352,8 +391,12 @@ func operationConnectorCommandPlanHash(planName, connector, credential string, c
 		"operation":    operation,
 		"path_params":  cloneStringMap(pathParams),
 		"query":        cloneStringMap(query),
+		"headers":      cloneStringMap(headers),
 		"record_count": 1,
 		"body":         cloneRecord(body),
+	}
+	if len(headerValues) > 0 {
+		payload["header_values"] = cloneStringSliceMap(headerValues)
 	}
 	if len(payloadIdentity) > 0 {
 		payload["payload_identity"] = append([]PayloadIdentity(nil), payloadIdentity...)
@@ -409,7 +452,7 @@ func payloadIdentitiesForConnectorCommand(projectDir string, connector connector
 		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
 	}
 	if metadata.PayloadFileFields != nil {
-		return payloadIdentitiesForDeclaredFields(projectDir, []connectors.Record{record}, metadata.PayloadFileFields)
+		return payloadIdentitiesForDeclaredFieldsWithCaps(projectDir, []connectors.Record{record}, metadata.PayloadFileFields, metadata.PayloadFileMaxBytes)
 	}
 	return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
 }
@@ -418,6 +461,10 @@ func payloadIdentitiesForConnectorCommand(projectDir string, connector connector
 // paths. It never guesses from arbitrary user fields, so multipart support
 // cannot broaden the accepted local-file input surface.
 func payloadIdentitiesForDeclaredFields(projectDir string, records []connectors.Record, declaredFields []string) ([]PayloadIdentity, error) {
+	return payloadIdentitiesForDeclaredFieldsWithCaps(projectDir, records, declaredFields, nil)
+}
+
+func payloadIdentitiesForDeclaredFieldsWithCaps(projectDir string, records []connectors.Record, declaredFields []string, maxBytes map[string]int64) ([]PayloadIdentity, error) {
 	var identities []PayloadIdentity
 	fields := fieldSetSlice(stringSliceSet(declaredFields))
 	for i, record := range records {
@@ -427,7 +474,15 @@ func payloadIdentitiesForDeclaredFields(projectDir string, records []connectors.
 			if !present || !ok || strings.TrimSpace(raw) == "" {
 				continue
 			}
-			identity, err := payloadIdentityForPath(projectDir, i, field, raw)
+			limit := int64(0)
+			if maxBytes != nil {
+				var ok bool
+				limit, ok = maxBytes[field]
+				if !ok || limit <= 0 {
+					return nil, fmt.Errorf("payload identity for %s: missing declared byte cap", field)
+				}
+			}
+			identity, err := payloadIdentityForPathWithCap(projectDir, i, field, raw, limit)
 			if err != nil {
 				return nil, err
 			}
@@ -485,12 +540,12 @@ func isPayloadPathField(name string) bool {
 	return strings.Contains(normalized, "file_path")
 }
 
-func payloadIdentityForPath(projectDir string, recordIndex int, field, raw string) (PayloadIdentity, error) {
+func payloadIdentityForPathWithCap(projectDir string, recordIndex int, field, raw string, maxBytes int64) (PayloadIdentity, error) {
 	resolved, err := resolvePayloadPath(projectDir, raw)
 	if err != nil {
 		return PayloadIdentity{}, fmt.Errorf("payload identity for %s: %w", field, err)
 	}
-	contentDigest, info, err := digestPayloadFile(resolved)
+	contentDigest, info, err := digestPayloadFileWithCap(resolved, maxBytes)
 	if err != nil {
 		return PayloadIdentity{}, fmt.Errorf("payload identity for %s: %w", field, err)
 	}
@@ -505,6 +560,10 @@ func payloadIdentityForPath(projectDir string, recordIndex int, field, raw strin
 }
 
 func digestPayloadFile(path string) (string, os.FileInfo, error) {
+	return digestPayloadFileWithCap(path, 0)
+}
+
+func digestPayloadFileWithCap(path string, maxBytes int64) (string, os.FileInfo, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return "", nil, err
@@ -518,9 +577,26 @@ func digestPayloadFile(path string) (string, os.FileInfo, error) {
 	if !before.Mode().IsRegular() {
 		return "", nil, fmt.Errorf("file must be a regular file")
 	}
+	if maxBytes > 0 && before.Size() > maxBytes {
+		return "", nil, fmt.Errorf("payload file exceeds declared byte cap %d", maxBytes)
+	}
 	hash := sha256.New()
-	if _, err := io.Copy(hash, file); err != nil {
+	reader := io.Reader(file)
+	if maxBytes > 0 {
+		reader = io.LimitReader(file, maxBytes)
+	}
+	if _, err := io.Copy(hash, reader); err != nil {
 		return "", nil, err
+	}
+	if maxBytes > 0 {
+		var extra [1]byte
+		n, readErr := file.Read(extra[:])
+		if n > 0 {
+			return "", nil, fmt.Errorf("payload file exceeds declared byte cap %d", maxBytes)
+		}
+		if readErr != nil && readErr != io.EOF {
+			return "", nil, readErr
+		}
 	}
 	after, err := file.Stat()
 	if err != nil {
@@ -528,6 +604,9 @@ func digestPayloadFile(path string) (string, os.FileInfo, error) {
 	}
 	if before.Size() != after.Size() || !before.ModTime().Equal(after.ModTime()) {
 		return "", nil, fmt.Errorf("payload file changed while computing approval identity")
+	}
+	if maxBytes > 0 && after.Size() > maxBytes {
+		return "", nil, fmt.Errorf("payload file exceeds declared byte cap %d", maxBytes)
 	}
 	return hex.EncodeToString(hash.Sum(nil)), after, nil
 }

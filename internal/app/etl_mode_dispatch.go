@@ -14,19 +14,21 @@ import (
 // It is package-local plumbing only; no request reaches a public boundary in
 // this shape.
 type etlModeDispatchRequest struct {
-	runID               string
-	connection          Connection
-	source              connectors.Connector
-	sourceRuntime       connectors.RuntimeConfig
-	destination         connectors.Connector
-	destinationRuntime  connectors.RuntimeConfig
-	sourceExpectation   synccontract.ResumeExpectation
-	streamName          string
-	stream              StreamConfig
-	mode                SyncMode
-	batchSize           int
-	maxInFlightBatches  int
-	destinationApproval synctransport.DestinationApproval
+	runID                       string
+	connection                  Connection
+	source                      connectors.Connector
+	sourceRuntime               connectors.RuntimeConfig
+	destination                 connectors.Connector
+	destinationRuntime          connectors.RuntimeConfig
+	sourceExpectation           synccontract.ResumeExpectation
+	transportAdmissionFence     int64
+	streamName                  string
+	stream                      StreamConfig
+	mode                        SyncMode
+	batchSize                   int
+	maxInFlightBatches          int
+	destinationApproval         synctransport.DestinationApproval
+	rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope
 }
 
 func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchRequest) (Run, error) {
@@ -47,7 +49,10 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 		}
 		return a.completeAcknowledgedTransportRun(request.runID, result)
 	}
-	transportRoute := a.shouldRunTransport(request.connection, request.streamName, request.mode, request.source, request.destination)
+	transportRoute, _, routeErr := a.selectTransportRoute(request.connection, request.streamName, request.mode, request.source, request.destination)
+	if routeErr != nil {
+		return a.failAcknowledgedTransportRun(request.runID, etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}, fmt.Errorf("select closed transport route: %w", routeErr))
+	}
 	if request.maxInFlightBatches > 0 && (!transportRoute || !isOrderedArrowFullOverwriteCandidate(request)) {
 		return a.failRun(request.runID, &synctransport.OrderedPipelineUnsupportedError{Source: request.source.Name(), Destination: request.destination.Name()})
 	}
@@ -59,10 +64,12 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 		if maxInFlightBatches == 0 && isOrderedArrowFullOverwriteCandidate(request) {
 			maxInFlightBatches = 2
 		}
-		result, err := a.runTransportETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.streamName, request.stream, request.mode, request.batchSize, maxInFlightBatches, request.destinationApproval)
+		result, err := a.runTransportETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.transportAdmissionFence, request.streamName, request.stream, request.mode, request.batchSize, maxInFlightBatches, request.destinationApproval, request.rateParkingResumeCheckpoint)
 		if err != nil {
-			if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, err); handled {
-				return parked, parkErr
+			if origin, tagged := synctransport.TransportExecutionOriginOf(err); tagged && origin == synctransport.TransportExecutionOriginSource {
+				if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, result, err); handled {
+					return parked, parkErr
+				}
 			}
 			return a.failAcknowledgedTransportRun(request.runID, result, err)
 		}
@@ -90,7 +97,7 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 	}
 	catalog, err := a.catalogForEndpoint(ctx, request.source, request.sourceRuntime, false)
 	if err != nil {
-		if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, err); handled {
+		if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, etlExecutionResult{}, err); handled {
 			return parked, parkErr
 		}
 		return a.failRun(request.runID, err)
@@ -103,7 +110,7 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 		result, err = a.runConnectorETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.streamName, request.stream, request.mode, request.batchSize)
 	}
 	if err != nil {
-		if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, err); handled {
+		if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, result, err); handled {
 			return parked, parkErr
 		}
 		return a.failRun(request.runID, err)

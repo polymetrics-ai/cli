@@ -120,6 +120,15 @@ func (d *ManagedTargetTransportDestination) ApplyDestination(ctx context.Context
 	if ctx == nil || d == nil {
 		return synccontract.DownstreamAcknowledgement{}, ErrManagedTargetTransportUnavailable
 	}
+	return executeManagedTargetWithAuthenticationAdmission(ctx, request.Runtime, func(admitted context.Context) (synccontract.DownstreamAcknowledgement, error) {
+		return d.applyDestination(admitted, request)
+	})
+}
+
+func (d *ManagedTargetTransportDestination) applyDestination(ctx context.Context, request synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
+	if ctx == nil || d == nil {
+		return synccontract.DownstreamAcknowledgement{}, ErrManagedTargetTransportUnavailable
+	}
 	if err := ctx.Err(); err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
@@ -182,6 +191,21 @@ func (d *ManagedTargetTransportDestination) currentTime() time.Time {
 		return d.now().UTC()
 	}
 	return time.Now().UTC()
+}
+
+// executeManagedTargetWithAuthenticationAdmission binds one physical managed
+// target phase to the destination credential's cohort. Run-scoped overwrite
+// sessions re-enter this wrapper for every phase, so the cohort fence remains
+// live from Begin through read-back without retaining an admission after its
+// phase has completed.
+func executeManagedTargetWithAuthenticationAdmission[T any](ctx context.Context, runtime connectors.RuntimeConfig, operation func(context.Context) (T, error)) (T, error) {
+	var result T
+	err := executeWithAuthenticationAdmission(ctx, runtime, func(admitted context.Context) error {
+		var operationErr error
+		result, operationErr = operation(admitted)
+		return operationErr
+	})
+	return result, err
 }
 
 func (d *ManagedTargetTransportDestination) applyChangeDelivery(ctx context.Context, request synctransport.DestinationApplyRequest, resolved managedTargetTransportResolution, control database.ManagedTargetControlRecord, write *database.DatabaseWriteExecutor) (synccontract.DownstreamAcknowledgement, error) {
@@ -308,6 +332,16 @@ func managedTargetDatabaseWriteInput(request synctransport.DestinationApplyReque
 }
 
 func (d *ManagedTargetTransportDestination) ReadBackDestination(ctx context.Context, request synctransport.DestinationReadBackRequest) error {
+	if ctx == nil || d == nil {
+		return ErrManagedTargetTransportReadBackFailed
+	}
+	_, err := executeManagedTargetWithAuthenticationAdmission(ctx, request.Runtime, func(admitted context.Context) (struct{}, error) {
+		return struct{}{}, d.readBackDestination(admitted, request)
+	})
+	return err
+}
+
+func (d *ManagedTargetTransportDestination) readBackDestination(ctx context.Context, request synctransport.DestinationReadBackRequest) error {
 	if ctx == nil || d == nil || request.Acknowledgement.Sink != d.connector.Name() || request.Acknowledgement.AcknowledgedAt.IsZero() {
 		return ErrManagedTargetTransportReadBackFailed
 	}
@@ -443,6 +477,9 @@ func (d *ManagedTargetTransportDestination) resolveManagedTargetWithTransform(ct
 	}
 	pgxConfig, err := config.dataConfig()
 	if err != nil {
+		return managedTargetTransportResolution{}, err
+	}
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
 		return managedTargetTransportResolution{}, err
 	}
 	conn, err := pgx.ConnectConfig(ctx, pgxConfig)

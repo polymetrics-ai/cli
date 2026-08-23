@@ -42,7 +42,12 @@
       "id": "direct",
       "title": "Bounded direct reads and reports",
       "commands": [
-        "direct"
+        "direct",
+        "direct get-conversation-v3",
+        "direct list-conversation-threads-v3",
+        "direct list-customers-v3",
+        "direct list-system-users-v3",
+        "direct get-system-user-v3"
       ]
     },
     {
@@ -1604,28 +1609,137 @@
       ]
     },
     {
-      "path": "attachments download",
-      "summary": "Download a conversation attachment to a bounded destination.",
-      "intent": "binary_download",
+      "path": "direct get-conversation-v3",
+      "summary": "Get Conversation (v3)",
+      "intent": "direct_read",
       "availability": "implemented",
-      "operation": "help-scout.attachment_download",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
+      "operation": "help-scout.v3_get_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
+      "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
+      "examples": [
+        "pm help-scout direct get-conversation-v3 --json --conversationId <conversationId>"
+      ],
       "flags": [
         {
           "name": "conversationId",
           "type": "string",
           "summary": "Help Scout conversation id.",
           "maps_to": "path.conversationId",
-          "allow_empty": false
-        },
-        {
-          "name": "attachmentId",
-          "type": "string",
-          "summary": "Help Scout attachment id.",
-          "maps_to": "path.attachmentId",
-          "allow_empty": false
+          "required": true
         }
       ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/conversations/{conversationId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "direct list-conversation-threads-v3",
+      "summary": "List Conversation Threads (v3)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "help-scout.v3_list_conversation_threads",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
+      "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
+      "examples": [
+        "pm help-scout direct list-conversation-threads-v3 --json --conversationId <conversationId>"
+      ],
+      "flags": [
+        {
+          "name": "conversationId",
+          "type": "string",
+          "summary": "Help Scout conversation id.",
+          "maps_to": "path.conversationId",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/conversations/{conversationId}/threads"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "direct list-customers-v3",
+      "summary": "List Customers (v3)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "help-scout.v3_list_customers",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
+      "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
+      "examples": [
+        "pm help-scout direct list-customers-v3 --json"
+      ],
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/customers"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "direct list-system-users-v3",
+      "summary": "List System Users (v3)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "help-scout.v3_list_system_users",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
+      "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
+      "examples": [
+        "pm help-scout direct list-system-users-v3 --json"
+      ],
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/system-users"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "direct get-system-user-v3",
+      "summary": "Get System User (v3)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "help-scout.v3_get_system_user",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
+      "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
+      "examples": [
+        "pm help-scout direct get-system-user-v3 --json --systemUserId <systemUserId>"
+      ],
+      "flags": [
+        {
+          "name": "systemUserId",
+          "type": "string",
+          "summary": "Help Scout system user id.",
+          "maps_to": "path.systemUserId",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/system-users/{systemUserId}"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "attachments download",
+      "summary": "Download a conversation attachment to a bounded destination.",
+      "intent": "binary_download",
+      "availability": "implemented",
+      "operation": "help-scout.attachment_download",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",

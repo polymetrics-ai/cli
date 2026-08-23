@@ -22,14 +22,28 @@ import (
 )
 
 type etlExecutionResult struct {
-	RecordsRead               int
-	RecordsTransformed        int
-	RecordsLoaded             int
-	RecordsFailed             int
-	BatchCount                int
-	Checkpoint                map[string]string
-	TransportPhaseMeasurement *TransportPhaseMeasurement
-	PendingStreamState        *pendingStreamState
+	RecordsRead                     int
+	RecordsTransformed              int
+	RecordsLoaded                   int
+	RecordsFailed                   int
+	BatchCount                      int
+	Checkpoint                      map[string]string
+	TransportPhaseMeasurement       *TransportPhaseMeasurement
+	DestinationResults              []json.RawMessage
+	DeliveryReconciliation          *DeliveryReconciliation
+	PendingStreamState              *pendingStreamState
+	persistedDeliveryReconciliation *Run
+}
+
+func cloneDestinationResults(results []json.RawMessage) []json.RawMessage {
+	if len(results) == 0 {
+		return nil
+	}
+	clone := make([]json.RawMessage, len(results))
+	for index, result := range results {
+		clone[index] = append(json.RawMessage(nil), result...)
+	}
+	return clone
 }
 
 func cloneTransportPhaseMeasurement(measurement *TransportPhaseMeasurement) *TransportPhaseMeasurement {
@@ -37,6 +51,22 @@ func cloneTransportPhaseMeasurement(measurement *TransportPhaseMeasurement) *Tra
 		return nil
 	}
 	clone := *measurement
+	return &clone
+}
+
+func cloneDeliveryReconciliation(reconciliation *DeliveryReconciliation) *DeliveryReconciliation {
+	if reconciliation == nil {
+		return nil
+	}
+	clone := *reconciliation
+	if reconciliation.EmptyPublication != nil {
+		witness := *reconciliation.EmptyPublication
+		clone.EmptyPublication = &witness
+	}
+	if reconciliation.EmptyPublicationReadBackPending != nil {
+		receipt := reconciliation.EmptyPublicationReadBackPending.Clone()
+		clone.EmptyPublicationReadBackPending = &receipt
+	}
 	return &clone
 }
 

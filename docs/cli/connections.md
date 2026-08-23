@@ -3,12 +3,20 @@ NAME
   pm connections - configure source-to-destination sync connections
 
 SYNOPSIS
-  pm connections create <name> --source connector:credential --destination connector:credential --stream stream [--sync-mode mode] [--cursor field] [--primary-key field] [--table table] [--transform-file plan.json] [--target-copy-workers n]
+  pm connections create <name> --source connector:credential --destination connector:credential --stream stream [--sync-mode mode] [--cursor field] [--primary-key field] [--table table] [--destination-action action] [--transform-file plan.json] [--target-copy-workers n]
   pm connections list [--json]
 
 DESCRIPTION
   A connection joins one source endpoint to one destination endpoint and stores
   stream-level sync settings.
+
+DECLARATIVE TYPED DESTINATION ACTION
+  --destination-action persists one exact eligible writes.json action for a
+  declarative_typed_destination stream. It is accepted only for that closed
+  destination adapter and is validated against the destination descriptor,
+  source binding, mode, acknowledgement, and evidence before catalog or
+  provider I/O. It is not an ETL run flag: a plan and run resolve only this
+  saved identity, so an invocation cannot substitute another action.
 
 TARGET COPY CAPACITY
   --target-copy-workers records the bounded target connection capacity for an

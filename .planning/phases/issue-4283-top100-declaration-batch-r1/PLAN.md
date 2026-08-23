@@ -1,9 +1,9 @@
 ## Task Delivery Header
 
 - Issue: Refs #4283 — chore(connectors): pin and declare daily-use public API cohort
-- Base branch: fm/cli-reverse-etl-destination-r1
-- Merges into: fm/cli-reverse-etl-destination-r1 → main
-- Delivery: Existing PR #4294 is open against `fm/cli-reverse-etl-destination-r1`; it is complete only after all ten in-scope bundles have a source-backed, installed-binary-reachable command disposition for every documented operation and each eligible typed action has a definition-owned reverse-ETL destination. No provider credential or live request is permitted; live certification remains pending.
+- Base branch: main
+- Merges into: main
+- Delivery: Existing PR #4294 is retargeted to `main` after a non-rewriting merge of current `origin/main`; it is complete only after all ten in-scope bundles have a source-backed, installed-binary-reachable command disposition for every documented operation and each eligible typed action has a definition-owned reverse-ETL destination. No provider credential or live request is permitted; live certification remains pending.
 - Working branch: fm/cli-top100-declaration-batch-r1
 - Task: Reconcile only Docker Hub, GitLab, Jira, Vercel, Notion, Stripe, Bitbucket, CircleCI, Sentry, and Asana after the #4303 typed-destination foundation. Preserve their pinned public artifacts and derive every command/transport declaration from them. Exclude `github`, `zoom`, all other connectors, shared runtime changes, credentials, and live provider I/O.
 - Verification: `scripts/gsd doctor`; `go run ./cmd/agentcontractgen check`; targeted red/green integrity assertions; per-connector `connectorgen validate`, `surface-sync --check`, and certification-sweep checks; fixture/conformance and commandrunner preflight; generated manual/website checks; `make connector-runtime-preflight`, `make connector-canon-check`, `go run ./cmd/connectorgen boundary . --json`, and `make verify`.
@@ -453,3 +453,34 @@ and none contributes merge-ready credit. The rollup is intentionally bounded:
 ten mapped connectors of the fixed 100, with the remaining 90 marked
 unmapped rather than fabricated. F2 has a zero-count pending fanout until F0
 imports exact required headers.
+
+## Main-base reconciliation — 2026-08-23
+
+Captain has replaced the temporary stacked-base delivery with a main-base
+delivery. The reconciliation uses `git merge origin/main` (never a rebase or
+force-push); `origin/main` is pinned at `6410fe59c`, which contains the
+0.3.0 foundation rollup and declaration-owned operation routes as squash
+content. Conflicts retain current main for foundation/route changes and this
+lane only for the ten Batch-1 connector declarations and their evidence.
+
+### Reconciliation red/green evidence
+
+- **Red:** PR #4294 targets the stale `fm/cli-reverse-etl-destination-r1`
+  base, so even its green checks cannot land the Batch-1 declaration cohort in
+  `main`.
+- **Green:** merge `origin/main`, retarget #4294 through the GitHub REST API,
+  then rerun the full repository `make verify` gate. Recompute the
+  source-lock ledger and assert exactly 4,378 documented operations found and
+  exactly 4,378 declared across Docker Hub, Notion, Stripe, Bitbucket, GitLab,
+  CircleCI, Sentry, Vercel, Asana, and Jira.
+- **Refactor:** retain only this reconciliation evidence; no source operation,
+  foundation capability, connector directory, credential, or live-provider
+  certification scope changes as part of moving the base.
+
+The GSD prompts for `discuss-phase`, `plan-phase --tdd`, `execute-phase`,
+`verify-work`, and `code-review` were re-resolved with `scripts/gsd` for this
+amendment. The execution remains inline because this environment has no
+compatible Pi runtime and the canonical connector contract forbids role
+spawning. The reconciliation reuses the existing focused red/green checks;
+its terminal verification is the full `make verify` gate plus API read-back of
+PR #4294's `main` base.

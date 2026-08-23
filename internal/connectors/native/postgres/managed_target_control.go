@@ -24,6 +24,9 @@ func (d *DatabaseDriver) loadNamespaceOwner(ctx context.Context, target database
 		SELECT workspace_id, connector_id, connection_id, target_database_oid, namespace_oid
 		FROM %s
 		LIMIT 2`, postgresQualifiedControlTable(target.Namespace(), postgresNamespaceOwnerTable))
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return database.ManagedTargetNamespaceOwnerUnknown, database.ManagedTargetNamespaceOwnerRecord{}, err
+	}
 	rows, err := d.conn.Query(ctx, query)
 	if err != nil {
 		if postgresUndefinedTable(err) {
@@ -80,6 +83,9 @@ func (d *DatabaseDriver) loadTargetControl(ctx context.Context, target database.
 	var workspaceID, connectorID, connectionID, streamID, databaseOID, relationOID string
 	var schemaVersion int64
 	var fingerprintBytes []byte
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return database.ManagedTargetControlUnknown, database.ManagedTargetControlRecord{}, err
+	}
 	err := d.conn.QueryRow(ctx, query, target.Relation()).Scan(
 		&workspaceID, &connectorID, &connectionID, &streamID, &databaseOID,
 		&relationOID, &schemaVersion, &fingerprintBytes,
@@ -135,6 +141,9 @@ func (d *DatabaseDriver) LoadManagedTargetDelivery(ctx context.Context, key data
 	defer d.connMu.Unlock()
 	query := fmt.Sprintf(`SELECT delivery_id FROM %s WHERE stream_id = $1 AND relation_name = $2 AND target_database_oid = $3`, postgresQualifiedControlTable(key.Namespace(), postgresDeliveryLedgerTable))
 	var deliveryID string
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return database.ManagedTargetDeliveryRecord{}, false, err
+	}
 	err := d.conn.QueryRow(ctx, query, key.StreamID(), key.Relation(), key.TargetDatabase().Value()).Scan(&deliveryID)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return database.ManagedTargetDeliveryRecord{}, false, nil
@@ -171,6 +180,9 @@ func (d *DatabaseDriver) StoreManagedTargetDelivery(ctx context.Context, key dat
 		SET relation_name = EXCLUDED.relation_name,
 		    target_database_oid = EXCLUDED.target_database_oid,
 		    delivery_id = EXCLUDED.delivery_id`, postgresQualifiedControlTable(key.Namespace(), postgresDeliveryLedgerTable))
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return err
+	}
 	if _, err := d.conn.Exec(ctx, query, key.StreamID(), key.Relation(), key.TargetDatabase().Value(), record.DeliveryID()); err != nil {
 		return postgresManagedTargetQueryError(ctx, err)
 	}

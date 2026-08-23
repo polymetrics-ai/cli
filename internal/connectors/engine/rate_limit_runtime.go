@@ -413,6 +413,13 @@ func (e *responseFormatError) As(target any) bool {
 		return false
 	}
 	switch typed := target.(type) {
+	case **connsdk.ProviderResponseError:
+		var httpErr *connsdk.HTTPError
+		if !errors.As(e.cause, &httpErr) {
+			return false
+		}
+		*typed = &connsdk.ProviderResponseError{Status: httpErr.Status}
+		return true
 	case **connsdk.CredentialRejectedError:
 		var httpErr *connsdk.HTTPError
 		if !errors.As(e.cause, &httpErr) || httpErr.Status != http.StatusUnauthorized {

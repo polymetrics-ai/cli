@@ -153,8 +153,13 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 	case prefix(args, "etl", "run") && hasJSON(args) && hasFlag(args, "--connection") && hasFlag(args, "--stream"):
 		s.seen["etl_run"]++
 		if isTypedCompatibilityRefusal(s.connections[flagValue(args, "--connection")]) {
-			return writeScriptedEnvelopeWithCode(stdout, "Error", map[string]any{
-				"error": map[string]any{"message": "sync mode is not executable"},
+			return writeScriptedEnvelopeWithCode(stdout, "ETLRun", map[string]any{
+				"run": map[string]any{
+					"id":           "run_certification_refusal",
+					"status":       "failed",
+					"completed_at": "2026-08-21T00:00:00Z",
+					"error":        "sync mode is not executable",
+				},
 			}, 1)
 		}
 		return writeScriptedEnvelope(stdout, "ETLRun", map[string]any{"run": map[string]any{

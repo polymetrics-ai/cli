@@ -46,6 +46,7 @@ type ExternalProofInput struct {
 	Connector               string
 	RunID                   string
 	BinarySHA256            string
+	BuildSHA256             string
 	Command                 []string
 	Stdout                  string
 	Stderr                  string
@@ -65,6 +66,7 @@ type externalProofArtifact struct {
 	Connector               string                      `json:"connector"`
 	RunID                   string                      `json:"run_id"`
 	PMBinarySHA256          string                      `json:"pm_binary_sha256"`
+	PMBuildSHA256           string                      `json:"pm_build_sha256,omitempty"`
 	CredentialScope         string                      `json:"credential_scope,omitempty"`
 	CredentialScopeProof    string                      `json:"credential_scope_proof,omitempty"`
 	CredentialFingerprints  []string                    `json:"credential_fingerprints"`
@@ -118,6 +120,7 @@ type ImportedExternalProof struct {
 	Connector               string
 	RunID                   string
 	PMBinarySHA256          string
+	PMBuildSHA256           string
 	PMCommandFingerprint    string
 	CredentialFingerprints  []string
 	HTTPExchanges           []ImportedExternalHTTPExchange
@@ -256,6 +259,7 @@ func ReadExternalProof(root, proofPath string) (ImportedExternalProof, error) {
 		Connector:               artifact.Connector,
 		RunID:                   artifact.RunID,
 		PMBinarySHA256:          artifact.PMBinarySHA256,
+		PMBuildSHA256:           artifact.PMBuildSHA256,
 		PMCommandFingerprint:    externalProofFingerprint(salt, strings.Join(artifact.Process.Command, "\x00")),
 		CredentialFingerprints:  append([]string(nil), artifact.CredentialFingerprints...),
 		HTTPExchanges:           make([]ImportedExternalHTTPExchange, 0, len(artifact.HTTPExchanges)),
@@ -359,6 +363,9 @@ func validateExternalProofInput(input ExternalProofInput) ([]string, externalPro
 	if !externalProofSHA256.MatchString(input.BinarySHA256) {
 		return nil, externalProofCredentialScope{}, errors.New("external proof requires a lowercase SHA-256 built-binary fingerprint")
 	}
+	if input.BuildSHA256 != "" && !externalProofSHA256.MatchString(input.BuildSHA256) {
+		return nil, externalProofCredentialScope{}, errors.New("external proof build fingerprint must be a lowercase SHA-256 digest when present")
+	}
 	if len(input.Command) == 0 {
 		return nil, externalProofCredentialScope{}, errors.New("external proof requires the exact observed process command")
 	}
@@ -432,6 +439,9 @@ func validateStoredExternalProof(artifact externalProofArtifact) error {
 	}
 	if !externalProofSHA256.MatchString(artifact.PMBinarySHA256) {
 		return errors.New("external proof requires a lowercase SHA-256 built-binary fingerprint")
+	}
+	if artifact.PMBuildSHA256 != "" && !externalProofSHA256.MatchString(artifact.PMBuildSHA256) {
+		return errors.New("external proof build fingerprint must be a lowercase SHA-256 digest when present")
 	}
 	if len(artifact.CredentialFingerprints) == 0 || !sortedUniqueExternalProofFingerprints(artifact.CredentialFingerprints) {
 		return errors.New("external proof credential fingerprints must be a non-empty sorted unique list")
@@ -646,6 +656,7 @@ func sanitizeExternalProof(input ExternalProofInput, prepared []string, salt []b
 		Connector:              input.Connector,
 		RunID:                  input.RunID,
 		PMBinarySHA256:         input.BinarySHA256,
+		PMBuildSHA256:          input.BuildSHA256,
 		CredentialScope:        scope.credentialScope,
 		CredentialScopeProof:   scope.proof,
 		CredentialFingerprints: fingerprintExternalPreparedValues(salt, prepared),

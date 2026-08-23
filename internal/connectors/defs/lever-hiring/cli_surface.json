@@ -522,22 +522,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_application",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "application",
-          "type": "string",
-          "summary": "Lever application identifier.",
-          "maps_to": "path.application",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -555,15 +540,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_archive_reason",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "archive-reason",
-          "type": "string",
-          "summary": "Lever archive_reason identifier.",
-          "maps_to": "path.archive_reason",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -581,15 +558,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_contact",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "contact",
-          "type": "string",
-          "summary": "Lever contact identifier.",
-          "maps_to": "path.contact",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -625,22 +594,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_feedback_form",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "feedback",
-          "type": "string",
-          "summary": "Lever feedback identifier.",
-          "maps_to": "path.feedback",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -658,15 +612,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_feedback_template",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "feedback-template",
-          "type": "string",
-          "summary": "Lever feedback_template identifier.",
-          "maps_to": "path.feedback_template",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -684,22 +630,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_interview",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "interview",
-          "type": "string",
-          "summary": "Lever interview identifier.",
-          "maps_to": "path.interview",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -717,22 +648,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_note",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Lever note identifier.",
-          "maps_to": "path.note",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -750,15 +666,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_opportunity",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -776,22 +684,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_panel",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "panel",
-          "type": "string",
-          "summary": "Lever panel identifier.",
-          "maps_to": "path.panel",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -809,15 +702,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_posting",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "posting",
-          "type": "string",
-          "summary": "Lever posting identifier.",
-          "maps_to": "path.posting",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -835,15 +720,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_posting_application_questions",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "posting",
-          "type": "string",
-          "summary": "Lever posting identifier.",
-          "maps_to": "path.posting",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -861,22 +738,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_profile_form",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "form",
-          "type": "string",
-          "summary": "Lever form identifier.",
-          "maps_to": "path.form",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -894,15 +756,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_profile_form_template",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "form-template",
-          "type": "string",
-          "summary": "Lever form_template identifier.",
-          "maps_to": "path.form_template",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -920,22 +774,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_referral",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "opportunity",
-          "type": "string",
-          "summary": "Lever opportunity identifier.",
-          "maps_to": "path.opportunity",
-          "allow_empty": false
-        },
-        {
-          "name": "referral",
-          "type": "string",
-          "summary": "Lever referral identifier.",
-          "maps_to": "path.referral",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -953,15 +792,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_requisition",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "requisition",
-          "type": "string",
-          "summary": "Lever requisition identifier.",
-          "maps_to": "path.requisition",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -979,15 +810,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_requisition_field",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "requisition-field",
-          "type": "string",
-          "summary": "Lever requisition_field identifier.",
-          "maps_to": "path.requisition_field",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -1005,15 +828,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_stage",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "stage",
-          "type": "string",
-          "summary": "Lever stage identifier.",
-          "maps_to": "path.stage",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -1031,15 +846,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_diversity_survey",
       "output_policy": "clinical_json_redacted",
-      "flags": [
-        {
-          "name": "posting",
-          "type": "string",
-          "summary": "Lever posting identifier.",
-          "maps_to": "path.posting",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -1075,15 +882,7 @@
       "availability": "implemented",
       "operation": "lever-hiring.retrieve_a_single_user",
       "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "user",
-          "type": "string",
-          "summary": "Lever user identifier.",
-          "maps_to": "path.user",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",

@@ -2,7 +2,9 @@ package wasabistatsapi
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/base64"
+	"errors"
 	"net/http"
 	"strings"
 	"testing"
@@ -10,6 +12,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/credential"
 )
 
 func baseSpec() engine.AuthSpec {
@@ -103,9 +106,15 @@ func TestAuthenticator_TrailingColonWithEmptySecondPartUsesBasicAuth(t *testing.
 		t.Fatalf("Authenticator: %v", err)
 	}
 	req := doAuthenticatedRequest(t, auth)
-	want := "Basic " + base64.StdEncoding.EncodeToString([]byte("user:"))
-	if got := req.Header.Get("Authorization"); got != want {
-		t.Fatalf("Authorization = %q, want %q", got, want)
+	username, password, ok := req.BasicAuth()
+	if !ok || len(password) != 0 {
+		t.Fatal("Basic auth did not preserve the declaration-authorized blank password")
+	}
+	if gotLength, wantLength := len(username), len("user"); gotLength != wantLength {
+		t.Fatalf("username length = %d, want %d", gotLength, wantLength)
+	}
+	if gotHash, wantHash := sha256.Sum256([]byte(username)), sha256.Sum256([]byte("user")); gotHash != wantHash {
+		t.Fatalf("username SHA-256 = %x, want %x", gotHash, wantHash)
 	}
 }
 
@@ -114,6 +123,10 @@ func TestAuthenticator_EmptyKeyIsError(t *testing.T) {
 	_, err := h.Authenticator(context.Background(), cfgWithKey(""), baseSpec())
 	if err == nil {
 		t.Fatal("Authenticator() error = nil, want an error for an empty api_key")
+	}
+	var empty *credential.EmptySecretError
+	if !errors.As(err, &empty) {
+		t.Fatalf("Authenticator() error is not typed empty-secret classification: %T", err)
 	}
 }
 

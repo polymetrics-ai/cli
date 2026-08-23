@@ -12,6 +12,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"polymetrics.ai/internal/credential"
 )
 
 type Vault struct {
@@ -64,6 +66,9 @@ func (v *Vault) Put(ctx context.Context, id string, secret map[string]string) er
 		return err
 	}
 	if err := validateID(id); err != nil {
+		return err
+	}
+	if err := credential.RequirePersistentValues(secret); err != nil {
 		return err
 	}
 	plaintext, err := json.Marshal(secret)
@@ -120,6 +125,9 @@ func (v *Vault) Get(ctx context.Context, id string) (map[string]string, error) {
 	var out map[string]string
 	if err := json.Unmarshal(plaintext, &out); err != nil {
 		return nil, fmt.Errorf("decode secret bundle: %w", err)
+	}
+	if err := credential.RequirePersistentValues(out); err != nil {
+		return nil, err
 	}
 	if out == nil {
 		out = map[string]string{}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "accountLink": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/accountLinks:create",
+    "body": {
+      "accountLink": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

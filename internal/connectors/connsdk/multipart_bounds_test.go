@@ -8,8 +8,10 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync/atomic"
 	"testing"
+	"time"
 )
 
 // uploadEcho starts a server that captures the bytes of the "mediaFile" part.
@@ -20,9 +22,14 @@ import (
 // reach *got, so an incomplete request must leave it empty and return quietly
 // rather than failing the test. Treating the abort as an error made this a flake
 // — whether the handler got as far as ParseMultipartForm depended on timing.
-func uploadEcho(t *testing.T, got *string) *httptest.Server {
+func uploadEcho(t *testing.T, got *string, completed ...chan<- struct{}) *httptest.Server {
 	t.Helper()
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if len(completed) == 1 && completed[0] != nil {
+				close(completed[0])
+			}
+		}()
 		if err := r.ParseMultipartForm(1 << 20); err != nil {
 			return
 		}
@@ -65,7 +72,8 @@ func TestRequesterDoMultipartRefusesEscapingSymlinkSwappedAfterValidation(t *tes
 	}
 
 	var sawFile string
-	srv := uploadEcho(t, &sawFile)
+	handlerDone := make(chan struct{})
+	srv := uploadEcho(t, &sawFile, handlerDone)
 	defer srv.Close()
 
 	root, err := os.OpenRoot(rootDir)
@@ -75,8 +83,9 @@ func TestRequesterDoMultipartRefusesEscapingSymlinkSwappedAfterValidation(t *tes
 	defer root.Close()
 
 	r := &Requester{
-		BaseURL: srv.URL,
-		Sleep:   noSleep,
+		BaseURL:        srv.URL,
+		Sleep:          noSleep,
+		DisableRetries: true,
 		Auth: AuthFunc(func(context.Context, *http.Request) error {
 			if err := os.Remove(innocent); err != nil {
 				return err
@@ -100,6 +109,11 @@ func TestRequesterDoMultipartRefusesEscapingSymlinkSwappedAfterValidation(t *tes
 	})
 	if err == nil {
 		t.Fatal("DoMultipart error = nil, want refusal of the escaping symlink")
+	}
+	select {
+	case <-handlerDone:
+	case <-time.After(5 * time.Second):
+		t.Fatal("upload handler did not complete before assertion")
 	}
 	if sawFile == "OUTSIDE-ROOT-SECRET" {
 		t.Fatalf("content from outside the root reached the wire: %q", sawFile)
@@ -150,6 +164,25 @@ func TestRequesterDoMultipartRefusesRootRelativeTraversal(t *testing.T) {
 	}
 	if got := calls.Load(); got != 0 {
 		t.Fatalf("HTTP calls = %d, want the traversal refused before any request", got)
+	}
+}
+
+func TestRequesterDoMultipartRejectsScalarAndFramingOverAggregateCapBeforeRequest(t *testing.T) {
+	var calls atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls.Add(1)
+	}))
+	t.Cleanup(srv.Close)
+	r := &Requester{BaseURL: srv.URL, Sleep: noSleep}
+	_, err := r.DoMultipart(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Fields:   map[string]string{"message": strings.Repeat("x", 128)},
+		MaxBytes: 32,
+	})
+	if err == nil || !strings.Contains(err.Error(), "multipart payload too large") {
+		t.Fatalf("DoMultipart error = %v, want aggregate-cap refusal", err)
+	}
+	if calls.Load() != 0 {
+		t.Fatalf("requests = %d, want scalar/framing cap refusal before I/O", calls.Load())
 	}
 }
 

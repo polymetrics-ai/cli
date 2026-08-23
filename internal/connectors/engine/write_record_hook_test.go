@@ -2,12 +2,52 @@ package engine
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
+
+type statefulRecordMapper struct{ calls int }
+
+func (h *statefulRecordMapper) ConnectorName() string { return "acme" }
+func (h *statefulRecordMapper) MapWriteRecord(_ WriteAction, rec connectors.Record) (connectors.Record, bool, error) {
+	h.calls++
+	mapped := connectors.Record{"generation": h.calls}
+	for key, value := range rec {
+		mapped[key] = value
+	}
+	return mapped, true, nil
+}
+
+func TestApprovedWriteMapperRunsOnceAndExecutionMatchesDigest(t *testing.T) {
+	var received map[string]any
+	server := httptest.NewServer(http.HandlerFunc(func(_ http.ResponseWriter, request *http.Request) {
+		if err := json.NewDecoder(request.Body).Decode(&received); err != nil {
+			t.Fatalf("decode request: %v", err)
+		}
+	}))
+	t.Cleanup(server.Close)
+	bundle := Bundle{
+		Name: "acme", HTTP: HTTPBase{URL: server.URL},
+		Writes: []WriteAction{{Name: "create", Kind: "create", Method: http.MethodPost, Path: "/records", BodyFields: []string{"generation"}}},
+	}
+	hook := &statefulRecordMapper{}
+	result, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "create"}, []connectors.Record{{"id": "record-1"}}, hook)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if hook.calls != 1 {
+		t.Fatalf("mapper calls = %d, want exactly one before preview", hook.calls)
+	}
+	if result.RecordsWritten != 1 || received["generation"] != float64(1) {
+		t.Fatalf("result/request = %#v / %#v, want approved generation 1", result, received)
+	}
+}
 
 type recordPinHook struct {
 	executes bool
@@ -16,8 +56,8 @@ type recordPinHook struct {
 
 func (h recordPinHook) ConnectorName() string { return "acme" }
 
-func (h recordPinHook) ExecuteWrite(context.Context, WriteAction, connectors.Record, *Runtime) (bool, error) {
-	return h.executes, nil
+func (h recordPinHook) ExecuteWrite(context.Context, WriteAction, connectors.Record, *Runtime) (bool, []*connsdk.Response, error) {
+	return h.executes, nil, nil
 }
 
 func (h recordPinHook) HandlesWriteAction(WriteAction) bool { return h.claims }
@@ -81,8 +121,8 @@ func TestPrepareDeclarativeWriteRefusesDestructiveHookExecutedAction(t *testing.
 	if err == nil {
 		t.Fatal("prepareDeclarativeWrite() prepared a destructive hook-executed action")
 	}
-	if !strings.Contains(err.Error(), "exact prepared-request preview") {
-		t.Fatalf("prepareDeclarativeWrite() error = %v, want the exact-preview refusal", err)
+	if !strings.Contains(err.Error(), "exact prepared-request plan") {
+		t.Fatalf("prepareDeclarativeWrite() error = %v, want the exact-plan refusal", err)
 	}
 }
 

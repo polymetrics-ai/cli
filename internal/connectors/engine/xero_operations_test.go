@@ -51,8 +51,10 @@ func TestXeroReportOperationsDirectRead(t *testing.T) {
 				Operation:    op.ID,
 				Config:       cfg,
 				OutputPolicy: "json_redacted",
-				PathParams:   map[string]string{"ReportID": "report_fixture_1"},
 				MaxBytes:     1 << 20,
+			}
+			if strings.Contains(op.REST.Path, "{ReportID}") {
+				req.PathParams = map[string]string{"ReportID": "report_fixture_1"}
 			}
 			result, err := OperationDirectRead(context.Background(), bundle, req, nil)
 			if err != nil {
