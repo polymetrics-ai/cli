@@ -60,9 +60,6 @@ func TestOperationStatusCheckUsesDeclaredHEADWithoutJSONBody(t *testing.T) {
 	if got := result.Headers["X-Provider-Status"].Values; len(got) != 1 || got[0] != "ordinary-metadata" {
 		t.Fatalf("X-Provider-Status = %#v, want declared ordinary metadata", got)
 	}
-	// Engine results are immutable provider evidence. The commandrunner public
-	// boundary compares concrete configured credential values; it must not
-	// classify values from header spelling alone.
 	if cookie, ok := result.Headers["Set-Cookie"]; !ok || len(cookie.Values) != 1 || cookie.Values[0] != "transport-secret" {
 		t.Fatalf("Set-Cookie = %#v, want exact internal provider metadata", cookie)
 	}

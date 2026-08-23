@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestWriteResultOutputMasksConfiguredSecretsAndPreservesOrdinaryProviderTruth(t *testing.T) {
+func TestWriteResultOutputPreservesProviderValuesEqualToConfiguredCredentials(t *testing.T) {
 	credential := "client-secret"
 	numericCredential := "12345678901234567890"
 	result := WriteResult{
@@ -35,25 +35,28 @@ func TestWriteResultOutputMasksConfiguredSecretsAndPreservesOrdinaryProviderTrut
 	}
 
 	got := SanitizeWriteResultForOutput(result, map[string]string{"token": credential, "numeric": numericCredential})
-	if reflect.DeepEqual(got, result) {
-		t.Fatal("public provider result retained configured credentials")
-	}
-	if got.ProviderResponses[0].Body.(map[string]any)["token"] != "ordinary-occurrence-id" {
-		t.Fatal("ordinary token-named provider identifier was changed")
+	if !reflect.DeepEqual(got, result) {
+		t.Fatalf("public provider result = %#v, want exact provider values", got)
 	}
 	encoded, err := json.Marshal(got)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if strings.Contains(string(encoded), credential) || strings.Contains(string(encoded), numericCredential) || strings.Contains(string(encoded), base64.StdEncoding.EncodeToString([]byte(credential))) {
-		t.Fatalf("public result leaked a configured secret: %s", encoded)
+	for _, value := range []string{credential, numericCredential, base64.StdEncoding.EncodeToString([]byte(credential))} {
+		if !strings.Contains(string(encoded), value) {
+			t.Fatalf("public result did not retain provider value %q: %s", value, encoded)
+		}
 	}
-	if result.ProviderResponses[0].Body.(map[string]any)["credential_echo"] != credential {
+	got.ProviderResponses[0].Body.(map[string]any)["nested"].(map[string]any)["value"] = "changed"
+	header := got.ProviderResponses[0].Headers["X-Provider-Echo"]
+	header.Values[0] = "changed"
+	got.ProviderResponses[0].Headers["X-Provider-Echo"] = header
+	if result.ProviderResponses[0].Body.(map[string]any)["nested"].(map[string]any)["value"] != credential || result.ProviderResponses[0].Headers["X-Provider-Echo"].Values[0] != credential {
 		t.Fatal("sanitizer mutated the complete internal receipt")
 	}
 }
 
-func TestOperationDirectWriteResultOutputMasksConfiguredAndDeclaredSecrets(t *testing.T) {
+func TestOperationDirectWriteResultOutputMasksDeclaredSecretsAndPreservesConfiguredEqualProviderValues(t *testing.T) {
 	credential := "client-secret"
 	numericCredential := "12345678901234567890"
 	result := OperationDirectWriteResult{
@@ -74,19 +77,32 @@ func TestOperationDirectWriteResultOutputMasksConfiguredAndDeclaredSecrets(t *te
 	}
 
 	got := SanitizeOperationDirectWriteResultForOutput(result, map[string]string{"token": credential, "numeric": numericCredential})
-	if reflect.DeepEqual(got, result) {
-		t.Fatal("public direct-write result retained secret material")
+	body := got.Body.(map[string]any)
+	if body["credential"] != "[masked]" {
+		t.Fatalf("declared provider secret = %#v, want masked", body["credential"])
 	}
-	if got.Body.(map[string]any)["token"] != "ordinary-occurrence-id" {
-		t.Fatal("ordinary token-named provider identifier was changed")
+	if body["token"] != "ordinary-occurrence-id" || body["echo"] != credential || body["numeric"] != json.Number(numericCredential) || body["base64"] != base64.StdEncoding.EncodeToString([]byte(credential)) {
+		t.Fatalf("provider result did not retain undeclared values: %#v", body)
+	}
+	if got.Headers["X-Echo"].Values[0] != credential {
+		t.Fatalf("provider header = %#v, want configured-equal value", got.Headers)
+	}
+	if got.GraphQL == nil || got.GraphQL.Errors[0].Message != credential {
+		t.Fatalf("GraphQL result = %#v, want configured-equal provider value", got.GraphQL)
+	}
+	if strings.Contains(got.BodyRaw, `"credential":"client-secret"`) || !strings.Contains(got.BodyRaw, `"credential":"[masked]"`) || !strings.Contains(got.BodyRaw, numericCredential) {
+		t.Fatalf("declared raw masking = %q", got.BodyRaw)
 	}
 	encoded, err := json.Marshal(got)
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, secret := range []string{credential, numericCredential, "provider-issued-secret", base64.StdEncoding.EncodeToString([]byte(credential))} {
-		if strings.Contains(string(encoded), secret) {
-			t.Fatalf("public result leaked %q: %s", secret, encoded)
+	if strings.Contains(string(encoded), "provider-issued-secret") {
+		t.Fatalf("public result retained declared secret: %s", encoded)
+	}
+	for _, value := range []string{credential, numericCredential, base64.StdEncoding.EncodeToString([]byte(credential))} {
+		if !strings.Contains(string(encoded), value) {
+			t.Fatalf("public result did not retain provider value %q: %s", value, encoded)
 		}
 	}
 	if result.Body.(map[string]any)["credential"] != "provider-issued-secret" {
@@ -94,7 +110,7 @@ func TestOperationDirectWriteResultOutputMasksConfiguredAndDeclaredSecrets(t *te
 	}
 }
 
-func TestOperationDirectWriteResultOutputMasksDeclaredRequestSensitiveEcho(t *testing.T) {
+func TestOperationDirectWriteResultOutputPreservesRequestSensitiveEchoWithoutOutputDeclaration(t *testing.T) {
 	requestSecret := "declaration-owned-request-secret"
 	result := OperationDirectWriteResult{
 		Connector: "fixture", Operation: "fixture.create", Method: "POST", Path: "/fixed", ResponseReceived: true, Status: 400,
@@ -103,13 +119,13 @@ func TestOperationDirectWriteResultOutputMasksDeclaredRequestSensitiveEcho(t *te
 		RequestSensitiveValues: []string{requestSecret},
 	}
 
-	got := SanitizeOperationDirectWriteResultForOutput(result, nil)
+	got := SanitizeOperationDirectWriteResultForOutput(result, map[string]string{"token": requestSecret})
 	encoded, err := json.Marshal(got)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if strings.Contains(string(encoded), requestSecret) {
-		t.Fatalf("public direct-write receipt leaked declared request scalar: %s", encoded)
+	if !strings.Contains(string(encoded), requestSecret) || got.Body.(map[string]any)["error"] != requestSecret || got.BodyRaw != `{"error":"declaration-owned-request-secret"}` {
+		t.Fatalf("public direct-write receipt did not retain undeclared provider echo: %s", encoded)
 	}
 	if result.Body.(map[string]any)["error"] != requestSecret {
 		t.Fatal("sanitizer mutated the immutable internal receipt")
@@ -124,7 +140,7 @@ func TestSanitizeWriteErrorForOutputKeepsSystemDiagnosticsSecretFree(t *testing.
 	}
 }
 
-func TestPublicReceiptProjectionMasksOnlyExactConfiguredScalars(t *testing.T) {
+func TestPublicReceiptProjectionPreservesProviderValuesEqualToConfiguredCredentials(t *testing.T) {
 	// Short values are the regression boundary: a public projection must never
 	// turn provider-owned keys such as occurrence_id into fabricated keys merely
 	// because a configured credential happens to be "id".
@@ -149,14 +165,8 @@ func TestPublicReceiptProjectionMasksOnlyExactConfiguredScalars(t *testing.T) {
 	}
 
 	public := SanitizeProviderResponseReceiptForOutput(receipt, map[string]string{"short": shortSecret, "escaped": escapedSecret})
-	encoded, err := json.Marshal(public)
-	if err != nil {
-		t.Fatalf("marshal public receipt: %v", err)
-	}
-	for _, leaked := range []string{escapedSecret, base64.StdEncoding.EncodeToString([]byte(escapedSecret))} {
-		if strings.Contains(string(encoded), leaked) {
-			t.Fatalf("public receipt leaked %q: %s", leaked, encoded)
-		}
+	if !reflect.DeepEqual(public, receipt) {
+		t.Fatalf("public receipt = %#v, want exact provider values", public)
 	}
 	if _, ok := public.Body.(map[string]any)["occurrence_id"]; !ok {
 		t.Fatalf("public body rewrote provider key: %#v", public.Body)
@@ -170,8 +180,8 @@ func TestPublicReceiptProjectionMasksOnlyExactConfiguredScalars(t *testing.T) {
 	if _, ok := public.Headers["X-Occurrence-Id"]; !ok {
 		t.Fatalf("public receipt rewrote provider header name: %#v", public.Headers)
 	}
-	if !reflect.DeepEqual(receipt.Body.(map[string]any)["credential"], escapedSecret) || receipt.BodyRaw == public.BodyRaw {
-		t.Fatalf("internal receipt was mutated or escaped raw public projection was not canonicalized: internal=%#v public=%#v", receipt, public)
+	if public.Body.(map[string]any)["credential"] != escapedSecret || public.BodyRaw != receipt.BodyRaw {
+		t.Fatalf("public receipt did not retain configured-equal provider evidence: %#v", public)
 	}
 }
 

@@ -743,11 +743,8 @@ type OperationDirectWriteResult struct {
 	Body               any                                `json:"body"`
 	GraphQL            *GraphQLResponseMetadata           `json:"graphql,omitempty"`
 	OutputSecretFields []string                           `json:"-"`
-	// RequestSensitiveValues is populated only by the declaration-owned
-	// executor.  A provider can echo a declared sensitive request scalar in an
-	// otherwise ordinary receipt (especially an error receipt); retain the
-	// receipt but mask that exact scalar at the persistence/public boundary.
-	// It is deliberately not serializable and is never caller-controlled.
+	// RequestSensitiveValues carries declaration-owned request sensitivity. It
+	// is deliberately not serializable and is never caller-controlled.
 	RequestSensitiveValues []string `json:"-"`
 }
 
@@ -1033,38 +1030,34 @@ type WriteProviderResponse struct {
 type WriteProviderHeader = OperationResponseHeader
 
 // SanitizeWriteResultForOutput returns a public clone of the complete internal
-// receipt. Ordinary provider truth is retained; only concrete configured
-// credential material (including common transport encodings) is masked.
-func SanitizeWriteResultForOutput(result WriteResult, secrets map[string]string) WriteResult {
-	masked := configuredWriteResultSecrets(secrets)
+// receipt, preserving provider-returned data verbatim.
+func SanitizeWriteResultForOutput(result WriteResult, _ map[string]string) WriteResult {
 	out := result
 	out.ProviderResponses = make([]WriteProviderResponse, len(result.ProviderResponses))
 	for i, response := range result.ProviderResponses {
-		out.ProviderResponses[i] = sanitizeWriteProviderResponse(response, masked)
+		out.ProviderResponses[i] = cloneWriteProviderResponse(response)
 	}
 	return out
 }
 
 // SanitizeOperationDirectWriteResultForOutput applies the same public-boundary
 // clone and also masks declaration-classified response secret locations.
-func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, secrets map[string]string) OperationDirectWriteResult {
-	masked := configuredWriteResultSecrets(secrets)
-	masked = appendDeclaredSecretVariants(masked, result.RequestSensitiveValues)
+func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, _ map[string]string) OperationDirectWriteResult {
 	declaredValues := providerOutputSecretValues(result.Body, result.OutputSecretFields)
 	body := cloneProviderOutputValue(result.Body)
 	for _, path := range result.OutputSecretFields {
 		maskProviderOutputPath(body, path)
 	}
 	out := result
-	out.Headers = sanitizeProviderHeaders(result.Headers, masked)
-	out.BodyRaw = sanitizeProviderResponseRawAtPaths(result.BodyRaw, result.BodyRawEncoding, masked, result.OutputSecretFields)
-	out.Body = sanitizeProviderOutputValue(body, masked)
+	out.Headers = cloneProviderHeaders(result.Headers)
+	out.BodyRaw = sanitizeProviderResponseRawAtPaths(result.BodyRaw, result.BodyRawEncoding, result.OutputSecretFields)
+	out.Body = cloneProviderOutputValue(body)
 	out.OutputSecretFields = append([]string(nil), result.OutputSecretFields...)
 	out.RequestSensitiveValues = append([]string(nil), result.RequestSensitiveValues...)
 	if result.GraphQL != nil {
 		graphql := *result.GraphQL
 		graphql.Errors = append([]GraphQLResultError(nil), result.GraphQL.Errors...)
-		graphqlSecrets := appendDeclaredSecretVariants(masked, declaredValues)
+		graphqlSecrets := appendDeclaredSecretVariants(nil, declaredValues)
 		for i := range graphql.Errors {
 			graphql.Errors[i].Message = redactWriteResultString(graphql.Errors[i].Message, graphqlSecrets)
 		}
@@ -1077,27 +1070,21 @@ func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResu
 	return out
 }
 
-func sanitizeWriteProviderResponse(response WriteProviderResponse, secrets []string) WriteProviderResponse {
+func cloneWriteProviderResponse(response WriteProviderResponse) WriteProviderResponse {
 	out := response
-	out.Headers = sanitizeProviderHeaders(response.Headers, secrets)
-	out.BodyRaw = sanitizeProviderResponseRaw(response.BodyRaw, response.BodyRawEncoding, secrets)
-	out.Body = sanitizeProviderOutputValue(response.Body, secrets)
+	out.Headers = cloneProviderHeaders(response.Headers)
+	out.Body = cloneProviderOutputValue(response.Body)
 	return out
 }
 
-func sanitizeProviderHeaders(headers map[string]OperationResponseHeader, secrets []string) map[string]OperationResponseHeader {
+func cloneProviderHeaders(headers map[string]OperationResponseHeader) map[string]OperationResponseHeader {
 	if headers == nil {
 		return nil
 	}
 	out := make(map[string]OperationResponseHeader, len(headers))
 	for name, header := range headers {
 		clone := header
-		clone.Values = make([]string, len(header.Values))
-		for i, value := range header.Values {
-			clone.Values[i] = redactWriteResultString(value, secrets)
-		}
-		// Header names are provider facts, never values. Rewriting them can
-		// corrupt duplicate/header identity and cannot remove secret material.
+		clone.Values = append([]string(nil), header.Values...)
 		out[name] = clone
 	}
 	return out
@@ -1126,63 +1113,28 @@ func cloneProviderOutputValue(value any) any {
 	}
 }
 
-func sanitizeProviderOutputValue(value any, secrets []string) any {
-	switch typed := value.(type) {
-	case map[string]any:
-		out := make(map[string]any, len(typed))
-		for key, item := range typed {
-			// Map keys are provider-owned identity, not secret values.
-			out[key] = sanitizeProviderOutputValue(item, secrets)
-		}
-		return out
-	case []any:
-		out := make([]any, len(typed))
-		for i, item := range typed {
-			out[i] = sanitizeProviderOutputValue(item, secrets)
-		}
-		return out
-	case string:
-		return redactWriteResultString(typed, secrets)
-	case json.Number:
-		masked := redactWriteResultString(typed.String(), secrets)
-		if masked != typed.String() {
-			return masked
-		}
-		return typed
-	default:
-		return cloneProviderOutputValue(value)
-	}
-}
-
 // SanitizeProviderOutputForOutput deep-clones an arbitrary decoded provider
-// value and masks only configured credential material. It intentionally does
-// not infer sensitivity from field names: identifiers such as token and
-// trained_tokens are ordinary provider truth unless a declaration says
-// otherwise.
-func SanitizeProviderOutputForOutput(value any, secrets map[string]string) any {
-	return sanitizeProviderOutputValue(value, configuredWriteResultSecrets(secrets))
+// value while preserving provider-returned fields, keys, and values.
+func SanitizeProviderOutputForOutput(value any, _ map[string]string) any {
+	return cloneProviderOutputValue(value)
 }
 
 // SanitizeProviderResponseReceiptForOutput clones a complete response receipt
-// and removes only concrete configured credential values. Header locations
-// classified as credential material by the engine are already represented by
-// explicit Redacted/Masked markers before this value reaches the boundary.
-func SanitizeProviderResponseReceiptForOutput(receipt ProviderResponseReceipt, secrets map[string]string) ProviderResponseReceipt {
-	return SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(receipt, secrets, nil)
+// while retaining provider-returned fields, keys, and values verbatim.
+func SanitizeProviderResponseReceiptForOutput(receipt ProviderResponseReceipt, _ map[string]string) ProviderResponseReceipt {
+	return SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(receipt, nil, nil)
 }
 
 // SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput is the sole
 // public projection of an immutable provider receipt. Declared field paths
-// identify values (never keys) to mask; configured credential material is
-// compared as whole scalar values, not by substring.
-func SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(receipt ProviderResponseReceipt, secrets map[string]string, declaredFields []string) ProviderResponseReceipt {
-	masked := configuredWriteResultSecrets(secrets)
+// identify values (never keys) to mask.
+func SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(receipt ProviderResponseReceipt, _ map[string]string, declaredFields []string) ProviderResponseReceipt {
 	out := receipt
-	out.Headers = sanitizeProviderHeaders(receipt.Headers, masked)
+	out.Headers = cloneProviderHeaders(receipt.Headers)
 	body := cloneProviderOutputValue(receipt.Body)
 	maskProviderOutputPaths(body, declaredFields)
-	out.BodyRaw = sanitizeProviderResponseRawAtPaths(receipt.BodyRaw, receipt.BodyRawEncoding, masked, declaredFields)
-	out.Body = sanitizeProviderOutputValue(body, masked)
+	out.BodyRaw = sanitizeProviderResponseRawAtPaths(receipt.BodyRaw, receipt.BodyRawEncoding, declaredFields)
+	out.Body = cloneProviderOutputValue(body)
 	if rawBody, ok := receipt.Body.(string); ok && receipt.BodyRawEncoding == "base64" && rawBody == receipt.BodyRaw {
 		out.Body = out.BodyRaw
 	}
@@ -1192,24 +1144,23 @@ func SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(receipt Provide
 // SanitizeDirectReadResultForOutput projects an engine-owned result at the
 // command boundary. The engine result remains immutable provider evidence;
 // this clone is the only representation suitable for stdout or persistence.
-func SanitizeDirectReadResultForOutput(result DirectReadResult, secrets map[string]string) DirectReadResult {
-	masked := configuredWriteResultSecrets(secrets)
+func SanitizeDirectReadResultForOutput(result DirectReadResult, _ map[string]string) DirectReadResult {
 	var declaredValues []string
 	if result.Receipt != nil {
 		declaredValues = providerOutputSecretValues(result.Receipt.Body, result.OutputSecretFields)
 	}
 	out := result
-	out.Headers = sanitizeProviderHeaders(result.Headers, masked)
-	out.Body = sanitizeProviderOutputValue(result.Body, masked)
+	out.Headers = cloneProviderHeaders(result.Headers)
+	out.Body = cloneProviderOutputValue(result.Body)
 	out.OutputSecretFields = append([]string(nil), result.OutputSecretFields...)
 	if result.Receipt != nil {
-		receipt := SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(*result.Receipt, secrets, result.OutputSecretFields)
+		receipt := SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(*result.Receipt, nil, result.OutputSecretFields)
 		out.Receipt = &receipt
 	}
 	if result.GraphQL != nil {
 		graphql := *result.GraphQL
 		graphql.Errors = append([]GraphQLResultError(nil), result.GraphQL.Errors...)
-		graphqlSecrets := appendDeclaredSecretVariants(masked, declaredValues)
+		graphqlSecrets := appendDeclaredSecretVariants(nil, declaredValues)
 		for i := range graphql.Errors {
 			graphql.Errors[i].Message = redactWriteResultString(graphql.Errors[i].Message, graphqlSecrets)
 		}
@@ -1224,11 +1175,11 @@ func SanitizeDirectReadResultForOutput(result DirectReadResult, secrets map[stri
 
 // SanitizeOperationStatusCheckResultForOutput mirrors direct-read receipt
 // safety without adding a response-body surface to a HEAD operation.
-func SanitizeOperationStatusCheckResultForOutput(result OperationStatusCheckResult, secrets map[string]string) OperationStatusCheckResult {
+func SanitizeOperationStatusCheckResultForOutput(result OperationStatusCheckResult, _ map[string]string) OperationStatusCheckResult {
 	out := result
-	out.Headers = sanitizeProviderHeaders(result.Headers, configuredWriteResultSecrets(secrets))
+	out.Headers = cloneProviderHeaders(result.Headers)
 	if result.Receipt != nil {
-		receipt := SanitizeProviderResponseReceiptForOutput(*result.Receipt, secrets)
+		receipt := SanitizeProviderResponseReceiptForOutput(*result.Receipt, nil)
 		out.Receipt = &receipt
 	}
 	return out
@@ -1236,41 +1187,31 @@ func SanitizeOperationStatusCheckResultForOutput(result OperationStatusCheckResu
 
 // SanitizeOperationBinaryDownloadResultForOutput keeps binary transfer bytes
 // out of the record while projecting its bounded provider receipt safely.
-func SanitizeOperationBinaryDownloadResultForOutput(result OperationBinaryDownloadResult, secrets map[string]string) OperationBinaryDownloadResult {
+func SanitizeOperationBinaryDownloadResultForOutput(result OperationBinaryDownloadResult, _ map[string]string) OperationBinaryDownloadResult {
 	out := result
-	out.Headers = sanitizeProviderHeaders(result.Headers, configuredWriteResultSecrets(secrets))
+	out.Headers = cloneProviderHeaders(result.Headers)
 	if result.Receipt != nil {
-		receipt := SanitizeProviderResponseReceiptForOutput(*result.Receipt, secrets)
+		receipt := SanitizeProviderResponseReceiptForOutput(*result.Receipt, nil)
 		out.Receipt = &receipt
 	}
 	return out
 }
 
-func sanitizeProviderResponseRaw(value, encoding string, secrets []string) string {
-	return sanitizeProviderResponseRawAtPaths(value, encoding, secrets, nil)
-}
-
-func sanitizeProviderResponseRawAtPaths(value, encoding string, secrets, declaredFields []string) string {
+func sanitizeProviderResponseRawAtPaths(value, encoding string, declaredFields []string) string {
+	if len(declaredFields) == 0 {
+		return value
+	}
 	raw := []byte(value)
 	base64Encoded := encoding == "base64"
 	if base64Encoded {
 		decoded, err := base64.StdEncoding.DecodeString(value)
 		if err != nil {
-			return redactWriteResultString(value, secrets)
+			return value
 		}
 		raw = decoded
-		// Opaque binary has no scalar structure to traverse. A short configured
-		// value (for example "id") is ordinary provider bytes, not evidence;
-		// longer known credential material is withheld wholesale rather than
-		// fabricating a partially rewritten binary payload.
-		if containsMaskableConfiguredSecretBytes(raw, secrets) {
-			return base64.StdEncoding.EncodeToString([]byte("[masked]"))
-		}
 	}
-	if publicJSON, ok := sanitizeProviderJSON(raw, secrets, declaredFields); ok {
+	if publicJSON, ok := sanitizeProviderJSON(raw, declaredFields); ok {
 		raw = publicJSON
-	} else if string(raw) != "" {
-		raw = []byte(redactWriteResultString(string(raw), secrets))
 	}
 	if base64Encoded {
 		return base64.StdEncoding.EncodeToString(raw)
@@ -1278,18 +1219,7 @@ func sanitizeProviderResponseRawAtPaths(value, encoding string, secrets, declare
 	return string(raw)
 }
 
-const minimumOpaqueBinarySecretBytes = 8
-
-func containsMaskableConfiguredSecretBytes(raw []byte, secrets []string) bool {
-	for _, secret := range secrets {
-		if len(secret) >= minimumOpaqueBinarySecretBytes && bytes.Contains(raw, []byte(secret)) {
-			return true
-		}
-	}
-	return false
-}
-
-func sanitizeProviderJSON(raw []byte, secrets, declaredFields []string) ([]byte, bool) {
+func sanitizeProviderJSON(raw []byte, declaredFields []string) ([]byte, bool) {
 	decoder := json.NewDecoder(bytes.NewReader(raw))
 	decoder.UseNumber()
 	var decoded any
@@ -1302,15 +1232,14 @@ func sanitizeProviderJSON(raw []byte, secrets, declaredFields []string) ([]byte,
 	}
 	original := cloneProviderOutputValue(decoded)
 	maskProviderOutputPaths(decoded, declaredFields)
-	public := sanitizeProviderOutputValue(decoded, secrets)
 	// Provider bytes are evidence, not a formatting suggestion. A parse is
-	// necessary to find a concrete scalar to withhold, but when no declared or
-	// configured value matched it must not change whitespace, key order,
+	// necessary to find a declared scalar to withhold, but when no declared
+	// field matched it must not change whitespace, key order,
 	// numeric spelling, escapes, or non-ASCII byte representation.
-	if reflect.DeepEqual(original, public) {
+	if reflect.DeepEqual(original, decoded) {
 		return append([]byte(nil), raw...), true
 	}
-	encoded, err := json.Marshal(public)
+	encoded, err := json.Marshal(decoded)
 	if err != nil {
 		return nil, false
 	}
@@ -1439,7 +1368,7 @@ func SanitizeWriteErrorForOutput(err error, secrets map[string]string) string {
 
 // Diagnostics are not provider scalar values: an upstream error may quote a
 // credential inside surrounding prose. Redact concrete known material here,
-// while provider receipts continue to use exact scalar matching above.
+// while provider receipts use declared field paths.
 func redactProviderDiagnosticText(value string, secrets []string) string {
 	for _, secret := range secrets {
 		if secret != "" {

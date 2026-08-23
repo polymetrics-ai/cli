@@ -56,9 +56,6 @@ func completeProviderResponseHeaders(b Bundle, headers http.Header) map[string]c
 	}
 	out := make(map[string]connectors.OperationResponseHeader, len(headers))
 	for name, values := range headers {
-		// A response header name is provider-owned metadata, not a secret
-		// classifier. Keep every name/value here; the public projection masks
-		// only values proven to equal configured credential material.
 		out[name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
 	}
 	return out

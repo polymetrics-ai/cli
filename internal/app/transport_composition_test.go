@@ -869,11 +869,6 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 	}
 
 	const appendProviderResponse = "{\n  \"id\": \"provider-append-1\",\n  \"receipt_id\": \"widget-1\",\n  \"large_provider_id\": 9007199254740993,\n  \"rare_field\": {\"enabled\": true},\n  \"paid_tier\": \"enterprise\",\n  \"echoed_secret\": \"destination-secret\",\n  \"duplicate\": \"first\",\n  \"duplicate\": \"second\"\n}\n"
-	// A configured scalar requires structured masking, so the public raw
-	// result is the exact JSON encoder form of the masked object. BodyBytes
-	// remains the verbatim provider byte count above; the companion Group-3
-	// regression covers byte-for-byte raw preservation when no value is masked.
-	const publicAppendProviderResponse = `{"duplicate":"second","echoed_secret":"[masked]","id":"provider-append-1","large_provider_id":9007199254740993,"paid_tier":"enterprise","rare_field":{"enabled":true},"receipt_id":"widget-1"}`
 	var reads, appendWrites, replaceWrites, otherWrites int
 	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		switch {
@@ -1025,57 +1020,59 @@ func TestPersistedConnectionSelectsDeclarativeTypedDestinationAction(t *testing.
 			if got := output.ProviderResponses[0].Headers["Authorization"]; got.Masked || !reflect.DeepEqual(got.Values, []string{"provider-response-secret"}) {
 				t.Fatal("unconfigured provider header was not preserved")
 			}
-			if got := output.ProviderResponses[0].Headers["X-Echoed-Credential"]; !reflect.DeepEqual(got.Values, []string{"[masked]"}) {
-				t.Fatal("configured credential echo was not masked")
-			}
-			if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["receipt_id"] != "widget-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || got["echoed_secret"] != "[masked]" {
-				t.Fatal("ordinary provider body fields were not preserved")
-			}
-			provider := output.ProviderResponses[0]
-			if !provider.BodyPresent {
-				t.Fatal("provider raw body presence was lost")
-			}
-			if provider.BodyBytes != len(appendProviderResponse) {
-				t.Fatalf("provider raw body byte count = %d, want exact %d", provider.BodyBytes, len(appendProviderResponse))
-			}
-			if provider.BodyRaw != publicAppendProviderResponse {
-				t.Fatal("provider raw body lost bytes or credential masking")
-			}
-			if provider.BodyRawEncoding != "text" {
-				t.Fatalf("provider raw body encoding = %q, want text", provider.BodyRawEncoding)
-			}
-			var rawOutput struct {
-				ProviderResponses []struct {
-					Body map[string]json.RawMessage `json:"body"`
-				} `json:"provider_responses"`
-			}
-			if err := json.Unmarshal(run.DestinationResults[0], &rawOutput); err != nil || string(rawOutput.ProviderResponses[0].Body["large_provider_id"]) != "9007199254740993" {
-				t.Fatal("large provider result identifier was not preserved as an exact JSON number")
-			}
-			persistedApp, err := Open(root)
-			if err != nil {
-				t.Fatalf("reopen app with persisted provider result: %v", err)
-			}
-			persisted, err := persistedApp.GetRun(run.ID)
-			if err != nil {
-				t.Fatalf("load persisted typed destination run: %v", err)
-			}
-			if len(persisted.DestinationResults) != len(run.DestinationResults) {
-				t.Fatalf("persisted typed destination result count = %d, want %d", len(persisted.DestinationResults), len(run.DestinationResults))
-			}
-			var persistedOutput, returnedOutput any
-			if err := json.Unmarshal(persisted.DestinationResults[0], &persistedOutput); err != nil {
-				t.Fatalf("decode persisted typed destination result: %v", err)
-			}
-			if err := json.Unmarshal(run.DestinationResults[0], &returnedOutput); err != nil || !reflect.DeepEqual(persistedOutput, returnedOutput) {
-				t.Fatal("persisted typed destination result did not match returned output")
-			}
-			cliEnvelope, err := json.Marshal(struct {
-				Run Run `json:"run"`
-			}{Run: persisted})
-			if err != nil || !bytes.Contains(cliEnvelope, []byte(`"destination_results"`)) || !bytes.Contains(cliEnvelope, []byte(`"body_raw"`)) || !bytes.Contains(cliEnvelope, []byte(`"paid_tier":"enterprise"`)) || !bytes.Contains(cliEnvelope, []byte("[masked]")) || bytes.Contains(cliEnvelope, []byte("destination-secret")) {
-				t.Fatal("CLI-shaped persisted ETL JSON lost provider truth or leaked a configured credential")
-			}
+			t.Run("preserves configured-equal undeclared provider output", func(t *testing.T) {
+				if got := output.ProviderResponses[0].Headers["X-Echoed-Credential"]; !reflect.DeepEqual(got.Values, []string{"destination-secret"}) {
+					t.Fatal("configured-equal provider header was not preserved")
+				}
+				if got := output.ProviderResponses[0].Body; got["id"] != "provider-append-1" || got["receipt_id"] != "widget-1" || got["paid_tier"] != "enterprise" || !reflect.DeepEqual(got["rare_field"], map[string]any{"enabled": true}) || got["echoed_secret"] != "destination-secret" {
+					t.Fatal("provider body fields were not preserved")
+				}
+				provider := output.ProviderResponses[0]
+				if !provider.BodyPresent {
+					t.Fatal("provider raw body presence was lost")
+				}
+				if provider.BodyBytes != len(appendProviderResponse) {
+					t.Fatalf("provider raw body byte count = %d, want exact %d", provider.BodyBytes, len(appendProviderResponse))
+				}
+				if provider.BodyRaw != appendProviderResponse {
+					t.Fatal("provider raw body was not preserved verbatim")
+				}
+				if provider.BodyRawEncoding != "text" {
+					t.Fatalf("provider raw body encoding = %q, want text", provider.BodyRawEncoding)
+				}
+				var rawOutput struct {
+					ProviderResponses []struct {
+						Body map[string]json.RawMessage `json:"body"`
+					} `json:"provider_responses"`
+				}
+				if err := json.Unmarshal(run.DestinationResults[0], &rawOutput); err != nil || string(rawOutput.ProviderResponses[0].Body["large_provider_id"]) != "9007199254740993" {
+					t.Fatal("large provider result identifier was not preserved as an exact JSON number")
+				}
+				persistedApp, err := Open(root)
+				if err != nil {
+					t.Fatalf("reopen app with persisted provider result: %v", err)
+				}
+				persisted, err := persistedApp.GetRun(run.ID)
+				if err != nil {
+					t.Fatalf("load persisted typed destination run: %v", err)
+				}
+				if len(persisted.DestinationResults) != len(run.DestinationResults) {
+					t.Fatalf("persisted typed destination result count = %d, want %d", len(persisted.DestinationResults), len(run.DestinationResults))
+				}
+				var persistedOutput, returnedOutput any
+				if err := json.Unmarshal(persisted.DestinationResults[0], &persistedOutput); err != nil {
+					t.Fatalf("decode persisted typed destination result: %v", err)
+				}
+				if err := json.Unmarshal(run.DestinationResults[0], &returnedOutput); err != nil || !reflect.DeepEqual(persistedOutput, returnedOutput) {
+					t.Fatal("persisted typed destination result did not match returned output")
+				}
+				cliEnvelope, err := json.Marshal(struct {
+					Run Run `json:"run"`
+				}{Run: persisted})
+				if err != nil || !bytes.Contains(cliEnvelope, []byte(`"destination_results"`)) || !bytes.Contains(cliEnvelope, []byte(`"body_raw"`)) || !bytes.Contains(cliEnvelope, []byte(`"paid_tier":"enterprise"`)) || !bytes.Contains(cliEnvelope, []byte("destination-secret")) {
+					t.Fatal("CLI-shaped persisted ETL JSON did not retain configured-equal provider output")
+				}
+			})
 		})
 	}
 
@@ -1484,8 +1481,8 @@ func TestDeclarativeTypedDestinationPersistsProviderResultsAfterPostSuccessLocal
 			w.Header().Set("Content-Type", "application/json")
 			w.Header().Set("X-Credential-Echo", "destination-secret")
 			// Both mutations succeed, then the adapter fails locally because the
-			// declared private receipt locator is absent. Its public sanitized
-			// provider results must still reach the failed run for reconciliation.
+			// declared private receipt locator is absent. Its provider results must
+			// still reach the failed run for reconciliation.
 			_ = json.NewEncoder(w).Encode(map[string]string{"provider_id": fmt.Sprintf("provider-%d", posts), "echo": "destination-secret"})
 		default:
 			w.WriteHeader(http.StatusNotFound)
@@ -1560,12 +1557,15 @@ func TestDeclarativeTypedDestinationPersistsProviderResultsAfterPostSuccessLocal
 	if len(output.ProviderResponses) == 2 {
 		secondBody, secondBodyOK = output.ProviderResponses[1].Body.(map[string]any)
 	}
-	if output.RecordsWritten != 2 || output.RecordsFailed != 0 || len(output.ProviderResponses) != 2 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[1].RecordIndex != 1 || output.ProviderResponses[1].Status != http.StatusOK || !secondBodyOK || secondBody["provider_id"] != "provider-2" || secondBody["echo"] != "[masked]" {
-		t.Fatal("post-success failed provider output did not retain ordered sanitized results")
+	if output.RecordsWritten != 2 || output.RecordsFailed != 0 || len(output.ProviderResponses) != 2 || output.ProviderResponses[0].RecordIndex != 0 || output.ProviderResponses[1].RecordIndex != 1 || output.ProviderResponses[1].Status != http.StatusOK || !secondBodyOK || secondBody["provider_id"] != "provider-2" || secondBody["echo"] != "destination-secret" {
+		t.Fatal("post-success failed provider output did not retain ordered results")
+	}
+	if got := output.ProviderResponses[1].Headers["X-Credential-Echo"].Values; !reflect.DeepEqual(got, []string{"destination-secret"}) {
+		t.Fatalf("failed provider result header = %#v, want configured-equal provider value", got)
 	}
 	serialized, err := json.Marshal(run)
-	if err != nil || bytes.Contains(serialized, []byte("destination-secret")) {
-		t.Fatal("failed partial provider run leaked a configured credential")
+	if err != nil || !bytes.Contains(serialized, []byte("destination-secret")) {
+		t.Fatal("failed partial provider run did not retain configured-equal provider output")
 	}
 }
 

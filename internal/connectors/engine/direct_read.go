@@ -184,8 +184,6 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if len(redactFields) > 0 {
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
-	// Convenience response output is public-facing and may hide configured
-	// credentials, but Receipt remains the immutable pre-projection response.
 	decoded = connectors.SanitizeProviderOutputForOutput(decoded, req.Config.Secrets)
 	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
 	if err != nil {

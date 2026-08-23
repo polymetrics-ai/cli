@@ -360,9 +360,6 @@ func operationResponseHeaders(_ Bundle, op OperationSpec, headers http.Header) (
 		if total > declared.MaxBytes {
 			return nil, fmt.Errorf("operation %q response header %q exceeds declared byte cap %d", op.ID, declared.Name, declared.MaxBytes)
 		}
-		// Header names are not sensitivity evidence. The public command boundary
-		// masks only values that equal configured credential material, preserving
-		// ordinary provider metadata such as WWW-Authenticate and duplicate IDs.
 		result[declared.Name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
 	}
 	return result, nil

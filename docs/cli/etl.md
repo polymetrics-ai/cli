@@ -160,16 +160,13 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   unsupported mode fails before source or provider I/O. See
   docs/sync-transport-definition.md for the mechanical declaration contract.
 
-  JSON run and status output retains each provider-successful typed action
-  result in run.destination_results: record accounting plus every ordinary
-  successful provider response field (status, headers, and body). Fields are
-  not removed because they are rare, destructive, paid-tier-specific, or
-  unfamiliar. Concrete configured credential material is masked wherever it
-  occurs; provider-owned field names and ordinary values remain available.
-  If a later local receipt, acknowledgement, composition, or output step fails
-  before checkpoint, the failed uncheckpointed run still retains ordered
-  sanitized provider evidence. System-generated plans, logs, request
-  diagnostics, and synthetic errors remain secret-taint-safe.
+  JSON run and status output retains each acknowledged typed action result in
+  run.destination_results: record accounting plus every ordinary successful
+  provider response field (status, headers, and body). Fields are not removed
+  because they are rare, destructive, paid-tier-specific, or unfamiliar.
+  Provider-returned fields, keys, and values are preserved verbatim, even when
+  they equal configured credential bytes. System-generated plans, logs,
+  request diagnostics, and synthetic errors remain secret-taint-safe.
 
   If a closed transport has already applied, read back, and checkpointed a
   destination effect but cannot complete local receipt retirement or its
