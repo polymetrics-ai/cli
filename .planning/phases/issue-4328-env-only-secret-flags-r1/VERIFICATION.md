@@ -10,7 +10,7 @@
 - [x] `git diff --check`.
 - [x] Full `make verify` locally, including lint, with no package timeout budget above 20 minutes.
 - [x] Inline `verify-work` and code-review records completed.
-- [ ] PR opened with `Refs #4328`; GitHub API confirms its base is exactly `main`.
+- [x] PR opened with `Refs #4328`; GitHub API confirms its base is exactly `main`.
 
 ## Measurements and results
 
@@ -24,3 +24,4 @@
 - **Final full gate:** `make verify` exited `0`. It reported `connectorgen validate: 552 connector(s) checked, 0 findings`, `connectorgen surface-sync: 552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)`, `golangci-lint` `0 issues`, clean connector boundary, and `installed GitHub certification archive proof passed`.
 - **Diff integrity:** `git diff --check` exited `0` after all generated artifacts were refreshed.
 - **Final focused regression:** `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract|TestValidate_CLISurfaceEnvOnlyFlagAcceptsDeclaredRESTSecretRegardlessOfFlagShape|TestValidate_RealGitHubSecretCommandRequiresEnvOnly|TestValidate_RealHubSpotRequestSecretsRequireEnvOnly|TestSourceProjectionMarksDeclaredCircleCIWebhookSecretsEnvOnly)$'` exited `0` (`ok polymetrics.ai/cmd/connectorgen 1.764s`) after adding the enclosing JSON-field secret case.
+- **PR base read-back:** GitHub API `GET /repos/polymetrics-ai/cli/pulls/4334` reported URL `https://github.com/polymetrics-ai/cli/pull/4334`, base `main`, head `fm/cli-env-only-secret-flag-generalization-r1`, head SHA `a9ad7ed56025f0bc2bfe46d35bca1ce9a46054a1`, and `draft: false`.

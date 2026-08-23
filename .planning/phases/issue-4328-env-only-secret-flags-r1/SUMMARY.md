@@ -4,6 +4,8 @@
 
 `env_only` is now declaration-driven. A request field marked `x-secret`, an enclosing field whose schema contains an `x-secret`, or an exact request-side sensitive-policy field must be supplied from the environment independently of protocol, command intent, flag type, or mapping depth.
 
+Direct PR: https://github.com/polymetrics-ai/cli/pull/4334 (GitHub API-confirmed base: `main`).
+
 ## Blast radius
 
 The corrected rule found **3** missing protections across **552** connector definitions:

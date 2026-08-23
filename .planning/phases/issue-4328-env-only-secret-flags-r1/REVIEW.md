@@ -23,4 +23,4 @@ The source projector preserves `x-secret`, emits `env_only` for secret-bearing f
 
 ## Automated review route
 
-The direct, non-draft PR will use `claude_auto` on open. Its status is `pending` until GitHub records the automatic review. No manual Claude or Copilot request was made before that trigger.
+PR https://github.com/polymetrics-ai/cli/pull/4334 is a non-draft direct PR to `main`, head `a9ad7ed56025f0bc2bfe46d35bca1ce9a46054a1`. Its route is `claude_auto`, status `pending` until GitHub records the automatic review. No manual Claude or Copilot request was made before that trigger.
