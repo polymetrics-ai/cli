@@ -31,9 +31,9 @@
       "percent": 100
     },
     "implementation": {
-      "implemented": 1059,
+      "implemented": 1495,
       "total": 1525,
-      "percent": 69.44
+      "percent": 98.03
     },
     "live_proof": {
       "proven": 0,
@@ -22540,7 +22540,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -22585,7 +22585,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -22630,7 +22630,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -22720,7 +22720,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -22765,7 +22765,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -22900,7 +22900,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -22945,7 +22945,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -22990,7 +22990,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23125,7 +23125,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23260,7 +23260,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23305,7 +23305,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23530,7 +23530,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23620,7 +23620,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23710,7 +23710,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23800,7 +23800,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23845,7 +23845,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23890,7 +23890,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23935,7 +23935,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23980,7 +23980,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24025,7 +24025,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24115,7 +24115,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24160,7 +24160,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24205,7 +24205,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24295,7 +24295,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24566,7 +24566,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24656,7 +24656,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24701,7 +24701,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25061,7 +25061,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25106,7 +25106,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25151,7 +25151,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25196,7 +25196,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25241,7 +25241,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25286,7 +25286,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25331,7 +25331,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25376,7 +25376,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25421,7 +25421,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25466,7 +25466,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25511,7 +25511,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25601,7 +25601,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25646,7 +25646,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25691,7 +25691,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25736,7 +25736,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25781,7 +25781,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25827,7 +25827,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25873,7 +25873,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -25963,7 +25963,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26053,7 +26053,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26098,7 +26098,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26143,7 +26143,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26188,7 +26188,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26233,7 +26233,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26278,7 +26278,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26323,7 +26323,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26368,7 +26368,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26413,7 +26413,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26458,7 +26458,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -28802,7 +28802,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -28892,7 +28892,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -28937,7 +28937,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -28982,7 +28982,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29027,7 +29027,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29072,7 +29072,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29117,7 +29117,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29162,7 +29162,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29207,7 +29207,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29252,7 +29252,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29297,7 +29297,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29342,7 +29342,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29387,7 +29387,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29432,7 +29432,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29477,7 +29477,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29522,7 +29522,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29567,7 +29567,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29655,7 +29655,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30148,7 +30148,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30193,7 +30193,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30239,7 +30239,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30284,7 +30284,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30779,7 +30779,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30824,7 +30824,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30869,7 +30869,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31049,7 +31049,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31094,7 +31094,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31139,7 +31139,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31184,7 +31184,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31229,7 +31229,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31274,7 +31274,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31319,7 +31319,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31364,7 +31364,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31679,7 +31679,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31724,7 +31724,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31769,7 +31769,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31814,7 +31814,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31859,7 +31859,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31904,7 +31904,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31949,7 +31949,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31994,7 +31994,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32039,7 +32039,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32399,7 +32399,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32444,7 +32444,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32489,7 +32489,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32534,7 +32534,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32624,7 +32624,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32669,7 +32669,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32714,7 +32714,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32759,7 +32759,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32804,7 +32804,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32849,7 +32849,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32894,7 +32894,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32939,7 +32939,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32984,7 +32984,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33029,7 +33029,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33074,7 +33074,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33119,7 +33119,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33164,7 +33164,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33209,7 +33209,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33254,7 +33254,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33299,7 +33299,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33344,7 +33344,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33839,7 +33839,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33884,7 +33884,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33929,7 +33929,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33974,7 +33974,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34019,7 +34019,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34064,7 +34064,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34109,7 +34109,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34154,7 +34154,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34199,7 +34199,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34244,7 +34244,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34425,7 +34425,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34470,7 +34470,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34740,7 +34740,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34786,7 +34786,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34831,7 +34831,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -34876,7 +34876,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -35101,7 +35101,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -35146,7 +35146,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -35191,7 +35191,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -35236,7 +35236,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -35281,7 +35281,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -35326,7 +35326,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -35461,7 +35461,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -36136,7 +36136,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -36181,7 +36181,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -36314,7 +36314,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -36809,7 +36809,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -36899,7 +36899,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -36944,7 +36944,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -36989,7 +36989,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -37034,7 +37034,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -37079,7 +37079,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -37124,7 +37124,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -37169,7 +37169,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -37394,7 +37394,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -37439,7 +37439,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -37619,7 +37619,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38251,7 +38251,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38296,7 +38296,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38341,7 +38341,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38386,7 +38386,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38431,7 +38431,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38476,7 +38476,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38611,7 +38611,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38656,7 +38656,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38702,7 +38702,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38747,7 +38747,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38792,7 +38792,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38837,7 +38837,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38882,7 +38882,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38927,7 +38927,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -38972,7 +38972,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -39017,7 +39017,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40097,7 +40097,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40142,7 +40142,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40187,7 +40187,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40232,7 +40232,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40277,7 +40277,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40322,7 +40322,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40367,7 +40367,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40412,7 +40412,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40457,7 +40457,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -40502,7 +40502,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41132,7 +41132,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41177,7 +41177,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41222,7 +41222,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41267,7 +41267,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41312,7 +41312,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41357,7 +41357,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41402,7 +41402,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41447,7 +41447,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41492,7 +41492,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41537,7 +41537,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41582,7 +41582,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41627,7 +41627,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41672,7 +41672,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41852,7 +41852,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41897,7 +41897,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41942,7 +41942,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -41987,7 +41987,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42032,7 +42032,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42617,7 +42617,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42662,7 +42662,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42797,7 +42797,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42842,7 +42842,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42930,7 +42930,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42975,7 +42975,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -43020,7 +43020,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -43110,7 +43110,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -43155,7 +43155,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -43695,7 +43695,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -43875,7 +43875,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -43920,7 +43920,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44190,7 +44190,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44235,7 +44235,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44370,7 +44370,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44415,7 +44415,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44776,7 +44776,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44821,7 +44821,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44866,7 +44866,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44912,7 +44912,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44957,7 +44957,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45002,7 +45002,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45047,7 +45047,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45092,7 +45092,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45137,7 +45137,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45182,7 +45182,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45993,7 +45993,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -46038,7 +46038,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -46173,7 +46173,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -46218,7 +46218,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -46263,7 +46263,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -46398,7 +46398,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -46443,7 +46443,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -46488,7 +46488,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -46533,7 +46533,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48111,7 +48111,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48156,7 +48156,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48201,7 +48201,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48289,7 +48289,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48334,7 +48334,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48379,7 +48379,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48467,7 +48467,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48513,7 +48513,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48558,7 +48558,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48648,7 +48648,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48693,7 +48693,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48784,7 +48784,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48872,7 +48872,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48917,7 +48917,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49686,7 +49686,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49732,7 +49732,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49912,7 +49912,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49957,7 +49957,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -50092,7 +50092,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -50497,7 +50497,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -50542,7 +50542,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -50587,7 +50587,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -50632,7 +50632,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -50677,7 +50677,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -50722,7 +50722,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -51307,7 +51307,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -51352,7 +51352,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -51397,7 +51397,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -52387,7 +52387,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -52432,7 +52432,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -52477,7 +52477,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -52973,7 +52973,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53018,7 +53018,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53063,7 +53063,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53108,7 +53108,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53153,7 +53153,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53198,7 +53198,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53243,7 +53243,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53288,7 +53288,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53333,7 +53333,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53378,7 +53378,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53423,7 +53423,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53468,7 +53468,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53513,7 +53513,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53558,7 +53558,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53603,7 +53603,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53648,7 +53648,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53693,7 +53693,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53738,7 +53738,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53828,7 +53828,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53873,7 +53873,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53919,7 +53919,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -53964,7 +53964,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54009,7 +54009,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54054,7 +54054,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54099,7 +54099,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54144,7 +54144,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54189,7 +54189,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54234,7 +54234,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54279,7 +54279,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54324,7 +54324,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54369,7 +54369,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54414,7 +54414,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54459,7 +54459,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54504,7 +54504,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54549,7 +54549,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54594,7 +54594,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54639,7 +54639,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54684,7 +54684,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54729,7 +54729,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -54774,7 +54774,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56304,7 +56304,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56349,7 +56349,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56394,7 +56394,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56439,7 +56439,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56484,7 +56484,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56529,7 +56529,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56574,7 +56574,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56619,7 +56619,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56664,7 +56664,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56709,7 +56709,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56754,7 +56754,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56799,7 +56799,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56844,7 +56844,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56889,7 +56889,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -56934,7 +56934,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -57339,7 +57339,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -57384,7 +57384,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -57429,7 +57429,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -57979,7 +57979,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58024,7 +58024,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58069,7 +58069,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58114,7 +58114,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58159,7 +58159,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58204,7 +58204,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58249,7 +58249,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58294,7 +58294,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58339,7 +58339,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58384,7 +58384,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58429,7 +58429,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58474,7 +58474,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58519,7 +58519,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58564,7 +58564,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58789,7 +58789,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58834,7 +58834,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59331,7 +59331,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59512,7 +59512,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59557,7 +59557,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59602,7 +59602,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59692,7 +59692,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59780,7 +59780,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -60232,7 +60232,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -60727,7 +60727,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -60772,7 +60772,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -60817,7 +60817,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -60862,7 +60862,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -60907,7 +60907,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -61537,7 +61537,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -64464,7 +64464,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -64690,7 +64690,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -64870,7 +64870,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -64915,7 +64915,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65141,7 +65141,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65636,7 +65636,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65681,7 +65681,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65726,7 +65726,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65771,7 +65771,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -66403,7 +66403,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -66494,7 +66494,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67034,7 +67034,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67079,7 +67079,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67300,7 +67300,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67388,7 +67388,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67519,7 +67519,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67609,7 +67609,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67654,7 +67654,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67742,7 +67742,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67787,7 +67787,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67832,7 +67832,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67963,7 +67963,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -68096,7 +68096,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -68141,7 +68141,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -68186,7 +68186,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -68231,7 +68231,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -68364,7 +68364,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -68409,7 +68409,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70075,7 +70075,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70120,7 +70120,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70166,7 +70166,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70211,7 +70211,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70256,7 +70256,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70301,7 +70301,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70346,7 +70346,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70706,7 +70706,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70794,7 +70794,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70839,7 +70839,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70884,7 +70884,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70929,7 +70929,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -71342,7 +71342,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -71432,7 +71432,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -71477,7 +71477,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -71835,7 +71835,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -71880,7 +71880,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72060,7 +72060,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72105,7 +72105,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72195,7 +72195,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72240,7 +72240,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72285,7 +72285,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72330,7 +72330,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72375,7 +72375,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72420,7 +72420,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72465,7 +72465,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72510,7 +72510,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72555,7 +72555,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72600,7 +72600,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72645,7 +72645,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -72690,7 +72690,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -73863,7 +73863,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -73908,7 +73908,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -73953,7 +73953,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -73998,7 +73998,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74043,7 +74043,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74088,7 +74088,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74133,7 +74133,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74178,7 +74178,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74223,7 +74223,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74313,7 +74313,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74358,7 +74358,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74403,7 +74403,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74448,7 +74448,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74493,7 +74493,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74538,7 +74538,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74584,7 +74584,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74629,7 +74629,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74674,7 +74674,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74719,7 +74719,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74765,7 +74765,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74810,7 +74810,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74855,7 +74855,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74900,7 +74900,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -74945,7 +74945,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
