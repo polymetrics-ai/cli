@@ -46,3 +46,16 @@ After `origin/main` advanced with the cyclic source-import resolver, it was merg
 - `go run ./cmd/connectorgen validate`: **PASS** — `552 connector(s) checked, 0 findings`.
 - `go run ./cmd/connectorgen surface-sync --check`: **PASS** — 552 connectors scanned with zero changes.
 - `go run ./cmd/agentcontractgen check`: **PASS**.
+
+## Consumer-corpus preflight (read-only)
+
+Using the final contract code at `be4ef9747`, source import was run read-only from this worktree against each consumer lane's `internal/connectors/defs` directory. No consumer worktree or lock was modified.
+
+| Lane | Command result | Measured passing locks | Reason non-passing locks stop before representation validation |
+| --- | --- | ---: | --- |
+| Batch 2/3 (`.../46/cli`) | exit 1, 19 findings | 0 / 19 | Legacy/colliding `format` and `operation_counts` fields are rejected by strict v3 decoding. |
+| Batch 6/7 (`.../12/cli`) | exit 1, 20 findings | 0 / 20 | Colliding `source_url` fields are rejected by strict v3 decoding. |
+| Batch 8/9/10 (`.../54/cli`) | exit 1, 30 findings | 0 / 30 | Colliding `source_url` and `state` fields are rejected by strict v3 decoding. |
+| Zoom (`.../1/cli`) | exit 1, 1 finding | 0 / 1 | Its incompatible top-level REST `retrieval` field is rejected by strict v3 decoding. |
+
+These are migration-owned schema collisions, not missing foundation kinds: mainline v3 remains authoritative and must not accept those alternate field names. The contract already contains and tests the discovered consumer representations: JSON/YAML rendered captures and path fragments, ZIP/gzip bundles, explicit unavailable sources, required non-empty coverage confidence, and citation/evidence integrity.
