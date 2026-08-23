@@ -14,5 +14,6 @@
   smoke gates pass serially; see `VERIFICATION.md`.
 - Review: inline GSD standard review found no actionable finding; see
   `REVIEW.md`.
-- Status: ready to merge current `origin/main`, revalidate affected paths, and
-  push/open the direct PR.
+- Merge-before-push: fetched `origin/main` on 2026-08-24; it remains
+  `e338cd301`, and `git merge origin/main` reported `Already up to date.`
+- Status: ready to push/open the direct PR.

@@ -12,8 +12,10 @@
   generated/snapshot checks pass without increasing the 20-minute budget.
 - [x] `git diff --check` passes; `internal/connectors/defs/**` and
   `internal/connectors/defs/github/rate_limits.json` are unchanged.
-- [ ] `origin/main` merge is recorded immediately before push.
-- [ ] Inline GSD code review has no unresolved actionable findings.
+- [x] `origin/main` merge is recorded immediately before push: fetched
+  2026-08-24, `origin/main` remained `e338cd301`, and `git merge origin/main`
+  reported `Already up to date.`
+- [x] Inline GSD code review has no unresolved actionable findings.
 
 ## PR read-back
 
