@@ -6,15 +6,15 @@
     "state": "fetched",
     "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
     "requested_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-    "sha256": "d3c98b77ed76dd37b60a8a2512fc219912398c1a2e360e33943bc1096438579c",
-    "bytes": 1747309,
+    "sha256": "a487892c8e1f3feeba96c234148be69fddd50afce17bf30437bcb8de36d9a0c8",
+    "bytes": 1757202,
     "content_type": "application/octet-stream",
     "artifacts": [
       {
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "requested_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "sha256": "d3c98b77ed76dd37b60a8a2512fc219912398c1a2e360e33943bc1096438579c",
-        "bytes": 1747309,
+        "sha256": "a487892c8e1f3feeba96c234148be69fddd50afce17bf30437bcb8de36d9a0c8",
+        "bytes": 1757202,
         "content_type": "application/octet-stream"
       }
     ],
@@ -23,8 +23,8 @@
   },
   "normalized_inventory": {
     "path": "api_surface.json",
-    "sha256": "b867492d7bb63253ef5ff6ec8c6a88b1a06205fd8cc68b1324a20d8a6d334053",
-    "bytes": 349336,
+    "sha256": "56c15d3064186cc8e4fd0662a3d5f07d24292d414c279177667f0c52e44fb2bd",
+    "bytes": 349004,
     "source_operation_count": 629,
     "old_api_surface_rows": 631,
     "regenerated_api_surface_rows": 635,
@@ -32,8 +32,8 @@
   },
   "rest": {
     "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-    "sha256": "d3c98b77ed76dd37b60a8a2512fc219912398c1a2e360e33943bc1096438579c",
-    "bytes": 1747309,
+    "sha256": "a487892c8e1f3feeba96c234148be69fddd50afce17bf30437bcb8de36d9a0c8",
+    "bytes": 1757202,
     "operation_counts": [
       {
         "key": "DELETE",
@@ -6980,8 +6980,8 @@
   },
   "graphql": {
     "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-    "sha256": "d3c98b77ed76dd37b60a8a2512fc219912398c1a2e360e33943bc1096438579c",
-    "bytes": 1747309,
+    "sha256": "a487892c8e1f3feeba96c234148be69fddd50afce17bf30437bcb8de36d9a0c8",
+    "bytes": 1757202,
     "operation_counts": [],
     "operations": []
   },

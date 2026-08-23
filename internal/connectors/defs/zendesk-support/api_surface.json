@@ -189,13 +189,8 @@
     {
       "method": "DELETE",
       "path": "/api/v2/api_tokens/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
-        "notes": "operation_id=DeleteApiToken"
+      "covered_by": {
+        "write": "delete_api_token"
       }
     },
     {

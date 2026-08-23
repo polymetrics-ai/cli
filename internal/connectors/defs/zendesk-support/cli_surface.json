@@ -805,6 +805,22 @@
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required"
     },
     {
+      "path": "writes delete_api_token plan",
+      "summary": "Plan the delete_api_token Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_api_token",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/api_tokens/{id}"
+        }
+      ],
+      "risk": "deletes a Zendesk API token; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required"
+    },
+    {
       "path": "writes delete_group plan",
       "summary": "Plan the delete_group Zendesk Support write action.",
       "intent": "reverse_etl",

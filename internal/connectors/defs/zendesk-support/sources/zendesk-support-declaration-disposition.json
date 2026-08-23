@@ -5,14 +5,14 @@
   "source_basis": {
     "source_lock": "sources/zendesk-support-parity-source-lock.json",
     "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-    "source_sha256": "d3c98b77ed76dd37b60a8a2512fc219912398c1a2e360e33943bc1096438579c",
-    "source_bytes": 1747309,
+    "source_sha256": "a487892c8e1f3feeba96c234148be69fddd50afce17bf30437bcb8de36d9a0c8",
+    "source_bytes": 1757202,
     "operations_found": 629,
     "mapped_operations": 635,
     "old_api_surface_rows": 631,
     "regenerated_api_surface_rows": 635,
     "api_surface_regeneration": "provider-source-derived",
-    "normalized_inventory_sha256": "b867492d7bb63253ef5ff6ec8c6a88b1a06205fd8cc68b1324a20d8a6d334053",
+    "normalized_inventory_sha256": "56c15d3064186cc8e4fd0662a3d5f07d24292d414c279177667f0c52e44fb2bd",
     "source_retrieval": "fetched",
     "coverage_confidence": {
       "level": "machine-readable-spec",
@@ -30,7 +30,7 @@
       "basis": "Official Zendesk Support OpenAPI document; count is HTTP method plus path."
     },
     "enabled_operations": 33,
-    "declaration_pending_operations": 513,
+    "declaration_pending_operations": 512,
     "disabled_operations": 0,
     "documented_deletes": 87,
     "enabled_deletes": 0,
@@ -49,7 +49,7 @@
       }
     ],
     "stream_bindings": 33,
-    "writes_actions": 89,
+    "writes_actions": 90,
     "terminal_commands": 95,
     "live_certification": "pending",
     "gap_ids": [
@@ -60,7 +60,7 @@
         "id": "application-generic-destination-dispatch",
         "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
         "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path.",
-        "count": 89,
+        "count": 90,
         "scope": "shared_destination_runtime",
         "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class. The affected surface is not enabled until the shared App/CLI dispatch gap closes."
       }
@@ -68,11 +68,11 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 513
+        "count": 512
       },
       {
         "key": "foundation-gap",
-        "count": 89
+        "count": 90
       }
     ],
     "transport": {
@@ -89,7 +89,7 @@
         }
       }
     },
-    "foundation_gap_operations": 89
+    "foundation_gap_operations": 90
   },
   "ledger_dispositions": [
     {
@@ -796,15 +796,10 @@
       "api_surface": {
         "method": "DELETE",
         "path": "/api/v2/api_tokens/{id}",
-        "operation": {
-          "model": "destructive_action",
-          "status": "blocked",
-          "risk": "high",
-          "blocked_by_default": true,
-          "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
-          "notes": "operation_id=DeleteApiToken"
+        "operation": null,
+        "covered_by": {
+          "write": "delete_api_token"
         },
-        "covered_by": null,
         "excluded": null
       },
       "source": {
@@ -815,20 +810,37 @@
         "operation_id": "DeleteApiToken",
         "deprecated": false
       },
-      "state": "declaration-pending",
+      "state": "foundation-gap",
       "foundation": {
-        "state": "present",
-        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+        "state": "gap",
+        "foundation_gap": {
+          "id": "application-generic-destination-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+        }
       },
       "rejection": {
-        "reason": "declaration-pending",
+        "reason": "foundation-gap",
         "recoverable": true,
-        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
-        "evidence": "api_surface.json:endpoints[15]"
+        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
+        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "foundation-gap; typed direct-write action \"delete_api_token\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "command": {
+          "path": "writes delete_api_token plan",
+          "intent": "reverse_etl",
+          "availability": "partial"
+        },
+        "reverse_etl_eligibility": {
+          "eligible": true,
+          "state": "foundation-gap",
+          "foundation_gap": {
+            "id": "application-generic-destination-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
+            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
+          }
+        }
       }
     },
     {

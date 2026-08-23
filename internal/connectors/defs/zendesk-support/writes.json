@@ -849,6 +849,40 @@
       "risk": "deletes a Zendesk automation record; destructive external mutation requiring approval"
     },
     {
+      "name": "delete_api_token",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/api_tokens/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk API token; destructive external mutation requiring approval"
+    },
+    {
       "name": "create_view",
       "kind": "create",
       "method": "POST",
