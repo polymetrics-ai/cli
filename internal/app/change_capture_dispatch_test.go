@@ -2,7 +2,9 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"os"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -87,7 +89,7 @@ func (s *appChangeCaptureSource) ReadCDC(ctx context.Context, req connectors.CDC
 		}
 		s.restoredReceipts++
 	} else if req.TransactionReceiver != nil {
-		transaction, err := connectors.NewCDCTransaction("test-transaction", int64(len(events)), func(_ context.Context, transactionEmit func(connectors.CDCEvent) error) error {
+		transaction, err := connectors.NewCDCTransactionWithContentDigest("test-transaction", int64(len(events)), strings.Repeat("a", 64), func(_ context.Context, transactionEmit func(connectors.CDCEvent) error) error {
 			for _, event := range events {
 				if err := transactionEmit(event); err != nil {
 					return err
@@ -244,8 +246,9 @@ func TestDeclaredChangeCaptureRoutesRefuseBeforeIO(t *testing.T) {
 
 			_, err = a.RunETL(ctx, RunETLRequest{Connection: "declared_change_capture_refusal", Stream: "records", BatchSize: 1})
 			var modeErr *synccontract.ModeNotExecutableError
-			if !errors.As(err, &modeErr) || modeErr.Mode != synccontract.ModeChangeCapture || modeErr.Reason != tt.reason {
-				t.Fatalf("RunETL() error = %T %v, want change_capture ModeNotExecutableError reason %q", err, err, tt.reason)
+			declaredPreflightRefusal := tt.source == "github" && strings.Contains(err.Error(), `source transport does not support sync mode "change_capture"`)
+			if !declaredPreflightRefusal && (!errors.As(err, &modeErr) || modeErr.Mode != synccontract.ModeChangeCapture || modeErr.Reason != tt.reason) {
+				t.Fatalf("RunETL() error = %T %v, want declared transport preflight refusal or change_capture ModeNotExecutableError reason %q", err, err, tt.reason)
 			}
 			source.assertNoIO(t)
 			if destination != source {
@@ -445,5 +448,205 @@ func TestRunETLChangeCaptureRestoresWarehouseReceiptBeforeCheckpointAfterRestart
 	state := a.state.StreamStates[streamStateKey(connectionName, "records")]
 	if state.Checkpoint == nil || state.Checkpoint.CommittedAt == nil || string(state.Checkpoint.Position.Primary) != "lsn-1" {
 		t.Fatalf("restarted change_capture state = %#v, want restored durable checkpoint", state)
+	}
+}
+
+func TestCDCRecovery_ReceiptBindsExactWarehouseArtifacts(t *testing.T) {
+	tests := []struct {
+		name    string
+		mutate  func(t *testing.T, rawPath, finalPath, manifestPath string)
+		wantErr bool
+	}{
+		{
+			name: "untouched artifacts restore the exact receipt without a duplicate receive",
+		},
+		{
+			name: "missing manifest refuses LSN progress",
+			mutate: func(t *testing.T, _, _, manifestPath string) {
+				t.Helper()
+				if err := os.Remove(manifestPath); err != nil && !os.IsNotExist(err) {
+					t.Fatalf("remove durable CDC artifact manifest: %v", err)
+				}
+			},
+			wantErr: true,
+		},
+		{
+			name: "truncated raw WAL refuses LSN progress",
+			mutate: func(t *testing.T, rawPath, _, _ string) {
+				t.Helper()
+				if err := os.WriteFile(rawPath, []byte("{\"unrelated\":true}\n"), 0o600); err != nil {
+					t.Fatalf("replace raw WAL with a regular unrelated artifact: %v", err)
+				}
+			},
+			wantErr: true,
+		},
+		{
+			name: "swapped final table refuses LSN progress",
+			mutate: func(t *testing.T, _, finalPath, _ string) {
+				t.Helper()
+				if err := os.WriteFile(finalPath, []byte("unrelated regular parquet artifact"), 0o600); err != nil {
+					t.Fatalf("replace final table with a regular unrelated artifact: %v", err)
+				}
+			},
+			wantErr: true,
+		},
+		{
+			name: "stale manifest generation refuses LSN progress",
+			mutate: func(t *testing.T, _, _, manifestPath string) {
+				t.Helper()
+				mutateChangeCaptureArtifactManifest(t, manifestPath, func(manifest map[string]any) {
+					manifest["generation_id"] = float64(2)
+				})
+			},
+			wantErr: true,
+		},
+		{
+			name: "manifest checksum mismatch refuses LSN progress",
+			mutate: func(t *testing.T, _, _, manifestPath string) {
+				t.Helper()
+				mutateChangeCaptureArtifactManifest(t, manifestPath, func(manifest map[string]any) {
+					manifest["raw_wal_sha256"] = strings.Repeat("0", 64)
+				})
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := context.Background()
+			fixture := newChangeCaptureArtifactRecoveryFixture(t, ctx)
+			if tt.mutate != nil {
+				tt.mutate(t, fixture.rawPath, fixture.finalPath, fixture.manifestPath)
+			}
+
+			run, err := fixture.app.RunETL(ctx, RunETLRequest{Connection: fixture.connectionName, Stream: "records", BatchSize: 1})
+			state := fixture.app.state.StreamStates[streamStateKey(fixture.connectionName, "records")]
+			if tt.wantErr {
+				if err == nil {
+					t.Fatalf("restarted RunETL(change_capture) run=%#v error=nil, want artifact reconciliation refusal", run)
+				}
+				var reconciliation *ChangeCaptureArtifactReconciliationError
+				if !errors.As(err, &reconciliation) {
+					t.Fatalf("restarted RunETL(change_capture) error = %T %v, want ChangeCaptureArtifactReconciliationError", err, err)
+				}
+				if state.Checkpoint != nil {
+					t.Fatalf("rejected recovery stream state = %#v, want no LSN checkpoint", state)
+				}
+				if fixture.source.receivedTransactions != 1 || fixture.source.restoredReceipts != 0 {
+					t.Fatalf("rejected recovery receive/restore counts = %d/%d, want 1/0", fixture.source.receivedTransactions, fixture.source.restoredReceipts)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("untouched recovery RunETL(change_capture) error = %v", err)
+			}
+			if run.RecordsLoaded != 0 || fixture.source.receivedTransactions != 1 || fixture.source.restoredReceipts != 1 {
+				t.Fatalf("untouched recovery = run=%#v receive/restore=%d/%d, want receipt-only 0/1/1", run, fixture.source.receivedTransactions, fixture.source.restoredReceipts)
+			}
+			if state.Checkpoint == nil || state.Checkpoint.CommittedAt == nil || string(state.Checkpoint.Position.Primary) != "lsn-1" {
+				t.Fatalf("untouched recovery stream state = %#v, want the restored durable LSN checkpoint", state)
+			}
+		})
+	}
+}
+
+type changeCaptureArtifactRecoveryFixture struct {
+	app            *App
+	source         *appChangeCaptureSource
+	connectionName string
+	rawPath        string
+	finalPath      string
+	manifestPath   string
+}
+
+func newChangeCaptureArtifactRecoveryFixture(t *testing.T, ctx context.Context) changeCaptureArtifactRecoveryFixture {
+	t.Helper()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	a, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := newAppChangeCaptureSource()
+	source.failAfterReceipt = true
+	a.Registry().Register(source)
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "source", Connector: source.Name()}); err != nil {
+		t.Fatal(err)
+	}
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "warehouse", Connector: "warehouse", Config: map[string]string{"path": warehouseDir}}); err != nil {
+		t.Fatal(err)
+	}
+	const connectionName = "cdc_artifact_recovery"
+	if _, err := a.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        connectionName,
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "source"},
+		Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
+		Streams: map[string]StreamConfig{
+			"records": {SyncMode: string(synccontract.ModeChangeCapture), PrimaryKey: []string{"id"}, DestinationTable: "records"},
+		},
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connectionName, Stream: "records", BatchSize: 1}); err == nil || !strings.Contains(err.Error(), "simulated process loss after warehouse receipt") {
+		t.Fatalf("first RunETL(change_capture) error = %v, want simulated post-receipt failure", err)
+	}
+	connection, ok := a.findConnection(connectionName)
+	if !ok {
+		t.Fatal("change capture connection disappeared")
+	}
+	location, err := a.warehouseLocation(warehouseDir, connection)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rawPath, err := location.WALPath("records")
+	if err != nil {
+		t.Fatal(err)
+	}
+	finalPath, err := location.TablePath("records")
+	if err != nil {
+		t.Fatal(err)
+	}
+	manifestPath, err := changeCaptureWarehouseArtifactManifestPath(location, "records", 1, "test-transaction")
+	if err != nil {
+		t.Fatal(err)
+	}
+	return changeCaptureArtifactRecoveryFixture{
+		app:            a,
+		source:         source,
+		connectionName: connectionName,
+		rawPath:        rawPath,
+		finalPath:      finalPath,
+		manifestPath:   manifestPath,
+	}
+}
+
+func mutateChangeCaptureArtifactManifest(t *testing.T, path string, mutate func(map[string]any)) {
+	t.Helper()
+	payload, err := os.ReadFile(path)
+	if errors.Is(err, os.ErrNotExist) {
+		if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
+			t.Fatalf("create missing CDC artifact manifest directory: %v", err)
+		}
+		payload = []byte(`{"version":1,"generation_id":1,"raw_wal_sha256":"` + strings.Repeat("1", 64) + `"}`)
+		err = nil
+	}
+	if err != nil {
+		t.Fatalf("read durable CDC artifact manifest: %v", err)
+	}
+	manifest := make(map[string]any)
+	if err := json.Unmarshal(payload, &manifest); err != nil {
+		t.Fatalf("decode durable CDC artifact manifest: %v", err)
+	}
+	mutate(manifest)
+	payload, err = json.Marshal(manifest)
+	if err != nil {
+		t.Fatalf("encode mutated durable CDC artifact manifest: %v", err)
+	}
+	if err := os.WriteFile(path, append(payload, '\n'), 0o600); err != nil {
+		t.Fatalf("replace durable CDC artifact manifest: %v", err)
 	}
 }

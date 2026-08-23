@@ -24,7 +24,13 @@ func TestSafeReversePlanForOutputHonoursPlanRedactFields(t *testing.T) {
 		Mode:                   "connector_command",
 		Action:                 "set_secret",
 		ConnectorCommandRecord: connectors.Record{"encrypted_value": sentinel},
-		RedactFields:           []string{"encrypted_value"},
+		ConnectorCommandHeaders: map[string]string{
+			"X-Request-Mode": sentinel,
+		},
+		ConnectorCommandHeaderValues: map[string][]string{
+			"X-Request-Mode": {sentinel},
+		},
+		RedactFields: []string{"encrypted_value"},
 		Sample: []connectors.Record{{
 			"secret_name":     "DEPLOY_KEY",
 			"encrypted_value": sentinel,
@@ -37,6 +43,9 @@ func TestSafeReversePlanForOutputHonoursPlanRedactFields(t *testing.T) {
 
 	if safe.ConnectorCommandRecord != nil {
 		t.Fatalf("ConnectorCommandRecord = %#v, want nil at the output boundary", safe.ConnectorCommandRecord)
+	}
+	if safe.ConnectorCommandHeaders != nil || safe.ConnectorCommandHeaderValues != nil {
+		t.Fatalf("connector command headers = %#v / %#v, want nil at the output boundary", safe.ConnectorCommandHeaders, safe.ConnectorCommandHeaderValues)
 	}
 	if safe.ApprovalToken != "" {
 		t.Fatalf("ApprovalToken = %q, want cleared at the output boundary", safe.ApprovalToken)

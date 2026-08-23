@@ -1,7 +1,9 @@
 package app
 
 import (
+	"context"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -95,4 +97,48 @@ func TestPayloadIdentitiesRejectPathTraversal(t *testing.T) {
 	if err == nil {
 		t.Fatal("payloadIdentitiesForRecords: want traversal rejection")
 	}
+}
+
+func TestConnectorCommandPayloadIdentityHonorsDeclaredByteCap(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(dir+"/payload.bin", []byte("oversized"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	connector := &payloadMetadataConnector{metadata: connectors.OperationDirectWriteMetadata{
+		Operation:           "acme.upload",
+		PayloadFileFields:   []string{"media"},
+		PayloadFileMaxBytes: map[string]int64{"media": 4},
+	}}
+	_, err := payloadIdentitiesForConnectorCommand(dir, connector, "acme.upload", connectors.Record{"media": "payload.bin"})
+	if err == nil || !strings.Contains(err.Error(), "declared byte cap") {
+		t.Fatalf("payload identity error = %v, want declared-cap refusal", err)
+	}
+}
+
+type payloadMetadataConnector struct {
+	metadata connectors.OperationDirectWriteMetadata
+}
+
+func (*payloadMetadataConnector) Name() string { return "payload-metadata" }
+
+func (c *payloadMetadataConnector) Metadata() connectors.Metadata {
+	return connectors.Metadata{Name: c.Name(), DisplayName: "Payload metadata"}
+}
+
+func (*payloadMetadataConnector) Check(context.Context, connectors.RuntimeConfig) error { return nil }
+
+func (*payloadMetadataConnector) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return connectors.Catalog{}, connectors.ErrUnsupportedOperation
+}
+
+func (*payloadMetadataConnector) Read(context.Context, connectors.ReadRequest, func(connectors.Record) error) error {
+	return connectors.ErrUnsupportedOperation
+}
+
+func (*payloadMetadataConnector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
+}
+
+func (c *payloadMetadataConnector) OperationDirectWriteMetadata(string) (connectors.OperationDirectWriteMetadata, error) {
+	return c.metadata, nil
 }

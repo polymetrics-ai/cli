@@ -11,6 +11,7 @@ import (
 	"io/fs"
 	"mime"
 	"net/http"
+	"net/url"
 	"regexp"
 	"sort"
 	"strconv"
@@ -348,12 +349,13 @@ type FanOutInto struct {
 	PathVar    string `json:"path_var,omitempty"`
 }
 
-// QueryParam is one stream.Query entry (gap-loop cycle-1 item 3,
+// QueryParam is a declared query entry for streams, checks, or write actions
+// (gap-loop cycle-1 item 3,
 // REVIEW-B.md cross-cutting adjudication 2: the recurring
 // "optional/config-driven query param not expressible" gap — vitally
 // `status`, bitly `size`, calendly `count`/page_size, gmail's two filters,
-// searxng wave0 F6 — met the >=3 recurrence threshold). Declared in
-// streams.json either as a PLAIN STRING (today's exact dialect: `Template`
+// searxng wave0 F6 — met the >=3 recurrence threshold). Declared on a stream,
+// base check, or write action either as a PLAIN STRING (today's exact dialect: `Template`
 // is that string, `OmitWhenAbsent` false, `Default` empty — a template
 // referencing an absent config/secrets key is ALWAYS a hard error, zero
 // migration risk for every existing bundle) or as an OBJECT
@@ -362,6 +364,12 @@ type FanOutInto struct {
 // templating (which would silently convert a mistyped/missing REQUIRED key
 // from a fail-loud error into a silently-unfiltered request, the F4
 // fail-open class the engine deliberately rejects elsewhere).
+//
+// WriteAction.Query preserves that dialect and adds one narrow, write-only
+// case: an object-form entry with OmitWhenAbsent may omit its own unresolved
+// record.* reference. It does not widen caller query input or relax malformed,
+// wrong-source, or required-record failures; resolveWriteQueryParams owns the
+// distinction while retaining the established config/secrets/incremental rules.
 //
 // OmitWhenAbsent and Default are mutually usable but conceptually distinct:
 // OmitWhenAbsent means "leave the param off the request entirely when its
@@ -444,18 +452,22 @@ type IncrementalSpec struct {
 
 // WriteAction is one entry in writes.json's "actions" array.
 type WriteAction struct {
-	Name       string   `json:"name"`
-	Kind       string   `json:"kind"` // create|update|upsert|delete|custom
-	Method     string   `json:"method"`
-	Path       string   `json:"path"`
+	Name   string `json:"name"`
+	Kind   string `json:"kind"` // create|update|upsert|delete|custom
+	Method string `json:"method"`
+	Path   string `json:"path"`
+	// BaseURL pins an action to a declaration-owned alternate provider origin.
+	// It is an absolute origin (no path/query/userinfo), never caller input. This
+	// covers APIs such as GitHub release uploads whose mutation endpoint is
+	// intentionally hosted away from the connector's ordinary REST origin.
+	BaseURL    string   `json:"base_url,omitempty"`
 	PathFields []string `json:"path_fields,omitempty"`
-	// Query is the OPTIONAL write-action query-parameter map. It is the
-	// SAME construct (and the same QueryParam type, so the same
-	// bare-string-or-object dialect) that streams.json's stream.Query has
-	// always used — see QueryParam's doc comment — resolved through the
-	// same resolveQueryParams helper read.go already shares between stream
-	// reads and check reads, so all three surfaces resolve query templates
-	// identically by construction rather than by convention.
+	// Query is the OPTIONAL write-action query-parameter map. It uses the
+	// same QueryParam string-or-object dialect as stream and check queries;
+	// see QueryParam's doc comment. Write preparation resolves it through
+	// resolveWriteQueryParams, preserving that dialect and its one
+	// source-locked record.* omission rule without admitting a caller-provided
+	// free-form query channel.
 	//
 	// Absent/empty means the request carries no query string at all, which
 	// is exactly the behavior every write action had before this field
@@ -467,7 +479,7 @@ type WriteAction struct {
 	// samples and returned write errors. DryRunWrite preview warnings preserve
 	// their resolved values.
 	RedactFields []string `json:"redact_fields,omitempty"`
-	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload
+	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload | binary_upload
 	// BodyRequired forces an empty JSON object onto the wire when body construction
 	// resolves no fields. It is valid only for the default json body type.
 	BodyRequired bool                `json:"body_required,omitempty"`
@@ -477,6 +489,7 @@ type WriteAction struct {
 	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
 	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
 	Base64Upload *Base64UploadSpec   `json:"base64_upload,omitempty"`
+	BinaryUpload *BinaryUploadSpec   `json:"binary_upload,omitempty"`
 	RecordSchema json.RawMessage     `json:"record_schema"`
 	// IdempotencyKeyHeader names a provider-documented request header. Execution
 	// generates one fresh key per record and reuses it only across that record's retries.
@@ -497,6 +510,11 @@ type WriteAction struct {
 	Confirmation     *ConfirmationSpec                  `json:"confirmation,omitempty"`
 	TransportBinding *connectors.TransportActionBinding `json:"transport_binding,omitempty"`
 	Hook             string                             `json:"hook,omitempty"`
+	// HookFields is a closed declaration-owned list of record fields consumed
+	// only by a compound hook's declared follow-up route. They cannot overlap
+	// the primary action's path or body fields, which keeps a hook supplement
+	// from becoming a generic raw request/body channel.
+	HookFields []string `json:"hook_fields,omitempty"`
 }
 
 // ConfirmationSpec is the closed, declarative confirmation policy shared by
@@ -614,6 +632,15 @@ type Base64UploadSpec struct {
 	// APIs document the encoded limit — Airtable's attachment cap is 5 MB of
 	// base64, not 5 MB of file.
 	MaxEncodedBytes int64 `json:"max_encoded_bytes,omitempty"`
+}
+
+// BinaryUploadSpec describes a declaration-owned application/octet-stream
+// body read from a root-confined local file. The path itself is never sent.
+// Preview binds its normalized identity and approved SHA-256; execution
+// reopens, bounds, and hashes the file before sending the exact bytes once.
+type BinaryUploadSpec struct {
+	SourceField string `json:"source_field"`
+	MaxBytes    int64  `json:"max_bytes"`
 }
 
 type MultipartPartSpec struct {
@@ -785,12 +812,22 @@ func (o OperationSpec) IsBatchable() bool {
 // OperationParameter is one parameter a REST operation accepts, as its
 // provider specification declares it.
 type OperationParameter struct {
-	Name     string   `json:"name"`
-	In       string   `json:"in"`
-	Type     string   `json:"type,omitempty"`
-	Required bool     `json:"required,omitempty"`
-	Values   []string `json:"values,omitempty"`
-	Summary  string   `json:"summary,omitempty"`
+	Name string `json:"name"`
+	In   string `json:"in"`
+	// CLIName is an optional declaration-owned spelling for a fixed path
+	// placeholder. It exists when the runtime's safe placeholder differs from
+	// the provider's public resource name; it never changes the wire mapping.
+	CLIName    string   `json:"cli_name,omitempty"`
+	Type       string   `json:"type,omitempty"`
+	Required   bool     `json:"required,omitempty"`
+	Repeatable bool     `json:"repeatable,omitempty"`
+	Values     []string `json:"values,omitempty"`
+	Summary    string   `json:"summary,omitempty"`
+	// Schema and MaxBytes are required for a caller-provided header. Headers
+	// are strings on the wire, so their schema is deliberately a bounded
+	// string schema rather than a second generic request-body dialect.
+	Schema   json.RawMessage `json:"schema,omitempty"`
+	MaxBytes int             `json:"max_bytes,omitempty"`
 }
 
 type RESTOperationSpec struct {
@@ -833,7 +870,28 @@ type RESTOperationSpec struct {
 	// value on the outgoing request; a value hardcoded in Query counts, since
 	// the constraint is about the wire request rather than about who supplied
 	// it. Empty (the default) imposes nothing.
-	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+	RequiredQuery []RequiredQueryGroup   `json:"required_query,omitempty"`
+	Response      *OperationResponseSpec `json:"response,omitempty"`
+	Redirect      *OperationRedirectSpec `json:"redirect,omitempty"`
+}
+
+// OperationResponseSpec is a narrow result metadata contract. Body bytes and
+// media remain governed by the operation's existing output policy/max_bytes;
+// only these named, bounded headers may appear in fixed-operation results.
+type OperationResponseSpec struct {
+	Headers         []OperationResponseHeaderSpec `json:"headers,omitempty"`
+	SuccessStatuses []string                      `json:"success_statuses,omitempty"`
+}
+
+type OperationResponseHeaderSpec struct {
+	Name     string `json:"name"`
+	MaxBytes int    `json:"max_bytes"`
+}
+
+type OperationRedirectSpec struct {
+	MaxHops         int      `json:"max_hops"`
+	AllowSameOrigin bool     `json:"allow_same_origin,omitempty"`
+	AllowedHosts    []string `json:"allowed_hosts,omitempty"`
 }
 
 // RequiredQueryGroup is one "at least one of these" constraint. Several groups
@@ -894,10 +952,12 @@ type GraphQLOperationSpec struct {
 // in the declaration's fixed document; callers may only submit the next
 // cursor returned by the preceding result.
 type GraphQLOperationPaginationSpec struct {
-	ConnectionPath   string `json:"connection_path"`
-	CursorVariable   string `json:"cursor_variable"`
-	PageSizeVariable string `json:"page_size_variable,omitempty"`
-	MaxPageSize      int    `json:"max_page_size,omitempty"`
+	ConnectionPath           string `json:"connection_path"`
+	CursorVariable           string `json:"cursor_variable"`
+	PageSizeVariable         string `json:"page_size_variable,omitempty"`
+	BackwardCursorVariable   string `json:"backward_cursor_variable,omitempty"`
+	BackwardPageSizeVariable string `json:"backward_page_size_variable,omitempty"`
+	MaxPageSize              int    `json:"max_page_size,omitempty"`
 }
 
 type XMLOperationSpec struct {
@@ -910,6 +970,12 @@ type BinaryOperationSpec struct {
 	Method   string `json:"method"`
 	Path     string `json:"path"`
 	MaxBytes int    `json:"max_bytes,omitempty"`
+	// Parameters admits only the same declaration-owned typed path/query/header
+	// parameter dialect as REST operations. In particular, no arbitrary upload
+	// metadata or request header map exists.
+	Parameters []OperationParameter   `json:"parameters,omitempty"`
+	Response   *OperationResponseSpec `json:"response,omitempty"`
+	Redirect   *OperationRedirectSpec `json:"redirect,omitempty"`
 	// Accept selects one fixed provider-documented response representation.
 	// It is declaration-owned and cannot be overridden by command callers.
 	Accept string `json:"accept,omitempty"`
@@ -928,10 +994,15 @@ type BinaryOperationSpec struct {
 	// AllowedHosts permits redirects to exactly these hosts. Credentials are
 	// stripped on such a hop regardless.
 	AllowedHosts []string `json:"allowed_hosts,omitempty"`
-	// ContentTypes records the content types this operation is documented to
-	// return. It is metadata for authors and is deliberately NOT enforced:
-	// providers mislabel binary payloads routinely.
+	// ContentTypes is the closed provider media-type allowlist for the streamed
+	// response. The runtime parses and enforces it before opening a destination
+	// file; an omitted list preserves legacy operations that have no exact media
+	// declaration.
 	ContentTypes []string `json:"content_types,omitempty"`
+	// Charset, when declared for a text_export, is exact and enforced on the
+	// response Content-Type. Empty preserves legacy declarations that specify a
+	// bounded media type but no provider charset guarantee.
+	Charset string `json:"charset,omitempty"`
 	// StallTimeoutSeconds bounds how long the download may make NO progress.
 	// It is not a wall-clock deadline, which would turn the byte cap into a
 	// bandwidth requirement.
@@ -994,34 +1065,39 @@ type CLICommandGroup struct {
 
 // CLIFlag describes one command or global flag.
 type CLIFlag struct {
-	Name       string   `json:"name"`
-	Type       string   `json:"type"`
-	Summary    string   `json:"summary,omitempty"`
-	Values     []string `json:"values,omitempty"`
-	MapsTo     string   `json:"maps_to,omitempty"`
-	Format     string   `json:"format,omitempty"`
-	AllowEmpty *bool    `json:"allow_empty,omitempty"`
-	Minimum    *float64 `json:"minimum,omitempty"`
-	Required   bool     `json:"required,omitempty"`
-	EnvOnly    bool     `json:"env_only,omitempty"`
+	Name            string                  `json:"name"`
+	Type            string                  `json:"type"`
+	Summary         string                  `json:"summary,omitempty"`
+	Values          []string                `json:"values,omitempty"`
+	MapsTo          string                  `json:"maps_to,omitempty"`
+	Format          string                  `json:"format,omitempty"`
+	AllowEmpty      *bool                   `json:"allow_empty,omitempty"`
+	Minimum         *connectors.ExactNumber `json:"minimum,omitempty"`
+	Maximum         *connectors.ExactNumber `json:"maximum,omitempty"`
+	Required        bool                    `json:"required,omitempty"`
+	Repeatable      bool                    `json:"repeatable,omitempty"`
+	EnvOnly         bool                    `json:"env_only,omitempty"`
+	AllowBareString bool                    `json:"allow_bare_string,omitempty"`
 	// MaxItems/MinItems bound a string_array flag's item count so a bounded
 	// provider-search list can be enforced against the flag the user typed, not
 	// only against the assembled body.
 	MaxItems int `json:"max_items,omitempty"`
 	MinItems int `json:"min_items,omitempty"`
+	MaxBytes int `json:"max_bytes,omitempty"`
 }
 
 // CLIConstraint describes a provider-neutral validation rule over mapped
 // command inputs.
 type CLIConstraint struct {
-	Kind          string `json:"kind"`
-	Left          string `json:"left"`
-	Right         string `json:"right"`
-	Op            string `json:"op"`
-	ValueType     string `json:"value_type,omitempty"`
-	LeftFallback  string `json:"left_fallback,omitempty"`
-	RightFallback string `json:"right_fallback,omitempty"`
-	Message       string `json:"message,omitempty"`
+	Kind          string   `json:"kind"`
+	Fields        []string `json:"fields,omitempty"`
+	Left          string   `json:"left"`
+	Right         string   `json:"right"`
+	Op            string   `json:"op"`
+	ValueType     string   `json:"value_type,omitempty"`
+	LeftFallback  string   `json:"left_fallback,omitempty"`
+	RightFallback string   `json:"right_fallback,omitempty"`
+	Message       string   `json:"message,omitempty"`
 }
 
 // CLICommand is one provider-inspired command path.
@@ -1573,6 +1649,9 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	if err := validateOperationRuntimeHeaderIsolation(httpBase, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
+	}
 	directWriteSurface := deriveDirectWriteSurface(operations)
 
 	schemas, err := loadStreamSchemas(sub, dirName, streams)
@@ -1893,10 +1972,24 @@ func loadWrites(sub fs.FS, dirName string) ([]WriteAction, error) {
 	if err := strictDecode(raw, &doc); err != nil {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
+	if err := validateWriteActionNames(doc.Actions); err != nil {
+		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
+	}
 	if err := validateWriteBodies(doc.Actions); err != nil {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
 	return doc.Actions, nil
+}
+
+func validateWriteActionNames(actions []WriteAction) error {
+	seen := make(map[string]struct{}, len(actions))
+	for index, action := range actions {
+		if _, duplicate := seen[action.Name]; duplicate {
+			return fmt.Errorf("action %d duplicates write action name %q", index, action.Name)
+		}
+		seen[action.Name] = struct{}{}
+	}
+	return nil
 }
 
 func validateStreamGraphQL(streams []StreamSpec) error {
@@ -1994,7 +2087,13 @@ func validateWriteBodies(actions []WriteAction) error {
 		if err := validateDynamicFields(i, action); err != nil {
 			return err
 		}
+		if err := validateWriteHookFields(i, action); err != nil {
+			return err
+		}
 		bodyType := bodyTypeOf(action)
+		if err := validateWriteActionBaseURL(i, action); err != nil {
+			return err
+		}
 		if action.BodyRequired && bodyType != "json" {
 			return fmt.Errorf("action %d (%q) body_required requires body_type json, got %q", i, action.Name, bodyType)
 		}
@@ -2009,6 +2108,9 @@ func validateWriteBodies(actions []WriteAction) error {
 		}
 		if action.Base64Upload != nil && bodyType != "base64_upload" {
 			return fmt.Errorf("action %d (%q) declares base64_upload but body_type is %q", i, action.Name, bodyType)
+		}
+		if action.BinaryUpload != nil && bodyType != "binary_upload" {
+			return fmt.Errorf("action %d (%q) declares binary_upload but body_type is %q", i, action.Name, bodyType)
 		}
 		switch bodyType {
 		case "graphql":
@@ -2035,6 +2137,10 @@ func validateWriteBodies(actions []WriteAction) error {
 			if err := validateBase64UploadSpec(i, action); err != nil {
 				return err
 			}
+		case "binary_upload":
+			if err := validateBinaryUploadSpec(i, action); err != nil {
+				return err
+			}
 		case "multipart":
 			if action.Multipart == nil || len(action.Multipart.Parts) == 0 {
 				return fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name)
@@ -2053,6 +2159,75 @@ func validateWriteBodies(actions []WriteAction) error {
 				}
 			}
 		}
+	}
+	return nil
+}
+
+func validateWriteHookFields(i int, action WriteAction) error {
+	if len(action.HookFields) == 0 {
+		return nil
+	}
+	if strings.TrimSpace(action.Hook) == "" {
+		return fmt.Errorf("action %d (%q) hook_fields requires hook", i, action.Name)
+	}
+	properties, _, err := recordSchemaTopLevelProperties(action.RecordSchema)
+	if err != nil {
+		return fmt.Errorf("action %d (%q) hook_fields record_schema: %w", i, action.Name, err)
+	}
+	seen := make(map[string]struct{}, len(action.HookFields))
+	for _, field := range action.HookFields {
+		if strings.TrimSpace(field) == "" || strings.TrimSpace(field) != field {
+			return fmt.Errorf("action %d (%q) hook_fields contains an invalid field", i, action.Name)
+		}
+		if _, duplicate := seen[field]; duplicate {
+			return fmt.Errorf("action %d (%q) hook_fields duplicates %q", i, action.Name, field)
+		}
+		seen[field] = struct{}{}
+		if _, declared := properties[field]; !declared {
+			return fmt.Errorf("action %d (%q) hook_fields field %q is absent from record_schema", i, action.Name, field)
+		}
+		if containsWriteField(action.PathFields, field) || containsWriteField(action.BodyFields, field) || action.BodyField == field {
+			return fmt.Errorf("action %d (%q) hook_fields field %q overlaps the primary request contract", i, action.Name, field)
+		}
+	}
+	return nil
+}
+
+func containsWriteField(fields []string, wanted string) bool {
+	for _, field := range fields {
+		if field == wanted {
+			return true
+		}
+	}
+	return false
+}
+
+const maxBinaryUploadBytes = int64(64 << 20)
+
+func validateWriteActionBaseURL(i int, action WriteAction) error {
+	if strings.TrimSpace(action.BaseURL) == "" {
+		return nil
+	}
+	if action.BaseURL != strings.TrimSpace(action.BaseURL) || strings.Contains(action.BaseURL, "{{") {
+		return fmt.Errorf("action %d (%q) base_url must be one fixed absolute origin", i, action.Name)
+	}
+	parsed, err := url.Parse(action.BaseURL)
+	if err != nil || parsed.Host == "" || (parsed.Scheme != "https" && parsed.Scheme != "http") || parsed.User != nil || parsed.RawQuery != "" || parsed.Fragment != "" || (parsed.Path != "" && parsed.Path != "/") {
+		return fmt.Errorf("action %d (%q) base_url must be one fixed absolute HTTP origin", i, action.Name)
+	}
+	return nil
+}
+
+func validateBinaryUploadSpec(i int, action WriteAction) error {
+	spec := action.BinaryUpload
+	if spec == nil {
+		return fmt.Errorf("action %d (%q) body_type binary_upload requires binary_upload", i, action.Name)
+	}
+	if strings.TrimSpace(spec.SourceField) == "" {
+		return fmt.Errorf("action %d (%q) binary_upload requires source_field", i, action.Name)
+	}
+	if spec.MaxBytes <= 0 || spec.MaxBytes > maxBinaryUploadBytes {
+		return fmt.Errorf("action %d (%q) binary_upload max_bytes must be between 1 and %d", i, action.Name, maxBinaryUploadBytes)
 	}
 	return nil
 }
@@ -2464,31 +2639,6 @@ func operationExecutionBlock(op OperationSpec) (string, int) {
 	return block, count
 }
 
-func expectedOperationBlock(kind string) string {
-	switch kind {
-	case "rest_read", "rest_write", "provider_search":
-		return "rest"
-	case "graphql_query", "graphql_mutation":
-		return "graphql"
-	case "xml_export", "xml_import":
-		return "xml"
-	case "binary_download":
-		return "binary"
-	case "file_upload":
-		return "file"
-	case "local_git":
-		return "local_git"
-	case "local_file":
-		return "local_file"
-	case "browser_open":
-		return "browser"
-	case "stream_etl", "composite":
-		return "composite"
-	default:
-		return ""
-	}
-}
-
 // validateRequiredQuery rejects a required_query group that could never be
 // satisfied. The meta-schema already enforces a non-empty any_of; this catches
 // the blank-name case it cannot express. Both failures are load errors rather
@@ -2582,6 +2732,9 @@ func validateOperationMultipartSemantics(i int, op OperationSpec) error {
 			}
 			if part.MaxBytes <= 0 {
 				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires a positive max_bytes", i, op.ID, part.Name)
+			}
+			if strings.TrimSpace(part.ContentType) == "" && len(part.AllowedMediaTypes) == 0 {
+				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires declared media policy", i, op.ID, part.Name)
 			}
 		default:
 			return fmt.Errorf("operation %d (%q) rest.multipart part %d has unsupported type %q", i, op.ID, partIndex, part.Type)
@@ -2687,6 +2840,12 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	if err := validateRequiredQuery(i, op); err != nil {
 		return err
 	}
+	if err := validateOperationHeaderParameters(op); err != nil {
+		return fmt.Errorf("operation %d (%q): %w", i, op.ID, err)
+	}
+	if err := validateOperationResponseContract(op); err != nil {
+		return fmt.Errorf("operation %d (%q): %w", i, op.ID, err)
+	}
 	if err := validateOperationMultipartSemantics(i, op); err != nil {
 		return err
 	}
@@ -2725,8 +2884,8 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if op.OutputPolicy != "status" {
 			return fmt.Errorf("operation %d (%q) rest_status output_policy must be status", i, op.ID)
 		}
-		if op.REST.MaxBytes < 0 || op.REST.MaxBytes > 1024 {
-			return fmt.Errorf("operation %d (%q) rest_status max_bytes must be between 0 and 1024", i, op.ID)
+		if op.REST.MaxBytes <= 0 || op.REST.MaxBytes > 1024 {
+			return fmt.Errorf("operation %d (%q) rest_status max_bytes must be between 1 and 1024", i, op.ID)
 		}
 		if len(op.REST.Body) != 0 || len(op.REST.BodySchema) != 0 || strings.TrimSpace(op.REST.ContentType) != "" {
 			return fmt.Errorf("operation %d (%q) rest_status must not declare a request body", i, op.ID)
@@ -2779,6 +2938,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 				return fmt.Errorf("operation %d (%q) binary_download accept %q is not a valid media type: %w", i, op.ID, op.Binary.Accept, err)
 			}
 		}
+		if err := validateOperationBinaryContentTypes(op); err != nil {
+			return fmt.Errorf("operation %d (%q) binary_download: %w", i, op.ID, err)
+		}
 	case "text_export":
 		if method := strings.ToUpper(strings.TrimSpace(op.Binary.Method)); method != http.MethodGet {
 			return fmt.Errorf("operation %d (%q) text_export method must be GET, got %s", i, op.ID, method)
@@ -2791,6 +2953,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		}
 		if op.OutputPolicy != "file_manifest" {
 			return fmt.Errorf("operation %d (%q) text_export output_policy must be file_manifest", i, op.ID)
+		}
+		if err := validateOperationBinaryContentTypes(op); err != nil {
+			return fmt.Errorf("operation %d (%q) text_export: %w", i, op.ID, err)
 		}
 	case "file_upload":
 		if op.File.Direction != "upload" {

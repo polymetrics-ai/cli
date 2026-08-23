@@ -2,6 +2,7 @@ package elasticsearch
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/base64"
 	"net/http"
 	"testing"
@@ -95,6 +96,49 @@ func TestAuthenticator_MissingSecretFallsBackToBasic(t *testing.T) {
 	want := "Basic " + base64.StdEncoding.EncodeToString([]byte("elastic:password"))
 	if got := req.Header.Get("Authorization"); got != want {
 		t.Fatalf("Authorization = %q, want %q", got, want)
+	}
+}
+
+func TestAuthenticator_BasicAllowsOptionalBlankPassword(t *testing.T) {
+	username := "elastic-user-canary"
+	h := Hooks{}
+	auth, err := h.Authenticator(context.Background(), connectors.RuntimeConfig{
+		Config: map[string]string{"username": username},
+	}, baseSpec())
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req := doAuthenticatedRequest(t, auth)
+	gotUsername, password, ok := req.BasicAuth()
+	if !ok || len(password) != 0 {
+		t.Fatal("Basic auth did not preserve the declaration-authorized blank password")
+	}
+	if gotLength, wantLength := len(gotUsername), len(username); gotLength != wantLength {
+		t.Fatalf("username length = %d, want %d", gotLength, wantLength)
+	}
+	if gotHash, wantHash := sha256.Sum256([]byte(gotUsername)), sha256.Sum256([]byte(username)); gotHash != wantHash {
+		t.Fatalf("username SHA-256 = %x, want %x", gotHash, wantHash)
+	}
+}
+
+func TestAuthenticator_PreservesCompositeAPIKeyBytes(t *testing.T) {
+	id := "\tapi-key-id-canary"
+	secret := "api-key-secret-canary "
+	h := Hooks{}
+	auth, err := h.Authenticator(context.Background(), connectors.RuntimeConfig{
+		Config:  map[string]string{"api_key_id": id},
+		Secrets: map[string]string{"api_key_secret": secret},
+	}, baseSpec())
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	got := doAuthenticatedRequest(t, auth).Header.Get("Authorization")
+	want := "ApiKey " + base64.StdEncoding.EncodeToString([]byte(id+":"+secret))
+	if gotLength, wantLength := len(got), len(want); gotLength != wantLength {
+		t.Fatalf("Authorization length = %d, want %d", gotLength, wantLength)
+	}
+	if gotHash, wantHash := sha256.Sum256([]byte(got)), sha256.Sum256([]byte(want)); gotHash != wantHash {
+		t.Fatalf("Authorization SHA-256 = %x, want %x", gotHash, wantHash)
 	}
 }
 

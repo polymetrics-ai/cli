@@ -17,6 +17,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/native/sqltls"
 )
 
@@ -257,6 +258,9 @@ func (c connConfig) openTypedCatalogPool(ctx context.Context, resources typedCat
 }
 
 func openPostgresPool(ctx context.Context, poolConfig *pgxpool.Config) (*pgxpool.Pool, error) {
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return nil, err
+	}
 	pool, err := pgxpool.NewWithConfig(ctx, poolConfig)
 	if err != nil {
 		// Keep endpoint and credentials out of user-visible errors.
@@ -264,6 +268,66 @@ func openPostgresPool(ctx context.Context, poolConfig *pgxpool.Config) (*pgxpool
 	}
 	return pool, nil
 }
+
+// checkPostgresRequestAdmission is the physical PostgreSQL I/O fence. Native
+// callers carry the same declaration-owned admission context as the HTTP
+// transport, but pgx does not inspect it itself. Call this immediately before
+// opening a connection or issuing a query or statement so a fence committed by
+// another process stops the next database interaction rather than only the
+// next top-level connector operation.
+func checkPostgresRequestAdmission(ctx context.Context) error {
+	if err := connsdk.CheckRequestAdmission(ctx); err != nil {
+		return fmt.Errorf("postgres request admission: %w", err)
+	}
+	return nil
+}
+
+// admittedPostgresTx makes the fence non-optional for the pgx transaction
+// paths shared by catalog discovery, source reads, and managed-target writes.
+// Embedding preserves pgx.Tx's less common methods while the methods that can
+// issue SQL re-check the durable epoch immediately before the driver sees
+// them. A rollback intentionally remains unwrapped: cleanup must be allowed
+// after a fence so an uncommitted transaction cannot be leaked.
+type admittedPostgresTx struct{ pgx.Tx }
+
+func admitPostgresTx(tx pgx.Tx) pgx.Tx {
+	if tx == nil {
+		return nil
+	}
+	return admittedPostgresTx{Tx: tx}
+}
+
+func (tx admittedPostgresTx) Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error) {
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return pgconn.CommandTag{}, err
+	}
+	return tx.Tx.Exec(ctx, sql, arguments...)
+}
+
+func (tx admittedPostgresTx) Query(ctx context.Context, sql string, arguments ...any) (pgx.Rows, error) {
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return nil, err
+	}
+	return tx.Tx.Query(ctx, sql, arguments...)
+}
+
+func (tx admittedPostgresTx) QueryRow(ctx context.Context, sql string, arguments ...any) pgx.Row {
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return postgresAdmissionErrorRow{err: err}
+	}
+	return tx.Tx.QueryRow(ctx, sql, arguments...)
+}
+
+func (tx admittedPostgresTx) Commit(ctx context.Context) error {
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return err
+	}
+	return tx.Tx.Commit(ctx)
+}
+
+type postgresAdmissionErrorRow struct{ err error }
+
+func (row postgresAdmissionErrorRow) Scan(...any) error { return row.err }
 
 // resolveConfig validates config + secrets into a connConfig. It enforces
 // the required fields, a valid sslmode, a numeric port, and that host is a
@@ -491,6 +555,9 @@ func (c Connector) check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 		return fmt.Errorf("check postgres: open pool: %w", err)
 	}
 	defer pool.Close()
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return err
+	}
 	if err := pool.Ping(ctx); err != nil {
 		wrapped := fmt.Errorf("check postgres: ping: %w", err)
 		return wrapped

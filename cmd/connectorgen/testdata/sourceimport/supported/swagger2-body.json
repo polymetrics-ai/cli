@@ -1,0 +1,28 @@
+{
+  "swagger": "2.0",
+  "info": {"title": "Swagger body fixture", "version": "1"},
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "security": [
+    {"oauth2": ["widgets.write"], "apiKey": []},
+    {"bearerAuth": []}
+  ],
+  "paths": {
+    "/widgets/{widget_id}": {
+      "parameters": [
+        {"name": "widget_id", "in": "path", "required": true, "type": "string", "maxLength": 36},
+        {"name": "include_archived", "in": "query", "type": "boolean"}
+      ],
+      "post": {
+        "operationId": "updateWidget",
+        "parameters": [
+          {"name": "widget_id", "in": "path", "required": true, "type": "string", "maxLength": 24},
+          {"name": "body", "in": "body", "required": true, "schema": {"type": "object", "additionalProperties": false, "properties": {"name": {"type": "string", "maxLength": 80}}}}
+        ],
+        "responses": {
+          "200": {"description": "updated", "schema": {"type": "object", "additionalProperties": false, "properties": {"id": {"type": "string", "maxLength": 36}}}}
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "api": "Google Ads API v22 REST discovery revision 20260721",
+  "api": "Google Ads API v22 REST discovery revision 20260817",
   "docs": "https://developers.google.com/google-ads/api/reference/rpc/v22/overview",
   "reviewed_at": "2026-07-31",
   "operation_ledger_version": 1,
@@ -36,118 +36,64 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/AdGroupCriterionCustomizers:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.AdGroupCriterionCustomizers.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_criterion_customizers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_criterion_customizers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/CampaignGoalConfigs:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.CampaignGoalConfigs.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_goal_configs before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_goal_configs"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/CustomerCustomizers:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.CustomerCustomizers.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_customizers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_customizers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/Goals:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.Goals.mutate",
-        "notes": "Author a closed record_schema for mutate_goals before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_goals"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/accountBudgetProposals:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.accountBudgetProposals.mutate",
-        "notes": "Author a closed record_schema for mutate_account_budget_proposals before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_account_budget_proposals"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/accountLinks:create",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.accountLinks.create",
-        "notes": "Author a closed record_schema for create_account_links before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "create_account_links"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/accountLinks:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.accountLinks.mutate",
-        "notes": "Author a closed record_schema for mutate_account_links before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_account_links"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroupAdLabels:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroupAdLabels.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_ad_labels before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_ad_labels"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroupAds:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroupAds.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_ads before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_ads"
       }
     },
     {
@@ -166,131 +112,71 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroupAssetSets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroupAssetSets.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_asset_sets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_asset_sets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroupAssets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroupAssets.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_assets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_assets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroupBidModifiers:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroupBidModifiers.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_bid_modifiers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_bid_modifiers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroupCriteria:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroupCriteria.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_criteria before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_criteria"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroupCriterionLabels:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroupCriterionLabels.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_criterion_labels before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_criterion_labels"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroupCustomizers:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroupCustomizers.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_customizers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_customizers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroupLabels:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroupLabels.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_group_labels before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_group_labels"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adGroups:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adGroups.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_groups before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_groups"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/adParameters:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.adParameters.mutate",
-        "notes": "Author a closed record_schema for mutate_ad_parameters before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ad_parameters"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/ads:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.ads.mutate",
-        "notes": "Author a closed record_schema for mutate_ads before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_ads"
       }
     },
     {
@@ -310,105 +196,57 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/assetGroupAssets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGroupAssets.mutate",
-        "notes": "Author a closed record_schema for mutate_asset_group_assets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_asset_group_assets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/assetGroupListingGroupFilters:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGroupListingGroupFilters.mutate",
-        "notes": "Author a closed record_schema for mutate_asset_group_listing_group_filters before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_asset_group_listing_group_filters"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/assetGroupSignals:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGroupSignals.mutate",
-        "notes": "Author a closed record_schema for mutate_asset_group_signals before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_asset_group_signals"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/assetGroups:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGroups.mutate",
-        "notes": "Author a closed record_schema for mutate_asset_groups before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_asset_groups"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/assetSetAssets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetSetAssets.mutate",
-        "notes": "Author a closed record_schema for mutate_asset_set_assets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_asset_set_assets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/assetSets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetSets.mutate",
-        "notes": "Author a closed record_schema for mutate_asset_sets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_asset_sets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/assets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assets.mutate",
-        "notes": "Author a closed record_schema for mutate_assets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_assets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/audiences:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.audiences.mutate",
-        "notes": "Author a closed record_schema for mutate_audiences before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_audiences"
       }
     },
     {
@@ -440,14 +278,8 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/batchJobs:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.batchJobs.mutate",
-        "notes": "Author a closed record_schema for mutate_batch_jobs before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_batch_jobs"
       }
     },
     {
@@ -466,144 +298,78 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/biddingDataExclusions:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.biddingDataExclusions.mutate",
-        "notes": "Author a closed record_schema for mutate_bidding_data_exclusions before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_bidding_data_exclusions"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/biddingSeasonalityAdjustments:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.biddingSeasonalityAdjustments.mutate",
-        "notes": "Author a closed record_schema for mutate_bidding_seasonality_adjustments before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_bidding_seasonality_adjustments"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/biddingStrategies:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.biddingStrategies.mutate",
-        "notes": "Author a closed record_schema for mutate_bidding_strategies before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_bidding_strategies"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/billingSetups:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.billingSetups.mutate",
-        "notes": "Author a closed record_schema for mutate_billing_setups before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_billing_setups"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignAssetSets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignAssetSets.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_asset_sets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_asset_sets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignAssets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignAssets.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_assets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_assets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignBidModifiers:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignBidModifiers.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_bid_modifiers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_bid_modifiers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignBudgets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignBudgets.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_budgets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_budgets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignConversionGoals:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignConversionGoals.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_conversion_goals before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_conversion_goals"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignCriteria:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignCriteria.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_criteria before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_criteria"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignCustomizers:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignCustomizers.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_customizers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_customizers"
       }
     },
     {
@@ -622,14 +388,8 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignDrafts:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignDrafts.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_drafts before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_drafts"
       }
     },
     {
@@ -648,274 +408,148 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignGroups:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignGroups.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_groups before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_groups"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignLabels:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignLabels.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_labels before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_labels"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignLifecycleGoal:configureCampaignLifecycleGoals",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignLifecycleGoal.configureCampaignLifecycleGoals",
-        "notes": "Author a closed record_schema for configure_campaign_lifecycle_goals_campaign_lifecycle_goal before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "configure_campaign_lifecycle_goals_campaign_lifecycle_goal"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaignSharedSets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaignSharedSets.mutate",
-        "notes": "Author a closed record_schema for mutate_campaign_shared_sets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaign_shared_sets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaigns:enablePMaxBrandGuidelines",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaigns.enablePMaxBrandGuidelines",
-        "notes": "Author a closed record_schema for enable_p_max_brand_guidelines_campaigns before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "enable_p_max_brand_guidelines_campaigns"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/campaigns:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.campaigns.mutate",
-        "notes": "Author a closed record_schema for mutate_campaigns before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_campaigns"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/conversionActions:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.conversionActions.mutate",
-        "notes": "Author a closed record_schema for mutate_conversion_actions before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_conversion_actions"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/conversionCustomVariables:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.conversionCustomVariables.mutate",
-        "notes": "Author a closed record_schema for mutate_conversion_custom_variables before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_conversion_custom_variables"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/conversionGoalCampaignConfigs:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.conversionGoalCampaignConfigs.mutate",
-        "notes": "Author a closed record_schema for mutate_conversion_goal_campaign_configs before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_conversion_goal_campaign_configs"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/conversionValueRuleSets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.conversionValueRuleSets.mutate",
-        "notes": "Author a closed record_schema for mutate_conversion_value_rule_sets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_conversion_value_rule_sets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/conversionValueRules:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.conversionValueRules.mutate",
-        "notes": "Author a closed record_schema for mutate_conversion_value_rules before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_conversion_value_rules"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:createCustomerClient",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.createCustomerClient",
-        "notes": "Author a closed record_schema for create_customer_client_customers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "create_customer_client_customers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customAudiences:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customAudiences.mutate",
-        "notes": "Author a closed record_schema for mutate_custom_audiences before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_custom_audiences"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customConversionGoals:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customConversionGoals.mutate",
-        "notes": "Author a closed record_schema for mutate_custom_conversion_goals before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_custom_conversion_goals"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customInterests:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customInterests.mutate",
-        "notes": "Author a closed record_schema for mutate_custom_interests before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_custom_interests"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerAssetSets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerAssetSets.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_asset_sets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_asset_sets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerAssets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerAssets.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_assets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_assets"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerClientLinks:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerClientLinks.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_client_links before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_client_links"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerConversionGoals:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerConversionGoals.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_conversion_goals before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_conversion_goals"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerLabels:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerLabels.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_labels before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_labels"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerLifecycleGoal:configureCustomerLifecycleGoals",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerLifecycleGoal.configureCustomerLifecycleGoals",
-        "notes": "Author a closed record_schema for configure_customer_lifecycle_goals_customer_lifecycle_goal before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "configure_customer_lifecycle_goals_customer_lifecycle_goal"
       }
     },
     {
@@ -928,92 +562,50 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerManagerLinks:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerManagerLinks.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_manager_links before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_manager_links"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerNegativeCriteria:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerNegativeCriteria.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_negative_criteria before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_negative_criteria"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerSkAdNetworkConversionValueSchemas:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerSkAdNetworkConversionValueSchemas.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_sk_ad_network_conversion_value_schemas before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_sk_ad_network_conversion_value_schemas"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerUserAccessInvitations:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerUserAccessInvitations.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_user_access_invitations before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_user_access_invitations"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customerUserAccesses:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customerUserAccesses.mutate",
-        "notes": "Author a closed record_schema for mutate_customer_user_accesses before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customer_user_accesses"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/customizerAttributes:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.customizerAttributes.mutate",
-        "notes": "Author a closed record_schema for mutate_customizer_attributes before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customizer_attributes"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/dataLinks:create",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.dataLinks.create",
-        "notes": "Author a closed record_schema for create_data_links before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "create_data_links"
       }
     },
     {
@@ -1033,14 +625,8 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/experimentArms:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.experimentArms.mutate",
-        "notes": "Author a closed record_schema for mutate_experiment_arms before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_experiment_arms"
       }
     },
     {
@@ -1085,14 +671,8 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/experiments:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.experiments.mutate",
-        "notes": "Author a closed record_schema for mutate_experiments before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_experiments"
       }
     },
     {
@@ -1131,66 +711,36 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:generateAudienceCompositionInsights",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceCompositionInsights",
-        "notes": "Unsupported required body fields: audience. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers generate-audience-composition-insights"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:generateAudienceOverlapInsights",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceOverlapInsights",
-        "notes": "Unsupported required body fields: primaryAttribute, countryLocation. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers generate-audience-overlap-insights"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:generateCreatorInsights",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateCreatorInsights",
-        "notes": "Unsupported required body fields: countryLocations. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers generate-creator-insights"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:generateInsightsFinderReport",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateInsightsFinderReport",
-        "notes": "Unsupported required body fields: baselineAudience, specificAudience. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers generate-insights-finder-report"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:generateKeywordForecastMetrics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordForecastMetrics",
-        "notes": "Unsupported required body fields: campaign. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers generate-keyword-forecast-metrics"
       }
     },
     {
@@ -1210,27 +760,15 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:generateReachForecast",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateReachForecast",
-        "notes": "Unsupported required body fields: plannedProducts, campaignDuration. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers generate-reach-forecast"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:generateShareablePreviews",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateShareablePreviews",
-        "notes": "Unsupported required body fields: shareablePreviews. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers generate-shareable-previews"
       }
     },
     {
@@ -1243,27 +781,15 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTargetingSuggestionMetrics",
-        "notes": "Unsupported required body fields: audiences. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers generate-targeting-suggestion-metrics"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:generateTrendingInsights",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTrendingInsights",
-        "notes": "Unsupported required body fields: countryLocation. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers generate-trending-insights"
       }
     },
     {
@@ -1276,14 +802,8 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/googleAds:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.googleAds.mutate",
-        "notes": "Author a closed record_schema for mutate_google_ads before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_google_ads"
       }
     },
     {
@@ -1309,92 +829,50 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/keywordPlanAdGroupKeywords:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.keywordPlanAdGroupKeywords.mutate",
-        "notes": "Author a closed record_schema for mutate_keyword_plan_ad_group_keywords before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_keyword_plan_ad_group_keywords"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/keywordPlanAdGroups:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.keywordPlanAdGroups.mutate",
-        "notes": "Author a closed record_schema for mutate_keyword_plan_ad_groups before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_keyword_plan_ad_groups"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/keywordPlanCampaignKeywords:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.keywordPlanCampaignKeywords.mutate",
-        "notes": "Author a closed record_schema for mutate_keyword_plan_campaign_keywords before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_keyword_plan_campaign_keywords"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/keywordPlanCampaigns:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.keywordPlanCampaigns.mutate",
-        "notes": "Author a closed record_schema for mutate_keyword_plan_campaigns before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_keyword_plan_campaigns"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/keywordPlans:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.keywordPlans.mutate",
-        "notes": "Author a closed record_schema for mutate_keyword_plans before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_keyword_plans"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/labels:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.labels.mutate",
-        "notes": "Author a closed record_schema for mutate_labels before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_labels"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/localServices:appendLeadConversation",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.localServices.appendLeadConversation",
-        "notes": "Author a closed record_schema for append_lead_conversation_local_services before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "append_lead_conversation_local_services"
       }
     },
     {
@@ -1413,40 +891,22 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/multiPartyAuthReview:resolve",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.multiPartyAuthReview.resolve",
-        "notes": "Author a closed record_schema for resolve_multi_party_auth_review before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "resolve_multi_party_auth_review"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.mutate",
-        "notes": "Author a closed record_schema for mutate_customers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_customers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/offlineUserDataJobs:create",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.offlineUserDataJobs.create",
-        "notes": "Author a closed record_schema for create_offline_user_data_jobs before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "create_offline_user_data_jobs"
       }
     },
     {
@@ -1511,14 +971,8 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/productLinkInvitations:create",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.productLinkInvitations.create",
-        "notes": "Author a closed record_schema for create_product_link_invitations before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "create_product_link_invitations"
       }
     },
     {
@@ -1538,14 +992,8 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/productLinks:create",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.productLinks.create",
-        "notes": "Author a closed record_schema for create_product_links before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "create_product_links"
       }
     },
     {
@@ -1558,40 +1006,22 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/recommendationSubscriptions:mutateRecommendationSubscription",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.recommendationSubscriptions.mutateRecommendationSubscription",
-        "notes": "Author a closed record_schema for mutate_recommendation_subscription_recommendation_subscriptions before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_recommendation_subscription_recommendation_subscriptions"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/recommendations:apply",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.recommendations.apply",
-        "notes": "Author a closed record_schema for apply_recommendations before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "apply_recommendations"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/recommendations:dismiss",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.recommendations.dismiss",
-        "notes": "Author a closed record_schema for dismiss_recommendations before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "dismiss_recommendations"
       }
     },
     {
@@ -1604,27 +1034,15 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/remarketingActions:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.remarketingActions.mutate",
-        "notes": "Author a closed record_schema for mutate_remarketing_actions before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_remarketing_actions"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:removeCampaignAutomaticallyCreatedAsset",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.removeCampaignAutomaticallyCreatedAsset",
-        "notes": "Author a closed record_schema for remove_campaign_automatically_created_asset_customers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "remove_campaign_automatically_created_asset_customers"
       }
     },
     {
@@ -1637,27 +1055,15 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/sharedCriteria:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.sharedCriteria.mutate",
-        "notes": "Author a closed record_schema for mutate_shared_criteria before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_shared_criteria"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/sharedSets:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.sharedSets.mutate",
-        "notes": "Author a closed record_schema for mutate_shared_sets before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_shared_sets"
       }
     },
     {
@@ -1676,14 +1082,8 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/smartCampaignSettings:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.smartCampaignSettings.mutate",
-        "notes": "Author a closed record_schema for mutate_smart_campaign_settings before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_smart_campaign_settings"
       }
     },
     {
@@ -1703,40 +1103,22 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:suggestKeywordThemes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestKeywordThemes",
-        "notes": "Unsupported required body fields: suggestionInfo. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers suggest-keyword-themes"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:suggestSmartCampaignAd",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignAd",
-        "notes": "Unsupported required body fields: suggestionInfo. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers suggest-smart-campaign-ad"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignBudgetOptions",
-        "notes": "Unsupported required body fields: suggestionInfo. Add connector-owned typed mappings before enabling this direct read."
+      "covered_by": {
+        "direct_read": "customers suggest-smart-campaign-budget-options"
       }
     },
     {
@@ -1762,79 +1144,43 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:uploadCallConversions",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.uploadCallConversions",
-        "notes": "Author a closed record_schema for upload_call_conversions_customers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "upload_call_conversions_customers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:uploadClickConversions",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.uploadClickConversions",
-        "notes": "Author a closed record_schema for upload_click_conversions_customers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "upload_click_conversions_customers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:uploadConversionAdjustments",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.uploadConversionAdjustments",
-        "notes": "Author a closed record_schema for upload_conversion_adjustments_customers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "upload_conversion_adjustments_customers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:uploadUserData",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.uploadUserData",
-        "notes": "Author a closed record_schema for upload_user_data_customers before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "upload_user_data_customers"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/userListCustomerTypes:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.userListCustomerTypes.mutate",
-        "notes": "Author a closed record_schema for mutate_user_list_customer_types before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_user_list_customer_types"
       }
     },
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/userLists:mutate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.userLists.mutate",
-        "notes": "Author a closed record_schema for mutate_user_lists before enabling this reverse ETL action."
+      "covered_by": {
+        "write": "mutate_user_lists"
       }
     },
     {

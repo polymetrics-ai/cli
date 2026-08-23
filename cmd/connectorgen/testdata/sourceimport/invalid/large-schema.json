@@ -1,0 +1,1 @@
+{"openapi":"3.0.3","info":{"title":"invalid","version":"1"},"paths":{"/items":{"get":{"operationId":"large","responses":{"200":{"description":"x","content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{"a":{"type":"string","maxLength":80},"b":{"type":"string","maxLength":80},"c":{"type":"string","maxLength":80}}}}}}}}}}}

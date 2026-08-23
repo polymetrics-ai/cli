@@ -1,0 +1,1 @@
+{"openapi":"3.0.3","info":{"title":"invalid","version":"1"},"paths":{"/items/{item_id}":{"get":{"operationId":"missingPathParameter","responses":{"200":{"description":"x"}}}}}}

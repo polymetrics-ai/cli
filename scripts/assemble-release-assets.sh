@@ -153,7 +153,7 @@ for target in "${ARCHIVE_TARGETS[@]}"; do
       "$gnu_tar" --sort=name \
           --owner=0 --group=0 --numeric-owner \
           --mtime="@$SOURCE_DATE_EPOCH" \
-          -C "$work" -cf - . | gzip -9n > "$archive"
+          -C "$work" -cf - LICENSE NOTICE README.md "$binary" | gzip -9n > "$archive"
       ;;
     *)
       printf 'unsupported archive format: %s\n' "$extension" >&2

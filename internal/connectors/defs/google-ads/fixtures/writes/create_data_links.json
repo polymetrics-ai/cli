@@ -1,0 +1,16 @@
+{
+  "record": {
+    "dataLink": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/dataLinks:create",
+    "body": {
+      "dataLink": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

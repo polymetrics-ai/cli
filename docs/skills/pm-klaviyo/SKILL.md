@@ -1,0 +1,90 @@
+---
+name: pm-klaviyo
+description: Klaviyo connector knowledge and safe action guide.
+---
+
+# pm-klaviyo
+
+## Purpose
+
+Reads Klaviyo profiles, events, campaigns, lists, metrics, and segments through the Klaviyo REST (JSON:API) API.
+
+## Icon
+
+- id: klaviyo
+- asset: icons/klaviyo.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy
+
+## Capabilities
+
+- check=true catalog=true read=true write=false query=false
+- Integration type: api
+
+## Authentication
+
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
+
+## Configuration
+
+- base_url
+- mode
+- revision
+- api_key (secret) (required)
+
+## ETL Streams
+
+- profiles:
+  - primary key: id
+  - cursor: updated
+  - fields: created(string), email(string), external_id(string), first_name(string), id(string), last_name(string), organization(string), phone_number(string), type(string), updated(string)
+- events:
+  - primary key: id
+  - cursor: datetime
+  - fields: datetime(string), id(string), timestamp(integer), type(string), uuid(string)
+- campaigns:
+  - primary key: id
+  - cursor: updated_at
+  - fields: archived(boolean), channel(string), created_at(string), id(string), name(string), scheduled_at(string), send_time(string), status(string), type(string), updated_at(string)
+- lists:
+  - primary key: id
+  - cursor: updated
+  - fields: created(string), id(string), name(string), type(string), updated(string)
+- metrics:
+  - primary key: id
+  - cursor: updated
+  - fields: created(string), id(string), integration_name(string), name(string), type(string), updated(string)
+- segments:
+  - primary key: id
+  - cursor: updated
+  - fields: created(string), id(string), is_active(boolean), is_processing(boolean), name(string), type(string), updated(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+## Security
+
+- read risk: external Klaviyo API read of customer profile, event, and campaign data
+- Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Commands
+
+### Inspect as a manual
+
+```bash
+pm connectors inspect klaviyo
+```
+
+### Inspect as structured JSON
+
+```bash
+pm connectors inspect klaviyo --json
+```
+
+## Agent Rules
+
+- Run pm connectors inspect klaviyo before creating credentials or plans.
+- Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+- Never ask the user to paste secret values into chat.

@@ -58,9 +58,9 @@ func (f *fakeHooks) ReadStream(_ context.Context, _ StreamSpec, _ connectors.Rea
 	return f.readStreamHandled, f.readStreamErr
 }
 
-func (f *fakeHooks) ExecuteWrite(_ context.Context, _ WriteAction, _ connectors.Record, _ *Runtime) (bool, error) {
+func (f *fakeHooks) ExecuteWrite(_ context.Context, _ WriteAction, _ connectors.Record, _ *Runtime) (bool, []*connsdk.Response, error) {
 	f.executeWriteCalls++
-	return f.executeWriteHandled, f.executeWriteErr
+	return f.executeWriteHandled, nil, f.executeWriteErr
 }
 
 func (f *fakeHooks) Check(_ context.Context, _ connectors.RuntimeConfig, _ *Runtime) (bool, error) {
@@ -187,7 +187,7 @@ func TestStreamHookDispatch(t *testing.T) {
 
 func TestWriteHookDispatch(t *testing.T) {
 	fh := &fakeHooks{executeWriteHandled: true}
-	handled, err := fh.ExecuteWrite(context.Background(), WriteAction{Name: "create_widget"}, connectors.Record{}, &Runtime{})
+	handled, _, err := fh.ExecuteWrite(context.Background(), WriteAction{Name: "create_widget"}, connectors.Record{}, &Runtime{})
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}

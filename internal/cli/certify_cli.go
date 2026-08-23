@@ -4,17 +4,21 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
+	"debug/buildinfo"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
 	"polymetrics.ai/internal/connectors/certify"
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -115,7 +119,7 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		return err
 	}
 	if externalProof {
-		binarySHA256, err := currentBinarySHA256()
+		binaryProvenance, err := currentBinaryProvenance()
 		if err != nil {
 			return err
 		}
@@ -130,7 +134,8 @@ func runCertifySingle(ctx context.Context, root, connector string, flags parsedF
 		if _, err := certify.WriteExternalProof(root, certify.ExternalProofInput{
 			Connector:               connector,
 			RunID:                   runID,
-			BinarySHA256:            binarySHA256,
+			BinarySHA256:            binaryProvenance.PMBinarySHA256,
+			BuildSHA256:             binaryProvenance.PMBuildSHA256,
 			Command:                 append([]string(nil), os.Args...),
 			Stdout:                  rendered.String(),
 			ExitCode:                exitCodeForReport(rep),
@@ -306,9 +311,9 @@ func prepareExternalCertifyCredentialInput(args []string, flags parsedFlags, opt
 	if err != nil {
 		return nil, nil, nil, fmt.Errorf("read stdin certification credential: %w", err)
 	}
-	value := strings.TrimRight(string(payload), "\r\n")
-	if value == "" {
-		return nil, nil, nil, errors.New("stdin certification credential is empty")
+	value := credential.NormalizeStdin(string(payload))
+	if err := credential.RequirePersistentValue(field, value); err != nil {
+		return nil, nil, nil, err
 	}
 	childArgs := replaceCertificationStdinArg(args, field)
 	prepared = append(prepared, value)
@@ -395,17 +400,58 @@ func certificationModuleRoot() (string, error) {
 	}
 }
 
-func currentBinarySHA256() (string, error) {
+type currentBinaryBuildProvenance struct {
+	PMBinarySHA256 string
+	PMBuildSHA256  string
+}
+
+func currentBinaryProvenance() (currentBinaryBuildProvenance, error) {
 	path, err := os.Executable()
 	if err != nil {
-		return "", fmt.Errorf("certify external proof: locate current binary: %w", err)
+		return currentBinaryBuildProvenance{}, fmt.Errorf("certify external proof: locate current binary: %w", err)
 	}
 	payload, err := os.ReadFile(path)
 	if err != nil {
-		return "", fmt.Errorf("certify external proof: read current binary: %w", err)
+		return currentBinaryBuildProvenance{}, fmt.Errorf("certify external proof: read current binary: %w", err)
 	}
 	sum := sha256.Sum256(payload)
-	return hex.EncodeToString(sum[:]), nil
+	buildDigest, err := currentBinaryBuildDigest(path)
+	if err != nil {
+		return currentBinaryBuildProvenance{}, err
+	}
+	return currentBinaryBuildProvenance{PMBinarySHA256: hex.EncodeToString(sum[:]), PMBuildSHA256: buildDigest}, nil
+}
+
+func currentBinaryBuildDigest(path string) (string, error) {
+	info, err := buildinfo.ReadFile(path)
+	if err != nil {
+		return "", fmt.Errorf("certify external proof: read current build identity: %w", err)
+	}
+	type setting struct {
+		Key   string `json:"key"`
+		Value string `json:"value"`
+	}
+	settings := make([]setting, 0, len(info.Settings))
+	for _, value := range info.Settings {
+		settings = append(settings, setting{Key: value.Key, Value: value.Value})
+	}
+	sort.Slice(settings, func(i, j int) bool { return settings[i].Key < settings[j].Key })
+	payload, err := json.Marshal(struct {
+		GoVersion string    `json:"go_version"`
+		Path      string    `json:"path"`
+		MainPath  string    `json:"main_path"`
+		MainVer   string    `json:"main_version"`
+		MainSum   string    `json:"main_sum"`
+		Settings  []setting `json:"settings"`
+	}{
+		GoVersion: info.GoVersion, Path: info.Path, MainPath: info.Main.Path,
+		MainVer: info.Main.Version, MainSum: info.Main.Sum, Settings: settings,
+	})
+	if err != nil {
+		return "", fmt.Errorf("certify external proof: encode current build identity: %w", err)
+	}
+	digest := sha256.Sum256(payload)
+	return hex.EncodeToString(digest[:]), nil
 }
 
 func exitCodeForReport(rep certify.Report) int {

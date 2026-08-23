@@ -1,0 +1,16 @@
+{
+  "record": {
+    "jobId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value:uploadConversionAdjustments",
+    "body": {
+      "jobId": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

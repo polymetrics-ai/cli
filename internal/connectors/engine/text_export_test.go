@@ -12,19 +12,23 @@ import (
 func textExportBundle(baseURL string, maxBytes int) Bundle {
 	return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{
 		ID: "acme.audit.export", Kind: "text_export", Summary: "Export audit CSV", Risk: "medium", Approval: "explicit destination", OutputPolicy: "file_manifest",
-		Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/v2/audit.csv", MaxBytes: maxBytes, Accept: "text/csv"},
+		Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/v2/audit.csv", MaxBytes: maxBytes, Accept: "text/csv", ContentTypes: []string{"text/csv"}, Charset: "utf-8", Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}, Headers: []OperationResponseHeaderSpec{{Name: "X-Export-ID", MaxBytes: 64}}}},
 	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v2/audit.csv", Operation: &SurfaceOperation{Model: "text_export"}}}}}
 }
 
 func TestOperationTextExportWritesBoundedCSV(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.Header().Set("Content-Type", "text/csv")
+		w.Header().Set("Content-Type", "text/csv; charset=utf-8")
+		w.Header().Set("X-Export-ID", "export-42")
 		_, _ = w.Write([]byte("id,name\n1,ada\n"))
 	}))
 	t.Cleanup(srv.Close)
 	result, err := OperationBinaryDownload(context.Background(), textExportBundle(srv.URL, 1024), BinaryDownloadRequest{Operation: "acme.audit.export", DestRoot: t.TempDir(), FileName: "audit.csv"}, nil)
 	if err != nil || result.Record["file_size_bytes"] == nil {
 		t.Fatalf("OperationBinaryDownload result/error = %#v / %v", result, err)
+	}
+	if result.Status != http.StatusOK || result.Headers["X-Export-ID"].Values[0] != "export-42" {
+		t.Fatalf("result metadata = %#v, want declared status/header", result)
 	}
 }
 
@@ -41,9 +45,24 @@ func TestOperationTextExportRejectsUnboundedBeforeIO(t *testing.T) {
 	}
 }
 
+func TestOperationTextExportRequiresDeclaredCharsetBeforeIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
+	t.Cleanup(srv.Close)
+	bundle := textExportBundle(srv.URL, 1024)
+	bundle.Operations[0].Binary.Charset = ""
+	_, err := OperationBinaryDownload(context.Background(), bundle, BinaryDownloadRequest{Operation: "acme.audit.export", DestRoot: t.TempDir()}, nil)
+	if err == nil || !strings.Contains(err.Error(), "charset") {
+		t.Fatalf("OperationBinaryDownload error = %v, want charset contract refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("requests = %d, want pre-I/O refusal", requests)
+	}
+}
+
 func TestOperationTextExportOverCapLeavesNoArtifact(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.Header().Set("Content-Type", "text/csv")
+		w.Header().Set("Content-Type", "text/csv; charset=utf-8")
 		_, _ = w.Write([]byte("id,name\n1,ada\n2,grace\n"))
 	}))
 	t.Cleanup(srv.Close)
@@ -55,5 +74,44 @@ func TestOperationTextExportOverCapLeavesNoArtifact(t *testing.T) {
 	entries, readErr := os.ReadDir(dest)
 	if readErr != nil || len(entries) != 0 {
 		t.Fatalf("destination entries/error = %v / %v, want no partial export", entries, readErr)
+	}
+}
+
+func TestOperationTextExportRejectsUndeclaredMediaOrCharsetWithoutArtifact(t *testing.T) {
+	for _, contentType := range []string{"application/json", "text/csv; charset=iso-8859-1"} {
+		t.Run(contentType, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", contentType)
+				_, _ = w.Write([]byte("id,name\n1,ada\n"))
+			}))
+			t.Cleanup(srv.Close)
+			dest := t.TempDir()
+			_, err := OperationBinaryDownload(context.Background(), textExportBundle(srv.URL, 1024), BinaryDownloadRequest{Operation: "acme.audit.export", DestRoot: dest, FileName: "audit.csv"}, nil)
+			if err == nil || !strings.Contains(err.Error(), "response") {
+				t.Fatalf("OperationBinaryDownload error = %v, want media/charset rejection", err)
+			}
+			entries, readErr := os.ReadDir(dest)
+			if readErr != nil || len(entries) != 0 {
+				t.Fatalf("destination entries/error = %v / %v, want no artifact", entries, readErr)
+			}
+		})
+	}
+}
+
+func TestOperationTextExportRejectsOversizedDeclaredResponseHeaderWithoutArtifact(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "text/csv; charset=utf-8")
+		w.Header().Set("X-Export-ID", strings.Repeat("x", 65))
+		_, _ = w.Write([]byte("id,name\n1,ada\n"))
+	}))
+	t.Cleanup(srv.Close)
+	dest := t.TempDir()
+	_, err := OperationBinaryDownload(context.Background(), textExportBundle(srv.URL, 1024), BinaryDownloadRequest{Operation: "acme.audit.export", DestRoot: dest, FileName: "audit.csv"}, nil)
+	if err == nil || !strings.Contains(err.Error(), "response header") || !strings.Contains(err.Error(), "byte cap") {
+		t.Fatalf("OperationBinaryDownload error = %v, want bounded response-header rejection", err)
+	}
+	entries, readErr := os.ReadDir(dest)
+	if readErr != nil || len(entries) != 0 {
+		t.Fatalf("destination entries/error = %v / %v, want no artifact", entries, readErr)
 	}
 }

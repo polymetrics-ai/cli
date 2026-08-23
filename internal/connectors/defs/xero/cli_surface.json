@@ -282,15 +282,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_ten_ninety_nine",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "report-year",
-          "type": "string",
-          "summary": "The year of the 1099 report",
-          "maps_to": "query.reportYear",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -311,36 +303,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_aged_payables_by_contact",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "contact-id",
-          "type": "string",
-          "summary": "Unique identifier for a Contact",
-          "maps_to": "query.contactId",
-          "allow_empty": false
-        },
-        {
-          "name": "date",
-          "type": "string",
-          "summary": "The date of the Aged Payables By Contact report",
-          "maps_to": "query.date",
-          "allow_empty": false
-        },
-        {
-          "name": "from-date",
-          "type": "string",
-          "summary": "filter by the from date of the report e.g. 2021-02-01",
-          "maps_to": "query.fromDate",
-          "allow_empty": false
-        },
-        {
-          "name": "to-date",
-          "type": "string",
-          "summary": "filter by the to date of the report e.g. 2021-02-28",
-          "maps_to": "query.toDate",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -361,36 +324,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_aged_receivables_by_contact",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "contact-id",
-          "type": "string",
-          "summary": "Unique identifier for a Contact",
-          "maps_to": "query.contactId",
-          "allow_empty": false
-        },
-        {
-          "name": "date",
-          "type": "string",
-          "summary": "The date of the Aged Receivables By Contact report",
-          "maps_to": "query.date",
-          "allow_empty": false
-        },
-        {
-          "name": "from-date",
-          "type": "string",
-          "summary": "filter by the from date of the report e.g. 2021-02-01",
-          "maps_to": "query.fromDate",
-          "allow_empty": false
-        },
-        {
-          "name": "to-date",
-          "type": "string",
-          "summary": "filter by the to date of the report e.g. 2021-02-28",
-          "maps_to": "query.toDate",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -411,54 +345,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_balance_sheet",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "date",
-          "type": "string",
-          "summary": "The date of the Balance Sheet report",
-          "maps_to": "query.date",
-          "allow_empty": false
-        },
-        {
-          "name": "periods",
-          "type": "integer",
-          "summary": "The number of periods for the Balance Sheet report",
-          "maps_to": "query.periods"
-        },
-        {
-          "name": "timeframe",
-          "type": "string",
-          "summary": "The period size to compare to (MONTH, QUARTER, YEAR)",
-          "maps_to": "query.timeframe",
-          "allow_empty": false
-        },
-        {
-          "name": "tracking-option-id-1",
-          "type": "string",
-          "summary": "The tracking option 1 for the Balance Sheet report",
-          "maps_to": "query.trackingOptionID1",
-          "allow_empty": false
-        },
-        {
-          "name": "tracking-option-id-2",
-          "type": "string",
-          "summary": "The tracking option 2 for the Balance Sheet report",
-          "maps_to": "query.trackingOptionID2",
-          "allow_empty": false
-        },
-        {
-          "name": "standard-layout",
-          "type": "boolean",
-          "summary": "The standard layout boolean for the Balance Sheet report",
-          "maps_to": "query.standardLayout"
-        },
-        {
-          "name": "payments-only",
-          "type": "boolean",
-          "summary": "return a cash basis for the Balance Sheet report",
-          "maps_to": "query.paymentsOnly"
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -479,22 +366,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_bank_summary",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "from-date",
-          "type": "string",
-          "summary": "filter by the from date of the report e.g. 2021-02-01",
-          "maps_to": "query.fromDate",
-          "allow_empty": false
-        },
-        {
-          "name": "to-date",
-          "type": "string",
-          "summary": "filter by the to date of the report e.g. 2021-02-28",
-          "maps_to": "query.toDate",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -515,15 +387,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_from_id",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "report-id",
-          "type": "string",
-          "summary": "Unique identifier for a Report",
-          "maps_to": "path.ReportID",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -544,27 +408,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_budget_summary",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "date",
-          "type": "string",
-          "summary": "The date for the Bank Summary report e.g. 2018-03-31",
-          "maps_to": "query.date",
-          "allow_empty": false
-        },
-        {
-          "name": "periods",
-          "type": "integer",
-          "summary": "The number of periods to compare (integer between 1 and 12)",
-          "maps_to": "query.periods"
-        },
-        {
-          "name": "timeframe",
-          "type": "integer",
-          "summary": "The period size to compare to (1=month, 3=quarter, 12=year)",
-          "maps_to": "query.timeframe"
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -585,15 +429,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_executive_summary",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "date",
-          "type": "string",
-          "summary": "The date for the Bank Summary report e.g. 2018-03-31",
-          "maps_to": "query.date",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -635,75 +471,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_profit_and_loss",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "from-date",
-          "type": "string",
-          "summary": "filter by the from date of the report e.g. 2021-02-01",
-          "maps_to": "query.fromDate",
-          "allow_empty": false
-        },
-        {
-          "name": "to-date",
-          "type": "string",
-          "summary": "filter by the to date of the report e.g. 2021-02-28",
-          "maps_to": "query.toDate",
-          "allow_empty": false
-        },
-        {
-          "name": "periods",
-          "type": "integer",
-          "summary": "The number of periods to compare (integer between 1 and 12)",
-          "maps_to": "query.periods"
-        },
-        {
-          "name": "timeframe",
-          "type": "string",
-          "summary": "The period size to compare to (MONTH, QUARTER, YEAR)",
-          "maps_to": "query.timeframe",
-          "allow_empty": false
-        },
-        {
-          "name": "tracking-category-id",
-          "type": "string",
-          "summary": "The trackingCategory 1 for the ProfitAndLoss report",
-          "maps_to": "query.trackingCategoryID",
-          "allow_empty": false
-        },
-        {
-          "name": "tracking-category-id-2",
-          "type": "string",
-          "summary": "The trackingCategory 2 for the ProfitAndLoss report",
-          "maps_to": "query.trackingCategoryID2",
-          "allow_empty": false
-        },
-        {
-          "name": "tracking-option-id",
-          "type": "string",
-          "summary": "The tracking option 1 for the ProfitAndLoss report",
-          "maps_to": "query.trackingOptionID",
-          "allow_empty": false
-        },
-        {
-          "name": "tracking-option-id-2",
-          "type": "string",
-          "summary": "The tracking option 2 for the ProfitAndLoss report",
-          "maps_to": "query.trackingOptionID2",
-          "allow_empty": false
-        },
-        {
-          "name": "standard-layout",
-          "type": "boolean",
-          "summary": "Return the standard layout for the ProfitAndLoss report",
-          "maps_to": "query.standardLayout"
-        },
-        {
-          "name": "payments-only",
-          "type": "boolean",
-          "summary": "Return cash only basis for the ProfitAndLoss report",
-          "maps_to": "query.paymentsOnly"
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -724,21 +492,7 @@
       "availability": "implemented",
       "operation": "xero.get_report_trial_balance",
       "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-      "flags": [
-        {
-          "name": "date",
-          "type": "string",
-          "summary": "The date for the Trial Balance report e.g. 2018-03-31",
-          "maps_to": "query.date",
-          "allow_empty": false
-        },
-        {
-          "name": "payments-only",
-          "type": "boolean",
-          "summary": "Return cash only basis for the Trial Balance report",
-          "maps_to": "query.paymentsOnly"
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
