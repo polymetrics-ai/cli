@@ -13,6 +13,6 @@
     "complete_result_output": "passed",
     "revalidation_2026_08_20": "passed_locally",
     "follow_up_action_binding_foundation_r1": "passed_locally",
-    "merge_origin_main_2026_08_23": "focused_packages_and_website_generation_passed_full_verify_pending"
+    "merge_origin_main_2026_08_23": "full_make_verify_passed_post_push_pr_rollup_pending"
   }
 }

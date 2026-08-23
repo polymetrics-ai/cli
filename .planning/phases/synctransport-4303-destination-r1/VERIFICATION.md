@@ -92,7 +92,7 @@ definition-owned boundary remained intact under a fresh run.
 - [x] Static and repository gates: `go vet ./...`, `go build ./cmd/pm`, `make lint` (zero issues), `make connector-canon-check`, and `git diff --check` passed. The prior post-green chained run also passed `docs-check`, `smoke-no-build`, `agent-contract-check`, generator validation and `surface-sync --check`, `connector-boundary` (552 connectors; clean), and `release-workflow-check`.
 - [x] Manual-GSD code review: inline standard-depth review found no remaining actionable issue; the only full-package finding was the defaulted-action admission ordering above, which was red-tested, fixed, and revalidated before this evidence was recorded.
 
-## 2026-08-23 merge integration (in progress)
+## 2026-08-23 merge integration
 
 - [x] Non-rewriting merge preparation: `scripts/gsd doctor`, all required
   source/prompt resolution, and `go run ./cmd/agentcontractgen check` passed.
@@ -102,5 +102,19 @@ definition-owned boundary remained intact under a fresh run.
   (1.096s / 1.169s), and `./internal/cli` (459.905s) passed.
 - [x] `cd website && pnpm run gen:website-data` passed and produced no
   working-tree delta, proving generated website data is current for the merged tree.
-- [ ] Full `make verify`, including standalone/polled `connector-boundary`, and
-  the post-push PR workflow rollup remain required before delivery.
+- [x] Full local gate: `GOFLAGS='-p=3' make verify` exited `0` after the
+  externally restored disk capacity and the expected cold-cache rebuild. It
+  passed formatting/tidy, `go vet ./...`, the complete
+  `go test -timeout 20m ./...` tree, `go build ./cmd/pm`, docs, smoke, lint,
+  agent-contract, generator/surface/evidence/certification checks,
+  connector-boundary/canon, and all release checks including the installed
+  GitHub certification archive proof. The first attempt encountered a vanished
+  Go build-cache artifact while compiling `internal/synctransport`; the exact
+  isolated rebuild (`GOFLAGS='-p=3' go test -count=1 -timeout 20m
+  ./internal/synctransport`) passed, and the required complete retry then
+  passed without a storage error.
+- [x] The full-run boundary report was clean: 552 connectors loaded, 316 files
+  checked, zero findings, and zero warnings. The independently detached and
+  polled preflight report was also clean.
+- [ ] Post-push PR workflow rollup remains required before delivery; report
+  real completed totals, including Website checks and Website generated data.
