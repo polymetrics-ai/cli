@@ -31,14 +31,21 @@ parity dependencies are resolved.
   bounded typed direct read, required-input validation, and cursor-pagination validation. The
   repository `--direct-read-only --external-proof` harness report passed with zero leaks; only a
   non-secret proof fingerprint is retained in the phase ledger.
+- The pending clean-run plan now uses the eight-surface contract: ETL, direct read, direct write,
+  reverse ETL, binary download, binary upload, flow, and schedule. Gong's three named multipart
+  actions map binary upload; the standard bounded `flow_roundtrip` and `schedule_roundtrip` map
+  the two application workflows without inventing a Gong scheduler or flow-runtime endpoint.
 
 ### Current open blockers
 
-- The strict `connectorgen source-import` foundation rejects the official fixed Gong OpenAPI URL
-  because it contains the required `?version=` query; the query-free route is 404. This is a
-  provider-neutral URL-policy gap, not a connector-specific bypass. It blocks the scoped
-  source-import/validation/surface-sync proof only; the current 69-row source audit and all
-  independent runtime proofs are recorded in `SOURCE-AUDIT.md`.
+- PR #4335 is the provider-neutral source-import fix for Gong's required versioned official
+  OpenAPI document; it changes the real artifact-query identity gate, not a Gong fallback. Live
+  certification remains paused until it lands and the scoped source-import/validation proof is
+  rerun.
+- Foundation #4337 must prevent account-scoped non-secret configuration values from entering an
+  external-proof process command. The current serializer retains that command verbatim, so the
+  planned tenant endpoint cannot be passed to a proof-producing run until the provider-neutral
+  privacy boundary is fixed. No account identifier is retained in this PR or its evidence.
 - `GET /v2/targets` requires `workspaceId`, but the current direct CLI declaration has not yet
   received that required marker because `surface-sync` is blocked by the missing canonical source
   descriptor above. The live no-input call is recorded only as HTTP-400 classification; no manual

@@ -3,7 +3,7 @@
   "branch": "fm/cli-gong-parity-wave01-r1",
   "pull_request": 3552,
   "base_branch": "main",
-  "status": "live_certification_partially_verified",
+  "status": "live_certification_paused_pending_foundations",
   "lifecycle": {
     "discuss_phase": "inline: locked user decisions recorded in PLAN.md",
     "plan_phase_tdd": "inline: PLAN.md and TDD-LEDGER.md created before production edits",
@@ -25,8 +25,8 @@
     "semantic_inventory_sha256": "46cc30f319526572258d56293795c9036ea11b0ebee16919c7bb498b020f61e5",
     "audit_record": "SOURCE-AUDIT.md",
     "source_import": {
-      "status": "blocked_provider_neutral_url_policy",
-      "detail": "The official fixed source URL requires ?version=, but connectorgen source-import rejects query-bearing artifact URLs before fetch; the query-free official route returns 404."
+      "status": "pending_provider_neutral_query_identity_foundation",
+      "detail": "PR #4335 targets parseBatchArtifactURL so a versioned official artifact query can retain its identity through fetch. No Gong-specific source-import change is planned."
     },
     "output_preservation": {
       "status": "blocked_provider_neutral_collision_masking",
@@ -34,8 +34,8 @@
     }
   },
   "live_certification": {
-    "status": "scoped_read_proof_passed_full_parity_pending",
-    "detail": "persisted App authentication, one bounded ETL read, and one bounded typed direct read passed; five ETL cells, direct targets required-input projection, all self-cleaning write/readback cells, and the two paid agentic paths remain uncertified without any secret, identifier, or payload evidence"
+    "status": "paused_no_provider_calls_before_pr_4335",
+    "detail": "persisted App authentication, one bounded ETL read, and one bounded typed direct read passed; the next clean run is prepared in LIVE-CERTIFICATION-RUNBOOK.md and stays paused until the versioned-artifact foundation lands. It must also use provider-neutral foundation #4337 so an account-scoped base URL cannot enter generated evidence."
   },
   "captain_hard_gate": {
     "status": "pending",
@@ -45,7 +45,9 @@
       "direct_read",
       "direct_write",
       "binary_download",
-      "binary_upload"
+      "binary_upload",
+      "flow",
+      "schedule"
     ],
     "rule": "scope, tier, safety, and destructive metadata require runtime controls and confirmations; they never disable a provider-defined operation",
     "multipart_dependency": "resolved in merged parent c3f83cbf6eabbae00219566fb02719ca2d6c480d; focused Gong multipart conformance passes"

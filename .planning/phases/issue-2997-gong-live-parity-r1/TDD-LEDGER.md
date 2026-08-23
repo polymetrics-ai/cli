@@ -9,7 +9,8 @@
 | Direct-read exact endpoint binding | Reproduce any Gong command that preflights with an implemented operation but no matching `api_surface` row. | Real `commandrunner.Preflight`, `surface-reconcile`, and a built CLI preflight sweep accept each declared direct read up to missing credentials. | Let `surface-sync` derive operation-owned metadata; do not hand-author it. |
 | Typed write and reverse-ETL declarations | The historical CLI marks 24 exact write actions partial; the three multipart actions were recorded as an F4 foundation gap. | All 27 named actions are implemented, their CLI field shapes pass runtime preflight, and focused Gong multipart conformance passes through the shared approval-digest path. | No generic writer, raw body, arbitrary endpoint, or Gong-specific shared branch. |
 | Provider output preservation | Gong command metadata described ordinary provider response fields as redacted, and the shared result boundary masks an undeclared provider value that happens to equal a credential. | A focused Gong surface test fails on direct-read redaction language or read-field declarations; the provider-neutral foundation test for #4321 fails until an undeclared matching scalar, header, raw body, and cursor remain exact while an explicitly declared secret field stays visibly masked. | Keep declared-secret masking at the generic output boundary; do not create field-name heuristics or a Gong branch. |
-| Six-surface enabled parity | A source-locked operation can be structurally declared yet be absent from CLI/App dispatch, generated docs, or a supported ETL, reverse-ETL, direct, or binary path. | Generated inventory-to-surface evidence and built-CLI/App checks classify each of ETL, reverse ETL, direct read, direct write, binary download, and binary upload as proven or exact-source `not_applicable`. | Safety, scope, tier, and destructive metadata can add confirmation; they cannot disable a provider-defined operation. |
+| Eight-surface enabled parity | A source-locked operation or application workflow can be structurally declared yet be absent from CLI/App dispatch, generated docs, or a supported ETL, reverse-ETL, direct, binary, flow, or schedule path. | Generated inventory-to-surface evidence and built-CLI/App checks classify each of ETL, reverse ETL, direct read, direct write, binary download, binary upload, flow, and schedule as proven or exact-source/application-contract `not_applicable`. | Safety, scope, tier, and destructive metadata can add confirmation; they cannot disable a provider-defined operation or workflow. |
+| External-proof configuration privacy | The external-proof artifact stores its outer process command verbatim. An account-scoped connector `--config` value would therefore become generated evidence even when every secret is fingerprinted. | Provider-neutral foundation #4337 must retain only safe argument structure/fingerprints before a tenant-scoped base URL is used in a proof-producing run. | Do not bypass this by using a Gong branch, a generic public endpoint, or an untracked proof. |
 | Certification evidence | No credential reference means live stages cannot assert persisted provider state. | Credential-free gates are green and the remaining external block is explicit and secret-free. | Do not substitute browser authentication or fixtures for live certification. |
 
 ## Recorded red evidence
@@ -45,6 +46,12 @@
 - The initial certification declaration named that invalid target-list call. The focused
   certification test went red until the declaration selected the ordinary, bounded
   `users extensive` typed read instead.
+- The eight-surface audit found that binary upload, flow, and schedule must be separate cells:
+  Gong has three fixed multipart uploads; the generic flow and schedule roundtrips use Gong as
+  the declared source. The latter two are application workflows, not undocumented Gong provider
+  endpoints. The current external-proof serializer also retains raw outer command arguments, so
+  tenant-scoped configuration cannot be passed through it until the provider-neutral privacy
+  boundary is corrected.
 
 ## Green evidence recorded during execution
 
@@ -90,7 +97,7 @@
 - focused Gong test names/results and direct-read built-binary classifications;
 - generator, docs, boundary, and static gate results;
 - an explicit live-certification result or the one non-secret credential-reference blocker.
-- six-surface inventory, CLI/help/manual/website reachability, output-preservation, and App-path
+- eight-surface inventory, CLI/help/manual/website reachability, output-preservation, and App-path
   classifications for every supported provider operation; any `not_applicable` status cites the
   exact source-audit row(s), never a safety or tier label.
 - Complete full-parity live certification only after Gong has declaration-owned, self-cleaning

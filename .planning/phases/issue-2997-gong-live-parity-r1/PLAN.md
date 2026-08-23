@@ -18,7 +18,7 @@
 | Reverse-ETL transport uses the shared definition-selected foundation | live | The certification harness must drive the persisted App plan → preview → approval → execute path and record only bounded result classifications, readback references, and cleanup outcome. |
 | Live provider certification covers real persisted App paths and cleanup | live | The captain has supplied an approved non-echoing disposable credential reference. The built CLI and certification harness must prove authentication, bounded safe reads, applicable writes/readback/cleanup, ETL, pagination, required-input behavior, and supported binary paths without serializing provider payloads or credential values. |
 | Every provider-defined operation is source-traced, mapped, enabled, and reachable | live | The 69-row official source lock, disposition map, API surface, operation ledger, generated CLI surface, help/manual, and website projection agree. A safety tier, scope, or destructive classification can require typed confirmation but cannot make a declared operation unreachable. |
-| All six applicable execution surfaces reconcile | live | ETL, reverse ETL, direct read, direct write, binary download, and binary upload are each proven through their declaration-owned runtime path, or marked inapplicable only when the official source audit proves that Gong exposes no operation in that surface. |
+| All eight execution surfaces reconcile | live | ETL, reverse ETL, direct read, direct write, binary download, binary upload, flow, and schedule are each proven through their declaration-owned runtime path, or marked inapplicable only when the exact source or application-contract audit proves that Gong has no such path. |
 
 ## Locked discussion decisions
 
@@ -58,7 +58,7 @@ declared secret fields may be masked. Foundation #4321 owns the shared runtime c
 - Current credential-free refetch (2026-08-23): OpenAPI `3.0.1`, title `Gong API`, version `V2`;
   59 paths and 69 operations: DELETE 3, GET 29, PATCH 1, POST 28, PUT 8. The artifact SHA-256,
   byte count, and sorted semantic inventory fingerprint exactly match the committed source lock;
-  the six-surface inventory and any provider-neutral source-import dependency are recorded in
+  the eight-surface inventory and any provider-neutral source-import dependency are recorded in
   `SOURCE-AUDIT.md`.
 - The Batch 2/3 lock at
   `internal/connectors/defs/gong/sources/gong-operation-source-lock.json` has the same complete
@@ -90,6 +90,10 @@ declared secret fields may be masked. Foundation #4321 owns the shared runtime c
 6. Regenerate the Batch 2/3 machine-readable missing-foundation ledger after each foundation
    reconciliation. The closed Gong multipart capability has zero remaining Gong rows; unrelated
    open portfolio rows remain source-traced and are not a connector-local exemption.
+7. Before the next live run, use `LIVE-CERTIFICATION-RUNBOOK.md` to verify the eight-surface
+   contract, command/evidence sequence, no-agentic selection, bounded rates, and external-proof
+   privacy gate. The runbook is pre-execution only: it must not be treated as authorization to
+   call Gong before the listed foundations land.
 
 ## Execution outcome — 2026-08-23
 
@@ -124,10 +128,13 @@ historical parity count or declaration-only validation result.
    path. Destructive or high-risk operations use runtime metadata, typed confirmation, and the
    existing plan → preview → explicit approval → execute path—not `availability` or a connector
    policy branch as a substitute for reachability.
-3. **Six-surface reconciliation:** separately certify ETL, reverse ETL, direct read, direct
-   write, binary download, and binary upload. A surface is `not_applicable` only with an exact
-   source-audit finding; otherwise it remains an unmet requirement. Binary upload includes
-   multipart after `cli-closed-operation-runtime-r1` publishes its approval-digest contract.
+3. **Eight-surface reconciliation:** separately certify ETL, reverse ETL, direct read, direct
+   write, binary download, binary upload, flow, and schedule. A surface is `not_applicable` only
+   with an exact source- or application-contract finding; otherwise it remains an unmet
+   requirement. Binary upload includes multipart after `cli-closed-operation-runtime-r1`
+   publishes its approval-digest contract. Flow and schedule are application workflows backed by
+   Gong's declared readable/writable capability and are proven through the harness's bounded
+   `flow_roundtrip` and `schedule_roundtrip` stages, never by inventing a Gong scheduler API.
 4. **Discovery and output:** prove every supported operation is reachable from runtime CLI help,
    generated manual/docs, and website discovery projections. Retain all ordinary non-secret
    provider response fields. Only explicitly declared secret fields may be masked, and their

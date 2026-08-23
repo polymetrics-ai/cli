@@ -12,16 +12,18 @@
   The committed source lock produces the identical fingerprint.
 - Method distribution: DELETE 3, GET 29, PATCH 1, POST 28, PUT 8.
 
-## Exact surface inventory
+## Exact eight-surface inventory
 
-| Provider surface | Count | Declaration-owned mapping |
+| Execution surface | Count | Declaration-owned mapping |
 | --- | ---: | --- |
 | ETL | 12 | Exact stream bindings and implemented `etl` commands. |
 | Direct read | 30 | Implemented bounded CLI commands; every row has the exact API-surface endpoint. |
-| Direct write / reverse ETL command | 27 | One implemented, named reverse-ETL action per write; confirmation and plan → preview → approval → execute remain required. |
+| Direct write | 27 | Every provider mutation has one implemented named command and exact API operation; typed confirmation remains required where declared. |
+| Reverse ETL | 27 | The same 27 declaration-selected actions execute only through plan → preview → approval → execute. |
 | Binary download | 0 | The official document declares no binary response operation. |
-| Binary / multipart upload | 3 | `PUT /v2/calls/{id}/media`, `POST /v2/crm/entities`, and `POST /v2/targets/{targetId}/assignments`; named multipart actions with bounded files and approval digest binding. |
-| Application command surface | 69 | The source disposition, API surface, stream/write/operation declarations, and CLI each carry an exact binding; all source rows are enabled. |
+| Binary upload | 3 | `PUT /v2/calls/{id}/media`, `POST /v2/crm/entities`, and `POST /v2/targets/{targetId}/assignments`; named multipart actions with bounded files and approval-digest binding. |
+| Flow | 1 application workflow | Gong is the capability-backed source in the harness's capture ETL → local query `flow_roundtrip`; no Gong-named flow-runtime branch or provider-flow mutation is invented. |
+| Schedule | 1 application workflow | The same bounded Gong-backed flow is created, listed, installed into an isolated crontab file, fired, inspected, removed, and residue-checked by `schedule_roundtrip`; no provider scheduler API is assumed. |
 
 The primary source-map class remains `direct_write` for the three multipart operations because
 they are also fixed write actions; their binary-upload capability is recorded separately above.
