@@ -92,6 +92,80 @@ func TestSourceProjection_AddChangeDeletePropagatesToEverySurface(t *testing.T) 
 	}
 }
 
+func TestSourceProjectionMarksDeclaredCircleCIWebhookSecretsEnvOnly(t *testing.T) {
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{
+  "schema_version": 1,
+  "actions": [{
+    "name": "create_webhook", "kind": "create", "method": "POST", "path": "/webhook",
+    "record_schema": {"type":"object","additionalProperties":false,"properties":{}},
+    "risk": "standard"
+  }]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{
+  "schema_version": 1,
+  "commands": [{
+    "path":"webhook create","summary":"create","intent":"reverse_etl","availability":"implemented","write":"create_webhook","flags":[]
+  }]
+}`)
+	operation := sourceOperationDescriptor{
+		Connector: "circleci", SourceID: "createWebhook", Method: "POST", Path: "/webhook",
+		Request: sourceRequestDescriptor{
+			Query: []sourceParameterDescriptor{{Name: "callback_token", Schema: map[string]any{"type": "string", "x-secret": true}}},
+			Body: &sourceRequestBodyDescriptor{Schema: map[string]any{
+				"type": "object", "additionalProperties": false,
+				"properties": map[string]any{
+					"signing_secret": map[string]any{"type": "string", "x-secret": true},
+					"secure_payload": map[string]any{"type": "object", "properties": map[string]any{
+						"token": map[string]any{"type": "string", "x-secret": true},
+					}},
+					"name": map[string]any{"type": "string"},
+				},
+			}},
+			MediaType: "application/json",
+		},
+	}
+	if _, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false); err != nil {
+		t.Fatalf("project CircleCI webhook: %v", err)
+	}
+
+	var surface engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"))), &surface); err != nil {
+		t.Fatalf("decode projected CircleCI CLI surface: %v", err)
+	}
+	if len(surface.Commands) != 1 {
+		t.Fatalf("CircleCI commands = %d, want 1", len(surface.Commands))
+	}
+	flags := map[string]engine.CLIFlag{}
+	for _, flag := range surface.Commands[0].Flags {
+		flags[flag.Name] = flag
+	}
+	for _, name := range []string{"signing-secret", "callback-token", "secure-payload"} {
+		if !flags[name].EnvOnly {
+			t.Fatalf("CircleCI %s env_only = false, want true", name)
+		}
+	}
+	if flags["name"].EnvOnly {
+		t.Fatal("non-secret CircleCI webhook name was projected env_only")
+	}
+	writesRaw := readProjectionFixture(t, filepath.Join(bundleDir, "writes.json"))
+	if !strings.Contains(writesRaw, `"x-secret": true`) {
+		t.Fatal("projected CircleCI write schema lost its declaration-owned x-secret marker")
+	}
+	var writes struct {
+		Actions []engine.WriteAction `json:"actions"`
+	}
+	if err := json.Unmarshal([]byte(writesRaw), &writes); err != nil {
+		t.Fatalf("decode projected CircleCI writes: %v", err)
+	}
+	if len(writes.Actions) != 1 {
+		t.Fatalf("CircleCI write actions = %d, want 1", len(writes.Actions))
+	}
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "circleci"}, 0, surface.Commands[0], nil, map[string]engine.WriteAction{"create_webhook": writes.Actions[0]}); len(findings) != 0 {
+		t.Fatalf("projected CircleCI webhook env_only validation findings = %+v, want none", findings)
+	}
+}
+
 func TestSourceProjection_MissingOperationOrFieldFailsValidateAndSurfaceCheck(t *testing.T) {
 	operation := sourceProjectionTestOperation()
 	bundle := engine.Bundle{Name: "alpha", CLISurface: &engine.CLISurface{}}
