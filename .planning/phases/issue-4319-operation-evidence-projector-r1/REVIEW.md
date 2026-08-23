@@ -15,3 +15,6 @@ No unresolved findings.
 - Generated artifacts are guarded by the Make target, and the fixed cohort is
   capability-stratified so GraphQL writes cannot crowd out the other executable
   classes.
+- Current-main review: v3 source locks are consumed through the existing
+  read-only adapter. Revalidation against `cf493b834` passed without changing
+  either projector artifact; no source-lock parser or schema file was edited.

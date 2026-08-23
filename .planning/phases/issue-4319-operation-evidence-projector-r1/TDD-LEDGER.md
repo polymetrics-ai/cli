@@ -11,6 +11,7 @@
 - `go test -timeout 20m ./cmd/connectorgen -run '^TestOperationEvidenceFixed100RejectsEveryRegression$' -count=1` passed in 4.131s. It mutates every one of the independent 100 source IDs and verifies the gate names the regression.
 - `make connectorgen-operation-evidence` passed: the generated 1,525-row GitHub-source artifact is byte-current, has five deduplicated gap rollups, and the fixed-100 gate passed.
 - After review refinements, `go test -timeout 20m ./cmd/connectorgen -run '^TestOperationEvidence' -count=1` passed in 13.176s. This includes duplicate source-row deduplication and a real GraphQL acronym field (`createIpAllowListEntry`) matched to its fixed operation document.
+- After merging v3 source locks from `origin/main` at `cf493b834`, the same targeted behavioral suite passed in 14.161s; `make connectorgen-operation-evidence` and the full `make verify` (including lint) passed. The 1,525-row artifact and fixed-100 cohort were byte-identical, proving that the v3 representation did not change GitHub's projected evidence.
 
 ## Refactor / review
 
