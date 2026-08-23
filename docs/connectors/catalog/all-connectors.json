@@ -65900,7 +65900,7 @@
   {
     "name": "gong",
     "display_name": "Gong",
-    "description": "Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.",
+    "description": "Reads Gong users, calls, scorecards, targets, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, target assignment CSV uploads, multipart uploads, and top-level array uploads as typed reverse-ETL actions.",
     "integration_type": "api",
     "docs_url": "https://us-66463.app.gong.io/settings/api/documentation",
     "release_stage": "ga",
@@ -66092,14 +66092,14 @@
         "name": "update_meeting",
         "kind": "update",
         "method": "PUT",
-        "path": "/meetings/{meetingId}",
+        "path": "/meetings/{{ record.meetingId }}",
         "risk": "medium: mutates Gong API state; requires reverse ETL approval"
       },
       {
         "name": "delete_meeting",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/meetings/{meetingId}",
+        "path": "/meetings/{{ record.meetingId }}",
         "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
         "confirm": "destructive"
       },
@@ -66240,7 +66240,7 @@
         "name": "upload_call_media",
         "kind": "update",
         "method": "PUT",
-        "path": "/v2/calls/{{ record.id }}/media",
+        "path": "/calls/{{ record.id }}/media",
         "risk": "high: uploads call media from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
         "confirm": "destructive"
       },
@@ -66248,7 +66248,7 @@
         "name": "upload_crm_entities",
         "kind": "create",
         "method": "POST",
-        "path": "/v2/crm/entities",
+        "path": "/crm/entities",
         "risk": "high: uploads CRM data from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
         "confirm": "destructive"
       },
@@ -66256,7 +66256,7 @@
         "name": "upload_crm_entity_schema",
         "kind": "create",
         "method": "POST",
-        "path": "/v2/crm/entity-schema",
+        "path": "/crm/entity-schema",
         "risk": "high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval",
         "confirm": "destructive"
       },
@@ -66264,14 +66264,14 @@
         "name": "upload_target_assignments",
         "kind": "create",
         "method": "POST",
-        "path": "/v2/targets/{{ record.targetId }}/assignments",
+        "path": "/targets/{{ record.targetId }}/assignments",
         "risk": "high: uploads target assignments from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
         "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted",
-      "write": "typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure",
+      "read": "external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and preserve ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
+      "write": "typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, targets, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure",
       "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive; local file upload plans bind a SHA-256 payload identity that is snapshot-verified before network send"
     },
     "icon": {

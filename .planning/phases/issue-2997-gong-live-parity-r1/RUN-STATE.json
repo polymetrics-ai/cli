@@ -1,0 +1,62 @@
+{
+  "phase": "issue-2997-gong-live-parity-r1",
+  "branch": "fm/cli-gong-parity-wave01-r1",
+  "pull_request": 3552,
+  "base_branch": "main",
+  "status": "blocked_provider_neutral_source_import_and_proof_privacy",
+  "lifecycle": {
+    "discuss_phase": "inline: locked user decisions recorded in PLAN.md",
+    "plan_phase_tdd": "inline: PLAN.md and TDD-LEDGER.md created before production edits",
+    "execute_phase": "inline: source audit, foundation merge, parameter reconciliation, bounded live read evidence, and captain collision-policy declaration slice recorded",
+    "verify_work": "inline: focused Gong tests, complete connectorgen package, generated docs/subject, lint, vet, and boundary pass; external source-import and full-live gaps remain explicit",
+    "code_review": "inline: REVIEW.md records source, declaration, generation, secret-boundary, and shared-foundation dispositions"
+  },
+  "manual_gsd_fallback": {
+    "reason": "the canonical single-worker contract and runtime prohibit isolated GSD role spawning",
+    "command_sources": "scripts/gsd sources discuss-phase, plan-phase, execute-phase, verify-work, code-review"
+  },
+  "source_audit": {
+    "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+    "openapi": "3.0.1",
+    "operations": 69,
+    "semantic_inventory_matches_batch23_lock": true,
+    "sha256": "294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13",
+    "bytes": 453797,
+    "semantic_inventory_sha256": "46cc30f319526572258d56293795c9036ea11b0ebee16919c7bb498b020f61e5",
+    "audit_record": "SOURCE-AUDIT.md",
+    "source_import": {
+      "status": "blocked_provider_neutral_common_input_preflight",
+      "detail": "PR #4335 merged at 8127de418. The v3 gong-v2 document declares identity_query=true and source-import now fetches/parses the fixed ?version= artifact, then stops at GET /v2/all-permission-profiles parameter 0: required query workspaceId has schema type:string without maxLength, yielding unbounded request schema string has no maxLength. The generic importer must retain or typed-gap ordinary common-bound inputs before descriptor projection; no Gong maximum or bypass is permitted."
+    },
+    "output_preservation": {
+      "status": "blocked_provider_neutral_collision_masking",
+      "detail": "Gong declarations require ordinary provider values to remain exact even when equal to configured credential material. Shared result projections collision-mask those values; foundation issue #4321 owns the generic red/green correction."
+    }
+  },
+  "live_certification": {
+    "status": "blocked_external_proof_privacy_foundation",
+    "detail": "persisted App authentication, one bounded ETL read, and one bounded typed direct read passed. A new full run must not start: #4337 has no implementation lane, and the external-proof serializer would retain the account-scoped base_url argument verbatim. It prevents producing a compliant published external proof, not credential storage or credential-free reconciliation."
+  },
+  "captain_hard_gate": {
+    "status": "pending",
+    "required_surfaces": [
+      "etl",
+      "reverse_etl",
+      "direct_read",
+      "direct_write",
+      "binary_download",
+      "binary_upload",
+      "flow",
+      "schedule"
+    ],
+    "rule": "scope, tier, safety, and destructive metadata require runtime controls and confirmations; they never disable a provider-defined operation",
+    "multipart_dependency": "resolved in merged parent c3f83cbf6eabbae00219566fb02719ca2d6c480d; focused Gong multipart conformance passes"
+  },
+  "missing_foundation_ledger": {
+    "path": ".planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/missing-foundation-gaps.json",
+    "status": "regenerated_after_foundation_merge",
+    "gong_open_operations": 0,
+    "portfolio_open_operations": 48,
+    "rule": "the regenerated ledger retains only unrelated open source-traced gaps; Gong's three formerly F4 multipart rows are closed by the merged generic foundation"
+  }
+}

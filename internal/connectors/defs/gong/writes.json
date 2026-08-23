@@ -624,7 +624,7 @@
       "name": "update_meeting",
       "kind": "update",
       "method": "PUT",
-      "path": "/meetings/{meetingId}",
+      "path": "/meetings/{{ record.meetingId }}",
       "record_schema": {
         "type": "object",
         "properties": {
@@ -683,7 +683,7 @@
       "name": "delete_meeting",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/meetings/{meetingId}",
+      "path": "/meetings/{{ record.meetingId }}",
       "record_schema": {
         "type": "object",
         "properties": {
@@ -1634,7 +1634,7 @@
       "name": "upload_call_media",
       "kind": "update",
       "method": "PUT",
-      "path": "/v2/calls/{{ record.id }}/media",
+      "path": "/calls/{{ record.id }}/media",
       "path_fields": [
         "id"
       ],
@@ -1675,7 +1675,7 @@
       "name": "upload_crm_entities",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/crm/entities",
+      "path": "/crm/entities",
       "body_type": "multipart",
       "multipart": {
         "max_bytes": 209715200,
@@ -1709,7 +1709,7 @@
       "name": "upload_crm_entity_schema",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/crm/entity-schema",
+      "path": "/crm/entity-schema",
       "body_type": "json_array",
       "body_field": "selected_fields",
       "body_schema": {
@@ -1742,7 +1742,7 @@
       "name": "upload_target_assignments",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/targets/{{ record.targetId }}/assignments",
+      "path": "/targets/{{ record.targetId }}/assignments",
       "path_fields": [
         "targetId"
       ],

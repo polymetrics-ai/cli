@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+const gongPreservesCredentialCollision = "including values that happen to match configured credential material"
+
 func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	api := loadGongJSON[struct {
 		Endpoints []struct {
@@ -29,6 +31,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			Write        string   `json:"write"`
 			Operation    string   `json:"operation"`
 			OutputPolicy string   `json:"output_policy"`
+			Risk         string   `json:"risk"`
 			Examples     []string `json:"examples"`
 			Flags        []struct {
 				Name   string `json:"name"`
@@ -110,6 +113,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}{}
 	flagsByPath := map[string]map[string]string{}
 	examplesByPath := map[string][]string{}
+	reverseETLWrites := map[string]string{}
 	for _, cmd := range cli.Commands {
 		commandsByPath[cmd.Path] = struct {
 			intent, availability, stream, write, operation, outputPolicy string
@@ -122,6 +126,27 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		if cmd.Intent == "direct_read" && cmd.Availability != "implemented" {
 			t.Fatalf("direct read command %q availability = %q, want implemented", cmd.Path, cmd.Availability)
 		}
+		if cmd.Intent == "direct_read" && strings.Contains(strings.ToLower(cmd.Risk), "redact") {
+			t.Fatalf("direct read command %q describes provider fields as redacted; ordinary provider output must be preserved", cmd.Path)
+		}
+		if cmd.Intent == "direct_read" && !strings.Contains(cmd.Risk, gongPreservesCredentialCollision) {
+			t.Fatalf("direct read command %q omits the credential-collision preservation policy: %q", cmd.Path, cmd.Risk)
+		}
+		if cmd.Intent == "reverse_etl" {
+			if cmd.Availability != "implemented" {
+				t.Fatalf("reverse ETL command %q availability = %q, want implemented after the shared typed-destination foundation", cmd.Path, cmd.Availability)
+			}
+			if cmd.Write == "" {
+				t.Fatalf("reverse ETL command %q is missing its exact write action", cmd.Path)
+			}
+			if previous, exists := reverseETLWrites[cmd.Write]; exists {
+				t.Fatalf("reverse ETL write %q is declared by both %q and %q", cmd.Write, previous, cmd.Path)
+			}
+			reverseETLWrites[cmd.Write] = cmd.Path
+		}
+	}
+	if got, want := len(reverseETLWrites), len(writes.Actions); got != want {
+		t.Fatalf("implemented reverse ETL write bindings = %d, want all %d declared write actions", got, want)
 	}
 	for _, tc := range []struct {
 		path, intent, availability, target string
@@ -130,8 +155,8 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		{path: "workspaces list", intent: "etl", availability: "implemented", target: "workspaces"},
 		{path: "calls get", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "users get", intent: "direct_read", availability: "implemented", target: "json_redacted"},
-		{path: "calls create", intent: "reverse_etl", availability: "partial", target: "add_call"},
-		{path: "privacy erase-phone", intent: "reverse_etl", availability: "partial", target: "purge_phone_number"},
+		{path: "calls create", intent: "reverse_etl", availability: "implemented", target: "add_call"},
+		{path: "privacy erase-phone", intent: "reverse_etl", availability: "implemented", target: "purge_phone_number"},
 		{path: "calls extensive", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "calls transcript", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "meetings integration-status", intent: "direct_read", availability: "implemented", target: "json_redacted"},
@@ -171,6 +196,18 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	writesByName := map[string]struct{ kind, method, path, risk, confirm string }{}
 	for _, action := range writes.Actions {
 		writesByName[action.Name] = struct{ kind, method, path, risk, confirm string }{action.Kind, action.Method, action.Path, action.Risk, action.Confirm}
+	}
+	for name, wantPath := range map[string]string{
+		"update_meeting":            "/meetings/{{ record.meetingId }}",
+		"delete_meeting":            "/meetings/{{ record.meetingId }}",
+		"upload_call_media":         "/calls/{{ record.id }}/media",
+		"upload_crm_entities":       "/crm/entities",
+		"upload_crm_entity_schema":  "/crm/entity-schema",
+		"upload_target_assignments": "/targets/{{ record.targetId }}/assignments",
+	} {
+		if got := writesByName[name].path; got != wantPath {
+			t.Fatalf("write action %q path = %q, want connector-relative %q", name, got, wantPath)
+		}
 	}
 	if got := flagsByPath["calls transcript"]["call-id"]; got != "body.filter.callIds" {
 		t.Fatalf("calls transcript --call-id maps_to = %q, want body.filter.callIds", got)
@@ -217,6 +254,9 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		rest, sensitivePolicy                             json.RawMessage
 	}{}
 	for _, op := range ops.Operations {
+		if op.Kind == "rest_read" && len(op.SensitivePolicy) > 0 && string(op.SensitivePolicy) != "null" {
+			t.Fatalf("read operation %q declares field redaction; Gong reads have no declared output-secret fields", op.ID)
+		}
 		opsByID[op.ID] = struct {
 			kind, risk, approval, outputPolicy, mutationClass string
 			secretSensitive                                   bool
@@ -242,9 +282,54 @@ func TestGongMetadataEnablesWriteCapability(t *testing.T) {
 			Read  bool `json:"read"`
 			Write bool `json:"write"`
 		} `json:"capabilities"`
+		Risk struct {
+			Read string `json:"read"`
+		} `json:"risk"`
 	}](t, "../../internal/connectors/defs/gong/metadata.json")
 	if !metadata.Capabilities.Read || !metadata.Capabilities.Write {
 		t.Fatalf("Gong capabilities read/write = %t/%t, want true/true", metadata.Capabilities.Read, metadata.Capabilities.Write)
+	}
+	if strings.Contains(strings.ToLower(metadata.Risk.Read), "redact") {
+		t.Fatalf("Gong metadata describes ordinary direct-read output as redacted: %q", metadata.Risk.Read)
+	}
+	if !strings.Contains(metadata.Risk.Read, gongPreservesCredentialCollision) {
+		t.Fatalf("Gong metadata omits the credential-collision preservation policy: %q", metadata.Risk.Read)
+	}
+}
+
+func TestGongCertificationDeclarationUsesOnlyOrdinaryRESTLiveCandidates(t *testing.T) {
+	certification := loadGongJSON[struct {
+		Source struct {
+			DefaultStream string `json:"default_stream"`
+		} `json:"source"`
+		DirectReadCandidates []struct {
+			StageName string `json:"stage_name"`
+			Command   string `json:"command"`
+			Cohort    string `json:"cohort"`
+		} `json:"direct_read_candidates"`
+		MutationGeneration struct {
+			Cohort struct {
+				Name         string `json:"name"`
+				CommandCount int    `json:"command_count"`
+			} `json:"cohort"`
+		} `json:"mutation_generation"`
+	}](t, "../../internal/connectors/defs/gong/certification.json")
+
+	if certification.Source.DefaultStream != "users" {
+		t.Fatalf("certification default stream = %q, want users", certification.Source.DefaultStream)
+	}
+	if got, want := len(certification.DirectReadCandidates), 1; got != want {
+		t.Fatalf("ordinary REST direct-read candidate count = %d, want %d", got, want)
+	}
+	candidate := certification.DirectReadCandidates[0]
+	if candidate.StageName != "gong_ordinary_rest_users_extensive" || candidate.Command != "users extensive" || candidate.Cohort != "ordinary_rest" {
+		t.Fatalf("ordinary REST direct-read candidate = %+v, want bounded users-extensive candidate", candidate)
+	}
+	if got, want := certification.MutationGeneration.Cohort.Name, "gong_all_typed_writes"; got != want {
+		t.Fatalf("mutation cohort = %q, want %q", got, want)
+	}
+	if got, want := certification.MutationGeneration.Cohort.CommandCount, 27; got != want {
+		t.Fatalf("mutation cohort command_count = %d, want %d", got, want)
 	}
 }
 

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "selected_fields": [
+      {
+        "name": "fixture_field",
+        "label": "Fixture Field",
+        "type": "TEXT"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/crm/entity-schema"
+  }
+}
