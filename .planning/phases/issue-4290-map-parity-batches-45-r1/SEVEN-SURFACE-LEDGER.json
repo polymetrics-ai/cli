@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "issue": 4290,
-  "foundation_sha": "c6f03c937c1f4e516d339b48e8c2143726179fdf",
-  "reverse_etl_note": "The generic typed destination factory exists at this foundation SHA, but App dispatch integration is not yet merged; this ledger does not claim deployability.",
+  "foundation_sha": "94e5496ed",
+  "reverse_etl_note": "The merged #4304 foundation head supplies generic App/CLI dispatch. Connector-owned destination sync_transport declarations and conformance evidence remain declaration-pending; they are not engine foundation gaps.",
   "rows": [
     {
       "connector": "salesforce",
@@ -17,7 +17,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/salesforce/sources/salesforce-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/salesforce/sources/salesforce-parity-source-lock.json"
     },
     {
       "connector": "hubspot",
@@ -32,7 +32,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 3118,
-      "source_lock": "internal/connectors/defs/hubspot/sources/hubspot-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/hubspot/sources/hubspot-parity-source-lock.json"
     },
     {
       "connector": "pipedrive",
@@ -44,10 +44,10 @@
       "direct_write": 99,
       "classification_note": "Each value is the number of provider operations canonically classified for that surface. A zero is not an N/A claim; the per-operation hard gate carries pending proof unless provider evidence proves a capability absent.",
       "etl": "declaration-pending",
-      "reverse_etl": "foundation-gap: application-generic-destination-dispatch",
+      "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/pipedrive/sources/pipedrive-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/pipedrive/sources/pipedrive-parity-source-lock.json"
     },
     {
       "connector": "mailchimp",
@@ -59,10 +59,10 @@
       "direct_write": 164,
       "classification_note": "Each value is the number of provider operations canonically classified for that surface. A zero is not an N/A claim; the per-operation hard gate carries pending proof unless provider evidence proves a capability absent.",
       "etl": "declaration-pending",
-      "reverse_etl": "foundation-gap: application-generic-destination-dispatch",
+      "reverse_etl": "declaration-pending",
       "executable_cli_commands": 295,
       "cli_commands": 295,
-      "source_lock": "internal/connectors/defs/mailchimp/sources/mailchimp-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/mailchimp/sources/mailchimp-parity-source-lock.json"
     },
     {
       "connector": "zendesk-support",
@@ -74,10 +74,10 @@
       "direct_write": 294,
       "classification_note": "Each value is the number of provider operations canonically classified for that surface. A zero is not an N/A claim; the per-operation hard gate carries pending proof unless provider evidence proves a capability absent.",
       "etl": "declaration-pending",
-      "reverse_etl": "foundation-gap: application-generic-destination-dispatch",
+      "reverse_etl": "declaration-pending",
       "executable_cli_commands": 95,
-      "cli_commands": 631,
-      "source_lock": "internal/connectors/defs/zendesk-support/sources/zendesk-support-operation-source-lock.json"
+      "cli_commands": 632,
+      "source_lock": "internal/connectors/defs/zendesk-support/sources/zendesk-support-parity-source-lock.json"
     },
     {
       "connector": "quickbooks",
@@ -92,7 +92,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/quickbooks/sources/quickbooks-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/quickbooks/sources/quickbooks-parity-source-lock.json"
     },
     {
       "connector": "bamboo-hr",
@@ -104,10 +104,10 @@
       "direct_write": 190,
       "classification_note": "Each value is the number of provider operations canonically classified for that surface. A zero is not an N/A claim; the per-operation hard gate carries pending proof unless provider evidence proves a capability absent.",
       "etl": "declaration-pending",
-      "reverse_etl": "foundation-gap: application-generic-destination-dispatch",
+      "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/bamboo-hr/sources/bamboo-hr-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/bamboo-hr/sources/bamboo-hr-parity-source-lock.json"
     },
     {
       "connector": "airtable",
@@ -119,10 +119,10 @@
       "direct_write": 74,
       "classification_note": "Each value is the number of provider operations canonically classified for that surface. A zero is not an N/A claim; the per-operation hard gate carries pending proof unless provider evidence proves a capability absent.",
       "etl": "declaration-pending",
-      "reverse_etl": "foundation-gap: application-generic-destination-dispatch",
+      "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/airtable/sources/airtable-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/airtable/sources/airtable-parity-source-lock.json"
     },
     {
       "connector": "google-analytics-data-api",
@@ -137,7 +137,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/google-analytics-data-api/sources/google-analytics-data-api-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/google-analytics-data-api/sources/google-analytics-data-api-parity-source-lock.json"
     },
     {
       "connector": "woocommerce",
@@ -152,7 +152,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/woocommerce/sources/woocommerce-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/woocommerce/sources/woocommerce-parity-source-lock.json"
     },
     {
       "connector": "pinterest",
@@ -167,7 +167,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/pinterest/sources/pinterest-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/pinterest/sources/pinterest-parity-source-lock.json"
     },
     {
       "connector": "tiktok-marketing",
@@ -182,7 +182,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/tiktok-marketing/sources/tiktok-marketing-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/tiktok-marketing/sources/tiktok-marketing-parity-source-lock.json"
     },
     {
       "connector": "linear",
@@ -197,7 +197,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/linear/sources/linear-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/linear/sources/linear-parity-source-lock.json"
     },
     {
       "connector": "buildkite",
@@ -209,10 +209,10 @@
       "direct_write": 76,
       "classification_note": "Each value is the number of provider operations canonically classified for that surface. A zero is not an N/A claim; the per-operation hard gate carries pending proof unless provider evidence proves a capability absent.",
       "etl": "declaration-pending",
-      "reverse_etl": "foundation-gap: application-generic-destination-dispatch",
+      "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/buildkite/sources/buildkite-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/buildkite/sources/buildkite-parity-source-lock.json"
     },
     {
       "connector": "sonar-cloud",
@@ -224,10 +224,10 @@
       "direct_write": 87,
       "classification_note": "Each value is the number of provider operations canonically classified for that surface. A zero is not an N/A claim; the per-operation hard gate carries pending proof unless provider evidence proves a capability absent.",
       "etl": "declaration-pending",
-      "reverse_etl": "foundation-gap: application-generic-destination-dispatch",
+      "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/sonar-cloud/sources/sonar-cloud-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/sonar-cloud/sources/sonar-cloud-parity-source-lock.json"
     },
     {
       "connector": "launchdarkly",
@@ -242,7 +242,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/launchdarkly/sources/launchdarkly-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/launchdarkly/sources/launchdarkly-parity-source-lock.json"
     },
     {
       "connector": "fastly",
@@ -257,7 +257,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/fastly/sources/fastly-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/fastly/sources/fastly-parity-source-lock.json"
     },
     {
       "connector": "squarespace",
@@ -269,10 +269,10 @@
       "direct_write": 30,
       "classification_note": "Each value is the number of provider operations canonically classified for that surface. A zero is not an N/A claim; the per-operation hard gate carries pending proof unless provider evidence proves a capability absent.",
       "etl": "declaration-pending",
-      "reverse_etl": "foundation-gap: application-generic-destination-dispatch",
+      "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/squarespace/sources/squarespace-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/squarespace/sources/squarespace-parity-source-lock.json"
     },
     {
       "connector": "ebay-fulfillment",
@@ -287,7 +287,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/ebay-fulfillment/sources/ebay-fulfillment-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/ebay-fulfillment/sources/ebay-fulfillment-parity-source-lock.json"
     },
     {
       "connector": "shipstation",
@@ -302,7 +302,7 @@
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
       "cli_commands": 0,
-      "source_lock": "internal/connectors/defs/shipstation/sources/shipstation-operation-source-lock.json"
+      "source_lock": "internal/connectors/defs/shipstation/sources/shipstation-parity-source-lock.json"
     }
   ]
 }

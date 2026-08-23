@@ -30,7 +30,7 @@
       "basis": "Official Squarespace Commerce OpenAPI document has 53 HTTP method/path operations."
     },
     "enabled_operations": 0,
-    "declaration_pending_operations": 51,
+    "declaration_pending_operations": 53,
     "disabled_operations": 0,
     "documented_deletes": 7,
     "enabled_deletes": 0,
@@ -52,27 +52,12 @@
     "writes_actions": 2,
     "terminal_commands": 0,
     "live_certification": "pending",
-    "gap_ids": [
-      "application-generic-destination-dispatch"
-    ],
-    "foundation_gaps": [
-      {
-        "id": "application-generic-destination-dispatch",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path.",
-        "count": 2,
-        "scope": "shared_destination_runtime",
-        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class. The affected surface is not enabled until the shared App/CLI dispatch gap closes."
-      }
-    ],
+    "gap_ids": [],
+    "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 51
-      },
-      {
-        "key": "foundation-gap",
-        "count": 2
+        "count": 53
       }
     ],
     "transport": {
@@ -81,15 +66,11 @@
         "evidence": "internal/connectors/defs/squarespace/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
       },
       "destination_transport": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "declaration-pending",
+        "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/squarespace/sync_transport.json is absent."
       }
     },
-    "foundation_gap_operations": 2
+    "foundation_gap_operations": 0
   },
   "ledger_dispositions": [
     {
@@ -749,32 +730,24 @@
         "operation_id": "createWebhookSubscription",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/squarespace/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"create_webhook_subscription\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"create_webhook_subscription\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/squarespace/sync_transport.json is absent."
         }
       }
     },
@@ -799,32 +772,24 @@
         "operation_id": "deleteWebhookSubscription",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/squarespace/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"delete_webhook_subscription\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"delete_webhook_subscription\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/squarespace/sync_transport.json is absent."
         }
       }
     },

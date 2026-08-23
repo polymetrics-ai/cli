@@ -9,7 +9,7 @@ Status: **blocked**. This is a fail-closed operation ledger, not a claim that th
 - Generated website rows proven: 0
 - Executable fixture/conformance proofs: 0
 - Provider-deprecated/absent operations with direct source evidence: 31
-- Operations blocked by an open foundation gap: 345
+- Operations blocked by an open foundation gap: 0
 
 Every enumerable provider operation has its locked source URL, source-document locator/hash/bytes/version status, canonical API-surface mapping, generated-command disposition, website disposition, fixture/conformance disposition, runtime control metadata, and separate ETL/reverse-ETL/direct-read/direct-write/binary-download/binary-upload reconciliation in `HARD-PREMERGE-GATE.json`.
 

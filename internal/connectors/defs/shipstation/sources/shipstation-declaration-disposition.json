@@ -66,12 +66,8 @@
         "evidence": "internal/connectors/defs/shipstation/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
       },
       "destination_transport": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "declaration-pending",
+        "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/shipstation/sync_transport.json is absent."
       }
     },
     "foundation_gap_operations": 0
