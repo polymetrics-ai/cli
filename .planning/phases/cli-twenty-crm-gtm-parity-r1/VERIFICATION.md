@@ -515,3 +515,26 @@ GOMAXPROCS=2 go test -p 1 -parallel 1 -count=1 -timeout 20m \
 
 The resulting diff adds only `docs/skills/pm-twenty/SKILL.md` and the sorted
 `pm-twenty` index line. It is metadata-only and carries no credential value.
+
+## 2026-08-23 CI recovery — root help golden checkpoint
+
+GitHub Verify `32656326411` supplied the red projection failure after Twenty
+became a connector namespace: all nine root-help variants still had the old
+command summary. The repository’s targeted golden mechanism regenerated them
+from the CLI and the clean check then passed:
+
+```text
+POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 \
+POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES='root_bare_manual,root_long_help,root_short_help,root_help_command,root_man_command,root_json_help,root_late_json_help,root_equals_form,root_space_form' \
+GOMAXPROCS=2 go test -p 1 -parallel 1 -count=1 -timeout 20m ./internal/cli \
+  -run '^TestGoldenTranscripts$'
+# PASS
+GOMAXPROCS=2 go test -p 1 -parallel 1 -count=1 -timeout 20m ./internal/cli \
+  -run '^TestGoldenTranscripts$'
+# PASS
+```
+
+The generated diff is exactly nine line replacements in
+`internal/cli/testdata/golden_transcripts.json`. No assertion was weakened and
+the connector command remains `implemented`; 28 batch rows remain explicit
+0.3.1 certification deferrals.
