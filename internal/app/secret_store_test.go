@@ -3,12 +3,15 @@ package app_test
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/credential"
 )
 
 // TestRuntimeConfigSecretStorePersistsRotatedSecret is the rotation-persistence
@@ -72,6 +75,115 @@ func TestRuntimeConfigSecretStorePersistsRotatedSecret(t *testing.T) {
 
 	// And what is on disk must be ciphertext.
 	assertVaultCiphertext(t, root, rotated)
+}
+
+func TestAddCredentialRejectsTransportOnlySecretBeforeVaultPersistence(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		value string
+	}{
+		{name: "empty", value: ""},
+		{name: "LF only", value: "\n"},
+		{name: "CRLF only", value: "\r\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := context.Background()
+			root := t.TempDir()
+			if err := app.InitProject(root); err != nil {
+				t.Fatalf("InitProject() error = %v", err)
+			}
+			instance, err := app.Open(root)
+			if err != nil {
+				t.Fatalf("Open() error = %v", err)
+			}
+			if _, err := instance.AddCredential(ctx, app.AddCredentialRequest{
+				Name:      "transport-only-secret",
+				Connector: "sample",
+				Secrets:   map[string]string{"token": tt.value},
+			}); err == nil {
+				t.Fatal("AddCredential() accepted a transport-only secret")
+			} else {
+				var empty *credential.EmptySecretError
+				if !errors.As(err, &empty) {
+					t.Fatalf("AddCredential() error is not typed empty-secret classification: %T", err)
+				}
+			}
+			if got := len(instance.ListCredentials()); got != 0 {
+				t.Fatalf("credential count = %d, want 0", got)
+			}
+			entries, err := os.ReadDir(filepath.Join(root, ".polymetrics", "vault"))
+			if err != nil {
+				t.Fatalf("ReadDir(vault) error = %v", err)
+			}
+			for _, entry := range entries {
+				if strings.HasSuffix(entry.Name(), ".enc") {
+					t.Fatal("transport-only secret created encrypted persistence")
+				}
+			}
+		})
+	}
+}
+
+func TestRuntimeConfigSecretStoreRejectsTransportOnlyWriteAndPreservesExistingSecret(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	canary := strings.Repeat("stored-credential-canary-", 64)
+	rotated := strings.Repeat("rotated-credential-canary-", 64)
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	if _, err := instance.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "non-empty-secret",
+		Connector: "sample",
+		Secrets:   map[string]string{"token": canary},
+	}); err != nil {
+		t.Fatalf("AddCredential() error = %v", err)
+	}
+	_, runtime, err := instance.ResolveConnectorCredential(ctx, "sample", "non-empty-secret", nil)
+	if err != nil {
+		t.Fatalf("ResolveConnectorCredential() error = %v", err)
+	}
+	if err := runtime.SecretStore.PutSecret(ctx, "token", rotated); err != nil {
+		t.Fatalf("PutSecret(non-empty) error = %v", err)
+	}
+	for _, tt := range []struct {
+		name  string
+		value string
+	}{
+		{name: "empty", value: ""},
+		{name: "LF only", value: "\n"},
+		{name: "CRLF only", value: "\r\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := runtime.SecretStore.PutSecret(ctx, "token", tt.value); err == nil {
+				t.Fatal("PutSecret() accepted a transport-only secret")
+			} else {
+				var empty *credential.EmptySecretError
+				if !errors.As(err, &empty) {
+					t.Fatalf("PutSecret() error is not typed empty-secret classification: %T", err)
+				}
+			}
+		})
+	}
+
+	fresh, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("fresh Open() error = %v", err)
+	}
+	_, stored, err := fresh.ResolveConnectorCredential(ctx, "sample", "non-empty-secret", nil)
+	if err != nil {
+		t.Fatalf("fresh ResolveConnectorCredential() error = %v", err)
+	}
+	if gotLength, wantLength := len(stored.Secrets["token"]), len(rotated); gotLength != wantLength {
+		t.Fatalf("stored credential length = %d, want %d", gotLength, wantLength)
+	}
+	if gotHash, wantHash := sha256.Sum256([]byte(stored.Secrets["token"])), sha256.Sum256([]byte(rotated)); gotHash != wantHash {
+		t.Fatalf("stored credential SHA-256 = %x, want %x", gotHash, wantHash)
+	}
 }
 
 // TestRuntimeConfigSecretStoreRejectsUndeclaredKey proves the store will not

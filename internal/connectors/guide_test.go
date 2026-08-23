@@ -19,6 +19,46 @@ func TestRenderCommandSurfaceCommandIncludesOperationMapping(t *testing.T) {
 	}
 }
 
+func TestRenderCommandSurfaceCommandRendersRepeatableAndTextExportFlags(t *testing.T) {
+	line := renderCommandSurfaceCommand(CommandSurfaceCommand{
+		Path:   "audit export",
+		Intent: "text_export",
+		Flags:  []CommandSurfaceFlag{{Name: "header-x-mode", Repeatable: true}},
+	})
+	if !strings.Contains(line, "--header-x-mode (repeatable)") {
+		t.Fatalf("rendered command did not mark repeatable flag: %s", line)
+	}
+	for _, flag := range BinaryDownloadFlags() {
+		if !strings.Contains(line, "--"+flag.Name) {
+			t.Fatalf("text export guide did not render --%s: %s", flag.Name, line)
+		}
+	}
+}
+
+func TestRenderCommandSurfaceCommandRendersSafetyConstraints(t *testing.T) {
+	allowEmpty := false
+	line := renderCommandSurfaceCommand(CommandSurfaceCommand{
+		Path: "graphql mutation create-migration-source",
+		Flags: []CommandSurfaceFlag{{
+			Name:       "input",
+			Type:       "json",
+			Required:   true,
+			EnvOnly:    true,
+			AllowEmpty: &allowEmpty,
+			MaxBytes:   8192,
+			MinItems:   1,
+			MaxItems:   9,
+		}},
+	})
+	for _, want := range []string{
+		"--input (required, env-only, non-empty, 1..9 items, max 8192 bytes)",
+	} {
+		if !strings.Contains(line, want) {
+			t.Fatalf("rendered command missing %q: %s", want, line)
+		}
+	}
+}
+
 func TestConfigSectionRendersConditionalSecretRequirement(t *testing.T) {
 	section := configSection(Manifest{SecretFields: []SecretField{{
 		Name:         "password",

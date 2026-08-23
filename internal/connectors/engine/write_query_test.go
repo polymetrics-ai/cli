@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -123,6 +124,441 @@ func TestWriteActionQueryFromRecordField(t *testing.T) {
 	}
 	if got := (*seen)[0].Get("id"); got != "w1" {
 		t.Fatalf("id = %q, want %q", got, "w1")
+	}
+}
+
+func TestBuildWriteQueryOmitWhenAbsentScopesMissingRecordValuesToTheirDeclaredQuery(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		param   QueryParam
+		vars    Vars
+		want    string
+		wantErr string
+	}{
+		{
+			name:  "missing optional record value is omitted",
+			param: QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			vars:  Vars{Config: map[string]string{"optional": "wrong-source"}, Record: map[string]any{"other": "present"}},
+		},
+		{
+			name:    "missing required record value fails",
+			param:   QueryParam{Template: "{{ record.required }}"},
+			vars:    Vars{Config: map[string]string{"required": "wrong-source"}},
+			wantErr: "unresolved key",
+		},
+		{
+			name:  "explicit record value is preserved",
+			param: QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			vars:  Vars{Record: map[string]any{"optional": "record-value"}},
+			want:  "record-value",
+		},
+		{
+			name:  "config omission remains unchanged",
+			param: QueryParam{Template: "{{ config.optional }}", OmitWhenAbsent: true},
+			vars:  Vars{},
+		},
+		{
+			name:  "secret omission remains unchanged",
+			param: QueryParam{Template: "{{ secrets.optional }}", OmitWhenAbsent: true},
+			vars:  Vars{},
+		},
+		{
+			name:  "incremental omission remains unchanged",
+			param: QueryParam{Template: "{{ incremental.lower_bound }}", OmitWhenAbsent: true},
+			vars:  Vars{},
+		},
+		{
+			name:    "wrong source remains a failure",
+			param:   QueryParam{Template: "{{ query.optional }}", OmitWhenAbsent: true},
+			vars:    Vars{},
+			wantErr: "does not permit query references",
+		},
+		{
+			name:    "malformed explicit value remains a failure",
+			param:   QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"optional": "bad\r\nvalue"}},
+			wantErr: "contains CR/LF",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			query, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": tc.param},
+			}, tc.vars)
+			if tc.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+					t.Fatalf("buildWriteQuery error = %v, want %q", err, tc.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("buildWriteQuery: %v", err)
+			}
+			if got := query.Get("optional"); got != tc.want {
+				t.Fatalf("optional query = %q, want %q", got, tc.want)
+			}
+			if tc.want == "" {
+				if _, present := query["optional"]; present {
+					t.Fatalf("optional query = %v, want parameter omitted", query)
+				}
+			}
+		})
+	}
+}
+
+func TestBuildWriteQueryPreflightsEveryExpressionBeforeRecordOmission(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		template  string
+		vars      Vars
+		want      string
+		wantOmit  bool
+		wantError string
+	}{
+		{
+			name:      "later query reference",
+			template:  "{{ record.optional }}{{ query.forbidden }}",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: "does not permit query references",
+		},
+		{
+			name:      "reversed source order",
+			template:  "{{ query.forbidden }}{{ record.optional }}",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: "does not permit query references",
+		},
+		{
+			name:      "later invalid config expression",
+			template:  "{{ record.optional }}{{ config.updated_at | unix_seconds }}",
+			vars:      Vars{Config: map[string]string{"updated_at": "not-a-time"}, Record: map[string]any{"id": "w1"}},
+			wantError: "invalid RFC3339 value",
+		},
+		{
+			name:      "invalid filter after absent record",
+			template:  "{{ record.optional | not-a-filter }}",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: `unknown filter "not-a-filter"`,
+		},
+		{
+			name:      "malformed reference after absent record",
+			template:  "{{ record.optional }}{{ config. }}",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: `malformed reference "config."`,
+		},
+		{
+			name:      "unclosed expression after absent record",
+			template:  "{{ record.optional }}{{ config.scope",
+			vars:      Vars{Record: map[string]any{"id": "w1"}},
+			wantError: "malformed template delimiter",
+		},
+		{
+			name:     "mixed expression omits absent record",
+			template: "prefix={{ record.optional }}&scope={{ config.scope }}",
+			vars: Vars{
+				Config: map[string]string{"scope": "workspace-1"},
+				Record: map[string]any{"id": "w1"},
+			},
+			wantOmit: true,
+		},
+		{
+			name:     "mixed expression materializes present record",
+			template: "prefix={{ record.optional }}&scope={{ config.scope }}",
+			vars: Vars{
+				Config: map[string]string{"scope": "workspace-1"},
+				Record: map[string]any{"optional": "record-value"},
+			},
+			want: "prefix=record-value&scope=workspace-1",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			query, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": {Template: tc.template, OmitWhenAbsent: true}},
+			}, tc.vars)
+			if tc.wantError != "" {
+				if err == nil || !strings.Contains(err.Error(), tc.wantError) {
+					t.Fatalf("buildWriteQuery error = %v, want %q", err, tc.wantError)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("buildWriteQuery: %v", err)
+			}
+			if tc.wantOmit {
+				if _, present := query["optional"]; present {
+					t.Fatalf("optional query = %#v, want parameter omitted", query)
+				}
+				return
+			}
+			if got := query.Get("optional"); got != tc.want {
+				t.Fatalf("optional query = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestBuildWriteQueryRejectsMalformedTemplatesAndReferenceTails(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		template string
+		wantErr  string
+	}{
+		{
+			name:     "nested delimiter cannot hide wrong source",
+			template: "{{ record.optional {{ query.forbidden }}",
+			wantErr:  "nested opening delimiter",
+		},
+		{
+			name:     "stray closing delimiter",
+			template: "{{ record.optional }} }}",
+			wantErr:  "stray closing delimiter",
+		},
+		{
+			name:     "unbalanced opening delimiter",
+			template: "{{ record.optional",
+			wantErr:  "unbalanced opening delimiter",
+		},
+		{
+			name:     "empty expression",
+			template: "{{ }}",
+			wantErr:  "empty expression",
+		},
+		{
+			name:     "empty filter stage",
+			template: "{{ record.optional | }}",
+			wantErr:  "malformed filter chain",
+		},
+		{
+			name:     "config tail",
+			template: "{{ config.mode.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "secret tail",
+			template: "{{ secrets.token.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "query tail",
+			template: "{{ query.value.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "incremental tail",
+			template: "{{ incremental.lower_bound.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "fanout tail",
+			template: "{{ fanout.id.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+		{
+			name:     "cursor tail",
+			template: "{{ cursor.unexpected }}",
+			wantErr:  "malformed reference",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": {Template: tc.template, OmitWhenAbsent: true}},
+			}, Vars{Record: map[string]any{"id": "w1"}})
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("buildWriteQuery error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+
+	query, err := buildWriteQuery(WriteAction{
+		Name:  "update_widget",
+		Query: map[string]QueryParam{"optional": {Template: "{{ record.settings.primary.id }}", OmitWhenAbsent: true}},
+	}, Vars{Record: map[string]any{"settings": map[string]any{"primary": map[string]any{"id": "nested-id"}}}})
+	if err != nil {
+		t.Fatalf("buildWriteQuery dotted record path: %v", err)
+	}
+	if got := query.Get("optional"); got != "nested-id" {
+		t.Fatalf("dotted record query = %q, want %q", got, "nested-id")
+	}
+}
+
+func TestBuildWriteQuerySecretFilterErrorsDoNotExposeValues(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		template  string
+		secret    string
+		forbidden []string
+	}{
+		{
+			name:      "unix seconds",
+			template:  "{{ record.optional }}{{ secrets.token | unix_seconds }}",
+			secret:    "secret-canary-unix",
+			forbidden: []string{"secret-canary-unix"},
+		},
+		{
+			name:      "base64 conversion",
+			template:  "{{ record.optional }}{{ secrets.token | base64 | unix_seconds }}",
+			secret:    "secret-canary-base64",
+			forbidden: []string{"secret-canary-base64", base64.StdEncoding.EncodeToString([]byte("secret-canary-base64"))},
+		},
+		{
+			name:      "urlencode conversion",
+			template:  "{{ record.optional }}{{ secrets.token | urlencode | unix_seconds }}",
+			secret:    "secret canary urlencode",
+			forbidden: []string{"secret canary urlencode", urlencodeSegment("secret canary urlencode")},
+		},
+		{
+			name:      "path segment conversion",
+			template:  "{{ record.optional }}{{ secrets.token | last_path_segment | unix_seconds }}",
+			secret:    "prefix/secret-canary-segment",
+			forbidden: []string{"prefix/secret-canary-segment", "secret-canary-segment"},
+		},
+		{
+			name:      "join type error",
+			template:  "{{ record.optional }}{{ secrets.token | join:, }}",
+			secret:    "secret-canary-join",
+			forbidden: []string{"secret-canary-join"},
+		},
+		{
+			name:      "raw value error",
+			template:  "{{ record.optional }}{{ secrets.token }}",
+			secret:    "secret-canary-crlf\r\n",
+			forbidden: []string{"secret-canary-crlf"},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": {Template: tc.template, OmitWhenAbsent: true}},
+			}, Vars{
+				Record:  map[string]any{"id": "w1"},
+				Secrets: map[string]string{"token": tc.secret},
+			})
+			if err == nil {
+				t.Fatal("buildWriteQuery error = nil, want secret-safe failure")
+			}
+			for _, value := range tc.forbidden {
+				if strings.Contains(err.Error(), value) {
+					t.Fatalf("buildWriteQuery error exposed secret value %q: %v", value, err)
+				}
+			}
+		})
+	}
+}
+
+func TestWriteActionRecordQueryRejectionsHappenBeforeProviderIO(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		param   QueryParam
+		cfg     connectors.RuntimeConfig
+		record  connectors.Record
+		wantErr string
+	}{
+		{
+			name:    "required record value",
+			param:   QueryParam{Template: "{{ record.required }}"},
+			record:  connectors.Record{"id": "w1"},
+			wantErr: "unresolved key",
+		},
+		{
+			name:    "undeclared record value cannot cross-bind",
+			param:   QueryParam{Template: "{{ record.declared }}"},
+			record:  connectors.Record{"id": "w1", "undeclared": "attempted-value"},
+			wantErr: "unresolved key",
+		},
+		{
+			name:    "wrong source",
+			param:   QueryParam{Template: "{{ query.optional }}", OmitWhenAbsent: true},
+			record:  connectors.Record{"id": "w1"},
+			wantErr: "does not permit query references",
+		},
+		{
+			name:    "missing record cannot hide later wrong source",
+			param:   QueryParam{Template: "{{ record.optional }}{{ query.forbidden }}", OmitWhenAbsent: true},
+			record:  connectors.Record{"id": "w1"},
+			wantErr: "does not permit query references",
+		},
+		{
+			name:    "nested delimiter cannot hide later wrong source",
+			param:   QueryParam{Template: "{{ record.optional {{ query.forbidden }}", OmitWhenAbsent: true},
+			record:  connectors.Record{"id": "w1"},
+			wantErr: "nested opening delimiter",
+		},
+		{
+			name:    "malformed explicit value",
+			param:   QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			record:  connectors.Record{"id": "w1", "optional": "bad\r\nvalue"},
+			wantErr: "contains CR/LF",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			srv, seen := queryCaptureServer(t)
+			bundle := newWriteTestBundle(srv, WriteAction{
+				Name: "update_widget", Kind: "update", Method: http.MethodPost, Path: "/widgets",
+				Query: map[string]QueryParam{"optional": tc.param},
+			})
+			err := writeOneRecord(t, bundle, "update_widget", tc.cfg, tc.record)
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("Write error = %v, want %q", err, tc.wantErr)
+			}
+			if len(*seen) != 0 {
+				t.Fatalf("rejected query reached provider; requests = %d", len(*seen))
+			}
+		})
+	}
+}
+
+func TestWriteActionSecretQueryErrorsDoNotReachProviderOrExposeValues(t *testing.T) {
+	const secret = "secret-canary-provider"
+	srv, seen := queryCaptureServer(t)
+	bundle := newWriteTestBundle(srv, WriteAction{
+		Name: "update_widget", Kind: "update", Method: http.MethodPost, Path: "/widgets",
+		Query: map[string]QueryParam{
+			"optional": {Template: "{{ record.optional }}{{ secrets.token | unix_seconds }}", OmitWhenAbsent: true},
+		},
+	})
+	err := writeOneRecord(t, bundle, "update_widget", connectors.RuntimeConfig{Secrets: map[string]string{"token": secret}}, connectors.Record{"id": "w1"})
+	if err == nil {
+		t.Fatal("Write error = nil, want secret-safe failure")
+	}
+	if strings.Contains(err.Error(), secret) {
+		t.Fatalf("Write error exposed secret value: %v", err)
+	}
+	if len(*seen) != 0 {
+		t.Fatalf("rejected query reached provider; requests = %d", len(*seen))
+	}
+}
+
+func TestWriteActionOptionalRecordQueryIsOmittedOrPreservedAtProvider(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		record connectors.Record
+		want   string
+	}{
+		{name: "missing optional record value is omitted", record: connectors.Record{"id": "w1"}},
+		{name: "explicit record value is preserved", record: connectors.Record{"id": "w1", "optional": "record-value"}, want: "record-value"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			srv, seen := queryCaptureServer(t)
+			bundle := newWriteTestBundle(srv, WriteAction{
+				Name: "update_widget", Kind: "update", Method: http.MethodPost, Path: "/widgets",
+				Query: map[string]QueryParam{"optional": {Template: "{{ record.optional }}", OmitWhenAbsent: true}},
+			})
+			if err := writeOneRecord(t, bundle, "update_widget", connectors.RuntimeConfig{}, tc.record); err != nil {
+				t.Fatalf("Write: %v", err)
+			}
+			if len(*seen) != 1 {
+				t.Fatalf("provider requests = %d, want 1", len(*seen))
+			}
+			if got := (*seen)[0].Get("optional"); got != tc.want {
+				t.Fatalf("optional query = %q, want %q", got, tc.want)
+			}
+			if tc.want == "" {
+				if _, present := (*seen)[0]["optional"]; present {
+					t.Fatalf("optional query = %v, want parameter omitted", (*seen)[0])
+				}
+			}
+		})
 	}
 }
 
@@ -372,5 +808,93 @@ func TestBundleLoadRejectsInvalidDynamicFields(t *testing.T) {
 	}`)}
 	if _, err := Load(fsys, "acme"); err == nil {
 		t.Fatal("dynamic_fields on an unsupported body_type must be rejected at load")
+	}
+}
+
+func TestBuildWriteQueryRejectsUnsafeTemplateSyntaxAndValues(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		param   QueryParam
+		vars    Vars
+		wantErr string
+	}{
+		{
+			name:    "multiline expression",
+			param:   QueryParam{Template: "{{ record.id |\n urlencode }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"id": "value"}},
+			wantErr: "invalid control characters",
+		},
+		{
+			name:    "nul identifier",
+			param:   QueryParam{Template: "{{ config.mode\x00 }}", OmitWhenAbsent: true},
+			wantErr: "invalid control characters",
+		},
+		{
+			name:    "bidi identifier",
+			param:   QueryParam{Template: "{{ record.option\u202eal }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"optional": "value"}},
+			wantErr: "invalid unicode characters",
+		},
+		{
+			name:    "nul resolved record value",
+			param:   QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"optional": "value\x00"}},
+			wantErr: "invalid control characters",
+		},
+		{
+			name:    "nul encoded record value",
+			param:   QueryParam{Template: "{{ record.optional | urlencode }}", OmitWhenAbsent: true},
+			vars:    Vars{Record: map[string]any{"optional": "value\x00"}},
+			wantErr: "invalid control characters",
+		},
+		{
+			name:    "bidi default value",
+			param:   QueryParam{Template: "{{ config.optional }}", Default: "value\u202e"},
+			wantErr: "invalid unicode characters",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := buildWriteQuery(WriteAction{
+				Name:  "update_widget",
+				Query: map[string]QueryParam{"optional": tc.param},
+			}, tc.vars)
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("buildWriteQuery error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+}
+
+func TestWriteActionUnsafeQueryValuesDoNotReachProvider(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		param  QueryParam
+		record connectors.Record
+		cfg    connectors.RuntimeConfig
+	}{
+		{
+			name:   "resolved record value",
+			param:  QueryParam{Template: "{{ record.optional }}", OmitWhenAbsent: true},
+			record: connectors.Record{"id": "w1", "optional": "value\x00"},
+		},
+		{
+			name:   "default value",
+			param:  QueryParam{Template: "{{ config.optional }}", Default: "value\u202e"},
+			record: connectors.Record{"id": "w1"},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			srv, seen := queryCaptureServer(t)
+			bundle := newWriteTestBundle(srv, WriteAction{
+				Name: "update_widget", Kind: "update", Method: http.MethodPost, Path: "/widgets",
+				Query: map[string]QueryParam{"optional": tc.param},
+			})
+			if err := writeOneRecord(t, bundle, "update_widget", tc.cfg, tc.record); err == nil {
+				t.Fatal("Write error = nil, want unsafe query value rejection")
+			}
+			if len(*seen) != 0 {
+				t.Fatalf("unsafe query value reached provider; requests = %d", len(*seen))
+			}
+		})
 	}
 }

@@ -16,10 +16,11 @@
           "kind": { "type": "string", "enum": ["create", "update", "upsert", "delete", "custom"] },
           "method": { "type": "string" },
           "path": { "type": "string" },
+          "base_url": { "type": "string", "pattern": "^https?://[^/?#]+/?$" },
           "path_fields": { "type": "array", "items": { "type": "string" } },
           "query": { "type": "object" },
           "redact_fields": { "type": "array", "items": { "type": "string" } },
-          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart", "base64_upload"] },
+          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart", "base64_upload", "binary_upload"] },
           "body_required": { "type": "boolean" },
           "body_fields": { "type": "array", "items": { "type": "string" } },
           "body_field": { "type": "string" },
@@ -76,6 +77,15 @@
               "content_field": { "type": "string" },
               "max_decoded_bytes": { "type": "integer" },
               "max_encoded_bytes": { "type": "integer" }
+            }
+          },
+          "binary_upload": {
+            "type": "object",
+            "required": ["source_field", "max_bytes"],
+            "additionalProperties": false,
+            "properties": {
+              "source_field": { "type": "string" },
+              "max_bytes": { "type": "integer" }
             }
           },
           "record_schema": { "type": "object" },
@@ -144,7 +154,12 @@
               }
             }
           },
-          "hook": { "type": "string" }
+          "hook": { "type": "string" },
+          "hook_fields": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "pattern": ".+" }
+          }
         }
       }
     }

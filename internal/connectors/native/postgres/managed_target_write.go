@@ -92,10 +92,14 @@ func (d *DatabaseDriver) BeginDatabaseWrite(ctx context.Context, plan database.D
 	if err := d.assertManagedTargetForWrite(ctx, d.conn, plan); err != nil {
 		return nil, err
 	}
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return nil, err
+	}
 	tx, err := d.conn.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return nil, errPostgresWriteSessionFailed
 	}
+	tx = admitPostgresTx(tx)
 	rollback := func() {
 		_ = tx.Rollback(context.WithoutCancel(ctx))
 	}

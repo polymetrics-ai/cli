@@ -1,0 +1,115 @@
+---
+name: pm-acuity-scheduling
+description: Acuity Scheduling connector knowledge and safe action guide.
+---
+
+# pm-acuity-scheduling
+
+## Purpose
+
+Reads Acuity Scheduling appointments, clients, appointment types, calendars, forms, products, orders, and labels, and writes appointment/block/certificate mutations, through the Acuity REST API.
+
+## Icon
+
+- id: pm-sample
+- asset: icons/pm-sample.svg
+- source: polymetrics
+- review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
+
+## Capabilities
+
+- check=true catalog=true read=true write=true query=false
+- Integration type: api
+
+## Authentication
+
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
+
+## Configuration
+
+- base_url
+- mode
+- username (required)
+- password (secret) (required)
+
+## ETL Streams
+
+- appointments:
+  - primary key: id
+  - cursor: datetime
+  - fields: amount_paid(string), appointment_type_id(integer), calendar(string), calendar_id(integer), canceled(boolean), date(string), datetime(string), datetime_created(string), duration(string), email(string), end_time(string), first_name(string), id(integer), last_name(string), paid(string), phone(string), price(string), time(string), type(string)
+- clients:
+  - primary key: email
+  - fields: email(string), first_name(string), last_name(string), phone(string)
+- appointment_types:
+  - primary key: id
+  - fields: active(boolean), category(string), color(string), description(string), duration(integer), id(integer), name(string), price(string), private(boolean), type(string)
+- calendars:
+  - primary key: id
+  - fields: description(string), email(string), id(integer), location(string), name(string), replyTo(string), timezone(string)
+- forms:
+  - primary key: id
+  - fields: description(string), hidden(boolean), id(integer), name(string)
+- products:
+  - primary key: id
+  - fields: description(string), expires(integer), hidden(boolean), id(integer), minutes(integer), name(string), price(string), type(string)
+- orders:
+  - primary key: id
+  - fields: email(string), first_name(string), id(integer), last_name(string), notes(string), phone(string), status(string), time(string), title(string), total(string)
+- labels:
+  - primary key: id
+  - fields: color(string), id(integer), name(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+## Reverse ETL Actions
+
+- create_appointment:
+  - endpoint: POST /appointments
+  - required fields: datetime, appointmentTypeID, firstName, lastName, email
+  - risk: creates a live appointment booking on the calendar and, depending on account settings, sends the client a confirmation email/SMS; external mutation, approval required
+- update_appointment:
+  - endpoint: PUT /appointments/{{ record.id }}
+  - required fields: id
+  - risk: updates a live appointment's client-facing details from Acuity's white-list of updatable attributes; external mutation, approval required
+- cancel_appointment:
+  - endpoint: PUT /appointments/{{ record.id }}/cancel
+  - required fields: id
+  - risk: permanently cancels a live scheduled appointment; irreversible (Acuity's own docs: it is not possible to un-cancel), and by default sends the client a cancellation notification. External mutation, approval required
+- create_block:
+  - endpoint: POST /blocks
+  - required fields: start, end, calendarID
+  - risk: blocks off a time range on a live calendar, preventing clients from booking appointments in it; external mutation, approval required
+- create_certificate:
+  - endpoint: POST /certificates
+  - risk: issues a live, redeemable package or coupon certificate code; external mutation, approval required
+
+## Security
+
+- read risk: external Acuity Scheduling API read of appointments, clients, appointment types, calendars, forms, products, orders, and labels
+- write risk: external Acuity Scheduling mutation: creates/updates/cancels live appointments, blocks off calendar time, and issues package/coupon certificates; approval required
+- Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Commands
+
+### Inspect as a manual
+
+```bash
+pm connectors inspect acuity-scheduling
+```
+
+### Inspect as structured JSON
+
+```bash
+pm connectors inspect acuity-scheduling --json
+```
+
+## Agent Rules
+
+- Run pm connectors inspect acuity-scheduling before creating credentials or plans.
+- Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+- Never ask the user to paste secret values into chat.
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

@@ -1,0 +1,1 @@
+{"openapi":"3.0.3","info":{"title":"invalid","version":"1"},"paths":{"/one":{"get":{"operationId":"duplicate","responses":{"200":{"description":"x"}}}},"/two":{"get":{"operationId":"duplicate","responses":{"200":{"description":"x"}}}}}}

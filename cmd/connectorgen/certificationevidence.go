@@ -295,6 +295,7 @@ func runReportCertificationEvidence(args []string, stdout, stderr io.Writer) int
 			ExecutedAt:             report.CompletedAt.UTC().Format(time.RFC3339),
 			RunID:                  proof.RunID + "-" + evidenceBindingSuffix(binding),
 			PMBinarySHA256:         proof.PMBinarySHA256,
+			PMBuildSHA256:          proof.PMBuildSHA256,
 			PMCommandFingerprint:   proof.PMCommandFingerprint,
 			CredentialFingerprints: append([]string(nil), proof.CredentialFingerprints...),
 			HTTPExchanges:          exchanges,

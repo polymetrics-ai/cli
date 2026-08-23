@@ -118,10 +118,10 @@ error: direct read received --page and a command flag setting the request
 
 ## Where command flags come from
 
-A direct-read command's flags are **derived from the connector's own provider
-specification**, not hand-written. `pm <connector> <command> --help` lists every
-parameter the endpoint accepts, with its type, its allowed values when the
-specification declares an enum, and whether it is required:
+A direct-read command's flags are **derived from its connector's declared
+provider contract**, not hand-written. `pm <connector> <command> --help` lists
+the supported parameters the command accepts, with their types, allowed values
+when the specification declares an enum, and requiredness:
 
 ```
 FLAGS
@@ -129,6 +129,15 @@ FLAGS
   --sarif-id (string): Filter analyses belonging to the same SARIF upload. maps_to=query.sarif_id
   --sort (enum): The property by which to sort the results. values=created maps_to=query.sort
 ```
+
+When an operation declares a non-auth request header, its generated flag starts
+with `--header-` and is scoped to that command's exact provider header. It is
+not a generic `--header` escape hatch: authorization, cookies (including
+`Set-Cookie`), hosts, content, and connection/proxy/forwarding/transport
+metadata — plus their case or underscore variants — are runtime-owned and
+cannot be supplied. See the
+[connector authoring conventions](migration/conventions.md) for the declaration
+contract.
 
 Invalid values and missing required flags are rejected **before any network
 call**:

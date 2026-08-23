@@ -14,6 +14,7 @@ import (
 	"sync"
 	"time"
 
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -104,9 +105,12 @@ type OAuth2RefreshToken struct {
 	// TokenURL is the provider's token endpoint. Required.
 	TokenURL string
 	// ClientID and ClientSecret identify the OAuth2 client. Some providers
-	// (public clients) accept an empty secret.
+	// (public clients) omit ClientSecret.
 	ClientID     string
 	ClientSecret string
+	// ClientSecretRequired distinguishes an absent public-client secret from a
+	// declared but empty secret, which must be rejected before token emission.
+	ClientSecretRequired bool
 	// RefreshToken is the initial refresh token. Required. On a provider that
 	// rotates, the value actually presented is the most recent one, not this.
 	RefreshToken string
@@ -186,6 +190,9 @@ func (a *OAuth2RefreshToken) Apply(ctx context.Context, req *http.Request) error
 	if err != nil {
 		return err
 	}
+	if err := credential.ValidateHTTPHeaderValue("OAuth2 access token", token); err != nil {
+		return fmt.Errorf("oauth2 refresh: %w", err)
+	}
 	req.Header.Set("Authorization", "Bearer "+token)
 	return nil
 }
@@ -253,18 +260,32 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 		return "", errors.New("oauth2 refresh: token_url is required")
 	}
 	if !a.seeded {
-		a.refreshToken = strings.TrimSpace(a.RefreshToken)
+		a.refreshToken = a.RefreshToken
 		a.seeded = true
 	}
-	if a.refreshToken == "" {
-		return "", errors.New("oauth2 refresh: refresh_token is required")
+	if err := credential.RequireAuthenticationValue("OAuth2 refresh token", a.refreshToken); err != nil {
+		return "", fmt.Errorf("oauth2 refresh: %w", err)
+	}
+	if a.ClientID != "" {
+		if err := credential.RequireAuthenticationValue("OAuth2 client ID", a.ClientID); err != nil {
+			return "", fmt.Errorf("oauth2 refresh: %w", err)
+		}
+	}
+	if a.ClientSecret != "" || a.ClientSecretRequired {
+		if err := credential.RequireAuthenticationValue("OAuth2 client secret", a.ClientSecret); err != nil {
+			return "", fmt.Errorf("oauth2 refresh: %w", err)
+		}
 	}
 
 	form := url.Values{}
 	form.Set("grant_type", "refresh_token")
 	form.Set("refresh_token", a.refreshToken)
-	form.Set("client_id", a.ClientID)
-	form.Set("client_secret", a.ClientSecret)
+	if a.ClientID != "" {
+		form.Set("client_id", a.ClientID)
+	}
+	if a.ClientSecret != "" {
+		form.Set("client_secret", a.ClientSecret)
+	}
 	if len(a.Scopes) > 0 {
 		form.Set("scope", strings.Join(a.Scopes, " "))
 	}
@@ -281,6 +302,9 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Accept", "application/json")
 
+	if err := CheckRequestAdmission(ctx); err != nil {
+		return "", fmt.Errorf("oauth2 refresh: request admission: %w", err)
+	}
 	resp, err := a.httpClient().Do(req)
 	if err != nil {
 		// url.Error embeds the request URL, which may itself carry a query.
@@ -312,11 +336,14 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 		// the failure, not its content.
 		return "", errors.New("oauth2 refresh: token endpoint returned a body that is not a valid token response")
 	}
-	if strings.TrimSpace(out.AccessToken) == "" {
-		return "", errors.New("oauth2 refresh: token response has no access_token")
+	if err := credential.RequireAuthenticationValue("OAuth2 access token", out.AccessToken); err != nil {
+		return "", fmt.Errorf("oauth2 refresh: %w", err)
 	}
 
-	if rotated := strings.TrimSpace(out.RefreshToken); rotated != "" && rotated != a.refreshToken {
+	if rotated := out.RefreshToken; rotated != "" && rotated != a.refreshToken {
+		if err := credential.RequireAuthenticationValue("OAuth2 refresh token", rotated); err != nil {
+			return "", fmt.Errorf("oauth2 refresh: %w", err)
+		}
 		a.refreshToken = rotated
 		if a.OnRefreshTokenRotated != nil {
 			if err := a.OnRefreshTokenRotated(ctx, rotated); err != nil {

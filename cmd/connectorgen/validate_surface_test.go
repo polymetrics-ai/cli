@@ -35,6 +35,28 @@ func TestCheckAPISurface_POSTDirectReadDoesNotRequireWriteCapability(t *testing.
 	}
 }
 
+func TestCheckCLISurfaceEndpointCoverageAllowsSourceBoundPartialRead(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "acme",
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: "GET", Path: "/widgets",
+			Operation: &engine.SurfaceOperation{
+				Model: "direct_read", Status: "blocked", Risk: "low", BlockedByDefault: true,
+				Reason: "Locked source operation acme.widgets.list has no field-complete declaration-owned executable route.",
+				Notes:  "source_operation=acme.widgets.list",
+			},
+		}}},
+	}
+	command := engine.CLICommand{
+		Path: "widgets list", Intent: "direct_read", Availability: "partial",
+		Notes:      "Blocked: locked source operation acme.widgets.list has no declaration-owned executable stream, direct-read, binary, or status route.",
+		APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/widgets"}},
+	}
+	if findings := checkCLISurfaceEndpointCoverage(bundle, 0, command, cliSurfaceEndpointStates(bundle.Surface)); len(findings) != 0 {
+		t.Fatalf("source-bound partial read must be allowed to reference its blocked endpoint: %+v", findings)
+	}
+}
+
 // A fixed GraphQL query is a read even though its shared transport is POST.
 // The executable source root must therefore not let a connector claim
 // capabilities.read=false merely because the REST-specific check only looked

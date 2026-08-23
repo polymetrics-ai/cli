@@ -10996,6 +10996,8 @@
     "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
     "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
     "bytes": 1546421,
+    "projection_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
+    "projection_bytes": 1190347,
     "query_fields": [
       {
         "root": "Query",

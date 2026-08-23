@@ -243,6 +243,24 @@ func TestCommitAfterDownstreamAcknowledgement(t *testing.T) {
 	}
 }
 
+func TestPublicationWitnessRequiresConnectorIssuedAcknowledgement(t *testing.T) {
+	acknowledgedAt := time.Now().UTC()
+	if _, err := (DownstreamAcknowledgement{Sink: "warehouse", AcknowledgedAt: acknowledgedAt}).PublicationWitness(); !errors.Is(err, ErrDownstreamAcknowledgementRequired) {
+		t.Fatalf("forged publication witness error = %v, want durable acknowledgement refusal", err)
+	}
+	acknowledgement, err := NewDurableDownstreamAcknowledgement("warehouse", acknowledgedAt)
+	if err != nil {
+		t.Fatal(err)
+	}
+	witness, err := acknowledgement.PublicationWitness()
+	if err != nil {
+		t.Fatalf("connector-issued publication witness = %v", err)
+	}
+	if witness.Sink != "warehouse" || !witness.AcknowledgedAt.Equal(acknowledgedAt) {
+		t.Fatalf("publication witness = %#v, want exact durable acknowledgement identity", witness)
+	}
+}
+
 func TestResumeRejectsObservedButUncommittedCheckpoint(t *testing.T) {
 	checkpoint := validCheckpoint()
 	err := checkpoint.ValidateResume(ResumeExpectation{Source: checkpoint.Source, SourceGeneration: checkpoint.SourceGeneration})

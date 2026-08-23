@@ -643,6 +643,20 @@
         ]
       },
       {
+        "function_kind": "operation:rest_status",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"zoom\" does not declare operation kind \"rest_status\""
+        }
+      },
+      {
         "function_kind": "operation:rest_write",
         "applicable": true,
         "declared": true,
@@ -664,6 +678,20 @@
         "not_applicable": {
           "code": "operation_kind_not_declared",
           "reason": "connector \"zoom\" does not declare operation kind \"stream_etl\""
+        }
+      },
+      {
+        "function_kind": "operation:text_export",
+        "applicable": false,
+        "declared": false,
+        "implemented": false,
+        "fixture_tested": false,
+        "live_tested": false,
+        "fixture_evidence": [],
+        "live_evidence": [],
+        "not_applicable": {
+          "code": "operation_kind_not_declared",
+          "reason": "connector \"zoom\" does not declare operation kind \"text_export\""
         }
       },
       {
@@ -743,91 +771,105 @@
       "id": "operation:binary_download",
       "category": "operation",
       "name": "binary_download",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=binary_download)",
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=binary_download)",
       "executor_source": "internal/connectors/engine/binary_read.go:OperationBinaryDownload"
     },
     {
       "id": "operation:browser_open",
       "category": "operation",
       "name": "browser_open",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=browser_open)"
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=browser_open)"
     },
     {
       "id": "operation:composite",
       "category": "operation",
       "name": "composite",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=composite)"
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=composite)"
     },
     {
       "id": "operation:file_upload",
       "category": "operation",
       "name": "file_upload",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=file_upload)"
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=file_upload)"
     },
     {
       "id": "operation:graphql_mutation",
       "category": "operation",
       "name": "graphql_mutation",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=graphql_mutation)",
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=graphql_mutation)",
       "executor_source": "internal/connectors/engine/direct_write.go:OperationDirectWrite"
     },
     {
       "id": "operation:graphql_query",
       "category": "operation",
       "name": "graphql_query",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=graphql_query)",
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=graphql_query)",
       "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
     },
     {
       "id": "operation:local_file",
       "category": "operation",
       "name": "local_file",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=local_file)"
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=local_file)"
     },
     {
       "id": "operation:local_git",
       "category": "operation",
       "name": "local_git",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=local_git)"
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=local_git)"
     },
     {
       "id": "operation:provider_search",
       "category": "operation",
       "name": "provider_search",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=provider_search)",
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=provider_search)",
       "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
     },
     {
       "id": "operation:rest_read",
       "category": "operation",
       "name": "rest_read",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=rest_read)",
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=rest_read)",
       "executor_source": "internal/connectors/engine/direct_read.go:PreflightOperationDirectRead"
+    },
+    {
+      "id": "operation:rest_status",
+      "category": "operation",
+      "name": "rest_status",
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=rest_status)",
+      "executor_source": "internal/connectors/engine/status_check.go:OperationStatusCheck"
     },
     {
       "id": "operation:rest_write",
       "category": "operation",
       "name": "rest_write",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=rest_write)",
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=rest_write)",
       "executor_source": "internal/connectors/engine/direct_write.go:OperationDirectWrite"
     },
     {
       "id": "operation:stream_etl",
       "category": "operation",
       "name": "stream_etl",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=stream_etl)"
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=stream_etl)"
+    },
+    {
+      "id": "operation:text_export",
+      "category": "operation",
+      "name": "text_export",
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=text_export)",
+      "executor_source": "internal/connectors/engine/binary_read.go:OperationBinaryDownload"
     },
     {
       "id": "operation:xml_export",
       "category": "operation",
       "name": "xml_export",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=xml_export)"
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=xml_export)"
     },
     {
       "id": "operation:xml_import",
       "category": "operation",
       "name": "xml_import",
-      "discovery_source": "internal/connectors/engine/bundle.go:expectedOperationBlock(kind=xml_import)"
+      "discovery_source": "internal/connectors/engine/operation_kind.go:operationKindContracts(kind=xml_import)"
     }
   ],
   "flow_kinds": [

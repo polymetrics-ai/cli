@@ -3,7 +3,6 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 )
 
 // RecordSchemaShape is the promotion-relevant shape of a declarative write
@@ -83,25 +82,47 @@ func ValidatePromotableRecordSchema(raw json.RawMessage) error {
 // additionalProperties as authority for a transport mapping; a closed typed
 // destination must point at a named schema property.
 func ValidateRecordSchemaField(raw json.RawMessage, field string) error {
-	field = strings.TrimSpace(field)
-	if field == "" || strings.Contains(field, ".") {
+	if field == "" {
 		return fmt.Errorf("record field %q must map to one top-level record property", field)
 	}
-	if err := ValidatePromotableRecordSchema(raw); err != nil {
+	properties, _, err := recordSchemaTopLevelProperties(raw)
+	if err != nil {
 		return err
 	}
-	if _, err := CompileSchema(raw); err != nil {
-		return fmt.Errorf("record_schema: %w", err)
-	}
-
-	var root struct {
-		Properties map[string]json.RawMessage `json:"properties"`
-	}
-	if err := json.Unmarshal(raw, &root); err != nil {
-		return fmt.Errorf("invalid record_schema: %w", err)
-	}
-	if _, ok := root.Properties[field]; !ok {
+	if _, ok := properties[field]; !ok {
 		return fmt.Errorf("record field %q is not declared in record_schema", field)
+	}
+	return nil
+}
+
+// ValidateRecordSchemaFieldMapping proves that declaration-owned fields map
+// exactly to one concrete write action and cover every required top-level
+// property of its record schema.
+func ValidateRecordSchemaFieldMapping(raw json.RawMessage, fields []string) error {
+	properties, required, err := recordSchemaTopLevelProperties(raw)
+	if err != nil {
+		return err
+	}
+	mapped := make(map[string]struct{}, len(fields))
+	for _, field := range fields {
+		if field == "" {
+			return fmt.Errorf("record field %q must map to one top-level record property", field)
+		}
+		if _, duplicate := mapped[field]; duplicate {
+			return fmt.Errorf("record schema mapping duplicates field %q", field)
+		}
+		if _, declared := properties[field]; !declared {
+			return fmt.Errorf("record field %q is not declared in record_schema", field)
+		}
+		mapped[field] = struct{}{}
+	}
+	for _, field := range required {
+		if _, declared := properties[field]; !declared {
+			return fmt.Errorf("record_schema requires undeclared field %q", field)
+		}
+		if _, present := mapped[field]; !present {
+			return fmt.Errorf("record schema required field %q is not mapped", field)
+		}
 	}
 	return nil
 }
@@ -110,36 +131,102 @@ func ValidateRecordSchemaField(raw json.RawMessage, field string) error {
 // command flag which supplies one structured JSON value to a reverse-ETL
 // record. A JSON flag is deliberately narrower than a generic request body:
 // it must name exactly one top-level field of a concrete write action, and
-// that field must itself be an explicitly typed object or array. The runner
-// calls this through Connector during runtime preflight; connectorgen calls
-// the same function while validating authored CLI metadata.
+// that field must itself be an explicitly typed object or array, or a genuine
+// declared multi-kind JSON union. A plain scalar remains a scalar flag; only a
+// provider-owned union needs JSON syntax to preserve every declared arm. The
+// runner calls this through Connector during runtime preflight; connectorgen
+// calls the same function while validating authored CLI metadata.
 func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error {
-	field = strings.TrimSpace(field)
-	if field == "" || strings.Contains(field, ".") {
+	if field == "" {
 		return fmt.Errorf("structured JSON field %q must map to one top-level record property", field)
 	}
-	if err := ValidateRecordSchemaField(raw, field); err != nil {
+	properties, _, err := recordSchemaTopLevelProperties(raw)
+	if err != nil {
 		return err
 	}
-
-	var root struct {
-		Properties map[string]json.RawMessage `json:"properties"`
+	property, ok := properties[field]
+	if !ok {
+		return fmt.Errorf("record field %q is not declared in record_schema", field)
 	}
-	if err := json.Unmarshal(raw, &root); err != nil {
-		return fmt.Errorf("invalid record_schema: %w", err)
-	}
-	property := root.Properties[field]
 
 	var schema struct {
-		Type string `json:"type"`
+		Type json.RawMessage `json:"type"`
 	}
 	if err := json.Unmarshal(property, &schema); err != nil {
 		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
 	}
-	if schema.Type != "object" && schema.Type != "array" {
+	var types []string
+	var single string
+	if err := json.Unmarshal(schema.Type, &single); err == nil {
+		types = []string{single}
+	} else if err := json.Unmarshal(schema.Type, &types); err != nil {
+		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	}
+	structured := false
+	nonNullTypes := map[string]bool{}
+	for _, typeName := range types {
+		if typeName == "object" || typeName == "array" {
+			structured = true
+		}
+		if typeName != "null" {
+			nonNullTypes[typeName] = true
+		}
+	}
+	if !structured && len(nonNullTypes) < 2 {
 		return fmt.Errorf("structured JSON field %q must declare type object or array", field)
 	}
 	return nil
+}
+
+// ValidateStructuredJSONRecordStringArm proves that a bounded named JSON
+// field may accept ordinary text as its declared string arm. It deliberately
+// reuses the same closed top-level record boundary as structured JSON fields;
+// it is not authority for an arbitrary body or an open JSON value.
+func ValidateStructuredJSONRecordStringArm(raw json.RawMessage, field string) error {
+	if err := ValidateStructuredJSONRecordField(raw, field); err != nil {
+		return err
+	}
+	properties, _, err := recordSchemaTopLevelProperties(raw)
+	if err != nil {
+		return err
+	}
+	property := properties[field]
+	var schema struct {
+		Type json.RawMessage `json:"type"`
+	}
+	if err := json.Unmarshal(property, &schema); err != nil {
+		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	}
+	var types []string
+	var single string
+	if err := json.Unmarshal(schema.Type, &single); err == nil {
+		types = []string{single}
+	} else if err := json.Unmarshal(schema.Type, &types); err != nil {
+		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	}
+	for _, typeName := range types {
+		if typeName == "string" {
+			return nil
+		}
+	}
+	return fmt.Errorf("structured JSON field %q has no declared string arm", field)
+}
+
+func recordSchemaTopLevelProperties(raw json.RawMessage) (map[string]json.RawMessage, []string, error) {
+	if err := ValidatePromotableRecordSchema(raw); err != nil {
+		return nil, nil, err
+	}
+	if _, err := CompileSchema(raw); err != nil {
+		return nil, nil, fmt.Errorf("record_schema: %w", err)
+	}
+	var root struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+		Required   []string                   `json:"required"`
+	}
+	if err := json.Unmarshal(raw, &root); err != nil {
+		return nil, nil, fmt.Errorf("invalid record_schema: %w", err)
+	}
+	return root.Properties, root.Required, nil
 }
 
 // expandRecordSchemaArms only treats a union at the current root as a branch;

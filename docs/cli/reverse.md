@@ -190,9 +190,12 @@ SECURITY
   preview warnings preserve the resolved execution request, including fields
   declared in redact_fields. Engine direct-read, operation-direct-read, and binary-
   download executors preserve bounded HTTP URL/query/body diagnostics before
-  downstream rendering. Persisted reverse-ETL output retains complete ordinary
-  provider results; only credential values are represented as explicit masked
-  markers. Credential storage remains encrypted at rest.
+  downstream rendering. Persisted reverse-ETL output retains complete provider
+  results: concrete configured credential material is masked, while
+  provider-owned field names and ordinary values remain available.
+  System-generated plans, logs, request diagnostics, and synthetic errors
+  remain secret-taint-safe.
+  Credential storage remains encrypted at rest.
 
 LEARN MORE
   Run pm reverse --help for this manual.

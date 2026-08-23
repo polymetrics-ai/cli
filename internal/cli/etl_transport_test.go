@@ -4,13 +4,16 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"io"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synctransport"
 )
 
 func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
@@ -47,9 +50,18 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 	if err := runETLTransport(context.Background(), nil, []string{"declarative-typed-destination"}, &declaredStdout, false); err != nil {
 		t.Fatalf("runDeclarativeTypedDestinationTransport help = %v", err)
 	}
-	for _, want := range []string{"destination_action", "writes.json", "cannot pass a connector, action, URL, method, body, mapping, or evidence", "--approval-token-stdin"} {
+	for _, want := range []string{"destination_action", "writes.json", "cannot pass a connector, action, URL, method, body, mapping, or evidence", "--approval-token-stdin", "clamp --batch-size", "separately approved tombstone delete"} {
 		if !strings.Contains(declaredStdout.String(), want) {
 			t.Fatalf("declarative typed destination help missing %q", want)
+		}
+	}
+	var manualStdout bytes.Buffer
+	if err := writeETLTransportManual(&manualStdout, false, "etl transport"); err != nil {
+		t.Fatalf("writeETLTransportManual(etl transport) = %v", err)
+	}
+	for _, want := range []string{"clamp --batch-size", "separately approved tombstone delete"} {
+		if !strings.Contains(manualStdout.String(), want) {
+			t.Fatalf("generated etl transport manual missing %q", want)
 		}
 	}
 	var postgresStdout bytes.Buffer
@@ -65,6 +77,51 @@ func TestETLTransportBareAndLeafHelpAreContextual(t *testing.T) {
 	code := Run([]string{"etl", "transport", "github-issue-label", "cleanup", "--root", filepath.Join(t.TempDir(), "uninitialized")}, &stdout, &stderr)
 	if code != 0 || !strings.Contains(stdout.String(), "pm etl transport github-issue-label plan") || stderr.Len() != 0 {
 		t.Fatalf("bare cleanup namespace = code %d stdout=%q stderr=%q, want contextual manual without opening a project", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestDeclarativeTypedDestinationPlanPrintsCompletePhysicalActionSet(t *testing.T) {
+	plan := app.ReversePlan{
+		ID:     "rplan_action_set",
+		Mode:   "incremental_upsert",
+		Action: "upsert_issue",
+		TransportPhysicalActions: []synctransport.DestinationPhysicalAction{
+			{Action: "upsert_issue", ActionDefinitionSHA256: "apply-digest", IdempotencyKeyHeader: "Idempotency-Key", Kind: "upsert"},
+			{Action: "delete_issue", ActionDefinitionSHA256: "delete-digest", IdempotencyKeyHeader: "Idempotency-Key", Kind: "delete", Destructive: true},
+		},
+	}
+
+	var human bytes.Buffer
+	if err := writeDeclarativeTypedDestinationTransportPlan(&human, false, plan); err != nil {
+		t.Fatalf("writeDeclarativeTypedDestinationTransportPlan(human) = %v", err)
+	}
+	for _, want := range []string{"Physical actions:", "upsert_issue", "apply-digest", "delete_issue", "delete-digest", "destructive"} {
+		if !strings.Contains(human.String(), want) {
+			t.Fatalf("human plan missing %q:\n%s", want, human.String())
+		}
+	}
+
+	var jsonOut bytes.Buffer
+	if err := writeDeclarativeTypedDestinationTransportPlan(&jsonOut, true, plan); err != nil {
+		t.Fatalf("writeDeclarativeTypedDestinationTransportPlan(json) = %v", err)
+	}
+	for _, want := range []string{"transport_physical_actions", "upsert_issue", "apply-digest", "delete_issue", "delete-digest"} {
+		if !strings.Contains(jsonOut.String(), want) {
+			t.Fatalf("JSON plan missing %q:\n%s", want, jsonOut.String())
+		}
+	}
+
+	plan.ApprovalToken = "issued-for-fixture"
+	for _, jsonOutput := range []bool{false, true} {
+		var preview bytes.Buffer
+		if err := writeDeclarativeTypedDestinationTransportPreview(&preview, jsonOutput, plan, connectors.WritePreview{Action: plan.Action}); err != nil {
+			t.Fatalf("writeDeclarativeTypedDestinationTransportPreview(json=%t) = %v", jsonOutput, err)
+		}
+		for _, want := range []string{"upsert_issue", "apply-digest", "delete_issue", "delete-digest", "destructive"} {
+			if !strings.Contains(preview.String(), want) {
+				t.Fatalf("preview(json=%t) missing %q:\n%s", jsonOutput, want, preview.String())
+			}
+		}
 	}
 }
 
@@ -252,6 +309,58 @@ func TestETLRunTransportApprovalLeavesLegacyRuntimeAlone(t *testing.T) {
 	}, strings.NewReader(""))
 	if err != nil || present || approval.PlanID != "" || approval.ApprovalToken != "" || approval.Evidence != nil || approval.AuthorizeNextUnit != nil {
 		t.Fatalf("legacy --runtime carrier = %#v present=%t err=%v, want untouched legacy ETL arguments", approval, present, err)
+	}
+}
+
+func TestETLRunRejectsRuntimeWriteShapingFlagsBeforeLegacyDispatch(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		value string
+	}{
+		{name: "destination-action", value: "arbitrary"},
+		{name: "destination_action", value: "arbitrary"},
+		{name: "connector", value: "foreign"},
+		{name: "action", value: "replace"},
+		{name: "route", value: "/foreign"},
+		{name: "verb", value: "PATCH"},
+		{name: "method", value: "POST"},
+		{name: "path", value: "/foreign"},
+		{name: "url", value: "https://foreign.example.test"},
+		{name: "body", value: `{"override":true}`},
+		{name: "payload", value: "override"},
+		{name: "query", value: "override=true"},
+		{name: "headers", value: "X-Override=true"},
+		{name: "mapping", value: "source:target"},
+		{name: "map", value: "source:target"},
+		{name: "input-fields", value: "source=target"},
+		{name: "evidence", value: "caller-evidence"},
+		{name: "destination-config", value: "target=override"},
+		{name: "destination", value: "foreign:credential"},
+		{name: "credential", value: "foreign"},
+		{name: "source-config", value: "source=override"},
+		{name: "sql", value: "UPDATE records"},
+		{name: "shell", value: "touch ignored"},
+		{name: "http", value: "request"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			err := runETL(context.Background(), nil, []string{
+				"run",
+				"--connection", "ordinary-connection",
+				"--stream", "widgets",
+				"--batch-size", "1",
+				"--" + tt.name, tt.value,
+			}, io.Discard, false, config.Config{})
+			if err == nil {
+				t.Fatalf("runtime --%s selection was accepted", tt.name)
+			}
+			var refusal *cliError
+			if !errors.As(err, &refusal) || refusal.category != categoryUsage {
+				t.Fatalf("runtime --%s refusal = %T %v, want usage error", tt.name, err, err)
+			}
+			if strings.Contains(err.Error(), tt.value) {
+				t.Fatalf("runtime --%s refusal leaked caller value %q", tt.name, tt.value)
+			}
+		})
 	}
 }
 

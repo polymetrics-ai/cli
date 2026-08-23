@@ -1,0 +1,88 @@
+---
+name: pm-hellobaton
+description: Hellobaton connector knowledge and safe action guide.
+---
+
+# pm-hellobaton
+
+## Purpose
+
+Reads Hellobaton projects, milestones, tasks, phases, companies, and users through the Hellobaton REST API.
+
+## Icon
+
+- id: hellobaton
+- asset: icons/hellobaton.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+
+## Capabilities
+
+- check=true catalog=true read=true write=false query=false
+- Integration type: api
+
+## Authentication
+
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
+
+## Configuration
+
+- base_url (required)
+- api_key (secret) (required)
+
+## ETL Streams
+
+- projects:
+  - primary key: id
+  - cursor: modified
+  - fields: _self(string), annual_contract_value(string), archived(boolean), completed_datetime(string), cost(integer), created(string), creator(string), id(integer), modified(string), name(string)
+- milestones:
+  - primary key: id
+  - cursor: modified
+  - fields: _self(string), created(string), deadline_datetime(string), deadline_fixed(boolean), description(string), duration(integer), finish_datetime(string), id(integer), modified(string), project(string)
+- tasks:
+  - primary key: id
+  - cursor: modified
+  - fields: _self(string), created(string), description(string), id(integer), modified(string), name(string), project(string)
+- phases:
+  - primary key: id
+  - cursor: modified
+  - fields: _self(string), created(string), id(integer), modified(string), name(string)
+- companies:
+  - primary key: id
+  - cursor: modified
+  - fields: _self(string), created(string), id(integer), modified(string), name(string)
+- users:
+  - primary key: id
+  - cursor: modified
+  - fields: _self(string), created(string), first_name(string), id(integer), last_name(string), modified(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+## Security
+
+- read risk: external Hellobaton API read of project, milestone, task, phase, company, and user data
+- approval: none; read-only, no obviously-safe reverse-ETL writes
+- Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Commands
+
+### Inspect as a manual
+
+```bash
+pm connectors inspect hellobaton
+```
+
+### Inspect as structured JSON
+
+```bash
+pm connectors inspect hellobaton --json
+```
+
+## Agent Rules
+
+- Run pm connectors inspect hellobaton before creating credentials or plans.
+- Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+- Never ask the user to paste secret values into chat.
