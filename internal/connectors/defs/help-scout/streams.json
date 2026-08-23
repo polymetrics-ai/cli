@@ -1,6 +1,13 @@
 {
   "base": {
     "url": "{{ config.base_url }}",
+    "routes": [
+      {
+        "name": "mailbox_v3",
+        "base_url": "{{ config.base_url }}",
+        "version": "v3"
+      }
+    ],
     "user_agent": "polymetrics-go-cli",
     "auth": [
       {
