@@ -538,3 +538,20 @@ The generated diff is exactly nine line replacements in
 `internal/cli/testdata/golden_transcripts.json`. No assertion was weakened and
 the connector command remains `implemented`; 28 batch rows remain explicit
 0.3.1 certification deferrals.
+
+## 2026-08-23 CI recovery — generated connector-doc checkpoint
+
+GitHub Verify `32657312227` supplied the red generated-documentation failure:
+the recovered connector made `docs/connectors/catalog/all-connectors.json`
+stale. The built binary supplied its own safe generation and validation path:
+
+```text
+./pm docs --help
+./pm docs generate --dir docs/cli
+./pm docs validate --connectors-dir docs/connectors
+# PASS
+```
+
+The generator refreshed only the connector catalog and Twenty generated manual
+and skill, removing 114 stale lines. No documentation was manually edited and
+no command availability or batch-deferral classification changed.

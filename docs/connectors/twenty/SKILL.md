@@ -765,14 +765,6 @@ Reads Twenty CRM companies, people, opportunities, notes, tasks, messages, calen
   - writes - Twenty write commands use reverse ETL plan, preview, approval, execute.
   - direct-read - Get-by-id commands are bounded, operation-backed direct reads with redacted JSON output.
 
-## Sync Transport
-
-- Source transport: declared
-- Destination transport: declared
-- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
-- Source executor: declarative_api/declarative_stream_source
-- Destination executor: declarative_api/declarative_typed_destination
-
 ## Commands
 
 ### Inspect as a manual
