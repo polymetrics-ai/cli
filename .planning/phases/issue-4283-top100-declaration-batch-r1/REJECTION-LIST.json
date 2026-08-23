@@ -20,30 +20,24 @@
       "operation": {
         "kind": "typed_action_set",
         "source": "writes.json",
-        "sha256": "e41b6aa9194d56488360d04c07b67514b6436b453dddb34deb43968d34d81606",
-        "except": [
-          "update_view"
-        ]
+        "sha256": "e41b6aa9194d56488360d04c07b67514b6436b453dddb34deb43968d34d81606"
       },
       "reason": "foundation-gap",
-      "evidence": "A destination binding is resolved only by declarative source executor and stream, not by selected typed action; update_view is the static fixture proof and all other action mappings need action-scoped selection.",
+      "evidence": "No action in this set has a complete declared typed-destination contract. The provisional update_view mapping was removed because its public declaration records no provider idempotency header and it lacks action-owned read-back evidence; direct write commands remain declared and reachable.",
       "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
-      "recoverability": "Implement action-scoped destination source bindings."
+      "recoverability": "Add exact action-scoped source bindings, source-cited delivery/idempotency facts where the provider exposes them, and bounded action-owned read-back evidence."
     },
     {
       "connector": "stripe",
       "operation": {
         "kind": "typed_action_set",
         "source": "writes.json",
-        "sha256": "48c9d8e074dd4d7ac5b42f008a13ad09d8e69766667f90051d991ad8f5b24a7f",
-        "except": [
-          "update_customer"
-        ]
+        "sha256": "48c9d8e074dd4d7ac5b42f008a13ad09d8e69766667f90051d991ad8f5b24a7f"
       },
       "reason": "foundation-gap",
-      "evidence": "The customer update mapping is static-fixture qualified; create and delete require different source payload semantics that the action-invariant binding cannot select.",
+      "evidence": "No action in this set has a complete declared typed-destination contract. The provisional update_customer mapping was removed because it lacks a source-cited action-owned delivery/read-back declaration; direct write commands remain declared and reachable.",
       "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
-      "recoverability": "Implement action-scoped destination source bindings."
+      "recoverability": "Add exact action-scoped source bindings, source-cited delivery/idempotency facts where the provider exposes them, and bounded action-owned read-back evidence."
     },
     {
       "connector": "bitbucket",
@@ -62,30 +56,24 @@
       "operation": {
         "kind": "typed_action_set",
         "source": "writes.json",
-        "sha256": "669e83c70a30423ea5dab4974279a18efeaf2d7e8f01cfd0812610c6de84838d",
-        "except": [
-          "update_schedule"
-        ]
+        "sha256": "669e83c70a30423ea5dab4974279a18efeaf2d7e8f01cfd0812610c6de84838d"
       },
       "reason": "foundation-gap",
-      "evidence": "The schedules update mapping is static-fixture qualified; remaining actions require their own action-specific mapping selection.",
+      "evidence": "No action in this set has a complete declared typed-destination contract. The provisional update_schedule mapping was removed because it lacks a declared provider idempotency header and action-owned read-back evidence; direct write commands remain declared and reachable.",
       "source_lock": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
-      "recoverability": "Implement action-scoped destination source bindings."
+      "recoverability": "Add exact action-scoped source bindings, source-cited delivery/idempotency facts where the provider exposes them, and bounded action-owned read-back evidence."
     },
     {
       "connector": "vercel",
       "operation": {
         "kind": "typed_action_set",
         "source": "writes.json",
-        "sha256": "d125af58f61823f5f26426892c011fc986492c2b64b965ed92750e2d9c1b2a9e",
-        "except": [
-          "update_project"
-        ]
+        "sha256": "d125af58f61823f5f26426892c011fc986492c2b64b965ed92750e2d9c1b2a9e"
       },
       "reason": "foundation-gap",
-      "evidence": "The projects update mapping is static-fixture qualified; remaining actions require their own action-specific mapping selection.",
+      "evidence": "No action in this set has a complete declared typed-destination contract. The provisional update_project mapping was removed because it lacks a declared provider idempotency header and action-owned read-back evidence; direct write commands remain declared and reachable.",
       "source_lock": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
-      "recoverability": "Implement action-scoped destination source bindings."
+      "recoverability": "Add exact action-scoped source bindings, source-cited delivery/idempotency facts where the provider exposes them, and bounded action-owned read-back evidence."
     },
     {
       "connector": "asana",

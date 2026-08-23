@@ -10,10 +10,10 @@
     "required_before_final_push": "Fetch and merge the current branch head, prove it is an ancestor, then exercise the installed application/CLI reverse-ETL path without provider credentials."
   },
   "foundation_gap": {
-    "id": "action-scoped-source-binding",
-    "reason": "A destination declaration has one source binding per executor and its mapping is resolved only by executor and stream; it is not selected by apply-strategy action. Distinct action payloads for the same declarative source therefore cannot each carry an exact source-to-input mapping in one destination declaration.",
-    "evidence": "internal/connectors/sync_transport.go:147-150,431-456; internal/app/issue_label_warehouse_transport.go:310-332,351-365",
-    "minimal_change": "Make source bindings action-scoped (or permit separately named destination declarations) and resolve the mapping with the selected action.",
+    "id": "declarative-typed-destination-contract-evidence",
+    "reason": "A declarative typed destination must bind each action to a source mapping, bounded delivery unit, provider idempotency key, and action-owned bounded read-back policy. The four provisional Batch-1 static mappings supplied none of the delivery/read-back facts, so they cannot be represented as executable destinations.",
+    "evidence": "internal/app/issue_label_warehouse_transport.go:903-991; internal/connectors/defs/notion/writes.json:914; internal/connectors/defs/{circleci,notion,stripe,vercel}/sync_transport.json",
+    "minimal_change": "For an action whose provider contract supports it, source-cite and declare the exact action-owned source binding, bounded delivery/idempotency facts, and read-back operation/receipt contract; otherwise retain only the source transport and direct typed command.",
     "recoverable": true
   },
   "rows": [
@@ -222,8 +222,8 @@
         },
         "reverse_etl": {
           "typed_actions": 24,
-          "destination_actions": 1,
-          "app_cli_dispatch": "pending-upstream-4304"
+          "destination_actions": 0,
+          "app_cli_dispatch": "no-complete-destination-declaration"
         },
         "cli": {
           "declared": 49,
@@ -234,18 +234,8 @@
         "source": "internal/connectors/defs/notion/writes.json",
         "action_set_sha256": "e41b6aa9194d56488360d04c07b67514b6436b453dddb34deb43968d34d81606",
         "action_count": 24,
-        "bound_actions": [
-          {
-            "action": "update_view",
-            "stream": "views",
-            "fixture": "fixtures/streams/views/page_1.json",
-            "inputs": {
-              "view_id": "id",
-              "name": "name"
-            }
-          }
-        ],
-        "remaining_action_selector": "Every other typed action in this pinned action set.",
+        "bound_actions": [],
+        "remaining_action_selector": "Every typed action in this pinned action set.",
         "remaining_state": "foundation-gap",
         "foundation_gap_id": "action-scoped-source-binding",
         "action_dispositions": [
@@ -361,7 +351,7 @@
             "action": "update_view",
             "kind": "update",
             "reverse_etl_eligibility": "eligible",
-            "destination_disposition": "eligible_bound_fixture_mapping"
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
           },
           {
             "action": "delete_view",
@@ -434,8 +424,8 @@
         },
         "reverse_etl": {
           "typed_actions": 3,
-          "destination_actions": 1,
-          "app_cli_dispatch": "pending-upstream-4304"
+          "destination_actions": 0,
+          "app_cli_dispatch": "no-complete-destination-declaration"
         },
         "cli": {
           "declared": 8,
@@ -446,21 +436,8 @@
         "source": "internal/connectors/defs/stripe/writes.json",
         "action_set_sha256": "48c9d8e074dd4d7ac5b42f008a13ad09d8e69766667f90051d991ad8f5b24a7f",
         "action_count": 3,
-        "bound_actions": [
-          {
-            "action": "update_customer",
-            "stream": "customers",
-            "fixture": "fixtures/streams/customers/page_1.json",
-            "inputs": {
-              "id": "id",
-              "email": "email",
-              "name": "name",
-              "description": "description",
-              "phone": "phone"
-            }
-          }
-        ],
-        "remaining_action_selector": "Every other typed action in this pinned action set.",
+        "bound_actions": [],
+        "remaining_action_selector": "Every typed action in this pinned action set.",
         "remaining_state": "foundation-gap",
         "foundation_gap_id": "action-scoped-source-binding",
         "action_dispositions": [
@@ -474,7 +451,7 @@
             "action": "update_customer",
             "kind": "update",
             "reverse_etl_eligibility": "eligible",
-            "destination_disposition": "eligible_bound_fixture_mapping"
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
           },
           {
             "action": "delete_customer",
@@ -959,8 +936,8 @@
         },
         "reverse_etl": {
           "typed_actions": 7,
-          "destination_actions": 1,
-          "app_cli_dispatch": "pending-upstream-4304"
+          "destination_actions": 0,
+          "app_cli_dispatch": "no-complete-destination-declaration"
         },
         "cli": {
           "declared": 2,
@@ -971,21 +948,8 @@
         "source": "internal/connectors/defs/circleci/writes.json",
         "action_set_sha256": "669e83c70a30423ea5dab4974279a18efeaf2d7e8f01cfd0812610c6de84838d",
         "action_count": 7,
-        "bound_actions": [
-          {
-            "action": "update_schedule",
-            "stream": "schedules",
-            "fixture": "fixtures/streams/schedules/page_1.json",
-            "inputs": {
-              "id": "id",
-              "name": "name",
-              "description": "description",
-              "timetable": "timetable",
-              "parameters": "parameters"
-            }
-          }
-        ],
-        "remaining_action_selector": "Every other typed action in this pinned action set.",
+        "bound_actions": [],
+        "remaining_action_selector": "Every typed action in this pinned action set.",
         "remaining_state": "foundation-gap",
         "foundation_gap_id": "action-scoped-source-binding",
         "action_dispositions": [
@@ -999,7 +963,7 @@
             "action": "update_schedule",
             "kind": "update",
             "reverse_etl_eligibility": "eligible",
-            "destination_disposition": "eligible_bound_fixture_mapping"
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
           },
           {
             "action": "delete_schedule",
@@ -1126,8 +1090,8 @@
         },
         "reverse_etl": {
           "typed_actions": 18,
-          "destination_actions": 1,
-          "app_cli_dispatch": "pending-upstream-4304"
+          "destination_actions": 0,
+          "app_cli_dispatch": "no-complete-destination-declaration"
         },
         "cli": {
           "declared": 2,
@@ -1138,18 +1102,8 @@
         "source": "internal/connectors/defs/vercel/writes.json",
         "action_set_sha256": "d125af58f61823f5f26426892c011fc986492c2b64b965ed92750e2d9c1b2a9e",
         "action_count": 18,
-        "bound_actions": [
-          {
-            "action": "update_project",
-            "stream": "projects",
-            "fixture": "fixtures/streams/projects/page_1.json",
-            "inputs": {
-              "id": "id",
-              "name": "name"
-            }
-          }
-        ],
-        "remaining_action_selector": "Every other typed action in this pinned action set.",
+        "bound_actions": [],
+        "remaining_action_selector": "Every typed action in this pinned action set.",
         "remaining_state": "foundation-gap",
         "foundation_gap_id": "action-scoped-source-binding",
         "action_dispositions": [
@@ -1163,7 +1117,7 @@
             "action": "update_project",
             "kind": "update",
             "reverse_etl_eligibility": "eligible",
-            "destination_disposition": "eligible_bound_fixture_mapping"
+            "destination_disposition": "eligible_pending_action_scoped_source_binding"
           },
           {
             "action": "delete_project",

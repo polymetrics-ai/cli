@@ -121,3 +121,22 @@ dispositions and recoverability remain in `REJECTION-LIST.json`.
 - No checked-in source lock is refreshed from these measurements: a valid
   refresh must retain a complete verified inventory and derived declaration,
   not only a new byte count and SHA-256.
+
+## Declarative typed-destination delivery evidence — 2026-08-24
+
+- Affected declarations: the prior CircleCI `update_schedule`, Notion
+  `update_view`, Stripe `update_customer`, and Vercel `update_project`
+  `destination_transport` entries.
+- Evidence: the runtime correctly rejects a binding with no action at
+  `internal/app/issue_label_warehouse_transport.go:907`, then rejects a
+  missing batch at line 910, a missing provider idempotency header at
+  lines 971-980, and missing action-owned read-back at lines 982-991. Notion
+  explicitly says it has no provider idempotency header at
+  `internal/connectors/defs/notion/writes.json:914`; the other three have no
+  source-cited header or action-owned read-back declaration.
+- Recovery: only declare this closed destination surface after the pinned
+  provider contract supports and the bundle source-cites the exact action-owned
+  mapping, per-record delivery/idempotency facts, and bounded read-back
+  operation/receipt policy. Do not invent any header, route, acknowledgement,
+  or response shape. The actions remain declared and direct-command reachable;
+  no credentialed or provider-live test was run.

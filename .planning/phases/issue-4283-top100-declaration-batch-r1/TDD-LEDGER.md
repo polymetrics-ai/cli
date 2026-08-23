@@ -565,6 +565,105 @@ importer refuses `patternProperties` first. The expected Notion, Bitbucket,
 GitLab, and Jira clear result is not reproduced, so no pin, denominator, or
 derived declaration is changed on this evidence.
 
+## PR #4294 main-base typed-destination binding repair — 2026-08-24
+
+**GSD/manual fallback:** generated the `discuss-phase`, `plan-phase --gaps`,
+`execute-phase --gaps-only`, `verify-work`, and `code-review` prompts and
+executed the single-worker gap plan/review inline because this dispatcher
+cannot provide the adapter's isolated Pi worker runtime. Required skills loaded: `golang-how-to`,
+`golang-troubleshooting`, `golang-testing`, `golang-error-handling`,
+`golang-safety`, and `golang-continuous-integration`.
+
+**Red:** at PR head `761c1bc8a`, both native target builds and the verify
+certification harness reject the same loaded bundle contract. The local,
+credential-free reproduction is:
+
+```text
+go test -timeout 20m -count=1 -run 'TestWarehouseMaterializesTablesAsParquet|TestQuerySQLAggregatesOverParquetTables|TestReverseETLReadsAParquetSourceTable' ./internal/app
+```
+
+All three tests fail before source or provider I/O with
+`declarative typed destination requires an action-owned source binding`.
+The declaration inventory identifies exactly four affected destination
+transports: `circleci/update_schedule`, `notion/update_view`,
+`stripe/update_customer`, and `vercel/update_project`. Each has one ordinary
+`source_bindings` entry with the exact action's existing `input_fields` mapping
+but no `action` identity. The runtime guard at
+`internal/app/issue_label_warehouse_transport.go:907` correctly refuses that
+ambiguous binding.
+
+**First Green attempt (rejected by the next runtime gate):** add the
+corresponding existing `writes.json` action name to each of those four
+connector-local binding objects without altering input fields, routes, schemas,
+source locks, engines, or shared transport code. The ensuing red proves that
+action identity alone cannot establish safe delivery; no temporary binding or
+batch declaration remains in the final change. No credentials or live provider
+calls are authorized.
+
+**Second Red / root cause:** action identity made the next validator boundary
+observable: every affected binding lacks the required declaration-owned batch,
+and, after that mechanical addition, the runtime correctly refuses
+`update_schedule` because it has no provider idempotency key header. The same
+guard would then require action-owned bounded read-back declarations. These
+are not inert JSON defaults: `internal/app/issue_label_warehouse_transport.go`
+requires provider idempotency at lines 971-980 and action-owned read-back at
+982-991. The existing Notion action explicitly records that the provider has
+no idempotency header in `internal/connectors/defs/notion/writes.json:914`.
+The other three actions have no source-cited header or action-owned read-back
+contract in their pinned declarations. Inventing either would turn a direct
+write command into an unsafe replaying destination transport.
+
+**Green:** removed the four invalid `destination_transport` claims rather
+than inventing headers, acknowledgement units, or read-back routes. Their
+source transports, source locks, writes.json actions, and installed direct
+commands remain intact; generated manuals now say `Destination transport:
+unsupported`. The credential-free focused app reproduction and
+`TestSampleOutboxWriteLifecycleAgainstRealCLI` both pass after the removal.
+The remaining reverse-ETL destination capability is recorded as a
+source-cited declaration/foundation gap, not a disabled or omitted provider
+operation.
+
+**Final local gates:** `make tidy-check`, `make lint`, `go vet ./...`, `go
+build ./cmd/pm`, focused `internal/app` and `internal/connectors/certify`
+tests, `make docs-check-no-build`, `make smoke-no-build`,
+`make connector-boundary`, `make connector-canon-check`, all four
+`connectorgen-certification-*` checks, `make github-parity-artifacts-check`,
+and `make release-workflow-check` pass. `certification-subject` first reded on
+a stale generated fingerprint; running its documented generator changed only
+`internal/connectors/certifications/current-subject.json`, and its `--check`
+then passes. `operation-evidence --check` likewise reded on a stale generated
+artifact; `go run ./cmd/connectorgen operation-evidence --write-fixed-100`
+regenerated it to 5,903 rows and the fixed-100 check then passes.
+
+**Deferred validator gates (pre-existing shared foundations, no mutation):**
+`go run ./cmd/connectorgen validate internal/connectors/defs` reaches 49
+findings: the batch's Asana, Bitbucket, CircleCI, Docker Hub, GitLab, Jira,
+Notion, Stripe, and Vercel descriptors are absent; Docker Hub also retains the
+source-derived SCIM `example` dialect refusal; Sentry retains 34 action
+projection gaps. `go run ./cmd/connectorgen surface-sync
+internal/connectors/defs --check` stops first at the same absent Asana
+descriptor. The authoritative refusing code is
+`cmd/connectorgen/sourceprojection.go:1810-1814` and
+`cmd/connectorgen/surfacesync.go:227-232`; these are recorded gaps rather than
+invented descriptors or altered source locks.
+
+**Independent installed-binary audit:** `make connector-runtime-preflight`
+reaches the pre-existing Docker Hub SCIM body-schema dialect gap and rejects
+only `scim user create` and `scim user update`, both because the pinned-derived
+schema retains an unsupported OpenAPI `example` keyword. The exact compiler
+refusal is `internal/connectors/engine/schema.go:165-168`. The operations stay
+declared and their direct command routes stay present; changing them to look
+partial or deleting their schema would hide the missing provider-dialect
+foundation rather than repair it.
+
+**Credential-free command reachability:** an initialized disposable project
+was used with no credential configured. The four repaired routes (`circleci
+schedules update`, `notion view update`, `stripe customers update`, and
+`vercel projects update`) were each invoked with their required identity flag
+and stopped at `error: missing --credential`. Thus removal of the invalid
+destination declarations did not unpublish or misroute any installed command;
+no provider request was made.
+
 ## Captain hard pre-merge gate — 2026-08-20
 
 ### Red

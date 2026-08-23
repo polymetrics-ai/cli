@@ -133,17 +133,16 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
   - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
 - Schedules
   - schedules list - Read CircleCI schedules through the declared ETL stream. [intent=etl availability=implemented stream=schedules]
-  - schedules update - Plan an update to a CircleCI schedule through reverse ETL. [intent=reverse_etl availability=implemented write=update_schedule]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Updates a CircleCI schedule; requires reverse-ETL plan, preview, explicit approval, then execute.; flags: --id (required), --name, --description, --timetable, --parameters
+  - schedules update - Plan an update to a CircleCI schedule through reverse ETL. [intent=reverse_etl availability=implemented write=update_schedule]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Updates a CircleCI schedule; requires reverse-ETL plan, preview, explicit approval, then execute.; flags: --id (required, non-empty), --name, --description, --timetable, --parameters
 - Help topics:
   - execution-model - Reverse ETL uses plan, preview, approval, and execute; provider-live certification remains pending.
 
 ## Sync Transport
 
 - Source transport: declared
-- Destination transport: declared
+- Destination transport: unsupported
 - A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
 - Source executor: declarative_api/declarative_stream_source
-- Destination executor: declarative_api/declarative_typed_destination
 
 ## Commands
 

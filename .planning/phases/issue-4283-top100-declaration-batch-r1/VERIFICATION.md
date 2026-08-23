@@ -371,3 +371,51 @@
 - [x] Vercel fails before the known read-only coverage work: its public
   `/api-keys` POST response uses `patternProperties`, refused by the source
   importer at `cmd/connectorgen/sourceimport.go:4311-4315`.
+
+## Current-main typed-destination declaration repair — 2026-08-24
+
+- [x] **Red reproduced without credentials:** focused `internal/app` Parquet
+  transport tests fail on the prior CircleCI, Notion, Stripe, and Vercel
+  destination declarations before provider I/O with the exact action-owned
+  source-binding refusal.
+- [x] **Root cause established:** adding only the action identity reaches the
+  next guard, a missing per-record batch declaration, then the provider
+  idempotency/read-back admission. No provider header, delivery unit, or
+  read-back operation was invented.
+- [x] **Green:** the four invalid destination declarations were removed while
+  their source transports, typed write actions, and installed direct commands
+  remain declared. `go test -timeout 20m -count=1 -run
+  'TestWarehouseMaterializesTablesAsParquet|TestQuerySQLAggregatesOverParquetTables|TestReverseETLReadsAParquetSourceTable'
+  ./internal/app` passes.
+- [x] `go test -timeout 20m -count=1 -run
+  TestSampleOutboxWriteLifecycleAgainstRealCLI ./internal/connectors/certify`
+  passes without credentials or provider I/O.
+- [x] Credential-free installed-binary reachability is retained for the four
+  affected direct write routes: in an initialized disposable project,
+  `pm circleci schedules update --id sched_fixture_1`, `pm notion view update
+  --view-id view_fixture_1`, `pm stripe customers update --id cus_fixture_1`,
+  and `pm vercel projects update --id prj_fixture_1` each reaches the binary's
+  credential boundary with `error: missing --credential`, never an unknown
+  command or provider request.
+- [x] `go build -o ./pm ./cmd/pm`, `./pm help docs`, `./pm docs generate --dir
+  docs/cli --connectors-dir docs/connectors`, and `./pm docs validate
+  --connectors-dir docs/connectors` pass; generated manuals and catalog match
+  the source-only transport declarations.
+- [x] Generated-artifact and local gates pass: `make tidy-check`, `make lint`,
+  `go vet ./...`, `go build ./cmd/pm`, `make docs-check-no-build`, `make
+  smoke-no-build`, `make connector-boundary`, `make connector-canon-check`,
+  `make github-parity-artifacts-check`, all four
+  `connectorgen-certification-*` checks, and `make release-workflow-check`.
+  `certification-subject` and 5,903-row `operation-evidence.json` were
+  regenerated and then passed their `--check` gates.
+- [ ] `connectorgen validate` and `surface-sync --check` remain blocked by
+  already-recorded source-projection foundations, not the repaired destination
+  declarations: all ten batch connectors reach either a missing canonical
+  descriptor or an existing source-derived gap; `surface-sync` stops at
+  `asana`'s missing descriptor. No lock, descriptor, request schema, or
+  provider contract was invented to make these gates appear green.
+- [ ] The independent installed-binary preflight is correctly blocked only by
+  Docker Hub's two SCIM user writes: their pinned-derived schemas retain the
+  unsupported `example` OpenAPI keyword (`internal/connectors/engine/schema.go:165-168`).
+  This is the existing body-schema dialect gap; their declarations and routes
+  remain present pending its foundation repair.

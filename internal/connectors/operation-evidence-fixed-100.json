@@ -3,6 +3,277 @@
   "source": "official provider source locks, stratified across available executable capability classes as a fixed 100-operation aggregate cohort",
   "rows": [
     {
+      "source_id": "asana.rest.getCustomFieldsForWorkspace",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "GET",
+      "canonical_path": "/workspaces/{workspace_gid}/custom_fields",
+      "cli_paths": [
+        "custom-fields list"
+      ],
+      "website_paths": [
+        "custom-fields list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/custom_fields/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.getProjects",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "GET",
+      "canonical_path": "/projects",
+      "cli_paths": [
+        "projects list"
+      ],
+      "website_paths": [
+        "projects list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/projects/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.getTags",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "GET",
+      "canonical_path": "/tags",
+      "cli_paths": [
+        "tags list"
+      ],
+      "website_paths": [
+        "tags list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/tags/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.getTasks",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "GET",
+      "canonical_path": "/tasks",
+      "cli_paths": [
+        "tasks list"
+      ],
+      "website_paths": [
+        "tasks list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/tasks/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.getTeamMemberships",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "GET",
+      "canonical_path": "/team_memberships",
+      "cli_paths": [
+        "team-memberships list"
+      ],
+      "website_paths": [
+        "team-memberships list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/team_memberships/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.getTeamsForWorkspace",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "GET",
+      "canonical_path": "/workspaces/{workspace_gid}/teams",
+      "cli_paths": [
+        "teams list"
+      ],
+      "website_paths": [
+        "teams list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/teams/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.getUsers",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "GET",
+      "canonical_path": "/users",
+      "cli_paths": [
+        "users list"
+      ],
+      "website_paths": [
+        "users list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/users/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "GET",
+      "canonical_path": "/workspaces/{workspace_gid}/workspace_memberships",
+      "cli_paths": [
+        "workspace-memberships list"
+      ],
+      "website_paths": [
+        "workspace-memberships list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/workspace_memberships/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.getWorkspaces",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "GET",
+      "canonical_path": "/workspaces",
+      "cli_paths": [
+        "workspaces list"
+      ],
+      "website_paths": [
+        "workspaces list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/workspaces/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "bitbucket.rest.get_/repositories",
+      "source_sha256": "cc6411982ef4dad138bbdfc16d4ccf1bb87054e0df5aaf9f79a40b446df58e9e",
+      "canonical_method": "GET",
+      "canonical_path": "/repositories",
+      "cli_paths": [
+        "repositories list"
+      ],
+      "website_paths": [
+        "repositories list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/repositories/page_1.json",
+        "fixtures/streams/repositories/page_2.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "circleci.rest.listSchedulesForProject",
+      "source_sha256": "5daeb722f744a9f4a577b45a7b6b71e19543854534d6091f5874a8c476fdc699",
+      "canonical_method": "GET",
+      "canonical_path": "/project/{project-slug}/schedule",
+      "cli_paths": [
+        "schedules list"
+      ],
+      "website_paths": [
+        "schedules list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/schedules/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.GetRepository",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/namespaces/{namespace}/repositories/{repository}",
+      "cli_paths": [
+        "repository detail list"
+      ],
+      "website_paths": [
+        "repository detail list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/repository_detail/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.GetRepositoryTag",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+      "cli_paths": [
+        "tag detail list"
+      ],
+      "website_paths": [
+        "tag detail list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/tag_detail/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.ListRepositoryTags",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+      "cli_paths": [
+        "tags list"
+      ],
+      "website_paths": [
+        "tags list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/tags/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.listNamespaceRepositories",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/namespaces/{namespace}/repositories",
+      "cli_paths": [
+        "repositories list"
+      ],
+      "website_paths": [
+        "repositories list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/repositories/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
       "source_id": "github.rest.actions/list-repo-workflows",
       "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
       "canonical_method": "GET",
@@ -97,459 +368,705 @@
       ]
     },
     {
-      "source_id": "github.rest.repos/get",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "GET",
-      "canonical_path": "/repos/{owner}/{repo}",
-      "cli_paths": [
-        "repo view"
-      ],
-      "website_paths": [
-        "repo view"
-      ],
-      "fixture_paths": [
-        "fixtures/streams/repository/page_1.json"
-      ],
-      "classifications": [
-        "etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.repos/get-repo-rulesets",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "GET",
-      "canonical_path": "/repos/{owner}/{repo}/rulesets",
-      "cli_paths": [
-        "ruleset list"
-      ],
-      "website_paths": [
-        "ruleset list"
-      ],
-      "fixture_paths": [
-        "fixtures/streams/repo_rulesets/page_1.json"
-      ],
-      "classifications": [
-        "etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.repos/list-autolinks",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "GET",
-      "canonical_path": "/repos/{owner}/{repo}/autolinks",
-      "cli_paths": [
-        "repo autolink list"
-      ],
-      "website_paths": [
-        "repo autolink list"
-      ],
-      "fixture_paths": [
-        "fixtures/streams/autolinks/page_1.json"
-      ],
-      "classifications": [
-        "etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.repos/list-deploy-keys",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "GET",
-      "canonical_path": "/repos/{owner}/{repo}/keys",
-      "cli_paths": [
-        "repo deploy-key list"
-      ],
-      "website_paths": [
-        "repo deploy-key list"
-      ],
-      "fixture_paths": [
-        "fixtures/streams/deploy_keys/page_1.json"
-      ],
-      "classifications": [
-        "etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.repos/list-releases",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "GET",
-      "canonical_path": "/repos/{owner}/{repo}/releases",
-      "cli_paths": [
-        "release list"
-      ],
-      "website_paths": [
-        "release list"
-      ],
-      "fixture_paths": [
-        "fixtures/streams/releases/page_1.json"
-      ],
-      "classifications": [
-        "etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.actions/cancel-workflow-run",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
+      "source_id": "asana.rest.addCustomFieldSettingForGoal",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
       "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/actions/runs/{run_id}/cancel",
+      "canonical_path": "/goals/{goal_gid}/addCustomFieldSetting",
       "cli_paths": [
-        "run cancel"
+        "goals add-custom-field-setting-for-goal"
       ],
       "website_paths": [
-        "run cancel"
+        "goals add-custom-field-setting-for-goal"
       ],
       "fixture_paths": [
-        "fixtures/writes/cancel_workflow_run.json"
+        "fixtures/writes/add_custom_field_setting_for_goal.json"
       ],
       "classifications": [
         "reverse_etl"
       ]
     },
     {
-      "source_id": "github.rest.actions/create-repo-variable",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
+      "source_id": "asana.rest.addCustomFieldSettingForPortfolio",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
       "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/actions/variables",
+      "canonical_path": "/portfolios/{portfolio_gid}/addCustomFieldSetting",
       "cli_paths": [
-        "variable create",
-        "variable set"
+        "portfolios add-custom-field-setting-for-portfolio"
       ],
       "website_paths": [
-        "variable create"
+        "portfolios add-custom-field-setting-for-portfolio"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_custom_field_setting_for_portfolio.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addCustomFieldSettingForProject",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/projects/{project_gid}/addCustomFieldSetting",
+      "cli_paths": [
+        "projects add-custom-field-setting-for-project"
+      ],
+      "website_paths": [
+        "projects add-custom-field-setting-for-project"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_custom_field_setting_for_project.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addDependenciesForTask",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/tasks/{task_gid}/addDependencies",
+      "cli_paths": [
+        "tasks add-dependencies-for-task"
+      ],
+      "website_paths": [
+        "tasks add-dependencies-for-task"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_dependencies_for_task.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addDependentsForTask",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/tasks/{task_gid}/addDependents",
+      "cli_paths": [
+        "tasks add-dependents-for-task"
+      ],
+      "website_paths": [
+        "tasks add-dependents-for-task"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_dependents_for_task.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addFollowers",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/goals/{goal_gid}/addFollowers",
+      "cli_paths": [
+        "goals add-followers"
+      ],
+      "website_paths": [
+        "goals add-followers"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_followers.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addFollowersForProject",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/projects/{project_gid}/addFollowers",
+      "cli_paths": [
+        "projects add-followers-for-project"
+      ],
+      "website_paths": [
+        "projects add-followers-for-project"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_followers_for_project.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addFollowersForTask",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/tasks/{task_gid}/addFollowers",
+      "cli_paths": [
+        "tasks add-followers-for-task"
+      ],
+      "website_paths": [
+        "tasks add-followers-for-task"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_followers_for_task.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addItemForPortfolio",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/portfolios/{portfolio_gid}/addItem",
+      "cli_paths": [
+        "portfolios add-item-for-portfolio"
+      ],
+      "website_paths": [
+        "portfolios add-item-for-portfolio"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_item_for_portfolio.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addMembersForPortfolio",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/portfolios/{portfolio_gid}/addMembers",
+      "cli_paths": [
+        "portfolios add-members-for-portfolio"
+      ],
+      "website_paths": [
+        "portfolios add-members-for-portfolio"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_members_for_portfolio.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addMembersForProject",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/projects/{project_gid}/addMembers",
+      "cli_paths": [
+        "projects add-members-for-project"
+      ],
+      "website_paths": [
+        "projects add-members-for-project"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_members_for_project.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addProjectForTask",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/tasks/{task_gid}/addProject",
+      "cli_paths": [
+        "tasks add-project-for-task"
+      ],
+      "website_paths": [
+        "tasks add-project-for-task"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_project_for_task.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addSupportingRelationship",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/goals/{goal_gid}/addSupportingRelationship",
+      "cli_paths": [
+        "goal-relationships add-supporting-relationship"
+      ],
+      "website_paths": [
+        "goal-relationships add-supporting-relationship"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_supporting_relationship.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addTagForTask",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/tasks/{task_gid}/addTag",
+      "cli_paths": [
+        "tasks add-tag-for-task"
+      ],
+      "website_paths": [
+        "tasks add-tag-for-task"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_tag_for_task.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addTaskForSection",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/sections/{section_gid}/addTask",
+      "cli_paths": [
+        "sections add-task-for-section"
+      ],
+      "website_paths": [
+        "sections add-task-for-section"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_task_for_section.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addUserForTeam",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/teams/{team_gid}/addUser",
+      "cli_paths": [
+        "teams add-user-for-team"
+      ],
+      "website_paths": [
+        "teams add-user-for-team"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_user_for_team.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.addUserForWorkspace",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/workspaces/{workspace_gid}/addUser",
+      "cli_paths": [
+        "workspaces add-user-for-workspace"
+      ],
+      "website_paths": [
+        "workspaces add-user-for-workspace"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/add_user_for_workspace.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.createCustomField",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/custom_fields",
+      "cli_paths": [
+        "custom-fields create-custom-field"
+      ],
+      "website_paths": [
+        "custom-fields create-custom-field"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/create_custom_field.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.createEnumOptionForCustomField",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/custom_fields/{custom_field_gid}/enum_options",
+      "cli_paths": [
+        "custom-fields create-enum-option-for-custom-field"
+      ],
+      "website_paths": [
+        "custom-fields create-enum-option-for-custom-field"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/create_enum_option_for_custom_field.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "asana.rest.createGoal",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+      "canonical_method": "POST",
+      "canonical_path": "/goals",
+      "cli_paths": [
+        "goals create-goal"
+      ],
+      "website_paths": [
+        "goals create-goal"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/create_goal.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.AuditLogs_ListAuditActions",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/auditlogs/{account}/actions",
+      "cli_paths": [
+        "audit log actions view"
+      ],
+      "website_paths": [
+        "audit log actions view"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.actions/create-workflow-dispatch",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches",
+      "source_id": "dockerhub.rest.AuditLogs_ListAuditLogs",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/auditlogs/{account}",
       "cli_paths": [
-        "workflow run"
+        "audit logs list"
       ],
       "website_paths": [
-        "workflow run"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/dispatch_workflow.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.actions/delete-workflow-run",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "DELETE",
-      "canonical_path": "/repos/{owner}/{repo}/actions/runs/{run_id}",
-      "cli_paths": [
-        "run delete"
-      ],
-      "website_paths": [
-        "run delete"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/delete_workflow_run.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.actions/re-run-workflow",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun",
-      "cli_paths": [
-        "run rerun"
-      ],
-      "website_paths": [
-        "run rerun"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/rerun_workflow_run.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.actions/update-repo-variable",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "PATCH",
-      "canonical_path": "/repos/{owner}/{repo}/actions/variables/{name}",
-      "cli_paths": [
-        "variable set",
-        "variable update"
-      ],
-      "website_paths": [
-        "variable update"
+        "audit logs list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.code-scanning/update-alert",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "PATCH",
-      "canonical_path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
+      "source_id": "dockerhub.rest.get_/v2/access-tokens",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/access-tokens",
       "cli_paths": [
-        "api code-scanning update-alert"
+        "personal access tokens list"
       ],
       "website_paths": [
-        "api code-scanning update-alert"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/update_code_scanning_alert.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.dependabot/update-alert",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "PATCH",
-      "canonical_path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
-      "cli_paths": [
-        "api dependabot update-alert"
-      ],
-      "website_paths": [
-        "api dependabot update-alert"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/update_dependabot_alert.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.gists/create",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/gists",
-      "cli_paths": [
-        "gist create",
-        "gists create"
-      ],
-      "website_paths": [
-        "gists create"
+        "personal access tokens list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.git/create-ref",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/git/refs",
+      "source_id": "dockerhub.rest.get_/v2/access-tokens/{uuid}",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/access-tokens/{uuid}",
       "cli_paths": [
-        "api git create-ref"
+        "personal access token view"
       ],
       "website_paths": [
-        "api git create-ref"
+        "personal access token view"
       ],
       "fixture_paths": [
-        "fixtures/writes/create_ref.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.git/delete-ref",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "DELETE",
-      "canonical_path": "/repos/{owner}/{repo}/git/refs/{ref}",
+      "source_id": "dockerhub.rest.get_/v2/orgs/{name}/access-tokens",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/orgs/{name}/access-tokens",
       "cli_paths": [
-        "api git delete-ref"
+        "organization access tokens list"
       ],
       "website_paths": [
-        "api git delete-ref"
+        "organization access tokens list"
       ],
       "fixture_paths": [
-        "fixtures/writes/delete_ref.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.git/update-ref",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "PATCH",
-      "canonical_path": "/repos/{owner}/{repo}/git/refs/{ref}",
+      "source_id": "dockerhub.rest.get_/v2/orgs/{name}/settings",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/orgs/{name}/settings",
       "cli_paths": [
-        "api git update-ref"
+        "organization settings view"
       ],
       "website_paths": [
-        "api git update-ref"
+        "organization settings view"
       ],
       "fixture_paths": [
-        "fixtures/writes/update_ref.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.issues/add-assignees",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees",
+      "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
       "cli_paths": [
-        "api issues add-assignees"
+        "organization access token view"
       ],
       "website_paths": [
-        "api issues add-assignees"
+        "organization access token view"
       ],
       "fixture_paths": [
-        "fixtures/writes/add_issue_assignees.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.issues/add-labels",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
+      "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/orgs/{org_name}/groups",
       "cli_paths": [
-        "api issues add-labels"
+        "organization groups list"
       ],
       "website_paths": [
-        "api issues add-labels"
+        "organization groups list"
       ],
       "fixture_paths": [
-        "fixtures/writes/add_issue_labels.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.issues/create",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/issues",
+      "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/orgs/{org_name}/groups/{group_name}",
       "cli_paths": [
-        "issue create"
+        "organization group view"
       ],
       "website_paths": [
-        "issue create"
+        "organization group view"
       ],
       "fixture_paths": [
-        "fixtures/writes/create_issue.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.issues/create-comment",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/issues/{issue_number}/comments",
+      "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/orgs/{org_name}/groups/{group_name}/members",
       "cli_paths": [
-        "issue comment",
-        "pr comment"
+        "organization group members list"
       ],
       "website_paths": [
-        "issue comment",
-        "pr comment"
+        "organization group members list"
       ],
       "fixture_paths": [
-        "fixtures/writes/comment_issue.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.issues/create-label",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/labels",
+      "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/invites",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/orgs/{org_name}/invites",
       "cli_paths": [
-        "label clone",
-        "label create"
+        "organization invites list"
       ],
       "website_paths": [
-        "label create"
+        "organization invites list"
       ],
       "fixture_paths": [
-        "fixtures/writes/create_label.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.issues/create-milestone",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/milestones",
+      "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/members",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/orgs/{org_name}/members",
       "cli_paths": [
-        "api issues create-milestone"
+        "organization members list"
       ],
       "website_paths": [
-        "api issues create-milestone"
+        "organization members list"
       ],
       "fixture_paths": [
-        "fixtures/writes/create_milestone.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.issues/delete-comment",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "DELETE",
-      "canonical_path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
+      "source_id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/scim/2.0/ResourceTypes",
       "cli_paths": [
-        "api issues delete-comment"
+        "scim resource-types list"
       ],
       "website_paths": [
-        "api issues delete-comment"
+        "scim resource-types list"
       ],
       "fixture_paths": [
-        "fixtures/writes/delete_issue_comment.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.rest.issues/delete-label",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "DELETE",
-      "canonical_path": "/repos/{owner}/{repo}/labels/{name}",
+      "source_id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes/{name}",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/scim/2.0/ResourceTypes/{name}",
       "cli_paths": [
-        "label delete"
+        "scim resource-type view"
       ],
       "website_paths": [
-        "label delete"
+        "scim resource-type view"
       ],
       "fixture_paths": [
-        "fixtures/writes/delete_label.json"
+        "fixtures/check.json"
       ],
       "classifications": [
-        "reverse_etl"
+        "direct_read"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.get_/v2/scim/2.0/Schemas",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/scim/2.0/Schemas",
+      "cli_paths": [
+        "scim schemas list"
+      ],
+      "website_paths": [
+        "scim schemas list"
+      ],
+      "fixture_paths": [
+        "fixtures/check.json"
+      ],
+      "classifications": [
+        "direct_read"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.get_/v2/scim/2.0/Schemas/{id}",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/scim/2.0/Schemas/{id}",
+      "cli_paths": [
+        "scim schema view"
+      ],
+      "website_paths": [
+        "scim schema view"
+      ],
+      "fixture_paths": [
+        "fixtures/check.json"
+      ],
+      "classifications": [
+        "direct_read"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.get_/v2/scim/2.0/ServiceProviderConfig",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/scim/2.0/ServiceProviderConfig",
+      "cli_paths": [
+        "scim service-provider-config view"
+      ],
+      "website_paths": [
+        "scim service-provider-config view"
+      ],
+      "fixture_paths": [
+        "fixtures/check.json"
+      ],
+      "classifications": [
+        "direct_read"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.get_/v2/scim/2.0/Users",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/scim/2.0/Users",
+      "cli_paths": [
+        "scim users list"
+      ],
+      "website_paths": [
+        "scim users list"
+      ],
+      "fixture_paths": [
+        "fixtures/check.json"
+      ],
+      "classifications": [
+        "direct_read"
+      ]
+    },
+    {
+      "source_id": "dockerhub.rest.get_/v2/scim/2.0/Users/{id}",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "GET",
+      "canonical_path": "/v2/scim/2.0/Users/{id}",
+      "cli_paths": [
+        "scim user view"
+      ],
+      "website_paths": [
+        "scim user view"
+      ],
+      "fixture_paths": [
+        "fixtures/check.json"
+      ],
+      "classifications": [
+        "direct_read"
       ]
     },
     {
@@ -571,345 +1088,39 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.codesOfConduct",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
+      "source_id": "dockerhub.rest.post_/v2/scim/2.0/Users",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
       "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "canonical_path": "/v2/scim/2.0/Users",
       "cli_paths": [
-        "graphql query codes-of-conduct"
+        "scim user create"
       ],
       "website_paths": [
-        "graphql query codes-of-conduct"
+        "scim user create"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_read"
+        "direct_write"
       ]
     },
     {
-      "source_id": "github.graphql.query.enterprise",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
+      "source_sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "canonical_method": "PUT",
+      "canonical_path": "/v2/scim/2.0/Users/{id}",
       "cli_paths": [
-        "graphql query enterprise"
+        "scim user update"
       ],
       "website_paths": [
-        "graphql query enterprise"
+        "scim user update"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.enterpriseAdministratorInvitation",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query enterprise-administrator-invitation"
-      ],
-      "website_paths": [
-        "graphql query enterprise-administrator-invitation"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.enterpriseAdministratorInvitationByToken",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query enterprise-administrator-invitation-by-token"
-      ],
-      "website_paths": [
-        "graphql query enterprise-administrator-invitation-by-token"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.enterpriseMemberInvitation",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query enterprise-member-invitation"
-      ],
-      "website_paths": [
-        "graphql query enterprise-member-invitation"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.enterpriseMemberInvitationByToken",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query enterprise-member-invitation-by-token"
-      ],
-      "website_paths": [
-        "graphql query enterprise-member-invitation-by-token"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.id",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query id"
-      ],
-      "website_paths": [
-        "graphql query id"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.license",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query license"
-      ],
-      "website_paths": [
-        "graphql query license"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.licenses",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query licenses"
-      ],
-      "website_paths": [
-        "graphql query licenses"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.marketplaceCategories",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query marketplace-categories"
-      ],
-      "website_paths": [
-        "graphql query marketplace-categories"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.marketplaceCategory",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query marketplace-category"
-      ],
-      "website_paths": [
-        "graphql query marketplace-category"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.marketplaceListing",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query marketplace-listing"
-      ],
-      "website_paths": [
-        "graphql query marketplace-listing"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.marketplaceListings",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query marketplace-listings"
-      ],
-      "website_paths": [
-        "graphql query marketplace-listings"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.meta",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query meta"
-      ],
-      "website_paths": [
-        "graphql query meta"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.node",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query node"
-      ],
-      "website_paths": [
-        "graphql query node"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.nodes",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query nodes"
-      ],
-      "website_paths": [
-        "graphql query nodes"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.organization",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query organization"
-      ],
-      "website_paths": [
-        "graphql query organization"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.rateLimit",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query rate-limit"
-      ],
-      "website_paths": [
-        "graphql query rate-limit"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.relay",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query relay"
-      ],
-      "website_paths": [
-        "graphql query relay"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_read"
+        "direct_write"
       ]
     },
     {
@@ -1239,42 +1450,6 @@
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addPullRequestCreationCapBypassUsers",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation add-pull-request-creation-cap-bypass-users"
-      ],
-      "website_paths": [
-        "graphql mutation add-pull-request-creation-cap-bypass-users"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.addPullRequestReview",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation add-pull-request-review"
-      ],
-      "website_paths": [
-        "graphql mutation add-pull-request-review"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
       "source_id": "github.rest.actions/download-artifact",
       "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
       "canonical_method": "GET",
@@ -1519,309 +1694,129 @@
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addPullRequestReviewComment",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "jira.rest.getAvatarImageByID",
+      "source_sha256": "d2d944017255deab39462144a125566b42fe3f7d003ac9b0e8dba797b8375094",
+      "canonical_method": "GET",
+      "canonical_path": "/rest/api/3/universal_avatar/view/type/{type}/avatar/{id}",
       "cli_paths": [
-        "graphql mutation add-pull-request-review-comment"
+        "universal-avatar get-avatar-image-by-id"
       ],
       "website_paths": [
-        "graphql mutation add-pull-request-review-comment"
+        "universal-avatar get-avatar-image-by-id"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
+        "binary_download"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addPullRequestReviewThread",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "jira.rest.getAvatarImageByOwner",
+      "source_sha256": "d2d944017255deab39462144a125566b42fe3f7d003ac9b0e8dba797b8375094",
+      "canonical_method": "GET",
+      "canonical_path": "/rest/api/3/universal_avatar/view/type/{type}/owner/{entityId}",
       "cli_paths": [
-        "graphql mutation add-pull-request-review-thread"
+        "universal-avatar get-avatar-image-by-owner"
       ],
       "website_paths": [
-        "graphql mutation add-pull-request-review-thread"
+        "universal-avatar get-avatar-image-by-owner"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
+        "binary_download"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addPullRequestReviewThreadReply",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "jira.rest.getAvatarImageByType",
+      "source_sha256": "d2d944017255deab39462144a125566b42fe3f7d003ac9b0e8dba797b8375094",
+      "canonical_method": "GET",
+      "canonical_path": "/rest/api/3/universal_avatar/view/type/{type}",
       "cli_paths": [
-        "graphql mutation add-pull-request-review-thread-reply"
+        "universal-avatar get-avatar-image-by-type"
       ],
       "website_paths": [
-        "graphql mutation add-pull-request-review-thread-reply"
+        "universal-avatar get-avatar-image-by-type"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
+        "binary_download"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addReaction",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
+      "source_id": "asana.rest.createGoalMetric",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
       "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "canonical_path": "/goals/{goal_gid}/setMetric",
       "cli_paths": [
-        "graphql mutation add-reaction"
+        "goals create-goal-metric"
       ],
       "website_paths": [
-        "graphql mutation add-reaction"
+        "goals create-goal-metric"
       ],
       "fixture_paths": [
-        "fixtures/check.json"
+        "fixtures/writes/create_goal_metric.json"
       ],
       "classifications": [
-        "direct_write"
+        "reverse_etl"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addStar",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
+      "source_id": "asana.rest.createGraphExport",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
       "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "canonical_path": "/exports/graph",
       "cli_paths": [
-        "graphql mutation add-star"
+        "exports create-graph-export"
       ],
       "website_paths": [
-        "graphql mutation add-star"
+        "exports create-graph-export"
       ],
       "fixture_paths": [
-        "fixtures/check.json"
+        "fixtures/writes/create_graph_export.json"
       ],
       "classifications": [
-        "direct_write"
+        "reverse_etl"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addSubIssue",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
+      "source_id": "asana.rest.createOooEntry",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
       "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "canonical_path": "/ooo_entries",
       "cli_paths": [
-        "graphql mutation add-sub-issue"
+        "ooo-entries create-ooo-entry"
       ],
       "website_paths": [
-        "graphql mutation add-sub-issue"
+        "ooo-entries create-ooo-entry"
       ],
       "fixture_paths": [
-        "fixtures/check.json"
+        "fixtures/writes/create_ooo_entry.json"
       ],
       "classifications": [
-        "direct_write"
+        "reverse_etl"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addUpvote",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
+      "source_id": "asana.rest.createPortfolio",
+      "source_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
       "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "canonical_path": "/portfolios",
       "cli_paths": [
-        "graphql mutation add-upvote"
+        "portfolios create-portfolio"
       ],
       "website_paths": [
-        "graphql mutation add-upvote"
+        "portfolios create-portfolio"
       ],
       "fixture_paths": [
-        "fixtures/check.json"
+        "fixtures/writes/create_portfolio.json"
       ],
       "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.addVerifiableDomain",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation add-verifiable-domain"
-      ],
-      "website_paths": [
-        "graphql mutation add-verifiable-domain"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.applyPendingIssueSuggestions",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation apply-pending-issue-suggestions"
-      ],
-      "website_paths": [
-        "graphql mutation apply-pending-issue-suggestions"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.approveDeployments",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation approve-deployments"
-      ],
-      "website_paths": [
-        "graphql mutation approve-deployments"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.approveVerifiableDomain",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation approve-verifiable-domain"
-      ],
-      "website_paths": [
-        "graphql mutation approve-verifiable-domain"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.archiveProjectV2Item",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation archive-project-v2-item"
-      ],
-      "website_paths": [
-        "graphql mutation archive-project-v2-item"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.archivePullRequest",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation archive-pull-request"
-      ],
-      "website_paths": [
-        "graphql mutation archive-pull-request"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.archiveRepository",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation archive-repository"
-      ],
-      "website_paths": [
-        "graphql mutation archive-repository"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.cancelEnterpriseAdminInvitation",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation cancel-enterprise-admin-invitation"
-      ],
-      "website_paths": [
-        "graphql mutation cancel-enterprise-admin-invitation"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.cancelEnterpriseMemberInvitation",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation cancel-enterprise-member-invitation"
-      ],
-      "website_paths": [
-        "graphql mutation cancel-enterprise-member-invitation"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.cancelSponsorship",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation cancel-sponsorship"
-      ],
-      "website_paths": [
-        "graphql mutation cancel-sponsorship"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
+        "reverse_etl"
       ]
     }
   ]

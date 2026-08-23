@@ -1834,11 +1834,12 @@
       "foundation_design": ".planning/phases/issue-4283-top100-declaration-batch-r1/EXECUTABLE-OPERATION-FOUNDATION-DESIGN.md",
       "captain_decision": "Rejected the disabled-command target. Reachability requires installed-CLI provider execution through an exact typed declaration, not a BlockedCommandError placeholder."
     },
-    "destination_static_mappings": {
-      "notion": "views -> update_view",
-      "stripe": "customers -> update_customer",
-      "circleci": "schedules -> update_schedule",
-      "vercel": "projects -> update_project"
+    "destination_static_mappings": {},
+    "destination_static_mappings_superseded_2026_08_24": {
+      "notion": "views -> update_view removed: no provider idempotency header or action-owned read-back declaration",
+      "stripe": "customers -> update_customer removed: no source-cited action-owned delivery/read-back declaration",
+      "circleci": "schedules -> update_schedule removed: no provider idempotency header or action-owned read-back declaration",
+      "vercel": "projects -> update_project removed: no provider idempotency header or action-owned read-back declaration"
     },
     "non_live_certification": "focused connector validation and installed command preflight reached missing --credential without provider I/O; provider-live certification remains pending.",
     "resume_pointer": "Paused by captain hard pre-merge gate. The planning ledger is necessary but insufficient: after F0, F2/F4, #4305, and final #4304 publish, implement the executable CI validator on the integration branch for the fixed 100; it must emit schema-backed per-connector and aggregate verdicts and pass its negative tests before any merge-ready assertion.",
