@@ -6,6 +6,7 @@ Status: **blocked**. This is a fail-closed operation ledger, not a claim that th
 - Connectors with dynamic or unavailable provider inventories: salesforce, tiktok-marketing, ebay-fulfillment
 - Runtime reachability proven: 0
 - Generated CLI commands proven: 0
+- Generated CLI commands declared-blocked: 6945
 - Generated website rows proven: 0
 - Executable fixture/conformance proofs: 0
 - Provider-deprecated/absent operations with direct source evidence: 31
@@ -15,7 +16,7 @@ Every enumerable provider operation has its locked source URL, source-document l
 
 `not-asserted`, `pending`, `declared-unproven`, and a source version that was not materialized are all pending evidence—not N/A. The only provider-capability absence status is backed by the source record’s deprecation/absence metadata. Scope, tier, destructive, risk, and confirmation requirements remain typed runtime controls and never turn an otherwise supported operation into an exclusion.
 
-Final push remains paused until the shared foundation publishes its App/CLI generic-destination dispatch integration, is merged locally, is proven as an ancestor, and passes the real installed App/CLI-path exercise. This gate also remains blocked until each operation has the missing reachability, generated website, and executable conformance evidence.
+The merged #4304 foundation head supplies generic App/CLI destination dispatch and is an ancestor of this branch. This gate remains blocked until each operation has the missing executable reachability, generated website, and fixture/conformance evidence.
 
 | Connector | Provider inventory state | Enumerable operations | Local bindings outside provider inventory |
 | --- | --- | ---: | ---: |

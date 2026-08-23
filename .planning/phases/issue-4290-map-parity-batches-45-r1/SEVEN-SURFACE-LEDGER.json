@@ -16,7 +16,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 10,
       "source_lock": "internal/connectors/defs/salesforce/sources/salesforce-parity-source-lock.json"
     },
     {
@@ -31,7 +31,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 3118,
+      "cli_commands": 3141,
       "source_lock": "internal/connectors/defs/hubspot/sources/hubspot-parity-source-lock.json"
     },
     {
@@ -46,7 +46,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 218,
       "source_lock": "internal/connectors/defs/pipedrive/sources/pipedrive-parity-source-lock.json"
     },
     {
@@ -61,7 +61,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 295,
-      "cli_commands": 295,
+      "cli_commands": 323,
       "source_lock": "internal/connectors/defs/mailchimp/sources/mailchimp-parity-source-lock.json"
     },
     {
@@ -76,7 +76,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 95,
-      "cli_commands": 632,
+      "cli_commands": 635,
       "source_lock": "internal/connectors/defs/zendesk-support/sources/zendesk-support-parity-source-lock.json"
     },
     {
@@ -91,7 +91,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 134,
       "source_lock": "internal/connectors/defs/quickbooks/sources/quickbooks-parity-source-lock.json"
     },
     {
@@ -106,7 +106,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 345,
       "source_lock": "internal/connectors/defs/bamboo-hr/sources/bamboo-hr-parity-source-lock.json"
     },
     {
@@ -121,7 +121,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 105,
       "source_lock": "internal/connectors/defs/airtable/sources/airtable-parity-source-lock.json"
     },
     {
@@ -136,7 +136,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 28,
       "source_lock": "internal/connectors/defs/google-analytics-data-api/sources/google-analytics-data-api-parity-source-lock.json"
     },
     {
@@ -151,7 +151,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 140,
       "source_lock": "internal/connectors/defs/woocommerce/sources/woocommerce-parity-source-lock.json"
     },
     {
@@ -166,7 +166,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 284,
       "source_lock": "internal/connectors/defs/pinterest/sources/pinterest-parity-source-lock.json"
     },
     {
@@ -181,7 +181,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 7,
       "source_lock": "internal/connectors/defs/tiktok-marketing/sources/tiktok-marketing-parity-source-lock.json"
     },
     {
@@ -196,7 +196,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 543,
       "source_lock": "internal/connectors/defs/linear/sources/linear-parity-source-lock.json"
     },
     {
@@ -211,7 +211,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 132,
       "source_lock": "internal/connectors/defs/buildkite/sources/buildkite-parity-source-lock.json"
     },
     {
@@ -226,7 +226,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 157,
       "source_lock": "internal/connectors/defs/sonar-cloud/sources/sonar-cloud-parity-source-lock.json"
     },
     {
@@ -241,7 +241,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 399,
       "source_lock": "internal/connectors/defs/launchdarkly/sources/launchdarkly-parity-source-lock.json"
     },
     {
@@ -256,7 +256,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 732,
       "source_lock": "internal/connectors/defs/fastly/sources/fastly-parity-source-lock.json"
     },
     {
@@ -271,7 +271,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 53,
       "source_lock": "internal/connectors/defs/squarespace/sources/squarespace-parity-source-lock.json"
     },
     {
@@ -286,7 +286,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 11,
       "source_lock": "internal/connectors/defs/ebay-fulfillment/sources/ebay-fulfillment-parity-source-lock.json"
     },
     {
@@ -301,7 +301,7 @@
       "etl": "declaration-pending",
       "reverse_etl": "declaration-pending",
       "executable_cli_commands": 0,
-      "cli_commands": 0,
+      "cli_commands": 47,
       "source_lock": "internal/connectors/defs/shipstation/sources/shipstation-parity-source-lock.json"
     }
   ]
