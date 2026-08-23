@@ -497,3 +497,21 @@ GOMAXPROCS=2 go test -p 1 -parallel 1 -count=1 -timeout 20m \
 This is not a new transport feature. It removes stale branch-local foundation
 drift. The 168 Twenty commands remain implemented, and the 28 batch actions
 remain source-traced, CLI-reachable 0.3.1 certification deferrals.
+
+## 2026-08-23 CI recovery — generated skill checkpoint
+
+GitHub Verify `32655087518` supplied the red generated-artifact finding:
+`TestSkillsGenerateMatchesTrackedSkills` detected that `docs/skills` did not
+yet contain the required deterministic projection for Twenty. The generated
+artifact was refreshed through the built CLI, never edited by hand:
+
+```text
+go build -o ./pm ./cmd/pm
+./pm skills generate --dir docs/skills
+GOMAXPROCS=2 go test -p 1 -parallel 1 -count=1 -timeout 20m \
+  -run '^TestSkillsGenerateMatchesTrackedSkills$' ./internal/cli
+# PASS
+```
+
+The resulting diff adds only `docs/skills/pm-twenty/SKILL.md` and the sorted
+`pm-twenty` index line. It is metadata-only and carries no credential value.
