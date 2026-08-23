@@ -419,3 +419,15 @@
   unsupported `example` OpenAPI keyword (`internal/connectors/engine/schema.go:165-168`).
   This is the existing body-schema dialect gap; their declarations and routes
   remain present pending its foundation repair.
+- [ ] After merging `origin/main` at `27664370c` (`#4334`), the full merged
+  package run exposes two additional shared-test failures. The fixed-100 test
+  fixture copies only GitHub while its cohort now includes Asana; the
+  declarative source-factory test compares GitHub's evidence to the first
+  registered (Asana) shared factory. The production operation-evidence check
+  itself passes. Exact recovery and refusing lines are logged in
+  `FOUNDATION-GAPS.md`; neither is repaired by modifying locks, schemas, or
+  connector-local transport facts.
+- [ ] The merged CircleCI env-only-secret foundation does not by itself clear
+  CircleCI source projection: its current validator still stops at the missing
+  canonical descriptor. This is recorded as a wait for source-import/projection
+  recovery, not a regression of #4334.

@@ -140,3 +140,49 @@ dispositions and recoverability remain in `REJECTION-LIST.json`.
   operation/receipt policy. Do not invent any header, route, acknowledgement,
   or response shape. The actions remain declared and direct-command reachable;
   no credentialed or provider-live test was run.
+
+## Fixed-100 test fixture does not include its whole cohort — 2026-08-24
+
+- ID: `operation-evidence-fixed-cohort-test-fixture`.
+- Evidence: after merging `origin/main` at `27664370c` (`#4334`),
+  `TestOperationEvidenceFixed100RejectsEveryRegression` at
+  `cmd/connectorgen/operationevidence_test.go:232` refuses its temporary
+  evidence because `asana.rest.getCustomFieldsForWorkspace` is absent. The
+  production `go run ./cmd/connectorgen operation-evidence --check` passes:
+  the real 5,903-row artifact contains that Asana row.
+- Cause: `operationEvidenceWorkspace` at
+  `cmd/connectorgen/operationevidence_test.go:274-278` copies only the GitHub
+  definition tree, while the current fixed-100 fixture includes an Asana row.
+- Recovery: make the shared test workspace include every connector represented
+  by `operation-evidence-fixed-100.json`, or derive its temporary fixture from
+  the full checked-in source. No evidence row, source location, or hash is
+  hand-authored here.
+
+## Shared declarative source evidence test assumes first bundle — 2026-08-24
+
+- ID: `declarative-source-factory-evidence-selection`.
+- Evidence: `TestDefinitionTransportFactoriesSelectDeclaredEvidence` at
+  `internal/app/transport_composition_test.go:297` selects the shared
+  `declarative_stream_source` factory by executor reference, which is now
+  first registered by Asana and therefore carries Asana's declared conformance
+  record. It then compares that factory's single primary evidence to GitHub's
+  evidence, despite the factory correctly retaining every accepted bundle
+  evidence record. The credential-free full package run reports the exact
+  Asana/GitHub mismatch.
+- Recovery: a foundation test must select GitHub's accepted evidence or assert
+  the factory's accepted-evidence set rather than rely on registry order. This
+  is a shared `internal/app` test contract; this connector-local lane neither
+  changes product transport code nor rewrites any connector evidence to make a
+  first-registration assumption true.
+
+## CircleCI after merged env-only-secret foundation — 2026-08-24
+
+- Evidence: `origin/main` now includes `27664370c` (`#4334`). On that merged
+  tree, `go run ./cmd/connectorgen validate internal/connectors/defs/circleci`
+  still reports exactly `sources/circleci-operation-descriptor.json:
+  [source_projection] canonical source descriptor is missing`.
+- Interpretation: the env-only-secret capability has landed, but it cannot be
+  exercised against CircleCI until the existing source-import/projection path
+  emits its canonical descriptor. The earlier 27-action projection gap is not
+  cleared or reclassified by this absence. No lock refresh or descriptor write
+  was attempted in this lane.

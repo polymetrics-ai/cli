@@ -664,6 +664,15 @@ and stopped at `error: missing --credential`. Thus removal of the invalid
 destination declarations did not unpublish or misroute any installed command;
 no provider request was made.
 
+**Current-main regression red:** after the required merge of main commit
+`27664370c` (`#4334`), the full merged package run first fails the new
+fixed-100 test because its temporary workspace copies only GitHub while the
+cohort includes Asana, then fails the shared-source factory test because it
+compares GitHub's evidence to the first registered (Asana) factory. The
+production operation-evidence check passes. These are shared foundation/test
+contracts, recorded with exact lines in `FOUNDATION-GAPS.md`; no connector
+declaration is altered to conceal them.
+
 ## Captain hard pre-merge gate — 2026-08-20
 
 ### Red
