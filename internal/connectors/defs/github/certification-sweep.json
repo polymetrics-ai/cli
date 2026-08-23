@@ -22553,6 +22553,12 @@
           "maps_to": "path.enterprise"
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.enterprise-team"
+        },
+        {
           "name": "username",
           "type": "string",
           "required": true,
@@ -22569,6 +22575,7 @@
       "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--username"
       ],
       "output_assertions": [
@@ -22594,6 +22601,12 @@
           "type": "string",
           "required": true,
           "maps_to": "path.enterprise"
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.enterprise-team"
         }
       ],
       "api_surface": [
@@ -22605,7 +22618,8 @@
       "status": "eligible_pending_live",
       "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
-        "--enterprise"
+        "--enterprise",
+        "--enterprise-team"
       ],
       "output_assertions": [
         {
@@ -22842,6 +22856,12 @@
           "maps_to": "path.enterprise"
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.enterprise-team"
+        },
+        {
           "name": "org",
           "type": "string",
           "required": true,
@@ -22858,6 +22878,7 @@
       "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
         "--enterprise",
+        "--enterprise-team",
         "--org"
       ],
       "output_assertions": [
@@ -22883,6 +22904,12 @@
           "type": "string",
           "required": true,
           "maps_to": "path.enterprise"
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.enterprise-team"
         }
       ],
       "api_surface": [
@@ -22894,7 +22921,8 @@
       "status": "eligible_pending_live",
       "reason": "declaration-owned produced-value assertions exist; live execution is pending",
       "required_flags": [
-        "--enterprise"
+        "--enterprise",
+        "--enterprise-team"
       ],
       "output_assertions": [
         {
@@ -49243,7 +49271,7 @@
         {
           "name": "path",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.path"
         },
         {
@@ -49260,7 +49288,10 @@
         }
       ],
       "status": "fixture_required",
-      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --path",
+      "required_flags": [
+        "--path"
+      ]
     },
     {
       "summary": "Read repository file metadata",
@@ -49273,7 +49304,7 @@
         {
           "name": "path",
           "type": "string",
-          "required": false,
+          "required": true,
           "maps_to": "path.path"
         },
         {
@@ -49291,6 +49322,9 @@
       ],
       "status": "eligible_pending_live",
       "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "required_flags": [
+        "--path"
+      ],
       "output_assertions": [
         {
           "json_pointer": "/response/name",

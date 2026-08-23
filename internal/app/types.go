@@ -286,6 +286,12 @@ type DeliveryReconciliation struct {
 	StageRetirement                   bool   `json:"stage_retirement,omitempty"`
 	PostgresManagedTargetPlanID       string `json:"postgres_managed_target_plan_id,omitempty"`
 	DeclarativeTypedDestinationPlanID string `json:"declarative_typed_destination_plan_id,omitempty"`
+	// EmptyPublication is the sealed durable witness for an empty
+	// full-overwrite whose provider receipt has already been read back. It
+	// permits only local terminal-state repair; it never represents a source
+	// checkpoint or permission to re-enter the destination route.
+	EmptyPublication                *synccontract.PublicationWitness               `json:"empty_publication,omitempty"`
+	EmptyPublicationReadBackPending *synctransport.EmptyPublicationReadBackReceipt `json:"empty_publication_read_back_pending,omitempty"`
 }
 
 type Run struct {

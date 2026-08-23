@@ -5760,8 +5760,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh agent-task list",
-      "notes": "Compatibility alias of agent-tasks list-tasks; uses that declaration-owned provider contract."
+      "source_cli_path": "gh agent-task list"
     },
     {
       "path": "agent-tasks create-task-in-repo",
@@ -11682,8 +11681,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh cache list",
-      "notes": "Compatibility alias of actions caches view; uses that declaration-owned provider contract."
+      "source_cli_path": "gh cache list"
     },
     {
       "path": "campaigns delete-campaign",
@@ -14998,8 +14996,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh codespace list",
-      "notes": "Compatibility alias of codespaces list-for-authenticated-user; uses that declaration-owned provider contract."
+      "source_cli_path": "gh codespace list"
     },
     {
       "path": "codespace ssh",
@@ -20547,6 +20544,13 @@
           "required": true
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "summary": "The enterprise-team path parameter.",
+          "maps_to": "path.enterprise-team",
+          "required": true
+        },
+        {
           "name": "username",
           "type": "string",
           "summary": "The handle for the GitHub user account.",
@@ -20575,6 +20579,13 @@
           "type": "string",
           "summary": "The slug version of the enterprise name.",
           "maps_to": "path.enterprise",
+          "required": true
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "summary": "The enterprise-team path parameter.",
+          "maps_to": "path.enterprise-team",
           "required": true
         }
       ],
@@ -20812,6 +20823,13 @@
           "required": true
         },
         {
+          "name": "enterprise-team",
+          "type": "string",
+          "summary": "The enterprise-team path parameter.",
+          "maps_to": "path.enterprise-team",
+          "required": true
+        },
+        {
           "name": "org",
           "type": "string",
           "summary": "The organization name.",
@@ -20840,6 +20858,13 @@
           "type": "string",
           "summary": "The slug version of the enterprise name.",
           "maps_to": "path.enterprise",
+          "required": true
+        },
+        {
+          "name": "enterprise-team",
+          "type": "string",
+          "summary": "The enterprise-team path parameter.",
+          "maps_to": "path.enterprise-team",
           "required": true
         }
       ],
@@ -21632,8 +21657,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh gist list",
-      "notes": "Compatibility alias of gists list; uses that declaration-owned provider contract."
+      "source_cli_path": "gh gist list"
     },
     {
       "path": "gists create-comment",
@@ -22583,8 +22607,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh gpg-key list",
-      "notes": "Compatibility alias of users list-gpg-keys-for-authenticated-user; uses that declaration-owned provider contract."
+      "source_cli_path": "gh gpg-key list"
     },
     {
       "path": "graphql mutation abort-queued-migrations",
@@ -32051,8 +32074,7 @@
           "path": "/user/issues"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Compatibility alias of issues list-for-authenticated-user; uses that declaration-owned provider contract."
+      "output_policy": "json_redacted"
     },
     {
       "path": "issue transfer",
@@ -32155,8 +32177,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/issues/{issue_number}"
         }
-      ],
-      "notes": "Compatibility alias of issues view; uses that declaration-owned provider contract."
+      ]
     },
     {
       "path": "issue-types view",
@@ -34521,8 +34542,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh org list",
-      "notes": "Compatibility alias of orgs list-for-authenticated-user; uses that declaration-owned provider contract."
+      "source_cli_path": "gh org list"
     },
     {
       "path": "org secret-scanning custom-pattern update-end-delimiter",
@@ -40894,8 +40914,7 @@
           "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Compatibility alias of commits check-runs view; uses that declaration-owned provider contract."
+      "output_policy": "json_redacted"
     },
     {
       "path": "pr close",
@@ -41486,8 +41505,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
         }
-      ],
-      "notes": "Compatibility alias of pulls view; uses that declaration-owned provider contract."
+      ]
     },
     {
       "path": "private-registries create-org-private-registry",
@@ -44332,8 +44350,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/releases/{release_id}"
         }
-      ],
-      "notes": "Compatibility alias of releases view; uses that declaration-owned provider contract."
+      ]
     },
     {
       "path": "releases assets upload",
@@ -45278,8 +45295,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh repo gitignore list",
-      "notes": "Compatibility alias of gitignore get-all-templates; uses that declaration-owned provider contract."
+      "source_cli_path": "gh repo gitignore list"
     },
     {
       "path": "repo license list",
@@ -45295,8 +45311,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh repo license list",
-      "notes": "Compatibility alias of licenses get-all-commonly-used; uses that declaration-owned provider contract."
+      "source_cli_path": "gh repo license list"
     },
     {
       "path": "repo list",
@@ -45335,14 +45350,14 @@
       "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "gh repo read-dir",
-      "notes": "Executes the fixed GitHub repository contents read endpoint for directory listings; file responses are rejected.",
       "source_url": "https://docs.github.com/en/rest/repos/contents#get-repository-content",
       "flags": [
         {
           "name": "path",
           "type": "string",
           "summary": "Repository-relative file or directory path.",
-          "maps_to": "path.path"
+          "maps_to": "path.path",
+          "required": true
         },
         {
           "name": "ref",
@@ -45369,14 +45384,14 @@
       "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "gh repo read-file",
-      "notes": "Executes the fixed GitHub repository contents read endpoint with file content and raw download URLs redacted.",
       "source_url": "https://docs.github.com/en/rest/repos/contents#get-repository-content",
       "flags": [
         {
           "name": "path",
           "type": "string",
           "summary": "Repository-relative file or directory path.",
-          "maps_to": "path.path"
+          "maps_to": "path.path",
+          "required": true
         },
         {
           "name": "ref",
@@ -46913,8 +46928,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/rules/branches/{branch}"
         }
-      ],
-      "notes": "Compatibility alias of rules branches view; uses that declaration-owned provider contract."
+      ]
     },
     {
       "path": "ruleset list",
@@ -46958,8 +46972,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
         }
-      ],
-      "notes": "Compatibility alias of rulesets view; uses that declaration-owned provider contract."
+      ]
     },
     {
       "path": "rulesets history view-2",
@@ -47363,8 +47376,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}"
         }
-      ],
-      "notes": "Compatibility alias of actions runs view; uses that declaration-owned provider contract."
+      ]
     },
     {
       "path": "run watch",
@@ -47499,8 +47511,7 @@
           "path": "/search/issues"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Compatibility alias of search issues; uses that declaration-owned provider contract."
+      "output_policy": "json_redacted"
     },
     {
       "path": "search repos",
@@ -47747,8 +47758,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh secret list",
-      "notes": "Returns secret metadata only; values are never exposed."
+      "source_cli_path": "gh secret list"
     },
     {
       "path": "secret set-2",
@@ -48786,8 +48796,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh ssh-key list",
-      "notes": "Compatibility alias of users list-public-ssh-keys-for-authenticated-user; uses that declaration-owned provider contract."
+      "source_cli_path": "gh ssh-key list"
     },
     {
       "path": "stats code_frequency view",
@@ -52189,8 +52198,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh variable get",
-      "notes": "Compatibility alias of actions variables view-2; uses that declaration-owned provider contract."
+      "source_cli_path": "gh variable get"
     },
     {
       "path": "variable list",
@@ -52207,8 +52215,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "source_cli_path": "gh variable list",
-      "notes": "Compatibility alias of actions variables view; uses that declaration-owned provider contract."
+      "source_cli_path": "gh variable list"
     },
     {
       "path": "variable set",
@@ -52660,8 +52667,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}"
         }
-      ],
-      "notes": "Compatibility alias of actions workflows view; uses that declaration-owned provider contract."
+      ]
     }
   ],
   "help_topics": [

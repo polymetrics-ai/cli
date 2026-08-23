@@ -124,11 +124,19 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	}
 
 	cfg := materializeConfigDefaults(b, req.Config)
-	resolvedPath, err := resolveSurfaceEndpointPath(spec.Path, cfg, req.PathParams)
+	effectivePathParams, err := materializeOperationBinaryDownloadPathParams(op, cfg, req.PathParams)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	query, err := directReadQuery(req.Query)
+	resolvedPath, err := resolveSurfaceEndpointPath(spec.Path, cfg, effectivePathParams)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	queryMap, err := operationBinaryDownloadQuery(op, req.Query)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	query, err := directReadQuery(queryMap)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
@@ -145,12 +153,16 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	rt, err := newRuntime(ctx, b, cfg, h)
+	baseURL, err := resolveOperationRoute(b, cfg, op.Route, op.ID, spec.Path, op.SourceURL)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, spec.Path, op.SourceURL)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
 
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL)
 	requester, err := rt.requesterFor(http.MethodGet, spec.Path)
 	if err != nil {
 		return BinaryDownloadResult{}, err
@@ -185,6 +197,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		Status:           resp.Status,
 		Headers:          completeProviderResponseHeaders(b, resp.Header),
 	}
+	responseReceipt = connectors.SanitizeProviderResponseReceiptForOutput(responseReceipt, cfg.Secrets)
 	result := BinaryDownloadResult{
 		Connector: b.Name,
 		Operation: op.ID,
@@ -201,7 +214,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
 		return result, errors.Join(err, captureErr)
 	}
-	responseHeaders, err := operationResponseHeaders(b, op, resp.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header, cfg.Secrets)
 	if err != nil {
 		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
 		return result, errors.Join(err, captureErr)
@@ -249,6 +262,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		BodyBytes:        written,
 		Body:             map[string]any{"file_size_bytes": written, "file_sha256": digest},
 	}
+	receipt = connectors.SanitizeProviderResponseReceiptForOutput(receipt, cfg.Secrets)
 	result.Record = record
 	result.Receipt = &receipt
 	return result, nil
@@ -291,6 +305,9 @@ func operationBinaryDownloadSpec(b Bundle, operation string) (OperationSpec, err
 	}
 	if (op.Kind != "binary_download" && op.Kind != "text_export") || op.Binary == nil {
 		return OperationSpec{}, fmt.Errorf("file download requires binary_download or text_export operation, got %q", op.Kind)
+	}
+	if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.Binary.Path, op.SourceURL); err != nil {
+		return OperationSpec{}, err
 	}
 	spec := op.Binary
 	if err := requireOperationBinaryResponseContract(op); err != nil {

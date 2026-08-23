@@ -1,0 +1,14 @@
+{
+  "phase": "cli-foundation-public-output-fix-r1",
+  "mode": "inline-manual",
+  "base_commit": "c9824b5837f487acaa2c2a39126d29cf401d7fb5",
+  "status": "verified",
+  "checkpoints": [
+    "818b284ebfc092a6c5db73b59b73cf0042345327",
+    "5c2edbd3e9e2b6d7120a99434fbd5ac63eaf8f0e",
+    "0086c47b1f09b757fffb294203197ff5ca766ec3",
+    "4739e1f53c6841010e1414d3e07462412e821a10"
+  ],
+  "scope": ["FND-B10", "FND-B11", "FND-B12", "FND-B13", "FND-B14", "FND-W02"],
+  "excluded_scope": ["FND-B01..FND-B09", "FND-W01", "reverse-etl action binding"]
+}

@@ -3,7 +3,7 @@
 ## Task Delivery Header
 
 - Issue: Refs #4303 — connector-neutral typed reverse-ETL destinations; Refs #4321 — preserve undeclared provider values that collide with credentials.
-- Base branch: `origin/main` at `cf493b83455aca3dc38164cee01520f5be5803cf`.
+- Base branch: `origin/main` at `486b92b4246a8c993cd229a56e9a6b5af87deea6`.
 - Merges into: `main` through a direct PR; Firstmate owns review and the human merge gate.
 - Delivery: committed, non-force-pushed repair branch and a direct PR targeting `main`, with all canonical review IDs and the captain's credential-echo decision evidenced, full local verification, and a clean worktree.
 - Working branch: `fm/cli-reverse-etl-action-binding-foundation-r1`.

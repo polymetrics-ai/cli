@@ -873,7 +873,7 @@ func (c *RateParkingCoordinator) resumeDue(runID string) {
 			}
 			return
 		}
-		err = c.reconcileIndeterminateMutation(err)
+		c.reconcileIndeterminateMutation(err)
 		c.retryResume(runID, lease, c.nextRetryAt(runID), "claim")
 		return
 	}

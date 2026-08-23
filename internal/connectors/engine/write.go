@@ -264,7 +264,9 @@ func sortWriteRedactionLiterals(values []string) {
 
 func writeRedactionLiterals(values []string) []string {
 	seen := map[string]bool{}
-	literals := make([]string, 0, len(values)*4)
+	// Values and their encoded forms are deduplicated below. Avoid deriving an
+	// allocation size from an unchecked multiplication of input length.
+	literals := make([]string, 0)
 	for _, value := range values {
 		for _, literal := range writeRedactionLiteralForms(value) {
 			if seen[literal] {
@@ -557,6 +559,10 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	if err != nil {
 		return nil, err
 	}
+	baseURL, err := resolveWriteActionRoute(b, cfg, action)
+	if err != nil {
+		return nil, err
+	}
 	requesterForAction, err := rt.requesterFor(method, action.Path)
 	if err != nil {
 		return nil, err
@@ -565,9 +571,7 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	if err != nil {
 		return nil, err
 	}
-	if action.BaseURL != "" {
-		requester.BaseURL = action.BaseURL
-	}
+	requester.BaseURL = baseURL
 
 	switch bodyTypeOf(action) {
 	case "form":
@@ -988,13 +992,6 @@ func bodyTypeOf(action WriteAction) string {
 		return "json"
 	}
 	return action.BodyType
-}
-
-func writeActionBaseURL(b Bundle, action WriteAction) string {
-	if action.BaseURL != "" {
-		return action.BaseURL
-	}
-	return b.HTTP.URL
 }
 
 // buildJSONBody returns every record field not consumed by path_fields

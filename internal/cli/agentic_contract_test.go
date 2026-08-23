@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/cli"
 )
@@ -127,6 +128,7 @@ func TestSkillsGenerateWritesAgentSkills(t *testing.T) {
 }
 
 func TestSkillsGenerateMatchesTrackedSkills(t *testing.T) {
+	startedAt := time.Now()
 	dir := t.TempDir()
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"skills", "generate", "--dir", dir}, &stdout, &stderr)
@@ -144,6 +146,9 @@ func TestSkillsGenerateMatchesTrackedSkills(t *testing.T) {
 	}
 	if !reflect.DeepEqual(generated, tracked) {
 		t.Fatalf("generated skills drift\ntracked=%v\ngenerated=%v", tracked, generated)
+	}
+	if elapsed := time.Since(startedAt); elapsed > 30*time.Second {
+		t.Fatalf("skills generate took %s; it must reuse the registry built for this invocation", elapsed)
 	}
 }
 

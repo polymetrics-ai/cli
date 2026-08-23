@@ -16,14 +16,16 @@ import (
 )
 
 const (
-	certificationSubjectSchemaVersion = 1
+	certificationSubjectSchemaVersion = 2
 	certificationSubjectProofProtocol = "foundation-certification-proof-v1"
 	certificationSubjectArtifactPath  = "internal/connectors/certifications/current-subject.json"
 )
 
-// certificationSubjectComponents is the complete immutable identity of the
-// executable contract exercised by a live certification. Each value is a
-// digest collected at the producer boundary; none is an operator assertion.
+// certificationSubjectComponents separates repository identity from the
+// executable provenance of an individual proof. The checked-in subject is
+// allowed to depend only on the repository inputs; an actual proof records the
+// binary/build fields separately so a host-specific executable cannot stale a
+// repository artifact.
 type certificationSubjectComponents struct {
 	PMBinarySHA256          string
 	PMBuildSHA256           string
@@ -34,15 +36,13 @@ type certificationSubjectComponents struct {
 	ProofProtocol           string
 }
 
-// certificationSubject is persisted in proof-bearing evidence and in the
-// current-subject artifact. The fingerprint is derived from every component,
-// then each component is retained so a collision or partial rewrite cannot
-// turn an old proof into current evidence.
+// certificationSubject is the deterministic repository identity persisted in
+// the checked-in current-subject artifact and referenced by certification
+// evidence. Proof-time executable provenance is intentionally not part of this
+// object or its fingerprint.
 type certificationSubject struct {
 	SchemaVersion           int    `json:"schema_version"`
 	Fingerprint             string `json:"fingerprint"`
-	PMBinarySHA256          string `json:"pm_binary_sha256"`
-	PMBuildSHA256           string `json:"pm_build_sha256"`
 	DeclarationsSHA256      string `json:"declarations_sha256"`
 	SourceProjectionSHA256  string `json:"source_projection_sha256"`
 	CLICommandMappingSHA256 string `json:"cli_command_mapping_sha256"`
@@ -52,8 +52,6 @@ type certificationSubject struct {
 
 func newCertificationSubject(components certificationSubjectComponents) (certificationSubject, error) {
 	for _, digest := range []string{
-		components.PMBinarySHA256,
-		components.PMBuildSHA256,
 		components.DeclarationsSHA256,
 		components.SourceProjectionSHA256,
 		components.CLICommandMappingSHA256,
@@ -68,8 +66,6 @@ func newCertificationSubject(components certificationSubjectComponents) (certifi
 	}
 	subject := certificationSubject{
 		SchemaVersion:           certificationSubjectSchemaVersion,
-		PMBinarySHA256:          components.PMBinarySHA256,
-		PMBuildSHA256:           components.PMBuildSHA256,
 		DeclarationsSHA256:      components.DeclarationsSHA256,
 		SourceProjectionSHA256:  components.SourceProjectionSHA256,
 		CLICommandMappingSHA256: components.CLICommandMappingSHA256,
@@ -87,8 +83,6 @@ func newCertificationSubject(components certificationSubjectComponents) (certifi
 
 func (subject certificationSubject) Components() certificationSubjectComponents {
 	return certificationSubjectComponents{
-		PMBinarySHA256:          subject.PMBinarySHA256,
-		PMBuildSHA256:           subject.PMBuildSHA256,
 		DeclarationsSHA256:      subject.DeclarationsSHA256,
 		SourceProjectionSHA256:  subject.SourceProjectionSHA256,
 		CLICommandMappingSHA256: subject.CLICommandMappingSHA256,
@@ -161,23 +155,24 @@ func runCertificationSubject(args []string, stdout, stderr io.Writer) int {
 			return 2
 		}
 	}
-	if binary == "" {
-		logln(stderr, "connectorgen certification-subject: --pm is required")
-		return 2
-	}
 	absRoot, err := filepath.Abs(root)
 	if err != nil {
 		logf(stderr, "connectorgen certification-subject: resolve repository root: %v\n", err)
 		return 1
 	}
-	subject, err := certificationSubjectForBinary(absRoot, binary)
+	var subject certificationSubject
+	if binary == "" {
+		subject, err = certificationSubjectForRepository(absRoot)
+	} else {
+		subject, _, err = certificationSubjectForBinary(absRoot, binary)
+	}
 	if err != nil {
 		logf(stderr, "connectorgen certification-subject: %v\n", err)
 		return 1
 	}
 	artifact := currentCertificationSubjectArtifact{
 		SchemaVersion:    certificationSubjectSchemaVersion,
-		GeneratedCommand: "go run ./cmd/connectorgen certification-subject --pm ./pm",
+		GeneratedCommand: "go run ./cmd/connectorgen certification-subject",
 		Subject:          subject,
 	}
 	payload, err := marshalGeneratedJSON(artifact)
@@ -189,7 +184,7 @@ func runCertificationSubject(args []string, stdout, stderr io.Writer) int {
 	if check {
 		committed, err := os.ReadFile(path)
 		if err != nil || !bytes.Equal(committed, payload) {
-			logf(stderr, "connectorgen certification-subject: current subject is stale; run `go run ./cmd/connectorgen certification-subject --pm ./pm`\n")
+			logf(stderr, "connectorgen certification-subject: current subject is stale; run `go run ./cmd/connectorgen certification-subject`\n")
 			return 1
 		}
 		logf(stdout, "connectorgen certification-subject: %s is current\n", certificationSubjectArtifactPath)
@@ -203,23 +198,49 @@ func runCertificationSubject(args []string, stdout, stderr io.Writer) int {
 	return 0
 }
 
-func certificationSubjectForBinary(root, binary string) (certificationSubject, error) {
+func certificationSubjectForBinary(root, binary string) (certificationSubject, certificationBuildProvenance, error) {
+	provenance, err := certificationBuildProvenanceForBinary(binary)
+	if err != nil {
+		return certificationSubject{}, certificationBuildProvenance{}, err
+	}
+	subject, err := certificationSubjectForRepository(root)
+	if err != nil {
+		return certificationSubject{}, certificationBuildProvenance{}, err
+	}
+	return subject, provenance, nil
+}
+
+// certificationBuildProvenance is collected at a real-proof producer boundary
+// and belongs in proof-bearing evidence, never in current-subject.json.
+type certificationBuildProvenance struct {
+	PMBinarySHA256 string
+	PMBuildSHA256  string
+}
+
+func certificationBuildProvenanceForBinary(binary string) (certificationBuildProvenance, error) {
 	binaryPath, err := filepath.Abs(binary)
 	if err != nil {
-		return certificationSubject{}, fmt.Errorf("resolve pm binary: %w", err)
+		return certificationBuildProvenance{}, fmt.Errorf("resolve pm binary: %w", err)
 	}
 	binaryBytes, err := os.ReadFile(binaryPath)
 	if err != nil {
-		return certificationSubject{}, fmt.Errorf("read pm binary: %w", err)
+		return certificationBuildProvenance{}, fmt.Errorf("read pm binary: %w", err)
 	}
 	if len(binaryBytes) == 0 {
-		return certificationSubject{}, fmt.Errorf("pm binary is empty")
+		return certificationBuildProvenance{}, fmt.Errorf("pm binary is empty")
 	}
 	binaryDigest := sha256.Sum256(binaryBytes)
 	buildDigest, err := certificationBuildDigest(binaryPath)
 	if err != nil {
-		return certificationSubject{}, err
+		return certificationBuildProvenance{}, err
 	}
+	return certificationBuildProvenance{
+		PMBinarySHA256: hex.EncodeToString(binaryDigest[:]),
+		PMBuildSHA256:  buildDigest,
+	}, nil
+}
+
+func certificationSubjectForRepository(root string) (certificationSubject, error) {
 	declarationsDigest, err := digestCertificationFiles(root, isCertificationDeclarationFile)
 	if err != nil {
 		return certificationSubject{}, fmt.Errorf("digest declarations: %w", err)
@@ -237,8 +258,6 @@ func certificationSubjectForBinary(root, binary string) (certificationSubject, e
 		return certificationSubject{}, fmt.Errorf("digest relevant certification config: %w", err)
 	}
 	return newCertificationSubject(certificationSubjectComponents{
-		PMBinarySHA256:          hex.EncodeToString(binaryDigest[:]),
-		PMBuildSHA256:           buildDigest,
 		DeclarationsSHA256:      declarationsDigest,
 		SourceProjectionSHA256:  sourceDigest,
 		CLICommandMappingSHA256: cliDigest,
@@ -358,7 +377,7 @@ func loadCurrentCertificationSubject(root string) (certificationSubject, error) 
 	if err := decodeStrictJSON(raw, &artifact); err != nil {
 		return certificationSubject{}, fmt.Errorf("parse current certification subject: %w", err)
 	}
-	if artifact.SchemaVersion != certificationSubjectSchemaVersion || artifact.GeneratedCommand != "go run ./cmd/connectorgen certification-subject --pm ./pm" {
+	if artifact.SchemaVersion != certificationSubjectSchemaVersion || artifact.GeneratedCommand != "go run ./cmd/connectorgen certification-subject" {
 		return certificationSubject{}, fmt.Errorf("current certification subject artifact is invalid")
 	}
 	if err := validateCertificationSubject(artifact.Subject); err != nil {

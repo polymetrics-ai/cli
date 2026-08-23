@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	githubSourceLockSHA256 = "59e9b33503b2b997b73af9efca5c0443e29f9aa885e161d5745ca11e1c13be17"
+	githubSourceLockSHA256 = "281b1cfcc67eb63e19ef83daf06197bf3d3b23db0b6bc9b73e02fc18ee278fb6"
 )
 
 func TestProductionEmbedLoadsRuntimeBundles(t *testing.T) {

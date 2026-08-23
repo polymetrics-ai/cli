@@ -118,6 +118,17 @@ func (c *SourceContinuation) Clone() *SourceContinuation {
 	return &clone
 }
 
+// ContinuationEqual reports whether two optional continuations have the same
+// presence, exact kind, and opaque token. Continuation is durable checkpoint
+// state, so callers must not treat a changed continuation as an equal source
+// position.
+func ContinuationEqual(left, right *SourceContinuation) bool {
+	if left == nil || right == nil {
+		return left == nil && right == nil
+	}
+	return left.Kind == right.Kind && bytes.Equal(left.Token, right.Token)
+}
+
 func (c SourceContinuation) validate() error {
 	if strings.TrimSpace(c.Kind) == "" {
 		return fmt.Errorf("source continuation kind is required")

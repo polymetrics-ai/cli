@@ -17,6 +17,10 @@ import (
 // takeover.
 const transportWorkLeaseDuration = 2 * time.Minute
 
+const transportWorkFenceLimit = int64(^uint64(0) >> 1)
+
+var transportWorkLeaseNow = func() time.Time { return time.Now().UTC() }
+
 type transportWorkLease struct {
 	app          *App
 	key          string
@@ -29,24 +33,30 @@ type transportWorkLease struct {
 	state StreamState
 }
 
-func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stream, workID string, source synccontract.ResumeExpectation, overwrite bool) (*transportWorkLease, error) {
+func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stream, workID string, source synccontract.ResumeExpectation, overwrite bool, admissionFence int64) (*transportWorkLease, error) {
 	if a == nil || key == "" || connection == "" || stream == "" || workID == "" {
 		return nil, errors.New("transport stream work lease is invalid")
 	}
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	now := time.Now().UTC()
+	now := transportWorkLeaseNow()
 	until := now.Add(transportWorkLeaseDuration)
 	var claimed StreamState
 	var prior StreamState
 	var priorPresent bool
 	if _, err := a.updateState(func(current state) (state, error) {
+		if _, pending := deliveredReconciliationForState(current, connection, stream); pending {
+			return current, errTransportStreamReconciliationPending
+		}
 		currentState, present := current.StreamStates[key]
 		currentState = cloneStreamState(currentState)
 		migrateLegacyTransportReceiptAssociation(&currentState)
 		prior = cloneStreamState(currentState)
 		priorPresent = present
+		if currentState.ActiveWorkFence != admissionFence {
+			return current, fmt.Errorf("%w: expected fence %d, found %d", errTransportStreamAdmissionStale, admissionFence, currentState.ActiveWorkFence)
+		}
 		if currentState.Checkpoint != nil {
 			if err := validateStreamStateResume(currentState, source); err != nil {
 				return current, err
@@ -61,8 +71,9 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 				return current, errTransportStreamWorkInProgress
 			}
 		}
-		if currentState.ActiveWorkFence == int64(^uint64(0)>>1) {
-			return current, errors.New("transport stream work fences are exhausted")
+		nextFence, err := nextTransportWorkFence(currentState.ActiveWorkFence)
+		if err != nil {
+			return current, err
 		}
 		currentState.Connection = connection
 		currentState.Stream = stream
@@ -70,7 +81,7 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 			currentState.GenerationID++
 		}
 		currentState.ActiveWorkID = workID
-		currentState.ActiveWorkFence++
+		currentState.ActiveWorkFence = nextFence
 		currentState.ActiveWorkLeaseUntil = &until
 		if current.StreamStates == nil {
 			current.StreamStates = map[string]StreamState{}
@@ -86,6 +97,13 @@ func (a *App) claimTransportWorkLease(ctx context.Context, key, connection, stre
 		app: a, key: key, workID: workID, fence: claimed.ActiveWorkFence,
 		prior: prior, priorPresent: priorPresent, state: claimed,
 	}, nil
+}
+
+func nextTransportWorkFence(fence int64) (int64, error) {
+	if fence == transportWorkFenceLimit {
+		return 0, errors.New("transport stream work fences are exhausted")
+	}
+	return fence + 1, nil
 }
 
 func transportWorkOwnerTerminal(runs []Run, workID string) bool {
@@ -153,7 +171,7 @@ func (l *transportWorkLease) abandonUncommitted(ctx context.Context) error {
 	defer cancel()
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	now := time.Now().UTC()
+	now := transportWorkLeaseNow()
 	if _, err := l.app.updateState(func(current state) (state, error) {
 		actual, present := current.StreamStates[l.key]
 		if !present || actual.ActiveWorkID != l.workID || actual.ActiveWorkFence != l.fence || actual.ActiveWorkLeaseUntil == nil || !actual.ActiveWorkLeaseUntil.After(now) {
@@ -189,7 +207,7 @@ func (l *transportWorkLease) mutate(ctx context.Context, change func(StreamState
 	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	now := time.Now().UTC()
+	now := transportWorkLeaseNow()
 	until := now.Add(transportWorkLeaseDuration)
 	var updated StreamState
 	if _, err := l.app.updateState(func(current state) (state, error) {

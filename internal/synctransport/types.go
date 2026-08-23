@@ -248,6 +248,44 @@ type FullOverwriteRun interface {
 	AbortFullOverwrite(context.Context) error
 }
 
+type EmptyPublicationReadBackReceipt struct {
+	Witness synccontract.PublicationWitness `json:"witness"`
+	Output  json.RawMessage                 `json:"output,omitempty"`
+}
+
+func (r EmptyPublicationReadBackReceipt) Validate() error {
+	if err := r.Witness.Validate(); err != nil {
+		return err
+	}
+	if len(r.Output) != 0 && !json.Valid(r.Output) {
+		return fmt.Errorf("empty publication read-back receipt output must be valid JSON")
+	}
+	return nil
+}
+
+func (r EmptyPublicationReadBackReceipt) Clone() EmptyPublicationReadBackReceipt {
+	clone := r
+	clone.Output = append(json.RawMessage(nil), r.Output...)
+	return clone
+}
+
+type EmptyPublicationReadBackDestination interface {
+	ReadBackEmptyFullOverwrite(context.Context, EmptyPublicationReadBackRequest) error
+}
+
+type EmptyPublicationReadBackRequest struct {
+	Runtime           connectors.RuntimeConfig
+	Source            connectors.Connector
+	SourceRuntime     connectors.RuntimeConfig
+	Destination       connectors.Connector
+	Binding           DestinationBinding
+	Stream            string
+	DestinationAction string
+	TransformPlanJSON string
+	TransformPlanHash string
+	Receipt           EmptyPublicationReadBackReceipt
+}
+
 // FullOverwritePublicationRequest is payload-free aggregate evidence supplied
 // only after source emission completed. LastCheckpoint remains source-owned;
 // the destination cannot replace it, and the orchestrator remains responsible
@@ -632,10 +670,13 @@ type RunRequest struct {
 	// immediately before a source executor begins physical I/O; it accepts no
 	// route, credential, or provider authority and is intentionally absent from
 	// receipts and generated declarations.
-	SourceAdmission func(context.Context) error `json:"-"`
-	Stage           WarehouseStage
-	Commit          func(synccontract.CheckpointEnvelope) error
-	CommitWorksets  func(synccontract.CheckpointEnvelope, []WarehouseReceipt) error
+	SourceAdmission                        func(context.Context) error         `json:"-"`
+	ReadBackAdmission                      func(context.Context) error         `json:"-"`
+	EmptyPublicationReadBackPendingHandoff func(context.Context, Result) error `json:"-"`
+	EmptyPublicationHandoff                func(context.Context, Result) error `json:"-"`
+	Stage                                  WarehouseStage
+	Commit                                 func(synccontract.CheckpointEnvelope) error
+	CommitWorksets                         func(synccontract.CheckpointEnvelope, []WarehouseReceipt) error
 }
 
 type Result struct {
@@ -664,13 +705,21 @@ type Result struct {
 	ParquetBytes           int64
 	PeakCreditBytes        int64
 	CreditWaitElapsed      time.Duration
-	// DestinationResults retain every provider-returned response field, key,
-	// value, receipt, status, body, occurrence ID, and credential-equal byte
-	// verbatim. They remain opaque to the transport core: mapping and provider
-	// protocol stay connector-owned. Only system-generated diagnostics, plans,
-	// logs, and errors are rendered secret-safely.
+	// DestinationResults retain each adapter-returned provider response, including
+	// field names, ordinary values, receipts, status, body, and occurrence IDs.
+	// Adapters mask concrete configured credential material before placing results
+	// here; the transport core otherwise keeps them opaque so mapping and provider
+	// protocol stay connector-owned. System-generated diagnostics, plans, logs,
+	// and errors are rendered secret-safely.
 	DestinationResults  []json.RawMessage
 	CommittedCheckpoint *synccontract.CheckpointEnvelope
+	// EmptyPublication is sealed evidence that a full-overwrite publication of
+	// an explicitly empty source was made durable and verified. It is distinct
+	// from a source checkpoint: no source position was observed or advanced.
+	// App persists it with the exact provider receipt before any local repair,
+	// so retrying the run cannot publish the empty replacement a second time.
+	EmptyPublication                *synccontract.PublicationWitness
+	EmptyPublicationReadBackPending *EmptyPublicationReadBackReceipt
 	// DeliveredReconciliationRequired says the destination effect, read-back,
 	// and checkpoint are already durable but a subsequent local bookkeeping
 	// action (for example, retiring a bounded stage receipt) needs repair.

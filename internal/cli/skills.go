@@ -27,7 +27,7 @@ func runSkills(args []string, stdout io.Writer, jsonOut bool) error {
 		return validationErrorf("missing --dir")
 	}
 	registry := appRegistry()
-	generated, err := generateSkills(dir, registry.ListManifests())
+	generated, err := generateSkills(dir, registry)
 	if err != nil {
 		return err
 	}
@@ -38,11 +38,11 @@ func runSkills(args []string, stdout io.Writer, jsonOut bool) error {
 	return nil
 }
 
-func generateSkills(dir string, manifests []connectors.Manifest) ([]string, error) {
+func generateSkills(dir string, registry *connectors.Registry) ([]string, error) {
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return nil, fmt.Errorf("create skills dir: %w", err)
 	}
-	docs, err := baseSkillDocs(manifests)
+	docs, err := baseSkillDocsWithRegistry(registry.ListManifests(), registry)
 	if err != nil {
 		return nil, err
 	}
@@ -65,6 +65,13 @@ func generateSkills(dir string, manifests []connectors.Manifest) ([]string, erro
 }
 
 func baseSkillDocs(manifests []connectors.Manifest) ([]skillDoc, error) {
+	if len(manifests) == 0 {
+		return baseSkillDocsWithRegistry(manifests, nil)
+	}
+	return baseSkillDocsWithRegistry(manifests, appRegistry())
+}
+
+func baseSkillDocsWithRegistry(manifests []connectors.Manifest, registry *connectors.Registry) ([]skillDoc, error) {
 	docs := []skillDoc{
 		{
 			Name:        "pm-shared",
@@ -94,7 +101,7 @@ func baseSkillDocs(manifests []connectors.Manifest) ([]skillDoc, error) {
 				"Supported sync modes are `full_refresh_append`, `full_refresh_overwrite`, `full_refresh_overwrite_deduped`, `incremental_append`, and `incremental_append_deduped`.",
 				"For the closed managed-PostgreSQL route, run `pm etl transport postgres-managed-target plan --connection <name> --stream <stream>`, preview the plan, then send its one-time token through `pm etl run ... --approval-token-stdin --confirm destructive`; PostgreSQL and declared API sources use sealed catalogs, and callers never supply raw SQL or target identifiers.",
 				"For a connector-declared typed destination, run `pm etl transport declarative-typed-destination plan --connection <name> --stream <stream>`, preview it, then use the ordinary approved ETL run. The saved stream's `destination_action` selects the connector-owned `writes.json` action; never accept it, a route, method, body, mapping, connector, or evidence as a run-time flag.",
-				"In `pm etl run --json` and `pm etl status --json`, inspect `run.destination_results` for each acknowledged typed action's complete provider result. Provider-returned fields, keys, and values remain verbatim even when they equal configured credential bytes; system-generated plans, logs, request diagnostics, and synthetic errors remain secret-taint-safe.",
+				"In `pm etl run --json` and `pm etl status --json`, inspect `run.destination_results` for each provider-successful typed action. A later local receipt or acknowledgement failure leaves the run uncheckpointed but retains ordered sanitized provider evidence. Concrete configured credential material is masked; provider-owned field names and ordinary values remain available.",
 				"A terminal `run.status=delivered_reconciliation_required` means the provider effect, read-back, and checkpoint are already durable. Preserve its exact `ETLRun` and categorized nonzero exit; rerun only the same saved connection and stream so pm repairs its declared `delivery_reconciliation` locally before endpoint resolution and never replays source or destination I/O. Never replace it with a normal retry or a raw provider action.",
 				"Incremental modes and deduped compatibility names require a cursor. Deduped modes require a primary key; static manifests advertise the full deduped compatibility name only with both fields and incremental modes only with a declared incremental executor. The deduped compatibility names refuse before source I/O until a matching transport is admitted.",
 				"Inspect `batch_count` and `checkpoint` in JSON output after runs.",
@@ -142,7 +149,7 @@ func baseSkillDocs(manifests []connectors.Manifest) ([]skillDoc, error) {
 		if manifest.Metadata.Name == "" {
 			continue
 		}
-		doc, err := connectorSkill(manifest.Metadata.Name)
+		doc, err := connectorSkillWithRegistry(registry, manifest.Metadata.Name)
 		if err != nil {
 			return nil, err
 		}
@@ -151,8 +158,10 @@ func baseSkillDocs(manifests []connectors.Manifest) ([]skillDoc, error) {
 	return docs, nil
 }
 
-func connectorSkill(name string) (skillDoc, error) {
-	registry := appRegistry()
+func connectorSkillWithRegistry(registry *connectors.Registry, name string) (skillDoc, error) {
+	if registry == nil {
+		return skillDoc{}, fmt.Errorf("publish connector skill %q: registry is required", name)
+	}
 	connector, ok := registry.Get(name)
 	if !ok {
 		return skillDoc{}, fmt.Errorf("publish connector skill %q: manifest has no registered connector", name)

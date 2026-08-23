@@ -12,6 +12,15 @@
         "method": "POST",
         "path": "/accounts/{account_id}/invoices/preview",
         "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Path parameter `account_id`."
+          }
+        ],
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
@@ -142,6 +151,15 @@
         "method": "GET",
         "path": "/invoices/{invoice_id}.pdf",
         "max_bytes": 16777216,
+        "parameters": [
+          {
+            "name": "invoice_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Path parameter `invoice_id`."
+          }
+        ],
         "content_types": [
           "application/pdf"
         ],
@@ -163,7 +181,16 @@
       "rest": {
         "method": "GET",
         "path": "/subscriptions/{subscription_id}/preview_renewal",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Path parameter `subscription_id`."
+          }
+        ]
       }
     },
     {
@@ -178,6 +205,15 @@
         "method": "POST",
         "path": "/subscriptions/{subscription_id}/change/preview",
         "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "subscription_id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Path parameter `subscription_id`."
+          }
+        ],
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
@@ -1852,6 +1888,15 @@
         "method": "GET",
         "path": "/export_dates/{export_date}/export_files",
         "max_bytes": 16777216,
+        "parameters": [
+          {
+            "name": "export_date",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Path parameter `export_date`."
+          }
+        ],
         "content_types": [
           "application/json"
         ],

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -164,6 +165,48 @@ func TestBinaryDownloadWritesBoundedFile(t *testing.T) {
 	}
 	if !strings.HasPrefix(path, dest) {
 		t.Fatalf("file escaped the destination root: %s", path)
+	}
+}
+
+func TestOperationBinaryDownloadPreservesConfiguredEqualResponseHeaderValues(t *testing.T) {
+	const credential = "configured-header-material"
+	const occurrenceID = "occurrence-9007199254740993"
+	const unconfiguredToken = "ghp_unconfigured_provider_token"
+	encoded := base64.StdEncoding.EncodeToString([]byte(credential))
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Header().Add("X-Provider-Metadata", credential)
+		w.Header().Add("X-Provider-Metadata", occurrenceID)
+		w.Header().Add("X-Provider-Metadata", encoded)
+		w.Header().Add("X-Provider-Metadata", unconfiguredToken)
+		w.Header().Add("X-Provider-Metadata", credential)
+		w.Header().Set(credential, occurrenceID)
+		_, _ = w.Write([]byte("fixture"))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := binaryBundle(srv, &BinaryOperationSpec{
+		Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
+			{Name: "X-Provider-Metadata", MaxBytes: 512},
+			{Name: credential, MaxBytes: 64},
+		}},
+	})
+	req := downloadReq(t.TempDir())
+	req.Config.Secrets = map[string]string{"credential": credential}
+	result, err := OperationBinaryDownload(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("OperationBinaryDownload: %v", err)
+	}
+	// A provider may legitimately return a value byte-identical to a configured
+	// credential. Response headers are provider output, so that coincidence is
+	// preserved unless the operation explicitly declares the output secret.
+	want := []string{credential, occurrenceID, encoded, unconfiguredToken, credential}
+	for _, headers := range []map[string]connectors.OperationResponseHeader{result.Headers, result.Receipt.Headers} {
+		if !reflect.DeepEqual(headers["X-Provider-Metadata"].Values, want) {
+			t.Fatalf("header values = %#v, want %#v", headers["X-Provider-Metadata"].Values, want)
+		}
+	}
+	if result.Headers[credential].Values[0] != occurrenceID {
+		t.Fatalf("configured header name was changed: %#v", result.Headers)
 	}
 }
 
@@ -718,7 +761,7 @@ func TestBinaryDownloadHTTPErrorKeepsProviderQueryAndBodyPrivateAndLeavesNoFile(
 	}))
 	t.Cleanup(srv.Close)
 	dest := t.TempDir()
-	b := binaryBundle(srv, &BinaryOperationSpec{})
+	b := binaryBundle(srv, &BinaryOperationSpec{Parameters: []OperationParameter{{Name: "trace", In: "query", Type: "string", MaxBytes: 64}}})
 	req := downloadReq(dest)
 	req.Query = map[string]string{"trace": "binary-download-fixture"}
 	_, err := OperationBinaryDownload(context.Background(), b, req, nil)
@@ -736,6 +779,58 @@ func TestBinaryDownloadHTTPErrorKeepsProviderQueryAndBodyPrivateAndLeavesNoFile(
 	entries, _ := os.ReadDir(dest)
 	if len(entries) != 0 {
 		t.Fatalf("failed download must leave no file, found %d", len(entries))
+	}
+}
+
+func TestBinaryDownloadRejectsUndeclaredOrUnsafeParametersBeforeProviderIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if got := r.URL.Query().Get("view"); got != "full" {
+			t.Errorf("view = %q, want full", got)
+		}
+		w.Header().Set("Content-Type", "application/octet-stream")
+		_, _ = w.Write([]byte("ok"))
+	}))
+	t.Cleanup(srv.Close)
+	b := binaryBundle(srv, &BinaryOperationSpec{Parameters: []OperationParameter{
+		{Name: "id", In: "path", Type: "string", Required: true, MaxBytes: 8},
+		{Name: "view", In: "query", Type: "string", Required: true, MaxBytes: 8},
+	}})
+	for _, tc := range []struct {
+		name string
+		req  BinaryDownloadRequest
+		ok   bool
+	}{
+		{name: "declared parameters", ok: true, req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "declared path parameter from config", ok: true, req: BinaryDownloadRequest{Operation: "acme.download_file", Config: connectors.RuntimeConfig{Config: map[string]string{"id": "report"}}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "undeclared path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report", "admin": "true"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "undeclared query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full", "admin": "true"}, DestRoot: t.TempDir()}},
+		{name: "over cap path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "too-long-id"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "over cap configured path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", Config: connectors.RuntimeConfig{Config: map[string]string{"id": "too-long-id"}}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "missing required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, DestRoot: t.TempDir()}},
+		{name: "empty required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": ""}, DestRoot: t.TempDir()}},
+		{name: "whitespace required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "   "}, DestRoot: t.TempDir()}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			before := requests
+			_, err := OperationBinaryDownload(context.Background(), b, tc.req, nil)
+			if tc.ok {
+				if err != nil {
+					t.Fatalf("OperationBinaryDownload: %v", err)
+				}
+				if requests != before+1 {
+					t.Fatalf("requests = %d, want %d", requests, before+1)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("unsafe binding was accepted")
+			}
+			if requests != before {
+				t.Fatalf("unsafe binding reached provider %d times", requests-before)
+			}
+		})
 	}
 }
 

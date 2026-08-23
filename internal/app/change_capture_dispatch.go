@@ -467,7 +467,7 @@ func (a *App) runWarehouseChangeCapture(ctx context.Context, request etlModeDisp
 	}
 	changefeed := request.source.(connectors.ChangefeedExecutor)
 	stateKey := streamStateKey(request.connection.Name, request.streamName)
-	workLease, err := a.claimTransportWorkLease(ctx, stateKey, request.connection.Name, request.streamName, request.runID, request.sourceExpectation, false)
+	workLease, err := a.claimTransportWorkLease(ctx, stateKey, request.connection.Name, request.streamName, request.runID, request.sourceExpectation, false, request.transportAdmissionFence)
 	if err != nil {
 		return etlExecutionResult{}, err
 	}

@@ -2,7 +2,8 @@
   "record": {
     "operations": [
       {
-        "create": {}
+        "multiPartyAuthReview": "customers/synthetic-conformance-value/multiPartyAuthReviews/1",
+        "newStatus": "APPROVED"
       }
     ]
   },
@@ -12,7 +13,8 @@
     "body": {
       "operations": [
         {
-          "create": {}
+          "multiPartyAuthReview": "customers/synthetic-conformance-value/multiPartyAuthReviews/1",
+          "newStatus": "APPROVED"
         }
       ]
     }

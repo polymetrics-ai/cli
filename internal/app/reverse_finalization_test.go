@@ -90,6 +90,56 @@ func TestReverseFinalization_DoesNotPublishUnpersistedRun(t *testing.T) {
 	}
 }
 
+func TestReverseFinalizationRejectsIncompleteNilErrorAcknowledgements(t *testing.T) {
+	tests := []struct {
+		name       string
+		action     string
+		result     connectors.WriteResult
+		wantFailed bool
+	}{
+		{name: "partial write", action: "create_issue", result: connectors.WriteResult{RecordsWritten: 1}, wantFailed: true},
+		{name: "zero acknowledgement", action: "create_issue", result: connectors.WriteResult{}, wantFailed: true},
+		{name: "negative written", action: "create_issue", result: connectors.WriteResult{RecordsWritten: -1, RecordsFailed: 3}, wantFailed: true},
+		{name: "over-counted write", action: "create_issue", result: connectors.WriteResult{RecordsWritten: 3}, wantFailed: true},
+		{name: "unchanged forbidden for create", action: "create_issue", result: connectors.WriteResult{RecordsUnchanged: 2}, wantFailed: true},
+		{name: "unchanged forbidden for delete without declared missing status", action: "delete_label", result: connectors.WriteResult{RecordsUnchanged: 2}, wantFailed: true},
+		{name: "unchanged allowed for idempotent delete", action: "delete_issue_comment", result: connectors.WriteResult{RecordsUnchanged: 2}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := newReverseFinalizationTestApp(t)
+			plan := a.state.ReversePlans[0]
+			plan.DestinationConnector = "github"
+			plan.Action = tt.action
+			a.state.ReversePlans[0] = plan
+			if err := a.save(); err != nil {
+				t.Fatalf("save action policy plan: %v", err)
+			}
+			run := ReverseRun{ID: "rrun-ack", PlanID: plan.ID, Status: "running", RecordsStaged: 2, StartedAt: time.Unix(100, 0).UTC()}
+			got, err := a.finishReverseWrite(plan.ID, run, tt.result, connectors.RuntimeConfig{}, run.RecordsStaged, nil)
+			stored, planErr := a.GetReversePlan(plan.ID)
+			if planErr != nil {
+				t.Fatalf("GetReversePlan(%q): %v", plan.ID, planErr)
+			}
+			if tt.wantFailed {
+				if err == nil {
+					t.Fatal("finalizer accepted incomplete nil-error acknowledgement")
+				}
+				if got.Status != "failed" || stored.Status != "failed" {
+					t.Fatalf("run/plan status = %q/%q, want failed/failed", got.Status, stored.Status)
+				}
+				if got.RecordsSucceeded < 0 || got.RecordsFailed < 0 {
+					t.Fatalf("failed acknowledgement persisted negative counters: %#v", got)
+				}
+				return
+			}
+			if err != nil || got.Status != "completed" || stored.Status != "executed" {
+				t.Fatalf("allowed unchanged acknowledgement = run=%#v plan=%#v err=%v, want completed/executed", got, stored, err)
+			}
+		})
+	}
+}
+
 func TestOrdinaryETLTerminalPersistenceReloadsExactDurableRun(t *testing.T) {
 	tests := []struct {
 		name       string

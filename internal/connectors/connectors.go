@@ -19,6 +19,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf16"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/synccontract"
@@ -522,9 +524,9 @@ type DirectReadResult struct {
 	// representation and every ordinary response header for audit/retry work.
 	Receipt *ProviderResponseReceipt `json:"receipt,omitempty"`
 	// Headers contains only response headers explicitly admitted by the exact
-	// operation response contract. Values are preserved verbatim, even when they
-	// equal configured credential bytes; declared output secret fields are
-	// sanitized separately. Arbitrary provider metadata is never an output channel.
+	// operation response contract. Declared provider values are preserved
+	// verbatim unless a declaration-owned output-secret field classifies them;
+	// arbitrary provider metadata is never an output channel.
 	Headers map[string]OperationResponseHeader `json:"headers,omitempty"`
 	// GraphQL is present only for a declared fixed-document GraphQL operation.
 	// It deliberately exposes a small, redacted response summary rather than
@@ -557,9 +559,8 @@ type ProviderResponseReceipt struct {
 }
 
 // OperationResponseHeader is one declared provider response header. Values are
-// preserved verbatim, including values equal to configured credentials.
-// Redacted and Masked are compatibility markers only; provider headers are
-// sanitized only through an explicit declared output-secret field boundary.
+// complete when ordinary. Redacted and Masked preserve compatibility for
+// declaration-owned output-secret fields only.
 type OperationResponseHeader struct {
 	Values   []string `json:"values,omitempty"`
 	Redacted bool     `json:"redacted,omitempty"`
@@ -745,8 +746,10 @@ type OperationDirectWriteResult struct {
 	Body               any                                `json:"body"`
 	GraphQL            *GraphQLResponseMetadata           `json:"graphql,omitempty"`
 	OutputSecretFields []string                           `json:"-"`
-	// RequestSensitiveValues carries declaration-owned request sensitivity. It
-	// is deliberately not serializable and is never caller-controlled.
+	// RequestSensitiveValues is populated only by the declaration-owned
+	// executor and is deliberately not serializable or caller-controlled. It
+	// protects system-generated diagnostics; provider output is classified only
+	// by OutputSecretFields.
 	RequestSensitiveValues []string `json:"-"`
 }
 
@@ -1052,7 +1055,7 @@ func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResu
 	}
 	out := result
 	out.Headers = cloneProviderHeaders(result.Headers)
-	out.BodyRaw = sanitizeProviderResponseRawAtPaths(result.BodyRaw, result.BodyRawEncoding, result.OutputSecretFields)
+	out.BodyRaw = sanitizeProviderResponseRawAtPaths(result.BodyRaw, result.BodyRawEncoding, nil, result.OutputSecretFields)
 	out.Body = cloneProviderOutputValue(body)
 	out.OutputSecretFields = append([]string(nil), result.OutputSecretFields...)
 	out.RequestSensitiveValues = append([]string(nil), result.RequestSensitiveValues...)
@@ -1092,6 +1095,41 @@ func cloneProviderHeaders(headers map[string]OperationResponseHeader) map[string
 	return out
 }
 
+// SanitizeGraphQLResponseMetadataForOutput clones provider-returned GraphQL
+// metadata. A response diagnostic may legitimately equal credential bytes, so
+// only declaration-owned output-secret fields are eligible for masking at a
+// public boundary.
+func SanitizeGraphQLResponseMetadataForOutput(metadata *GraphQLResponseMetadata, _ map[string]string) *GraphQLResponseMetadata {
+	return cloneGraphQLResponseMetadata(metadata)
+}
+
+func cloneGraphQLResponseMetadata(metadata *GraphQLResponseMetadata) *GraphQLResponseMetadata {
+	if metadata == nil {
+		return nil
+	}
+	out := *metadata
+	out.Errors = append([]GraphQLResultError(nil), metadata.Errors...)
+	if metadata.RateLimit != nil {
+		rateLimit := *metadata.RateLimit
+		out.RateLimit = &rateLimit
+	}
+	return &out
+}
+
+func sanitizeWriteProviderResponse(response WriteProviderResponse, secrets []string) WriteProviderResponse {
+	_ = secrets
+	out := response
+	out.Headers = cloneProviderHeaders(response.Headers)
+	out.BodyRaw = response.BodyRaw
+	out.Body = cloneProviderOutputValue(response.Body)
+	return out
+}
+
+func sanitizeProviderHeaders(headers map[string]OperationResponseHeader, secrets []string) map[string]OperationResponseHeader {
+	_ = secrets
+	return cloneProviderHeaders(headers)
+}
+
 func cloneProviderOutputValue(value any) any {
 	switch typed := value.(type) {
 	case map[string]any:
@@ -1115,10 +1153,35 @@ func cloneProviderOutputValue(value any) any {
 	}
 }
 
+func sanitizeProviderOutputValue(value any, secrets []string) any {
+	_ = secrets
+	return cloneProviderOutputValue(value)
+}
+
+func sanitizeProviderResponseValue(value any, secrets []string) any {
+	_ = secrets
+	return cloneProviderOutputValue(value)
+}
+
+func sanitizeProviderOutputScalar(value string, secrets []string) string {
+	_ = secrets
+	return value
+}
+
 // SanitizeProviderOutputForOutput deep-clones an arbitrary decoded provider
 // value while preserving provider-returned fields, keys, and values.
 func SanitizeProviderOutputForOutput(value any, _ map[string]string) any {
 	return cloneProviderOutputValue(value)
+}
+
+func SanitizeProviderResponseHeadersForOutput(headers map[string]OperationResponseHeader, _ map[string]string) map[string]OperationResponseHeader {
+	return cloneProviderHeaders(headers)
+}
+
+// SanitizeDirectReadPageForOutput clones page navigation while retaining the
+// provider-issued cursor verbatim.
+func SanitizeDirectReadPageForOutput(page DirectReadPage, _ map[string]string) DirectReadPage {
+	return page
 }
 
 // SanitizeProviderResponseReceiptForOutput clones a complete response receipt
@@ -1135,7 +1198,7 @@ func SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(receipt Provide
 	out.Headers = cloneProviderHeaders(receipt.Headers)
 	body := cloneProviderOutputValue(receipt.Body)
 	maskProviderOutputPaths(body, declaredFields)
-	out.BodyRaw = sanitizeProviderResponseRawAtPaths(receipt.BodyRaw, receipt.BodyRawEncoding, declaredFields)
+	out.BodyRaw = sanitizeProviderResponseRawAtPaths(receipt.BodyRaw, receipt.BodyRawEncoding, nil, declaredFields)
 	out.Body = cloneProviderOutputValue(body)
 	if rawBody, ok := receipt.Body.(string); ok && receipt.BodyRawEncoding == "base64" && rawBody == receipt.BodyRaw {
 		out.Body = out.BodyRaw
@@ -1199,21 +1262,23 @@ func SanitizeOperationBinaryDownloadResultForOutput(result OperationBinaryDownlo
 	return out
 }
 
-func sanitizeProviderResponseRawAtPaths(value, encoding string, declaredFields []string) string {
+func sanitizeProviderResponseRawAtPaths(value, encoding string, secrets, declaredFields []string) string {
 	if len(declaredFields) == 0 {
-		return value
+		return sanitizeProviderResponseRaw(value, encoding, secrets)
 	}
 	raw := []byte(value)
 	base64Encoded := encoding == "base64"
 	if base64Encoded {
 		decoded, err := base64.StdEncoding.DecodeString(value)
 		if err != nil {
-			return value
+			return sanitizeProviderResponseRaw(value, encoding, secrets)
 		}
 		raw = decoded
 	}
-	if publicJSON, ok := sanitizeProviderJSON(raw, declaredFields); ok {
+	if publicJSON, ok := sanitizeProviderJSON(raw, secrets, declaredFields); ok {
 		raw = publicJSON
+	} else {
+		return sanitizeProviderResponseRaw(value, encoding, secrets)
 	}
 	if base64Encoded {
 		return base64.StdEncoding.EncodeToString(raw)
@@ -1221,7 +1286,7 @@ func sanitizeProviderResponseRawAtPaths(value, encoding string, declaredFields [
 	return string(raw)
 }
 
-func sanitizeProviderJSON(raw []byte, declaredFields []string) ([]byte, bool) {
+func sanitizeProviderJSON(raw []byte, secrets, declaredFields []string) ([]byte, bool) {
 	decoder := json.NewDecoder(bytes.NewReader(raw))
 	decoder.UseNumber()
 	var decoded any
@@ -1234,18 +1299,475 @@ func sanitizeProviderJSON(raw []byte, declaredFields []string) ([]byte, bool) {
 	}
 	original := cloneProviderOutputValue(decoded)
 	maskProviderOutputPaths(decoded, declaredFields)
+	public := sanitizeProviderOutputValue(decoded, secrets)
 	// Provider bytes are evidence, not a formatting suggestion. A parse is
-	// necessary to find a declared scalar to withhold, but when no declared
-	// field matched it must not change whitespace, key order,
+	// necessary to find a concrete scalar to withhold, but when no declared or
+	// configured value matched it must not change whitespace, key order,
 	// numeric spelling, escapes, or non-ASCII byte representation.
-	if reflect.DeepEqual(original, decoded) {
+	if reflect.DeepEqual(original, public) {
 		return append([]byte(nil), raw...), true
 	}
-	encoded, err := json.Marshal(decoded)
+	encoded, err := json.Marshal(public)
 	if err != nil {
 		return nil, false
 	}
 	return encoded, true
+}
+
+func sanitizeProviderResponseBody(raw, rawEncoding string, body any, secrets []string) (string, any) {
+	_ = rawEncoding
+	_ = secrets
+	sanitizedRaw := raw
+	sanitizedBody := cloneProviderOutputValue(body)
+	if rawBody, ok := body.(string); ok && rawBody == raw {
+		sanitizedBody = sanitizedRaw
+	}
+	return sanitizedRaw, sanitizedBody
+}
+
+func sanitizeProviderResponseRaw(value, encoding string, secrets []string) string {
+	_ = encoding
+	_ = secrets
+	return value
+}
+
+type providerResponseJSONStringSpan struct {
+	start int
+	end   int
+	key   bool
+}
+
+type providerResponseJSONContainerState uint8
+
+const (
+	providerResponseJSONObjectKeyOrEnd providerResponseJSONContainerState = iota
+	providerResponseJSONObjectColon
+	providerResponseJSONObjectValue
+	providerResponseJSONObjectCommaOrEnd
+	providerResponseJSONArrayValueOrEnd
+	providerResponseJSONArrayCommaOrEnd
+	providerResponseJSONContainerInvalid
+)
+
+type providerResponseJSONContainer struct {
+	kind  byte
+	state providerResponseJSONContainerState
+}
+
+type providerResponseJSONScanner struct {
+	containers []providerResponseJSONContainer
+}
+
+func redactProviderResponseText(value string, secrets []string) string {
+	if len(secrets) == 0 {
+		return value
+	}
+	stringSpans, isJSON := providerResponseJSONStrings(value)
+	if !isJSON || len(stringSpans) == 0 {
+		return redactProviderResponseTextSegment(value, secrets)
+	}
+	var out strings.Builder
+	out.Grow(len(value))
+	offset := 0
+	for _, span := range stringSpans {
+		out.WriteString(redactProviderResponseTextSegment(value[offset:span.start], secrets))
+		if span.key {
+			out.WriteString(value[span.start:span.end])
+		} else {
+			out.WriteString(redactProviderResponseJSONString(value[span.start:span.end], secrets))
+		}
+		offset = span.end
+	}
+	out.WriteString(redactProviderResponseTextSegment(value[offset:], secrets))
+	return out.String()
+}
+
+func redactProviderResponseTextSegment(value string, secrets []string) string {
+	for _, secret := range secrets {
+		value = redactConcreteSecretTextWithBoundary(value, secret, providerResponseTokenBoundary)
+	}
+	return value
+}
+
+func providerResponseJSONStrings(value string) ([]providerResponseJSONStringSpan, bool) {
+	spans := make([]providerResponseJSONStringSpan, 0)
+	scanner := providerResponseJSONScanner{}
+	for offset := 0; offset < len(value); {
+		if isProviderResponseJSONWhitespace(value[offset]) {
+			offset++
+			continue
+		}
+		if value[offset] != '"' {
+			scanner.consume(value, &offset)
+			continue
+		}
+		start := offset
+		offset++
+		terminated := false
+		for offset < len(value) {
+			switch value[offset] {
+			case '\\':
+				offset += 2
+			case '"':
+				offset++
+				terminated = true
+			default:
+				offset++
+			}
+			if terminated {
+				break
+			}
+		}
+		if !terminated {
+			break
+		}
+		spans = append(spans, providerResponseJSONStringSpan{start: start, end: offset, key: scanner.consumeString(value, offset)})
+	}
+	return spans, len(spans) != 0
+}
+
+func (scanner *providerResponseJSONScanner) consume(value string, offset *int) {
+	switch value[*offset] {
+	case '{', '[':
+		scanner.open(value[*offset])
+		*offset = *offset + 1
+	case '}', ']':
+		scanner.close(value[*offset])
+		*offset = *offset + 1
+	case ':':
+		scanner.colon()
+		*offset = *offset + 1
+	case ',':
+		scanner.comma()
+		*offset = *offset + 1
+	default:
+		start := *offset
+		for *offset < len(value) && !isProviderResponseJSONWhitespace(value[*offset]) && !isProviderResponseJSONStructuralByte(value[*offset]) {
+			*offset = *offset + 1
+		}
+		scanner.literal(value[start:*offset])
+	}
+}
+
+func (scanner *providerResponseJSONScanner) consumeString(value string, end int) bool {
+	container := scanner.top()
+	if container == nil {
+		return false
+	}
+	next := end
+	for next < len(value) && isProviderResponseJSONWhitespace(value[next]) {
+		next++
+	}
+	if container.kind == '{' && container.state == providerResponseJSONObjectKeyOrEnd && next < len(value) && value[next] == ':' {
+		container.state = providerResponseJSONObjectColon
+		return true
+	}
+	switch container.state {
+	case providerResponseJSONObjectValue:
+		container.state = providerResponseJSONObjectCommaOrEnd
+	case providerResponseJSONArrayValueOrEnd:
+		container.state = providerResponseJSONArrayCommaOrEnd
+	default:
+		container.state = providerResponseJSONContainerInvalid
+	}
+	return false
+}
+
+func (scanner *providerResponseJSONScanner) open(kind byte) {
+	if container := scanner.top(); container != nil {
+		switch container.state {
+		case providerResponseJSONObjectValue:
+			container.state = providerResponseJSONObjectCommaOrEnd
+		case providerResponseJSONArrayValueOrEnd:
+			container.state = providerResponseJSONArrayCommaOrEnd
+		default:
+			container.state = providerResponseJSONContainerInvalid
+			return
+		}
+	}
+	state := providerResponseJSONObjectKeyOrEnd
+	if kind == '[' {
+		state = providerResponseJSONArrayValueOrEnd
+	}
+	scanner.containers = append(scanner.containers, providerResponseJSONContainer{kind: kind, state: state})
+}
+
+func (scanner *providerResponseJSONScanner) close(kind byte) {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	if (kind != '}' || container.kind != '{') && (kind != ']' || container.kind != '[') {
+		container.state = providerResponseJSONContainerInvalid
+		return
+	}
+	complete := providerResponseJSONContainerComplete(*container)
+	scanner.containers = scanner.containers[:len(scanner.containers)-1]
+	if !complete {
+		if parent := scanner.top(); parent != nil {
+			parent.state = providerResponseJSONContainerInvalid
+		}
+	}
+}
+
+func (scanner *providerResponseJSONScanner) colon() {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	if container.kind == '{' && container.state == providerResponseJSONObjectColon {
+		container.state = providerResponseJSONObjectValue
+		return
+	}
+	container.state = providerResponseJSONContainerInvalid
+}
+
+func (scanner *providerResponseJSONScanner) comma() {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	switch container.kind {
+	case '{':
+		if container.state == providerResponseJSONObjectCommaOrEnd {
+			container.state = providerResponseJSONObjectKeyOrEnd
+			return
+		}
+		container.state = providerResponseJSONContainerInvalid
+	case '[':
+		if container.state == providerResponseJSONArrayCommaOrEnd {
+			container.state = providerResponseJSONArrayValueOrEnd
+			return
+		}
+		container.state = providerResponseJSONContainerInvalid
+	}
+}
+
+func (scanner *providerResponseJSONScanner) literal(value string) {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	if !json.Valid([]byte(value)) {
+		container.state = providerResponseJSONContainerInvalid
+		return
+	}
+	switch container.state {
+	case providerResponseJSONObjectValue:
+		container.state = providerResponseJSONObjectCommaOrEnd
+	case providerResponseJSONArrayValueOrEnd:
+		container.state = providerResponseJSONArrayCommaOrEnd
+	default:
+		container.state = providerResponseJSONContainerInvalid
+	}
+}
+
+func (scanner *providerResponseJSONScanner) top() *providerResponseJSONContainer {
+	if len(scanner.containers) == 0 {
+		return nil
+	}
+	return &scanner.containers[len(scanner.containers)-1]
+}
+
+func providerResponseJSONContainerComplete(container providerResponseJSONContainer) bool {
+	switch container.kind {
+	case '{':
+		return container.state == providerResponseJSONObjectKeyOrEnd || container.state == providerResponseJSONObjectCommaOrEnd
+	case '[':
+		return container.state == providerResponseJSONArrayValueOrEnd || container.state == providerResponseJSONArrayCommaOrEnd
+	default:
+		return false
+	}
+}
+
+func isProviderResponseJSONStructuralByte(value byte) bool {
+	switch value {
+	case '{', '}', '[', ']', ':', ',', '"':
+		return true
+	default:
+		return false
+	}
+}
+
+func isProviderResponseJSONWhitespace(value byte) bool {
+	return value == ' ' || value == '\t' || value == '\n' || value == '\r'
+}
+
+type providerResponseDecodedByteSpan struct {
+	start int
+	end   int
+}
+
+type providerResponseTextSpan struct {
+	start int
+	end   int
+}
+
+func redactProviderResponseJSONString(value string, secrets []string) string {
+	decoded, decodedSpans, ok := decodeProviderResponseJSONString(value)
+	if !ok {
+		return redactProviderResponseTextSegment(value, secrets)
+	}
+	matches := providerResponseSecretTextSpans(decoded, secrets)
+	if len(matches) == 0 {
+		return value
+	}
+	var out strings.Builder
+	out.Grow(len(value))
+	offset := 0
+	for _, match := range matches {
+		start := decodedSpans[match.start].start
+		end := decodedSpans[match.end-1].end
+		out.WriteString(value[offset:start])
+		out.WriteString("[masked]")
+		offset = end
+	}
+	out.WriteString(value[offset:])
+	return out.String()
+}
+
+func decodeProviderResponseJSONString(value string) (string, []providerResponseDecodedByteSpan, bool) {
+	if len(value) < 2 || value[0] != '"' || value[len(value)-1] != '"' {
+		return "", nil, false
+	}
+	decoded := make([]byte, 0, len(value)-2)
+	spans := make([]providerResponseDecodedByteSpan, 0, len(value)-2)
+	appendBytes := func(start, end int, bytes []byte) {
+		decoded = append(decoded, bytes...)
+		for range bytes {
+			spans = append(spans, providerResponseDecodedByteSpan{start: start, end: end})
+		}
+	}
+	for offset := 1; offset < len(value)-1; {
+		if value[offset] != '\\' {
+			appendBytes(offset, offset+1, []byte{value[offset]})
+			offset++
+			continue
+		}
+		if offset+1 >= len(value)-1 {
+			return "", nil, false
+		}
+		start := offset
+		switch value[offset+1] {
+		case '"', '\\', '/':
+			appendBytes(start, offset+2, []byte{value[offset+1]})
+			offset += 2
+		case 'b':
+			appendBytes(start, offset+2, []byte{'\b'})
+			offset += 2
+		case 'f':
+			appendBytes(start, offset+2, []byte{'\f'})
+			offset += 2
+		case 'n':
+			appendBytes(start, offset+2, []byte{'\n'})
+			offset += 2
+		case 'r':
+			appendBytes(start, offset+2, []byte{'\r'})
+			offset += 2
+		case 't':
+			appendBytes(start, offset+2, []byte{'\t'})
+			offset += 2
+		case 'u':
+			if offset+6 > len(value)-1 {
+				return "", nil, false
+			}
+			r, ok := providerResponseJSONHexRune(value[offset+2 : offset+6])
+			if !ok {
+				return "", nil, false
+			}
+			offset += 6
+			end := offset
+			if r >= 0xD800 && r <= 0xDBFF && offset+6 <= len(value)-1 && value[offset] == '\\' && value[offset+1] == 'u' {
+				low, validLow := providerResponseJSONHexRune(value[offset+2 : offset+6])
+				if validLow && low >= 0xDC00 && low <= 0xDFFF {
+					r = utf16.DecodeRune(r, low)
+					offset += 6
+					end = offset
+				} else {
+					r = utf8.RuneError
+				}
+			} else if r >= 0xD800 && r <= 0xDFFF {
+				r = utf8.RuneError
+			}
+			appendBytes(start, end, []byte(string(r)))
+		default:
+			return "", nil, false
+		}
+	}
+	return string(decoded), spans, true
+}
+
+func providerResponseJSONHexRune(value string) (rune, bool) {
+	if len(value) != 4 {
+		return 0, false
+	}
+	var result rune
+	for _, digit := range value {
+		result <<= 4
+		switch {
+		case digit >= '0' && digit <= '9':
+			result += digit - '0'
+		case digit >= 'a' && digit <= 'f':
+			result += digit - 'a' + 10
+		case digit >= 'A' && digit <= 'F':
+			result += digit - 'A' + 10
+		default:
+			return 0, false
+		}
+	}
+	return result, true
+}
+
+func providerResponseSecretTextSpans(value string, secrets []string) []providerResponseTextSpan {
+	spans := make([]providerResponseTextSpan, 0)
+	for _, secret := range secrets {
+		if secret == "" {
+			continue
+		}
+		for offset := 0; offset < len(value); {
+			index := strings.Index(value[offset:], secret)
+			if index < 0 {
+				break
+			}
+			start := offset + index
+			end := start + len(secret)
+			if providerOutputTokenBoundary(value, start, end) && !providerResponseTextSpanOverlaps(spans, start, end) {
+				spans = append(spans, providerResponseTextSpan{start: start, end: end})
+			}
+			offset = end
+		}
+	}
+	sort.Slice(spans, func(i, j int) bool {
+		if spans[i].start == spans[j].start {
+			return spans[i].end < spans[j].end
+		}
+		return spans[i].start < spans[j].start
+	})
+	return spans
+}
+
+func providerResponseTextSpanOverlaps(spans []providerResponseTextSpan, start, end int) bool {
+	for _, span := range spans {
+		if start < span.end && span.start < end {
+			return true
+		}
+	}
+	return false
+}
+
+func providerOutputValueAtPath(value any, path string) (any, bool) {
+	current := value
+	for _, segment := range strings.Split(strings.TrimPrefix(path, "body."), ".") {
+		object, ok := current.(map[string]any)
+		if !ok {
+			return nil, false
+		}
+		current, ok = object[segment]
+		if !ok {
+			return nil, false
+		}
+	}
+	return current, true
 }
 
 func maskProviderOutputPath(value any, path string) {
@@ -1355,7 +1877,7 @@ func SanitizeWriteErrorForOutput(err error, secrets map[string]string) string {
 
 // Diagnostics are not provider scalar values: an upstream error may quote a
 // credential inside surrounding prose. Redact concrete known material here,
-// while provider receipts use declared field paths.
+// while provider receipts continue to use exact scalar matching above.
 func redactProviderDiagnosticText(value string, secrets []string) string {
 	for _, secret := range secrets {
 		if secret != "" {
@@ -1391,7 +1913,7 @@ func configuredSecretVariants(value string) []string {
 		return nil
 	}
 	bytes := []byte(value)
-	return []string{
+	variants := []string{
 		value,
 		url.QueryEscape(value),
 		url.PathEscape(value),
@@ -1400,15 +1922,106 @@ func configuredSecretVariants(value string) []string {
 		base64.URLEncoding.EncodeToString(bytes),
 		base64.RawURLEncoding.EncodeToString(bytes),
 	}
+	if escaped, err := json.Marshal(value); err == nil && len(escaped) >= 2 {
+		variants = append(variants, string(escaped[1:len(escaped)-1]))
+	}
+	return variants
 }
 
 func redactWriteResultString(value string, secrets []string) string {
 	for _, secret := range secrets {
-		if value == secret {
-			return "[masked]"
-		}
+		value = redactConcreteSecretText(value, secret)
 	}
 	return value
+}
+
+func redactConcreteSecretText(value, secret string) string {
+	return redactConcreteSecretTextWithBoundary(value, secret, providerOutputTokenBoundary)
+}
+
+func redactConcreteSecretTextWithBoundary(value, secret string, boundary func(string, int, int) bool) string {
+	if secret == "" {
+		return value
+	}
+	var out strings.Builder
+	for offset := 0; ; {
+		index := strings.Index(value[offset:], secret)
+		if index < 0 {
+			out.WriteString(value[offset:])
+			return out.String()
+		}
+		start := offset + index
+		end := start + len(secret)
+		out.WriteString(value[offset:start])
+		if boundary(value, start, end) {
+			out.WriteString("[masked]")
+		} else {
+			out.WriteString(secret)
+		}
+		offset = end
+	}
+}
+
+func providerOutputTokenBoundary(value string, start, end int) bool {
+	return (start == 0 || !isProviderOutputTokenByte(value[start-1])) &&
+		(end == len(value) || !isProviderOutputTokenByte(value[end]))
+}
+
+func providerResponseTokenBoundary(value string, start, end int) bool {
+	return providerResponseTokenBoundaryBefore(value, start) && providerResponseTokenBoundaryAfter(value, end)
+}
+
+func providerResponseTokenBoundaryBefore(value string, start int) bool {
+	if start == 0 {
+		return true
+	}
+	if decoded, ok := providerResponseEscapedRuneBefore(value, start); ok {
+		return !isProviderResponseTokenRune(decoded)
+	}
+	return !isProviderOutputTokenByte(value[start-1])
+}
+
+func providerResponseTokenBoundaryAfter(value string, end int) bool {
+	if end == len(value) {
+		return true
+	}
+	if decoded, ok := providerResponseEscapedRuneAfter(value, end); ok {
+		return !isProviderResponseTokenRune(decoded)
+	}
+	return !isProviderOutputTokenByte(value[end])
+}
+
+func providerResponseEscapedRuneBefore(value string, end int) (rune, bool) {
+	start := end - 6
+	if start < 0 || value[start] != '\\' || value[start+1] != 'u' || providerResponseEscapedBackslash(value, start) {
+		return 0, false
+	}
+	return providerResponseJSONHexRune(value[start+2 : end])
+}
+
+func providerResponseEscapedRuneAfter(value string, start int) (rune, bool) {
+	end := start + 6
+	if end > len(value) || value[start] != '\\' || value[start+1] != 'u' || providerResponseEscapedBackslash(value, start) {
+		return 0, false
+	}
+	return providerResponseJSONHexRune(value[start+2 : end])
+}
+
+func providerResponseEscapedBackslash(value string, slash int) bool {
+	count := 0
+	for offset := slash; offset >= 0 && value[offset] == '\\'; offset-- {
+		count++
+	}
+	return count%2 == 0
+}
+
+func isProviderResponseTokenRune(value rune) bool {
+	return value < utf8.RuneSelf && isProviderOutputTokenByte(byte(value))
+}
+
+func isProviderOutputTokenByte(value byte) bool {
+	return value >= 'a' && value <= 'z' || value >= 'A' && value <= 'Z' || value >= '0' && value <= '9' ||
+		value == '_' || value == '-' || value == '.' || value == '~' || value == '%'
 }
 
 type QueryRequest struct {

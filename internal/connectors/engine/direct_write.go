@@ -229,7 +229,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if responseBodyErr != nil {
 			return operationDirectWritePostResponseError(prepared.op.ID, responseBodyErr, response, prepared.identity)
 		}
-		responseHeaders, headerErr := operationResponseHeaders(b, prepared.op, response.Header)
+		responseHeaders, headerErr := operationResponseHeaders(b, prepared.op, response.Header, prepared.cfg.Secrets)
 		if headerErr != nil {
 			return headerErr
 		}
@@ -1615,7 +1615,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			return preparedOperationDirectWrite{}, err
 		}
 	}
-	baseURL, err := operationDirectWriteBaseURL(b, cfg, identity)
+	baseURL, err := operationDirectWriteBaseURL(b, cfg, op, identity)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -1747,7 +1747,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	baseURL, err := operationDirectWriteBaseURL(b, cfg, identity)
+	baseURL, err := operationDirectWriteBaseURL(b, cfg, op, identity)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -1833,6 +1833,9 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 		if op.REST == nil {
 			return OperationSpec{}, "", fmt.Errorf("operation direct write rest_write operation has no REST declaration")
 		}
+		if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.REST.Path, op.SourceURL); err != nil {
+			return OperationSpec{}, "", err
+		}
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 		if !isOperationDirectWriteMethod(method) {
 			return OperationSpec{}, "", fmt.Errorf("operation direct write requires POST, PUT, PATCH, or DELETE, got %s", method)
@@ -1862,6 +1865,12 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 		}
 		return op, method, nil
 	case "graphql_mutation":
+		if op.GraphQL == nil {
+			return OperationSpec{}, "", fmt.Errorf("operation direct write graphql_mutation operation has no GraphQL declaration")
+		}
+		if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.GraphQL.Path, op.SourceURL); err != nil {
+			return OperationSpec{}, "", err
+		}
 		if err := validateGraphQLOperationDirectContract(op, "mutation"); err != nil {
 			return OperationSpec{}, "", err
 		}
@@ -2259,7 +2268,10 @@ func operationDirectWriteIdentity(b Bundle, op OperationSpec, method string) str
 	return fmt.Sprintf("connector %q operation %q %s %s", b.Name, op.ID, strings.ToUpper(method), path)
 }
 
-func operationDirectWriteBaseURL(b Bundle, cfg connectors.RuntimeConfig, identity string) (string, error) {
+func operationDirectWriteBaseURL(b Bundle, cfg connectors.RuntimeConfig, op OperationSpec, identity string) (string, error) {
+	if strings.TrimSpace(op.Route) != "" {
+		return resolveOperationRoute(b, cfg, op.Route, op.ID, operationRoutePath(op), op.SourceURL)
+	}
 	if err := validateOperationDirectWriteBaseURLTemplate(b.HTTP.URL); err != nil {
 		return "", operationDirectWriteInterpolationError(identity, "base URL", b.HTTP.URL)
 	}

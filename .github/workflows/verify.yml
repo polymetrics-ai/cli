@@ -69,6 +69,41 @@ jobs:
       - name: Check generated files
         run: git diff --exit-code
 
+  # Hermetic GitHub fixture proofs start fresh pm binaries, including the
+  # exhaustive 97 generated candidates and the released read surface. They
+  # are intentionally isolated from `make verify`'s shared internal/cli
+  # deadline; every behavioral assertion remains mandatory in this 45-minute
+  # job while the ordinary Verify job keeps its fixed 20-minute package budget.
+  github-generated-direct-read-fixture:
+    name: github-generated-direct-read-fixture
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.26.6'
+          cache: false
+
+      # Shared admission is part of the small certification proof. This job
+      # owns its disposable Redis-compatible coordinator rather than relying on
+      # an ambient service supplied by a runner.
+      - name: Provision local shared-admission fixture
+        run: |
+          if ! command -v redis-server >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install --yes redis-server
+          fi
+          redis-server --version
+
+      - name: Exhaustive hermetic GitHub fresh-binary fixtures
+        run: >-
+          go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli
+          -run '^(TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'
+
   # pm embeds DuckDB, so every release target must actually link cgo against
   # go-duckdb's bundled library. That is verifiable only on a native runner:
   # cross-compiling cgo to Windows or macOS from Linux needs a toolchain CI does

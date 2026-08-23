@@ -16,6 +16,8 @@ var errTransportStreamStateConflict = errors.New("transport stream state changed
 
 var errTransportStreamWorkInProgress = errors.New("transport stream work is already owned by another process")
 var errTransportStreamWorkFenceLost = errors.New("transport stream work fence was lost before I/O")
+var errTransportStreamReconciliationPending = errors.New("transport stream reconciliation is pending before I/O")
+var errTransportStreamAdmissionStale = errors.New("transport stream admission changed before I/O")
 
 func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	_, sourceDeclared := connectors.SyncTransportDescriptorOf(source)
@@ -210,7 +212,7 @@ func validateClosedTransportBatchSize(source, destination connectors.Connector, 
 // action. Real durable warehouse/apply adapters remain separate foundations;
 // this seam therefore fails closed unless a stage and externally verified
 // transports are registered.
-func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval, rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope) (etlExecutionResult, error) {
+func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, admissionFence int64, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval, rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope) (etlExecutionResult, error) {
 	emptyResult := etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}
 	if a.transports == nil {
 		return emptyResult, fmt.Errorf("closed transport registry is unavailable")
@@ -260,7 +262,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	if rateParkingResumeCheckpoint != nil && !transportCheckpointEqual(prior.Checkpoint, rateParkingResumeCheckpoint) {
 		return emptyResult, errors.New("rate-limit resume checkpoint changed")
 	}
-	workLease, err := a.claimTransportWorkLease(ctx, stateKey, conn.Name, streamName, runID, sourceExpectation, mode.IsOverwrite())
+	workLease, err := a.claimTransportWorkLease(ctx, stateKey, conn.Name, streamName, runID, sourceExpectation, mode.IsOverwrite(), admissionFence)
 	if err != nil {
 		return emptyResult, err
 	}
@@ -283,6 +285,80 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 
 	var committed *synccontract.CheckpointEnvelope
+	var persistedEmptyPublication *Run
+	var persistedEmptyPublicationResult etlExecutionResult
+	pendingEmptyPublicationResult := func(transportResult synctransport.Result) (etlExecutionResult, error) {
+		if transportResult.EmptyPublicationReadBackPending == nil {
+			return etlExecutionResult{}, errors.New("closed transport returned no empty publication read-back receipt")
+		}
+		receipt := transportResult.EmptyPublicationReadBackPending.Clone()
+		if err := receipt.Validate(); err != nil {
+			return etlExecutionResult{}, fmt.Errorf("closed transport returned an invalid empty publication read-back receipt: %w", err)
+		}
+		if receipt.Witness.Sink != destination.Name() {
+			return etlExecutionResult{}, fmt.Errorf("closed transport empty publication read-back sink %q does not match destination %q", receipt.Witness.Sink, destination.Name())
+		}
+		updated := workLease.stateForTerminalRun()
+		updated.Connection = conn.Name
+		updated.Stream = streamName
+		updated.GenerationID = generationID
+		updated.UpdatedAt = receipt.Witness.AcknowledgedAt
+		deliveryReconciliation := &DeliveryReconciliation{
+			State:                           ETLRunStatusDeliveredReconciliationRequired,
+			EmptyPublicationReadBackPending: &receipt,
+		}
+		if requiresManagedTargetApproval {
+			deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+		}
+		if requiresDefinitionOwnedApproval {
+			deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+		}
+		result := etlExecutionResult{
+			TransportPhaseMeasurement: transportPhaseMeasurement(transportResult),
+			DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+			DeliveryReconciliation:    deliveryReconciliation,
+			PendingStreamState:        &pendingStreamState{Key: stateKey, State: updated},
+		}
+		result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+		return result, nil
+	}
+	emptyPublicationResult := func(transportResult synctransport.Result) (etlExecutionResult, error) {
+		if transportResult.EmptyPublication == nil {
+			return etlExecutionResult{}, errors.New("closed transport returned no empty publication witness")
+		}
+		witness := *transportResult.EmptyPublication
+		if err := witness.Validate(); err != nil {
+			return etlExecutionResult{}, fmt.Errorf("closed transport returned an invalid empty publication witness: %w", err)
+		}
+		if witness.Sink != destination.Name() {
+			return etlExecutionResult{}, fmt.Errorf("closed transport empty publication sink %q does not match destination %q", witness.Sink, destination.Name())
+		}
+		updated := workLease.stateForTerminalRun()
+		updated.Connection = conn.Name
+		updated.Stream = streamName
+		updated.GenerationID = generationID
+		updated.LastSuccessfulRunID = runID
+		updated.RecordsLoaded = 0
+		updated.UpdatedAt = witness.AcknowledgedAt
+		deliveryReconciliation := &DeliveryReconciliation{
+			State:            ETLRunStatusDeliveredReconciliationRequired,
+			EmptyPublication: &witness,
+		}
+		if requiresManagedTargetApproval {
+			deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+		}
+		if requiresDefinitionOwnedApproval {
+			deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+		}
+		result := etlExecutionResult{
+			TransportPhaseMeasurement: transportPhaseMeasurement(transportResult),
+			DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+			DeliveryReconciliation:    deliveryReconciliation,
+			PendingStreamState:        &pendingStreamState{Key: stateKey, State: updated},
+		}
+		result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+		return result, nil
+	}
 	persistAcknowledgedWorksets := func(checkpoint synccontract.CheckpointEnvelope, receipts []synctransport.WarehouseReceipt) error {
 		interim := checkpoint.Clone()
 		if interim.CommittedAt == nil {
@@ -335,6 +411,54 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		Approval:                  approval,
 		Stage:                     a.transportStage,
 		SourceAdmission:           workLease.renew,
+		ReadBackAdmission:         workLease.renew,
+		EmptyPublicationReadBackPendingHandoff: func(handoffCtx context.Context, transportResult synctransport.Result) error {
+			persistCtx, cancel := context.WithTimeout(context.WithoutCancel(handoffCtx), transportWorkLeaseDuration)
+			defer cancel()
+			result, err := pendingEmptyPublicationResult(transportResult)
+			if err != nil {
+				return err
+			}
+			fenced, persistErr := a.persistPendingEmptyPublicationReadBackWithWorkLease(persistCtx, workLease, runID, result)
+			if persistErr != nil && fenced.ID == "" && !stateStoreCommitMayHaveSucceeded(persistErr) && !errors.Is(persistErr, errStateRevisionConflict) {
+				fenced, persistErr = a.persistPendingEmptyPublicationReadBackWithWorkLease(persistCtx, workLease, runID, result)
+			}
+			if fenced.ID != "" {
+				stored := fenced
+				result.persistedDeliveryReconciliation = &stored
+				persistedEmptyPublication = &stored
+				persistedEmptyPublicationResult = result
+			}
+			if persistErr != nil {
+				return synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite read-back receipt: %w", persistErr))
+			}
+			return nil
+		},
+		EmptyPublicationHandoff: func(handoffCtx context.Context, transportResult synctransport.Result) error {
+			persistCtx, cancel := context.WithTimeout(context.WithoutCancel(handoffCtx), transportWorkLeaseDuration)
+			defer cancel()
+			if err := workLease.renew(persistCtx); err != nil {
+				return fmt.Errorf("renew empty full-overwrite work lease after read-back: %w", err)
+			}
+			result, err := emptyPublicationResult(transportResult)
+			if err != nil {
+				return err
+			}
+			fenced, persistErr := a.persistDeliveredReconciliationRunWithWorkLease(persistCtx, workLease, runID, result)
+			if persistErr != nil && fenced.ID == "" && !stateStoreCommitMayHaveSucceeded(persistErr) && !errors.Is(persistErr, errStateRevisionConflict) {
+				fenced, persistErr = a.persistDeliveredReconciliationRunWithWorkLease(persistCtx, workLease, runID, result)
+			}
+			if fenced.ID != "" {
+				stored := fenced
+				result.persistedDeliveryReconciliation = &stored
+				persistedEmptyPublication = &stored
+				persistedEmptyPublicationResult = result
+			}
+			if persistErr != nil {
+				return synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", persistErr))
+			}
+			return nil
+		},
 		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
 			return persistAcknowledgedWorksets(checkpoint, nil)
 		},
@@ -345,8 +469,49 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		err = sanitizeRuntimeError(err, sourceRuntime, destRuntime)
 	}
 	transportMeasurement := transportPhaseMeasurement(transportResult)
+	if persistedEmptyPublication != nil {
+		persistedEmptyPublicationResult.TransportPhaseMeasurement = transportMeasurement
+		if err != nil {
+			return persistedEmptyPublicationResult, err
+		}
+		if persistedEmptyPublication.DeliveryReconciliation != nil && persistedEmptyPublication.DeliveryReconciliation.EmptyPublicationReadBackPending != nil {
+			return persistedEmptyPublicationResult, synctransport.NewDeliveredReconciliationRequiredError(errors.New("empty full-overwrite read-back remains pending"))
+		}
+		return persistedEmptyPublicationResult, nil
+	}
+	if mode.IsOverwrite() && transportResult.EmptyPublicationReadBackPending != nil {
+		result, resultErr := pendingEmptyPublicationResult(transportResult)
+		if resultErr != nil {
+			return emptyResult, errors.Join(err, resultErr)
+		}
+		persistCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), transportWorkLeaseDuration)
+		defer cancel()
+		fenced, persistErr := a.persistPendingEmptyPublicationReadBackWithWorkLease(persistCtx, workLease, runID, result)
+		if persistErr != nil && fenced.ID == "" && !stateStoreCommitMayHaveSucceeded(persistErr) && !errors.Is(persistErr, errStateRevisionConflict) {
+			fenced, persistErr = a.persistPendingEmptyPublicationReadBackWithWorkLease(persistCtx, workLease, runID, result)
+		}
+		if fenced.ID != "" {
+			stored := fenced
+			result.persistedDeliveryReconciliation = &stored
+			if persistErr != nil {
+				return result, errors.Join(err, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite read-back receipt: %w", persistErr)))
+			}
+			return result, errors.Join(err, synctransport.NewDeliveredReconciliationRequiredError(errors.New("empty full-overwrite read-back remains pending")))
+		}
+		if persistErr != nil {
+			return result, errors.Join(err, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite read-back receipt: %w", persistErr)))
+		}
+		return result, errors.Join(err, synctransport.NewDeliveredReconciliationRequiredError(errors.New("empty full-overwrite read-back remains pending")))
+	}
 	if committed == nil || committed.CommittedAt == nil {
 		if err != nil {
+			if mode.IsOverwrite() && transportResult.EmptyPublication != nil {
+				result, resultErr := emptyPublicationResult(transportResult)
+				if resultErr != nil {
+					return emptyResult, errors.Join(err, resultErr)
+				}
+				return result, err
+			}
 			result := etlExecutionResult{
 				RecordsRead: transportResult.RecordsRead, RecordsLoaded: transportResult.RecordsApplied,
 				BatchCount: transportResult.Pages, TransportPhaseMeasurement: transportMeasurement,
@@ -368,6 +533,68 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			return result, err
 		}
 		if transportResult.Pages == 0 && transportResult.RecordsRead == 0 && transportResult.RecordsApplied == 0 {
+			if mode.IsOverwrite() && transportResult.EmptyPublication != nil {
+				witness := *transportResult.EmptyPublication
+				if err := witness.Validate(); err != nil {
+					return emptyResult, fmt.Errorf("closed transport returned an invalid empty publication witness: %w", err)
+				}
+				if witness.Sink != destination.Name() {
+					return emptyResult, fmt.Errorf("closed transport empty publication sink %q does not match destination %q", witness.Sink, destination.Name())
+				}
+				updated := workLease.stateForTerminalRun()
+				updated.Connection = conn.Name
+				updated.Stream = streamName
+				updated.GenerationID = generationID
+				updated.LastSuccessfulRunID = runID
+				updated.RecordsLoaded = 0
+				updated.UpdatedAt = witness.AcknowledgedAt
+				deliveryReconciliation := &DeliveryReconciliation{
+					State:            ETLRunStatusDeliveredReconciliationRequired,
+					EmptyPublication: &witness,
+				}
+				if requiresManagedTargetApproval {
+					deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+				}
+				if requiresDefinitionOwnedApproval {
+					deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+				}
+				result := etlExecutionResult{
+					TransportPhaseMeasurement: transportMeasurement,
+					DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+					DeliveryReconciliation:    deliveryReconciliation,
+					PendingStreamState:        &pendingStreamState{Key: stateKey, State: updated},
+				}
+				result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+				// A marker records only that the exact declaration-owned approval
+				// was consumed. The externally visible empty replacement, read-back
+				// receipt, and terminal state were already sealed above, so a marker
+				// failure must persist reconciliation rather than abandon and replay.
+				if requiresManagedTargetApproval {
+					if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
+						return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark PostgreSQL managed target plan executed: %w", err))
+					}
+				}
+				if requiresDefinitionOwnedApproval {
+					if err := a.markDeclarativeTypedDestinationPlanExecuted(approval.PlanID); err != nil {
+						return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark declarative typed destination plan executed: %w", err))
+					}
+				}
+				return result, nil
+			}
+			if mode.IsOverwrite() {
+				// A full-overwrite that made no provider-visible publication cannot
+				// be presented as a successful empty replacement. The only allowed
+				// zero-result success is the sealed witness minted after publish and
+				// read-back above.
+				completionErr := fmt.Errorf("closed transport completed empty full-overwrite without a durable publication witness")
+				if releaseErr := workLease.abandonUncommitted(ctx); releaseErr != nil {
+					if errors.Is(releaseErr, errTransportStreamWorkFenceLost) {
+						releaseErr = fmt.Errorf("%w: %w", errTransportStreamStateConflict, releaseErr)
+					}
+					return emptyResult, errors.Join(completionErr, releaseErr)
+				}
+				return emptyResult, completionErr
+			}
 			if requiresManagedTargetApproval {
 				if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
 					return emptyResult, err
@@ -563,6 +790,7 @@ func transportCheckpointEqual(left, right *synccontract.CheckpointEnvelope) bool
 		left.Mechanism != right.Mechanism ||
 		!transportSnapshotBarrierEqual(left.SnapshotBarrier, right.SnapshotBarrier) ||
 		!transportCheckpointPositionEqual(left.Position, right.Position) ||
+		!synccontract.ContinuationEqual(left.Continuation, right.Continuation) ||
 		!transportOptionalBoolEqual(left.PositionObserved, right.PositionObserved) ||
 		!transportOpaqueTokenEqual(left.SourceGeneration, right.SourceGeneration) ||
 		left.SchemaVersion != right.SchemaVersion ||

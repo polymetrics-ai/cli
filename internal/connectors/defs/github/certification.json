@@ -4496,6 +4496,13 @@
           "default": "polymetrics-cert"
         },
         {
+          "literal": "--enterprise-team"
+        },
+        {
+          "config_key": "enterprise-team",
+          "default": "pm-cert-generated-read"
+        },
+        {
           "literal": "--username"
         },
         {
@@ -4543,6 +4550,13 @@
           "default": "polymetrics-cert"
         },
         {
+          "literal": "--enterprise-team"
+        },
+        {
+          "config_key": "enterprise-team",
+          "default": "pm-cert-generated-read"
+        },
+        {
           "literal": "--json"
         }
       ],
@@ -4581,6 +4595,13 @@
         {
           "config_key": "enterprise",
           "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--enterprise-team"
+        },
+        {
+          "config_key": "enterprise-team",
+          "default": "pm-cert-generated-read"
         },
         {
           "literal": "--org"
@@ -4628,6 +4649,13 @@
         {
           "config_key": "enterprise",
           "default": "polymetrics-cert"
+        },
+        {
+          "literal": "--enterprise-team"
+        },
+        {
+          "config_key": "enterprise-team",
+          "default": "pm-cert-generated-read"
         },
         {
           "literal": "--json"
@@ -5056,6 +5084,7 @@
       "day": "2026-08-16",
       "devcontainer-path": ".devcontainer/devcontainer.json",
       "enterprise": "polymetrics-cert",
+      "enterprise-team": "pm-cert-generated-read",
       "export-id": "pm-cert-generated-read",
       "language": "javascript",
       "org": "Polymetrics-Cert",
