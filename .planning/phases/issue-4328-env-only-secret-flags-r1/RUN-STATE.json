@@ -1,7 +1,7 @@
 {
   "issue": 4328,
   "phase": "issue-4328-env-only-secret-flags-r1",
-  "status": "pr_open",
+  "status": "base_reconciled_pending_push",
   "base_branch": "main",
   "working_branch": "fm/cli-env-only-secret-flag-generalization-r1",
   "delivery_mode": "direct_pr",

@@ -34,3 +34,10 @@
 - Refactor verification: source projection preserves only its existing bare-string behavior while adding the declaration-owned secret marker; `go run ./cmd/connectorgen surface-sync --check` reported `552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)`.
 - Generated artifacts: `./pm docs generate --dir docs/cli`, `./pm skills generate --dir docs/skills`, and `go run ./cmd/connectorgen certification-subject` refreshed exactly the HubSpot manual/skill surfaces and certification subject that derive from the corrected flags.
 - Full Green: `make verify` exited `0`, including the complete `go test -timeout 20m ./...`, docs validation, smoke, `golangci-lint` (`0 issues`), validation, surface synchronization, GitHub parity artifacts, certification subject/matrix/candidates/sweep, connector boundary, connector canon, release tooling, and installed GitHub certification archive proof.
+
+### 2026-08-23 — PR #4334 base reconciliation
+
+- Reason: after the PR opened, `main` advanced to `e338cd301` through #4327. The website generated-data gate therefore compared this branch's pre-merge output with the new bundle corpus.
+- Green: merged `origin/main` with `git merge --no-edit origin/main` (merge commit, no rebase), then ran `cd website && pnpm run gen:website-data`. The repository generator refreshed the two derived catalog payloads; no file was hand-edited.
+- Post-merge regression: `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract|TestValidate_CLISurfaceEnvOnlyFlagAcceptsDeclaredRESTSecretRegardlessOfFlagShape|TestValidate_RealGitHubSecretCommandRequiresEnvOnly|TestValidate_RealHubSpotRequestSecretsRequireEnvOnly|TestSourceProjectionMarksDeclaredCircleCIWebhookSecretsEnvOnly)$'` exited `0` (`ok polymetrics.ai/cmd/connectorgen 1.681s`).
+- Rebuild: `GOFLAGS=-p=3 go build ./cmd/pm` exited `0`.
