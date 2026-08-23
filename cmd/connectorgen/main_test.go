@@ -644,21 +644,21 @@ func TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract(t *
 		}},
 	}
 	operations := map[string]engine.OperationSpec{op.ID: op}
-	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations); len(findings) != 0 {
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations, nil); len(findings) != 0 {
 		t.Fatalf("declared secret GraphQL env_only contract findings = %+v, want none", findings)
 	}
 
 	command.Flags[0].EnvOnly = false
-	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations); len(findings) != 0 {
-		t.Fatalf("ordinary typed input should not require env_only findings = %+v", findings)
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations, nil); len(findings) != 1 || !strings.Contains(findings[0].Message, "must set env_only") {
+		t.Fatalf("declared secret input without env_only findings = %+v, want one", findings)
 	}
 
 	command.Flags[0].EnvOnly = true
 	op.SensitivePolicy.InputMode = "inline"
 	operations[op.ID] = op
-	findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations)
-	if len(findings) != 1 || !strings.Contains(findings[0].Message, "secret GraphQL mutation") {
-		t.Fatalf("env_only without environment redaction contract findings = %+v, want one closed-surface rejection", findings)
+	findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations, nil)
+	if len(findings) != 0 {
+		t.Fatalf("declared secret env_only findings = %+v, want none", findings)
 	}
 
 	query := engine.OperationSpec{
@@ -683,13 +683,127 @@ func TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract(t *
 			Name: "invitation-token", Type: "string", MapsTo: "body.invitationToken", EnvOnly: true,
 		}},
 	}
-	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}); len(findings) != 0 {
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}, nil); len(findings) != 0 {
 		t.Fatalf("source-declared GraphQL query env_only contract findings = %+v, want none", findings)
 	}
 	query.SensitivePolicy = nil
-	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}); len(findings) != 1 || !strings.Contains(findings[0].Message, "source-declared scalar GraphQL query") {
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}, nil); len(findings) != 1 || !strings.Contains(findings[0].Message, "declaration-owned secret") {
 		t.Fatalf("query env_only without declared policy findings = %+v, want closed-surface rejection", findings)
 	}
+}
+
+func TestValidate_CLISurfaceEnvOnlyFlagAcceptsDeclaredRESTSecretRegardlessOfFlagShape(t *testing.T) {
+	operation := engine.OperationSpec{
+		ID:   "circleci.webhooks.create",
+		Kind: "rest_write",
+		REST: &engine.RESTOperationSpec{
+			BodySchema: json.RawMessage(`{
+				"type":"object","properties":{
+					"webhook":{"type":"object","properties":{"signing_secret":{"type":"string","x-secret":true}}},
+					"name":{"type":"string"}
+				}
+			}`),
+		},
+	}
+	command := engine.CLICommand{
+		Path:         "webhooks create",
+		Intent:       "direct_write",
+		Availability: "implemented",
+		Operation:    operation.ID,
+		Flags: []engine.CLIFlag{{
+			Name: "signing-secret", Type: "string", MapsTo: "body.webhook.signing_secret", EnvOnly: true,
+		}},
+	}
+
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "circleci"}, 0, command, map[string]engine.OperationSpec{operation.ID: operation}, nil); len(findings) != 0 {
+		t.Fatalf("declared CircleCI REST signing-secret env_only findings = %+v, want none", findings)
+	}
+	nonSecret := command
+	nonSecret.Flags = []engine.CLIFlag{{Name: "name", Type: "string", MapsTo: "body.name"}}
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "circleci"}, 0, nonSecret, map[string]engine.OperationSpec{operation.ID: operation}, nil); len(findings) != 0 {
+		t.Fatalf("ordinary CircleCI REST name findings = %+v, want none", findings)
+	}
+}
+
+func TestValidate_RealGitHubSecretCommandRequiresEnvOnly(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS(filepath.Join("..", "..", "internal", "connectors", "defs")), "github")
+	if err != nil {
+		t.Fatalf("load real GitHub definition: %v", err)
+	}
+	found := false
+	for commandIndex := range bundle.CLISurface.Commands {
+		command := &bundle.CLISurface.Commands[commandIndex]
+		if command.Path != "graphql mutation start-organization-migration" {
+			continue
+		}
+		for flagIndex := range command.Flags {
+			if command.Flags[flagIndex].Name == "input" {
+				command.Flags[flagIndex].EnvOnly = false
+				found = true
+			}
+		}
+	}
+	if !found {
+		t.Fatal("real GitHub secret command input flag was not found")
+	}
+	for _, finding := range checkCLISurface(bundle) {
+		if finding.Connector == "github" && finding.Rule == ruleCLISurfaceSafety && strings.Contains(finding.Message, "must set env_only") {
+			return
+		}
+	}
+	t.Fatal("real GitHub secret command without env_only did not produce a validation finding")
+}
+
+func TestValidate_RealHubSpotRequestSecretsRequireEnvOnly(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS(filepath.Join("..", "..", "internal", "connectors", "defs")), "hubspot")
+	if err != nil {
+		t.Fatalf("load real HubSpot definition: %v", err)
+	}
+	want := map[string]map[string]bool{
+		"reverse delete-oauth-v1-refresh-tokens-token-archive": {"token": true},
+		"reverse post-oauth-v1-token-create":                   {"client-secret": true, "refresh-token": true},
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		flags, relevant := want[command.Path]
+		if !relevant {
+			continue
+		}
+		for _, flag := range command.Flags {
+			if flags[flag.Name] && !flag.EnvOnly {
+				t.Fatalf("real HubSpot %s --%s env_only = false, want true", command.Path, flag.Name)
+			}
+		}
+		for name := range flags {
+			found := false
+			for _, flag := range command.Flags {
+				if flag.Name == name {
+					found = true
+					break
+				}
+			}
+			if !found {
+				t.Fatalf("real HubSpot %s --%s flag was not found", command.Path, name)
+			}
+		}
+	}
+
+	for commandIndex := range bundle.CLISurface.Commands {
+		command := &bundle.CLISurface.Commands[commandIndex]
+		if command.Path != "reverse post-oauth-v1-token-create" {
+			continue
+		}
+		for flagIndex := range command.Flags {
+			if command.Flags[flagIndex].Name == "client-secret" {
+				command.Flags[flagIndex].EnvOnly = false
+			}
+		}
+	}
+	for _, finding := range checkCLISurface(bundle) {
+		if finding.Connector == "hubspot" && finding.Rule == ruleCLISurfaceSafety && strings.Contains(finding.Message, "--client-secret must set env_only") {
+			return
+		}
+	}
+	t.Fatal("real HubSpot secret request flag without env_only did not produce a validation finding")
 }
 
 func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
