@@ -128,65 +128,31 @@ func TestOperationReadAndStructuredWriteSafetyContracts(t *testing.T) {
 	}
 }
 
-// TestTypedDestinationDeclaration pins the one reversible CRM projection that
-// the closed declarative typed-destination adapter can execute. All Twenty
-// operations remain CLI-reachable; deletes deliberately stay outside this
-// no-tombstone transport and retain their typed destructive CLI contract.
-func TestTypedDestinationDeclaration(t *testing.T) {
+// TestTypedDestinationDeclarationRequiresPublishedIdempotencyProof prevents a
+// connector-local declaration from registering the generic typed destination
+// when the provider has not documented an independent idempotency header.
+// Twenty's ordinary typed CLI commands remain implemented; this only keeps an
+// unprovable application transport from breaking App construction globally.
+func TestTypedDestinationDeclarationRequiresPublishedIdempotencyProof(t *testing.T) {
 	bundle, err := engine.Load(os.DirFS(".."), twentyBundleName)
 	if err != nil {
 		t.Fatalf("load %s bundle: %v", twentyBundleName, err)
 	}
-	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil || bundle.SyncTransport.Destination == nil {
-		t.Fatalf("SyncTransport = %#v, want declared source and typed destination", bundle.SyncTransport)
+	if bundle.SyncTransport != nil {
+		t.Fatalf("SyncTransport = %#v, want absent without published provider idempotency proof", bundle.SyncTransport)
 	}
-
-	source := bundle.SyncTransport.Source
-	if source.Executor.Family != "declarative_api" || source.Executor.ID != "declarative_stream_source" {
-		t.Fatalf("source executor = %#v, want declarative stream source", source.Executor)
-	}
-	if got, want := len(source.EligibleStreams), len(bundle.Streams); got != want {
-		t.Fatalf("source eligible streams = %d, want every %d Twenty stream", got, want)
-	}
-	seenStreams := make(map[string]bool, len(source.EligibleStreams))
-	for _, stream := range source.EligibleStreams {
-		if seenStreams[stream] {
-			t.Fatalf("source eligible streams repeats %q", stream)
-		}
-		seenStreams[stream] = true
-	}
-	for _, stream := range bundle.Streams {
-		if !seenStreams[stream.Name] {
-			t.Errorf("source transport omits executable stream %q", stream.Name)
-		}
-	}
-
-	destination := bundle.SyncTransport.Destination
-	if destination.Executor.Family != "declarative_api" || destination.Executor.ID != "declarative_typed_destination" {
-		t.Fatalf("destination executor = %#v, want declarative typed destination", destination.Executor)
-	}
-	if destination.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
-		t.Fatalf("destination acknowledgement = %q, want durable warehouse", destination.Acknowledgement)
-	}
-	if destination.Delivery.Idempotency != connectors.DeliveryIdempotencyKeyed || destination.Delivery.Deletes != connectors.DeliveryDeletesUnavailable {
-		t.Fatalf("destination delivery = %#v, want keyed no-tombstone delivery", destination.Delivery)
-	}
-	if got := destination.EligibleActions; len(got) != 1 || got[0] != "create_companies" {
-		t.Fatalf("destination eligible actions = %#v, want only reversible create_companies", got)
-	}
-	if got := destination.ApplyStrategies; len(got) != 1 || got[0].Action != "create_companies" || string(got[0].Mode) != "full_append" || string(got[0].Strategy) != "append" {
-		t.Fatalf("destination apply strategies = %#v, want full_append create_companies", got)
-	}
-	if got := destination.SourceBindings; len(got) != 1 || len(got[0].EligibleStreams) != 1 || got[0].EligibleStreams[0] != "companies" {
-		t.Fatalf("destination source bindings = %#v, want only companies", got)
-	} else if got := got[0].RecordMapping; got.Kind != connectors.SourceRecordMappingKindInputFields || len(got.Inputs) != 1 || got.Inputs[0].Input != "name" || got.Inputs[0].Field != "name" {
-		t.Fatalf("destination record mapping = %#v, want closed name-to-name input mapping", got)
-	}
-
+	found := false
 	for _, action := range bundle.Writes {
-		if action.Name == "delete_companies" && action.Confirmation == nil {
-			t.Fatal("delete_companies must retain its destructive CLI confirmation outside the no-tombstone destination")
+		if action.Name != "create_companies" {
+			continue
 		}
+		found = true
+		if action.IdempotencyKeyHeader != "" {
+			t.Fatalf("create_companies idempotency header = %q, want no invented provider header", action.IdempotencyKeyHeader)
+		}
+	}
+	if !found {
+		t.Fatal("create_companies action is absent")
 	}
 }
 
@@ -271,7 +237,7 @@ func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
 		if strings.Contains(action.ReasonCode, "safety") || strings.Contains(action.ReasonCode, "privilege") || strings.Contains(action.ReasonCode, "destructive") {
 			t.Fatalf("%q reason code = %q, want semantic transport reason", action.Name, action.ReasonCode)
 		}
-		if action.Disposition == "eligible_pending_foundation_multiplicity" || action.Disposition == "bound" {
+		if action.Disposition == "eligible_pending_foundation_multiplicity" || action.Disposition == "provider_idempotency_contract_not_published" {
 			if action.Candidate == nil || action.Candidate.Mode != "full_append" || action.Candidate.Strategy != "append" || len(action.Candidate.InputFields) == 0 {
 				t.Fatalf("%q candidate = %#v, want a closed full_append input mapping", action.Name, action.Candidate)
 			}
@@ -335,11 +301,21 @@ func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
 	if got := len(entries); got != len(bundle.Writes) {
 		t.Fatalf("write eligibility entries = %d, want %d actions", got, len(bundle.Writes))
 	}
-	if got := counts["bound"]; got != 1 {
-		t.Fatalf("bound actions = %d, want one current destination proof", got)
+	companyCreate, found := entries["create_companies"]
+	if !found || companyCreate.Disposition != "provider_idempotency_contract_not_published" || companyCreate.ReasonCode != "provider_idempotency_header_not_documented" {
+		t.Fatalf("create_companies eligibility = %#v, want documented provider idempotency-contract gap", companyCreate)
+	}
+	if companyCreate.SourceTrace == nil || companyCreate.SourceTrace.URL != "https://docs.twenty.com/developers/extend/api" || companyCreate.SourceTrace.Method != "POST" || companyCreate.SourceTrace.Path != "/rest/companies" {
+		t.Fatalf("create_companies provider trace = %#v, want published POST /rest/companies", companyCreate.SourceTrace)
+	}
+	if got := counts["bound"]; got != 0 {
+		t.Fatalf("bound actions = %d, want no undeclared generic destination proof", got)
 	}
 	if got := counts["eligible_pending_foundation_multiplicity"]; got != 55 {
 		t.Fatalf("eligible pending actions = %d, want 55", got)
+	}
+	if got := counts["provider_idempotency_contract_not_published"]; got != 1 {
+		t.Fatalf("provider idempotency contract gaps = %d, want create_companies only", got)
 	}
 	if got := counts["semantic_array_envelope_incompatible"]; got != 28 {
 		t.Fatalf("array-envelope incompatibilities = %d, want 28", got)
@@ -347,91 +323,4 @@ func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
 	if got := counts["semantic_tombstone_incompatible"]; got != 28 {
 		t.Fatalf("tombstone incompatibilities = %d, want 28", got)
 	}
-}
-
-func TestPerActionSourceBindingFoundationHandoffWitness(t *testing.T) {
-	bundle, err := engine.Load(os.DirFS(".."), twentyBundleName)
-	if err != nil {
-		t.Fatalf("load %s bundle: %v", twentyBundleName, err)
-	}
-	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil || bundle.SyncTransport.Destination == nil {
-		t.Fatalf("SyncTransport = %#v, want source and destination", bundle.SyncTransport)
-	}
-
-	var ledger struct {
-		Actions []struct {
-			Name      string `json:"name"`
-			Candidate *struct {
-				InputFields []struct {
-					Input string `json:"input"`
-					Field string `json:"field"`
-				} `json:"input_fields"`
-			} `json:"candidate"`
-		} `json:"actions"`
-	}
-	raw, err := os.ReadFile("write_eligibility.json")
-	if err != nil {
-		t.Fatalf("read write eligibility ledger: %v", err)
-	}
-	if err := json.Unmarshal(raw, &ledger); err != nil {
-		t.Fatalf("decode write eligibility ledger: %v", err)
-	}
-	candidates := make(map[string][]connectors.SourceRecordInputBinding, 2)
-	for _, action := range ledger.Actions {
-		if action.Name != "create_companies" && action.Name != "update_companies" {
-			continue
-		}
-		if action.Candidate == nil {
-			t.Fatalf("%s has no candidate mapping", action.Name)
-		}
-		for _, input := range action.Candidate.InputFields {
-			candidates[action.Name] = append(candidates[action.Name], connectors.SourceRecordInputBinding{Input: input.Input, Field: input.Field})
-		}
-	}
-	if len(candidates["create_companies"]) != 1 || len(candidates["update_companies"]) != 2 {
-		t.Fatalf("company candidate mappings = %#v, want create(name) and update(id,name)", candidates)
-	}
-
-	destination := *bundle.SyncTransport.Destination
-	destination.EligibleActions = append([]string(nil), destination.EligibleActions...)
-	destination.ApplyStrategies = append([]connectors.DestinationApplyStrategy(nil), destination.ApplyStrategies...)
-	destination.EligibleActions = append(destination.EligibleActions, "update_companies")
-	destination.ApplyStrategies = append(destination.ApplyStrategies, connectors.DestinationApplyStrategy{
-		Mode:     destination.ApplyStrategies[0].Mode,
-		Strategy: destination.ApplyStrategies[0].Strategy,
-		Action:   "update_companies",
-	})
-
-	if err := destination.Validate(); err != nil {
-		t.Fatalf("happy multi-action destination declaration = %v, want accepted", err)
-	}
-	if resolved, err := destination.ApplyStrategyForAction(destination.ApplyStrategies[0].Mode, "update_companies"); err != nil || resolved.Action != "update_companies" {
-		t.Fatalf("happy persisted update selection = %#v, %v; want update_companies", resolved, err)
-	}
-	if _, err := bundle.SyncTransport.Destination.ApplyStrategyForAction(destination.ApplyStrategies[0].Mode, "update_companies"); err == nil {
-		t.Fatal("edge undeclared update action unexpectedly resolved from the current declaration")
-	}
-
-	binding, found := destination.SourceBindingFor(bundle.SyncTransport.Source.Executor, "companies")
-	if !found {
-		t.Fatal("source binding for declarative companies stream is absent")
-	}
-	if !sourceInputsMatch(binding.RecordMapping.Inputs, candidates["create_companies"]) {
-		t.Fatalf("create mapping = %#v, want %#v", binding.RecordMapping.Inputs, candidates["create_companies"])
-	}
-	if sourceInputsMatch(binding.RecordMapping.Inputs, candidates["update_companies"]) {
-		t.Fatalf("shared source binding unexpectedly satisfied update mapping %#v", candidates["update_companies"])
-	}
-}
-
-func sourceInputsMatch(got, want []connectors.SourceRecordInputBinding) bool {
-	if len(got) != len(want) {
-		return false
-	}
-	for index := range got {
-		if got[index] != want[index] {
-			return false
-		}
-	}
-	return true
 }

@@ -83,3 +83,8 @@ than a duplicate, raw parallel command surface for the same REST CRUD operations
   validation, or fixture conformance.
 - Destructive delete actions are declarative only until a user follows reverse ETL plan, preview,
   approval, and execute.
+- The provider source used by this bundle does not document an idempotency-key
+  header for `POST /rest/companies`. Twenty therefore does not declare the
+  generic typed-destination application transport: doing so would invent a
+  retry/delivery guarantee. This does not alter the implemented, approval-gated
+  direct typed command.

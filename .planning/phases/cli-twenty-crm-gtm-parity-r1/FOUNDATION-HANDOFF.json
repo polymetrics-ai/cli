@@ -2,21 +2,17 @@
   "schema_version": 1,
   "connector": "twenty",
   "issue": 277,
-  "handoff_status": "blocked_shared_foundation",
+  "handoff_status": "superseded_provider_idempotency_contract_not_published",
   "local_checkpoint": "7059fe85ad09bdcf17f262375ebe20c4036a53fa",
   "acceptance_criteria": "unchanged",
   "source_traces": {
     "write_eligibility": {
       "path": "internal/connectors/defs/twenty/write_eligibility.json",
-      "sha256": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1"
+      "sha256": "10185f600abb5e7bb7906a02f65d655cef0df52e553e46908cdc2baf38a7406d"
     },
     "writes": {
       "path": "internal/connectors/defs/twenty/writes.json",
       "sha256": "5188fe0dea80e93471b476e91c75a33e2b6ca7fc8c9835144b87591acf7535f8"
-    },
-    "sync_transport": {
-      "path": "internal/connectors/defs/twenty/sync_transport.json",
-      "sha256": "d4b10c0d26ce159d8c6c9fb7d2e4c740332adc7e28aeee869f19388eaf51bc58"
     },
     "provider_api_revision": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7"
   },
@@ -30,14 +26,14 @@
       "internal/connectors/sync_transport.go:480",
       "internal/app/declarative_typed_destination_approval.go:274"
     ],
-    "limitation": "SourceBindingFor is keyed only by source executor and stream, so one binding is shared by every persisted action selected from that source."
+    "limitation": "The current App rejects generic declarative_typed_destination registration without an action-owned source binding and a provider-documented idempotency_key_header. Twenty's source-locked POST /rest/companies action has no such header."
   },
   "red_witness": {
-    "test": "TestPerActionSourceBindingFoundationHandoffWitness",
-    "command": "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty -run ^TestPerActionSourceBindingFoundationHandoffWitness$",
-    "happy": "An in-memory declaration can select update_companies and create_companies selection keeps its exact name-to-name mapping.",
-    "bad": "update_companies selection receives the shared name-to-name mapping instead of its required id-to-id plus name-to-name mapping before provider I/O.",
-    "edge": "update_companies is refused when absent from the current declaration rather than defaulting by mode."
+    "test": "TestTypedDestinationDeclarationRequiresPublishedIdempotencyProof",
+    "command": "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty -run ^TestTypedDestinationDeclarationRequiresPublishedIdempotencyProof$",
+    "happy": "The Twenty bundle has no generic typed destination and direct typed commands remain implemented.",
+    "bad": "An invented idempotency_key_header is rejected by the source-locked action assertion.",
+    "edge": "The explicit provider-contract eligibility row retains its exact POST /rest/companies trace."
   },
   "gap_groups": [
     {
@@ -60,9 +56,9 @@
     }
   ],
   "verification": {
-    "source_hashes": "pass: snapshot and all three exact gap selectors match write_eligibility.json",
+    "source_hashes": "pass: current 55/1/28/28 action dispositions match write_eligibility.json",
     "commands": [
-      "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty -run ^TestPerActionSourceBindingFoundationHandoffWitness$: pass",
+      "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty -run ^TestTypedDestinationDeclarationRequiresPublishedIdempotencyProof$: pass",
       "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty: pass",
       "go test -count=1 -timeout 20m ./internal/app -run persisted-destination-focused-suite: pass",
       "go run ./cmd/connectorgen validate internal/connectors/defs/twenty: pass",

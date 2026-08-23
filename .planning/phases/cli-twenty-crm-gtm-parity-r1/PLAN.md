@@ -34,6 +34,22 @@ and declared maximum) plus a stable foundation gap reference. It deliberately
 does not claim a batch dispatch proof, alter foundation code, touch a live
 credential, or recast any command as partial.
 
+## 2026-08-23 CI recovery — invalid typed destination removed
+
+CI proves that loading all declarative bundles fails before unrelated GitHub
+fixture and warehouse tests can open an App. The attempted Twenty generic typed
+destination has an action-owned mapping but fails the current App contract:
+`declarative_typed_destination` requires a provider-documented
+`idempotency_key_header`. The source-locked Twenty create contract publishes no
+such header, so adding one would fabricate a retry guarantee. The connector
+therefore removes `sync_transport.json`, preserves every direct typed command
+as implemented, and records `create_companies` as a source-traced,
+provider-contract application-dispatch gap. The red checkpoint was the native
+App construction failure; green requires the no-destination test plus the
+native warehouse and generated-GitHub fixture tests to construct the App. The
+28 batch provider actions remain separately source-traced and deferred to
+0.3.1.
+
 ## GSD and skills
 
 - Lifecycle: `discuss-phase` → `plan-phase --tdd` → `execute-phase` →

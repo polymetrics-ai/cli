@@ -1,5 +1,15 @@
 # Twenty CRM shared-foundation handoff
 
+> **Superseded by the 2026-08-23 CI recovery.** `sync_transport.json` was
+> removed because current App construction requires a provider-documented
+> `idempotency_key_header` for every generic typed destination, and the
+> source-locked Twenty contract publishes none for `POST /rest/companies`.
+> Declaring one would invent a retry guarantee. The 168 direct typed CLI
+> commands remain implemented; the 28 source-traced batch deferrals remain
+> explicit and are not partial commands. The current replacement evidence is
+> `TestTypedDestinationDeclarationRequiresPublishedIdempotencyProof` and
+> `SEVEN-SURFACE-LEDGER.json`.
+
 ## Boundary
 
 This is a provider-neutral transport capability gap. It must not be implemented

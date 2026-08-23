@@ -38,23 +38,20 @@ review is requested by opening the non-draft PR.
 
 ## Typed-destination reconciliation
 
-PR #4304's published head `d814875a902be684cb2a38b94f7a8077f66b70b1` is merged
-into this local branch and GitHub API confirms PR #4298 targets
-`fm/cli-reverse-etl-destination-r1` at that exact SHA. `sync_transport.json` is a
-connector-owned declaration: all 28 REST streams are eligible as a bounded
-full-append source and `create_companies` is the only destination action. Its
-closed mapping copies only a company's `name` into the action's `name` field;
-the declaration names durable acknowledgement and never provides a
-caller-selected endpoint or body template. The refreshed foundation persists a
-selected action, but its source-binding lookup has one mapping per executor and
-stream. It cannot preserve Twenty's distinct mappings for the other 55
-record-shaped actions, so this is not an application-deployable all-ops
-reverse-ETL path.
+CI recovery supersedes the prior generic transport declaration. Both native
+builds construct all declarative bundles and found that the recovered
+`sync_transport.json` did not meet current App construction requirements. An
+action-owned binding revealed the decisive provider limitation: Twenty's
+source-locked `POST /rest/companies` action does not publish an
+`idempotency_key_header`. The connector removes the generic destination rather
+than inventing a retry/delivery guarantee. Direct typed commands remain
+implemented and approval-gated; no CLI command is hidden, disabled, or marked
+partial.
 
-`write_eligibility.json` closes the one-action accounting gap without
-misrepresenting it as complete transport coverage. It records one currently
-bound action, 55 schema-intersecting record actions blocked on a
-provider-neutral per-action source-binding capability, 28 batch actions whose required
+`write_eligibility.json` records 55 schema-intersecting record actions blocked
+on a provider-neutral per-action source-binding capability, one source-traced
+action that lacks the provider idempotency contract required by generic typed
+delivery, 28 batch actions whose required
 `records` array cannot be formed by the single-record contract, and 28 deletes
 whose tombstone workset is incompatible with its no-tombstone delivery.
 These dispositions do not alter CLI reachability: all 112 typed actions remain

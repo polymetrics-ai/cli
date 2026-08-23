@@ -14,7 +14,7 @@
       "operations.json": "a489c815907cef64d44c5c71f994fa9b874fc2a69c5807ba6ab1765b7231e198",
       "streams.json": "100da1c2ac04e46a574016f06a28aa93f8c15c2f7fd2df2febc10ff4b258c8f3",
       "writes.json": "5188fe0dea80e93471b476e91c75a33e2b6ca7fc8c9835144b87591acf7535f8",
-      "write_eligibility.json": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1",
+      "write_eligibility.json": "10185f600abb5e7bb7906a02f65d655cef0df52e553e46908cdc2baf38a7406d",
       "cli_surface.json": "0f5037f58cb1735852d2a9164ef98c56d83f0a719221d65200f3161d811d4b54"
     },
     "source_locked_provider_operation_count": 168,
@@ -181,7 +181,7 @@
         "kind": "record_shaped_create_update_actions",
         "members_source": {
           "file": "internal/connectors/defs/twenty/write_eligibility.json",
-          "sha256": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1",
+          "sha256": "10185f600abb5e7bb7906a02f65d655cef0df52e553e46908cdc2baf38a7406d",
           "selector": "$.actions[?(@.disposition == 'eligible_pending_foundation_multiplicity')]",
           "identity": "name",
           "expected_count": 55
@@ -235,7 +235,7 @@
         "kind": "batch_array_envelope_actions",
         "members_source": {
           "file": "internal/connectors/defs/twenty/write_eligibility.json",
-          "sha256": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1",
+          "sha256": "10185f600abb5e7bb7906a02f65d655cef0df52e553e46908cdc2baf38a7406d",
           "selector": "$.actions[?(@.disposition == 'semantic_array_envelope_incompatible')]",
           "identity": "name",
           "expected_count": 28
@@ -293,7 +293,7 @@
         "kind": "typed_delete_actions",
         "members_source": {
           "file": "internal/connectors/defs/twenty/write_eligibility.json",
-          "sha256": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1",
+          "sha256": "10185f600abb5e7bb7906a02f65d655cef0df52e553e46908cdc2baf38a7406d",
           "selector": "$.actions[?(@.disposition == 'semantic_tombstone_incompatible')]",
           "identity": "name",
           "expected_count": 28

@@ -1,7 +1,7 @@
 {
   "issue": 277,
   "phase": "cli-twenty-crm-gtm-parity-r1",
-  "status": "workable_noncertified_batch_certification_deferred_0_3_1",
+  "status": "workable_noncertified_batch_certification_deferred_0_3_1_provider_transport_not_declared",
   "workflow": [
     "discuss-phase",
     "plan-phase --tdd",
@@ -66,7 +66,7 @@
     "recovered_branch": "origin/fm/cli-twenty-parity-wave02-r1",
     "recovery_assessment": "The historical branch has no merge base with current main; only its Twenty subtree was recovered. The current bundle preserves 168 source-locked REST operations: 28 ETL streams, 28 direct reads, and 112 typed reverse-ETL actions; the documented REST inventory has no direct-write or binary transfer operation.",
     "foundation_merge": "Merged d814875a902be684cb2a38b94f7a8077f66b70b1 normally as 93e6b9d79; GitHub API confirms #4298 base ref fm/cli-reverse-etl-destination-r1 at that SHA.",
-    "mapping_result": "The refreshed foundation persists action selection, but its source binding is indexed only by executor and stream. Twenty's 55 eligible candidates need distinct mappings from the same declarative source, which is not representable connector-locally.",
+    "mapping_result": "CI found that the recovered generic typed destination makes all-App construction fail: it has no provider-documented idempotency_key_header. The connector removes that unsupported application transport rather than inventing a header; 55 actions still need per-action mappings if a provider-supported destination becomes possible.",
     "focused_checks": [
       "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty: pass",
       "go test -count=1 -timeout 20m ./internal/app -run persisted-destination-focused-suite: pass",
@@ -74,7 +74,7 @@
       "go run ./cmd/connectorgen surface-sync --check: pass",
       "go run ./cmd/connectorgen certification-sweep --connector twenty --check: pass (172 rows; 168 CLI commands)"
     ],
-    "stop_condition": "Needs a provider-neutral per-action source-binding foundation decision; batch-envelope and tombstone workset delivery are separately unassigned shared foundations. No live credential, runtime mutation, or heavy verification was attempted during this low-CPU reconciliation."
+    "stop_condition": "No generic Twenty application transport is declared until a provider-supported idempotency contract exists; batch-envelope and tombstone workset delivery are separately unassigned shared foundations. No live credential, runtime mutation, or heavy verification was attempted during this low-CPU reconciliation."
   },
   "foundation_handoff": {
     "status": "ready_for_separate_foundation_lane",
@@ -82,7 +82,7 @@
       ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-HANDOFF.md",
       ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-HANDOFF.json"
     ],
-    "behavioral_witness": "TestPerActionSourceBindingFoundationHandoffWitness records happy persisted selection, bad same-source mapping mismatch before I/O, and undeclared-action edge refusal.",
+    "behavioral_witness": "TestTypedDestinationDeclarationRequiresPublishedIdempotencyProof records no generic destination, no invented provider header, and intact direct typed command reachability.",
     "scope": "No shared engine change, push, live credential use, or runtime/vault change was made by the handoff slice."
   },
   "captain_foundation_gap_ledger": {

@@ -437,3 +437,31 @@ with `Refs #277`. The reconciliation API read-back returned base
 `fm/cli-twenty-crm-gtm-parity-r1`. A final API read-back is still required
 after the fresh #4304 merge and before the next push; the generic
 destination's persisted App/CLI dispatch is not yet claimed as deployable.
+
+## 2026-08-23 CI recovery — current checkpoint
+
+GitHub Verify run `32651480917` supplied the red evidence. Both
+`native-build (linux-amd64)` and `native-build (darwin-arm64)` failed before a
+platform binary was exercised because `app.New` validates every declarative
+bundle. The error was deterministic: the recovered Twenty generic destination
+did not meet the current action-owned/idempotency contract. A local
+action-owned binding exposed the second fact: Twenty's source-locked
+`create_companies` action has no published idempotency header.
+
+The connector removes that invalid transport rather than inventing provider
+behavior. The fresh focused green checks are:
+
+```text
+go test -count=1 -timeout 20m ./internal/connectors/defs/twenty -run '^(TestTypedDestinationDeclarationRequiresPublishedIdempotencyProof|TestEveryTypedWriteHasEligibilityDisposition)$'
+# PASS
+go test -count=1 -timeout 20m -run 'TestWarehouseMaterializesTablesAsParquet|TestQuerySQLAggregatesOverParquetTables|TestReverseETLReadsAParquetSourceTable' ./internal/app/
+# PASS
+go test -count=1 -timeout 20m ./internal/connectors/defs/twenty
+# PASS
+go test -count=1 -timeout 20m -run '^TestEveryImplementedCommandPassesRuntimePreflight$' ./internal/connectors/commandrunner
+# PASS
+```
+
+The 28 batch actions remain source-traced and explicitly deferred to 0.3.1;
+all are still implemented and CLI-reachable. Full verification resumes only
+after this recovery commit is normally merged with current `origin/main`.
