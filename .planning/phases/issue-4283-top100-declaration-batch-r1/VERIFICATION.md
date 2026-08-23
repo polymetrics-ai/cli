@@ -431,3 +431,25 @@
   CircleCI source projection: its current validator still stops at the missing
   canonical descriptor. This is recorded as a wait for source-import/projection
   recovery, not a regression of #4334.
+
+## Authorized shared-test repair — 2026-08-24
+
+- [x] Firstmate authorized the bounded downstream repair after the fixed-100
+  evidence proved an addition/selection change, not a GitHub surface removal.
+  `internal/connectors/operation-evidence-fixed-100.json` remains unchanged.
+- [x] `go test -timeout 20m -count=1 -run
+  '^(TestOperationEvidenceFixed100RejectsEveryRegression|TestOperationEvidenceCheckRunsFixed100Gate)$'
+  ./cmd/connectorgen` passes. The test removes
+  `github.rest.issues/list-for-repo` from a disposable copied source lock and
+  proves both direct fixed-cohort validation and CLI `--check` reject that
+  exact source ID.
+- [x] `go test -timeout 20m -count=1 -run
+  '^TestDefinitionTransportFactoriesSelectDeclaredEvidence$' ./internal/app`
+  passes. It requires GitHub's exact declared source conformance record in the
+  shared factory's primary-plus-accepted set and retains the exact destination
+  assertion.
+- [ ] `go test -timeout 20m -count=1 ./cmd/connectorgen` was attempted but
+  stopped in unrelated Freshservice fixture setup with `no space left on
+  device`; the shared data volume reported 6.5 GiB free. No external temporary
+  data was deleted. Full package and repository gates remain pending a usable
+  filesystem.

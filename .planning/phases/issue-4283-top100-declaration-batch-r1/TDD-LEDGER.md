@@ -304,6 +304,53 @@ and the `internal/app` package demonstrate the fix.
 Keep factory evidence ordered only as an implementation detail; no connector
 name or registry ordering is introduced into production composition.
 
+## Authorized downstream shared-test repair — 2026-08-24
+
+### Red
+
+```sh
+go test -timeout 20m -count=1 -run '^(TestOperationEvidenceFixed100RejectsEveryRegression|TestOperationEvidenceCheckRunsFixed100Gate)$' ./cmd/connectorgen
+go test -timeout 20m -count=1 -run '^TestDefinitionTransportFactoriesSelectDeclaredEvidence$' ./internal/app
+```
+
+The first command rejects the current fixed cohort because the test workspace
+contains only GitHub while it loads a cross-connector reference beginning with
+Asana. The second command rejects a correct shared factory because GitHub's
+exact evidence is accepted but is not the first registry entry. The exact
+outputs and selection counts are recorded in
+`VERIFY-SHARED-TEST-FIXTURE-EVIDENCE-2026-08-24.md`.
+
+### Green plan
+
+- Preserve the checked-in 100-row fixed reference unchanged.
+- Build the temporary operation-evidence workspace from the fixed reference's
+  exact connector prefixes and retain only those generated website rows.
+- Add a deliberate temporary GitHub source-row removal assertion proving the
+  direct fixed validator and CLI `--check` both fail on a genuine loss.
+- Assert GitHub's exact declared source evidence occurs in the factory's
+  primary-or-accepted set; retain the exact GitHub destination assertion.
+
+### Green
+
+```text
+ok  polymetrics.ai/cmd/connectorgen  16.514s
+ok  polymetrics.ai/internal/app      2.896s
+```
+
+The changed fixed-cohort tests create a separate temporary workspace, remove
+`github.rest.issues/list-for-repo` from its copied source lock, and assert the
+specific ID appears in the direct validator failure and in the CLI `--check`
+failure. The temporary workspace is discarded by `t.TempDir`; the checked-in
+source lock and fixed reference are unchanged. The app test rejects any factory
+whose primary-plus-accepted exact evidence records omit GitHub's declared
+conformance reference.
+
+### Refactor boundary
+
+No production transport code, connector definition, source lock, generated
+artifact, or test guard is removed or loosened. This is a test-fixture
+completeness and implementation-order-independence repair only.
+
 ## Classification correction — direct write is not reverse ETL
 
 ### Red

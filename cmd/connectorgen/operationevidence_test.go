@@ -231,6 +231,14 @@ func TestOperationEvidenceFixed100RejectsEveryRegression(t *testing.T) {
 	if err := validateOperationEvidenceFixed100(artifact, fixed); err != nil {
 		t.Fatalf("unmodified fixed cohort rejected: %v", err)
 	}
+	t.Run("source row removal", func(t *testing.T) {
+		removalRoot := operationEvidenceWorkspace(t)
+		removeOperationEvidenceSourceOperation(t, removalRoot, githubIssuesSourceID)
+		removed, _, _ := runOperationEvidenceForTest(t, removalRoot, "")
+		if err := validateOperationEvidenceFixed100(removed, fixed); err == nil || !strings.Contains(err.Error(), githubIssuesSourceID) {
+			t.Fatalf("GitHub source-row removal error = %v, want source-specific fixed-cohort failure", err)
+		}
+	})
 	for _, expectation := range fixed.Rows {
 		t.Run(expectation.SourceID, func(t *testing.T) {
 			mutated := artifact.clone()
@@ -261,6 +269,16 @@ func TestOperationEvidenceCheckRunsFixed100Gate(t *testing.T) {
 	if code, stderr := runCheck(); code != 0 {
 		t.Fatalf("fixed-100 check exit=%d stderr=%q", code, stderr)
 	}
+	removalRoot := operationEvidenceWorkspace(t)
+	removalOutput := filepath.Join(removalRoot, "operation-evidence.json")
+	removalFixedPath := filepath.Join(removalRoot, "internal", "connectors", "operation-evidence-fixed-100.json")
+	removeOperationEvidenceSourceOperation(t, removalRoot, githubIssuesSourceID)
+	_, _, _ = runOperationEvidenceForTest(t, removalRoot, "")
+	var removalStdout, removalStderr bytes.Buffer
+	removalCode := run([]string{"operation-evidence", removalRoot, "--output", removalOutput, "--fixed-100", removalFixedPath, "--check"}, &removalStdout, &removalStderr)
+	if removalCode == 0 || !strings.Contains(removalStderr.String(), githubIssuesSourceID) {
+		t.Fatalf("GitHub source-row removal check exit=%d stderr=%q, want source-specific fixed-100 failure", removalCode, removalStderr.String())
+	}
 	mutateOperationEvidenceJSON(t, fixedPath, func(document map[string]any) {
 		rows := document["rows"].([]any)
 		rows[0].(map[string]any)["source_sha256"] = "regressed"
@@ -273,9 +291,15 @@ func TestOperationEvidenceCheckRunsFixed100Gate(t *testing.T) {
 func operationEvidenceWorkspace(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()
-	copyOperationEvidenceTree(t, filepath.Join("..", "..", "internal", "connectors", "defs", "github"), filepath.Join(root, "internal", "connectors", "defs", "github"))
-	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "operation-evidence-fixed-100.json"), filepath.Join(root, "internal", "connectors", "operation-evidence-fixed-100.json"))
+	fixedPath := filepath.Join(root, "internal", "connectors", "operation-evidence-fixed-100.json")
+	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "operation-evidence-fixed-100.json"), fixedPath)
 	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "certifications", "current-subject.json"), filepath.Join(root, "internal", "connectors", "certifications", "current-subject.json"))
+	connectors := operationEvidenceFixedConnectorNames(t, loadOperationEvidenceFixed100(t, root))
+	connectorSet := make(map[string]bool, len(connectors))
+	for _, connector := range connectors {
+		connectorSet[connector] = true
+		copyOperationEvidenceTree(t, filepath.Join("..", "..", "internal", "connectors", "defs", connector), filepath.Join(root, "internal", "connectors", "defs", connector))
+	}
 
 	websiteRaw, err := os.ReadFile(filepath.Join("..", "..", "website", "data", "connectors.generated.json"))
 	if err != nil {
@@ -285,15 +309,60 @@ func operationEvidenceWorkspace(t *testing.T) string {
 	if err := json.Unmarshal(websiteRaw, &rows); err != nil {
 		t.Fatalf("decode generated website data: %v", err)
 	}
-	github := make([]any, 0, 1)
+	selected := make([]any, 0, len(connectors))
 	for _, item := range rows {
 		row := item.(map[string]any)
-		if row["slug"] == "github" {
-			github = append(github, row)
+		if connectorSet[row["slug"].(string)] {
+			selected = append(selected, row)
 		}
 	}
-	writeOperationEvidenceJSON(t, filepath.Join(root, "website", "data", "connectors.generated.json"), map[string]any{"rows": github})
+	writeOperationEvidenceJSON(t, filepath.Join(root, "website", "data", "connectors.generated.json"), map[string]any{"rows": selected})
 	return root
+}
+
+func operationEvidenceFixedConnectorNames(t *testing.T, fixed operationEvidenceFixed100) []string {
+	t.Helper()
+	seen := make(map[string]bool)
+	for _, row := range fixed.Rows {
+		connector, _, found := strings.Cut(row.SourceID, ".")
+		if !found || connector == "" {
+			t.Fatalf("fixed source ID %q has no connector prefix", row.SourceID)
+		}
+		seen[connector] = true
+	}
+	connectors := make([]string, 0, len(seen))
+	for connector := range seen {
+		connectors = append(connectors, connector)
+	}
+	slices.Sort(connectors)
+	return connectors
+}
+
+func removeOperationEvidenceSourceOperation(t *testing.T, root, sourceID string) {
+	t.Helper()
+	connector, _, found := strings.Cut(sourceID, ".")
+	if !found || connector == "" {
+		t.Fatalf("source ID %q has no connector prefix", sourceID)
+	}
+	path := filepath.Join(root, "internal", "connectors", "defs", connector, "sources", connector+"-operation-source-lock.json")
+	mutateOperationEvidenceJSON(t, path, func(document map[string]any) {
+		rest := document["rest"].(map[string]any)
+		operations := rest["operations"].([]any)
+		filtered := make([]any, 0, len(operations)-1)
+		removed := false
+		for _, item := range operations {
+			operation := item.(map[string]any)
+			if operation["id"] == sourceID {
+				removed = true
+				continue
+			}
+			filtered = append(filtered, item)
+		}
+		if !removed {
+			t.Fatalf("source operation %q was not present in %s", sourceID, path)
+		}
+		rest["operations"] = filtered
+	})
 }
 
 func operationEvidenceAbsenceWorkspace(t *testing.T) string {

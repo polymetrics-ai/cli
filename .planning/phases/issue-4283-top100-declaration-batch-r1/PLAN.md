@@ -263,6 +263,83 @@ the source-factory selection, connector declarations, or conformance data to
 make GitHub happen to sort first. Re-run the exact failing test before the
 affected package and static declaration gates.
 
+## Authorized downstream shared-test repair — 2026-08-24
+
+### Decision and scope
+
+Firstmate authorized the two shared downstream test repairs after reviewing
+the fixed-cohort evidence. This is an inline/manual GSD execution because this
+environment has no compatible isolated Pi worker and the canonical contract
+forbids role spawning. The task-delivery header at this document's start
+continues to govern PR #4294 (`fm/cli-top100-declaration-batch-r1` to `main`).
+
+Only these files may change for this slice:
+
+- `cmd/connectorgen/operationevidence_test.go`;
+- `internal/app/transport_composition_test.go`; and
+- this issue's GSD/TDD/verification evidence.
+
+The immutable `internal/connectors/operation-evidence-fixed-100.json` must
+not be regenerated, re-selected, or rewritten. No production source factory,
+connector declaration, source lock, generated artifact, or provider contract
+may change. Skills: `golang-how-to` and `golang-testing`.
+
+### Red
+
+`TestOperationEvidenceFixed100RejectsEveryRegression` and
+`TestOperationEvidenceCheckRunsFixed100Gate` currently load the 100-row
+cross-connector cohort in a temporary repository that contains only GitHub;
+they fail at `asana.rest.getCustomFieldsForWorkspace`. Separately,
+`TestDefinitionTransportFactoriesSelectDeclaredEvidence` assumes GitHub's
+conformance record is the primary evidence of a registry-wide shared factory,
+but Asana is the deterministic first declaration and GitHub is correctly
+present in the accepted evidence set. The exact failed outputs and expected
+versus produced values are preserved in
+`VERIFY-SHARED-TEST-FIXTURE-EVIDENCE-2026-08-24.md`.
+
+### Green plan
+
+1. Read the existing fixed reference inside the temporary workspace, derive
+   the connector prefix of every `source_id`, and copy exactly those definition
+   trees plus their generated website rows. Do not change the fixed reference.
+2. Retain the fixed-reference validator and add a source-row-removal proof:
+   remove one GitHub source row only in the temporary test workspace and show
+   both the direct validator and the CLI `--check` gate refuse it.
+3. Keep the destination assertion exact. Replace only the source-factory
+   primary-order assertion with an exact-membership assertion over the
+   factory's primary and accepted source-evidence records, requiring GitHub's
+   declared record specifically.
+4. Run the two targeted tests red/green, their package tests, then the
+   repository declaration/generated gates and `make verify` required by the
+   delivery contract. Record every result before a commit.
+
+### Green result
+
+The fixed reference remains unchanged. The workspace now derives its six
+definition trees and generated website rows from the fixed reference itself;
+the exact source set is Asana, Bitbucket, CircleCI, Docker Hub, GitHub, and
+Jira. Both fixed-cohort test paths deliberately remove
+`github.rest.issues/list-for-repo` only from a `t.TempDir` source lock and
+assert the source-specific failure: the direct validator and the CLI `--check`
+gate each reject the missing operation. The app test now requires GitHub's
+exact conformance reference in the shared factory's primary-or-accepted set,
+while retaining its exact destination evidence assertion.
+
+Focused results:
+
+```text
+ok  polymetrics.ai/cmd/connectorgen  16.514s
+ok  polymetrics.ai/internal/app      2.896s
+```
+
+### Refactor boundary
+
+No assertion is deleted or broadened to accept arbitrary evidence. The fixed
+cohort's prior 100 GitHub anchors remain validated in operation evidence even
+though the current selection fixture itself contains non-GitHub rows. The
+transport assertion remains evidence-specific and does not depend on registry
+iteration order.
+
 ## PR #4297 repair loop — observed Docker Hub outcome
 
 ### Red

@@ -144,6 +144,9 @@ dispositions and recoverability remain in `REJECTION-LIST.json`.
 ## Fixed-100 test fixture does not include its whole cohort — 2026-08-24
 
 - ID: `operation-evidence-fixed-cohort-test-fixture`.
+- Status: resolved by the authorized downstream test repair. The fixed 100-row
+  cohort is unchanged; the temporary workspace now derives and copies every
+  referenced connector definition and generated website row.
 - Evidence: after merging `origin/main` at `27664370c` (`#4334`),
   `TestOperationEvidenceFixed100RejectsEveryRegression` at
   `cmd/connectorgen/operationevidence_test.go:232` refuses its temporary
@@ -153,14 +156,17 @@ dispositions and recoverability remain in `REJECTION-LIST.json`.
 - Cause: `operationEvidenceWorkspace` at
   `cmd/connectorgen/operationevidence_test.go:274-278` copies only the GitHub
   definition tree, while the current fixed-100 fixture includes an Asana row.
-- Recovery: make the shared test workspace include every connector represented
-  by `operation-evidence-fixed-100.json`, or derive its temporary fixture from
-  the full checked-in source. No evidence row, source location, or hash is
-  hand-authored here.
+- Recovery applied: derive the exact connector set from
+  `operation-evidence-fixed-100.json`; no evidence row, source location, or
+  hash is hand-authored. A disposable GitHub source-row removal now proves both
+  the direct validator and CLI `--check` gate still reject genuine loss.
 
 ## Shared declarative source evidence test assumes first bundle — 2026-08-24
 
 - ID: `declarative-source-factory-evidence-selection`.
+- Status: resolved by the authorized downstream test repair. The test now
+  requires GitHub's exact declaration evidence in the shared factory's
+  primary-plus-accepted set and retains the exact destination assertion.
 - Evidence: `TestDefinitionTransportFactoriesSelectDeclaredEvidence` at
   `internal/app/transport_composition_test.go:297` selects the shared
   `declarative_stream_source` factory by executor reference, which is now
@@ -169,11 +175,11 @@ dispositions and recoverability remain in `REJECTION-LIST.json`.
   evidence, despite the factory correctly retaining every accepted bundle
   evidence record. The credential-free full package run reports the exact
   Asana/GitHub mismatch.
-- Recovery: a foundation test must select GitHub's accepted evidence or assert
-  the factory's accepted-evidence set rather than rely on registry order. This
-  is a shared `internal/app` test contract; this connector-local lane neither
-  changes product transport code nor rewrites any connector evidence to make a
-  first-registration assumption true.
+- Recovery applied: the foundation test selects GitHub's exact accepted
+  evidence rather than rely on registry order. This is a shared `internal/app`
+  test contract; this connector-local lane neither changes product transport
+  code nor rewrites connector evidence to make a first-registration assumption
+  true.
 
 ## CircleCI after merged env-only-secret foundation — 2026-08-24
 
