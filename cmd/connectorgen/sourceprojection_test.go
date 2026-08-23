@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -1581,6 +1582,74 @@ func writeProjectionFixture(t *testing.T, path, content string) {
 	t.Helper()
 	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestSourceProjectionAcceptsVersion3DocumentProvenance(t *testing.T) {
+	artifact := []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/alpha":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{{ID: "alpha", Path: "/alpha", Artifact: artifact}}), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 fixture lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return artifact, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 fixture lock: %v", err)
+	}
+	if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: result.Operations}); len(findings) != 0 {
+		t.Fatalf("v3 descriptor provenance findings = %+v", findings)
+	}
+	for _, change := range []struct {
+		name   string
+		mutate func(*sourceOperationDescriptor)
+	}{
+		{name: "provider operation id", mutate: func(operation *sourceOperationDescriptor) { operation.ProviderOperationID = "rewritten" }},
+		{name: "artifact url", mutate: func(operation *sourceOperationDescriptor) {
+			operation.Source.URL = "https://fixtures.polymetrics.invalid/reassigned.openapi.json"
+		}},
+		{name: "document id", mutate: func(operation *sourceOperationDescriptor) { operation.Source.DocumentID = "reassigned" }},
+		{name: "published url", mutate: func(operation *sourceOperationDescriptor) {
+			operation.Source.PublishedURL = "https://published.polymetrics.invalid/reassigned?slug=reassigned"
+		}},
+		{name: "published capture url", mutate: func(operation *sourceOperationDescriptor) {
+			operation.Source.PublishedCaptureURL = "https://fixtures.polymetrics.invalid/reassigned.capture.json"
+		}},
+		{name: "published digest", mutate: func(operation *sourceOperationDescriptor) { operation.Source.PublishedSHA256 = strings.Repeat("0", 64) }},
+		{name: "published bytes", mutate: func(operation *sourceOperationDescriptor) { operation.Source.PublishedBytes++ }},
+		{name: "published adapter", mutate: func(operation *sourceOperationDescriptor) { operation.Source.PublishedAdapter = "other-adapter" }},
+		{name: "source form", mutate: func(operation *sourceOperationDescriptor) { operation.Source.Form = "swagger" }},
+		{name: "source version", mutate: func(operation *sourceOperationDescriptor) { operation.Source.Version = "2.0" }},
+	} {
+		change := change
+		t.Run(change.name, func(t *testing.T) {
+			operation := result.Operations[0]
+			change.mutate(&operation)
+			if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{operation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "provenance drift") {
+				t.Fatalf("%s findings = %+v", change.name, findings)
+			}
+		})
+	}
+}
+
+func TestSurfaceSyncAcceptsSchema3SourceDescriptor(t *testing.T) {
+	bundleDir := filepath.Join(t.TempDir(), "alpha")
+	if err := os.MkdirAll(filepath.Join(bundleDir, "sources"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	operation := sourceProjectionTestOperation()
+	descriptorRaw, err := json.Marshal(sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{operation}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	writeProjectionFixture(t, filepath.Join(bundleDir, "sources", "alpha-operation-source-lock.json"), `{}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "sources", "alpha-operation-descriptor.json"), string(descriptorRaw))
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[{"name":"items","kind":"custom","method":"POST","path":"/items/{{ record.owner }}","path_fields":["owner"],"record_schema":{"type":"object","additionalProperties":false,"properties":{"owner":{"type":"string"}}},"risk":"standard"}]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{"schema_version":1,"commands":[{"path":"items create","summary":"create","intent":"reverse_etl","availability":"implemented","write":"items","flags":[{"name":"owner","type":"string","maps_to":"record.owner","required":true}]}]}`)
+	stats, err := syncCheckedInSourceProjection(bundleDir, "alpha", true)
+	if err != nil {
+		t.Fatalf("schema-3 source projection check: %v", err)
+	}
+	if !stats.Changed() || stats.Writes != 1 || stats.CLI != 1 {
+		t.Fatalf("schema-3 source projection drift = %+v", stats)
 	}
 }
 
