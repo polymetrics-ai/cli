@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "issue": 4288,
+  "branch": "fm/cli-cert-batch1-live-r1",
+  "base": "main",
+  "lifecycle": {
+    "discuss_phase": "inline_complete",
+    "plan_phase_tdd": "in_progress",
+    "execute_phase": "pending",
+    "verify_work": "pending",
+    "code_review": "pending"
+  },
+  "scope": [
+    "jira",
+    "asana",
+    "notion"
+  ],
+  "ownership_exclusions": [
+    "docker-hub",
+    "circleci",
+    "sentry",
+    "vercel",
+    "stripe",
+    "bitbucket",
+    "gitlab"
+  ],
+  "credentials": "not_provisioned",
+  "live_certification": "not_started"
+}
