@@ -55,6 +55,7 @@ func (s sourceProjectionStats) Changed() bool { return s.Writes+s.CLI+s.Surface+
 type sourceActionContract struct {
 	Fields           map[string]any
 	BareStringFields map[string]bool
+	SecretFields     map[string]bool
 	Required         map[string]bool
 	PathFields       []string
 	Query            []sourceParameterDescriptor
@@ -1051,7 +1052,7 @@ func sourceProjectionActionPropertyCount(action *orderedObject) int {
 }
 
 func sourceContractForAction(operation sourceOperationDescriptor, action *orderedObject) (sourceActionContract, error) {
-	contract := sourceActionContract{Fields: map[string]any{}, BareStringFields: map[string]bool{}, Required: map[string]bool{}}
+	contract := sourceActionContract{Fields: map[string]any{}, BareStringFields: map[string]bool{}, SecretFields: map[string]bool{}, Required: map[string]bool{}}
 	// A retained source gap does not authorize a raw body. It does permit a
 	// source-owned named field to use the bounded JSON flag path when its exact
 	// nested shape is not expressible by the closed record-schema subset.
@@ -1262,6 +1263,7 @@ func sourceContractForConcreteVariant(operation sourceOperationDescriptor, actio
 			return sourceActionContract{}, err
 		}
 		contract.Fields[name] = converted
+		contract.markSourceSecret(name, properties[name])
 		contract.Required[name] = contract.Required[name] || rootRequired[name] || variantRequired[name]
 		contract.BodyFields = append(contract.BodyFields, name)
 	}
@@ -1394,7 +1396,10 @@ func sourceContractForExistingClosedAction(operation sourceOperationDescriptor, 
 		}
 		properties[name] = converted
 	}
-	contract := sourceActionContract{Fields: properties, Required: sourceSchemaRequired(schema)}
+	contract := sourceActionContract{Fields: properties, BareStringFields: map[string]bool{}, SecretFields: map[string]bool{}, Required: sourceSchemaRequired(schema)}
+	for _, name := range sortedSourceMapKeys(properties) {
+		contract.markSourceSecret(name, rawProperties[name])
+	}
 	contract.BodyType = stringField(action, "body_type")
 	for _, raw := range arrayField(action, "body_fields") {
 		if name, ok := raw.(string); ok {
@@ -1518,6 +1523,9 @@ func sourceProjectionSchema(raw any) (any, error) {
 	if enum, ok := schema["enum"].([]any); ok && len(enum) > 0 {
 		out["enum"] = enum
 	}
+	if sourceProjectionDeclaredSecret(schema) {
+		out["x-secret"] = true
+	}
 	for _, key := range []string{"pattern", "minLength", "maxLength", "minItems", "maxItems", "minProperties", "maxProperties"} {
 		if value, exists := schema[key]; exists {
 			out[key] = value
@@ -1590,6 +1598,9 @@ func sourceProjectionBoundedNamedJSONSchema(raw any) (any, error) {
 			values[index] = types[index]
 		}
 		out["type"] = values
+	}
+	if sourceProjectionDeclaredSecret(schema) {
+		out["x-secret"] = true
 	}
 	if sourceProjectionContainsString(types, "string") {
 		out["maxLength"] = sourceProjectionBoundedCardinality(schema, "maxLength", sourceProjectionDefaultJSONBytes)
@@ -1812,6 +1823,11 @@ func sourceProjectCommand(command *orderedObject, contract sourceActionContract)
 		} else {
 			flag.remove("allow_bare_string")
 		}
+		if contract.SecretFields[name] {
+			flag.set("env_only", true)
+		} else {
+			flag.remove("env_only")
+		}
 		if schema, ok := contract.Fields[name].(map[string]any); ok {
 			if values, ok := schema["enum"].([]any); ok && len(values) > 0 {
 				flag.set("values", orderedFromAny(values))
@@ -1926,11 +1942,41 @@ func sourceProjectionFlagType(schema any) string {
 // validates the final value before any provider I/O.
 func (contract *sourceActionContract) setSourceField(name string, sourceSchema, projectedSchema any) {
 	contract.Fields[name] = projectedSchema
+	contract.markSourceSecret(name, sourceSchema)
 	if sourceProjectionFlagType(projectedSchema) == "json" && sourceProjectionContainsStringArm(sourceSchema) {
 		contract.BareStringFields[name] = true
 		return
 	}
 	delete(contract.BareStringFields, name)
+}
+
+func (contract *sourceActionContract) markSourceSecret(name string, sourceSchema any) {
+	if sourceProjectionDeclaredSecret(sourceSchema) {
+		contract.SecretFields[name] = true
+	} else {
+		delete(contract.SecretFields, name)
+	}
+}
+
+func sourceProjectionDeclaredSecret(raw any) bool {
+	switch schema := raw.(type) {
+	case map[string]any:
+		if secret, _ := schema["x-secret"].(bool); secret {
+			return true
+		}
+		for _, value := range schema {
+			if sourceProjectionDeclaredSecret(value) {
+				return true
+			}
+		}
+	case []any:
+		for _, value := range schema {
+			if sourceProjectionDeclaredSecret(value) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func sourceProjectionContainsStringArm(raw any) bool {
