@@ -465,3 +465,35 @@ go test -count=1 -timeout 20m -run '^TestEveryImplementedCommandPassesRuntimePre
 The 28 batch actions remain source-traced and explicitly deferred to 0.3.1;
 all are still implemented and CLI-reachable. Full verification resumes only
 after this recovery commit is normally merged with current `origin/main`.
+
+## 2026-08-23 CI recovery — duplicate acknowledgement checkpoint
+
+After the normal merge of `origin/main`, the branch compiled and vetted with
+the CPU-bounded commands below. Website generated data was regenerated rather
+than edited; the generator left its committed output clean.
+
+```text
+go build -p 2 ./...
+go vet -p 2 ./...
+cd website && pnpm run gen:website-data
+GOMAXPROCS=2 go test -p 1 -parallel 1 -count=1 -timeout 20m ./internal/connectors/defs/twenty
+GOMAXPROCS=2 go test -p 1 -parallel 1 -count=1 -timeout 20m -run '^TestEveryImplementedCommandPassesRuntimePreflight$' ./internal/connectors/commandrunner
+# PASS
+```
+
+GitHub Verify `32653425011` then supplied a narrow red failure in two
+`internal/app` transport-dispatch tests: an obsolete branch-only append in
+`internal/synctransport/orchestrator.go` retained the same destination
+acknowledgement twice. The branch has no `internal/app` diff relative to
+`origin/main`; removing the redundant append restored the existing current-main
+delivery contract:
+
+```text
+GOMAXPROCS=2 go test -p 1 -parallel 1 -count=1 -timeout 20m \
+  -run '^(TestParkedFullAppendRateResumeRearmsLatestCheckpoint|TestRunETLTransportPostCheckpointBookkeepingPersistsDeliveredReconciliationAndRepairsWithoutReplay)$' ./internal/app
+# PASS
+```
+
+This is not a new transport feature. It removes stale branch-local foundation
+drift. The 168 Twenty commands remain implemented, and the 28 batch actions
+remain source-traced, CLI-reachable 0.3.1 certification deferrals.
