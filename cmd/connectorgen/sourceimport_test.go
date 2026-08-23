@@ -12,7 +12,9 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 )
@@ -751,6 +753,57 @@ func TestSourceImportRejectsDuplicateJSONAndYAMLMembersWithPointers(t *testing.T
 	}
 }
 
+func TestSourceImportNormalizesScalarYAMLMappingKeys(t *testing.T) {
+	t.Parallel()
+	numeric := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  /items:\n    get:\n      responses:\n        200: {description: ok}\n")
+	quoted := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  /items:\n    get:\n      responses:\n        '200': {description: ok}\n")
+	importArtifact := func(t *testing.T, sourceURL string, raw []byte) sourceImportResult {
+		t.Helper()
+		lock := sourceImportFixtureLock("alpha", sourceURL, raw)
+		result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+			return raw, nil
+		}), defaultSourceImportLimits())
+		if err != nil {
+			t.Fatalf("import %s: %v", sourceURL, err)
+		}
+		return result
+	}
+
+	numericResult := importArtifact(t, "https://fixtures.polymetrics.invalid/numeric.yaml", numeric)
+	quotedResult := importArtifact(t, "https://fixtures.polymetrics.invalid/quoted.yaml", quoted)
+	if len(numericResult.Operations) != 1 || len(quotedResult.Operations) != 1 {
+		t.Fatalf("operation counts numeric=%d quoted=%d", len(numericResult.Operations), len(quotedResult.Operations))
+	}
+	if response := descriptorResponse(t, numericResult.Operations[0], "200"); response.Declaration.(map[string]any)["description"] != "ok" {
+		t.Fatalf("numeric response = %#v", response)
+	}
+	numericDescriptor := numericResult.Operations[0]
+	quotedDescriptor := quotedResult.Operations[0]
+	// The source digest and URL intentionally differ because the two pinned
+	// artifacts have distinct bytes; their imported operation contract must not.
+	numericDescriptor.Source = sourceImportSource{}
+	quotedDescriptor.Source = sourceImportSource{}
+	if !reflect.DeepEqual(numericDescriptor, quotedDescriptor) {
+		t.Fatalf("numeric and quoted YAML imports differ\nnumeric: %#v\nquoted: %#v", numericDescriptor, quotedDescriptor)
+	}
+
+	duplicate := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  /items:\n    get:\n      responses:\n        200: {description: ok}\n        '200': {description: duplicate}\n")
+	duplicateLock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/duplicate-normalized.yaml", duplicate)
+	if _, err := importSourceLockResult(context.Background(), duplicateLock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return duplicate, nil
+	}), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "duplicate YAML mapping key") {
+		t.Fatalf("duplicate normalized YAML key error = %v", err)
+	}
+
+	nonScalar := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  ? [/items]\n  : get: {responses: {'200': {description: ok}}}\n")
+	nonScalarLock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/non-scalar-key.yaml", nonScalar)
+	if _, err := importSourceLockResult(context.Background(), nonScalarLock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return nonScalar, nil
+	}), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "must be a scalar") {
+		t.Fatalf("non-scalar YAML key error = %v", err)
+	}
+}
+
 func TestSourceImportPreservesLiteralReferenceFieldsAndReferenceSiblings(t *testing.T) {
 	t.Parallel()
 	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original","content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{"$ref":{"type":"string","maxLength":8},"example":{"type":"string","maxLength":8}}}}}}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","description":"override"}}}}}}`)
@@ -1022,16 +1075,16 @@ func TestSourceImportPreservesExactFormAndSwaggerRouteBinding(t *testing.T) {
 	}
 }
 
-func TestSourceImportRejectsCrossKindIdentitiesAndNonStringYAMLKeys(t *testing.T) {
+func TestSourceImportRejectsCrossKindIdentitiesAndUnsupportedYAMLKeyTags(t *testing.T) {
 	t.Parallel()
 	collision := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{"invoice.created":{"post":{"responses":{"200":{"description":"ok"}}}}},"paths":{"/items":{"get":{"operationId":"alpha.inbound.webhook.invoice.created","responses":{"200":{"description":"ok"}}}}}}`)
 	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/collision.json", collision)
 	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return collision, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "duplicate source identity") {
 		t.Fatalf("cross-kind identity error = %v", err)
 	}
-	yaml := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  !!int \"01\": {}\n")
-	if _, _, err := parseSourceImportDocument(yaml); err == nil || !strings.Contains(err.Error(), "must be a string") {
-		t.Fatalf("non-string YAML key error = %v", err)
+	yaml := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  !!timestamp \"2026-08-23\": {}\n")
+	if _, _, err := parseSourceImportDocument(yaml); err == nil || !strings.Contains(err.Error(), "must use a JSON scalar type") {
+		t.Fatalf("unsupported YAML key tag error = %v", err)
 	}
 }
 
@@ -2007,4 +2060,218 @@ func descriptorResponse(t *testing.T, descriptor sourceOperationDescriptor, stat
 	}
 	t.Fatalf("descriptor %q is missing response status %q", descriptor.SourceID, status)
 	return sourceResponseDescriptor{}
+}
+
+type sourceImportV3FixtureDocument struct {
+	ID           string
+	Path         string
+	Artifact     []byte
+	PublishedURL string
+}
+
+func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourceImportV3FixtureDocument) []byte {
+	t.Helper()
+	sourceDocuments := make([]any, 0, len(documents))
+	for _, document := range documents {
+		artifactDigest := sha256.Sum256(document.Artifact)
+		publishedURL := document.PublishedURL
+		if publishedURL == "" {
+			publishedURL = "https://published.polymetrics.invalid/" + document.ID + "?slug=" + document.ID
+		}
+		sourceDocuments = append(sourceDocuments, map[string]any{
+			"id": document.ID,
+			"artifact": map[string]any{
+				"source_url": "https://fixtures.polymetrics.invalid/" + document.ID + ".openapi.json",
+				"sha256":     hex.EncodeToString(artifactDigest[:]),
+				"bytes":      len(document.Artifact),
+				"openapi":    "3.0.3",
+			},
+			"published_source": map[string]any{
+				"source_url":  publishedURL,
+				"capture_url": "https://fixtures.polymetrics.invalid/" + document.ID + ".capture.json",
+				"sha256":      hex.EncodeToString(artifactDigest[:]),
+				"bytes":       len(document.Artifact),
+				"adapter":     "fixture-openapi-capture-v1",
+			},
+			"info_version": "1",
+			"operations": []any{map[string]any{
+				"id":              connector + ".rest." + document.ID + ".shared",
+				"protocol":        "rest",
+				"method":          "GET",
+				"path":            document.Path,
+				"operation_id":    "shared",
+				"source_location": `paths["` + document.Path + `"].get`,
+			}},
+		})
+	}
+	lock := map[string]any{
+		"schema_version": 3,
+		"connector":      connector,
+		"rest": map[string]any{
+			"retrieval":        "hermetic multi-document fixture capture",
+			"openapi":          []any{"3.0.3"},
+			"source_documents": sourceDocuments,
+		},
+		"counts": map[string]any{"rest": len(documents), "graphql_query": 0, "graphql_mutation": 0, "total": len(documents)},
+	}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatalf("encode v3 fixture lock: %v", err)
+	}
+	return raw
+}
+
+func TestSourceImportVersion3ImportsDocumentOwnedProvenanceAndDuplicateProviderIDs(t *testing.T) {
+	t.Parallel()
+	documents := []sourceImportV3FixtureDocument{
+		{ID: "alpha", Path: "/alpha", Artifact: []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/alpha":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)},
+		{ID: "bravo", Path: "/bravo", Artifact: []byte(`{"openapi":"3.0.3","info":{"title":"bravo","version":"1"},"paths":{"/bravo":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)},
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", documents), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 fixture lock: %v", err)
+	}
+	fetched := map[string]int{}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		fetched[sourceURL]++
+		for _, document := range documents {
+			if sourceURL == "https://fixtures.polymetrics.invalid/"+document.ID+".openapi.json" {
+				return document.Artifact, nil
+			}
+		}
+		return nil, fmt.Errorf("unexpected fixture source URL %q", sourceURL)
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 fixture lock: %v", err)
+	}
+	if len(result.Operations) != 2 {
+		t.Fatalf("v3 imported operations = %d, want 2", len(result.Operations))
+	}
+	if fetched["https://published.polymetrics.invalid/alpha?slug=alpha"] != 0 || fetched["https://published.polymetrics.invalid/bravo?slug=bravo"] != 0 {
+		t.Fatalf("importer fetched a published citation: %#v", fetched)
+	}
+	byID := map[string]sourceOperationDescriptor{}
+	for _, operation := range result.Operations {
+		byID[operation.SourceID] = operation
+	}
+	for _, document := range documents {
+		identity := "fixture.rest." + document.ID + ".shared"
+		operation, ok := byID[identity]
+		if !ok {
+			t.Fatalf("v3 operation %q is absent: %#v", identity, result.Operations)
+		}
+		if operation.ProviderOperationID != "shared" || operation.Path != document.Path {
+			t.Fatalf("v3 operation identity = %#v", operation)
+		}
+		encoded, marshalErr := json.Marshal(operation)
+		if marshalErr != nil {
+			t.Fatalf("marshal v3 operation: %v", marshalErr)
+		}
+		for _, want := range []string{`"document_id":"` + document.ID + `"`, `"published_url":"https://published.polymetrics.invalid/` + document.ID + `?slug=` + document.ID + `"`, `"published_capture_url":"https://fixtures.polymetrics.invalid/` + document.ID + `.capture.json"`} {
+			if !strings.Contains(string(encoded), want) {
+				t.Fatalf("v3 provenance omitted %s from %s", want, encoded)
+			}
+		}
+	}
+	marshaled, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal v3 descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(marshaled, &descriptor); err != nil {
+		t.Fatalf("decode v3 descriptor: %v", err)
+	}
+	if descriptor.SchemaVersion != 3 || !strings.Contains(string(marshaled), `"document_id": "alpha"`) || !strings.Contains(string(marshaled), `"published_url": "https://published.polymetrics.invalid/bravo?slug=bravo"`) {
+		t.Fatalf("v3 descriptor wire provenance = %s", marshaled)
+	}
+}
+
+func TestSourceImportVersion3RejectsMissingOrDriftedDocument(t *testing.T) {
+	t.Parallel()
+	documents := []sourceImportV3FixtureDocument{
+		{ID: "alpha", Path: "/alpha", Artifact: []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/alpha":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)},
+		{ID: "bravo", Path: "/bravo", Artifact: []byte(`{"openapi":"3.0.3","info":{"title":"bravo","version":"1"},"paths":{"/bravo":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)},
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", documents), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 fixture lock: %v", err)
+	}
+	_, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		if strings.Contains(sourceURL, "bravo") {
+			return nil, fmt.Errorf("fixture source is missing")
+		}
+		return documents[0].Artifact, nil
+	}), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "fixture source is missing") {
+		t.Fatalf("missing v3 document error = %v", err)
+	}
+
+	_, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return []byte(`{"openapi":"3.0.3","info":{"title":"drift","version":"1"},"paths":{}}`), nil
+	}), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "source-lock refresh required") {
+		t.Fatalf("drifted v3 document error = %v", err)
+	}
+}
+
+func TestSourceImportVersion3RejectsUnsafePublishedCitationQuery(t *testing.T) {
+	t.Parallel()
+	document := sourceImportV3FixtureDocument{
+		ID:           "alpha",
+		Path:         "/alpha",
+		Artifact:     []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/alpha":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`),
+		PublishedURL: "https://published.polymetrics.invalid/alpha?access_token=value",
+	}
+	if _, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture"); err == nil || !strings.Contains(err.Error(), "published source URL") {
+		t.Fatalf("unsafe published citation query error = %v", err)
+	}
+}
+
+func TestSourceImportVersion3SynchronizesDuplicateArtifactDigests(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.0.3","info":{"title":"fixture","version":"1"},"paths":{}}`)
+	digest := sha256.Sum256(raw)
+	artifact := sourceImportArtifact{SourceURL: "https://fixtures.polymetrics.invalid/shared.openapi.json", SHA256: hex.EncodeToString(digest[:]), Bytes: int64(len(raw)), OpenAPI: "3.0.3"}
+	documents := []sourceImportRESTDocument{{ID: "alpha", Artifact: artifact}, {ID: "bravo", Artifact: artifact}}
+	var mu sync.Mutex
+	calls := 0
+	got, err := fetchSourceImportV3Documents(context.Background(), documents, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		mu.Lock()
+		calls++
+		mu.Unlock()
+		time.Sleep(10 * time.Millisecond)
+		return raw, nil
+	}))
+	if err != nil {
+		t.Fatalf("fetch duplicate digest documents: %v", err)
+	}
+	if calls != 1 || !bytes.Equal(got["alpha"], raw) || !bytes.Equal(got["bravo"], raw) {
+		t.Fatalf("duplicate digest synchronization calls=%d documents=%#v", calls, got)
+	}
+}
+
+func TestSourceImportPreservesFrozenGitHubArtifacts(t *testing.T) {
+	t.Parallel()
+	checks := []struct {
+		path   string
+		bytes  int
+		sha256 string
+	}{
+		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), bytes: 3420025, sha256: "281b1cfcc67eb63e19ef83daf06197bf3d3b23db0b6bc9b73e02fc18ee278fb6"},
+		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-descriptor.json"), bytes: 43354021, sha256: "d1978c0c6fd0eb66e9fcd4d78d637864a6e486f558aaad1e51550bc43758b899"},
+		{path: filepath.Join("..", "..", ".planning", "phases", "github-parity-extract-r1", "GITHUB-COMBINED-OPERATION-LEDGER.json"), bytes: 2553169, sha256: "c4a904a919f30065fcc8453c6689e1a3dcc7be5ac8e11a7154d310b334972de3"},
+	}
+	for _, check := range checks {
+		check := check
+		t.Run(filepath.Base(check.path), func(t *testing.T) {
+			raw, err := os.ReadFile(check.path)
+			if err != nil {
+				t.Fatalf("read frozen artifact: %v", err)
+			}
+			digest := sha256.Sum256(raw)
+			if len(raw) != check.bytes || hex.EncodeToString(digest[:]) != check.sha256 {
+				t.Fatalf("frozen artifact %s = %d/%s, want %d/%s", check.path, len(raw), hex.EncodeToString(digest[:]), check.bytes, check.sha256)
+			}
+		})
+	}
 }
