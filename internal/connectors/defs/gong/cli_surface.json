@@ -452,7 +452,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong calls get --json --max-bytes 1048576"
       ]
@@ -477,7 +477,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong permissions profile get --json --max-bytes 1048576"
       ]
@@ -508,7 +508,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong crm entity-schema get --json --max-bytes 1048576"
       ]
@@ -545,7 +545,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong crm entities get --json --max-bytes 1048576"
       ]
@@ -570,7 +570,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong users get --json --max-bytes 1048576"
       ]
@@ -595,7 +595,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong users settings-history --json --max-bytes 1048576"
       ]
@@ -620,7 +620,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong permissions profile-users list --json --max-bytes 1048576"
       ]
@@ -657,7 +657,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong logs list --json --max-bytes 1048576"
       ]
@@ -682,7 +682,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong library folder-content list --json --max-bytes 1048576"
       ]
@@ -707,7 +707,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong flows bulk-assignment get --json --max-bytes 1048576"
       ]
@@ -768,7 +768,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong entities get-brief --json --max-bytes 1048576"
       ]
@@ -829,7 +829,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong entities ask --json --max-bytes 1048576"
       ]
@@ -854,7 +854,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong privacy find-phone --json --max-bytes 1048576"
       ]
@@ -879,7 +879,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong privacy find-email --json --max-bytes 1048576"
       ]
@@ -910,7 +910,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong crm request-status get --json --max-bytes 1048576"
       ]
@@ -953,7 +953,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong coaching list --json --max-bytes 1048576"
       ]
@@ -1556,7 +1556,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.calls_extensive",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -1722,7 +1722,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.calls_users_access_get",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -1751,7 +1751,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.users_extensive",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -1797,7 +1797,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.tasks_list",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -1853,7 +1853,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.stats_interaction",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -1907,7 +1907,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.stats_activity_scorecards",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -1977,7 +1977,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.stats_activity_day_by_day",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -2031,7 +2031,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.stats_activity_aggregate",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -2085,7 +2085,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.stats_activity_aggregate_by_period",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -2153,7 +2153,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.meetings_integration_status",
-      "risk": "bounded POST read-query; sends only typed email array body fields and preserves ordinary provider response fields",
+      "risk": "bounded POST read-query; sends only typed email array body fields and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed.",
       "output_policy": "json_redacted",
@@ -2180,7 +2180,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.flows_steps",
-      "risk": "bounded POST read-query; sends only typed flow ID array body fields and preserves ordinary provider response fields",
+      "risk": "bounded POST read-query; sends only typed flow ID array body fields and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed.",
       "output_policy": "json_redacted",
@@ -2207,7 +2207,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.flows_prospects",
-      "risk": "bounded POST read-query; sends only typed CRM prospect or flow instance ID arrays and preserves ordinary provider response fields",
+      "risk": "bounded POST read-query; sends only typed CRM prospect or flow instance ID arrays and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed.",
       "output_policy": "json_redacted",
@@ -2239,7 +2239,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gong.calls_transcript",
-      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded typed POST read-query; response size is capped and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "approval": "none: read-only POST query with schema-gated body",
       "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",
@@ -2360,7 +2360,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields; only concrete configured credential values are masked",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and preserves ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "examples": [
         "pm gong targets list --json --max-bytes 1048576"
       ]
@@ -2413,7 +2413,7 @@
     },
     {
       "name": "gong-direct-read",
-      "summary": "Gong direct reads are bounded JSON GET or typed POST operations that preserve ordinary provider response fields; only concrete configured credential values are masked. Call transcripts support a 16 MiB cap."
+      "summary": "Gong direct reads are bounded JSON GET or typed POST operations that preserve ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker. Call transcripts support a 16 MiB cap."
     }
   ]
 }

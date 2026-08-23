@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+const gongPreservesCredentialCollision = "including values that happen to match configured credential material"
+
 func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	api := loadGongJSON[struct {
 		Endpoints []struct {
@@ -126,6 +128,9 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		}
 		if cmd.Intent == "direct_read" && strings.Contains(strings.ToLower(cmd.Risk), "redact") {
 			t.Fatalf("direct read command %q describes provider fields as redacted; ordinary provider output must be preserved", cmd.Path)
+		}
+		if cmd.Intent == "direct_read" && !strings.Contains(cmd.Risk, gongPreservesCredentialCollision) {
+			t.Fatalf("direct read command %q omits the credential-collision preservation policy: %q", cmd.Path, cmd.Risk)
 		}
 		if cmd.Intent == "reverse_etl" {
 			if cmd.Availability != "implemented" {
@@ -250,7 +255,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}{}
 	for _, op := range ops.Operations {
 		if op.Kind == "rest_read" && len(op.SensitivePolicy) > 0 && string(op.SensitivePolicy) != "null" {
-			t.Fatalf("read operation %q declares field redaction; only concrete configured credential values may be masked at output", op.ID)
+			t.Fatalf("read operation %q declares field redaction; Gong reads have no declared output-secret fields", op.ID)
 		}
 		opsByID[op.ID] = struct {
 			kind, risk, approval, outputPolicy, mutationClass string
@@ -286,6 +291,9 @@ func TestGongMetadataEnablesWriteCapability(t *testing.T) {
 	}
 	if strings.Contains(strings.ToLower(metadata.Risk.Read), "redact") {
 		t.Fatalf("Gong metadata describes ordinary direct-read output as redacted: %q", metadata.Risk.Read)
+	}
+	if !strings.Contains(metadata.Risk.Read, gongPreservesCredentialCollision) {
+		t.Fatalf("Gong metadata omits the credential-collision preservation policy: %q", metadata.Risk.Read)
 	}
 }
 

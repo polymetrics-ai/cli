@@ -8,7 +8,7 @@
 | Foundation reconciliation | Preserved branch predates current main, typed destinations, and Batch 2/3 source disposition evidence. | Merge ancestry proves retained branch history plus the exact published foundation heads. | Resolve connector-owned declarations, not provider-named engine conditions. |
 | Direct-read exact endpoint binding | Reproduce any Gong command that preflights with an implemented operation but no matching `api_surface` row. | Real `commandrunner.Preflight`, `surface-reconcile`, and a built CLI preflight sweep accept each declared direct read up to missing credentials. | Let `surface-sync` derive operation-owned metadata; do not hand-author it. |
 | Typed write and reverse-ETL declarations | The historical CLI marks 24 exact write actions partial; the three multipart actions were recorded as an F4 foundation gap. | All 27 named actions are implemented, their CLI field shapes pass runtime preflight, and focused Gong multipart conformance passes through the shared approval-digest path. | No generic writer, raw body, arbitrary endpoint, or Gong-specific shared branch. |
-| Provider output preservation | Gong command metadata described ordinary provider response fields as redacted. | A focused Gong surface test fails on direct-read redaction language or read-field redaction declarations; current descriptions preserve ordinary response fields and mask only configured credential values. | Keep credential masking at the generic output boundary; do not create field-name heuristics. |
+| Provider output preservation | Gong command metadata described ordinary provider response fields as redacted, and the shared result boundary masks an undeclared provider value that happens to equal a credential. | A focused Gong surface test fails on direct-read redaction language or read-field declarations; the provider-neutral foundation test for #4321 fails until an undeclared matching scalar, header, raw body, and cursor remain exact while an explicitly declared secret field stays visibly masked. | Keep declared-secret masking at the generic output boundary; do not create field-name heuristics or a Gong branch. |
 | Six-surface enabled parity | A source-locked operation can be structurally declared yet be absent from CLI/App dispatch, generated docs, or a supported ETL, reverse-ETL, direct, or binary path. | Generated inventory-to-surface evidence and built-CLI/App checks classify each of ETL, reverse ETL, direct read, direct write, binary download, and binary upload as proven or exact-source `not_applicable`. | Safety, scope, tier, and destructive metadata can add confirmation; they cannot disable a provider-defined operation. |
 | Certification evidence | No credential reference means live stages cannot assert persisted provider state. | Credential-free gates are green and the remaining external block is explicit and secret-free. | Do not substitute browser authentication or fixtures for live certification. |
 
@@ -23,6 +23,10 @@
 - The first output-preservation assertion did not compile until the focused test model was extended
   with CLI risk metadata; it then failed on `calls get` claiming its fields were redacted. This
   established a declaration-level red case without provider I/O.
+- Captain policy audit found collision masking in the shared public provider-result projections:
+  `SanitizeProviderOutputForOutput`, receipt/header/write projections, and direct-read cursors
+  mask a scalar solely because it equals configured credential material. Foundation issue #4321
+  records the required provider-neutral red test and fix; this Gong lane does not add an exception.
 - `node .../verify-parity-maps.mjs` failed after the shared multipart foundation was merged because
   its generated ledger still carried the now-obsolete Gong F4 rows. Removing that stale special
   case and regenerating the ledger made the 19-connector/5,127-operation check pass with zero
@@ -55,6 +59,13 @@
 - `go test -timeout 20m ./cmd/connectorgen -run '^TestGong(CertificationDeclarationUsesOnlyOrdinaryRESTLiveCandidates|FullSurfaceCommandAndOperationCoverage|MetadataEnablesWriteCapability)$' -count=1`
   passed. `certification-candidates` and `certification-sweep` generated and then passed their
   Gong `--check` modes (71 rows / 69 CLI commands).
+- Gong declarations now state the captain rule: all ordinary provider values, including a value
+  equal to configured credential material, must be preserved; only explicitly declared secret
+  fields may be masked. The shared runtime implementation is tracked as an open #4321 dependency.
+- The strengthened Gong declaration test first failed because three direct-read descriptions
+  (`meetings integration-status`, `flows steps`, and `flows prospects`) omitted the policy. After
+  declaration-only corrections, `TestGongFullSurfaceCommandAndOperationCoverage` passed and its
+  JSON assertion proved all 30 direct-read descriptions carry the policy.
 - The rebuilt CLI authenticated through the persisted App credential path. A bounded `users list`
   ETL read returned one record, and the bounded ordinary `users extensive` direct read returned a
   successful provider response with page context. No provider fields or identifiers were retained

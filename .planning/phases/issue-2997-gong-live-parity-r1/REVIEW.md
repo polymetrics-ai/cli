@@ -18,10 +18,11 @@
 3. **Fixed — stale F4 bookkeeping.** The Batch 2/3 generator fabricated Gong multipart gap rows
    after focused generic conformance passed. The obsolete Gong-specific generator branch was
    removed; the regenerated 19-connector check contains zero Gong gap rows.
-4. **Fixed — misleading response-redaction claims.** Gong read declarations do not have
-   field-redaction policies, but connector metadata/docs said ordinary data was redacted. Focused
-   tests now reject that drift; ordinary provider data is preserved and only concrete configured
-   credential values are masked.
+4. **Open, shared foundation — provider-value collision masking.** Gong read declarations have no
+   field-redaction policy and now require ordinary provider values to remain exact even when a
+   value equals configured credential material. The current shared output boundary violates that
+   rule by collision-masking values, headers, raw receipts, and cursors. Foundation issue #4321
+   owns the generic red/green correction; the Gong PR contains no provider-specific exception.
 5. **Open, external — source importer URL policy.** The generic importer rejects the official
    fixed query-bearing Gong artifact URL. No connector-specific exception was added. See
    `SOURCE-AUDIT.md` for the exact failure and safe required foundation change.
@@ -47,11 +48,17 @@
     source hashes, and one external-proof hash only. The local proof, credential store, responses,
     and account data stay outside the repository. `git diff --check`, focused conformance,
     commandrunner preflight, generated-candidate/sweep/subject checks, lint, boundary, and release
-    workflow gates pass; the repository-wide test and `make verify` remain blocked by unrelated
-    generated-skill drift.
+   workflow gates pass; the repository-wide test and `make verify` remain blocked by unrelated
+   generated-skill drift.
+11. **Verified — captain collision-policy declaration coverage.** The strengthened focused test
+    first found three direct-read descriptions that omitted the policy. All 30 direct reads,
+    metadata, generated manual/skill, and catalog now state that an ordinary provider value stays
+    intact when it equals configured credential material. The review traced the contrary runtime
+    behavior to shared output projections and recorded provider-neutral #4321 instead of adding a
+    Gong exception. Declared-secret masking remains the only permitted provider-output masking.
 
 ## Review result
 
 No remaining connector-local correctness or safety finding was identified beyond the source
 projection gap above. The branch remains draft/non-merge-ready until the generic source-import URL
-policy and full live certification gates are resolved.
+policy, foundation #4321 output-policy correction, and full live certification gates are resolved.

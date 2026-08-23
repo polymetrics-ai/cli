@@ -4,7 +4,7 @@ Reads Gong users, calls, scorecards, targets, settings, flows, and related API r
 
 Executable ETL streams: `users`, `calls`, `scorecards`, `crm_integrations`, `workspaces`, `trackers`, `briefs`, `library_folders`, `flows`, `flow_folders`, `call_outcomes`, `permission_profiles`. Bounded target definition lookup is exposed as `pm gong targets list --workspaceId <id>` because the official endpoint requires a workspace query parameter rather than a connection-global stream.
 
-Bounded direct-read commands cover the official GET detail/query endpoints and all 13 POST read-query endpoints with the `json_redacted` output policy. That policy preserves all ordinary provider response fields; only concrete configured credential values are masked with an explicit marker. POST reads execute through typed operation metadata with connector-authored flags and schema-gated JSON bodies; no raw body flag exists. Call transcripts are available through `pm gong calls transcript` with call ID, time range, workspace, and cursor filters and a 16 MiB response cap. JSON mutations, typed multipart uploads, target assignment CSV uploads, and top-level array CRM schema uploads are modeled as reverse-ETL write actions where the engine supports the request shape.
+Bounded direct-read commands cover the official GET detail/query endpoints and all 13 POST read-query endpoints with the `json_redacted` output policy. That policy preserves all ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker. POST reads execute through typed operation metadata with connector-authored flags and schema-gated JSON bodies; no raw body flag exists. Call transcripts are available through `pm gong calls transcript` with call ID, time range, workspace, and cursor filters and a 16 MiB response cap. JSON mutations, typed multipart uploads, target assignment CSV uploads, and top-level array CRM schema uploads are modeled as reverse-ETL write actions where the engine supports the request shape.
 
 Service API documentation: https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=.
 
@@ -45,7 +45,7 @@ Safety gates:
 - Top-level JSON array writes use a declared `body_field` and `body_schema`; no raw JSON CLI flag is exposed.
 - Gong DELETE operations (`meetings delete`, `crm integrations delete`, and `calls users-access delete`) are canonical reverse-ETL write actions with `confirm: destructive`, typed record schemas, and plan -> preview -> explicit approval -> execute safeguards.
 
-Read risk: external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and preserve ordinary provider response fields. Only concrete configured credential values are masked.
+Read risk: external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and preserve ordinary provider response fields. Ordinary provider response values, including values that happen to match configured credential material, are retained; explicitly declared secret fields are masked with an explicit marker.
 
 Write risk: typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, targets, engagement, and data privacy erasure.
 

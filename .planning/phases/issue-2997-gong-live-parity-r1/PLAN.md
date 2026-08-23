@@ -29,7 +29,9 @@ typed confirmation and the reverse plan → preview → approval → execute flo
 Gong-named runtime policy branches. The captain has supplied the approved non-echoing disposable
 credential reference for live certification. Agentic endpoints remain categorically excluded from
 live execution because they consume paid credits; a certification requirement that cannot avoid one
-is a captain decision, not a connector-local exception.
+is a captain decision, not a connector-local exception. The captain further requires an ordinary
+provider value to remain complete even when it equals a configured credential; only explicitly
+declared secret fields may be masked. Foundation #4321 owns the shared runtime correction.
 
 ## GSD command path and manual fallback
 
@@ -45,7 +47,7 @@ is a captain decision, not a connector-local exception.
 
 - `no-mistakes`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
   `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`,
-  `golang-context`, `golang-concurrency`, and `golang-documentation`.
+  `golang-context`, `golang-concurrency`, `golang-documentation`, and `golang-lint`.
 - Repository guidance: `required-skills-routing.md`, `gsd-pi-adapter.md`,
   `cli-help-docs-website-parity.md`, `docs/migration/HANDOFF-CODEX.md`,
   `docs/migration/conventions.md`, and `docs/architecture/connector-architecture-v2-design.md`.
@@ -128,8 +130,9 @@ historical parity count or declaration-only validation result.
    multipart after `cli-closed-operation-runtime-r1` publishes its approval-digest contract.
 4. **Discovery and output:** prove every supported operation is reachable from runtime CLI help,
    generated manual/docs, and website discovery projections. Retain all ordinary non-secret
-   provider response fields; credential/transport-secret masking must preserve the masked field
-   with an explicit marker rather than dropping it.
+   provider response fields. Only explicitly declared secret fields may be masked, and their
+   masked field must retain an explicit marker rather than being dropped. A provider value that
+   merely equals configured credential material remains ordinary provider truth.
 5. **Live evidence after foundations publish:** use only a non-echoing approved disposable Gong
    credential reference and the persisted App path. Exercise supported CRUD and application
    commands, each applicable surface, pagination, required-input errors, reverse-ETL
@@ -139,6 +142,11 @@ historical parity count or declaration-only validation result.
 6. **Paid endpoint exclusion:** do not execute any Gong agentic endpoint. It consumes paid credits;
    if a mandatory certification cell cannot be proven by ordinary REST endpoints, record that exact
    cell as uncertified and stop for captain direction.
+
+7. **Collision-policy foundation:** shared result projections currently mask undeclared provider
+   values when they equal configured credentials. This contradicts the captain's preservation rule;
+   connector work must not add an exception. Foundation issue #4321 owns the provider-neutral
+   red/green change while Gong records the dependency and continues independent certification.
 
 ## CLI/docs parity
 

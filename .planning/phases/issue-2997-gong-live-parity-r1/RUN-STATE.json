@@ -7,9 +7,9 @@
   "lifecycle": {
     "discuss_phase": "inline: locked user decisions recorded in PLAN.md",
     "plan_phase_tdd": "inline: PLAN.md and TDD-LEDGER.md created before production edits",
-    "execute_phase": "in_progress: source audit, foundation merge, parameter reconciliation, and bounded live read evidence recorded",
-    "verify_work": "pending",
-    "code_review": "pending"
+    "execute_phase": "inline: source audit, foundation merge, parameter reconciliation, bounded live read evidence, and captain collision-policy declaration slice recorded",
+    "verify_work": "inline: focused Gong tests, complete connectorgen package, generated docs/subject, lint, vet, and boundary pass; external source-import and full-live gaps remain explicit",
+    "code_review": "inline: REVIEW.md records source, declaration, generation, secret-boundary, and shared-foundation dispositions"
   },
   "manual_gsd_fallback": {
     "reason": "the canonical single-worker contract and runtime prohibit isolated GSD role spawning",
@@ -27,6 +27,10 @@
     "source_import": {
       "status": "blocked_provider_neutral_url_policy",
       "detail": "The official fixed source URL requires ?version=, but connectorgen source-import rejects query-bearing artifact URLs before fetch; the query-free official route returns 404."
+    },
+    "output_preservation": {
+      "status": "blocked_provider_neutral_collision_masking",
+      "detail": "Gong declarations require ordinary provider values to remain exact even when equal to configured credential material. Shared result projections collision-mask those values; foundation issue #4321 owns the generic red/green correction."
     }
   },
   "live_certification": {

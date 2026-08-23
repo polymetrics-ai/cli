@@ -17,6 +17,13 @@
 - [x] Built `pm` credential-free command sweep classified all 69 implemented Gong paths (30 direct reads, 27 reverse-ETL writes, 12 ETL streams) as `missing --credential`; it made no provider request and saw zero unknown, partial, or unbound results.
 - [x] `pm help gong`, `pm gong`, and `pm gong calls get --help` render contextual help; manual, skill, and website generated artifacts were regenerated after the declaration changes.
 - [x] Gong parameter import reconciled the three multipart operations (`17` scanned, `0` remaining drift); Gong certification candidates and the 71-row certification sweep are generated and current.
+- [x] `TestGongFullSurfaceCommandAndOperationCoverage` is strengthened for the captain's collision
+  policy. It first failed on three stale direct-read descriptions, then passed after all 30 direct
+  reads and metadata declared preservation of an ordinary credential-equal provider value.
+- [x] `go test -timeout 20m ./cmd/connectorgen -count=1` passed (146.952s); `make docs-check`,
+  `make connector-boundary` (552 connectors, zero findings), `make lint` (zero issues),
+  `go vet ./...`, and current Gong certification candidate/sweep/subject checks passed after
+  regeneration.
 - [x] `go vet ./...` and `go build ./cmd/pm` pass.
 - [x] `tidy-check`, `docs-check`, `smoke-no-build`, `lint`, `agent-contract-check`,
   `connector-boundary`, and `release-workflow-check` pass. Boundary scanned 552 connectors with
@@ -33,6 +40,10 @@
   source descriptor. `certification-matrix --connector gong --check` is blocked because Gong is
   not in the shared static allowlist; no allowlist change was made. Gong certification candidates,
   71-row sweep, and regenerated current subject all pass their `--check` modes.
+- [ ] Latest scoped `go run ./cmd/connectorgen source-import gong --check` still returns
+  `source lock has invalid public artifact URL: artifact URL must not include a query`. PR #4320
+  remains open, so this is recorded as the same provider-neutral dependency rather than a claim
+  that its multi-document source-lock change has been empirically tested for Gong.
 - [ ] Inline code review is recorded in `REVIEW.md`; automated-review route/dispositions are recorded in PR #3552.
 
 ## Captain hard certification gate
@@ -59,9 +70,10 @@
 - [x] Binary-download is exact-source `not_applicable`: every official Gong response contract is
   JSON or wildcard response metadata, with no binary response operation. Binary-upload has three
   exact multipart operations and focused generic conformance evidence.
-- [x] Provider output-preservation evidence forbids read-field redaction declarations and stale
-  redaction language; ordinary provider fields are retained and only configured credential values
-  are masked with an explicit marker.
+- [ ] Provider output-preservation declarations forbid Gong read-field redaction, and require all
+  ordinary values—including an undeclared value that equals a credential—to be retained. Shared
+  runtime collision masking still violates that rule; foundation issue #4321 owns the
+  provider-neutral red/green fix. Explicitly declared secret fields remain maskable with a marker.
 - [ ] Live certification uses the persisted App path with an approved non-echoing disposable
   credential reference, supported CRUD/application commands, cleanup, and bounded non-secret
   request/result fingerprints. The approved reference is now in use and scoped read proof is

@@ -15,8 +15,10 @@ parity dependencies are resolved.
 - Promoted all 27 named write actions to implemented declaration-owned reverse-ETL commands;
   corrected array/object flag types and the required CRM schema flag. The three multipart uploads
   pass focused generic conformance with approval-digest binding.
-- Made output preservation explicit: Gong ordinary provider response fields are retained, with
-  masking only for concrete configured credential values.
+- Made the required output policy explicit: Gong ordinary provider values—including values that
+  happen to match configured credentials—must be retained. Only explicitly declared secret fields
+  may be masked with an explicit marker. A strengthened focused declaration test covers all 30
+  direct reads; the shared runtime correction is tracked in #4321.
 - Regenerated manuals, skills, website data, and the Batch 2/3 map. All 69 source rows are enabled;
   the missing-foundation ledger has zero Gong rows.
 - In a fresh initialized project with no credentials, the built binary ran every implemented Gong
@@ -41,6 +43,10 @@ parity dependencies are resolved.
   received that required marker because `surface-sync` is blocked by the missing canonical source
   descriptor above. The live no-input call is recorded only as HTTP-400 classification; no manual
   flag or provider-specific runtime path was added.
+- Shared provider-result projections currently collision-mask an ordinary scalar, header, raw
+  body, or cursor when it equals configured credential material. This violates the captain's
+  provider-output rule. Foundation issue #4321 owns the provider-neutral fix; this PR contains no
+  Gong-specific escape hatch.
 - Full live parity remains incomplete: the full harness observed 16 bounded ETL records and seven
   passing ETL append cells, while `calls`, `library_folders`, `flows`, `flow_folders`, and
   `permission_profiles` remain uncertified. There are no declaration-owned, self-cleaning Gong

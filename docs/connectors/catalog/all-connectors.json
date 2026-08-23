@@ -66270,7 +66270,7 @@
       }
     ],
     "risk": {
-      "read": "external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and preserve ordinary provider response fields; only concrete configured credential values are masked",
+      "read": "external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and preserve ordinary provider response fields, including values that happen to match configured credential material; explicitly declared secret fields are masked with an explicit marker",
       "write": "typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, targets, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure",
       "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive; local file upload plans bind a SHA-256 payload identity that is snapshot-verified before network send"
     },

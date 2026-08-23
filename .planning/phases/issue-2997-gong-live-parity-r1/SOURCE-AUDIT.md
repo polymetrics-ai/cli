@@ -30,10 +30,12 @@ with typed destructive confirmation.
 
 ## Output and foundation audit
 
-- Gong direct reads declare no `sensitive_policy.redact_fields`. The `json_redacted` policy
-  deep-clones ordinary provider JSON; the only output masking is for concrete configured
-  credential values and retains an explicit marker. Connector docs and the focused surface test
-  forbid wording or declarations that imply ordinary response-field redaction.
+- Gong direct reads declare no `sensitive_policy.redact_fields`. Their policy requires every
+  ordinary provider value, including one that happens to equal configured credential material, to
+  remain intact. Only explicitly declared secret output fields may be represented by an explicit
+  marker. Shared collision masking currently violates this rule across provider-output projections;
+  provider-neutral foundation issue #4321 owns its red/green correction. Connector docs and the
+  focused surface test forbid wording or declarations that imply ordinary response-field redaction.
 - The reconciled `origin/main` tree `6410fe59c` contains the final squashed structured-body,
   source-import, typed-header/binary/status/text, action-binding, and declaration-route heads.
   The branch merge preserves that shared tree and retains only Gong-owned declarations and
