@@ -135,6 +135,94 @@ func TestSourceImportAcceptsStringScalarUnionPathWireContract(t *testing.T) {
 	}
 }
 
+func TestSourceImportRetainsRecursiveSchemaReferencesAsSourceBoundGaps(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name        string
+		components  string
+		responseRef string
+		wantPointer string
+		wantSchema  string
+		wantGap     bool
+	}{
+		{
+			name:        "direct self reference",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"children":{"type":"array","items":{"$ref":"#/components/schemas/Folder"}}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "mutually recursive schemas",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"parent":{"$ref":"#/components/schemas/Parent"}}},"Parent":{"type":"object","additionalProperties":false,"properties":{"folder":{"$ref":"#/components/schemas/Folder"}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "deeply nested cycle",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"metadata":{"type":"object","additionalProperties":false,"properties":{"tree":{"type":"object","additionalProperties":false,"properties":{"child":{"$ref":"#/components/schemas/Folder"}}}}}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "non cyclic schema",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string","maxLength":64}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantGap:     false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"recursive fixture","version":"1"},"components":{"schemas":{` + tt.components + `}},"paths":{"/folders":{"get":{"operationId":"folders/get","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"` + tt.responseRef + `"}}}}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			if len(result.Operations) != 1 {
+				t.Fatalf("operations = %d, want retained operation", len(result.Operations))
+			}
+			operation := result.Operations[0]
+			if operation.Source.Location != `paths["/folders"].get` {
+				t.Fatalf("operation source trace = %#v", operation.Source)
+			}
+
+			var cycleGap *sourceContractGap
+			for index := range operation.Runtime.Gaps {
+				gap := &operation.Runtime.Gaps[index]
+				if gap.Foundation == "cli-recursive-schema-foundation-r1" {
+					cycleGap = gap
+					break
+				}
+			}
+			if !tt.wantGap {
+				if cycleGap != nil || operation.Runtime.MergeBlocked {
+					t.Fatalf("non-cyclic runtime gaps = %#v", operation.Runtime)
+				}
+				return
+			}
+			if cycleGap == nil || !operation.Runtime.MergeBlocked {
+				t.Fatalf("recursive schema runtime gap = %#v", operation.Runtime)
+			}
+			if !strings.Contains(cycleGap.Location, `response 200`) || !strings.Contains(cycleGap.Reason, tt.wantPointer) || !strings.Contains(cycleGap.Reason, tt.wantSchema) {
+				t.Fatalf("cycle gap = %#v, want response location and schema pointer %q", cycleGap, tt.wantPointer)
+			}
+
+			response := descriptorResponse(t, operation, "200")
+			encoded, err := json.Marshal(response.Declaration)
+			if err != nil {
+				t.Fatalf("marshal retained response declaration: %v", err)
+			}
+			if !strings.Contains(string(encoded), `"$ref":"`+tt.wantPointer+`"`) {
+				t.Fatalf("recursive schema was flattened or truncated: %s", encoded)
+			}
+		})
+	}
+}
+
 func TestSourceImport_CheckedInGitHubLockCoversRESTAndGraphQL(t *testing.T) {
 	t.Parallel()
 	raw, err := os.ReadFile(filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"))
