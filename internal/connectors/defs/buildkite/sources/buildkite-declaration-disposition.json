@@ -70,7 +70,8 @@
         "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
       }
     },
-    "foundation_gap_operations": 0
+    "foundation_gap_operations": 0,
+    "partial_commands": 132
   },
   "ledger_dispositions": [
     {
@@ -111,8 +112,12 @@
         "evidence": "api_surface.json:endpoints[0]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-access-token\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-access-token",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -153,8 +158,12 @@
         "evidence": "api_surface.json:endpoints[1]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-access-token\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-access-token",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -195,8 +204,12 @@
         "evidence": "api_surface.json:endpoints[2]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-builds\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-builds",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -237,8 +250,12 @@
         "evidence": "api_surface.json:endpoints[3]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-meta\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-meta",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -274,8 +291,12 @@
         "evidence": "api_surface.json:endpoints[4]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -322,8 +343,12 @@
         "evidence": "api_surface.json:endpoints[5]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -359,8 +384,12 @@
         "evidence": "api_surface.json:endpoints[6]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-agents\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-agents",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -407,8 +436,12 @@
         "evidence": "api_surface.json:endpoints[7]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-agents-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-agents-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -445,7 +478,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"pause_agent\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-agents-id-pause",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -487,7 +524,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"resume_agent\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-agents-id-resume",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -529,7 +570,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"stop_agent\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-agents-id-stop",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -575,8 +620,12 @@
         "evidence": "api_surface.json:endpoints[11]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-api-settings\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-api-settings",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -617,8 +666,12 @@
         "evidence": "api_surface.json:endpoints[12]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations patch-v2-organizations-org-slug-api-settings\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-api-settings",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -659,8 +712,12 @@
         "evidence": "api_surface.json:endpoints[13]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-audit-events\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-audit-events",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -701,8 +758,12 @@
         "evidence": "api_surface.json:endpoints[14]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-audit-events-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-audit-events-uuid",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -743,8 +804,12 @@
         "evidence": "api_surface.json:endpoints[15]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-builds\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-builds",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -780,8 +845,12 @@
         "evidence": "api_surface.json:endpoints[16]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-clusters\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -828,8 +897,12 @@
         "evidence": "api_surface.json:endpoints[17]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-clusters\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-clusters",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -870,8 +943,12 @@
         "evidence": "api_surface.json:endpoints[18]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-clusters-cluster-id-agent-images\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters-cluster-id-agent-images",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -912,8 +989,12 @@
         "evidence": "api_surface.json:endpoints[19]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-clusters-cluster-id-agent-images\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-clusters-cluster-id-agent-images",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -954,8 +1035,12 @@
         "evidence": "api_surface.json:endpoints[20]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-clusters-cluster-id-agent-images-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-clusters-cluster-id-agent-images-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -996,8 +1081,12 @@
         "evidence": "api_surface.json:endpoints[21]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-clusters-cluster-id-agent-images-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters-cluster-id-agent-images-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1038,8 +1127,12 @@
         "evidence": "api_surface.json:endpoints[22]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-clusters-cluster-id-cache-volumes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-clusters-cluster-id-cache-volumes",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1080,8 +1173,12 @@
         "evidence": "api_surface.json:endpoints[23]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-clusters-cluster-id-cache-volumes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters-cluster-id-cache-volumes",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1122,8 +1219,12 @@
         "evidence": "api_surface.json:endpoints[24]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-clusters-cluster-id-network-ranges\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters-cluster-id-network-ranges",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1164,8 +1265,12 @@
         "evidence": "api_surface.json:endpoints[25]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-clusters-cluster-id-queues\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters-cluster-id-queues",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1206,8 +1311,12 @@
         "evidence": "api_surface.json:endpoints[26]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-clusters-cluster-id-queues\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-clusters-cluster-id-queues",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1248,8 +1357,12 @@
         "evidence": "api_surface.json:endpoints[27]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-clusters-cluster-id-queues-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-clusters-cluster-id-queues-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1290,8 +1403,12 @@
         "evidence": "api_surface.json:endpoints[28]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-clusters-cluster-id-queues-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters-cluster-id-queues-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1332,8 +1449,12 @@
         "evidence": "api_surface.json:endpoints[29]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-clusters-cluster-id-queues-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-clusters-cluster-id-queues-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1374,8 +1495,12 @@
         "evidence": "api_surface.json:endpoints[30]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-clusters-cluster-id-queues-id-pause-dispatch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-clusters-cluster-id-queues-id-pause-dispatch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1416,8 +1541,12 @@
         "evidence": "api_surface.json:endpoints[31]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-clusters-cluster-id-queues-id-resume-dispatch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-clusters-cluster-id-queues-id-resume-dispatch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1454,7 +1583,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters-cluster-id-tokens",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "lists agent registration tokens; these are bearer credentials agents use to connect, never modeled as ordinary sync data"
         }
@@ -1494,7 +1627,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-clusters-cluster-id-tokens",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "mints a new agent registration token; a credential-minting operation, never a data mutation"
         }
@@ -1534,7 +1671,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-clusters-cluster-id-tokens-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "revokes an agent registration token; credential-shaped mutation, would disconnect every agent still using it"
         }
@@ -1574,7 +1715,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters-cluster-id-tokens-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "single agent-token detail; credential-shaped, same reasoning as the list"
         }
@@ -1614,7 +1759,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-clusters-cluster-id-tokens-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "renames/revokes-and-reissues an agent token; credential-shaped mutation"
         }
@@ -1658,8 +1807,12 @@
         "evidence": "api_surface.json:endpoints[37]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-clusters-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-clusters-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1700,8 +1853,12 @@
         "evidence": "api_surface.json:endpoints[38]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-clusters-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-clusters-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1742,8 +1899,12 @@
         "evidence": "api_surface.json:endpoints[39]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-clusters-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-clusters-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1784,8 +1945,12 @@
         "evidence": "api_surface.json:endpoints[40]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-emojis\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-emojis",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1826,8 +1991,12 @@
         "evidence": "api_surface.json:endpoints[41]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-jobs-job-id-ssh-session\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-jobs-job-id-ssh-session",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1868,8 +2037,12 @@
         "evidence": "api_surface.json:endpoints[42]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-jobs-job-id-vnc-session\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-jobs-job-id-vnc-session",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1910,8 +2083,12 @@
         "evidence": "api_surface.json:endpoints[43]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-members\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-members",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1952,8 +2129,12 @@
         "evidence": "api_surface.json:endpoints[44]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-members-user-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-members-user-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1994,8 +2175,12 @@
         "evidence": "api_surface.json:endpoints[45]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-members-user-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-members-user-uuid",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2036,8 +2221,12 @@
         "evidence": "api_surface.json:endpoints[46]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations patch-v2-organizations-org-slug-members-user-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-members-user-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2078,8 +2267,12 @@
         "evidence": "api_surface.json:endpoints[47]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipeline-settings\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipeline-settings",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2120,8 +2313,12 @@
         "evidence": "api_surface.json:endpoints[48]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations patch-v2-organizations-org-slug-pipeline-settings\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-pipeline-settings",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2162,8 +2359,12 @@
         "evidence": "api_surface.json:endpoints[49]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-pipeline-settings-advanced-queue-metrics\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-pipeline-settings-advanced-queue-metrics",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2204,8 +2405,12 @@
         "evidence": "api_surface.json:endpoints[50]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-pipeline-settings-build-export\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-pipeline-settings-build-export",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2246,8 +2451,12 @@
         "evidence": "api_surface.json:endpoints[51]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-pipeline-settings-build-export\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-pipeline-settings-build-export",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2288,8 +2497,12 @@
         "evidence": "api_surface.json:endpoints[52]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-pipeline-settings-hosted-agents-ssh\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-pipeline-settings-hosted-agents-ssh",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2330,8 +2543,12 @@
         "evidence": "api_surface.json:endpoints[53]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-pipeline-settings-hosted-agents-ssh\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-pipeline-settings-hosted-agents-ssh",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2372,8 +2589,12 @@
         "evidence": "api_surface.json:endpoints[54]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-pipeline-settings-public-pipelines\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-pipeline-settings-public-pipelines",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2414,8 +2635,12 @@
         "evidence": "api_surface.json:endpoints[55]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-pipeline-settings-public-pipelines\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-pipeline-settings-public-pipelines",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2456,8 +2681,12 @@
         "evidence": "api_surface.json:endpoints[56]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipeline-templates\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipeline-templates",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2498,8 +2727,12 @@
         "evidence": "api_surface.json:endpoints[57]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-pipeline-templates\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-pipeline-templates",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2540,8 +2773,12 @@
         "evidence": "api_surface.json:endpoints[58]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-pipeline-templates-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-pipeline-templates-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2582,8 +2819,12 @@
         "evidence": "api_surface.json:endpoints[59]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipeline-templates-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipeline-templates-uuid",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2624,8 +2865,12 @@
         "evidence": "api_surface.json:endpoints[60]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations patch-v2-organizations-org-slug-pipeline-templates-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-pipeline-templates-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2661,8 +2906,12 @@
         "evidence": "api_surface.json:endpoints[61]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -2705,7 +2954,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"create_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-pipelines",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -2746,8 +2999,12 @@
         "evidence": "api_surface.json:endpoints[63]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -2790,7 +3047,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"create_build\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-pipelines-pipeline-slug-builds",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -2836,8 +3097,12 @@
         "evidence": "api_surface.json:endpoints[65]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2878,8 +3143,12 @@
         "evidence": "api_surface.json:endpoints[66]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2920,8 +3189,12 @@
         "evidence": "api_surface.json:endpoints[67]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2962,8 +3235,12 @@
         "evidence": "api_surface.json:endpoints[68]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3004,8 +3281,12 @@
         "evidence": "api_surface.json:endpoints[69]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-artifacts\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-artifacts",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3042,7 +3323,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"cancel_build\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-cancel",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -3088,8 +3373,12 @@
         "evidence": "api_surface.json:endpoints[71]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3130,8 +3419,12 @@
         "evidence": "api_surface.json:endpoints[72]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3172,8 +3465,12 @@
         "evidence": "api_surface.json:endpoints[73]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3214,8 +3511,12 @@
         "evidence": "api_surface.json:endpoints[74]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id-download\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id-download",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3256,8 +3557,12 @@
         "evidence": "api_surface.json:endpoints[75]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-env\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-env",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3298,8 +3603,12 @@
         "evidence": "api_surface.json:endpoints[76]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-log\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-log",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3340,8 +3649,12 @@
         "evidence": "api_surface.json:endpoints[77]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-log\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-log",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3382,8 +3695,12 @@
         "evidence": "api_surface.json:endpoints[78]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-reprioritize\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-reprioritize",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3424,8 +3741,12 @@
         "evidence": "api_surface.json:endpoints[79]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-retry\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-retry",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3466,8 +3787,12 @@
         "evidence": "api_surface.json:endpoints[80]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-unblock\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-unblock",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3504,7 +3829,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"rebuild_build\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-rebuild",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -3546,7 +3875,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"delete_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-pipelines-slug",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -3592,8 +3925,12 @@
         "evidence": "api_surface.json:endpoints[83]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-pipelines-slug\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-pipelines-slug",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3630,7 +3967,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"update_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-pipelines-slug",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -3672,7 +4013,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"archive_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-pipelines-slug-archive",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -3714,7 +4059,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"unarchive_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-pipelines-slug-unarchive",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -3760,8 +4109,12 @@
         "evidence": "api_surface.json:endpoints[87]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-pipelines-slug-webhook\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-pipelines-slug-webhook",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3802,8 +4155,12 @@
         "evidence": "api_surface.json:endpoints[88]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-portals\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-portals",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3844,8 +4201,12 @@
         "evidence": "api_surface.json:endpoints[89]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-portals\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-portals",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3886,8 +4247,12 @@
         "evidence": "api_surface.json:endpoints[90]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-portals-portal-slug\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-portals-portal-slug",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3928,8 +4293,12 @@
         "evidence": "api_surface.json:endpoints[91]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-portals-portal-slug\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-portals-portal-slug",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3970,8 +4339,12 @@
         "evidence": "api_surface.json:endpoints[92]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-portals-portal-slug\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-portals-portal-slug",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4012,8 +4385,12 @@
         "evidence": "api_surface.json:endpoints[93]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-rate-limit\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-rate-limit",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4054,8 +4431,12 @@
         "evidence": "api_surface.json:endpoints[94]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-repository-connections\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-repository-connections",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4096,8 +4477,12 @@
         "evidence": "api_surface.json:endpoints[95]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-repository-connections-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-repository-connections-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4134,7 +4519,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-rules",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "organization-level access-control rule list (cross-pipeline/cross-cluster permission policies); a security-policy configuration surface, Pass B breadth-vs-cost triage"
         }
@@ -4174,7 +4563,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-rules",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "creates an access-control rule; a security-policy mutation, out of scope for this data-sync connector"
         }
@@ -4214,7 +4607,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-rules-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "deletes an access-control rule; a security-policy mutation, out of scope for this data-sync connector"
         }
@@ -4254,7 +4651,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-rules-uuid",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "single rule detail; part of the excluded rules surface"
         }
@@ -4298,8 +4699,12 @@
         "evidence": "api_surface.json:endpoints[100]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-services\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-services",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4340,8 +4745,12 @@
         "evidence": "api_surface.json:endpoints[101]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-services\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-services",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4382,8 +4791,12 @@
         "evidence": "api_surface.json:endpoints[102]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-services-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-services-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4424,8 +4837,12 @@
         "evidence": "api_surface.json:endpoints[103]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-services-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-services-uuid",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4466,8 +4883,12 @@
         "evidence": "api_surface.json:endpoints[104]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations patch-v2-organizations-org-slug-services-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-services-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4508,8 +4929,12 @@
         "evidence": "api_surface.json:endpoints[105]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-services-uuid-disable\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-services-uuid-disable",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4550,8 +4975,12 @@
         "evidence": "api_surface.json:endpoints[106]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-v2-organizations-org-slug-services-uuid-enable\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-v2-organizations-org-slug-services-uuid-enable",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4587,8 +5016,12 @@
         "evidence": "api_surface.json:endpoints[107]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-teams\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-teams",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -4631,7 +5064,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"create_team\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-teams",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -4673,7 +5110,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"delete_team\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-teams-team-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -4719,8 +5160,12 @@
         "evidence": "api_surface.json:endpoints[110]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-teams-team-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-teams-team-uuid",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4757,7 +5202,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"update_team\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-teams-team-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -4803,8 +5252,12 @@
         "evidence": "api_surface.json:endpoints[112]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-teams-team-uuid-members\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-teams-team-uuid-members",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4845,8 +5298,12 @@
         "evidence": "api_surface.json:endpoints[113]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-teams-team-uuid-members\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-teams-team-uuid-members",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4887,8 +5344,12 @@
         "evidence": "api_surface.json:endpoints[114]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-teams-team-uuid-members-user-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-teams-team-uuid-members-user-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4929,8 +5390,12 @@
         "evidence": "api_surface.json:endpoints[115]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-teams-team-uuid-members-user-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-teams-team-uuid-members-user-uuid",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4971,8 +5436,12 @@
         "evidence": "api_surface.json:endpoints[116]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations patch-v2-organizations-org-slug-teams-team-uuid-members-user-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-teams-team-uuid-members-user-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5013,8 +5482,12 @@
         "evidence": "api_surface.json:endpoints[117]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-teams-team-uuid-pipelines\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-teams-team-uuid-pipelines",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5055,8 +5528,12 @@
         "evidence": "api_surface.json:endpoints[118]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-teams-team-uuid-pipelines\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-teams-team-uuid-pipelines",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5097,8 +5574,12 @@
         "evidence": "api_surface.json:endpoints[119]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5139,8 +5620,12 @@
         "evidence": "api_surface.json:endpoints[120]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5181,8 +5666,12 @@
         "evidence": "api_surface.json:endpoints[121]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations patch-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5223,8 +5712,12 @@
         "evidence": "api_surface.json:endpoints[122]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-teams-team-uuid-suites\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-teams-team-uuid-suites",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5265,8 +5758,12 @@
         "evidence": "api_surface.json:endpoints[123]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-teams-team-uuid-suites\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-teams-team-uuid-suites",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5307,8 +5804,12 @@
         "evidence": "api_surface.json:endpoints[124]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v2-organizations-org-slug-teams-team-uuid-suites-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v2-organizations-org-slug-teams-team-uuid-suites-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5349,8 +5850,12 @@
         "evidence": "api_surface.json:endpoints[125]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-organizations-org-slug-teams-team-uuid-suites-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-organizations-org-slug-teams-team-uuid-suites-uuid",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5391,8 +5896,12 @@
         "evidence": "api_surface.json:endpoints[126]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations patch-v2-organizations-org-slug-teams-team-uuid-suites-uuid\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations patch-v2-organizations-org-slug-teams-team-uuid-suites-uuid",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5433,8 +5942,12 @@
         "evidence": "api_surface.json:endpoints[127]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v2-organizations-org-slug-teams-enable\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-teams-enable",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5475,8 +5988,12 @@
         "evidence": "api_surface.json:endpoints[128]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v2-user\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v2-user",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5513,7 +6030,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"retry_job\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations put-organizations-org-slug-jobs-job-id-retry",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -5555,7 +6076,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"unblock_job\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations put-organizations-org-slug-jobs-job-id-unblock",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -5597,7 +6122,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"create_annotation\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",

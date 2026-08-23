@@ -74,7 +74,8 @@
         "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/sonar-cloud/sync_transport.json is absent."
       }
     },
-    "foundation_gap_operations": 0
+    "foundation_gap_operations": 0,
+    "partial_commands": 157
   },
   "ledger_dispositions": [
     {
@@ -115,8 +116,12 @@
         "evidence": "api_surface.json:endpoints[0]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-authentication-logout\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-authentication-logout",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -157,8 +162,12 @@
         "evidence": "api_surface.json:endpoints[1]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-authentication-validate\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-authentication-validate",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -199,8 +208,12 @@
         "evidence": "api_surface.json:endpoints[2]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-ce-activity\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-ce-activity",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -241,8 +254,12 @@
         "evidence": "api_surface.json:endpoints[3]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-ce-activity-status\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-ce-activity-status",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -283,8 +300,12 @@
         "evidence": "api_surface.json:endpoints[4]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-ce-component\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-ce-component",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -325,8 +346,12 @@
         "evidence": "api_surface.json:endpoints[5]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-ce-task\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-ce-task",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -362,8 +387,12 @@
         "evidence": "api_surface.json:endpoints[6]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-components-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-components-search",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -410,8 +439,12 @@
         "evidence": "api_surface.json:endpoints[7]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-components-show\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-components-show",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -452,8 +485,12 @@
         "evidence": "api_surface.json:endpoints[8]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-components-tree\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-components-tree",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -494,8 +531,12 @@
         "evidence": "api_surface.json:endpoints[9]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-duplications-show\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-duplications-show",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -536,8 +577,12 @@
         "evidence": "api_surface.json:endpoints[10]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-favorites-add\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-favorites-add",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -578,8 +623,12 @@
         "evidence": "api_surface.json:endpoints[11]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-favorites-remove\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-favorites-remove",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -620,8 +669,12 @@
         "evidence": "api_surface.json:endpoints[12]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-favorites-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-favorites-search",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -663,7 +716,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-favourites-index",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -705,7 +762,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-hotspots-change-status",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -741,8 +802,12 @@
         "evidence": "api_surface.json:endpoints[15]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-hotspots-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-hotspots-search",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -789,8 +854,12 @@
         "evidence": "api_surface.json:endpoints[16]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-hotspots-show\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-hotspots-show",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -827,7 +896,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"add_issue_comment\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-api-issues-add-comment",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -869,7 +942,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"assign_issue\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-api-issues-assign",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -915,8 +992,12 @@
         "evidence": "api_surface.json:endpoints[19]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-issues-authors\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-issues-authors",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -957,8 +1038,12 @@
         "evidence": "api_surface.json:endpoints[20]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-issues-bulk-change\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-issues-bulk-change",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -999,8 +1084,12 @@
         "evidence": "api_surface.json:endpoints[21]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-issues-changelog\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-issues-changelog",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1041,8 +1130,12 @@
         "evidence": "api_surface.json:endpoints[22]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-issues-delete-comment\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-issues-delete-comment",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1079,7 +1172,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"do_issue_transition\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-api-issues-do-transition",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -1125,8 +1222,12 @@
         "evidence": "api_surface.json:endpoints[24]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-issues-edit-comment\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-issues-edit-comment",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1162,8 +1263,12 @@
         "evidence": "api_surface.json:endpoints[25]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-issues-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-issues-search",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -1211,7 +1316,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-issues-set-severity",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1248,7 +1357,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"set_issue_tags\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-api-issues-set-tags",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -1295,7 +1408,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-issues-set-type",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1336,8 +1453,12 @@
         "evidence": "api_surface.json:endpoints[29]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-issues-tags\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-issues-tags",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1373,8 +1494,12 @@
         "evidence": "api_surface.json:endpoints[30]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-languages-list\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-languages-list",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -1421,8 +1546,12 @@
         "evidence": "api_surface.json:endpoints[31]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-measures-component\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-measures-component",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1463,8 +1592,12 @@
         "evidence": "api_surface.json:endpoints[32]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-measures-component-tree\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-measures-component-tree",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1505,8 +1638,12 @@
         "evidence": "api_surface.json:endpoints[33]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-measures-search-history\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-measures-search-history",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1548,7 +1685,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-metrics-domains",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1584,8 +1725,12 @@
         "evidence": "api_surface.json:endpoints[35]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-metrics-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-metrics-search",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -1632,8 +1777,12 @@
         "evidence": "api_surface.json:endpoints[36]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-metrics-types\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-metrics-types",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1674,8 +1823,12 @@
         "evidence": "api_surface.json:endpoints[37]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-notifications-add\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-notifications-add",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1716,8 +1869,12 @@
         "evidence": "api_surface.json:endpoints[38]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-notifications-list\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-notifications-list",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1758,8 +1915,12 @@
         "evidence": "api_surface.json:endpoints[39]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-notifications-remove\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-notifications-remove",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1800,8 +1961,12 @@
         "evidence": "api_surface.json:endpoints[40]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-add-group\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-add-group",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1842,8 +2007,12 @@
         "evidence": "api_surface.json:endpoints[41]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-add-group-to-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-add-group-to-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1884,8 +2053,12 @@
         "evidence": "api_surface.json:endpoints[42]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-add-project-creator-to-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-add-project-creator-to-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1926,8 +2099,12 @@
         "evidence": "api_surface.json:endpoints[43]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-add-user\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-add-user",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1968,8 +2145,12 @@
         "evidence": "api_surface.json:endpoints[44]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-add-user-to-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-add-user-to-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2010,8 +2191,12 @@
         "evidence": "api_surface.json:endpoints[45]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-apply-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-apply-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2052,8 +2237,12 @@
         "evidence": "api_surface.json:endpoints[46]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-bulk-apply-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-bulk-apply-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2094,8 +2283,12 @@
         "evidence": "api_surface.json:endpoints[47]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-create-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-create-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2136,8 +2329,12 @@
         "evidence": "api_surface.json:endpoints[48]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-delete-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-delete-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2178,8 +2375,12 @@
         "evidence": "api_surface.json:endpoints[49]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-remove-group\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-remove-group",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2220,8 +2421,12 @@
         "evidence": "api_surface.json:endpoints[50]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-remove-group-from-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-remove-group-from-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2262,8 +2467,12 @@
         "evidence": "api_surface.json:endpoints[51]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-remove-project-creator-from-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-remove-project-creator-from-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2304,8 +2513,12 @@
         "evidence": "api_surface.json:endpoints[52]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-remove-user\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-remove-user",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2346,8 +2559,12 @@
         "evidence": "api_surface.json:endpoints[53]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-remove-user-from-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-remove-user-from-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2384,7 +2601,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-api-permissions-search-templates",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "lists permission templates; requires global administrator rights and only serves the excluded permission-administration write actions above"
         }
@@ -2428,8 +2649,12 @@
         "evidence": "api_surface.json:endpoints[55]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-set-default-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-set-default-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2470,8 +2695,12 @@
         "evidence": "api_surface.json:endpoints[56]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-permissions-update-template\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-permissions-update-template",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2512,8 +2741,12 @@
         "evidence": "api_surface.json:endpoints[57]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-project-analyses-create-event\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-project-analyses-create-event",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2554,8 +2787,12 @@
         "evidence": "api_surface.json:endpoints[58]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-project-analyses-delete\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-project-analyses-delete",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2596,8 +2833,12 @@
         "evidence": "api_surface.json:endpoints[59]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-project-analyses-delete-event\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-project-analyses-delete-event",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2633,8 +2874,12 @@
         "evidence": "api_surface.json:endpoints[60]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-project-analyses-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-project-analyses-search",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -2677,7 +2922,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-project-analyses-set-baseline",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "changes which historical analysis the New Code Definition is measured against; project-administrator-scoped configuration, not a data-sync mutation"
         }
@@ -2717,7 +2966,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-project-analyses-unset-baseline",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "reverts the New Code Definition baseline; project-administrator-scoped configuration, not a data-sync mutation"
         }
@@ -2761,8 +3014,12 @@
         "evidence": "api_surface.json:endpoints[63]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-project-analyses-update-event\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-project-analyses-update-event",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2803,8 +3060,12 @@
         "evidence": "api_surface.json:endpoints[64]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-project-badges-ai-code-assurance\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-project-badges-ai-code-assurance",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2845,8 +3106,12 @@
         "evidence": "api_surface.json:endpoints[65]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-project-badges-measure\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-project-badges-measure",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2887,8 +3152,12 @@
         "evidence": "api_surface.json:endpoints[66]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-project-badges-quality-gate\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-project-badges-quality-gate",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2929,8 +3198,12 @@
         "evidence": "api_surface.json:endpoints[67]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-project-branches-delete\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-project-branches-delete",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2971,8 +3244,12 @@
         "evidence": "api_surface.json:endpoints[68]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-project-branches-list\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-project-branches-list",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3009,7 +3286,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-project-branches-rename",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "renames a project's main branch; project-administrator-scoped configuration, not a data-sync mutation"
         }
@@ -3053,8 +3334,12 @@
         "evidence": "api_surface.json:endpoints[70]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-project-links-create\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-project-links-create",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3095,8 +3380,12 @@
         "evidence": "api_surface.json:endpoints[71]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-project-links-delete\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-project-links-delete",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3137,8 +3426,12 @@
         "evidence": "api_surface.json:endpoints[72]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-project-links-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-project-links-search",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3179,8 +3472,12 @@
         "evidence": "api_surface.json:endpoints[73]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-project-pull-requests-delete\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-project-pull-requests-delete",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3221,8 +3518,12 @@
         "evidence": "api_surface.json:endpoints[74]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-project-pull-requests-list\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-project-pull-requests-list",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3263,8 +3564,12 @@
         "evidence": "api_surface.json:endpoints[75]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-project-tags-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-project-tags-search",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3301,7 +3606,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"set_project_tags\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-api-project-tags-set",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -3347,8 +3656,12 @@
         "evidence": "api_surface.json:endpoints[77]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-projects-bulk-delete\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-projects-bulk-delete",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3390,7 +3703,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-projects-bulk-update-key",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3427,7 +3744,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-projects-create",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires the 'Create Projects' organization permission per the action's own description; project provisioning is an organization-administration action, not a typical data-sync mutation"
         }
@@ -3471,8 +3792,12 @@
         "evidence": "api_surface.json:endpoints[80]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-projects-delete\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-projects-delete",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3508,8 +3833,12 @@
         "evidence": "api_surface.json:endpoints[81]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-projects-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-projects-search",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -3552,7 +3881,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-projects-update-key",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "renames a project's unique key, which is also its primary-key identifier for every other stream in this bundle; requires project-administrator rights and changing it would break cross-stream record correlation"
         }
@@ -3592,7 +3925,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-projects-update-visibility",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "changes a project's public/private visibility; requires project-administrator rights, an access-control change rather than a data-sync mutation"
         }
@@ -3637,7 +3974,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-properties-index",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3679,7 +4020,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-copy",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3721,7 +4066,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-create",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3763,7 +4112,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-create-condition",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3805,7 +4158,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-delete-condition",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3847,7 +4204,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-deselect",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3889,7 +4250,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-destroy",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3931,7 +4296,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-qualitygates-get-by-project",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3967,8 +4336,12 @@
         "evidence": "api_surface.json:endpoints[92]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-qualitygates-list\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-qualitygates-list",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -4016,7 +4389,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-qualitygates-project-status",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4058,7 +4435,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-rename",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4100,7 +4481,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-qualitygates-search",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4142,7 +4527,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-select",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4184,7 +4573,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-set-as-default",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4226,7 +4619,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-qualitygates-show",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4268,7 +4665,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-unset-default",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4310,7 +4711,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualitygates-update-condition",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4347,7 +4752,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-activate-rule",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission per the underlying action; quality-profile administration, out of remit"
         }
@@ -4387,7 +4796,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-activate-rules",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
         }
@@ -4427,7 +4840,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-add-project",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires project-administrator rights; quality-profile administration, out of remit"
         }
@@ -4471,8 +4888,12 @@
         "evidence": "api_surface.json:endpoints[104]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-qualityprofiles-backup\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-qualityprofiles-backup",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4509,7 +4930,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-change-parent",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
         }
@@ -4553,8 +4978,12 @@
         "evidence": "api_surface.json:endpoints[106]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-qualityprofiles-changelog\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-qualityprofiles-changelog",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4591,7 +5020,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-copy",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
         }
@@ -4631,7 +5064,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-create",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
         }
@@ -4671,7 +5108,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-deactivate-rule",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
         }
@@ -4711,7 +5152,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-deactivate-rules",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
         }
@@ -4755,8 +5200,12 @@
         "evidence": "api_surface.json:endpoints[111]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-qualityprofiles-delete\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-qualityprofiles-delete",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4798,7 +5247,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-qualityprofiles-export",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4840,7 +5293,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-qualityprofiles-exporters",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4882,7 +5339,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-qualityprofiles-importers",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4923,8 +5384,12 @@
         "evidence": "api_surface.json:endpoints[115]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-qualityprofiles-inheritance\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-qualityprofiles-inheritance",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4965,8 +5430,12 @@
         "evidence": "api_surface.json:endpoints[116]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-qualityprofiles-projects\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-qualityprofiles-projects",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5003,7 +5472,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-remove-project",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires project-administrator rights; quality-profile administration, out of remit"
         }
@@ -5043,7 +5516,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-rename",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
         }
@@ -5083,7 +5560,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-restore",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
         }
@@ -5128,7 +5609,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations post-api-qualityprofiles-restore-built-in",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5169,8 +5654,12 @@
         "evidence": "api_surface.json:endpoints[121]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-qualityprofiles-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-qualityprofiles-search",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5207,7 +5696,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-qualityprofiles-set-default",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit"
         }
@@ -5251,8 +5744,12 @@
         "evidence": "api_surface.json:endpoints[123]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-rules-repositories\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-rules-repositories",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5288,8 +5785,12 @@
         "evidence": "api_surface.json:endpoints[124]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-rules-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-rules-search",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -5336,8 +5837,12 @@
         "evidence": "api_surface.json:endpoints[125]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-rules-show\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-rules-show",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5378,8 +5883,12 @@
         "evidence": "api_surface.json:endpoints[126]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-rules-tags\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-rules-tags",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5416,7 +5925,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-rules-update",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires 'Administer Quality Profiles' organization permission per the action's own description; custom-rule authoring/rule-metadata administration, out of remit"
         }
@@ -5456,7 +5969,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-api-settings-list-definitions",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "instance/project configuration-setting definitions; requires administrator rights on most instances, configuration metadata rather than analysis data"
         }
@@ -5500,8 +6017,12 @@
         "evidence": "api_surface.json:endpoints[129]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-settings-reset\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-settings-reset",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5538,7 +6059,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations post-api-settings-set",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "changes an instance/project configuration setting; requires administrator rights, configuration administration rather than a data-sync mutation"
         }
@@ -5578,7 +6103,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-api-settings-values",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "reads instance/project configuration-setting values; requires administrator rights on most settings, configuration data rather than analysis data"
         }
@@ -5622,8 +6151,12 @@
         "evidence": "api_surface.json:endpoints[132]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-sources-raw\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-sources-raw",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5664,8 +6197,12 @@
         "evidence": "api_surface.json:endpoints[133]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-sources-scm\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-sources-scm",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5706,8 +6243,12 @@
         "evidence": "api_surface.json:endpoints[134]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-sources-show\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-sources-show",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5749,7 +6290,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-timemachine-index",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5790,8 +6335,12 @@
         "evidence": "api_surface.json:endpoints[136]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-user-groups-add-user\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-user-groups-add-user",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5832,8 +6381,12 @@
         "evidence": "api_surface.json:endpoints[137]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-user-groups-create\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-user-groups-create",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5874,8 +6427,12 @@
         "evidence": "api_surface.json:endpoints[138]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-user-groups-delete\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-user-groups-delete",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5916,8 +6473,12 @@
         "evidence": "api_surface.json:endpoints[139]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-user-groups-remove-user\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-user-groups-remove-user",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5954,7 +6515,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-api-user-groups-search",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires organization-administrator rights to list groups; account/access-control administration, out of remit"
         }
@@ -5998,8 +6563,12 @@
         "evidence": "api_surface.json:endpoints[141]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-user-groups-update\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-user-groups-update",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -6036,7 +6605,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-api-user-groups-users",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "requires organization-administrator rights to list a group's members; account/access-control administration, out of remit"
         }
@@ -6081,7 +6654,11 @@
       },
       "declaration": {
         "status": "disabled; provider endpoint is not an executable data-operation declaration",
-        "command": null
+        "command": {
+          "path": "operations get-api-user-properties-index",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -6122,8 +6699,12 @@
         "evidence": "api_surface.json:endpoints[144]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-user-tokens-generate\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-user-tokens-generate",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -6164,8 +6745,12 @@
         "evidence": "api_surface.json:endpoints[145]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-api-user-tokens-revoke\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-api-user-tokens-revoke",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -6206,8 +6791,12 @@
         "evidence": "api_surface.json:endpoints[146]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-user-tokens-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-user-tokens-search",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -6244,7 +6833,11 @@
       "rejection": null,
       "declaration": {
         "status": "enabled; requires elevated scope at runtime",
-        "command": null,
+        "command": {
+          "path": "operations get-api-users-groups",
+          "intent": "direct_read",
+          "availability": "partial"
+        },
         "runtime_metadata": {
           "required_scope": "lists a specific user's group memberships; requires administrator rights on most instances, account/access-control data rather than analysis data"
         }
@@ -6284,7 +6877,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"create_webhook\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-api-webhooks-create",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -6326,7 +6923,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"delete_webhook\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-api-webhooks-delete",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -6372,8 +6973,12 @@
         "evidence": "api_surface.json:endpoints[150]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-webhooks-deliveries\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-webhooks-deliveries",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -6414,8 +7019,12 @@
         "evidence": "api_surface.json:endpoints[151]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-webhooks-delivery\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-webhooks-delivery",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -6451,8 +7060,12 @@
         "evidence": "api_surface.json:endpoints[152]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-webhooks-list\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-webhooks-list",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -6495,7 +7108,11 @@
       },
       "declaration": {
         "status": "declaration-pending; typed direct-write action \"update_webhook\" needs a connector-owned destination transport declaration and conformance evidence",
-        "command": null,
+        "command": {
+          "path": "operations post-api-webhooks-update",
+          "intent": "direct_write",
+          "availability": "partial"
+        },
         "reverse_etl_eligibility": {
           "eligible": false,
           "state": "declaration-pending",
@@ -6541,8 +7158,12 @@
         "evidence": "api_surface.json:endpoints[154]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-webservices-list\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-webservices-list",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -6583,8 +7204,12 @@
         "evidence": "api_surface.json:endpoints[155]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-api-webservices-response-example\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-webservices-response-example",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -6620,8 +7245,12 @@
         "evidence": "api_surface.json:endpoints[156]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-api-measures-search\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-api-measures-search",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
