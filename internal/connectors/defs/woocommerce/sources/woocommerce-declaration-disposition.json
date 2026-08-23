@@ -70,7 +70,8 @@
         "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/woocommerce/sync_transport.json is absent."
       }
     },
-    "foundation_gap_operations": 0
+    "foundation_gap_operations": 0,
+    "partial_commands": 140
   },
   "ledger_dispositions": [
     {
@@ -110,8 +111,12 @@
         "evidence": "api_surface.json:endpoints[0]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -147,8 +152,12 @@
         "evidence": "api_surface.json:endpoints[1]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-coupons\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-coupons",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -194,8 +203,12 @@
         "evidence": "api_surface.json:endpoints[2]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-coupons\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-coupons",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -235,8 +248,12 @@
         "evidence": "api_surface.json:endpoints[3]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-coupons-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-coupons-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -276,8 +293,12 @@
         "evidence": "api_surface.json:endpoints[4]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-coupons-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-coupons-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -317,8 +338,12 @@
         "evidence": "api_surface.json:endpoints[5]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-coupons-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-coupons-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -358,8 +383,12 @@
         "evidence": "api_surface.json:endpoints[6]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-coupons-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-coupons-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -395,8 +424,12 @@
         "evidence": "api_surface.json:endpoints[7]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-customers\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-customers",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -442,8 +475,12 @@
         "evidence": "api_surface.json:endpoints[8]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-customers\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-customers",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -483,8 +520,12 @@
         "evidence": "api_surface.json:endpoints[9]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-customers-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-customers-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -524,8 +565,12 @@
         "evidence": "api_surface.json:endpoints[10]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-customers-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-customers-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -565,8 +610,12 @@
         "evidence": "api_surface.json:endpoints[11]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-customers-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-customers-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -606,8 +655,12 @@
         "evidence": "api_surface.json:endpoints[12]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-customers-id-downloads\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-customers-id-downloads",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -647,8 +700,12 @@
         "evidence": "api_surface.json:endpoints[13]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-customers-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-customers-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -688,8 +745,12 @@
         "evidence": "api_surface.json:endpoints[14]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-data\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-data",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -729,8 +790,12 @@
         "evidence": "api_surface.json:endpoints[15]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-data-continents\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-data-continents",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -770,8 +835,12 @@
         "evidence": "api_surface.json:endpoints[16]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-data-continents-location\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-data-continents-location",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -811,8 +880,12 @@
         "evidence": "api_surface.json:endpoints[17]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-data-countries\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-data-countries",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -852,8 +925,12 @@
         "evidence": "api_surface.json:endpoints[18]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-data-countries-location\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-data-countries-location",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -893,8 +970,12 @@
         "evidence": "api_surface.json:endpoints[19]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-data-currencies\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-data-currencies",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -934,8 +1015,12 @@
         "evidence": "api_surface.json:endpoints[20]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-data-currencies-currency\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-data-currencies-currency",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -975,8 +1060,12 @@
         "evidence": "api_surface.json:endpoints[21]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-data-currencies-current\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-data-currencies-current",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1012,8 +1101,12 @@
         "evidence": "api_surface.json:endpoints[22]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-orders\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-orders",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -1059,8 +1152,12 @@
         "evidence": "api_surface.json:endpoints[23]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-orders\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-orders",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1100,8 +1197,12 @@
         "evidence": "api_surface.json:endpoints[24]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-orders-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-orders-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1141,8 +1242,12 @@
         "evidence": "api_surface.json:endpoints[25]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-orders-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-orders-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1182,8 +1287,12 @@
         "evidence": "api_surface.json:endpoints[26]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-orders-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-orders-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1223,8 +1332,12 @@
         "evidence": "api_surface.json:endpoints[27]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-orders-id-actions-email-templates\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-orders-id-actions-email-templates",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1264,8 +1377,12 @@
         "evidence": "api_surface.json:endpoints[28]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-orders-id-actions-send-email\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-orders-id-actions-send-email",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1305,8 +1422,12 @@
         "evidence": "api_surface.json:endpoints[29]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-orders-id-actions-send-order-details\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-orders-id-actions-send-order-details",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1346,8 +1467,12 @@
         "evidence": "api_surface.json:endpoints[30]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-orders-id-notes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-orders-id-notes",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1387,8 +1512,12 @@
         "evidence": "api_surface.json:endpoints[31]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-orders-id-notes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-orders-id-notes",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1428,8 +1557,12 @@
         "evidence": "api_surface.json:endpoints[32]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-orders-id-notes-note-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-orders-id-notes-note-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1469,8 +1602,12 @@
         "evidence": "api_surface.json:endpoints[33]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-orders-id-notes-note-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-orders-id-notes-note-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1510,8 +1647,12 @@
         "evidence": "api_surface.json:endpoints[34]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-orders-id-refunds\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-orders-id-refunds",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1551,8 +1692,12 @@
         "evidence": "api_surface.json:endpoints[35]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-orders-id-refunds\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-orders-id-refunds",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1592,8 +1737,12 @@
         "evidence": "api_surface.json:endpoints[36]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-orders-id-refunds-refund-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-orders-id-refunds-refund-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1633,8 +1782,12 @@
         "evidence": "api_surface.json:endpoints[37]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-orders-id-refunds-refund-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-orders-id-refunds-refund-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1674,8 +1827,12 @@
         "evidence": "api_surface.json:endpoints[38]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-orders-id-refunds-preview\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-orders-id-refunds-preview",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1715,8 +1872,12 @@
         "evidence": "api_surface.json:endpoints[39]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-orders-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-orders-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1756,8 +1917,12 @@
         "evidence": "api_surface.json:endpoints[40]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-payment-gateways\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-payment-gateways",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1797,8 +1962,12 @@
         "evidence": "api_surface.json:endpoints[41]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-payment-gateways-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-payment-gateways-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1838,8 +2007,12 @@
         "evidence": "api_surface.json:endpoints[42]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-payment-gateways-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-payment-gateways-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1875,8 +2048,12 @@
         "evidence": "api_surface.json:endpoints[43]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -1922,8 +2099,12 @@
         "evidence": "api_surface.json:endpoints[44]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -1963,8 +2144,12 @@
         "evidence": "api_surface.json:endpoints[45]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-products-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-products-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2004,8 +2189,12 @@
         "evidence": "api_surface.json:endpoints[46]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2045,8 +2234,12 @@
         "evidence": "api_surface.json:endpoints[47]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-products-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-products-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2086,8 +2279,12 @@
         "evidence": "api_surface.json:endpoints[48]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-product-id-duplicate\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-product-id-duplicate",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2127,8 +2324,12 @@
         "evidence": "api_surface.json:endpoints[49]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-product-id-variations\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-product-id-variations",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2168,8 +2369,12 @@
         "evidence": "api_surface.json:endpoints[50]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-product-id-variations\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-product-id-variations",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2209,8 +2414,12 @@
         "evidence": "api_surface.json:endpoints[51]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-products-product-id-variations-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-products-product-id-variations-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2250,8 +2459,12 @@
         "evidence": "api_surface.json:endpoints[52]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-product-id-variations-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-product-id-variations-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2291,8 +2504,12 @@
         "evidence": "api_surface.json:endpoints[53]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-products-product-id-variations-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-products-product-id-variations-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2332,8 +2549,12 @@
         "evidence": "api_surface.json:endpoints[54]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-product-id-variations-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-product-id-variations-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2373,8 +2594,12 @@
         "evidence": "api_surface.json:endpoints[55]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-attributes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-attributes",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2414,8 +2639,12 @@
         "evidence": "api_surface.json:endpoints[56]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-attributes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-attributes",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2455,8 +2684,12 @@
         "evidence": "api_surface.json:endpoints[57]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-attributes-attribute-id-terms\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-attributes-attribute-id-terms",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2496,8 +2729,12 @@
         "evidence": "api_surface.json:endpoints[58]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-attributes-attribute-id-terms\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-attributes-attribute-id-terms",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2537,8 +2774,12 @@
         "evidence": "api_surface.json:endpoints[59]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-products-attributes-attribute-id-terms-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-products-attributes-attribute-id-terms-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2578,8 +2819,12 @@
         "evidence": "api_surface.json:endpoints[60]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-attributes-attribute-id-terms-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-attributes-attribute-id-terms-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2619,8 +2864,12 @@
         "evidence": "api_surface.json:endpoints[61]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-products-attributes-attribute-id-terms-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-products-attributes-attribute-id-terms-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2660,8 +2909,12 @@
         "evidence": "api_surface.json:endpoints[62]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-attributes-attribute-id-terms-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-attributes-attribute-id-terms-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2701,8 +2954,12 @@
         "evidence": "api_surface.json:endpoints[63]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-products-attributes-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-products-attributes-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2742,8 +2999,12 @@
         "evidence": "api_surface.json:endpoints[64]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-attributes-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-attributes-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2783,8 +3044,12 @@
         "evidence": "api_surface.json:endpoints[65]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-products-attributes-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-products-attributes-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2824,8 +3089,12 @@
         "evidence": "api_surface.json:endpoints[66]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-attributes-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-attributes-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2865,8 +3134,12 @@
         "evidence": "api_surface.json:endpoints[67]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2906,8 +3179,12 @@
         "evidence": "api_surface.json:endpoints[68]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-categories\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-categories",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2947,8 +3224,12 @@
         "evidence": "api_surface.json:endpoints[69]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-categories\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-categories",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -2988,8 +3269,12 @@
         "evidence": "api_surface.json:endpoints[70]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-products-categories-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-products-categories-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3029,8 +3314,12 @@
         "evidence": "api_surface.json:endpoints[71]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-categories-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-categories-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3070,8 +3359,12 @@
         "evidence": "api_surface.json:endpoints[72]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-products-categories-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-products-categories-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3111,8 +3404,12 @@
         "evidence": "api_surface.json:endpoints[73]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-categories-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-categories-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3152,8 +3449,12 @@
         "evidence": "api_surface.json:endpoints[74]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-custom-fields-names\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-custom-fields-names",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3193,8 +3494,12 @@
         "evidence": "api_surface.json:endpoints[75]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-reviews\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-reviews",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3234,8 +3539,12 @@
         "evidence": "api_surface.json:endpoints[76]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-reviews\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-reviews",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3275,8 +3584,12 @@
         "evidence": "api_surface.json:endpoints[77]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-products-reviews-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-products-reviews-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3316,8 +3629,12 @@
         "evidence": "api_surface.json:endpoints[78]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-reviews-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-reviews-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3357,8 +3674,12 @@
         "evidence": "api_surface.json:endpoints[79]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-products-reviews-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-products-reviews-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3398,8 +3719,12 @@
         "evidence": "api_surface.json:endpoints[80]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-reviews-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-reviews-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3439,8 +3764,12 @@
         "evidence": "api_surface.json:endpoints[81]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-shipping-classes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-shipping-classes",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3480,8 +3809,12 @@
         "evidence": "api_surface.json:endpoints[82]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-shipping-classes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-shipping-classes",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3521,8 +3854,12 @@
         "evidence": "api_surface.json:endpoints[83]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-products-shipping-classes-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-products-shipping-classes-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3562,8 +3899,12 @@
         "evidence": "api_surface.json:endpoints[84]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-shipping-classes-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-shipping-classes-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3603,8 +3944,12 @@
         "evidence": "api_surface.json:endpoints[85]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-products-shipping-classes-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-products-shipping-classes-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3644,8 +3989,12 @@
         "evidence": "api_surface.json:endpoints[86]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-shipping-classes-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-shipping-classes-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3685,8 +4034,12 @@
         "evidence": "api_surface.json:endpoints[87]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-tags\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-tags",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3726,8 +4079,12 @@
         "evidence": "api_surface.json:endpoints[88]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-tags\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-tags",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3767,8 +4124,12 @@
         "evidence": "api_surface.json:endpoints[89]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-products-tags-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-products-tags-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3808,8 +4169,12 @@
         "evidence": "api_surface.json:endpoints[90]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-products-tags-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-products-tags-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3849,8 +4214,12 @@
         "evidence": "api_surface.json:endpoints[91]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-products-tags-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-products-tags-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3890,8 +4259,12 @@
         "evidence": "api_surface.json:endpoints[92]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-products-tags-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-products-tags-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3931,8 +4304,12 @@
         "evidence": "api_surface.json:endpoints[93]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-refunds\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-refunds",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -3972,8 +4349,12 @@
         "evidence": "api_surface.json:endpoints[94]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-reports\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-reports",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4013,8 +4394,12 @@
         "evidence": "api_surface.json:endpoints[95]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-reports-coupons-totals\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-reports-coupons-totals",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4054,8 +4439,12 @@
         "evidence": "api_surface.json:endpoints[96]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-reports-customers-totals\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-reports-customers-totals",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4095,8 +4484,12 @@
         "evidence": "api_surface.json:endpoints[97]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-reports-orders-totals\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-reports-orders-totals",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4136,8 +4529,12 @@
         "evidence": "api_surface.json:endpoints[98]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-reports-products-totals\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-reports-products-totals",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4177,8 +4574,12 @@
         "evidence": "api_surface.json:endpoints[99]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-reports-reviews-totals\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-reports-reviews-totals",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4218,8 +4619,12 @@
         "evidence": "api_surface.json:endpoints[100]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-reports-sales\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-reports-sales",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4259,8 +4664,12 @@
         "evidence": "api_surface.json:endpoints[101]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-reports-top-sellers\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-reports-top-sellers",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4300,8 +4709,12 @@
         "evidence": "api_surface.json:endpoints[102]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-settings\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-settings",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4341,8 +4754,12 @@
         "evidence": "api_surface.json:endpoints[103]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-settings-group-id-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-settings-group-id-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4382,8 +4799,12 @@
         "evidence": "api_surface.json:endpoints[104]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-settings-group-id-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-settings-group-id-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4423,8 +4844,12 @@
         "evidence": "api_surface.json:endpoints[105]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-settings-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-settings-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4464,8 +4889,12 @@
         "evidence": "api_surface.json:endpoints[106]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-settings-id-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-settings-id-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4505,8 +4934,12 @@
         "evidence": "api_surface.json:endpoints[107]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-shipping-methods\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-shipping-methods",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4546,8 +4979,12 @@
         "evidence": "api_surface.json:endpoints[108]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-shipping-methods-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-shipping-methods-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4587,8 +5024,12 @@
         "evidence": "api_surface.json:endpoints[109]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-shipping-zones\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-shipping-zones",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4628,8 +5069,12 @@
         "evidence": "api_surface.json:endpoints[110]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-shipping-zones\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-shipping-zones",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4669,8 +5114,12 @@
         "evidence": "api_surface.json:endpoints[111]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-shipping-zones-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-shipping-zones-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4710,8 +5159,12 @@
         "evidence": "api_surface.json:endpoints[112]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-shipping-zones-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-shipping-zones-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4751,8 +5204,12 @@
         "evidence": "api_surface.json:endpoints[113]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-shipping-zones-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-shipping-zones-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4792,8 +5249,12 @@
         "evidence": "api_surface.json:endpoints[114]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-shipping-zones-id-locations\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-shipping-zones-id-locations",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4833,8 +5294,12 @@
         "evidence": "api_surface.json:endpoints[115]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-shipping-zones-id-locations\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-shipping-zones-id-locations",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4874,8 +5339,12 @@
         "evidence": "api_surface.json:endpoints[116]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-shipping-zones-id-methods\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-shipping-zones-id-methods",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4915,8 +5384,12 @@
         "evidence": "api_surface.json:endpoints[117]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-shipping-zones-id-methods\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-shipping-zones-id-methods",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4956,8 +5429,12 @@
         "evidence": "api_surface.json:endpoints[118]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-shipping-zones-zone-id-methods-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-shipping-zones-zone-id-methods-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -4997,8 +5474,12 @@
         "evidence": "api_surface.json:endpoints[119]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-shipping-zones-zone-id-methods-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-shipping-zones-zone-id-methods-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5038,8 +5519,12 @@
         "evidence": "api_surface.json:endpoints[120]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-shipping-zones-zone-id-methods-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-shipping-zones-zone-id-methods-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5079,8 +5564,12 @@
         "evidence": "api_surface.json:endpoints[121]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-system-status\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-system-status",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5120,8 +5609,12 @@
         "evidence": "api_surface.json:endpoints[122]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-system-status-tools\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-system-status-tools",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5161,8 +5654,12 @@
         "evidence": "api_surface.json:endpoints[123]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-system-status-tools-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-system-status-tools-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5202,8 +5699,12 @@
         "evidence": "api_surface.json:endpoints[124]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-system-status-tools-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-system-status-tools-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5243,8 +5744,12 @@
         "evidence": "api_surface.json:endpoints[125]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-taxes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-taxes",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5284,8 +5789,12 @@
         "evidence": "api_surface.json:endpoints[126]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-taxes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-taxes",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5325,8 +5834,12 @@
         "evidence": "api_surface.json:endpoints[127]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-taxes-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-taxes-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5366,8 +5879,12 @@
         "evidence": "api_surface.json:endpoints[128]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-taxes-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-taxes-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5407,8 +5924,12 @@
         "evidence": "api_surface.json:endpoints[129]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-taxes-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-taxes-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5448,8 +5969,12 @@
         "evidence": "api_surface.json:endpoints[130]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-taxes-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-taxes-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5489,8 +6014,12 @@
         "evidence": "api_surface.json:endpoints[131]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-taxes-classes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-taxes-classes",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5530,8 +6059,12 @@
         "evidence": "api_surface.json:endpoints[132]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-taxes-classes\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-taxes-classes",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5571,8 +6104,12 @@
         "evidence": "api_surface.json:endpoints[133]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-taxes-classes-slug\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-taxes-classes-slug",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5612,8 +6149,12 @@
         "evidence": "api_surface.json:endpoints[134]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-webhooks\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-webhooks",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5653,8 +6194,12 @@
         "evidence": "api_surface.json:endpoints[135]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-webhooks\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-webhooks",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5694,8 +6239,12 @@
         "evidence": "api_surface.json:endpoints[136]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-wp-json-wc-v3-webhooks-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-wp-json-wc-v3-webhooks-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5735,8 +6284,12 @@
         "evidence": "api_surface.json:endpoints[137]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-wp-json-wc-v3-webhooks-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-wp-json-wc-v3-webhooks-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5776,8 +6329,12 @@
         "evidence": "api_surface.json:endpoints[138]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations put-wp-json-wc-v3-webhooks-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-wp-json-wc-v3-webhooks-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -5817,8 +6374,12 @@
         "evidence": "api_surface.json:endpoints[139]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-wp-json-wc-v3-webhooks-batch\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-wp-json-wc-v3-webhooks-batch",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     }
   ]

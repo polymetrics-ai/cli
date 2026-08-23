@@ -70,7 +70,8 @@
         "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent."
       }
     },
-    "foundation_gap_operations": 0
+    "foundation_gap_operations": 0,
+    "partial_commands": 28
   },
   "ledger_dispositions": [
     {
@@ -107,8 +108,12 @@
         "evidence": "api_surface.json:endpoints[0]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations delete-v1-name\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v1-name",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -145,8 +150,12 @@
         "evidence": "api_surface.json:endpoints[1]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v1-name\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1-name",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -183,8 +192,12 @@
         "evidence": "api_surface.json:endpoints[2]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1-name-cancel\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1-name-cancel",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -221,8 +234,12 @@
         "evidence": "api_surface.json:endpoints[3]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v1alpha-name\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1alpha-name",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -259,8 +276,12 @@
         "evidence": "api_surface.json:endpoints[4]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-name-query\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-name-query",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -297,8 +318,12 @@
         "evidence": "api_surface.json:endpoints[5]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v1alpha-parent-audience-lists\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1alpha-parent-audience-lists",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -335,8 +360,12 @@
         "evidence": "api_surface.json:endpoints[6]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-parent-audience-lists\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-parent-audience-lists",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -373,8 +402,12 @@
         "evidence": "api_surface.json:endpoints[7]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v1alpha-parent-recurring-audience-lists\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1alpha-parent-recurring-audience-lists",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -411,8 +444,12 @@
         "evidence": "api_surface.json:endpoints[8]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-parent-recurring-audience-lists\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-parent-recurring-audience-lists",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -449,8 +486,12 @@
         "evidence": "api_surface.json:endpoints[9]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v1alpha-parent-report-tasks\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1alpha-parent-report-tasks",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -487,8 +528,12 @@
         "evidence": "api_surface.json:endpoints[10]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-parent-report-tasks\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-parent-report-tasks",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -525,8 +570,12 @@
         "evidence": "api_surface.json:endpoints[11]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-property-run-funnel-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-property-run-funnel-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -563,8 +612,12 @@
         "evidence": "api_surface.json:endpoints[12]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-property-run-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-property-run-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -601,8 +654,12 @@
         "evidence": "api_surface.json:endpoints[13]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v1beta-name\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1beta-name",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -639,8 +696,12 @@
         "evidence": "api_surface.json:endpoints[14]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-name-query\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-name-query",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -677,8 +738,12 @@
         "evidence": "api_surface.json:endpoints[15]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_read command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations get-v1beta-parent-audience-exports\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1beta-parent-audience-exports",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -715,8 +780,12 @@
         "evidence": "api_surface.json:endpoints[16]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-parent-audience-exports\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-parent-audience-exports",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -753,8 +822,12 @@
         "evidence": "api_surface.json:endpoints[17]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-batch-run-pivot-reports\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-batch-run-pivot-reports",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -791,8 +864,12 @@
         "evidence": "api_surface.json:endpoints[18]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-batch-run-reports\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-batch-run-reports",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -829,8 +906,12 @@
         "evidence": "api_surface.json:endpoints[19]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-check-compatibility\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-check-compatibility",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -867,8 +948,12 @@
         "evidence": "api_surface.json:endpoints[20]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-run-pivot-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-run-pivot-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -905,8 +990,12 @@
         "evidence": "api_surface.json:endpoints[21]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-run-realtime-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-run-realtime-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -943,8 +1032,12 @@
         "evidence": "api_surface.json:endpoints[22]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned direct_write command binds the normalized source endpoint",
-        "command": null
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-run-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-run-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
       }
     },
     {
@@ -980,8 +1073,12 @@
         "evidence": "api_surface.json:endpoints[23]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -1023,8 +1120,12 @@
         "evidence": "api_surface.json:endpoints[24]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-website-overview-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-website-overview-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -1066,8 +1167,12 @@
         "evidence": "api_surface.json:endpoints[25]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -1109,8 +1214,12 @@
         "evidence": "api_surface.json:endpoints[26]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-devices-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-devices-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
@@ -1152,8 +1261,12 @@
         "evidence": "api_surface.json:endpoints[27]"
       },
       "declaration": {
-        "status": "declaration-pending; no implemented connector-owned etl command binds the normalized source endpoint",
-        "command": null,
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-pages-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-pages-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
         "transport": {
           "source_transport": {
             "state": "declaration-pending",
