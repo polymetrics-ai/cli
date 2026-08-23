@@ -911,6 +911,41 @@ func TestSourceImportPreservesLiteralReferenceFieldsAndReferenceSiblings(t *test
 	}
 }
 
+func TestSourceImportAllowsOnlyDescriptiveOpenAPI30ReferenceSiblings(t *testing.T) {
+	t.Parallel()
+	for _, sibling := range []struct {
+		name  string
+		field string
+		value string
+	}{
+		{name: "description", field: "description", value: "provider description"},
+		{name: "summary", field: "summary", value: "provider summary"},
+	} {
+		sibling := sibling
+		t.Run(sibling.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","` + sibling.field + `":"` + sibling.value + `"}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			response := descriptorResponse(t, result.Operations[0], "200")
+			declaration, ok := response.Declaration.(map[string]any)
+			if !ok || declaration[sibling.field] != sibling.value {
+				t.Fatalf("OpenAPI 3.0 %s sibling declaration = %#v", sibling.field, response.Declaration)
+			}
+		})
+	}
+
+	extension := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","x-provider-note":"preserved"}}}}}}`)
+	if result := importInlineSourceResult(t, extension, defaultSourceImportLimits()); len(result.Operations) != 1 {
+		t.Fatalf("OpenAPI 3.0 extension sibling result = %#v", result.Operations)
+	}
+
+	semantic := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","content":{"application/json":{"schema":{"type":"string"}}}}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-semantic-sibling.json", semantic)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return semantic, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), `ambiguous response reference with sibling field "content"`) {
+		t.Fatalf("OpenAPI 3.0 semantic reference sibling error = %v", err)
+	}
+}
+
 func TestSourceImportPreservesInboundEventsAndExtensionsAsMergeBlocked(t *testing.T) {
 	t.Parallel()
 	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{"invoice.created":{"post":{"responses":{"200":{"description":"ok"}}}}},"paths":{"x-provider-metadata":{"tier":"test"},"/deliver":{"x-route-metadata":{"owner":"provider"},"post":{"operationId":"deliver","callbacks":{"notify":{"{$request.body#/callback_url}":{"post":{"responses":{"202":{"description":"accepted"}}}}}},"responses":{"202":{"description":"accepted"}}}}}}`)
@@ -1139,11 +1174,6 @@ func TestSourceImportPreservesExactFormAndSwaggerRouteBinding(t *testing.T) {
 		if _, _, err := parseSourceImportDocument(raw); err == nil {
 			t.Fatalf("unsupported document form was accepted: %s", raw)
 		}
-	}
-	openAPI30Sibling := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"ok"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","description":"override"}}}}}}`)
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-sibling.json", openAPI30Sibling)
-	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return openAPI30Sibling, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "ambiguous response reference") {
-		t.Fatalf("OpenAPI 3.0 reference sibling error = %v", err)
 	}
 	swagger := []byte(`{"swagger":"2.0","info":{"title":"x","version":"1"},"host":"api.example.invalid","basePath":"/v1","schemes":["https","http"],"paths":{"/items":{"get":{"schemes":["http"],"responses":{"200":{"description":"ok"}}}}}}`)
 	result := importInlineSourceResult(t, swagger, defaultSourceImportLimits())

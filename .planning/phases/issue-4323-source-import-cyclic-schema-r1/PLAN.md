@@ -2,7 +2,8 @@
 
 ## Task Delivery Header
 
-- Issue: Refs #4323 — retain cyclic schema references as source-bound gaps
+- Issue: Refs #4323 and Refs #4326 — retain cyclic schema references as
+  source-bound gaps and permit non-semantic OpenAPI 3.0 reference siblings
 - Base branch: main
 - Merges into: main
 - Delivery: Pull request open against `main`, committed on
@@ -11,7 +12,9 @@
 - Working branch: fm/cli-source-import-cyclic-schema-r1
 - Task: Make the shared source importer preserve recursive schema references as
   existing missing-foundation gap evidence with schema/pointer provenance,
-  without losing operations or changing the v3 source-lock/provenance model.
+  without losing operations or changing the v3 source-lock/provenance model;
+  also retain OpenAPI 3.0 reference descriptions and summaries while refusing
+  reference siblings that alter resolved semantics.
 - Verification: Red and green real-import-path Go tests, an affected connector
   import, frozen GitHub artifact hash/byte measurements, generated checks, full
   `make verify`, diff review, and PR base/review-route checks.
@@ -38,6 +41,10 @@
    measurements, generated checks, and the required complete `make verify`.
 4. **Review:** inspect the diff for v3/provenance regression, run inline code
    review under the GSD fallback, and record dispositions before opening the PR.
+5. **Widened slice (#4326):** red-test OpenAPI 3.0 response references carrying
+   safe `description`/`summary` siblings, preserve the rejection of semantic
+   siblings, and prove public Asana, GitLab, and Docker Hub source imports;
+   then implement and verify this resolver-only extension in its own commit.
 
 ## CLI docs parity
 

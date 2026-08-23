@@ -1,6 +1,6 @@
 # Run state — issue 4323
 
-State: review-green
+State: #4326 red-test-recorded
 
 - Issue opened: #4323.
 - Base ancestry confirmed: `cf493b834` is an ancestor of the branch start.
@@ -13,5 +13,7 @@ State: review-green
   `git diff --check`, frozen GitHub artifact measurements, and full `make verify`
   are green. The shared 20-minute test timeout remains unchanged.
 - Inline GSD code review found no unresolved actionable findings.
-- Next gate: commit, push, open the main-targeted PR, and record GitHub's
-  API-reported base and automated-review route.
+- The widened #4326 test is red: OpenAPI 3.0 response references with
+  `description` and `summary` both fail grammar preflight as ambiguous siblings.
+- Next gate: permit those non-semantic fields only, retain semantic-sibling
+  rejection, run real provider imports, and re-run the full verification gate.

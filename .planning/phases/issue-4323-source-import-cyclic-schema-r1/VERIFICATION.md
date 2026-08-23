@@ -14,6 +14,11 @@
 - [x] Repository generated-file/snapshot checks pass through `make verify`.
 - [x] Full `make verify` passes locally; no test timeout exceeds the shared 20m budget.
 - [x] Inline GSD code review records no unresolved actionable findings.
+- [x] #4326 red test records current OpenAPI 3.0 descriptive-sibling rejection.
+- [ ] #4326 focused green tests prove `description` and `summary` import, a
+  semantic sibling remains rejected, and existing allowlisted behavior holds.
+- [ ] Real Asana, GitLab, and Docker Hub source documents import without
+  connector-local source mutation.
 
 ## PR read-back
 
