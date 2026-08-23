@@ -1,8 +1,8 @@
 {
   "issue": 4329,
-  "state": "implementation_green",
+  "state": "ready_for_final_verify",
   "base": "main",
   "working_branch": "fm/cli-read-only-source-coverage-r1",
   "scope": "sourceprojection.go, operationevidence.go, one closed engine api_surface enum member, and tests; no Sentry/Vercel connector files",
-  "next": "record mutation-disposition handoff, run focused package checks, then request a quiet window for make verify"
+  "next": "run the final serial make verify after the connector-keyed read-only evidence rollup checkpoint, then merge current origin/main and open the direct PR"
 }
