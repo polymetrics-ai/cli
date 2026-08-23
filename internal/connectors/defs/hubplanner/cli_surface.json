@@ -655,15 +655,7 @@
       "availability": "implemented",
       "operation": "hubplanner.billing_rates_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/billingrate.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -682,15 +674,7 @@
       "availability": "implemented",
       "operation": "hubplanner.booking_categories_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/booking-categories.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -709,15 +693,7 @@
       "availability": "implemented",
       "operation": "hubplanner.bookings_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/bookings.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -736,15 +712,7 @@
       "availability": "implemented",
       "operation": "hubplanner.clients_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/clients.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -763,15 +731,7 @@
       "availability": "implemented",
       "operation": "hubplanner.events_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/events.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -790,15 +750,7 @@
       "availability": "implemented",
       "operation": "hubplanner.project_groups_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/groups.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -817,15 +769,7 @@
       "availability": "implemented",
       "operation": "hubplanner.holidays_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/holidays.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -844,15 +788,7 @@
       "availability": "implemented",
       "operation": "hubplanner.milestones_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/milestones.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -871,15 +807,7 @@
       "availability": "implemented",
       "operation": "hubplanner.cost_categories_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-cost-categories.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -898,15 +826,7 @@
       "availability": "implemented",
       "operation": "hubplanner.projects_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -925,15 +845,7 @@
       "availability": "implemented",
       "operation": "hubplanner.resources_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/resource.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -952,15 +864,7 @@
       "availability": "implemented",
       "operation": "hubplanner.time_entries_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/timesheets.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -979,15 +883,7 @@
       "availability": "implemented",
       "operation": "hubplanner.unassigned_work_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/unassigned-work.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -1006,15 +902,7 @@
       "availability": "implemented",
       "operation": "hubplanner.vacations_get",
       "source_url": "https://github.com/hubplanner/API/blob/master/Sections/vacation.md",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Hubplanner object id.",
-          "maps_to": "path.id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",

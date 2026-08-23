@@ -1000,7 +1000,7 @@ func newPreflightDestinationConnector() *preflightDestinationConnector {
 		EligibleActions: []string{"apply_snapshot"},
 		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 		Delivery: connectors.DeliveryGuarantees{
-			Idempotency: connectors.DeliveryIdempotencyAtLeastOnce,
+			Idempotency: connectors.DeliveryIdempotencyKeyed,
 			Ordering:    connectors.DeliveryOrderingSource,
 			Deletes:     connectors.DeliveryDeletesUnavailable,
 		},

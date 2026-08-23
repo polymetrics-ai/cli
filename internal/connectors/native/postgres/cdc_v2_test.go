@@ -102,7 +102,20 @@ func TestPGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint(t 
 		}); err != nil {
 			return connectors.CDCTransactionReceipt{}, err
 		}
-		return connectors.NewCDCTransactionReceipt("warehouse-receipt", "warehouse:test-connection", time.Now().UTC())
+		manifest, err := connectors.NewCDCArtifactManifest(
+			"test-connection",
+			"public.users",
+			1,
+			transaction.ID(),
+			transaction.Records(),
+			transaction.ContentDigest(),
+			strings.Repeat("a", 64),
+			strings.Repeat("b", 64),
+		)
+		if err != nil {
+			return connectors.CDCTransactionReceipt{}, err
+		}
+		return connectors.NewCDCTransactionReceiptWithArtifactManifest("warehouse-receipt", "warehouse:test-connection", time.Now().UTC(), manifest)
 	})
 
 	const xid = uint32(721)
@@ -161,6 +174,9 @@ func TestPGOutputV2StreamCommitUsesDurableTransactionReceiverBeforeCheckpoint(t 
 	}
 	if restart.transactionID != probe.durableTransactionID || restart.receiptID != "warehouse-receipt" {
 		t.Fatalf("restored transaction receipt = (%q, %q), want (%q, warehouse-receipt)", restart.transactionID, restart.receiptID, probe.durableTransactionID)
+	}
+	if restart.manifest.TransactionKey != probe.durableTransactionID || restart.manifest.ContentSHA256 == "" {
+		t.Fatalf("restored transaction artifact manifest = %#v, want the exact persisted stage binding", restart.manifest)
 	}
 }
 
@@ -329,6 +345,7 @@ type cdcRestoringReceiver struct {
 	order         []string
 	transactionID string
 	receiptID     string
+	manifest      connectors.CDCArtifactManifest
 }
 
 func (*cdcRestoringReceiver) ReceiveCDCTransaction(context.Context, connectors.CDCTransaction) (connectors.CDCTransactionReceipt, error) {
@@ -336,9 +353,14 @@ func (*cdcRestoringReceiver) ReceiveCDCTransaction(context.Context, connectors.C
 }
 
 func (r *cdcRestoringReceiver) RestoreCDCTransactionReceipt(_ context.Context, transactionID string, receipt connectors.CDCTransactionReceipt) error {
+	manifest, err := receipt.ArtifactManifest()
+	if err != nil {
+		return err
+	}
 	r.order = append(r.order, "restore")
 	r.transactionID = transactionID
 	r.receiptID = receipt.ID()
+	r.manifest = manifest
 	return nil
 }
 

@@ -537,6 +537,8 @@ func assertExternalProofObservedOperationsClaim(t *testing.T, proofPath, token s
 	}
 	var proof struct {
 		Version              int    `json:"version"`
+		PMBinarySHA256       string `json:"pm_binary_sha256"`
+		PMBuildSHA256        string `json:"pm_build_sha256"`
 		CredentialScope      string `json:"credential_scope"`
 		CredentialScopeProof string `json:"credential_scope_proof"`
 		HTTPExchanges        []struct {
@@ -550,6 +552,9 @@ func assertExternalProofObservedOperationsClaim(t *testing.T, proofPath, token s
 	}
 	if proof.Version != 2 || proof.CredentialScope != "observed_operations" || proof.CredentialScopeProof != "protocol_exchanges" {
 		t.Fatalf("bounded external proof claim = version:%d scope:%q proof:%q, want schema-v2 observed operations", proof.Version, proof.CredentialScope, proof.CredentialScopeProof)
+	}
+	if len(proof.PMBinarySHA256) != 64 || len(proof.PMBuildSHA256) != 64 {
+		t.Fatalf("bounded external proof provenance = binary:%q build:%q, want two SHA-256 digests", proof.PMBinarySHA256, proof.PMBuildSHA256)
 	}
 	for _, exchange := range proof.HTTPExchanges {
 		if exchange.Response.Status >= http.StatusOK && exchange.Response.Status < http.StatusMultipleChoices {

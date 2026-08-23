@@ -262,3 +262,6 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 - Other documented endpoints are not exposed by this connector where they are classified as
   binary_payload=2, destructive_admin=1, duplicate_of=15, non_data_endpoint=2,
   requires_elevated_scope=14.
+- `messages attachments download` remains partial because the provider returns a base64url JSON
+  envelope rather than direct attachment bytes; the bounded binary executor does not write that
+  envelope as a file.

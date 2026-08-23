@@ -14,6 +14,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -37,6 +38,47 @@ func newWriteTestBundle(srv *httptest.Server, action WriteAction) Bundle {
 		Writes: []WriteAction{
 			action,
 		},
+	}
+}
+
+func TestWriteIdempotencyKeySeparatesDurableWorksets(t *testing.T) {
+	action := WriteAction{Name: "apply_widget", IdempotencyKeyHeader: "Idempotency-Key"}
+	first := writeIdempotencyKey("acme", action, "sealed-preview", "connection-a/workset-one/checkpoint", 0)
+	retry := writeIdempotencyKey("acme", action, "sealed-preview", "connection-a/workset-one/checkpoint", 0)
+	second := writeIdempotencyKey("acme", action, "sealed-preview", "connection-a/workset-two/checkpoint", 0)
+	if first == "" {
+		t.Fatal("keyed action did not derive an idempotency key")
+	}
+	// These calls model distinct durable worksets carrying the same record at
+	// index zero. A preview/body/index-only key aliases them at the provider.
+	if first != retry {
+		t.Fatalf("same durable workset retry changed provider key: %q != %q", first, retry)
+	}
+	if first == second {
+		t.Fatalf("distinct durable worksets derived the same provider key %q", first)
+	}
+}
+
+func TestWriteIdempotencyHeaderBindsDeliveryOccurrence(t *testing.T) {
+	keys := make([]string, 0, 3)
+	srv := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		keys = append(keys, request.Header.Get("Idempotency-Key"))
+		writer.WriteHeader(http.StatusNoContent)
+	}))
+	t.Cleanup(srv.Close)
+	bundle := newWriteTestBundle(srv, WriteAction{
+		Name: "apply_widget", Kind: "update", Method: http.MethodPost,
+		Path: "/widgets/{{ record.id }}", PathFields: []string{"id"},
+		IdempotencyKeyHeader: "Idempotency-Key",
+	})
+	records := []connectors.Record{{"id": "same-provider-payload"}}
+	for _, occurrence := range []string{"connection-a/workset-one/checkpoint", "connection-a/workset-one/checkpoint", "connection-a/workset-two/checkpoint"} {
+		if _, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "apply_widget", DeliveryOccurrence: occurrence}, records, nil); err != nil {
+			t.Fatalf("Write(%q): %v", occurrence, err)
+		}
+	}
+	if len(keys) != 3 || keys[0] == "" || keys[0] != keys[1] || keys[0] == keys[2] {
+		t.Fatalf("provider idempotency headers = %#v, want stable retry key and distinct durable-workset key", keys)
 	}
 }
 
@@ -762,7 +804,11 @@ func TestWriteGraphQLBodyIgnoresRecordQueryField(t *testing.T) {
 }
 
 func TestWriteGraphQLErrorsFailClosed(t *testing.T) {
-	srv, _ := captureServer(t, http.StatusOK, `{"errors":[{"message":"cannot delete issue"}],"data":{"deleteIssue":null}}`)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"errors":[{"message":"cannot delete issue"}],"data":{"deleteIssue":null}}`))
+	}))
+	t.Cleanup(srv.Close)
 	b := newWriteTestBundle(srv, WriteAction{
 		Name:     "delete_issue",
 		Kind:     "delete",
@@ -787,8 +833,49 @@ func TestWriteGraphQLErrorsFailClosed(t *testing.T) {
 	if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
 		t.Fatalf("result = %+v, want 0 written / 1 failed", result)
 	}
-	if !strings.Contains(strings.ToLower(err.Error()), "graphql") || !strings.Contains(err.Error(), "cannot delete issue") {
-		t.Fatalf("error = %q, want GraphQL error details", err.Error())
+	if !strings.Contains(strings.ToLower(err.Error()), "graphql") || strings.Contains(err.Error(), "cannot delete issue") {
+		t.Fatalf("error = %q, want a generic GraphQL failure", err.Error())
+	}
+	if len(result.ProviderResponses) != 1 || result.ProviderResponses[0].Status != http.StatusOK || result.ProviderResponses[0].BodyRaw != `{"errors":[{"message":"cannot delete issue"}],"data":{"deleteIssue":null}}` || result.ProviderResponses[0].BodyRawEncoding != "text" {
+		t.Fatalf("GraphQL failed-write provider result = %#v, want complete response envelope", result.ProviderResponses)
+	}
+}
+
+func TestWriteGraphQLPreservesExplicitNonJSONResponse(t *testing.T) {
+	const providerResponse = `{"errors":[{"message":"provider text is not a GraphQL envelope"}]}`
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("Content-Type", "text/plain")
+		_, _ = w.Write([]byte(providerResponse))
+	}))
+	t.Cleanup(srv.Close)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "delete_issue",
+		Kind:     "delete",
+		Method:   http.MethodPost,
+		Path:     "/graphql",
+		BodyType: "graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "mutation DeleteIssue($issueId: ID!) { deleteIssue(input: {id: $issueId}) { clientMutationId } }",
+			OperationName: "DeleteIssue",
+			Variables: map[string]any{
+				"issueId": "{{ record.issue_id }}",
+			},
+		},
+		RecordSchema: json.RawMessage(`{"type":"object","required":["issue_id"],"properties":{"issue_id":{"type":"string"}}}`),
+	})
+	records := []connectors.Record{{"issue_id": "I_kwDO123"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_issue", records, nil), records, nil)
+	if err != nil {
+		t.Fatalf("Write() = %v", err)
+	}
+	if calls != 1 || result.RecordsWritten != 1 || len(result.ProviderResponses) != 1 {
+		t.Fatalf("GraphQL non-JSON write = %#v calls=%d, want successful provider result", result, calls)
+	}
+	response := result.ProviderResponses[0]
+	if !response.BodyPresent || response.BodyRaw != providerResponse || response.BodyRawEncoding != "text" || response.Body != providerResponse || response.BodyEncoding != "text" {
+		t.Fatalf("GraphQL non-JSON provider response = %#v, want exact text response", response)
 	}
 }
 
@@ -846,7 +933,7 @@ func TestValidateWriteRecordSchemaValidPasses(t *testing.T) {
 
 // --- DryRunWrite ---
 
-func TestDryRunWritePreviewResolvedMethodPathPreservesSecretValues(t *testing.T) {
+func TestWritePreviewRedactsResolvedSecretsButDigestBindsThem(t *testing.T) {
 	b := Bundle{
 		Name: "acme",
 		HTTP: HTTPBase{URL: "https://api.example.com/{{ secrets.client_secret }}"},
@@ -877,8 +964,61 @@ func TestDryRunWritePreviewResolvedMethodPathPreservesSecretValues(t *testing.T)
 	if !strings.Contains(joined, "POST") || !strings.Contains(joined, "/customers/cus_1") {
 		t.Fatalf("Warnings = %v, want resolved method+path", preview.Warnings)
 	}
-	if !strings.Contains(joined, "fixture-preview-secret") {
-		t.Fatalf("Warnings = %v, want complete resolved secret value", preview.Warnings)
+	if strings.Contains(joined, "fixture-preview-secret") || !strings.Contains(joined, "redacted") {
+		t.Fatalf("Warnings = %v, want secret masked while ordinary customer ID remains", preview.Warnings)
+	}
+
+	changed, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_customer", Config: connectors.RuntimeConfig{
+		Secrets: map[string]string{"client_secret": "different-preview-secret"},
+	}}, []connectors.Record{{"id": "cus_1", "name": "New Name"}}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite(changed secret): %v", err)
+	}
+	if preview.Digest == changed.Digest {
+		t.Fatal("preview digest did not bind the privately prepared secret-derived target")
+	}
+}
+
+func TestWritePreviewRedactsUserinfoQueryAndDeclaredValuesButPreservesOrdinaryToken(t *testing.T) {
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: "https://{{ secrets.user }}:{{ secrets.password }}@api.example.com"},
+		Writes: []WriteAction{{
+			Name:       "update_customer",
+			Kind:       "update",
+			Method:     http.MethodPost,
+			Path:       "/customers/{{ record.private_id }}/{{ record.token }}",
+			PathFields: []string{"private_id", "token"},
+			RedactFields: []string{
+				"private_id",
+			},
+			Query: map[string]QueryParam{
+				"access": {Template: "{{ secrets.query_secret }}"},
+			},
+		}},
+	}
+	records := []connectors.Record{
+		{"private_id": "private/id", "token": "ordinary-token-42"},
+		{"private_id": "second-private-id", "token": "ordinary-token-43"},
+	}
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_customer", Config: connectors.RuntimeConfig{
+		Secrets: map[string]string{
+			"user":         "credential-user",
+			"password":     "credential-password",
+			"query_secret": "query secret/value",
+		},
+	}}, records, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	joined := strings.Join(preview.Warnings, " | ")
+	for _, secret := range []string{"credential-user", "credential-password", "query secret/value", "query+secret%2Fvalue", "private/id", "private%2Fid"} {
+		if strings.Contains(joined, secret) {
+			t.Fatalf("Warnings = %v, leaked %q", preview.Warnings, secret)
+		}
+	}
+	if !strings.Contains(joined, "ordinary-token-42") {
+		t.Fatalf("Warnings = %v, ordinary provider token-shaped ID was not preserved", preview.Warnings)
 	}
 }
 
@@ -951,7 +1091,7 @@ func TestDryRunWriteDigestBindsCanonicalRequestAndCredentialRevision(t *testing.
 	}
 }
 
-func TestDryRunWritePreviewResolvedPathPreservesConfiguredRecordFields(t *testing.T) {
+func TestDryRunWritePreviewResolvedPathRedactsConfiguredRecordFields(t *testing.T) {
 	b := Bundle{
 		Name: "clinical",
 		HTTP: HTTPBase{URL: "https://api.example.com"},
@@ -973,15 +1113,12 @@ func TestDryRunWritePreviewResolvedPathPreservesConfiguredRecordFields(t *testin
 		t.Fatalf("DryRunWrite: %v", err)
 	}
 	joined := strings.Join(preview.Warnings, " | ")
-	if !strings.Contains(joined, "patient-raw-uuid") {
-		t.Fatalf("Warnings = %v, want complete record path field", preview.Warnings)
-	}
-	if !strings.Contains(joined, "/patients/patient-raw-uuid") {
-		t.Fatalf("Warnings = %v, want complete resolved request path", preview.Warnings)
+	if strings.Contains(joined, "patient-raw-uuid") || !strings.Contains(joined, "/patients/redacted") {
+		t.Fatalf("Warnings = %v, want configured record path field masked", preview.Warnings)
 	}
 }
 
-func TestDryRunWritePreviewResolvedPathPreservesNestedRecordFields(t *testing.T) {
+func TestDryRunWritePreviewResolvedPathRedactsNestedRecordFields(t *testing.T) {
 	b := Bundle{
 		Name: "clinical",
 		HTTP: HTTPBase{URL: "https://api.example.com"},
@@ -1004,11 +1141,8 @@ func TestDryRunWritePreviewResolvedPathPreservesNestedRecordFields(t *testing.T)
 		t.Fatalf("DryRunWrite: %v", err)
 	}
 	joined := strings.Join(preview.Warnings, " | ")
-	if !strings.Contains(joined, "patient-nested-uuid") {
-		t.Fatalf("Warnings = %v, want complete nested record path field", preview.Warnings)
-	}
-	if !strings.Contains(joined, "/patients/patient-nested-uuid") {
-		t.Fatalf("Warnings = %v, want complete resolved nested request path", preview.Warnings)
+	if strings.Contains(joined, "patient-nested-uuid") || !strings.Contains(joined, "/patients/redacted") {
+		t.Fatalf("Warnings = %v, want nested configured record path field masked", preview.Warnings)
 	}
 	if patient["uuid"] != "patient-nested-uuid" {
 		t.Fatalf("DryRunWrite mutated caller record: %v", patient)
@@ -1038,6 +1172,66 @@ func TestWriteDeleteMissingOkStatusDoesNotCountAsWritten(t *testing.T) {
 	}
 	if result.RecordsWritten != 0 || result.RecordsFailed != 0 || result.RecordsUnchanged != 1 {
 		t.Fatalf("result = %+v, want provider 404 counted as one unchanged record", result)
+	}
+}
+
+func TestWriteMissingOKDeleteRequiresExactDeclaredJSONResponse(t *testing.T) {
+	for _, testCase := range []struct {
+		name    string
+		body    []byte
+		wantErr bool
+	}{
+		{name: "one JSON value remains an unchanged record", body: []byte(`{"provider":"missing"}`)},
+		{name: "empty JSON body"},
+		{name: "whitespace JSON body", body: []byte(" \n\t "), wantErr: true},
+		{name: "malformed JSON body", body: []byte(`{"provider":`), wantErr: true},
+		{name: "multiple JSON values", body: []byte(`{"provider":"first"} {"provider":"second"}`), wantErr: true},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				w.Header().Set("X-Provider-Receipt", "delete-receipt")
+				w.WriteHeader(http.StatusNotFound)
+				_, _ = w.Write(testCase.body)
+			}))
+			t.Cleanup(srv.Close)
+			bundle := newWriteTestBundle(srv, WriteAction{
+				Name:       "delete_widget",
+				Kind:       "delete",
+				Method:     http.MethodDelete,
+				Path:       "/widgets/{{ record.id }}",
+				PathFields: []string{"id"},
+				Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{http.StatusNotFound}},
+			})
+			records := []connectors.Record{{"id": "widget-1"}}
+			result, err := Write(context.Background(), bundle, approvedWriteRequest(t, bundle, "delete_widget", records, nil), records, nil)
+			if testCase.wantErr {
+				if err == nil || !strings.Contains(err.Error(), "provider response") {
+					t.Fatalf("Write() error = %v, want declared JSON response failure", err)
+				}
+				if result.RecordsWritten != 0 || result.RecordsUnchanged != 0 || result.RecordsFailed != 1 {
+					t.Fatalf("failed missing delete result = %#v, want one failed record", result)
+				}
+			} else {
+				if err != nil {
+					t.Fatalf("Write(): %v", err)
+				}
+				if result.RecordsWritten != 0 || result.RecordsUnchanged != 1 || result.RecordsFailed != 0 {
+					t.Fatalf("unchanged missing delete result = %#v, want one unchanged record", result)
+				}
+			}
+			if len(result.ProviderResponses) != 1 {
+				t.Fatalf("provider responses = %#v, want one captured response", result.ProviderResponses)
+			}
+			provider := result.ProviderResponses[0]
+			wantEncoding := "text"
+			if len(testCase.body) == 0 {
+				wantEncoding = ""
+			}
+			if provider.BodyPresent != (len(testCase.body) != 0) || provider.BodyBytes != len(testCase.body) || provider.BodyRaw != string(testCase.body) || provider.BodyRawEncoding != wantEncoding || provider.Status != http.StatusNotFound || !reflect.DeepEqual(provider.Headers["X-Provider-Receipt"].Values, []string{"delete-receipt"}) {
+				t.Fatalf("provider response = %#v, want exact captured missing-delete response", provider)
+			}
+		})
 	}
 }
 
@@ -1192,6 +1386,272 @@ func TestWriteErrorRedactsOverlappingConfiguredRecordFields(t *testing.T) {
 	}
 }
 
+func TestWriteRetainsOrderedProviderResponsesBeforeTrailingJSONFailure(t *testing.T) {
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("Content-Type", "application/json")
+		if calls == 1 {
+			_, _ = w.Write([]byte(`{"provider_id":"first"}`))
+			return
+		}
+		_, _ = w.Write([]byte(`{"provider_id":"second"} trailing`))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := newWriteTestBundle(srv, WriteAction{
+		Kind:       "update",
+		Method:     http.MethodPost,
+		Path:       "/widgets/{{ record.id }}",
+		PathFields: []string{"id"},
+		Confirm:    "destructive",
+	})
+	records := []connectors.Record{{"id": "first"}, {"id": "second"}}
+	result, err := Write(context.Background(), bundle, approvedWriteRequest(t, bundle, "update_widget", records, nil), records, nil)
+	if err == nil {
+		t.Fatal("Write() error = nil, want trailing JSON failure")
+	}
+	if calls != 2 || result.RecordsWritten != 1 || result.RecordsFailed != 1 || len(result.ProviderResponses) != 2 {
+		t.Fatalf("Write() result = %#v calls=%d, want first success and two correlated responses", result, calls)
+	}
+	if first := result.ProviderResponses[0]; first.RecordIndex != 0 || first.Body.(map[string]any)["provider_id"] != "first" {
+		t.Fatalf("first provider response = %#v, want record zero success", first)
+	}
+	if second := result.ProviderResponses[1]; second.RecordIndex != 1 || second.BodyEncoding != "text" || second.Body != `{"provider_id":"second"} trailing` {
+		t.Fatalf("second provider response = %#v, want complete raw trailing response", second)
+	}
+}
+
+func TestWriteRetainsRawDeclaredJSONAlongsideParsedBody(t *testing.T) {
+	const providerBody = "{\n  \"provider_id\": \"first\",\n  \"duplicate\": \"first\",\n  \"duplicate\": \"second\"\n}\n"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(providerBody))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := newWriteTestBundle(srv, WriteAction{Kind: "update", Method: http.MethodPost, Path: "/widgets/{{ record.id }}", PathFields: []string{"id"}})
+	result, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{{"id": "widget-1"}}, nil)
+	if err != nil {
+		t.Fatalf("Write(): %v", err)
+	}
+	if result.RecordsWritten != 1 || len(result.ProviderResponses) != 1 {
+		t.Fatalf("Write() result = %#v, want one written record with one provider response", result)
+	}
+	provider := result.ProviderResponses[0]
+	if !provider.BodyPresent || provider.BodyBytes != len(providerBody) || provider.BodyRaw != providerBody || provider.BodyRawEncoding != "text" {
+		t.Fatalf("provider response = %#v, want exact raw JSON body", provider)
+	}
+	body, ok := provider.Body.(map[string]any)
+	if !ok || body["provider_id"] != "first" || body["duplicate"] != "second" {
+		t.Fatalf("parsed provider body = %#v, want parsed JSON view alongside raw body", provider.Body)
+	}
+}
+
+func TestWriteProviderResponseRejectsBodiesBeyondCaptureLimit(t *testing.T) {
+	for _, testCase := range []struct {
+		name   string
+		header http.Header
+		body   []byte
+	}{
+		{name: "declared JSON", header: http.Header{"Content-Type": []string{"application/json"}, "X-Provider-Receipt": []string{"receipt-one", "receipt-two"}}, body: []byte(`{"id":1}`)},
+		{name: "explicit text", header: http.Header{"Content-Type": []string{"text/plain"}, "X-Provider-Receipt": []string{"receipt-one", "receipt-two"}}, body: []byte("abcde")},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			response := &connsdk.Response{Status: http.StatusOK, Header: testCase.header, Body: testCase.body}
+			result, err := writeProviderResponseWithLimit(response, 3, 4)
+			if err == nil || !strings.Contains(err.Error(), "too large") {
+				t.Fatalf("writeProviderResponseWithLimit() error = %v, want capture-limit failure", err)
+			}
+			if result.RecordIndex != 3 || result.Status != http.StatusOK || !result.BodyPresent || result.BodyBytes != len(testCase.body) || result.BodyRaw != string(testCase.body) || result.BodyRawEncoding != "text" || result.Body != string(testCase.body) || result.BodyEncoding != "text" {
+				t.Fatalf("provider response = %#v, want bounded raw response facts", result)
+			}
+			if !reflect.DeepEqual(result.Headers["Content-Type"].Values, testCase.header.Values("Content-Type")) || !reflect.DeepEqual(result.Headers["X-Provider-Receipt"].Values, []string{"receipt-one", "receipt-two"}) {
+				t.Fatalf("provider response headers = %#v, want preserved headers", result.Headers)
+			}
+		})
+	}
+}
+
+func TestWriteRequiresOneJSONValueForDeclaredResponses(t *testing.T) {
+	for _, testCase := range []struct {
+		name         string
+		status       int
+		contentType  string
+		response     []byte
+		wantErr      bool
+		wantBody     any
+		wantEncoding string
+	}{
+		{
+			name:         "empty declared JSON",
+			status:       http.StatusOK,
+			contentType:  "application/json",
+			wantBody:     nil,
+			wantEncoding: "",
+		},
+		{
+			name:         "whitespace declared JSON",
+			status:       http.StatusOK,
+			contentType:  "application/json",
+			response:     []byte(" \n\t "),
+			wantErr:      true,
+			wantBody:     " \n\t ",
+			wantEncoding: "text",
+		},
+		{
+			name:         "one JSON value with trailing whitespace",
+			status:       http.StatusOK,
+			contentType:  "application/json; charset=utf-8",
+			response:     []byte("{\"provider_id\":\"one\"}\n\t"),
+			wantBody:     map[string]any{"provider_id": "one"},
+			wantEncoding: "",
+		},
+		{
+			name:         "multiple declared JSON values",
+			status:       http.StatusOK,
+			contentType:  "application/json",
+			response:     []byte("{\"provider_id\":\"one\"} {\"provider_id\":\"two\"}"),
+			wantErr:      true,
+			wantBody:     "{\"provider_id\":\"one\"} {\"provider_id\":\"two\"}",
+			wantEncoding: "text",
+		},
+		{
+			name:         "non JSON whitespace text",
+			status:       http.StatusOK,
+			contentType:  "text/plain",
+			response:     []byte(" \n\t "),
+			wantBody:     " \n\t ",
+			wantEncoding: "text",
+		},
+		{
+			name:         "bodyless status",
+			status:       http.StatusNoContent,
+			wantBody:     nil,
+			wantEncoding: "",
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Add("X-Provider-Receipt", "receipt-one")
+				w.Header().Add("X-Provider-Receipt", "receipt-two")
+				if testCase.contentType != "" {
+					w.Header().Set("Content-Type", testCase.contentType)
+				}
+				w.WriteHeader(testCase.status)
+				_, _ = w.Write(testCase.response)
+			}))
+			t.Cleanup(srv.Close)
+			bundle := newWriteTestBundle(srv, WriteAction{Kind: "update", Method: http.MethodPost, Path: "/widgets/{{ record.id }}", PathFields: []string{"id"}})
+
+			result, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{{"id": "widget-1"}}, nil)
+			if testCase.wantErr {
+				if err == nil {
+					t.Fatal("Write() error = nil, want declared JSON response failure")
+				}
+				if !strings.Contains(err.Error(), "provider response") {
+					t.Fatalf("Write() error = %v, want provider response failure", err)
+				}
+			} else if err != nil {
+				t.Fatalf("Write(): %v", err)
+			}
+
+			if len(result.ProviderResponses) != 1 {
+				t.Fatalf("provider responses = %#v, want one captured response", result.ProviderResponses)
+			}
+			provider := result.ProviderResponses[0]
+			if provider.RecordIndex != 0 || provider.Status != testCase.status || !reflect.DeepEqual(provider.Headers["X-Provider-Receipt"].Values, []string{"receipt-one", "receipt-two"}) {
+				t.Fatalf("provider response = %#v, want captured status and receipts", provider)
+			}
+			if provider.BodyEncoding != testCase.wantEncoding || !reflect.DeepEqual(provider.Body, testCase.wantBody) {
+				t.Fatalf("provider response body = %#v encoding=%q, want %#v encoding=%q", provider.Body, provider.BodyEncoding, testCase.wantBody, testCase.wantEncoding)
+			}
+			if provider.BodyPresent != (len(testCase.response) > 0) {
+				t.Fatalf("provider BodyPresent = %v, want transport-byte presence %v", provider.BodyPresent, len(testCase.response) > 0)
+			}
+			if testCase.wantErr {
+				if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+					t.Fatalf("failed write result = %#v, want one failed record", result)
+				}
+			} else if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+				t.Fatalf("successful write result = %#v, want one written record", result)
+			}
+		})
+	}
+}
+
+func TestWriteRetainsTerminalProviderResponse(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Add("X-Provider-Receipt", "receipt-one")
+		w.Header().Add("X-Provider-Receipt", "receipt-two")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"provider_echo":"client-secret","provider_id":9007199254740993}`))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := newWriteTestBundle(srv, WriteAction{
+		Kind:         "update",
+		Method:       http.MethodPost,
+		Path:         "/widgets/{{ record.id }}",
+		PathFields:   []string{"id"},
+		RedactFields: []string{"token"},
+		Confirm:      "destructive",
+		RecordSchema: json.RawMessage(`{"type":"object","required":["id","token"],"properties":{"id":{"type":"string"},"token":{"type":"string"}}}`),
+	})
+	records := []connectors.Record{{"id": "widget-1", "token": "client-secret"}}
+	result, err := Write(context.Background(), bundle, approvedWriteRequest(t, bundle, "update_widget", records, nil), records, nil)
+	if err == nil {
+		t.Fatal("Write() error = nil, want terminal provider failure")
+	}
+	if strings.Contains(err.Error(), "client-secret") {
+		t.Fatal("Write() error leaked a provider response")
+	}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 1 || len(result.ProviderResponses) != 1 {
+		t.Fatal("terminal write result did not retain one failed response")
+	}
+	provider := result.ProviderResponses[0]
+	if provider.RecordIndex != 0 || provider.Status != http.StatusBadRequest || !reflect.DeepEqual(provider.Headers["X-Provider-Receipt"].Values, []string{"receipt-one", "receipt-two"}) {
+		t.Fatal("terminal provider response did not retain status and receipt")
+	}
+	body, ok := provider.Body.(map[string]any)
+	if !ok || body["provider_echo"] != "client-secret" || body["provider_id"] != json.Number("9007199254740993") {
+		t.Fatal("terminal provider body did not retain exact provider facts")
+	}
+}
+
+func TestWritePreservesExplicitNonJSONProviderResponses(t *testing.T) {
+	for _, testCase := range []struct {
+		name        string
+		contentType string
+		response    []byte
+		body        any
+		encoding    string
+	}{
+		{name: "starts with t", contentType: "text/plain", response: []byte("thanks"), body: "thanks", encoding: "text"},
+		{name: "starts with f", contentType: "text/plain", response: []byte("false"), body: "false", encoding: "text"},
+		{name: "starts with n", contentType: "text/plain", response: []byte("null"), body: "null", encoding: "text"},
+		{name: "starts with digit", contentType: "text/plain", response: []byte("123"), body: "123", encoding: "text"},
+		{name: "starts with brace", contentType: "text/plain", response: []byte(`{"provider":"text"}`), body: `{"provider":"text"}`, encoding: "text"},
+		{name: "starts with bracket", contentType: "text/plain", response: []byte(`["provider","text"]`), body: `["provider","text"]`, encoding: "text"},
+		{name: "json-looking media type", contentType: "application/jsonish", response: []byte(`{"provider":"text"}`), body: `{"provider":"text"}`, encoding: "text"},
+		{name: "binary", contentType: "application/octet-stream", response: []byte{0xff, 0x00, 0x80}, body: base64.StdEncoding.EncodeToString([]byte{0xff, 0x00, 0x80}), encoding: "base64"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("Content-Type", testCase.contentType)
+				_, _ = w.Write(testCase.response)
+			}))
+			t.Cleanup(srv.Close)
+			bundle := newWriteTestBundle(srv, WriteAction{Kind: "update", Method: http.MethodPost, Path: "/widgets/{{ record.id }}", PathFields: []string{"id"}})
+			result, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{{"id": "widget-1"}}, nil)
+			if err != nil {
+				t.Fatalf("Write(): %v", err)
+			}
+			if result.RecordsWritten != 1 || len(result.ProviderResponses) != 1 || result.ProviderResponses[0].BodyEncoding != testCase.encoding || !reflect.DeepEqual(result.ProviderResponses[0].Body, testCase.body) {
+				t.Fatal("non-JSON provider result did not retain raw response bytes")
+			}
+		})
+	}
+}
+
 // --- accounting parity with legacy semantics (stripe/write.go:66) ---
 
 func TestWriteAccountingFailFastRemainderCountsAsFailed(t *testing.T) {
@@ -1259,17 +1719,18 @@ func TestWriteValidationFailureReportsAllRecordsFailed(t *testing.T) {
 // --- ctx cancellation mid-loop ---
 
 func TestWriteCtxCancelMidLoopAccounting(t *testing.T) {
-	// A WriteHook lets this test cancel deterministically BETWEEN records
-	// (ExecuteWrite runs once per record, before that record's declarative
-	// body/request construction) rather than racing an HTTP round trip
-	// against ctx cancellation — a real but separately-covered scenario
-	// (TestReadCtxCancelMidPage covers the read-side "cancel while a request
-	// is in flight" case). The hook always reports handled=false, so record 1
-	// completes its real declarative Do() against srv; it then cancels ctx
-	// while "handling" record 2 (before record 2's own HTTP call), so record
-	// 2's request is itself refused by ctx and record 3 is never attempted.
+	// A post-receipt validator cancels after the first provider response has
+	// been persisted and counted, so execution observes cancellation at the
+	// next sealed physical-record boundary. This replaces the old WriteHook
+	// timing seam: legacy execution hooks are refused because they could choose
+	// an unpreviewed physical request after approval.
 	ctx, cancel := context.WithCancel(context.Background())
-	srv, cap := captureServer(t, http.StatusOK, "")
+	var lastPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		lastPath = r.URL.Path
+		w.WriteHeader(http.StatusOK)
+	}))
+	t.Cleanup(srv.Close)
 	b := newWriteTestBundle(srv, WriteAction{
 		Kind:       "update",
 		Method:     http.MethodPost,
@@ -1277,14 +1738,13 @@ func TestWriteCtxCancelMidLoopAccounting(t *testing.T) {
 		PathFields: []string{"id"},
 	})
 
-	h := &writeHookFunc{fn: func(_ context.Context, _ WriteAction, rec connectors.Record, _ *Runtime) (bool, error) {
-		if rec["id"] == "2" {
+	records := []connectors.Record{{"id": "1"}, {"id": "2"}, {"id": "3"}}
+	h := &preparedWriteResponseValidatorFunc{fn: func(_ WriteAction, rec connectors.Record, _ *connsdk.Response) error {
+		if rec["id"] == "1" {
 			cancel()
 		}
-		return false, nil
+		return nil
 	}}
-
-	records := []connectors.Record{{"id": "1"}, {"id": "2"}, {"id": "3"}}
 	result, err := Write(ctx, b, connectors.WriteRequest{Action: "update_widget"}, records, h)
 	if err == nil {
 		t.Fatalf("Write: want context.Canceled surfaced")
@@ -1295,14 +1755,14 @@ func TestWriteCtxCancelMidLoopAccounting(t *testing.T) {
 	if result.RecordsFailed != len(records)-result.RecordsWritten {
 		t.Fatalf("RecordsFailed = %d, want %d", result.RecordsFailed, len(records)-result.RecordsWritten)
 	}
-	if cap.path != "/widgets/1" {
-		t.Fatalf("last observed request path = %q, want /widgets/1 (only record 1 ever reached the server)", cap.path)
+	if lastPath != "/widgets/1" {
+		t.Fatalf("last observed request path = %q, want /widgets/1 (only record 1 ever reached the server)", lastPath)
 	}
 }
 
 // --- WriteHook ---
 
-func TestWriteHookHandledBypassesDeclarative(t *testing.T) {
+func TestLegacyWriteHookClaimIsRefusedBeforeUnpreviewedTransport(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		t.Fatalf("declarative HTTP request should not happen when WriteHook handles the write")
 	}))
@@ -1315,22 +1775,115 @@ func TestWriteHookHandledBypassesDeclarative(t *testing.T) {
 	})
 
 	calls := 0
-	h := &writeHookFunc{fn: func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error) {
+	h := &writeHookFunc{claims: true, fn: func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, []*connsdk.Response, error) {
 		calls++
-		return true, nil
+		return true, nil, nil
 	}}
 
 	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "merge_pull_request"}, []connectors.Record{
 		{"pull_number": 7},
 	}, h)
+	if err == nil || !strings.Contains(err.Error(), "without an exact prepared-request plan") {
+		t.Fatalf("Write error = %v, want pre-I/O legacy-hook refusal", err)
+	}
+	if calls != 0 || result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+		t.Fatalf("legacy hook/result = %d / %+v, want no hook call and one refused record", calls, result)
+	}
+}
+
+// TestPreparedWriteHookSealsEveryPhysicalRequestAndRetainsTerminalReceipts
+// proves the compound-write approval boundary: the hook selects only named
+// declaration-owned actions, preparation captures both physical requests in
+// their execution order, and the response-bound follow-up receives its path
+// value only from the sealed first receipt. A caller mutation after planning
+// cannot reach either wire payload, and the failed terminal receipt remains in
+// the result beside the successful creation receipt.
+func TestPreparedWriteHookSealsEveryPhysicalRequestAndRetainsTerminalReceipts(t *testing.T) {
+	var paths []string
+	var bodies []map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode %s body: %v", r.URL.Path, err)
+		}
+		paths = append(paths, r.URL.Path)
+		bodies = append(bodies, body)
+		switch r.URL.Path {
+		case "/widgets":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusCreated)
+			_, _ = w.Write([]byte(`{"id":73,"provider":"created"}`))
+		case "/widgets/73":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = w.Write([]byte(`{"message":"terminal update failure"}`))
+		default:
+			t.Fatalf("unexpected physical request %s", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+	b := Bundle{
+		Name: "sealed-compound", HTTP: HTTPBase{URL: srv.URL},
+		Writes: []WriteAction{
+			{Name: "compound_widget", Kind: "custom", Method: http.MethodPost, Path: "/compound", Hook: "sealed"},
+			{Name: "create_widget", Kind: "create", Method: http.MethodPost, Path: "/widgets", BodyFields: []string{"payload"}},
+			{Name: "update_widget", Kind: "update", Method: http.MethodPatch, Path: "/widgets/{{ record.id }}", PathFields: []string{"id"}, BodyFields: []string{"payload"}},
+		},
+	}
+	hook := &sealedCompoundWriteHook{}
+	records := []connectors.Record{{"payload": map[string]any{"name": "approved"}}}
+	prepared, err := prepareDeclarativeWrite(context.Background(), b, connectors.WriteRequest{Action: "compound_widget"}, records, hook)
 	if err != nil {
-		t.Fatalf("Write: %v", err)
+		t.Fatalf("prepareDeclarativeWrite: %v", err)
 	}
-	if calls != 1 {
-		t.Fatalf("WriteHook called %d times, want 1", calls)
+	if len(prepared.Requests) != 2 {
+		t.Fatalf("prepared requests = %#v, want both physical requests", prepared.Requests)
 	}
-	if result.RecordsWritten != 1 {
-		t.Fatalf("result = %+v, want 1 written via hook", result)
+	if got := []string{prepared.Requests[0].Action, prepared.Requests[1].Action}; !reflect.DeepEqual(got, []string{"create_widget", "update_widget"}) {
+		t.Fatalf("prepared action order = %v, want create_widget then update_widget", got)
+	}
+	if binding := prepared.Requests[1].ResponseBinding; binding == nil || binding.SourceStep != 0 || binding.Field != "id" || binding.TargetField != "id" {
+		t.Fatalf("prepared follow-up binding = %#v, want sealed first-response id binding", binding)
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite: %v", err)
+	}
+	if preview.Digest == "" {
+		t.Fatal("preview digest is empty; physical plan was not sealed")
+	}
+
+	action, err := findWriteAction(b, "compound_widget")
+	if err != nil {
+		t.Fatalf("findWriteAction: %v", err)
+	}
+	var result connectors.WriteResult
+	err = ExecutePreparedWrite(context.Background(), prepared, nil, preview.Digest, func(ctx context.Context) error {
+		result, err = executeApprovedWrite(ctx, b, action, connectors.WriteRequest{Action: "compound_widget"}, records, prepared, preview.Digest, hook)
+		return err
+	})
+	if err == nil || !strings.Contains(err.Error(), "HTTP status 400") {
+		t.Fatalf("ExecutePreparedWrite error = %v, want terminal compound failure", err)
+	}
+	if got := records[0]["payload"].(map[string]any)["name"]; got != "mutated-after-preview" {
+		t.Fatalf("fixture did not mutate caller record: %#v", records)
+	}
+	if !reflect.DeepEqual(paths, []string{"/widgets", "/widgets/73"}) {
+		t.Fatalf("physical request paths = %v, want sealed ordered create then response-bound update", paths)
+	}
+	for index, body := range bodies {
+		if body["payload"].(map[string]any)["name"] != "approved" {
+			t.Fatalf("physical request %d body = %#v, want sealed approved payload", index, body)
+		}
+	}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 1 || len(result.ProviderResponses) != 2 {
+		t.Fatalf("Write result = %#v, want failed record with both compound receipts", result)
+	}
+	if result.ProviderResponses[0].RecordIndex != 0 || result.ProviderResponses[0].Status != http.StatusCreated || result.ProviderResponses[1].RecordIndex != 0 || result.ProviderResponses[1].Status != http.StatusBadRequest {
+		t.Fatalf("compound receipts = %#v, want ordered statuses 201 then 400 for record zero", result.ProviderResponses)
+	}
+	if got := result.ProviderResponses[1].Body.(map[string]any)["message"]; got != "terminal update failure" {
+		t.Fatalf("terminal provider receipt = %#v, want exact provider failure", result.ProviderResponses[1])
 	}
 }
 
@@ -1343,8 +1896,8 @@ func TestWriteHookNotHandledFallsBackToDeclarative(t *testing.T) {
 		PathFields: []string{"id"},
 	})
 
-	h := &writeHookFunc{fn: func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error) {
-		return false, nil
+	h := &writeHookFunc{claims: false, fn: func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, []*connsdk.Response, error) {
+		return false, nil, nil
 	}}
 
 	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{
@@ -1558,12 +2111,52 @@ func TestWriteMultipartRejectsContentThatDoesNotMatchApproval(t *testing.T) {
 // --- test-only hook adapter ---
 
 type writeHookFunc struct {
-	fn func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error)
+	claims bool
+	fn     func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, []*connsdk.Response, error)
 }
 
 func (w *writeHookFunc) ConnectorName() string { return "write-hook-func-test" }
-func (w *writeHookFunc) ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error) {
+func (w *writeHookFunc) ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, []*connsdk.Response, error) {
 	return w.fn(ctx, action, rec, rt)
+}
+
+func (w *writeHookFunc) HandlesWriteAction(WriteAction) bool { return w.claims }
+
+type preparedWriteResponseValidatorFunc struct {
+	fn func(WriteAction, connectors.Record, *connsdk.Response) error
+}
+
+func (*preparedWriteResponseValidatorFunc) ConnectorName() string {
+	return "prepared-response-validator-test"
+}
+func (h *preparedWriteResponseValidatorFunc) ValidatePreparedWriteResponse(action WriteAction, rec connectors.Record, response *connsdk.Response) error {
+	return h.fn(action, rec, response)
+}
+
+type sealedCompoundWriteHook struct{}
+
+func (*sealedCompoundWriteHook) ConnectorName() string { return "sealed-compound-write-test" }
+
+func (h *sealedCompoundWriteHook) MapWriteRecord(_ WriteAction, rec connectors.Record) (connectors.Record, bool, error) {
+	pinned := connectors.Record(copyRecordMap(map[string]any(rec)))
+	rec["payload"].(map[string]any)["name"] = "mutated-after-preview"
+	return pinned, true, nil
+}
+
+func (*sealedCompoundWriteHook) PrepareWrite(action WriteAction, records []connectors.Record) (PreparedWriteHookPlan, bool, error) {
+	if action.Name != "compound_widget" {
+		return PreparedWriteHookPlan{}, false, nil
+	}
+	if len(records) != 1 {
+		return PreparedWriteHookPlan{}, true, errors.New("test hook requires one record")
+	}
+	payload := records[0]["payload"]
+	return PreparedWriteHookPlan{Records: []PreparedWriteHookRecord{{Steps: []PreparedWriteHookStep{
+		{Action: "create_widget", Record: connectors.Record{"payload": payload}},
+		// id is a schema/interpolation witness only. The engine replaces it
+		// from the sealed create receipt before it can reach the wire.
+		{Action: "update_widget", Record: connectors.Record{"id": 0, "payload": payload}, ResponseBinding: &PreparedWriteResponseBinding{SourceStep: 0, Field: "id", TargetField: "id"}},
+	}}}}, true, nil
 }
 
 // --- array cardinality reach ----------------------------------------------
@@ -1928,4 +2521,207 @@ func TestDryRunBase64UploadDoesNotReadTheFile(t *testing.T) {
 	if preview.RecordsStaged != 1 {
 		t.Fatalf("RecordsStaged = %d, want 1", preview.RecordsStaged)
 	}
+}
+
+func githubReleaseAssetUploadAction(t *testing.T, serverURL string) Bundle {
+	t.Helper()
+	bundle, err := Load(os.DirFS(filepath.Join("..", "defs")), "github")
+	if err != nil {
+		t.Fatalf("load installed GitHub bundle: %v", err)
+	}
+	var installed WriteAction
+	for _, action := range bundle.Writes {
+		if action.Name == "releases_release_id_assets2" {
+			installed = action
+			break
+		}
+	}
+	if installed.Name == "" {
+		t.Fatal("installed GitHub release-asset upload action is missing")
+	}
+	// The production declaration pins uploads.github.com. The test substitutes
+	// only the origin so the real installed path/query/body contract can be
+	// exercised without live credentials or provider I/O.
+	installed.BaseURL = serverURL
+	bundle.HTTP.URL = serverURL
+	bundle.HTTP.Auth = nil
+	bundle.HTTP.Headers = nil
+	bundle.Writes = []WriteAction{installed}
+	return bundle
+}
+
+func TestGitHubReleaseAssetUpload_InstalledCommandSendsExactBytes(t *testing.T) {
+	var calls int
+	var gotBody []byte
+	var gotQuery url.Values
+	var gotContentType string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		gotQuery = r.URL.Query()
+		gotContentType = r.Header.Get("Content-Type")
+		gotBody, _ = io.ReadAll(r.Body)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		_, _ = w.Write([]byte(`{"id":9007199254740993,"name":"asset.bin"}`))
+	}))
+	defer server.Close()
+
+	payload := []byte{0x00, 0xff, 'p', 'm', '\n'}
+	projectDir, relative := writeTempPayload(t, "asset.bin", payload)
+	bundle := githubReleaseAssetUploadAction(t, server.URL)
+	result, err := Write(context.Background(), bundle, connectors.WriteRequest{
+		Action: "releases_release_id_assets2",
+		Config: connectors.RuntimeConfig{
+			ProjectDir: projectDir,
+			Config:     map[string]string{"owner": "octo cat", "repo": "hello/world"},
+		},
+	}, []connectors.Record{{
+		"release_id": int64(42),
+		"name":       "asset +1.bin",
+		"label":      "release/one",
+		"file_path":  relative,
+	}}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("provider calls = %d, want 1", calls)
+	}
+	if !bytes.Equal(gotBody, payload) {
+		t.Fatalf("body = %x, want %x", gotBody, payload)
+	}
+	if gotContentType != "application/octet-stream" {
+		t.Fatalf("Content-Type = %q, want application/octet-stream", gotContentType)
+	}
+	if gotQuery.Get("name") != "asset +1.bin" || gotQuery.Get("label") != "release/one" {
+		t.Fatalf("query = %q", gotQuery.Encode())
+	}
+	if len(result.ProviderResponses) != 1 || result.ProviderResponses[0].Status != http.StatusCreated {
+		t.Fatalf("provider responses = %#v", result.ProviderResponses)
+	}
+	if body, ok := result.ProviderResponses[0].Body.(map[string]any); !ok || body["id"] != json.Number("9007199254740993") {
+		t.Fatalf("provider response body = %#v", result.ProviderResponses[0].Body)
+	}
+}
+
+func TestGitHubReleaseAssetUpload_RejectsMissingChangedUnsafeOrOversizeFile(t *testing.T) {
+	var calls int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusCreated)
+	}))
+	defer server.Close()
+	baseRecord := connectors.Record{"release_id": int64(42), "name": "asset.bin"}
+
+	t.Run("missing", func(t *testing.T) {
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{baseRecord}, nil)
+		if err == nil || !strings.Contains(err.Error(), "file_path") {
+			t.Fatalf("error = %v, want missing file_path", err)
+		}
+	})
+
+	t.Run("unsafe", func(t *testing.T) {
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		record := connectors.Record{"release_id": int64(42), "name": "asset.bin", "file_path": "../escape.bin"}
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: t.TempDir(), Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{record}, nil)
+		if err == nil || (!strings.Contains(strings.ToLower(err.Error()), "outside") && !strings.Contains(strings.ToLower(err.Error()), "project root")) {
+			t.Fatalf("error = %v, want confinement refusal", err)
+		}
+	})
+
+	t.Run("oversize", func(t *testing.T) {
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		for index := range bundle.Writes {
+			bundle.Writes[index].BinaryUpload.MaxBytes = 3
+		}
+		dir, path := writeTempPayload(t, "large.bin", []byte("four"))
+		record := connectors.Record{"release_id": int64(42), "name": "asset.bin", "file_path": path}
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: dir, Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{record}, nil)
+		if err == nil || !strings.Contains(err.Error(), "too large") {
+			t.Fatalf("error = %v, want size refusal", err)
+		}
+	})
+
+	t.Run("changed", func(t *testing.T) {
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		dir, path := writeTempPayload(t, "changed.bin", []byte("changed"))
+		record := connectors.Record{"release_id": int64(42), "name": "asset.bin", "file_path": path}
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{
+			ProjectDir: dir,
+			Config:     map[string]string{"owner": "o", "repo": "r"},
+			ApprovedPayloadSHA256: map[string]string{
+				connectors.PayloadApprovalKey(0, "file_path"): strings.Repeat("0", 64),
+			},
+		}}, []connectors.Record{record}, nil)
+		if err == nil || !strings.Contains(err.Error(), "approved digest") {
+			t.Fatalf("error = %v, want approved digest refusal", err)
+		}
+	})
+
+	if calls != 0 {
+		t.Fatalf("invalid uploads reached provider %d time(s)", calls)
+	}
+}
+
+func TestGitHubReleaseAssetUpload_EmptyFileAndTerminalFailures(t *testing.T) {
+	t.Run("empty", func(t *testing.T) {
+		var body []byte
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			body, _ = io.ReadAll(r.Body)
+			w.WriteHeader(http.StatusCreated)
+		}))
+		defer server.Close()
+		dir, path := writeTempPayload(t, "empty.bin", nil)
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		_, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: dir, Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{{"release_id": int64(42), "name": "empty.bin", "file_path": path}}, nil)
+		if err != nil {
+			t.Fatalf("empty upload: %v", err)
+		}
+		if body == nil || len(body) != 0 {
+			t.Fatalf("empty body = %#v, want present zero-byte body", body)
+		}
+	})
+
+	t.Run("redirect and 4xx", func(t *testing.T) {
+		var redirected int
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path == "/redirected" {
+				redirected++
+				w.WriteHeader(http.StatusCreated)
+				return
+			}
+			if r.URL.Query().Get("name") == "redirect.bin" {
+				http.Redirect(w, r, "/redirected", http.StatusTemporaryRedirect)
+				return
+			}
+			w.Header().Add("X-Request-Id", "occurrence-1")
+			w.Header().Add("X-Request-Id", "occurrence-2")
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			_, _ = w.Write([]byte(`{"message":"duplicate asset"}`))
+		}))
+		defer server.Close()
+		dir, path := writeTempPayload(t, "payload.bin", []byte("payload"))
+		bundle := githubReleaseAssetUploadAction(t, server.URL)
+		request := func(name string) (connectors.WriteResult, error) {
+			return Write(context.Background(), bundle, connectors.WriteRequest{Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: dir, Config: map[string]string{"owner": "o", "repo": "r"}}}, []connectors.Record{{"release_id": int64(42), "name": name, "file_path": path}}, nil)
+		}
+		if _, err := request("redirect.bin"); err == nil || !strings.Contains(strings.ToLower(err.Error()), "redirect") {
+			t.Fatalf("redirect error = %v", err)
+		}
+		if redirected != 0 {
+			t.Fatalf("redirect target calls = %d, want 0", redirected)
+		}
+		result, err := request("duplicate.bin")
+		if err == nil {
+			t.Fatal("4xx upload: want terminal error")
+		}
+		if len(result.ProviderResponses) != 1 || result.ProviderResponses[0].Status != http.StatusUnprocessableEntity {
+			t.Fatalf("4xx receipt = %#v", result.ProviderResponses)
+		}
+		if got := result.ProviderResponses[0].Headers["X-Request-Id"].Values; !reflect.DeepEqual(got, []string{"occurrence-1", "occurrence-2"}) {
+			t.Fatalf("X-Request-Id = %#v", got)
+		}
+	})
 }

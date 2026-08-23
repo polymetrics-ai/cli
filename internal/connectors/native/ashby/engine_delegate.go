@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -55,6 +56,12 @@ func (c Connector) PreflightOperationDirectRead(operation, method, path string, 
 	return engine.PreflightOperationDirectRead(ashbyBundle(), operation, method, path, maxBytes, outputPolicy)
 }
 
+// PreflightOperationDirectReadBindings keeps Ashby's native adapter on the
+// same closed command-binding contract as fully declarative connectors.
+func (c Connector) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
+	return engine.PreflightOperationDirectReadBindings(ashbyBundle(), operation, pathFields, queryFields, bodyFields, rawBody)
+}
+
 // ValidateWrite delegates typed Ashby reverse-ETL validation to the generated
 // bundle. The bundle contains closed top-level JSON schemas and fixed endpoint
 // paths; no generic HTTP passthrough is exposed by the native connector.
@@ -66,12 +73,47 @@ type ashbyEngineHooks struct{}
 
 func (ashbyEngineHooks) ConnectorName() string { return "ashby" }
 
-func (ashbyEngineHooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, error) {
+var (
+	_ engine.PreparedWriteHook              = ashbyEngineHooks{}
+	_ engine.PreparedWriteResponseValidator = ashbyEngineHooks{}
+)
+
+// PrepareWrite keeps Ashby's native success-envelope rule while moving its
+// physical POST selection into the engine's declaration-owned approval plan.
+// Each action names itself; the engine resolves its fixed method, path,
+// headers, bounded body, and receipt projection from writes.json before any
+// approval is minted.
+func (ashbyEngineHooks) PrepareWrite(action engine.WriteAction, records []connectors.Record) (engine.PreparedWriteHookPlan, bool, error) {
+	if len(action.PathFields) != 0 || strings.Contains(action.Path, "{{") || (action.BodyType != "" && action.BodyType != "json") || len(action.BodyFields) != 0 || len(action.BodySchema) != 0 || action.GraphQL != nil || action.Multipart != nil {
+		return engine.PreparedWriteHookPlan{}, true, fmt.Errorf("ashby write action %q uses an unsupported request shape", action.Name)
+	}
+	plan := engine.PreparedWriteHookPlan{Records: make([]engine.PreparedWriteHookRecord, len(records))}
+	for index, record := range records {
+		sealed := make(connectors.Record, len(record))
+		for key, value := range record {
+			sealed[key] = value
+		}
+		plan.Records[index].Steps = []engine.PreparedWriteHookStep{{
+			Action: action.Name,
+			Record: sealed,
+		}}
+	}
+	return plan, true, nil
+}
+
+func (ashbyEngineHooks) ValidatePreparedWriteResponse(_ engine.WriteAction, _ connectors.Record, response *connsdk.Response) error {
+	if response == nil {
+		return fmt.Errorf("ashby write did not return a provider response")
+	}
+	return ashbyValidateSuccessEnvelope(response.Body)
+}
+
+func (ashbyEngineHooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, []*connsdk.Response, error) {
 	if rt == nil || rt.Requester == nil {
-		return true, fmt.Errorf("ashby write runtime is unavailable")
+		return true, nil, fmt.Errorf("ashby write runtime is unavailable")
 	}
 	if len(action.PathFields) != 0 || strings.Contains(action.Path, "{{") || (action.BodyType != "" && action.BodyType != "json") || len(action.BodyFields) != 0 || len(action.BodySchema) != 0 || action.GraphQL != nil || action.Multipart != nil {
-		return true, fmt.Errorf("ashby write action %q uses an unsupported request shape", action.Name)
+		return true, nil, fmt.Errorf("ashby write action %q uses an unsupported request shape", action.Name)
 	}
 	var payload any
 	if len(rec) > 0 {
@@ -79,12 +121,19 @@ func (ashbyEngineHooks) ExecuteWrite(ctx context.Context, action engine.WriteAct
 	}
 	resp, err := rt.Requester.Do(ctx, action.Method, action.Path, nil, payload)
 	if err != nil {
-		return true, err
+		return true, ashbyResponseSlice(resp), err
 	}
 	if err := ashbyValidateSuccessEnvelope(resp.Body); err != nil {
-		return true, err
+		return true, ashbyResponseSlice(resp), err
 	}
-	return true, nil
+	return true, ashbyResponseSlice(resp), nil
+}
+
+func ashbyResponseSlice(response *connsdk.Response) []*connsdk.Response {
+	if response == nil {
+		return nil
+	}
+	return []*connsdk.Response{response}
 }
 
 // DryRunWrite stages Ashby reverse-ETL records without network I/O. The actual
@@ -105,10 +154,10 @@ func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, recor
 func (c Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	result, err := engine.OperationDirectRead(ctx, ashbyBundle(), req, nil)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return result, err
 	}
 	if err := ashbyValidateSuccessEnvelopeValue(result.Body); err != nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("ashby direct read: %w", err)
+		return result, fmt.Errorf("ashby direct read: %w", err)
 	}
 	return result, nil
 }

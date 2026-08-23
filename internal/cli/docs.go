@@ -521,6 +521,18 @@ REVERSE ETL WRITE ACTIONS
   writable connectors; the rest are read-only because their APIs expose no
   supported mutations.
 
+DECLARATION-BOUND STRUCTURED WRITE INPUTS
+  Some provider-sourced direct-write commands expose a declared object or array
+  as a typed json flag, for example --settings or --targets. The generated
+  command help and connector manual name the accepted fields and their
+  maps_to=body.<field> binding. The operation declaration—not the caller—owns
+  the method, route, content type, headers, and nested schema. There is no raw
+  --body flag and no method, path, content-type, action, or connector override.
+  A malformed, unknown, missing, oversized, or schema-incompatible structured
+  value is rejected before any provider request. Direct writes still use plan,
+  preview, approval, confirmation where declared, and execute; approval binds
+  the exact canonical structured payload.
+
   Run pm connectors inspect <name> to see a connector's write=true/false
   capability, ETL streams, reverse ETL write actions, required fields, and risk
   notes.
@@ -636,12 +648,20 @@ const connectionsHelp = `NAME
   pm connections - configure source-to-destination sync connections
 
 SYNOPSIS
-  pm connections create <name> --source connector:credential --destination connector:credential --stream stream [--sync-mode mode] [--cursor field] [--primary-key field] [--table table] [--transform-file plan.json] [--target-copy-workers n]
+  pm connections create <name> --source connector:credential --destination connector:credential --stream stream [--sync-mode mode] [--cursor field] [--primary-key field] [--table table] [--destination-action action] [--transform-file plan.json] [--target-copy-workers n]
   pm connections list [--json]
 
 DESCRIPTION
   A connection joins one source endpoint to one destination endpoint and stores
   stream-level sync settings.
+
+DECLARATIVE TYPED DESTINATION ACTION
+  --destination-action persists one exact eligible writes.json action for a
+  declarative_typed_destination stream. It is accepted only for that closed
+  destination adapter and is validated against the destination descriptor,
+  source binding, mode, acknowledgement, and evidence before catalog or
+  provider I/O. It is not an ETL run flag: a plan and run resolve only this
+  saved identity, so an invocation cannot substitute another action.
 
 TARGET COPY CAPACITY
   --target-copy-workers records the bounded target connection capacity for an
@@ -759,6 +779,8 @@ SYNOPSIS
   pm etl run --connection <name> --stream <stream> --batch-size 1 --approval-plan <plan-id> [--approval-token-stdin] --confirm destructive [--json]
   pm etl transport postgres-managed-target plan --connection <name> --stream <stream> [--authorization-lifetime <24h..48h>] [--json]
   pm etl transport postgres-managed-target preview <plan-id> [--json]
+  pm etl transport declarative-typed-destination plan --connection <name> --stream <stream> [--json]
+  pm etl transport declarative-typed-destination preview <plan-id> [--json]
   pm etl transport github-issue-label cleanup plan --connection <name> --forward-plan <plan-id> [--json]
   pm etl transport github-issue-label cleanup run <plan-id> --connection <name> --approval-token-stdin --confirm destructive [--json]
 
@@ -870,6 +892,61 @@ CLOSED POSTGRESQL MANAGED-TARGET TRANSPORT
   Stale, replayed, authentication-refused, and permission-refused runs stop
   before a checkpoint advance. The public PostgreSQL connector remains
   write=false and this route accepts no raw SQL or target identifiers.
+
+DECLARATIVE TYPED DESTINATION TRANSPORT
+  declarative-typed-destination runs only a sync_transport.json destination
+  that declares the exact declarative_typed_destination adapter. The saved
+  stream's destination_action selects one named, eligible writes.json action.
+  This is necessary when one connector exposes multiple
+  record-driven destination actions for the same sync mode; no action is
+  inferred from declaration order.
+
+  Plan and preview output list and digest-bind every declaration-owned
+  physical action, including any independently destructive tombstone delete.
+  The runtime may clamp --batch-size to the selected action's acknowledgement,
+  read-back, and bounded private-receipt capacity; it never creates a larger
+  provider mutation unit. A tombstone is a separately approved tombstone
+  delete with a distinct mapping, idempotency key, and independent absence
+  read-back before checkpoint.
+
+  Create and preview the connection-owned plan, then use the ordinary approved
+  ETL run:
+
+    pm etl transport declarative-typed-destination plan \
+      --connection <name> --stream <stream> --json
+    pm etl transport declarative-typed-destination preview <plan-id>
+    pm etl run --connection <name> --stream <stream> --batch-size <n> \
+      --approval-plan <plan-id> --approval-token-stdin --confirm destructive
+
+  The CLI accepts no connector, action, route, verb, body, mapping, or evidence
+  flag. Connector JSON owns that behavior; shared Go validates the sealed
+  descriptor, source binding, approval/workset guards, typed action execution,
+  acknowledgement, and read-back. An absent declaration, foreign action,
+  unlisted action, wrong source, malformed mapping, missing evidence, or
+  unsupported mode fails before source or provider I/O. See
+  docs/sync-transport-definition.md for the mechanical declaration contract.
+
+  JSON run and status output retains each provider-successful typed action
+  result in run.destination_results: record accounting plus every ordinary
+  successful provider response field (status, headers, and body). Fields are
+  not removed because they are rare, destructive, paid-tier-specific, or
+  unfamiliar. Concrete configured credential material is masked wherever it
+  occurs; provider-owned field names and ordinary values remain available.
+  If a later local receipt, acknowledgement, composition, or output step fails
+  before checkpoint, the failed uncheckpointed run still retains ordered
+  sanitized provider evidence. System-generated plans, logs, request
+  diagnostics, and synthetic errors remain secret-taint-safe.
+
+  If a closed transport has already applied, read back, and checkpointed a
+  destination effect but cannot complete local receipt retirement or its
+  declaration-owned approval marker, the persisted run has status
+  delivered_reconciliation_required. Its delivery_reconciliation field names
+  only the bounded local repair; destination_results and the acknowledged
+  checkpoint remain intact. The command exits nonzero with an exact terminal ETLRun.
+  Repeating the same saved connection and stream repairs from durable
+  state before endpoint resolution and never replays source or destination I/O.
+  Missing, malformed, or stale reconciliation evidence is refused rather than
+  falling back to an ordinary route.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -1345,8 +1422,12 @@ SECURITY
   preview warnings preserve the resolved execution request, including fields
   declared in redact_fields. Engine direct-read, operation-direct-read, and binary-
   download executors preserve bounded HTTP URL/query/body diagnostics before
-  downstream rendering. These engine-level guarantees do not establish
-  complete pm CLI output. Credential storage remains encrypted at rest.
+  downstream rendering. Persisted reverse-ETL output retains complete provider
+  results: concrete configured credential material is masked, while
+  provider-owned field names and ordinary values remain available.
+  System-generated plans, logs, request diagnostics, and synthetic errors
+  remain secret-taint-safe.
+  Credential storage remains encrypted at rest.
 
 LEARN MORE
   Run pm reverse --help for this manual.

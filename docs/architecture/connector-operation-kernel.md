@@ -26,15 +26,17 @@ pass its declared operation and command preflight before it can enter the write
 lifecycle.
 
 Operation execution is opt-in per intent, not blanket-enabled: an operation runs
-only through an intent whose executor exists. Direct reads, declared `rest_write`
-direct writes, and bounded binary downloads have executors today; GraphQL, XML,
-local git, local file, browser, and composite operations do not, and remain
-blocked.
+only through an intent whose executor exists. Direct reads; declared `rest_write`
+direct writes (including typed multipart); fixed-document GraphQL queries and
+mutations; bounded binary downloads and text exports; and declared status checks
+have executors today. XML, local git, local file, browser, and composite
+operations do not, and remain blocked.
 
 ## Supported Operation Kinds
 
 - `stream_etl`
 - `rest_read`
+- `rest_status`
 - `rest_write`
 - `provider_search`
 - `graphql_query`
@@ -42,6 +44,7 @@ blocked.
 - `xml_export`
 - `xml_import`
 - `binary_download`
+- `text_export`
 - `file_upload`
 - `local_git`
 - `local_file`
@@ -64,9 +67,15 @@ rules are enforceable at load time.
 - Secrets must not appear in operation metadata, fixtures, logs, examples, or
   review comments.
 - GraphQL operations must use fixed documents and checked variables.
-- Binary and file operations are bounded by a byte cap and an explicit
-  caller-supplied destination, never by an output policy: the response becomes a
-  file on disk, not a JSON body.
+- Binary downloads and text exports are bounded by a byte cap and an explicit
+  caller-supplied destination; their declared file-manifest contract writes a
+  file on disk rather than rendering a JSON body.
+- A caller-provided operation header is an exact, declared bounded string
+  parameter. Authorization, cookies, content, routing, connection/proxy, and
+  other runtime-owned headers are never caller-selectable. Declared response
+  metadata is bounded by name and byte cap; every ordinary admitted value is
+  retained, while established credential/transport-secret headers retain
+  presence with an explicit redaction marker.
 - Local git/file operations must use allowlisted structured actions, never a
   shell string.
 - Generated candidates from provider specs are not executable until reviewed
@@ -77,28 +86,46 @@ rules are enforceable at load time.
 `commandrunner` decides whether an operation-backed command executes, and it
 decides before any network or filesystem access:
 
-- `intent:"direct_read"` with `availability:"implemented"` executes as a bounded
-  REST read under the command's `output_policy`. It issues exactly one request
-  and returns one page: the page size and the next-page context are derived from
-  the connector's own declared `streams.json` pagination spec, the result
-  reports whether that page is the whole collection, and the runtime-owned
-  `--page`/`--page-cursor` flags reach the rest. See AGENTS.md, "Direct Reads
-  Return One Page, And Say So".
-- `intent:"direct_write"` with `availability:"implemented"` executes one bounded
-  `rest_write` only through the connector-command plan → preview → approval →
-  execute lifecycle. The command and operation must declare matching, explicit
-  output policies; their intent-specific choices are defined in the
+- `intent:"direct_read"` with `availability:"implemented"` executes a bounded
+  declared REST/provider-search read or fixed-document GraphQL query under the
+  command's `output_policy`. It issues exactly one request and returns one page:
+  the page size and the next-page context are derived from the connector's own
+  declared pagination spec, the result reports whether that page is the whole
+  collection, and the runtime-owned `--page`/`--page-cursor` flags reach the
+  rest. See AGENTS.md, "Direct Reads Return One Page, And Say So".
+- `intent:"status_check"` with `availability:"implemented"` executes exactly one
+  declared `rest_status` HEAD through `connectors.OperationStatusChecker`, which
+  the declarative engine satisfies with `engine.OperationStatusCheck`. It returns
+  status, body-byte count, and only declared bounded response metadata. The final
+  HTTP status, including a non-2xx response after normal retry handling, remains
+  a typed status result; transport, request-setup, and admission failures remain
+  errors.
+- `intent:"direct_write"` with `availability:"implemented"` executes one declared
+  `rest_write` (including typed multipart) or fixed-document `graphql_mutation`
+  only through the connector-command plan → preview → approval → execute lifecycle.
+  The command and operation must declare matching, explicit output policies;
+  their intent-specific choices are defined in the
   [connector authoring conventions](../migration/conventions.md#2-authoring-rules).
-- `intent:"binary_download"` with `availability:"implemented"` executes through
-  `connectors.OperationBinaryDownloader`, which the declarative engine satisfies
-  with `engine.OperationBinaryDownload`. The endpoint must be a single
-  connector-relative GET, the caller must supply a destination root, and the
+- `intent:"binary_download"` or `intent:"text_export"` with
+  `availability:"implemented"` executes through `connectors.OperationBinaryDownloader`,
+  which the declarative engine satisfies with `engine.OperationBinaryDownload`.
+  The endpoint must be a single connector-relative GET; `text_export` is the
+  closed `text/csv` variant. The caller must supply a destination root, and the
   byte cap is the request value clamped by the operation's declared maximum and
-  then by the engine's own ceiling.
-- `intent:"direct_write"` with `availability:"implemented"` can enter the
-  plan → preview → approval → execute lifecycle for one declared `rest_write`
-  operation. Disk-backed bundles cross-check the operation's fixed method/path
-  against an `api_surface.json` operation entry. Shipped builds derive endpoint
+  then by the engine's own ceiling. The operation declares its accepted success
+  statuses, response media types, optional bounded response headers, and any
+  bounded redirect policy before a file can be created.
+- `intent:"status_check"` with `availability:"implemented"` executes one
+  declared connector-relative HEAD operation and returns its fixed status plus
+  only declared bounded response metadata, never a body.
+- `intent:"text_export"` with `availability:"implemented"` uses the bounded
+  download executor with a declared CSV media type and exact charset, declared
+  successful statuses, explicit destination, atomic file completion, and the
+  same response-metadata projection. A failed
+  media/charset or byte check leaves no output file.
+- A declared `rest_write` direct write cross-checks the operation's fixed
+  method/path against an `api_surface.json` operation entry for disk-backed
+  bundles. Shipped builds derive endpoint
   validation only from embedded `rest_write` declarations because
   `api_surface.json` is not embedded; that proves internal declaration
   consistency, not provider documented-surface provenance. #3773 owns the

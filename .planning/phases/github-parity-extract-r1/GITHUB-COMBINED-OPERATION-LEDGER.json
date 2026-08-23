@@ -2,7 +2,7 @@
   "schema_version": 1,
   "connector": "github",
   "generated_from": {
-    "source_lock_sha256": "673aac93b71cff3e3cdbdf7452b9a6d1efcbf7779ed6c26a8f7bb9d9778760ad",
+    "source_lock_sha256": "0c63c2b8fa57b6169642cd9182cb4daf2b65c89b525614f6299a475f1bb2b647",
     "captured_at": "2026-08-09"
   },
   "sources": {
@@ -31,9 +31,9 @@
       "percent": 100
     },
     "implementation": {
-      "implemented": 1454,
+      "implemented": 1495,
       "total": 1525,
-      "percent": 95.34
+      "percent": 98.03
     },
     "live_proof": {
       "proven": 0,
@@ -19091,7 +19091,7 @@
           "WorkflowRun",
           "WorkflowRunFile"
         ],
-        "state": "fixed_typename_projection"
+        "state": "fixed_projection_only"
       }
     },
     {
@@ -31493,11 +31493,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api agents set-selected-repos-for-org-secret"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31536,11 +31538,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api agents set-selected-repos-for-org-variable"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31579,11 +31583,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api agents update-org-variable"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -36347,11 +36353,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api code-scanning update-alert"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -43321,11 +43329,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api dependabot update-alert"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45481,11 +45491,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api git create-ref"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45614,11 +45626,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api git delete-ref"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45927,11 +45941,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api git update-ref"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -47051,11 +47067,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues add-assignees"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -47184,11 +47202,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues add-labels"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -47544,11 +47564,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues create-milestone"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -47587,11 +47609,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues delete-comment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -47720,11 +47744,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues delete-milestone"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49066,11 +49092,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues remove-assignees"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49154,11 +49182,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues remove-label"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49332,11 +49362,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues set-labels"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49513,11 +49545,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues update-comment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49601,11 +49635,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api issues update-milestone"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59062,11 +59098,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api pulls create-review-comment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59150,11 +59188,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api pulls delete-review-comment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59193,11 +59233,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api pulls dismiss-review"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59912,11 +59954,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api pulls request-reviewers"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59955,11 +59999,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api pulls submit-review"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -60135,11 +60181,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api pulls update-review-comment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -60988,11 +61036,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos add-collaborator"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -61617,11 +61667,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos create-commit-comment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -61795,11 +61847,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos create-deployment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -62154,11 +62208,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos create-or-update-environment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -62197,11 +62253,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos create-or-update-file-contents"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -62510,11 +62568,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos create-webhook"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -62824,11 +62884,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos delete-an-environment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -62958,11 +63020,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos delete-commit-comment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -63181,11 +63245,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos delete-file"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -63539,11 +63605,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos delete-webhook"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -68423,11 +68491,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos merge"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -68646,11 +68716,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos remove-collaborator"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -68914,11 +68986,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos replace-all-topics"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -69409,11 +69483,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos update-commit-comment"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -69722,11 +69798,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos update-release-asset"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -69855,11 +69933,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api repos update-webhook"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -69945,7 +70025,7 @@
       "pm": {
         "commands": [
           "release upload",
-          "releases assets view-3"
+          "releases assets upload"
         ],
         "mapping": "declared PM command binding"
       },
@@ -70888,11 +70968,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "generic connector binding"
+        "commands": [
+          "api secret-scanning update-alert"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "implemented_generic_only"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",

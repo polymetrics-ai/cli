@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"context"
 	"crypto/ed25519"
 	"crypto/rand"
 	"crypto/x509"
@@ -16,8 +17,21 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/native/sqltls"
 )
+
+func TestPostgresRequestAdmissionRefusesFencedContextBeforeDatabaseIO(t *testing.T) {
+	want := errors.New("credential cohort was fenced")
+	ctx := connsdk.WithRequestAdmission(context.Background(), func(context.Context) error {
+		return want
+	})
+
+	err := checkPostgresRequestAdmission(ctx)
+	if !errors.Is(err, want) {
+		t.Fatalf("checkPostgresRequestAdmission() error = %v, want %v", err, want)
+	}
+}
 
 // The captain's ruling is that MySQL and PostgreSQL must not drift into two
 // spellings of the same transport-security choice. Existing libpq values keep

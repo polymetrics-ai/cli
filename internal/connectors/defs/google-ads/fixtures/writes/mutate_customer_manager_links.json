@@ -1,0 +1,24 @@
+{
+  "record": {
+    "operations": [
+      {
+        "update": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/customerManagerLinks:mutate",
+    "body": {
+      "operations": [
+        {
+          "update": {}
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

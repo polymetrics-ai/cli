@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -30,6 +31,40 @@ func metadataWithIntegrationType(name, integrationType string) string {
 		"release_stage": "ga",
 		"capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
 	}`
+}
+
+func TestValidateWriteHookFieldsRequireClosedSupplementalDeclarations(t *testing.T) {
+	base := WriteAction{
+		Name:       "pulls",
+		Kind:       "create",
+		Method:     "POST",
+		Path:       "/pulls",
+		Hook:       "compound",
+		BodyType:   "json",
+		BodyFields: []string{"title"},
+		HookFields: []string{"labels"},
+		RecordSchema: json.RawMessage(`{
+  "type":"object", "additionalProperties":false,
+  "properties":{"title":{"type":"string"},"labels":{"type":"array","maxItems":10,"items":{"type":"string","maxLength":64}}}
+}`),
+	}
+	if err := validateWriteBodies([]WriteAction{base}); err != nil {
+		t.Fatalf("closed declared hook supplement rejected: %v", err)
+	}
+	for name, mutate := range map[string]func(*WriteAction){
+		"missing hook":          func(action *WriteAction) { action.Hook = "" },
+		"missing schema field":  func(action *WriteAction) { action.HookFields = []string{"reviewers"} },
+		"duplicate field":       func(action *WriteAction) { action.HookFields = []string{"labels", "labels"} },
+		"overlaps primary body": func(action *WriteAction) { action.HookFields = []string{"title"} },
+	} {
+		t.Run(name, func(t *testing.T) {
+			action := base
+			mutate(&action)
+			if err := validateWriteBodies([]WriteAction{action}); err == nil {
+				t.Fatalf("validateWriteBodies accepted unsafe hook field declaration: %+v", action)
+			}
+		})
+	}
 }
 
 func dynamicSchemaMetadata(name string) string {
@@ -168,6 +203,39 @@ func TestBundleLoadHappyPathFullBundle(t *testing.T) {
 	}
 	if b.Fixtures == nil {
 		t.Fatalf("Fixtures should be non-nil when fixtures/ present")
+	}
+}
+
+func TestBundleLoadRejectsDuplicateWriteActionNames(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "apply_widget",
+				"kind": "create",
+				"method": "POST",
+				"path": "/widgets/first",
+				"body_type": "json",
+				"body_fields": ["id"],
+				"record_schema": {"type": "object", "properties": {"id": {"type": "string"}}},
+				"risk": "create widget"
+			},
+			{
+				"name": "apply_widget",
+				"kind": "create",
+				"method": "POST",
+				"path": "/widgets/second",
+				"body_type": "json",
+				"body_fields": ["id"],
+				"record_schema": {"type": "object", "properties": {"id": {"type": "string"}}},
+				"risk": "create widget"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil || !strings.Contains(err.Error(), `duplicates write action name "apply_widget"`) {
+		t.Fatalf("Load duplicate action names error = %v, want duplicate-name rejection", err)
 	}
 }
 
@@ -1316,6 +1384,142 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 	}
 	if b.CLISurface.Commands[0].Operation != "acme.widgets.get" {
 		t.Fatalf("command operation = %q, want acme.widgets.get", b.CLISurface.Commands[0].Operation)
+	}
+}
+
+func TestBundleLoadRegistersStatusAndTextExportOperations(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.repositories.status",
+				"kind": "rest_status",
+				"summary": "Check repository status",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "status",
+				"rest": {
+					"method": "HEAD",
+					"path": "/v2/repositories/{repository}",
+					"max_bytes": 1024
+				}
+			},
+			{
+				"id": "acme.members.export",
+				"kind": "text_export",
+				"summary": "Export members as CSV",
+				"risk": "medium",
+				"approval": "explicit destination",
+				"output_policy": "file_manifest",
+				"binary": {
+					"method": "GET",
+					"path": "/v2/members/export",
+					"max_bytes": 1,
+					"accept": "text/csv"
+				}
+			}
+		]
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load declarations for rest_status and text_export: %v", err)
+	}
+	if len(bundle.Operations) != 2 {
+		t.Fatalf("loaded operations = %d, want 2", len(bundle.Operations))
+	}
+	status, export := bundle.Operations[0], bundle.Operations[1]
+	if status.Kind != "rest_status" || status.REST == nil || status.REST.Method != "HEAD" || status.OutputPolicy != "status" {
+		t.Fatalf("loaded rest_status = %#v, want declared status-only REST operation", status)
+	}
+	if export.Kind != "text_export" || export.Binary == nil || export.Binary.MaxBytes != 1 || export.Binary.Accept != "text/csv" {
+		t.Fatalf("loaded text_export = %#v, want bounded CSV binary operation", export)
+	}
+}
+
+func TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations(t *testing.T) {
+	tests := []struct {
+		name      string
+		operation string
+		wantErr   string
+	}{
+		{
+			name: "status cannot declare JSON response body policy",
+			operation: `{
+				"id": "acme.repositories.status",
+				"kind": "rest_status",
+				"summary": "Check repository status",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {"method": "HEAD", "path": "/v2/repositories/{repository}"}
+			}`,
+			wantErr: "rest_status output_policy must be status",
+		},
+		{
+			name: "status cannot declare a request body",
+			operation: `{
+				"id": "acme.repositories.status",
+				"kind": "rest_status",
+				"summary": "Check repository status",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "status",
+				"rest": {"method": "HEAD", "path": "/v2/repositories/{repository}", "max_bytes": 1, "body": {"unexpected": true}}
+			}`,
+			wantErr: "rest_status must not declare a request body",
+		},
+		{
+			name: "status requires HEAD",
+			operation: `{
+				"id": "acme.repositories.status",
+				"kind": "rest_status",
+				"summary": "Check repository status",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "status",
+				"rest": {"method": "GET", "path": "/v2/repositories/{repository}"}
+			}`,
+			wantErr: "rest_status method must be HEAD",
+		},
+		{
+			name: "text export requires a positive byte bound",
+			operation: `{
+				"id": "acme.members.export",
+				"kind": "text_export",
+				"summary": "Export members as CSV",
+				"risk": "medium",
+				"approval": "explicit destination",
+				"output_policy": "file_manifest",
+				"binary": {"method": "GET", "path": "/v2/members/export", "accept": "text/csv"}
+			}`,
+			wantErr: "text_export must declare positive max_bytes",
+		},
+		{
+			name: "text export requires the binary execution block",
+			operation: `{
+				"id": "acme.members.export",
+				"kind": "text_export",
+				"summary": "Export members as CSV",
+				"risk": "medium",
+				"approval": "explicit destination",
+				"output_policy": "file_manifest",
+				"rest": {"method": "GET", "path": "/v2/members/export"}
+			}`,
+			wantErr: "kind \"text_export\" must declare binary block, got rest",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{"operations":[` + tt.operation + `]}`)}
+
+			_, err := Load(fsys, "acme")
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("Load error = %v, want %q", err, tt.wantErr)
+			}
+		})
 	}
 }
 

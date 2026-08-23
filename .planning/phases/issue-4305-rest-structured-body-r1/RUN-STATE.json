@@ -1,0 +1,18 @@
+{
+  "issue": 4305,
+  "phase": "issue-4305-rest-structured-body-r1",
+  "status": "verified",
+  "base_branch": "main",
+  "working_branch": "fm/cli-rest-structured-body-r1",
+  "manual_gsd_fallback": true,
+  "reason": "issue is not a roadmap phase and this Firstmate task forbids role spawning",
+  "target_connector": null,
+  "foundation_scope": [
+    "declaration-bound-structured-rest-body",
+    "shared-cli-and-typed-action-materialization",
+    "pre-io-schema-validation-and-limits",
+    "approval-bound-structured-payload",
+    "generated-surface-and-downstream-contract",
+    "write-query-record-omit-when-absent"
+  ]
+}

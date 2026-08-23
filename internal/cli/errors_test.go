@@ -145,9 +145,9 @@ func TestFreshBinaryProvider401IsCredentialErrorWithoutWritesOrCheckpointAdvance
 	checkpointBefore := githubFlowCheckpointSnapshot(t, root)
 
 	result := runGitHubFlowPM(t, binary, "", []string{token},
-		"github", "issues", "list", "--connection", "github-provider-401", "--root", root, "--json",
+		"github", "actions", "access", "view", "--connection", "github-provider-401", "--root", root, "--json",
 	)
-	assertGitHubFlowTypedRefusal(t, result, "auth", "credential_error")
+	assertGitHubFlowProviderFailureReceipt(t, result, "auth", "credential_error", token)
 	if got, want := reads.Load(), int32(1); got != want {
 		t.Fatalf("provider reads = %d, want %d", got, want)
 	}
@@ -155,4 +155,39 @@ func TestFreshBinaryProvider401IsCredentialErrorWithoutWritesOrCheckpointAdvance
 		t.Fatalf("provider writes after rejected credential = %d, want 0", got)
 	}
 	assertGitHubFlowCheckpointUnchanged(t, root, checkpointBefore, "provider authentication refusal")
+}
+
+func assertGitHubFlowProviderFailureReceipt(t *testing.T, result githubFlowPMResult, wantCategory, wantCode, secret string) {
+	t.Helper()
+	if result.code == 0 {
+		t.Fatal("provider-refused direct read unexpectedly exited zero")
+	}
+	if got, want := result.code, exitCodeFor(&cliError{category: categoryAuth}); got != want {
+		t.Fatalf("provider-refused direct read exit code = %d, want categorized auth exit %d", got, want)
+	}
+	var envelope struct {
+		Kind    string `json:"kind"`
+		Status  int    `json:"status"`
+		Receipt struct {
+			ResponseReceived bool  `json:"response_received"`
+			Status           int   `json:"status"`
+			BodyBytes        int64 `json:"body_bytes"`
+		} `json:"receipt"`
+		Error struct {
+			Category string `json:"category"`
+			Code     string `json:"code"`
+		} `json:"error"`
+	}
+	if err := json.Unmarshal([]byte(result.stdout), &envelope); err != nil {
+		t.Fatalf("decode provider-failure direct-read envelope: %v", err)
+	}
+	if envelope.Kind != "ConnectorCommandDirectRead" || envelope.Status != http.StatusUnauthorized || !envelope.Receipt.ResponseReceived || envelope.Receipt.Status != http.StatusUnauthorized || envelope.Receipt.BodyBytes != 0 {
+		t.Fatalf("provider-failure direct-read envelope = %#v, want retained 401 receipt", envelope)
+	}
+	if envelope.Error.Category != wantCategory || envelope.Error.Code != wantCode {
+		t.Fatalf("provider-failure direct-read error = %#v, want %s/%s", envelope.Error, wantCategory, wantCode)
+	}
+	if strings.Contains(result.stdout, secret) {
+		t.Fatalf("provider-failure direct-read envelope exposed credential material")
+	}
 }

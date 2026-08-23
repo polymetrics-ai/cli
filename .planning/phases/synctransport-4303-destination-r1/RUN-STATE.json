@@ -1,0 +1,17 @@
+{
+  "issue": 4303,
+  "phase": "synctransport-4303-destination-r1",
+  "state": "verified_reviewed",
+  "execution": "inline_manual_fallback",
+  "reason": "Compatible isolated GSD workers are unavailable and the canonical single-worker contract forbids role spawning.",
+  "verification": {
+    "make_verify": "passed",
+    "connector_boundary": "passed_clean",
+    "github_live_proof": "passed",
+    "code_review": "clean_inline_manual_fallback",
+    "application_dispatch": "passed",
+    "complete_result_output": "passed",
+    "revalidation_2026_08_20": "passed_locally",
+    "follow_up_action_binding_foundation_r1": "passed_locally"
+  }
+}

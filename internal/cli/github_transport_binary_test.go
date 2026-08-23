@@ -22,7 +22,7 @@ import (
 // the ordinary ETL command receives that token on stdin and owns the durable
 // source -> warehouse -> reopen -> provider -> read-back -> checkpoint path.
 // Cleanup has its own closed plan, preview, and one-time approval.
-func TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle(t *testing.T) {
+func runPMBinaryExecutesIssueLabelWarehouseTransportLifecycle(t *testing.T) {
 	server := newFaithfulIssueLabelTransportServer(t)
 	binary := buildTransportPM(t)
 	if repeated := buildTransportPM(t); repeated != binary {

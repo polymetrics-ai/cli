@@ -24,31 +24,31 @@ func TestGitHubRequiredMutationBodiesReachTheWire(t *testing.T) {
 		action   string
 		record   connectors.Record
 		want     map[string]any
-		required map[string]string
+		required map[string][]string
 	}{
 		{
 			name: "blob", command: "git blobs create", action: "git_blobs",
 			record:   connectors.Record{"content": "pm-cert-content", "encoding": "utf-8"},
 			want:     map[string]any{"content": "pm-cert-content", "encoding": "utf-8"},
-			required: map[string]string{"content": "string"},
+			required: map[string][]string{"content": {"string"}},
 		},
 		{
 			name: "commit", command: "git commits create", action: "git_commits",
 			record:   connectors.Record{"message": "pm-cert-commit", "tree": strings.Repeat("a", 40), "parents": []string{strings.Repeat("b", 40)}},
 			want:     map[string]any{"message": "pm-cert-commit", "tree": strings.Repeat("a", 40), "parents": []any{strings.Repeat("b", 40)}},
-			required: map[string]string{"message": "string", "tree": "string"},
+			required: map[string][]string{"message": {"string"}, "tree": {"string"}},
 		},
 		{
 			name: "tree", command: "git trees create", action: "git_trees",
 			record:   connectors.Record{"tree": []any{map[string]any{"path": "pm-cert.txt", "mode": "100644", "type": "blob", "content": "fixture"}}},
 			want:     map[string]any{"tree": []any{map[string]any{"path": "pm-cert.txt", "mode": "100644", "type": "blob", "content": "fixture"}}},
-			required: map[string]string{"tree": "array"},
+			required: map[string][]string{"tree": {"array"}},
 		},
 		{
 			name: "check run", command: "check-runs create", action: "check_runs",
 			record:   connectors.Record{"name": "pm-cert-check", "head_sha": strings.Repeat("c", 40)},
 			want:     map[string]any{"name": "pm-cert-check", "head_sha": strings.Repeat("c", 40)},
-			required: map[string]string{"name": "string", "head_sha": "string"},
+			required: map[string][]string{"name": {"string"}, "head_sha": {"string"}},
 		},
 		{
 			name: "branch protection", command: "branches protection set", action: "branches_branch_protection3",
@@ -65,16 +65,16 @@ func TestGitHubRequiredMutationBodiesReachTheWire(t *testing.T) {
 				"required_pull_request_reviews": map[string]any{"dismiss_stale_reviews": false, "require_code_owner_reviews": false, "required_approving_review_count": float64(0)},
 				"restrictions":                  map[string]any{"users": []any{}, "teams": []any{}, "apps": []any{}},
 			},
-			required: map[string]string{
-				"branch": "string", "required_status_checks": "object", "enforce_admins": "boolean",
-				"required_pull_request_reviews": "object", "restrictions": "object",
+			required: map[string][]string{
+				"branch": {"string"}, "required_status_checks": {"object", "null"}, "enforce_admins": {"boolean", "null"},
+				"required_pull_request_reviews": {"object", "null"}, "restrictions": {"object", "null"},
 			},
 		},
 		{
 			name: "commit status", command: "statuses create", action: "statuses_sha",
 			record:   connectors.Record{"sha": strings.Repeat("d", 40), "state": "success", "context": "pm-cert/context"},
 			want:     map[string]any{"state": "success", "context": "pm-cert/context"},
-			required: map[string]string{"sha": "string", "state": "string"},
+			required: map[string][]string{"sha": {"string"}, "state": {"string"}},
 		},
 	}
 
@@ -116,12 +116,12 @@ func TestGitHubRequiredMutationBodiesReachTheWire(t *testing.T) {
 	}
 }
 
-func assertGitHubWriteFields(t *testing.T, bundle Bundle, action WriteAction, commandPath string, required map[string]string) {
+func assertGitHubWriteFields(t *testing.T, bundle Bundle, action WriteAction, commandPath string, required map[string][]string) {
 	t.Helper()
 	var schema struct {
 		Required   []string `json:"required"`
 		Properties map[string]struct {
-			Type string `json:"type"`
+			Type json.RawMessage `json:"type"`
 		} `json:"properties"`
 	}
 	if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
@@ -135,10 +135,13 @@ func assertGitHubWriteFields(t *testing.T, bundle Bundle, action WriteAction, co
 	if !ok {
 		t.Fatalf("GitHub command %q is missing", commandPath)
 	}
-	for field, fieldType := range required {
+	for field, wantTypes := range required {
 		property, ok := schema.Properties[field]
-		if !ok || property.Type != fieldType || !requiredSet[field] {
-			t.Errorf("action %q field %q = %#v required=%t, want type %q and required", action.Name, field, property, requiredSet[field], fieldType)
+		gotTypes, err := githubSchemaTypes(property.Type)
+		if err != nil {
+			t.Errorf("action %q field %q has invalid type %s: %v", action.Name, field, property.Type, err)
+		} else if !ok || !reflect.DeepEqual(gotTypes, wantTypes) || !requiredSet[field] {
+			t.Errorf("action %q field %q types=%#v required=%t, want types %#v and required", action.Name, field, gotTypes, requiredSet[field], wantTypes)
 		}
 		flagName := strings.ReplaceAll(field, "_", "-")
 		found := false
@@ -152,6 +155,18 @@ func assertGitHubWriteFields(t *testing.T, bundle Bundle, action WriteAction, co
 			t.Errorf("command %q has no required --%s mapping to record.%s", commandPath, flagName, field)
 		}
 	}
+}
+
+func githubSchemaTypes(raw json.RawMessage) ([]string, error) {
+	var single string
+	if err := json.Unmarshal(raw, &single); err == nil {
+		return []string{single}, nil
+	}
+	var multiple []string
+	if err := json.Unmarshal(raw, &multiple); err != nil {
+		return nil, err
+	}
+	return multiple, nil
 }
 
 func TestGitHubCorrectedCommandDeclarations(t *testing.T) {

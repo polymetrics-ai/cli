@@ -8,13 +8,15 @@ import (
 	"testing"
 )
 
-// TestGitHubCompleteParityHasNoNonterminalCommandRows records the captain's
-// completion contract at the source boundary. It intentionally reads the
-// generated GitHub bundle rather than duplicating commandrunner's admission
-// logic: engine/runtime tests prove execution; this test makes an unresolved
-// source classification impossible to hide behind an old parity summary.
+// TestGitHubCompleteParityHasNoUnownedNonterminalCommandRows records the
+// captain's completion contract at the source boundary. A partial read is
+// allowed only when the immutable source descriptor names the blocking
+// operation; engine/runtime tests prove execution, while this test makes an
+// unresolved source classification impossible to hide behind parity output.
 func TestGitHubCompleteParityHasNoNonterminalCommandRows(t *testing.T) {
 	t.Helper()
+	_, descriptor := loadInstalledGitHubSourceProjection(t)
+	blockedReads := sourceProjectionBlockedReadSources(sourceImportResult{Operations: descriptor.Operations})
 
 	cliRaw, err := os.ReadFile("../../internal/connectors/defs/github/cli_surface.json")
 	if err != nil {
@@ -24,6 +26,8 @@ func TestGitHubCompleteParityHasNoNonterminalCommandRows(t *testing.T) {
 		Commands []struct {
 			Path         string `json:"path"`
 			Availability string `json:"availability"`
+			Intent       string `json:"intent"`
+			Notes        string `json:"notes"`
 			Operation    string `json:"operation"`
 			APISurface   []struct {
 				Method string `json:"method"`
@@ -38,9 +42,22 @@ func TestGitHubCompleteParityHasNoNonterminalCommandRows(t *testing.T) {
 	var unresolvedCommands []string
 	implementedOperationTargets := map[string]map[string]bool{}
 	for _, command := range cli.Commands {
+		var sourceIDs []string
+		for _, endpoint := range command.APISurface {
+			if source, found := blockedReads[sourceProjectionEndpointKey(endpoint.Method, endpoint.Path)]; found {
+				sourceIDs = append(sourceIDs, source.SourceID)
+			}
+		}
 		switch command.Availability {
-		case "partial", "planned", "unsafe_or_disallowed":
+		case "partial":
+			if command.Intent != "direct_read" || len(sourceIDs) == 0 || !strings.Contains(command.Notes, "Blocked: locked source operation "+sourceIDs[0]+" has no declaration-owned executable") {
+				unresolvedCommands = append(unresolvedCommands, "partial:"+command.Path)
+			}
+		case "planned", "unsafe_or_disallowed":
 			unresolvedCommands = append(unresolvedCommands, command.Availability+":"+command.Path)
+		}
+		if command.Availability == "implemented" && command.Intent == "direct_read" && len(sourceIDs) != 0 {
+			unresolvedCommands = append(unresolvedCommands, "implemented-source-gap:"+command.Path)
 		}
 		if command.Availability == "implemented" && command.Operation != "" && len(command.APISurface) == 1 {
 			endpoint := command.APISurface[0]
@@ -68,6 +85,7 @@ func TestGitHubCompleteParityHasNoNonterminalCommandRows(t *testing.T) {
 			Operation *struct {
 				Model       string `json:"model"`
 				DuplicateOf string `json:"duplicate_of"`
+				Notes       string `json:"notes"`
 			} `json:"operation"`
 		} `json:"endpoints"`
 	}
@@ -82,6 +100,9 @@ func TestGitHubCompleteParityHasNoNonterminalCommandRows(t *testing.T) {
 			continue
 		}
 		if endpoint.Operation != nil && endpoint.Operation.Model == "named_dependency" {
+			continue
+		}
+		if source, blocked := blockedReads[sourceProjectionEndpointKey(endpoint.Method, endpoint.Path)]; blocked && endpoint.Operation != nil && endpoint.Operation.Model == "direct_read" && strings.Contains(endpoint.Operation.Notes, "Named dependency: source_operation="+source.SourceID) {
 			continue
 		}
 		if endpoint.Operation != nil && endpoint.Operation.Model == "duplicate" &&

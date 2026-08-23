@@ -539,17 +539,24 @@ func stageErrorWithSafeCLIEnvelope(errMsg string, res CLIResult, secrets []strin
 }
 
 // assertTypedPreIORefusal verifies the serialized CLI shape of a typed
-// sync-mode admission refusal. The application tests retain the concrete Go
-// error and no-source-read assertion; certification observes the CLI result.
+// sync-mode admission refusal that the real App has durably finalized. The
+// production-shaped CLI test proves the same exact stored terminal run; this
+// certification projection verifies its bounded serialized form and exit.
 func assertTypedPreIORefusal(rc *runContext, stageName string, res CLIResult) (bool, string) {
-	if passed, errMsg := assertKind(rc, stageName, res, "Error", 1); !passed {
+	if passed, errMsg := assertKind(rc, stageName, res, "ETLRun", 1); !passed {
 		return false, errMsg
 	}
-	errEnvelope, ok := res.Envelope["error"].(map[string]any)
+	run, ok := res.Envelope["run"].(map[string]any)
 	if !ok {
-		return false, "typed sync-mode refusal did not include an error envelope"
+		return false, "typed sync-mode refusal did not include a terminal run"
 	}
-	message, _ := errEnvelope["message"].(string)
+	if status, _ := run["status"].(string); status != "failed" {
+		return false, fmt.Sprintf("typed sync-mode refusal terminal status = %q, want failed", status)
+	}
+	if completedAt, _ := run["completed_at"].(string); completedAt == "" {
+		return false, "typed sync-mode refusal did not include a completed terminal run"
+	}
+	message, _ := run["error"].(string)
 	if !strings.Contains(message, "is not executable") {
 		return false, fmt.Sprintf("want typed sync-mode refusal, got error message %q", message)
 	}

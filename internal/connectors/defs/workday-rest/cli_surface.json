@@ -1501,15 +1501,7 @@
       "availability": "implemented",
       "operation": "workday_rest.prism_analytics_buckets_by_id_error_file_list",
       "source_cli_path": "",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter id.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -1803,15 +1795,7 @@
       "availability": "implemented",
       "operation": "workday_rest.attachments_graphql_get_download",
       "source_cli_path": "",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter ID.",
-          "maps_to": "path.ID",
-          "required": true
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -2955,15 +2939,7 @@
       "availability": "implemented",
       "operation": "workday_rest.customer_accounts_invoice_pdfs_get_download",
       "source_cli_path": "",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter ID.",
-          "maps_to": "path.ID",
-          "required": true
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -7639,15 +7615,7 @@
       "availability": "implemented",
       "operation": "workday_rest.procurement_requisitions_by_id_attachments_list_download",
       "source_cli_path": "",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter ID.",
-          "maps_to": "path.ID",
-          "required": true
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -7693,22 +7661,7 @@
       "availability": "implemented",
       "operation": "workday_rest.procurement_requisitions_by_id_attachments_get_download",
       "source_cli_path": "",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter ID.",
-          "maps_to": "path.ID",
-          "required": true
-        },
-        {
-          "name": "subresource-id",
-          "type": "string",
-          "summary": "Path parameter subresourceID.",
-          "maps_to": "path.subresourceID",
-          "required": true
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -14978,7 +14931,7 @@
     },
     {
       "path": "communications create-managed-recipient",
-      "summary": "This API is used to manage a user\u2019s consent status for a messaging channel, allowing opt-in or opt-out actions using the associated phone number.",
+      "summary": "This API is used to manage a user’s consent status for a messaging channel, allowing opt-in or opt-out actions using the associated phone number.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "communications_create_managed_recipient",

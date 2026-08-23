@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"mime"
@@ -50,10 +51,12 @@ const (
 // seam between them, so the executor's own shape can change without moving the
 // connectors package.
 type BinaryDownloadRequest struct {
-	Operation  string
-	Config     connectors.RuntimeConfig
-	PathParams map[string]string
-	Query      map[string]string
+	Operation    string
+	Config       connectors.RuntimeConfig
+	PathParams   map[string]string
+	Query        map[string]string
+	Headers      map[string]string
+	HeaderValues map[string][]string
 	// MaxBytes optionally lowers the operation's declared cap. It can never
 	// raise it.
 	MaxBytes int64
@@ -75,16 +78,22 @@ type BinaryDownloadRequest struct {
 type BinaryDownloadResult struct {
 	Connector string
 	Operation string
+	Method    string
+	Path      string
 	Record    connectors.Record
+	Status    int
+	Headers   map[string]connectors.OperationResponseHeader
+	Receipt   *connectors.ProviderResponseReceipt
 }
 
-// OperationBinaryDownload executes a declared binary_download operation,
-// streaming the response to a file confined beneath req.DestRoot.
+// OperationBinaryDownload executes a declared binary_download or text_export
+// operation, streaming the response to a file confined beneath req.DestRoot.
 //
-// This is the executor half of a capability whose declaration half already
-// exists: the kind is in the schema enum and the block map, BinaryOperationSpec
-// already carries method/path/max_bytes/allow_overwrite/extract_archives, and
-// GET-only + positive-max_bytes validation already runs at bundle load.
+// This is the executor half of declaration-owned file operations: both kinds
+// are in the schema enum and block map, BinaryOperationSpec already carries
+// method/path/max_bytes/allow_overwrite/extract_archives, and GET-only +
+// positive-max_bytes validation already runs at bundle load. text_export is the
+// closed CSV variant and still produces a destination manifest, never stdout.
 //
 // Bounded by construction:
 //   - the body is read one byte PAST the limit and rejected on overflow, so a
@@ -96,42 +105,18 @@ type BinaryDownloadResult struct {
 //     (safety.ValidateLocalWritePath) cannot;
 //   - extract_archives is refused outright.
 //
-// pmcert:executes binary_download
+// pmcert:executes binary_download,text_export
 func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRequest, h Hooks) (BinaryDownloadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	op, err := findOperation(b, req.Operation)
+	op, err := operationBinaryDownloadSpec(b, req.Operation)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	if (op.Kind != "binary_download" && op.Kind != "text_export") || op.Binary == nil {
-		return BinaryDownloadResult{}, fmt.Errorf("file download requires binary_download or text_export operation, got %q", op.Kind)
-	}
 	spec := op.Binary
-	if op.Kind == "text_export" {
-		if spec.MaxBytes <= 0 {
-			return BinaryDownloadResult{}, fmt.Errorf("text export requires positive max_bytes")
-		}
-		if !strings.EqualFold(strings.TrimSpace(spec.Accept), "text/csv") {
-			return BinaryDownloadResult{}, fmt.Errorf("text export requires the closed text/csv accept contract")
-		}
-	}
-	// Refused at EXECUTION time rather than at bundle validation: two github
-	// operations already declare extract_archives true, and a foundation
-	// change must not invalidate an existing connector bundle. Extraction is
-	// zip-slip and decompression-bomb territory and is a separate capability,
-	// never a flag.
-	if spec.ExtractArchives {
-		return BinaryDownloadResult{}, fmt.Errorf("operation %q declares extract_archives, which is not supported: archive extraction is a separate capability", op.ID)
-	}
-	if method := strings.ToUpper(strings.TrimSpace(spec.Method)); method != http.MethodGet {
-		return BinaryDownloadResult{}, fmt.Errorf("binary download requires GET, got %s", method)
-	}
-	if isAbsoluteHTTPURL(spec.Path) {
-		return BinaryDownloadResult{}, fmt.Errorf("binary download endpoint must be connector-relative, got absolute URL")
-	}
-	if err := requireOperationSurfaceEndpoint(b, http.MethodGet, spec.Path); err != nil {
+	redirect, err := operationRedirectPolicy(op)
+	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
 	if strings.TrimSpace(req.DestRoot) == "" {
@@ -139,11 +124,23 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	}
 
 	cfg := materializeConfigDefaults(b, req.Config)
-	resolvedPath, err := resolveSurfaceEndpointPath(spec.Path, cfg, req.PathParams)
+	effectivePathParams, err := materializeOperationBinaryDownloadPathParams(op, cfg, req.PathParams)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	query, err := directReadQuery(req.Query)
+	resolvedPath, err := resolveSurfaceEndpointPath(spec.Path, cfg, effectivePathParams)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	queryMap, err := operationBinaryDownloadQuery(op, req.Query)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	query, err := directReadQuery(queryMap)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	headers, err := operationRequestHeaders(b, op, req.Headers, req.HeaderValues)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
@@ -166,12 +163,20 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
+	requester, err = requesterWithOperationHeaders(requester, op, headers)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
 	resp, err := requester.DoStream(ctx, http.MethodGet, requestPath, query, connsdk.StreamOptions{
 		Accept:         spec.Accept,
-		AllowCrossHost: spec.AllowCrossHost,
-		AllowedHosts:   spec.AllowedHosts,
+		RedirectPolicy: redirect,
 	})
-	if err != nil {
+	if err != nil && resp == nil {
+		result := BinaryDownloadResult{Connector: b.Name, Operation: op.ID, Method: http.MethodGet, Path: resolvedPath}
+		result.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
+		if result.Receipt != nil {
+			result.Status = result.Receipt.Status
+		}
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := completeEngineErrorText(err)
 		if hint != "" {
@@ -180,52 +185,252 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		if class != "" {
 			msg = class + ": " + msg
 		}
-		return BinaryDownloadResult{}, formatResponseError(fmt.Sprintf("binary download GET %s: %s", spec.Path, msg), err)
+		return result, formatResponseError(fmt.Sprintf("binary download GET %s: %s", spec.Path, msg), err)
 	}
 	defer func() { _ = resp.Body.Close() }()
-	if op.Kind == "text_export" {
-		mediaType, _, parseErr := mime.ParseMediaType(resp.Header.Get("Content-Type"))
-		if parseErr != nil || !strings.EqualFold(mediaType, "text/csv") {
-			return BinaryDownloadResult{}, fmt.Errorf("text export response is not text/csv")
-		}
+	responseReceipt := connectors.ProviderResponseReceipt{
+		ResponseReceived: true,
+		Status:           resp.Status,
+		Headers:          completeProviderResponseHeaders(b, resp.Header),
 	}
+	responseReceipt = connectors.SanitizeProviderResponseReceiptForOutput(responseReceipt, cfg.Secrets)
+	result := BinaryDownloadResult{
+		Connector: b.Name,
+		Operation: op.ID,
+		Method:    http.MethodGet,
+		Path:      resolvedPath,
+		Status:    resp.Status,
+		Receipt:   &responseReceipt,
+	}
+	if err != nil {
+		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
+		return result, errors.Join(err, captureErr)
+	}
+	if err := validateOperationBinaryResponseMediaType(op, resp.Header); err != nil {
+		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
+		return result, errors.Join(err, captureErr)
+	}
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header, cfg.Secrets)
+	if err != nil {
+		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
+		return result, errors.Join(err, captureErr)
+	}
+	result.Headers = responseHeaders
 
 	fileName, err := resolveBinaryDownloadFileName(req.FileName, resp.Header.Get("Content-Disposition"), op.ID)
 	if err != nil {
-		return BinaryDownloadResult{}, err
+		captureErr := captureBinaryResponseMetadata(resp.Body, result.Receipt, maxBytes, stall, cancel)
+		return result, errors.Join(err, captureErr)
 	}
 
 	written, digest, sniffed, err := streamBinaryDownloadToRoot(resp.Body, req.DestRoot, fileName, maxBytes, spec.AllowOverwrite, stall, cancel)
 	if err != nil {
-		return BinaryDownloadResult{}, err
+		result.Receipt.BodyPresent = written != 0
+		result.Receipt.BodyBytes = written
+		return result, err
 	}
 
-	return BinaryDownloadResult{
-		Connector: b.Name,
-		Operation: op.ID,
-		Record: redactBinaryDownloadRecord(connectors.Record{
-			"file_path":       filepath.Join(req.DestRoot, fileName),
-			"file_name":       fileName,
-			"file_size_bytes": written,
-			"file_sha256":     digest,
-			"content_type":    resp.Header.Get("Content-Type"),
-			// Sniffed independently: never trust Content-Type and never infer
-			// from the URL path. One provider serves CSV bytes from a path
-			// ending .json. The mismatch is surfaced, not rejected.
-			"content_type_sniffed": sniffed,
-			"source_operation":     op.ID,
-			// source_ref, NOT download_url: shouldRedactJSONField auto-redacts
-			// any field containing both "download" and "url", so a field named
-			// download_url would silently become download_url_redacted:true.
-			// The connector-relative path also carries no signed-URL secrets.
-			"source_ref":    resolvedPath,
-			"downloaded_at": time.Now().UTC().Format(time.RFC3339),
-			// Always false: overflow is a hard error rather than a silent
-			// truncation. The field exists so consumers can rely on it and so
-			// a future ranged/resumable mode has somewhere to report.
-			"truncated": false,
-		}, req.RedactFields),
-	}, nil
+	record := redactBinaryDownloadRecord(connectors.Record{
+		"file_path":       filepath.Join(req.DestRoot, fileName),
+		"file_name":       fileName,
+		"file_size_bytes": written,
+		"file_sha256":     digest,
+		"content_type":    resp.Header.Get("Content-Type"),
+		// Sniffed independently: never trust Content-Type and never infer
+		// from the URL path. One provider serves CSV bytes from a path
+		// ending .json. The mismatch is surfaced, not rejected.
+		"content_type_sniffed": sniffed,
+		"source_operation":     op.ID,
+		// The connector-relative source reference carries no signed-URL
+		// credentials and remains stable across public receipt projection.
+		"source_ref":    resolvedPath,
+		"downloaded_at": time.Now().UTC().Format(time.RFC3339),
+		// Always false: overflow is a hard error rather than a silent
+		// truncation. The field exists so consumers can rely on it and so
+		// a future ranged/resumable mode has somewhere to report.
+		"truncated": false,
+	}, req.RedactFields)
+	receipt := connectors.ProviderResponseReceipt{
+		ResponseReceived: true,
+		Status:           resp.Status,
+		Headers:          completeProviderResponseHeaders(b, resp.Header),
+		BodyPresent:      written != 0,
+		BodyBytes:        written,
+		Body:             map[string]any{"file_size_bytes": written, "file_sha256": digest},
+	}
+	receipt = connectors.SanitizeProviderResponseReceiptForOutput(receipt, cfg.Secrets)
+	result.Record = record
+	result.Receipt = &receipt
+	return result, nil
+}
+
+func captureBinaryResponseMetadata(body io.Reader, receipt *connectors.ProviderResponseReceipt, maxBytes int64, stall time.Duration, cancel context.CancelFunc) error {
+	if body == nil || receipt == nil {
+		return nil
+	}
+	written, err := io.Copy(io.Discard, io.LimitReader(newStallReader(body, stall, cancel), maxBytes+1))
+	receipt.BodyPresent = written != 0
+	receipt.BodyBytes = written
+	if err != nil {
+		return fmt.Errorf("capture binary response metadata: %w", err)
+	}
+	if written > maxBytes {
+		return fmt.Errorf("binary response metadata exceeds limit %d bytes", maxBytes)
+	}
+	return nil
+}
+
+func PreflightOperationBinaryDownload(b Bundle, operation, method, path string) error {
+	op, err := operationBinaryDownloadSpec(b, operation)
+	if err != nil {
+		return err
+	}
+	if !strings.EqualFold(strings.TrimSpace(method), http.MethodGet) {
+		return fmt.Errorf("binary download command requires GET")
+	}
+	if path != op.Binary.Path {
+		return fmt.Errorf("binary download command path %q does not match declared operation path %q", path, op.Binary.Path)
+	}
+	return nil
+}
+
+func operationBinaryDownloadSpec(b Bundle, operation string) (OperationSpec, error) {
+	op, err := findOperation(b, operation)
+	if err != nil {
+		return OperationSpec{}, err
+	}
+	if (op.Kind != "binary_download" && op.Kind != "text_export") || op.Binary == nil {
+		return OperationSpec{}, fmt.Errorf("file download requires binary_download or text_export operation, got %q", op.Kind)
+	}
+	spec := op.Binary
+	if err := requireOperationBinaryResponseContract(op); err != nil {
+		return OperationSpec{}, err
+	}
+	if _, err := requireOperationSuccessStatusPolicy(op); err != nil {
+		return OperationSpec{}, err
+	}
+	if _, err := operationRedirectPolicy(op); err != nil {
+		return OperationSpec{}, err
+	}
+	if op.Kind == "text_export" {
+		if spec.MaxBytes <= 0 {
+			return OperationSpec{}, fmt.Errorf("text export requires positive max_bytes")
+		}
+		if !strings.EqualFold(strings.TrimSpace(spec.Accept), "text/csv") {
+			return OperationSpec{}, fmt.Errorf("text export requires the closed text/csv accept contract")
+		}
+	}
+	if spec.ExtractArchives {
+		return OperationSpec{}, fmt.Errorf("operation %q declares extract_archives, which is not supported: archive extraction is a separate capability", op.ID)
+	}
+	if method := strings.ToUpper(strings.TrimSpace(spec.Method)); method != http.MethodGet {
+		return OperationSpec{}, fmt.Errorf("binary download requires GET, got %s", method)
+	}
+	if isAbsoluteHTTPURL(spec.Path) {
+		return OperationSpec{}, fmt.Errorf("binary download endpoint must be connector-relative, got absolute URL")
+	}
+	if err := requireOperationSurfaceEndpoint(b, http.MethodGet, spec.Path); err != nil {
+		return OperationSpec{}, err
+	}
+	return op, nil
+}
+
+func validateOperationBinaryContentTypes(op OperationSpec) error {
+	if op.Binary == nil {
+		return fmt.Errorf("operation has no binary declaration")
+	}
+	for _, declared := range op.Binary.ContentTypes {
+		mediaType, _, err := mime.ParseMediaType(strings.TrimSpace(declared))
+		if err != nil || !validOperationMediaRange(mediaType) {
+			return fmt.Errorf("content type %q is not a valid media type", declared)
+		}
+	}
+	if charset := strings.TrimSpace(op.Binary.Charset); charset != "" {
+		if _, _, err := mime.ParseMediaType("text/plain; charset=" + charset); err != nil {
+			return fmt.Errorf("charset %q is invalid", op.Binary.Charset)
+		}
+	}
+	return nil
+}
+
+func requireOperationBinaryResponseContract(op OperationSpec) error {
+	if op.Binary == nil || len(op.Binary.ContentTypes) == 0 {
+		return fmt.Errorf("operation %q requires non-empty declared response content_types", op.ID)
+	}
+	if op.Kind == "text_export" && strings.TrimSpace(op.Binary.Charset) == "" {
+		return fmt.Errorf("operation %q requires declared response charset", op.ID)
+	}
+	return validateOperationBinaryContentTypes(op)
+}
+
+func validOperationMediaRange(mediaType string) bool {
+	parts := strings.Split(mediaType, "/")
+	if len(parts) != 2 || parts[0] == "" || parts[1] == "" || parts[0] == "*" {
+		return false
+	}
+	return !strings.Contains(parts[0], "*") && (parts[1] == "*" || !strings.Contains(parts[1], "*"))
+}
+
+// validateOperationBinaryResponseMediaType rejects an undeclared response
+// before a destination file is created. This keeps media policy bounded while
+// preserving every ordinary field of a response the declaration admits.
+func validateOperationBinaryResponseMediaType(op OperationSpec, headers http.Header) error {
+	if err := requireOperationBinaryResponseContract(op); err != nil {
+		return fmt.Errorf("operation %q response media declaration: %w", op.ID, err)
+	}
+	mediaType, params, err := mime.ParseMediaType(headers.Get("Content-Type"))
+	if err != nil || mediaType == "" {
+		return fmt.Errorf("operation %q response has no valid Content-Type", op.ID)
+	}
+	if op.Kind == "text_export" && !strings.EqualFold(mediaType, "text/csv") {
+		return fmt.Errorf("text export response is not text/csv")
+	}
+	matched := false
+	for _, declared := range op.Binary.ContentTypes {
+		allowed, declaredParams, _ := mime.ParseMediaType(strings.TrimSpace(declared))
+		allowedParts := strings.Split(allowed, "/")
+		actualParts := strings.Split(mediaType, "/")
+		if len(allowedParts) == 2 && len(actualParts) == 2 && strings.EqualFold(actualParts[0], allowedParts[0]) && (allowedParts[1] == "*" || strings.EqualFold(actualParts[1], allowedParts[1])) && operationMediaParametersMatch(declaredParams, params, op.Binary.Charset) {
+			matched = true
+			break
+		}
+	}
+	if !matched {
+		return fmt.Errorf("operation %q response media type or parameters %q are not declared", op.ID, headers.Get("Content-Type"))
+	}
+	return nil
+}
+
+func operationMediaParametersMatch(declared, actual map[string]string, charset string) bool {
+	expected := make(map[string]string, len(declared)+1)
+	for name, value := range declared {
+		expected[strings.ToLower(strings.TrimSpace(name))] = value
+	}
+	if charset = strings.TrimSpace(charset); charset != "" {
+		if declaredCharset, present := expected["charset"]; present && !strings.EqualFold(declaredCharset, charset) {
+			return false
+		}
+		expected["charset"] = charset
+	}
+	if len(expected) != len(actual) {
+		return false
+	}
+	for name, value := range actual {
+		expectedValue, present := expected[strings.ToLower(strings.TrimSpace(name))]
+		if !present {
+			return false
+		}
+		if strings.EqualFold(name, "charset") {
+			if !strings.EqualFold(value, expectedValue) {
+				return false
+			}
+			continue
+		}
+		if value != expectedValue {
+			return false
+		}
+	}
+	return true
 }
 
 // redactBinaryDownloadRecord applies the command's declared redact_fields to
@@ -266,9 +471,10 @@ func clampOperationBinaryDownloadMaxBytes(requested int64, operationMax int) int
 // content type.
 //
 // Every filesystem operation goes through os.Root, which refuses traversal and
-// escaping symlinks. The bytes land in a temp file inside the SAME root (so the
-// rename cannot cross a filesystem and stop being atomic), are fsync'd, and are
-// only then renamed into place.
+// escaping symlinks. The bytes land in an owned hidden temp file inside the
+// SAME root, are fsync'd, then publish with either a replacing rename (when
+// explicitly allowed) or an atomic hard-link claim (when no overwrite was
+// approved). The containing directory is synced after the name transition.
 func streamBinaryDownloadToRoot(body io.Reader, destRoot, fileName string, maxBytes int64, allowOverwrite bool, stall time.Duration, cancel context.CancelFunc) (int64, string, string, error) {
 	root, err := os.OpenRoot(destRoot)
 	if err != nil {
@@ -276,31 +482,18 @@ func streamBinaryDownloadToRoot(body io.Reader, destRoot, fileName string, maxBy
 	}
 	defer func() { _ = root.Close() }()
 
-	// Reserve the destination FIRST when overwriting is not permitted, so the
-	// collision check and the claim are one atomic operation rather than a
-	// stat-then-write race.
-	if !allowOverwrite {
-		reserve, err := root.OpenFile(fileName, os.O_CREATE|os.O_EXCL|os.O_WRONLY, binaryDownloadFileMode)
-		if err != nil {
-			return 0, "", "", fmt.Errorf("binary download destination %q: %w", fileName, err)
-		}
-		_ = reserve.Close()
-	}
-
-	tempName := fileName + ".part-" + strconv.FormatInt(time.Now().UnixNano(), 36)
+	// Do not reserve fileName while staging: a process death must leave the
+	// visible final name absent. A hidden temp is owned solely by this attempt;
+	// its eventual hard-link publication below atomically claims fileName only
+	// if no competing final exists.
+	tempName := "." + fileName + ".part-" + strconv.FormatInt(time.Now().UnixNano(), 36)
 	temp, err := root.OpenFile(tempName, os.O_CREATE|os.O_EXCL|os.O_WRONLY, binaryDownloadFileMode)
 	if err != nil {
-		if !allowOverwrite {
-			_ = root.Remove(fileName)
-		}
 		return 0, "", "", fmt.Errorf("binary download temp file: %w", err)
 	}
 	cleanup := func() {
 		_ = temp.Close()
 		_ = root.Remove(tempName)
-		if !allowOverwrite {
-			_ = root.Remove(fileName)
-		}
 	}
 
 	hash := sha256.New()
@@ -312,11 +505,11 @@ func streamBinaryDownloadToRoot(body io.Reader, destRoot, fileName string, maxBy
 	written, err := io.Copy(io.MultiWriter(temp, hash, sniff), limited)
 	if err != nil {
 		cleanup()
-		return 0, "", "", fmt.Errorf("binary download: %w", err)
+		return written, "", "", fmt.Errorf("binary download: %w", err)
 	}
 	if written > maxBytes {
 		cleanup()
-		return 0, "", "", fmt.Errorf("binary download response too large: exceeds limit %d bytes", maxBytes)
+		return written, "", "", fmt.Errorf("binary download response too large: exceeds limit %d bytes", maxBytes)
 	}
 	// fsync before rename, or the rename can yield a zero-length file.
 	if err := temp.Sync(); err != nil {
@@ -325,19 +518,38 @@ func streamBinaryDownloadToRoot(body io.Reader, destRoot, fileName string, maxBy
 	}
 	if err := temp.Close(); err != nil {
 		_ = root.Remove(tempName)
-		if !allowOverwrite {
-			_ = root.Remove(fileName)
-		}
 		return 0, "", "", fmt.Errorf("binary download close: %w", err)
 	}
-	if err := root.Rename(tempName, fileName); err != nil {
-		_ = root.Remove(tempName)
-		if !allowOverwrite {
-			_ = root.Remove(fileName)
+	if allowOverwrite {
+		if err := root.Rename(tempName, fileName); err != nil {
+			_ = root.Remove(tempName)
+			return 0, "", "", fmt.Errorf("binary download rename: %w", err)
 		}
-		return 0, "", "", fmt.Errorf("binary download rename: %w", err)
+	} else if err := root.Link(tempName, fileName); err != nil {
+		_ = root.Remove(tempName)
+		return 0, "", "", fmt.Errorf("binary download publish without overwrite: %w", err)
+	} else if err := root.Remove(tempName); err != nil {
+		// The final link is already published. Never remove it on a cleanup
+		// error: doing so could delete the just-created artifact or a foreign
+		// replacement. Report the owned-temp cleanup failure for recovery.
+		return 0, "", "", fmt.Errorf("binary download publish cleanup: %w", err)
+	}
+	if err := syncBinaryDownloadDirectory(root); err != nil {
+		// Publication is durable enough to be visible but its directory entry
+		// was not confirmed to stable storage. Preserve the artifact; callers
+		// can inspect it and a retry will safely collide rather than overwrite.
+		return 0, "", "", fmt.Errorf("binary download directory sync: %w", err)
 	}
 	return written, hex.EncodeToString(hash.Sum(nil)), http.DetectContentType(sniff.head), nil
+}
+
+func syncBinaryDownloadDirectory(root *os.Root) error {
+	directory, err := root.Open(".")
+	if err != nil {
+		return err
+	}
+	defer func() { _ = directory.Close() }()
+	return directory.Sync()
 }
 
 // sniffBuffer captures only the first 512 bytes, matching

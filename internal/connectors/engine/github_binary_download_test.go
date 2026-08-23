@@ -29,7 +29,13 @@ func TestGitHubArchiveDownloadsAllowOnlyCodeloadRedirect(t *testing.T) {
 			if op.Binary.AllowCrossHost {
 				t.Fatal("archive download must not allow every cross-host redirect")
 			}
-			if got := op.Binary.AllowedHosts; len(got) != 1 || got[0] != "codeload.github.com" {
+			if op.Binary.Redirect == nil {
+				t.Fatal("archive download must declare a redirect policy")
+			}
+			if op.Binary.Redirect.MaxHops != 1 || !op.Binary.Redirect.AllowSameOrigin {
+				t.Fatalf("redirect policy = %+v, want one same-origin hop", op.Binary.Redirect)
+			}
+			if got := op.Binary.Redirect.AllowedHosts; len(got) != 1 || got[0] != "codeload.github.com" {
 				t.Fatalf("allowed_hosts = %v, want [codeload.github.com]", got)
 			}
 		})
