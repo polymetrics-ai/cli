@@ -1,40 +1,33 @@
-# Code review — Twenty CRM
+# Review — Twenty batch certification deferral
 
-## Method
+## Scope and method
 
-Manual inline review was used because compatible isolated Pi review workers are
-not available in this environment. The review follows the generated
-`code-review` prompt, the connector-only scope boundary, and the automated
-review routing policy. Required Go and connector skills are recorded in
-`PLAN.md`.
-
-## Reviewed changes
-
-- `internal/connectors/defs/twenty/**`: 168 declared commands across 28 ETL
-  lists, 28 operation-backed gets, and 112 typed write actions. The review
-  checked that direct reads bind to declared REST rows, batch bodies stay
-  schema-bounded at 60 records, and all 28 deletes use `kind: destructive`.
-- `internal/connectors/icon_data.json`: exactly one Twenty row uses the
-  curated Polymetrics sample fallback. The comparison reports 556 rows before,
-  557 after, one Twenty entry, and byte-identical non-Twenty rows.
-- Generated connector manuals, catalog, website data, root help transcripts,
-  and catalog count are limited to the expected Twenty projection.
-- No foundation engine, generator, certification allowlist, credential, token,
-  record identifier, or captain-owned configuration is in the diff.
+Inline/manual `code-review` fallback: the repository-local Pi adapter did not
+provide the isolated reviewer runtime, so the connector worker reviewed the
+committed deferral slice directly. The review covered the 28 eligibility rows,
+their Go enforcement test, foundation-gap/ledger evidence, and regenerated
+connector manuals/catalog. `git diff --check`, the focused connector suite,
+commandrunner preflight sweep, conformance test, generators, docs check, lint,
+vet, build, and connector boundary were inspected.
 
 ## Findings
 
-No actionable implementation, safety, or scope finding was identified in the
-manual review. `go test -timeout 20m ./internal/cli` passed in 596.926s on the
-rebased head; the
-final connector-definition, generator, docs, GSD-evidence, formatting, and
-built-binary live-auth checks are recorded in `VERIFICATION.md`.
+No critical, warning, or informational finding is open.
 
-## Automated-review route
+- The test rejects a missing source trace or foundation block for every batch
+  action and matches the declared method/path against `writes.json`.
+- The release deferral leaves each related command `implemented`; it does not
+  introduce a partial/disabled classification, a raw writer, or a foundation
+  bypass.
+- The machine-readable ledger uses the source-file hash and stable gap ID, and
+  the generated manuals reflect the source documentation.
+- `website/data/connectors.generated.json` already projects the connector
+  command surface and had no generated drift; the deferral changes no command,
+  flag, or website-facing capability.
 
-- Intended primary route: `claude_auto` after the non-draft PR opens against
-  `main`.
-- Fallback: none unless the automatic action is skipped, fails, or reports a
-  quota blocker; then follow the repository's Claude/Copilot routing policy.
-- Local review status: complete, no findings.
-- External review status: pending PR creation.
+## Known unrelated verification result
+
+The full `internal/cli` package run fails in shared generic sample transport
+tests because the current foundation requires an action-owned source binding.
+This slice does not alter shared code or weaken those tests. See
+`VERIFICATION.md` for the exact command and failure.
