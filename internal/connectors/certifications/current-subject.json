@@ -3,9 +3,9 @@
   "generated_command": "go run ./cmd/connectorgen certification-subject --pm ./pm",
   "subject": {
     "schema_version": 1,
-    "fingerprint": "948384469eeddd3b4ae5bb7ce2d77c4989dadc4dd1f0153956840f1ecfac6bee",
-    "pm_binary_sha256": "5d6e9f733532e9021f893a90fbb61718b3ffccaea91360af796e835539660607",
-    "pm_build_sha256": "a3e1196a5efa5482d2c6409afe53c1a8604e94eb73ae213c78280e35b6f63a02",
+    "fingerprint": "e85b5fb293cdcd930284cf4f92d9e38a2c44667382413846354bb04fb42b7c86",
+    "pm_binary_sha256": "d8e19867de1485a1f53517dc4fc19988c61c4e5580e7064e35f17daec38f37d8",
+    "pm_build_sha256": "ae8cecef865ed5a249303b607e8f2aa7ae65ee83960eeef022fe34dc5a43bad4",
     "declarations_sha256": "b0b8c8aadbd930cb110303a852e3786e8e52c15e6d8bbb345e38dc92ea8c6400",
     "source_projection_sha256": "875ab65998afa77ab9770dc675294d8b0af1a95053dc32cab77807fe53106161",
     "cli_command_mapping_sha256": "86a36c9ff4cee60fbb1d42663ee6658fc27ceaedd29b9041304f8960a29deb0b",
