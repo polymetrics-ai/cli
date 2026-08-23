@@ -1826,22 +1826,54 @@ func sourceProjectionFinding(connector, file, message string) Finding {
 }
 
 func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImportLock, descriptor sourceImportDescriptorDocument) []Finding {
-	if descriptor.SchemaVersion != 2 {
-		return []Finding{sourceProjectionFinding(connector, file, fmt.Sprintf("source descriptor schema_version = %d, want 2", descriptor.SchemaVersion))}
+	wantSchemaVersion := 2
+	if lock.SchemaVersion == 3 {
+		wantSchemaVersion = 3
 	}
-	expected := map[string]sourceImportSource{}
-	for _, operation := range lock.Rest.Operations {
-		identity := operation.OperationID
-		if identity == "" {
-			identity = operation.ID
+	if descriptor.SchemaVersion != wantSchemaVersion {
+		return []Finding{sourceProjectionFinding(connector, file, fmt.Sprintf("source descriptor schema_version = %d, want %d", descriptor.SchemaVersion, wantSchemaVersion))}
+	}
+	type expectedSource struct {
+		source              sourceImportSource
+		providerOperationID string
+	}
+	expected := map[string]expectedSource{}
+	if lock.SchemaVersion == 3 {
+		for _, document := range lock.Rest.SourceDocuments {
+			for _, operation := range document.Operations {
+				expected[operation.ID] = expectedSource{
+					source: sourceImportSource{
+						URL:                 document.Artifact.SourceURL,
+						SHA256:              strings.ToLower(document.Artifact.SHA256),
+						Bytes:               document.Artifact.Bytes,
+						Location:            operation.SourceLocation,
+						Form:                "openapi",
+						Version:             document.Artifact.OpenAPI,
+						DocumentID:          document.ID,
+						PublishedURL:        document.PublishedSource.SourceURL,
+						PublishedCaptureURL: document.PublishedSource.CaptureURL,
+						PublishedSHA256:     strings.ToLower(document.PublishedSource.SHA256),
+						PublishedBytes:      document.PublishedSource.Bytes,
+						PublishedAdapter:    document.PublishedSource.Adapter,
+					},
+					providerOperationID: operation.OperationID,
+				}
+			}
 		}
-		expected[identity] = sourceImportSource{SHA256: strings.ToLower(lock.Rest.SHA256), Bytes: lock.Rest.Bytes, Location: operation.SourceLocation}
+	} else {
+		for _, operation := range lock.Rest.Operations {
+			identity := operation.OperationID
+			if identity == "" {
+				identity = operation.ID
+			}
+			expected[identity] = expectedSource{source: sourceImportSource{SHA256: strings.ToLower(lock.Rest.SHA256), Bytes: lock.Rest.Bytes, Location: operation.SourceLocation}, providerOperationID: operation.OperationID}
+		}
 	}
 	for _, field := range lock.GraphQL.QueryFields {
-		expected[fmt.Sprintf("%s.graphql.query.%s", connector, field.Name)] = sourceImportSource{SHA256: strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)), Bytes: firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes)}
+		expected[fmt.Sprintf("%s.graphql.query.%s", connector, field.Name)] = expectedSource{source: sourceImportSource{SHA256: strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)), Bytes: firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes)}}
 	}
 	for _, field := range lock.GraphQL.MutationFields {
-		expected[fmt.Sprintf("%s.graphql.mutation.%s", connector, field.Name)] = sourceImportSource{SHA256: strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)), Bytes: firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes)}
+		expected[fmt.Sprintf("%s.graphql.mutation.%s", connector, field.Name)] = expectedSource{source: sourceImportSource{SHA256: strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)), Bytes: firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes)}}
 	}
 	actual := map[string]sourceOperationDescriptor{}
 	for _, operation := range descriptor.Operations {
@@ -1853,12 +1885,15 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	if len(actual) != len(expected) {
 		return []Finding{sourceProjectionFinding(connector, file, fmt.Sprintf("source descriptor has %d identities, lock requires %d", len(actual), len(expected)))}
 	}
-	for identity, source := range expected {
+	for identity, expectedOperation := range expected {
 		operation, ok := actual[identity]
 		if !ok {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor is missing identity "+identity)}
 		}
-		if operation.Source.SHA256 != source.SHA256 || operation.Source.Bytes != source.Bytes || (source.Location != "" && operation.Source.Location != source.Location) {
+		if operation.Source.SHA256 != expectedOperation.source.SHA256 || operation.Source.Bytes != expectedOperation.source.Bytes || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
+		}
+		if lock.SchemaVersion == 3 && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
 		}
 		if operation.Runtime.MergeBlocked != (len(operation.Runtime.Gaps) > 0) {
