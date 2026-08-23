@@ -78,11 +78,22 @@ const sourceProfiles = {
   shipstation: { urls: ['https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download'], total: 47, confidence: 'machine-readable-spec', basis: 'Official ShipStation V1 documentation download is an OpenAPI document with 47 HTTP method/path operations.', format: 'openapi-json' },
 };
 
-const reverseETLGap = {
-  id: 'application-generic-destination-dispatch',
-  evidence: 'internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.',
-  minimal_change: 'complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path.',
-};
+const reverseETLDeclarationEvidence = 'The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence.';
+
+function reverseETLDeclarationEligibility(connector, hasTransport) {
+  return {
+    eligible: false,
+    state: 'declaration-pending',
+    evidence: hasTransport
+      ? `${reverseETLDeclarationEvidence} internal/connectors/defs/${connector}/sync_transport.json does not yet declare this typed write as a destination action.`
+      : `${reverseETLDeclarationEvidence} internal/connectors/defs/${connector}/sync_transport.json is absent.`,
+  };
+}
+
+function addReverseETLDeclarationEligibility(declaration, endpoint, connector, hasTransport) {
+  if (endpoint.covered_by?.write) declaration.reverse_etl_eligibility = reverseETLDeclarationEligibility(connector, hasTransport);
+  return declaration;
+}
 
 function hash(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -161,30 +172,12 @@ function classifiedDisposition(connector, endpoint, index, cli, hasTransport, so
     excluded: endpoint.excluded || null,
   };
 
-  if (endpoint.covered_by?.write) {
-    return {
-      method: endpoint.method,
-      path: endpoint.path,
-      parity_class: parity,
-      api_surface: apiSurface,
-      source,
-      state: 'foundation-gap',
-      foundation: { state: 'gap', foundation_gap: reverseETLGap },
-      rejection: {
-        reason: 'foundation-gap',
-        recoverable: true,
-        detail: 'The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.',
-        evidence: reverseETLGap.evidence,
-      },
-      declaration: {
-        status: `foundation-gap; typed direct-write action "${endpoint.covered_by.write}" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists`,
-        command: command ? { path: command.path, intent: command.intent, availability: command.availability } : null,
-        reverse_etl_eligibility: { eligible: true, state: 'foundation-gap', foundation_gap: reverseETLGap },
-      },
-    };
-  }
-
   if (isElevated) {
+    const declaration = addReverseETLDeclarationEligibility({
+      status: 'enabled; requires elevated scope at runtime',
+      command: command ? { path: command.path, intent: command.intent, availability: command.availability } : null,
+      runtime_metadata: { required_scope: endpoint.excluded?.reason || endpoint.operation?.reason },
+    }, endpoint, connector, hasTransport);
     return {
       method: endpoint.method,
       path: endpoint.path,
@@ -194,11 +187,7 @@ function classifiedDisposition(connector, endpoint, index, cli, hasTransport, so
       state: 'enabled',
       foundation: { state: 'present', evidence: 'Authorization scope is a runtime provider policy, not an engine refusal.' },
       rejection: null,
-      declaration: {
-        status: 'enabled; requires elevated scope at runtime',
-        command: command ? { path: command.path, intent: command.intent, availability: command.availability } : null,
-        runtime_metadata: { required_scope: endpoint.excluded?.reason || endpoint.operation?.reason },
-      },
+      declaration,
     };
   }
 
@@ -212,6 +201,7 @@ function classifiedDisposition(connector, endpoint, index, cli, hasTransport, so
         ? { source_transport: { state: 'declared', evidence: `internal/connectors/defs/${connector}/sync_transport.json` } }
         : { source_transport: { state: 'declaration-pending', evidence: `internal/connectors/defs/${connector}/sync_transport.json is absent; the merged declarative source contract is available but no connector-owned conformance claim exists.` } };
     }
+    addReverseETLDeclarationEligibility(declaration, endpoint, connector, hasTransport);
     return {
       method: endpoint.method, path: endpoint.path, parity_class: parity, api_surface: apiSurface, source,
       state: 'enabled',
@@ -244,6 +234,7 @@ function classifiedDisposition(connector, endpoint, index, cli, hasTransport, so
       ? { source_transport: { state: 'declared', evidence: `internal/connectors/defs/${connector}/sync_transport.json` } }
       : { source_transport: { state: 'declaration-pending', evidence: `internal/connectors/defs/${connector}/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence.` } };
   }
+  addReverseETLDeclarationEligibility(declaration, endpoint, connector, hasTransport);
   return {
     method: endpoint.method, path: endpoint.path, parity_class: parity, api_surface: apiSurface, source,
     state: 'declaration-pending',
@@ -1077,21 +1068,25 @@ function summaryMarkdown(connector, map) {
   ].join('\n');
 }
 
-function applyOpenFoundationGapState(map) {
+function applyCurrentDeclarationState(map) {
   for (const row of map.ledger_dispositions || []) {
-    const eligibility = row.declaration?.reverse_etl_eligibility;
-    if (eligibility?.state !== 'foundation-gap') continue;
-    const gap = eligibility.foundation_gap;
-    assert(gap?.id === reverseETLGap.id && gap.evidence && gap.minimal_change, `${map.connector}: reverse-ETL eligibility has malformed foundation gap`);
-    row.state = 'foundation-gap';
-    row.foundation = { state: 'gap', foundation_gap: clone(gap) };
-    row.rejection = {
-      reason: 'foundation-gap',
+    if (!row.api_surface?.covered_by?.write) continue;
+    const command = row.declaration?.command || null;
+    const implemented = command?.availability === 'implemented' || row.api_surface?.excluded?.category === 'requires_elevated_scope';
+    row.state = implemented ? 'enabled' : 'declaration-pending';
+    row.foundation = { state: 'present', evidence: implemented
+      ? 'The connector has an enabled terminal declaration; reverse-ETL transport eligibility remains a connector-owned declaration.'
+      : 'No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap.' };
+    row.rejection = implemented ? null : {
+      reason: 'declaration-pending',
       recoverable: true,
-      detail: 'The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.',
-      evidence: gap.evidence,
+      detail: 'The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.',
+      evidence: `internal/connectors/defs/${map.connector}/sync_transport.json`,
     };
-    row.declaration.status = `foundation-gap; typed direct-write action "${row.api_surface?.covered_by?.write}" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists`;
+    row.declaration.status = implemented
+      ? `enabled; typed direct-write action "${row.api_surface?.covered_by?.write}" has an executable terminal declaration`
+      : `declaration-pending; typed direct-write action "${row.api_surface?.covered_by?.write}" needs a connector-owned destination transport declaration and conformance evidence`;
+    row.declaration.reverse_etl_eligibility = reverseETLDeclarationEligibility(map.connector, false);
   }
   const rows = map.ledger_dispositions || [];
   map.summary.enabled_operations = rows.filter(({ state }) => state === 'enabled').length;
@@ -1099,14 +1094,12 @@ function applyOpenFoundationGapState(map) {
   map.summary.declaration_pending_operations = rows.filter(({ state }) => state === 'declaration-pending').length;
   map.summary.disabled_operations = rows.filter(({ state }) => state === 'disabled').length;
   map.summary.enabled_deletes = rows.filter(({ method, state }) => method === 'DELETE' && state === 'enabled').length;
-  map.summary.gap_ids = [...new Set(rows.filter(({ rejection }) => rejection?.reason === 'foundation-gap').map(({ foundation }) => foundation?.foundation_gap?.id).filter(Boolean))];
-  map.summary.foundation_gaps = map.summary.gap_ids.map((id) => ({
-    ...clone(reverseETLGap),
-    id,
-    count: rows.filter(({ foundation }) => foundation?.foundation_gap?.id === id).length,
-    scope: 'shared_destination_runtime',
-    note: 'Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class. The affected surface is not enabled until the shared App/CLI dispatch gap closes.',
-  }));
+  map.summary.gap_ids = [];
+  map.summary.foundation_gaps = [];
+  map.summary.transport.destination_transport = {
+    state: 'declaration-pending',
+    evidence: `${reverseETLDeclarationEvidence} internal/connectors/defs/${map.connector}/sync_transport.json is absent.`,
+  };
   map.summary.rejected_by_reason = countBy(rows.filter(({ rejection }) => rejection).map(({ rejection }) => ({ reason: rejection.reason })), 'reason');
   return map;
 }
@@ -1162,14 +1155,14 @@ async function writeSevenSurfaceLedger(checkOnly = false) {
       direct_write: counts.direct_write || 0,
       classification_note: 'Each value is the number of provider operations canonically classified for that surface. A zero is not an N/A claim; the per-operation hard gate carries pending proof unless provider evidence proves a capability absent.',
       etl: transport.source_transport ? 'declared' : 'declaration-pending',
-      reverse_etl: transport.destination_transport ? 'definition-declared; app-dispatch-pending' : writes > 0 ? 'foundation-gap: application-generic-destination-dispatch' : 'declaration-pending',
+      reverse_etl: transport.destination_transport ? 'definition-declared' : writes > 0 ? 'declaration-pending' : 'declaration-pending',
       executable_cli_commands: cli.commands.filter(({ availability }) => availability === 'implemented').length,
       cli_commands: cli.commands.length,
       source_lock: `internal/connectors/defs/${connector}/sources/${connector}-parity-source-lock.json`,
     });
   }
   assert(rows.length === 20 && new Set(rows.map(({ connector }) => connector)).size === 20, 'seven-surface ledger must contain each assigned connector exactly once');
-  const output = { schema_version: 1, issue: 4290, foundation_sha: 'c6f03c937c1f4e516d339b48e8c2143726179fdf', reverse_etl_note: 'The generic typed destination factory exists at this foundation SHA, but App dispatch integration is not yet merged; this ledger does not claim deployability.', rows };
+  const output = { schema_version: 1, issue: 4290, foundation_sha: '94e5496ed', reverse_etl_note: 'The merged #4304 foundation head supplies generic App/CLI dispatch. Connector-owned destination sync_transport declarations and conformance evidence remain declaration-pending; they are not engine foundation gaps.', rows };
   const jsonPath = join(root, phase, 'SEVEN-SURFACE-LEDGER.json');
   const markdownPath = join(root, phase, 'SEVEN-SURFACE-LEDGER.md');
   if (checkOnly) {
@@ -1494,7 +1487,6 @@ async function writeFoundationGapLedger(checkOnly = false) {
       }
     }
   }
-  assert(operationRows.length > 0, 'foundation-gap ledger must not silently omit the recorded reverse-ETL dependency');
   assert(new Set(operationRows.map(({ gap_id, connector, provider_operation }) => `${gap_id}\u0000${connector}\u0000${provider_operation.source_id}`)).size === operationRows.length, 'foundation-gap ledger has duplicate operation rows');
   const rollup = (rows) => ({
     operation_rows: rows.length,
@@ -1525,8 +1517,8 @@ async function writeFoundationGapLedger(checkOnly = false) {
   const output = {
     schema_version: 1,
     issue: 4290,
-    policy: 'Open foundation gaps are deduplicated by stable gap_id, never disabled or N/A. A gap row is not enabled on its affected surface and cannot contribute to a merge-ready verdict.',
-    gate_status: 'blocked-open-foundation-gaps',
+    policy: 'Only an evidenced engine incapability is a foundation gap. Open gaps are deduplicated by stable gap_id, never disabled or N/A; unauthored connector declarations remain declaration-pending.',
+    gate_status: operationRows.length > 0 ? 'blocked-open-foundation-gaps' : 'clear',
     gaps,
     operation_gap_rows: operationRows,
     rollups: {
@@ -1539,7 +1531,9 @@ async function writeFoundationGapLedger(checkOnly = false) {
   const lines = [
     '# Issue #4290 foundation-gap ledger',
     '',
-    'Status: **blocked**. Shared gaps are deduplicated by stable ID; their affected provider operations remain visible as individual machine-readable rows.',
+    operationRows.length > 0
+      ? 'Status: **blocked**. Shared gaps are deduplicated by stable ID; their affected provider operations remain visible as individual machine-readable rows.'
+      : 'Status: **clear**. No current row has evidenced engine incapability; remaining connector declarations are tracked as `declaration-pending` rather than foundation work.',
     '',
     '| Gap | Status | Affected surface | Enumerated / retained rows | Connectors | Owner |',
     '| --- | --- | --- | ---: | ---: | --- |',
@@ -1547,7 +1541,7 @@ async function writeFoundationGapLedger(checkOnly = false) {
   for (const gap of gaps) lines.push(`| ${gap.gap_id} | ${gap.status} | ${gap.affected_surfaces.join(', ')} | ${gap.fan_out.enumerated_provider_operation_count} / ${gap.fan_out.retained_compatibility_binding_count} | ${gap.fan_out.connector_count} | #${gap.owning_issue} / ${gap.owning_lane} |`);
   lines.push('', '| Rollup | Enumerated provider operations | Retained bindings outside current inventory | Connectors | Merge-ready operations |', '| --- | ---: | ---: | ---: | ---: |');
   for (const [name, value] of Object.entries(output.rollups)) lines.push(`| ${name} | ${value.enumerated_provider_operations} | ${value.retained_compatibility_bindings_outside_current_provider_inventory} | ${value.connector_count} | ${value.merge_ready_operations} |`);
-  lines.push('', 'Each `operation_gap_rows` entry in `FOUNDATION-GAP-LEDGER.json` contains the exact provider method/path/source URL/revision/hash trace, canonical mapping, failing App runtime evidence, owner, status, affected surfaces, and closure commands. No connector-specific workaround is permitted.');
+  lines.push('', 'Each `operation_gap_rows` entry in `FOUNDATION-GAP-LEDGER.json` contains the exact provider method/path/source URL/revision/hash trace, canonical mapping, failing App runtime evidence, owner, status, affected surfaces, and closure commands. An empty list is an explicit clear state, not an N/A claim.');
   const markdown = `${lines.join('\n')}\n`;
   const markdownPath = join(root, phase, 'FOUNDATION-GAP-LEDGER.md');
   if (checkOnly) {
@@ -1683,17 +1677,18 @@ async function materialize(connector) {
       writes_actions: rows.filter(({ api_surface }) => api_surface.covered_by?.write).length,
       terminal_commands: rows.filter(({ declaration }) => declaration.command?.availability === 'implemented').length,
       live_certification: 'pending',
-      gap_ids: [reverseETLGap.id],
-      foundation_gaps: [{ id: reverseETLGap.id, count: rows.filter(({ api_surface }) => api_surface.covered_by?.write).length, scope: 'shared_destination_runtime', note: 'Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class.' }],
+      foundation_gap_operations: 0,
+      gap_ids: [],
+      foundation_gaps: [],
       rejected_by_reason: countBy(rows.filter(({ rejection }) => rejection).map(({ rejection }) => ({ reason: rejection.reason })), 'reason'),
       transport: {
         source_transport: hasTransport ? { state: 'declared', evidence: `internal/connectors/defs/${connector}/sync_transport.json` } : { state: 'declaration-pending', evidence: `internal/connectors/defs/${connector}/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence.` },
-        destination_transport: { state: 'gap', foundation_gap: reverseETLGap },
+        destination_transport: { state: 'declaration-pending', evidence: `${reverseETLDeclarationEvidence} internal/connectors/defs/${connector}/sync_transport.json is absent.` },
       },
     },
     ledger_dispositions: rows,
   };
-  applyOpenFoundationGapState(map);
+  applyCurrentDeclarationState(map);
   await mkdir(sources, { recursive: true });
   await writeFile(join(sources, `${connector}-parity-source-lock.json`), json(sourceLock));
   await writeFile(join(sources, `${connector}-declaration-disposition.json`), json(map));
@@ -1758,16 +1753,12 @@ async function check(connector) {
   for (const row of map.ledger_dispositions) {
     assert(['direct_read', 'direct_write', 'etl', 'reverse_etl', 'binary_read', 'binary_write'].includes(row.parity_class), `${connector}: invalid parity class`);
     assert(row.parity_class !== 'reverse_etl', `${connector}: reverse_etl must be an eligibility attribute, not an endpoint parity class`);
-    if (row.rejection?.reason === 'foundation-gap') {
-      assert(row.foundation?.foundation_gap?.evidence && row.foundation?.foundation_gap?.minimal_change, `${connector}: foundation gap lacks evidence or minimal change`);
-      assert(row.foundation.foundation_gap.id === reverseETLGap.id, `${connector}: invented foundation gap ${row.foundation.foundation_gap.id}`);
-    }
+    assert(row.rejection?.reason !== 'foundation-gap', `${connector}: no current engine refusal supports a foundation-gap row`);
     if (row.declaration?.reverse_etl_eligibility) {
       const eligibility = row.declaration.reverse_etl_eligibility;
-      assert(row.parity_class === 'direct_write' && row.state === 'foundation-gap', `${connector}: typed write with an open reverse-ETL gap must be a foundation-gap direct_write`);
-      assert(eligibility.eligible && eligibility.state === 'foundation-gap', `${connector}: reverse ETL eligibility must expose the foundation gap`);
-      assert(eligibility.foundation_gap?.id === reverseETLGap.id && eligibility.foundation_gap?.evidence && eligibility.foundation_gap?.minimal_change, `${connector}: malformed reverse ETL foundation evidence`);
-      assert(row.rejection?.reason === 'foundation-gap' && row.foundation?.foundation_gap?.id === reverseETLGap.id, `${connector}: typed write foundation state lacks exact shared gap evidence`);
+      assert(row.parity_class === 'direct_write', `${connector}: reverse-ETL eligibility must remain on a direct_write row`);
+      assert(!eligibility.eligible && eligibility.state === 'declaration-pending' && eligibility.evidence, `${connector}: reverse-ETL declaration state must not mislabel missing connector authoring as a foundation gap`);
+      assert(!eligibility.foundation_gap, `${connector}: reverse-ETL declaration state must not retain a stale foundation gap`);
     }
     if (row.state === 'declaration-pending') assert(row.rejection?.reason === 'declaration-pending', `${connector}: pending row has wrong reason`);
     if (row.api_surface?.excluded?.category === 'requires_elevated_scope') assert(row.state === 'enabled' && !row.rejection, `${connector}: elevated scope must stay enabled`);
@@ -1776,7 +1767,7 @@ async function check(connector) {
     const rows = map.ledger_dispositions.filter(({ api_surface }) => api_surface?.covered_by?.write === action.name);
     assert(rows.length === 1, `${connector}: typed write action ${action.name} must have exactly one source-backed disposition`);
     const eligibility = rows[0].declaration?.reverse_etl_eligibility;
-    assert(rows[0].state === 'foundation-gap' && rows[0].rejection?.reason === 'foundation-gap' && eligibility?.eligible && eligibility.state === 'foundation-gap' && eligibility.foundation_gap?.id === reverseETLGap.id, `${connector}: typed write action ${action.name} lacks an explicit non-enabled reverse-ETL foundation disposition`);
+    assert(rows[0].state !== 'foundation-gap' && eligibility && !eligibility.eligible && eligibility.state === 'declaration-pending' && !eligibility.foundation_gap, `${connector}: typed write action ${action.name} must record its unauthored reverse-ETL transport as declaration-pending`);
   }
   assert(map.summary.documented_deletes === apiSurface.endpoints.filter(({ method }) => method === 'DELETE').length, `${connector}: DELETE count mismatch`);
 }
@@ -1820,17 +1811,13 @@ async function main() {
     return;
   }
   if (mode === 'reconcile-dispatch') {
-    for (const connector of [...batches.batch4, ...batches.batch5]) {
+    const connectors = target ? (batches[target] || (sourceProfiles[target] ? [target] : null)) : [...batches.batch4, ...batches.batch5];
+    if (!connectors) throw new Error('usage: materialize-parity-maps.mjs reconcile-dispatch [batch4|batch5|connector]');
+    for (const connector of connectors) {
       const path = join(root, 'internal/connectors/defs', connector, 'sources', `${connector}-declaration-disposition.json`);
       const map = await readJSON(path);
-      const replace = (value) => {
-        if (Array.isArray(value)) return value.map(replace);
-        if (!value || typeof value !== 'object') return value;
-        if (value.id === 'generic-typed-destination-executor') return clone(reverseETLGap);
-        return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, replace(item)]));
-      };
-      const updated = replace(map);
-      applyOpenFoundationGapState(updated);
+      const updated = clone(map);
+      applyCurrentDeclarationState(updated);
       await writeFile(path, json(updated));
       await writeFile(join(root, 'internal/connectors/defs', connector, 'sources', `${connector}-parity-map-summary.md`), summaryMarkdown(connector, updated));
       console.log(`reconcile-dispatch: ${connector}`);

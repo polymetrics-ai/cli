@@ -4,11 +4,11 @@
 - Mapped operation rows: 635
 - Operations found in provider source: 629
 - Coverage confidence: machine-readable-spec — Official Zendesk Support OpenAPI document; count is HTTP method plus path.
-- Enabled: 33
-- Foundation gap: 90
-- Declaration pending: 512
+- Enabled: 95
+- Foundation gap: 0
+- Declaration pending: 540
 - Disabled: 0
 - Documented DELETEs: 87; enabled DELETEs: 0
 - Parity classes: direct_read=308, direct_write=294, etl=33
-- Foundation gaps: application-generic-destination-dispatch
+- Foundation gaps: none
 - Public source retrieval: undefined
