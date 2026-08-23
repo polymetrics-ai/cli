@@ -35,7 +35,16 @@
           "required": [
             "mediaFile"
           ]
-        }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "callId returned from 'Add New Call' request"
+          }
+        ]
       }
     },
     {
@@ -850,7 +859,29 @@
             "description": "selectedFields",
             "additionalProperties": true
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "integrationId",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "summary": "Integration ID generated when creating the integration"
+          },
+          {
+            "name": "objectType",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "values": [
+              "ACCOUNT",
+              "CONTACT",
+              "DEAL",
+              "LEAD"
+            ],
+            "summary": "The object type to set the schema for (case-sensitive)"
+          }
+        ]
       }
     },
     {
@@ -981,7 +1012,29 @@
           "required": [
             "file"
           ]
-        }
+        },
+        "parameters": [
+          {
+            "name": "targetId",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "summary": "Unique identifier for the target (up to 20 digits). Retrieve this value using the List targets API."
+          },
+          {
+            "name": "validateOnly",
+            "in": "query",
+            "type": "boolean",
+            "summary": "(Default: false) When true, the CSV file is fully validated but no data is uploaded. Use this to check your file for errors before committing."
+          },
+          {
+            "name": "workspaceId",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "summary": "The ID of the workspace the target belongs to. You can retrieve workspace IDs using the Workspaces API."
+          }
+        ]
       }
     }
   ]

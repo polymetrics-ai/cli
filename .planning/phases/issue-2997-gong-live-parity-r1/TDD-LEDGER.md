@@ -30,6 +30,17 @@
 - `go run ./cmd/connectorgen source-import gong --check` now reaches the strict lock validator but
   fails before fetch because the official fixed URL contains `?version=`. This is recorded as the
   remaining provider-neutral source-import URL-policy dependency, not a Gong-specific fallback.
+- `go run ./cmd/connectorgen params-import gong --artifact /tmp/gong-openapi-20260823.json --check`
+  reported three declaration drifts. The generator identified the three multipart operations, not
+  an inferred provider policy; its first green run is recorded below.
+- A live `pm gong targets list` reached Gong but returned only the safe HTTP-400 classification.
+  The current official contract says `workspaceId` is required for `GET /v2/targets`, while the
+  generated direct-read flag is still optional. The canonical source descriptor needed for
+  `surface-sync` cannot be generated until the query-bearing source-lock URL policy is fixed, so
+  this is visible as a source-projection dependency rather than hand-authoring a flag.
+- The initial certification declaration named that invalid target-list call. The focused
+  certification test went red until the declaration selected the ordinary, bounded
+  `users extensive` typed read instead.
 
 ## Green evidence recorded during execution
 
@@ -38,6 +49,29 @@
 - `go test -timeout 20m ./internal/connectors/conformance -run 'TestConformance/gong' -count=1` passed, including the three declaration-owned multipart actions.
 - In one freshly initialized project with no configured credential, the built binary classified all 30 direct-read commands, all 27 reverse-ETL write commands, and all 12 ETL stream commands as `missing --credential`. Each command was invoked without provider credentials; zero classified as unknown, partial, or unbound.
 - `node .planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/verify-parity-maps.mjs` passed: 19 connectors / 5,127 documented operations, with zero remaining Gong foundation-gap rows.
+- `go run ./cmd/connectorgen params-import gong --artifact /tmp/gong-openapi-20260823.json`
+  updated exactly three multipart operation parameter declarations; the immediate `--check` then
+  reported 17 scanned / 0 updated.
+- `go test -timeout 20m ./cmd/connectorgen -run '^TestGong(CertificationDeclarationUsesOnlyOrdinaryRESTLiveCandidates|FullSurfaceCommandAndOperationCoverage|MetadataEnablesWriteCapability)$' -count=1`
+  passed. `certification-candidates` and `certification-sweep` generated and then passed their
+  Gong `--check` modes (71 rows / 69 CLI commands).
+- The rebuilt CLI authenticated through the persisted App credential path. A bounded `users list`
+  ETL read returned one record, and the bounded ordinary `users extensive` direct read returned a
+  successful provider response with page context. No provider fields or identifiers were retained
+  in this ledger.
+- `pm connectors certify gong --direct-read-only --external-proof` produced a passing scoped
+  report: preflight, credential test, and `gong_ordinary_rest_users_extensive` passed; the report
+  had six pass stages, one documented skip, and zero leaks. The local external-proof artifact is
+  not committed; its non-secret SHA-256 is
+  `3c1a3e16480a139029dc2220f760b4726a0c8c71fb2fc35f97fd06e7a85d76e9`.
+- A fresh built-binary preflight sweep of all 30 direct reads produced 30 credential gates, zero
+  unknown commands, zero unexpected successes, and no provider request. With the persisted
+  credential, a missing typed `--call-id` was rejected before provider I/O, and cursor-based
+  `users extensive --page 2` was rejected before provider I/O.
+- The same rebuilt binary swept the complete current declaration surface: 69 commands (30 direct
+  reads, 12 ETL streams, and 27 reverse-ETL writes) all reached the credential gate; unknown,
+  partial, unbound, and unexpected-success counts were zero. This was credential-free and made no
+  provider request.
 
 ## Green evidence to record during execution
 
@@ -48,3 +82,7 @@
 - six-surface inventory, CLI/help/manual/website reachability, output-preservation, and App-path
   classifications for every supported provider operation; any `not_applicable` status cites the
   exact source-audit row(s), never a safety or tier label.
+- Complete full-parity live certification only after Gong has declaration-owned, self-cleaning
+  write pairings and the canonical source descriptor can project every provider-required direct
+  input. The current full harness evidence remains bounded and explicitly partial; it is not a
+  full-parity claim.

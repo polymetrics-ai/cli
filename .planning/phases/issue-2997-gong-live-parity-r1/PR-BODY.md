@@ -3,15 +3,15 @@
 Refs #2997
 
 This PR is intentionally a draft and is **not merge-ready**. It preserves the Gong certification
-branch and its source-mapping evidence while the remaining source-import URL-policy and disposable
-credential-reference dependencies are resolved.
+branch and its source-mapping evidence while the remaining source-import URL-policy and full live
+parity dependencies are resolved.
 
 ### Delivered evidence
 
 - Re-audited Gong's public OpenAPI V2 source: a current 453,797-byte pinned artifact has 69 exact
   method/path/operation-ID/deprecation rows and matches the committed semantic fingerprint.
-- Merged the exact shared foundation parent
-  `c3f83cbf6eabbae00219566fb02719ca2d6c480d` without discarding the preserved branch.
+- Merged `origin/main` tree `6410fe59c` (the final squashed shared-foundation rollup) without
+  discarding the preserved branch.
 - Promoted all 27 named write actions to implemented declaration-owned reverse-ETL commands;
   corrected array/object flag types and the required CRM schema flag. The three multipart uploads
   pass focused generic conformance with approval-digest binding.
@@ -22,6 +22,13 @@ credential-reference dependencies are resolved.
 - In a fresh initialized project with no credentials, the built binary ran every implemented Gong
   path—30 direct reads, 27 reverse-ETL writes, and 12 ETL streams—to `missing --credential`, with
   zero unknown, partial, or unbound results and no provider I/O.
+- Reconciled three multipart parameter declarations using `connectorgen params-import`; its
+  immediate check reports 17 scanned with zero remaining drift. Gong certification candidates and
+  the generated 71-row sweep are current.
+- Live, non-echoing persisted-App evidence now covers authentication, one bounded ETL read, one
+  bounded typed direct read, required-input validation, and cursor-pagination validation. The
+  repository `--direct-read-only --external-proof` harness report passed with zero leaks; only a
+  non-secret proof fingerprint is retained in the phase ledger.
 
 ### Current open blockers
 
@@ -30,8 +37,16 @@ credential-reference dependencies are resolved.
   provider-neutral URL-policy gap, not a connector-specific bypass. It blocks the scoped
   source-import/validation/surface-sync proof only; the current 69-row source audit and all
   independent runtime proofs are recorded in `SOURCE-AUDIT.md`.
-- No approved non-echoing disposable Gong credential reference exists. Live certification has not
-  run, and no secret, customer payload, or browser-session substitute has been used.
+- `GET /v2/targets` requires `workspaceId`, but the current direct CLI declaration has not yet
+  received that required marker because `surface-sync` is blocked by the missing canonical source
+  descriptor above. The live no-input call is recorded only as HTTP-400 classification; no manual
+  flag or provider-specific runtime path was added.
+- Full live parity remains incomplete: the full harness observed 16 bounded ETL records and seven
+  passing ETL append cells, while `calls`, `library_folders`, `flows`, `flow_folders`, and
+  `permission_profiles` remain uncertified. There are no declaration-owned, self-cleaning Gong
+  write/readback/cleanup pairings, so no mutation was sent. `get-brief` and `ask-entity` were not
+  called because they are paid agentic endpoints and require a captain decision for any future
+  certification cell.
 
 ### Verification run
 

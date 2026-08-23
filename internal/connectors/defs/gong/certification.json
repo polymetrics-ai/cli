@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "users",
+    "source_credential_defaults": {
+      "base_url": "https://api.gong.io/v2"
+    },
+    "live_unavailable": [
+      {
+        "kind": "Error",
+        "contains": [
+          "http 403",
+          "http 404",
+          "status 403",
+          "status 404"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [
+    {
+      "stage_name": "gong_ordinary_rest_users_extensive",
+      "command": "users extensive",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "users"
+        },
+        {
+          "literal": "extensive"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        },
+        {
+          "literal": "--max-bytes"
+        },
+        {
+          "literal": "1048576"
+        }
+      ],
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "cohort": "ordinary_rest"
+    }
+  ],
+  "mutation_generation": {
+    "cohort": {
+      "name": "gong_all_typed_writes",
+      "command_count": 27,
+      "intents": [
+        "reverse_etl"
+      ]
+    },
+    "unassessed": {
+      "code": "unassessed",
+      "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+    },
+    "families": []
+  },
+  "write_inventory": {}
+}

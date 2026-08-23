@@ -289,6 +289,42 @@ func TestGongMetadataEnablesWriteCapability(t *testing.T) {
 	}
 }
 
+func TestGongCertificationDeclarationUsesOnlyOrdinaryRESTLiveCandidates(t *testing.T) {
+	certification := loadGongJSON[struct {
+		Source struct {
+			DefaultStream string `json:"default_stream"`
+		} `json:"source"`
+		DirectReadCandidates []struct {
+			StageName string `json:"stage_name"`
+			Command   string `json:"command"`
+			Cohort    string `json:"cohort"`
+		} `json:"direct_read_candidates"`
+		MutationGeneration struct {
+			Cohort struct {
+				Name         string `json:"name"`
+				CommandCount int    `json:"command_count"`
+			} `json:"cohort"`
+		} `json:"mutation_generation"`
+	}](t, "../../internal/connectors/defs/gong/certification.json")
+
+	if certification.Source.DefaultStream != "users" {
+		t.Fatalf("certification default stream = %q, want users", certification.Source.DefaultStream)
+	}
+	if got, want := len(certification.DirectReadCandidates), 1; got != want {
+		t.Fatalf("ordinary REST direct-read candidate count = %d, want %d", got, want)
+	}
+	candidate := certification.DirectReadCandidates[0]
+	if candidate.StageName != "gong_ordinary_rest_users_extensive" || candidate.Command != "users extensive" || candidate.Cohort != "ordinary_rest" {
+		t.Fatalf("ordinary REST direct-read candidate = %+v, want bounded users-extensive candidate", candidate)
+	}
+	if got, want := certification.MutationGeneration.Cohort.Name, "gong_all_typed_writes"; got != want {
+		t.Fatalf("mutation cohort = %q, want %q", got, want)
+	}
+	if got, want := certification.MutationGeneration.Cohort.CommandCount, 27; got != want {
+		t.Fatalf("mutation cohort command_count = %d, want %d", got, want)
+	}
+}
+
 func loadGongJSON[T any](t *testing.T, path string) T {
 	t.Helper()
 	raw, err := os.ReadFile(path)

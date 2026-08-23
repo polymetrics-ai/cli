@@ -1,0 +1,1291 @@
+{
+  "schema_version": 1,
+  "mutation_candidates": [
+    {
+      "command": "calls create",
+      "command_tokens": [
+        "calls",
+        "create"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "add_call",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/calls"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.actualStart",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.clientUniqueId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.direction",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.parties",
+          "type": "json",
+          "required": true
+        },
+        {
+          "path": "record.primaryUser",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "calls upload-media",
+      "command_tokens": [
+        "calls",
+        "upload-media"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "upload_call_media",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/calls/{{ record.id }}/media"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.media_file_path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "calls users-access add",
+      "command_tokens": [
+        "calls",
+        "users-access",
+        "add"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "add_calls_users_access",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/calls/users-access"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "calls users-access delete",
+      "command_tokens": [
+        "calls",
+        "users-access",
+        "delete"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_calls_users_access",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/calls/users-access"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "crm integrations delete",
+      "command_tokens": [
+        "crm",
+        "integrations",
+        "delete"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_crm_integration",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/crm/integrations?integrationId={{ record.integrationId }}\u0026clientRequestId={{ record.clientRequestId }}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.clientRequestId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.integrationId",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "crm integrations register",
+      "command_tokens": [
+        "crm",
+        "integrations",
+        "register"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "register_crm_integration",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/crm/integrations"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.ownerEmail",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "crm upload-entities",
+      "command_tokens": [
+        "crm",
+        "upload-entities"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "upload_crm_entities",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/crm/entities"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.data_file_path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "crm upload-entity-schema",
+      "command_tokens": [
+        "crm",
+        "upload-entity-schema"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "upload_crm_entity_schema",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/crm/entity-schema"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.selected_fields",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "digital-interaction create",
+      "command_tokens": [
+        "digital-interaction",
+        "create"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "add_digital_interaction",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/digital-interaction"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.content",
+          "type": "json",
+          "required": true
+        },
+        {
+          "path": "record.eventId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.eventType",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.timestamp",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "engagement content-shared",
+      "command_tokens": [
+        "engagement",
+        "content-shared"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "content_shared",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/customer-engagement/content/shared"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.contentId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.contentTitle",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.contentUrl",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.eventTimestamp",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.reportingSystem",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "engagement content-viewed",
+      "command_tokens": [
+        "engagement",
+        "content-viewed"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "content_viewed",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/customer-engagement/content/viewed"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.contentId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.contentTitle",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.contentUrl",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.eventTimestamp",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.reportingSystem",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "engagement custom-action",
+      "command_tokens": [
+        "engagement",
+        "custom-action"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "custom_action",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/customer-engagement/action"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.eventTimestamp",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.reportingSystem",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "flows prospects assign",
+      "command_tokens": [
+        "flows",
+        "prospects",
+        "assign"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "assign_prospects",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/flows/prospects/assign"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.crmProspectsIds",
+          "type": "string_array",
+          "required": true
+        },
+        {
+          "path": "record.flowId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.flowInstanceOwnerEmail",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "flows prospects assign-cool-off-override",
+      "command_tokens": [
+        "flows",
+        "prospects",
+        "assign-cool-off-override"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "assign_prospects_cool_off_override",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/flows/prospects/assign/cool-off-override"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.crmProspectsIds",
+          "type": "string_array",
+          "required": true
+        },
+        {
+          "path": "record.flowId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.flowInstanceOwnerEmail",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "flows prospects bulk-assign",
+      "command_tokens": [
+        "flows",
+        "prospects",
+        "bulk-assign"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "submit_flow_prospects_bulk_assignment",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/flows/prospects/bulk-assignments"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.flowId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.flowInstanceOwnerEmail",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.prospects",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "flows prospects unassign-by-crm",
+      "command_tokens": [
+        "flows",
+        "prospects",
+        "unassign-by-crm"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "unassign_flows_by_crm_id",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/flows/prospects/unassign-flows-by-crm-id"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.crmProspectId",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "flows prospects unassign-by-instance",
+      "command_tokens": [
+        "flows",
+        "prospects",
+        "unassign-by-instance"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "unassign_flows_by_instance_id",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/flows/prospects/unassign-flows-by-instance-id"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.flowInstanceIds",
+          "type": "string_array",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "integration-settings update",
+      "command_tokens": [
+        "integration-settings",
+        "update"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "integration_settings",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/integration-settings"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.integrationTypeSettings",
+          "type": "json",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "meetings create",
+      "command_tokens": [
+        "meetings",
+        "create"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "create_meeting",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/meetings"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.endTime",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.invitees",
+          "type": "json",
+          "required": true
+        },
+        {
+          "path": "record.organizerEmail",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.startTime",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "meetings delete",
+      "command_tokens": [
+        "meetings",
+        "delete"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "delete_meeting",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "DELETE",
+        "path": "/meetings/{{ record.meetingId }}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.meetingId",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "meetings update",
+      "command_tokens": [
+        "meetings",
+        "update"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "update_meeting",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/meetings/{{ record.meetingId }}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.endTime",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.invitees",
+          "type": "json",
+          "required": true
+        },
+        {
+          "path": "record.meetingId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.organizerEmail",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.startTime",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "permissions profile create",
+      "command_tokens": [
+        "permissions",
+        "profile",
+        "create"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "create_permission_profile",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/permission-profile?workspaceId={{ record.workspaceId }}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.workspaceId",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "permissions profile update",
+      "command_tokens": [
+        "permissions",
+        "profile",
+        "update"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "update_permission_profile",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "PUT",
+        "path": "/permission-profile?profileId={{ record.profileId }}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.profileId",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "privacy erase-email",
+      "command_tokens": [
+        "privacy",
+        "erase-email"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "purge_email_address",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/data-privacy/erase-data-for-email-address?emailAddress={{ record.emailAddress }}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.emailAddress",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "privacy erase-phone",
+      "command_tokens": [
+        "privacy",
+        "erase-phone"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "purge_phone_number",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/data-privacy/erase-data-for-phone-number?phoneNumber={{ record.phoneNumber }}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.phoneNumber",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "targets upload-assignments",
+      "command_tokens": [
+        "targets",
+        "upload-assignments"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "upload_target_assignments",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "POST",
+        "path": "/targets/{{ record.targetId }}/assignments"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.assignments_file_path",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.targetId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.validateOnly",
+          "type": "string",
+          "required": false
+        },
+        {
+          "path": "record.workspaceId",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    },
+    {
+      "command": "tasks update",
+      "command_tokens": [
+        "tasks",
+        "update"
+      ],
+      "intent": "reverse_etl",
+      "cohort": "gong_all_typed_writes",
+      "credential_flag": "--credential",
+      "json_mode": true,
+      "declaration": {
+        "kind": "write_action",
+        "id": "update_task",
+        "executor": "reverse_plan"
+      },
+      "address": {
+        "source": "write_action",
+        "transport": "rest",
+        "method": "PATCH",
+        "path": "/tasks/{taskId}"
+      },
+      "fixture": {
+        "strategy": "named_exception",
+        "exception_code": "missing_api_surface",
+        "evidence": "the command has no cli_surface API address, so no declared collection cycle can be derived"
+      },
+      "input_slots": [
+        {
+          "path": "record.taskId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "path": "record.userId",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "required_flags": [],
+      "classification": {
+        "code": "unassessed",
+        "family": "unassessed",
+        "evidence": "Every documented Gong write remains an implemented declaration-owned command; live write containment, readback, and cleanup require a connector-owned disposable-resource pairing before execution."
+      },
+      "generated": true
+    }
+  ]
+}

@@ -25,11 +25,33 @@
 5. **Open, external — source importer URL policy.** The generic importer rejects the official
    fixed query-bearing Gong artifact URL. No connector-specific exception was added. See
    `SOURCE-AUDIT.md` for the exact failure and safe required foundation change.
-6. **Open, external — live certification credential reference.** No approved disposable Gong
-   credential reference is available; no secret or browser workaround was used.
+6. **Open — source-projected required input.** The current source says `GET /v2/targets` requires
+   `workspaceId`, while the generated direct command has not yet received that marker. The missing
+   canonical descriptor prevents `surface-sync` from deriving it. The live HTTP-400 classification
+   is recorded without payload data; no hand-authored flag or Gong-named runtime branch is allowed.
+7. **Open — full live parity.** Scoped persisted-App authentication, bounded ETL, typed direct read,
+   input validation, pagination validation, and external proof pass. Five ETL append cells are
+   still uncertified; there are no self-cleaning Gong write pairings; and the two paid agentic
+   source rows were deliberately not called. No customer payload, identifier, credential, or
+   browser-session evidence was used.
+8. **Fixed — unsafe direct-read certification candidate.** The first declaration selected
+   `targets list`, which needs a provider-required workspace ID and cannot be safely inferred by
+   the harness. The red test now requires the sole live candidate to be the bounded, ordinary
+   typed `users extensive` command. It passed against the actual disposable account; no agentic
+   endpoint is in the candidate set.
+9. **Fixed — multipart request parameters missing from operation declarations.** The official
+   parameter importer added the exact path/query declarations for call media, CRM entity schema,
+   and target assignments. Its post-generation check is clean. The review verified that these are
+   connector-owned JSON declarations and use no Gong-named runtime branch.
+10. **Verified — evidence boundaries.** The committed evidence contains counts, classifications,
+    source hashes, and one external-proof hash only. The local proof, credential store, responses,
+    and account data stay outside the repository. `git diff --check`, focused conformance,
+    commandrunner preflight, generated-candidate/sweep/subject checks, lint, boundary, and release
+    workflow gates pass; the repository-wide test and `make verify` remain blocked by unrelated
+    generated-skill drift.
 
 ## Review result
 
-No remaining connector-local correctness or safety finding was identified in the reviewed scope.
-The branch remains draft/non-merge-ready until the generic source-import URL policy and live
-certification gates are resolved.
+No remaining connector-local correctness or safety finding was identified beyond the source
+projection gap above. The branch remains draft/non-merge-ready until the generic source-import URL
+policy and full live certification gates are resolved.

@@ -1,0 +1,2256 @@
+{
+  "schema_version": 1,
+  "connector": "gong",
+  "source": "connector declarations",
+  "declared_commands": 69,
+  "declared_rows": 71,
+  "status_total": 71,
+  "commands": [
+    {
+      "summary": "List Gong call outcomes as ETL records.",
+      "path": "call-outcomes list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "call_outcomes",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/call-outcomes"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "path": "calls create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "actualStart",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.actualStart"
+        },
+        {
+          "name": "clientUniqueId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.clientUniqueId"
+        },
+        {
+          "name": "direction",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.direction"
+        },
+        {
+          "name": "parties",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.parties"
+        },
+        {
+          "name": "primaryUser",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.primaryUser"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Retrieve detailed call data by various filters (/v2/calls/extensive)",
+      "path": "calls extensive",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "call-id",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.filter.callIds"
+        },
+        {
+          "name": "context",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "None",
+            "Basic",
+            "Extended"
+          ],
+          "maps_to": "body.contentSelector.context"
+        },
+        {
+          "name": "context-timing",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.contentSelector.contextTiming"
+        },
+        {
+          "name": "from",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.fromDateTime"
+        },
+        {
+          "name": "include-brief",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.content.brief"
+        },
+        {
+          "name": "include-call-outcome",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.content.callOutcome"
+        },
+        {
+          "name": "include-highlights",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.content.highlights"
+        },
+        {
+          "name": "include-key-points",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.content.keyPoints"
+        },
+        {
+          "name": "include-media",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.media"
+        },
+        {
+          "name": "include-outline",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.content.outline"
+        },
+        {
+          "name": "include-parties",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.parties"
+        },
+        {
+          "name": "include-person-stats",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.interaction.personInteractionStats"
+        },
+        {
+          "name": "include-public-comments",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.collaboration.publicComments"
+        },
+        {
+          "name": "include-questions",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.interaction.questions"
+        },
+        {
+          "name": "include-speakers",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.interaction.speakers"
+        },
+        {
+          "name": "include-structure",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.content.structure"
+        },
+        {
+          "name": "include-topics",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.content.topics"
+        },
+        {
+          "name": "include-tracker-occurrences",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.content.trackerOccurrences"
+        },
+        {
+          "name": "include-trackers",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.content.trackers"
+        },
+        {
+          "name": "include-video-stats",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.contentSelector.exposedFields.interaction.video"
+        },
+        {
+          "name": "primary-user-id",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.filter.primaryUserIds"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.toDateTime"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.workspaceId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/calls/extensive"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --call-id",
+      "required_flags": [
+        "--call-id"
+      ]
+    },
+    {
+      "summary": "Retrieve data for a specific call (/v2/calls/{id})",
+      "path": "calls get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/calls/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "List Gong calls as ETL records.",
+      "path": "calls list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "calls",
+      "flags": [
+        {
+          "name": "from",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.fromDateTime"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.toDateTime"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/calls"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Retrieve transcripts of calls (/v2/calls/transcript)",
+      "path": "calls transcript",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "call-id",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.filter.callIds"
+        },
+        {
+          "name": "from",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.fromDateTime"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.toDateTime"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.workspaceId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/calls/transcript"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --call-id",
+      "required_flags": [
+        "--call-id"
+      ]
+    },
+    {
+      "summary": "Add call media (/v2/calls/{id}/media)",
+      "path": "calls upload-media",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "media-file-path",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.media_file_path"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "path": "calls users-access add",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "path": "calls users-access delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Retrieve users that have specific individual access to calls (/v2/calls/users-access)",
+      "path": "calls users-access get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "call-id",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.filter.callIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/calls/users-access"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --call-id",
+      "required_flags": [
+        "--call-id"
+      ]
+    },
+    {
+      "summary": "List all coaching metrics (/v2/coaching)",
+      "path": "coaching list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "from",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.from"
+        },
+        {
+          "name": "manager-id",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.manager-id"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.to"
+        },
+        {
+          "name": "workspace-id",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.workspace-id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/coaching"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Get CRM objects (/v2/crm/entities)",
+      "path": "crm entities get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "integrationId",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.integrationId"
+        },
+        {
+          "name": "objectType",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.objectType"
+        },
+        {
+          "name": "objectsCrmIds",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.objectsCrmIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crm/entities"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "List Schema Fields (/v2/crm/entity-schema)",
+      "path": "crm entity-schema get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "integrationId",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.integrationId"
+        },
+        {
+          "name": "objectType",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.objectType"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crm/entity-schema"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "path": "crm integrations delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "clientRequestId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.clientRequestId"
+        },
+        {
+          "name": "integrationId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.integrationId"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "List Generic CRM integrations as ETL records.",
+      "path": "crm integrations list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "crm_integrations",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crm/integrations"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "path": "crm integrations register",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "ownerEmail",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.ownerEmail"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get Request Status (/v2/crm/request-status)",
+      "path": "crm request-status get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "clientRequestId",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.clientRequestId"
+        },
+        {
+          "name": "integrationId",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.integrationId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crm/request-status"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Upload CRM objects (/v2/crm/entities)",
+      "path": "crm upload-entities",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "data-file-path",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.data_file_path"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Upload Object Schema (/v2/crm/entity-schema)",
+      "path": "crm upload-entity-schema",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "selected-fields",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.selected_fields"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "path": "digital-interaction create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "content",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.content"
+        },
+        {
+          "name": "eventId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.eventId"
+        },
+        {
+          "name": "eventType",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.eventType"
+        },
+        {
+          "name": "timestamp",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.timestamp"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "path": "engagement content-shared",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "contentId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.contentId"
+        },
+        {
+          "name": "contentTitle",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.contentTitle"
+        },
+        {
+          "name": "contentUrl",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.contentUrl"
+        },
+        {
+          "name": "eventTimestamp",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.eventTimestamp"
+        },
+        {
+          "name": "reportingSystem",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.reportingSystem"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "path": "engagement content-viewed",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "contentId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.contentId"
+        },
+        {
+          "name": "contentTitle",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.contentTitle"
+        },
+        {
+          "name": "contentUrl",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.contentUrl"
+        },
+        {
+          "name": "eventTimestamp",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.eventTimestamp"
+        },
+        {
+          "name": "reportingSystem",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.reportingSystem"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "path": "engagement custom-action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "eventTimestamp",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.eventTimestamp"
+        },
+        {
+          "name": "reportingSystem",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.reportingSystem"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Ask about an entity (/v2/entities/ask-entity)",
+      "path": "entities ask",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "crmEntityId",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.crmEntityId"
+        },
+        {
+          "name": "crmEntityType",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.crmEntityType"
+        },
+        {
+          "name": "fromDateTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.fromDateTime"
+        },
+        {
+          "name": "question",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.question"
+        },
+        {
+          "name": "timePeriod",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.timePeriod"
+        },
+        {
+          "name": "toDateTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.toDateTime"
+        },
+        {
+          "name": "workspaceId",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.workspaceId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/entities/ask-entity"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Generate a brief for a CRM entity (/v2/entities/get-brief)",
+      "path": "entities get-brief",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "briefName",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.briefName"
+        },
+        {
+          "name": "crmEntityId",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.crmEntityId"
+        },
+        {
+          "name": "crmEntityType",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.crmEntityType"
+        },
+        {
+          "name": "fromDateTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.fromDateTime"
+        },
+        {
+          "name": "timePeriod",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.timePeriod"
+        },
+        {
+          "name": "toDateTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.toDateTime"
+        },
+        {
+          "name": "workspaceId",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.workspaceId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/entities/get-brief"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Get the results of a bulk assignment of prospects to a flow (/v2/flows/prospects/bulk-assignments/{id})",
+      "path": "flows bulk-assignment get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/flows/prospects/bulk-assignments/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "List Gong Engage flow folders as ETL records.",
+      "path": "flows folders list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "flow_folders",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/flows/folders"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "List Gong Engage flows as ETL records.",
+      "path": "flows list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "flows",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/flows"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "List prospects assigned flows (/v2/flows/prospects)",
+      "path": "flows prospects",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "crm-prospect-id",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.crmProspectsIds"
+        },
+        {
+          "name": "flow-instance-id",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.flowInstanceIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "path": "flows prospects assign",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "crmProspectsIds",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.crmProspectsIds"
+        },
+        {
+          "name": "flowId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.flowId"
+        },
+        {
+          "name": "flowInstanceOwnerEmail",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.flowInstanceOwnerEmail"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "path": "flows prospects assign-cool-off-override",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "crmProspectsIds",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.crmProspectsIds"
+        },
+        {
+          "name": "flowId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.flowId"
+        },
+        {
+          "name": "flowInstanceOwnerEmail",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.flowInstanceOwnerEmail"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "path": "flows prospects bulk-assign",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "flowId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.flowId"
+        },
+        {
+          "name": "flowInstanceOwnerEmail",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.flowInstanceOwnerEmail"
+        },
+        {
+          "name": "prospects",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.prospects"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "path": "flows prospects unassign-by-crm",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "crmProspectId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.crmProspectId"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "path": "flows prospects unassign-by-instance",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "flowInstanceIds",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.flowInstanceIds"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get flow details and steps for one or more Engage flows (/v2/flows/steps)",
+      "path": "flows steps",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "flow-id",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.flowIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/steps"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --flow-id",
+      "required_flags": [
+        "--flow-id"
+      ]
+    },
+    {
+      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "path": "integration-settings update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "integrationTypeSettings",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.integrationTypeSettings"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "List of calls in a specific folder (/v2/library/folder-content)",
+      "path": "library folder-content list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "folderId",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.folderId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/library/folder-content"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "List Gong library folders as ETL records.",
+      "path": "library folders list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "library_folders",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/library/folders"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Retrieve logs data by type and time range (/v2/logs)",
+      "path": "logs list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "fromDateTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.fromDateTime"
+        },
+        {
+          "name": "logType",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.logType"
+        },
+        {
+          "name": "toDateTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.toDateTime"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/logs"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "path": "meetings create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "endTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.endTime"
+        },
+        {
+          "name": "invitees",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.invitees"
+        },
+        {
+          "name": "organizerEmail",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.organizerEmail"
+        },
+        {
+          "name": "startTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.startTime"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "path": "meetings delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "meetingId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.meetingId"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Validate Gong meeting Integration (/v2/meetings/integration/status)",
+      "path": "meetings integration-status",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.emails"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/meetings/integration/status"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --email",
+      "required_flags": [
+        "--email"
+      ]
+    },
+    {
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "path": "meetings update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "endTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.endTime"
+        },
+        {
+          "name": "invitees",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.invitees"
+        },
+        {
+          "name": "meetingId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.meetingId"
+        },
+        {
+          "name": "organizerEmail",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.organizerEmail"
+        },
+        {
+          "name": "startTime",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.startTime"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "path": "permissions profile create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "workspaceId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.workspaceId"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Permission profile for a given profile Id (/v2/permission-profile)",
+      "path": "permissions profile get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "profileId",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.profileId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/permission-profile"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "path": "permissions profile update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "profileId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.profileId"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "List all users attached to a given permission profile (/v2/permission-profile/users)",
+      "path": "permissions profile-users list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "profileId",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.profileId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/permission-profile/users"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "List Gong permission profiles as ETL records.",
+      "path": "permissions profiles list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "permission_profiles",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/all-permission-profiles"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "path": "privacy erase-email",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "emailAddress",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.emailAddress"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "path": "privacy erase-phone",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "phoneNumber",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.phoneNumber"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Retrieve all references to an email address. (/v2/data-privacy/data-for-email-address)",
+      "path": "privacy find-email",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "emailAddress",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.emailAddress"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/data-privacy/data-for-email-address"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Retrieve all references to a phone number. (/v2/data-privacy/data-for-phone-number)",
+      "path": "privacy find-phone",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "phoneNumber",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.phoneNumber"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/data-privacy/data-for-phone-number"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "List Gong scorecards as ETL records.",
+      "path": "scorecards list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "scorecards",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/settings/scorecards"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "List Gong AI brief settings as ETL records.",
+      "path": "settings briefs list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "briefs",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/settings/briefs"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "List Gong tracker settings as ETL records.",
+      "path": "settings trackers list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "trackers",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/settings/trackers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Retrieve aggregated activity for defined users by date (/v2/stats/activity/aggregate)",
+      "path": "stats activity-aggregate",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "created-from",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdFromDateTime"
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdToDateTime"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.filter.fromDate"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.filter.toDate"
+        },
+        {
+          "name": "user-id",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.filter.userIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/activity/aggregate"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --from-date, --to-date",
+      "required_flags": [
+        "--from-date",
+        "--to-date"
+      ]
+    },
+    {
+      "summary": "Retrieve aggregated activity for defined users by a date range with grouping in time periods (/v2/stats/activity/aggregate-by-period)",
+      "path": "stats activity-aggregate-by-period",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "aggregation-period",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "DAY",
+            "WEEK",
+            "MONTH",
+            "QUARTER",
+            "YEAR"
+          ],
+          "maps_to": "body.aggregationPeriod"
+        },
+        {
+          "name": "created-from",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdFromDateTime"
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdToDateTime"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.filter.fromDate"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.filter.toDate"
+        },
+        {
+          "name": "user-id",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.filter.userIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/activity/aggregate-by-period"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --aggregation-period, --from-date, --to-date",
+      "required_flags": [
+        "--aggregation-period",
+        "--from-date",
+        "--to-date"
+      ]
+    },
+    {
+      "summary": "Retrieve daily activity for applicable users for a date range (/v2/stats/activity/day-by-day)",
+      "path": "stats activity-day-by-day",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "created-from",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdFromDateTime"
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdToDateTime"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.filter.fromDate"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.filter.toDate"
+        },
+        {
+          "name": "user-id",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.filter.userIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/activity/day-by-day"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --from-date, --to-date",
+      "required_flags": [
+        "--from-date",
+        "--to-date"
+      ]
+    },
+    {
+      "summary": "Retrieve answered scorecards for applicable reviewed users or scorecards for a date range (/v2/stats/activity/scorecards)",
+      "path": "stats activity-scorecards",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "call-from-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.callFromDate"
+        },
+        {
+          "name": "call-to-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.callToDate"
+        },
+        {
+          "name": "review-from-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.reviewFromDate"
+        },
+        {
+          "name": "review-method",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "AUTOMATIC",
+            "MANUAL",
+            "BOTH"
+          ],
+          "maps_to": "body.filter.reviewMethod"
+        },
+        {
+          "name": "review-to-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.reviewToDate"
+        },
+        {
+          "name": "reviewed-user-id",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.filter.reviewedUserIds"
+        },
+        {
+          "name": "scorecard-id",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.filter.scorecardIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/activity/scorecards"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --scorecard-id",
+      "required_flags": [
+        "--scorecard-id"
+      ]
+    },
+    {
+      "summary": "Retrieve interaction stats for applicable users by date (/v2/stats/interaction)",
+      "path": "stats interaction",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "created-from",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdFromDateTime"
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdToDateTime"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.filter.fromDate"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.filter.toDate"
+        },
+        {
+          "name": "user-id",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.filter.userIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/interaction"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --from-date, --to-date",
+      "required_flags": [
+        "--from-date",
+        "--to-date"
+      ]
+    },
+    {
+      "summary": "List target definitions (/v2/targets)",
+      "path": "targets list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "workspaceId",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.workspaceId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/targets"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Upload target assignments (/v2/targets/{targetId}/assignments)",
+      "path": "targets upload-assignments",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "assignments-file-path",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.assignments_file_path"
+        },
+        {
+          "name": "targetId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.targetId"
+        },
+        {
+          "name": "validate-only",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.validateOnly"
+        },
+        {
+          "name": "workspaceId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.workspaceId"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "List user's tasks (/v2/tasks)",
+      "path": "tasks list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "status",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.filter.status"
+        },
+        {
+          "name": "task-action",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.filter.taskAction"
+        },
+        {
+          "name": "task-type",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.filter.types"
+        },
+        {
+          "name": "user-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.filter.userId"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.workspaceId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/tasks"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --status, --task-action, --task-type, --user-id",
+      "required_flags": [
+        "--status",
+        "--task-action",
+        "--task-type",
+        "--user-id"
+      ]
+    },
+    {
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "path": "tasks update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "taskId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.taskId"
+        },
+        {
+          "name": "userId",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.userId"
+        }
+      ],
+      "api_surface": null,
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "List users by filter (/v2/users/extensive)",
+      "path": "users extensive",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "created-from",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdFromDateTime"
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.filter.createdToDateTime"
+        },
+        {
+          "name": "include-avatars",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.filter.includeAvatars"
+        },
+        {
+          "name": "user-id",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "body.filter.userIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/users/extensive"
+        }
+      ],
+      "status": "eligible_pending_live",
+      "reason": "declaration-owned produced-value assertions exist; live execution is pending",
+      "output_assertions": [
+        {
+          "json_pointer": "/response",
+          "equals": null,
+          "value_type": "object_or_array"
+        }
+      ],
+      "assertion_source": "certification.json direct_read_candidates",
+      "certification_cohort": "ordinary_rest"
+    },
+    {
+      "summary": "Retrieve user (/v2/users/{id})",
+      "path": "users get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "List Gong users as ETL records.",
+      "path": "users list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "users",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Retrieve user settings history (/v2/users/{id}/settings-history)",
+      "path": "users settings-history",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{id}/settings-history"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "List Gong workspaces as ETL records.",
+      "path": "workspaces list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "workspaces",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared write capability",
+      "path": "capability write",
+      "intent": "capability_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared write capability requires connector-owned fixture and live proof"
+    }
+  ],
+  "product_defects": [],
+  "provider_refusals": []
+}

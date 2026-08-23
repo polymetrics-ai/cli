@@ -5,18 +5,18 @@
 - Issue: Refs #2997 — Gong official API parity parent (historical parent; this incremental certification work remains linked for provenance).
 - Base branch: `main`.
 - Merges into: `main`.
-- Delivery: Draft PR #3552 is refreshed on `fm/cli-gong-parity-wave01-r1`, remains unmerged, and truthfully records local gates plus any external live-certification blocker.
+- Delivery: Draft PR #3552 is refreshed on `fm/cli-gong-parity-wave01-r1`, remains unmerged, and truthfully records local and live certification evidence, including any exact unsupported or paid-operation boundary.
 - Working branch: `fm/cli-gong-parity-wave01-r1`.
 - Task: Reconcile the preserved Gong parity branch with current main, the published typed-destination foundation, and Batch 2/3 source-lock maps; keep every current provider operation exactly once in the declaration surface and prove the executable surfaces through the built CLI without credentials.
-- Verification: provider inventory comparison; source/disposition integrity; targeted Gong definition, conformance, commandrunner, CLI, and application tests; built-binary credential-free preflight sweep; generator/surface checks; repository static gates; connector-boundary; and no-mistakes after the firstmate gate.
+- Verification: provider inventory comparison; source/disposition integrity; targeted Gong definition, conformance, commandrunner, CLI, and application tests; built-binary credential-free preflight sweep; the repository's `connectorgen certification-*` gates and `pm connectors certify` external-proof harness; generator/surface checks; repository static gates; connector-boundary; and no-mistakes after the firstmate gate.
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
 | Every current public OpenAPI operation is source-locked and classified exactly once | live | A credential-free public OpenAPI fetch produces 69 method/path/operation-ID rows which exactly match the committed source lock and disposition rows. |
 | All direct-read declarations are executable through the installed CLI dispatch path | live | A built `pm` run in a fresh project reaches the credential preflight for every fully supplied direct-read command; none returns `unknown command` or an API-surface binding block. |
 | Provider writes remain typed, declarative, and approval-bound | live | Definition validation and plan/preview/approval tests reject unbound or destructive actions before provider I/O; declarations name only fixed operations and schema-bound fields. |
-| Reverse-ETL transport uses the shared definition-selected foundation | fake | Actual Gong reverse-ETL requires an approved disposable credential reference. Connector-local destination declarations and credential-free admission tests prove the non-provider path; live apply/readback is blocked until that reference is supplied. |
-| Live provider certification covers real persisted App paths and cleanup | fake | No approved disposable Gong credential/store reference is available in this worktree. No secret will be requested, printed, persisted, or put in command arguments. |
+| Reverse-ETL transport uses the shared definition-selected foundation | live | The certification harness must drive the persisted App plan → preview → approval → execute path and record only bounded result classifications, readback references, and cleanup outcome. |
+| Live provider certification covers real persisted App paths and cleanup | live | The captain has supplied an approved non-echoing disposable credential reference. The built CLI and certification harness must prove authentication, bounded safe reads, applicable writes/readback/cleanup, ETL, pagination, required-input behavior, and supported binary paths without serializing provider payloads or credential values. |
 | Every provider-defined operation is source-traced, mapped, enabled, and reachable | live | The 69-row official source lock, disposition map, API surface, operation ledger, generated CLI surface, help/manual, and website projection agree. A safety tier, scope, or destructive classification can require typed confirmation but cannot make a declared operation unreachable. |
 | All six applicable execution surfaces reconcile | live | ETL, reverse ETL, direct read, direct write, binary download, and binary upload are each proven through their declaration-owned runtime path, or marked inapplicable only when the official source audit proves that Gong exposes no operation in that surface. |
 
@@ -26,8 +26,10 @@
 locked the relevant product and safety decisions: retain all 69 official operations; use exact,
 declaration-selected commands; keep ordinary response data complete; model destructive writes with
 typed confirmation and the reverse plan → preview → approval → execute flow; and do not introduce
-Gong-named runtime policy branches. The only external dependency is a non-echoing disposable Gong
-credential reference for live certification. It is not safe to invent or request one in this task.
+Gong-named runtime policy branches. The captain has supplied the approved non-echoing disposable
+credential reference for live certification. Agentic endpoints remain categorically excluded from
+live execution because they consume paid credits; a certification requirement that cannot avoid one
+is a captain decision, not a connector-local exception.
 
 ## GSD command path and manual fallback
 
@@ -51,10 +53,11 @@ credential reference for live certification. It is not safe to invent or request
 ## Source audit
 
 - Official artifact: `https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=`.
-- Current fetch: OpenAPI `3.0.1`, title `Gong API`, version `V2`; 59 paths and 69 operations:
-  DELETE 3, GET 29, PATCH 1, POST 28, PUT 8. The exact current artifact SHA-256, byte count,
-  semantic fingerprint, six-surface inventory, and provider-neutral source-import dependency are
-  recorded in `SOURCE-AUDIT.md`.
+- Current credential-free refetch (2026-08-23): OpenAPI `3.0.1`, title `Gong API`, version `V2`;
+  59 paths and 69 operations: DELETE 3, GET 29, PATCH 1, POST 28, PUT 8. The artifact SHA-256,
+  byte count, and sorted semantic inventory fingerprint exactly match the committed source lock;
+  the six-surface inventory and any provider-neutral source-import dependency are recorded in
+  `SOURCE-AUDIT.md`.
 - The Batch 2/3 lock at
   `internal/connectors/defs/gong/sources/gong-operation-source-lock.json` has the same complete
   69-row method/path/operation-ID/deprecation inventory. The source lock is refreshed to the
@@ -63,10 +66,11 @@ credential reference for live certification. It is not safe to invent or request
 
 ## Execution slices
 
-1. Reconcile foundations without discarding the preserved branch. The exact parent
-   `c3f83cbf6eabbae00219566fb02719ca2d6c480d` is merged without rewriting history and contains
-   the published structured-body, source-importer, typed-header/binary/status/text, and
-   reverse-action binding foundations. Resolve only Gong- and evidence-related conflicts.
+1. Reconcile foundations without discarding the preserved branch. Merge `origin/main` tree
+   `6410fe59c` without rewriting history; it contains the final squashed structured-body,
+   source-importer, typed-header/binary/status/text, reverse-action binding, and declaration-route
+   foundations. Resolve only Gong- and evidence-related conflicts, and retain `main` for shared
+   runtime and unrelated connector content.
 2. Reconcile Gong's `api_surface.json`, source lock/disposition map, `operations.json`,
    `cli_surface.json`, streams, write actions, schemas, fixtures, and generated connector docs
    against the 69-row source inventory. Add only declaration-owned mappings and fixtures.
@@ -74,16 +78,37 @@ credential reference for live certification. It is not safe to invent or request
    API-surface bindings—then make the connector definitions pass the real runtime preflight and
    prove credential-free built-binary routing.
 4. Reconcile Gong-owned source/destination transport and certification declarations where the
-   merged foundations admit them. The three multipart actions are now declaration-owned and
-   focused conformance covers their generic approval-digest path; do not add a provider-specific
-   shared-code or fixture bypass. Run plan/preview/approval/execute only through credential-free
-   refusal paths until a disposable credential reference is supplied.
+   merged foundations admit them. The three multipart actions are declaration-owned and focused
+   conformance covers their generic approval-digest path; do not add a provider-specific shared
+   code or fixture bypass. Run the repository certification path with the approved credential only
+   through non-echoing stdin/environment delivery, and never send an agentic operation.
 5. Run focused gates, repository static gates, generated artifacts, connector boundary, full
    verification where the command timeout permits, a source/diff review, and the no-mistakes
    pipeline when firstmate authorizes its final gate.
 6. Regenerate the Batch 2/3 machine-readable missing-foundation ledger after each foundation
    reconciliation. The closed Gong multipart capability has zero remaining Gong rows; unrelated
    open portfolio rows remain source-traced and are not a connector-local exemption.
+
+## Execution outcome — 2026-08-23
+
+- Slices 1–4 completed without a provider-specific shared-code change. The source parameter
+  importer added the exact missing parameters for the three multipart operations, and Gong-owned
+  certification metadata selects one ordinary, bounded typed direct read rather than either paid
+  agentic source row.
+- The built binary reached the credential gate for all 69 declared commands with zero unknown or
+  unbound outcomes. Persisted-App authentication, bounded users ETL, bounded users-extensive
+  direct read, required-input rejection, cursor-pagination rejection, and scoped external proof
+  passed. Full details and only non-secret fingerprints are in `SOURCE-AUDIT.md` and
+  `TDD-LEDGER.md`.
+- The full live harness remains a partial observation, not a certification claim: 7 of 12 ETL
+  append cells passed; five remain uncertified. No Gong mutation or agentic endpoint was called.
+  Full parity awaits source-projected direct requiredness, self-cleaning write pairings, the five
+  ETL cells, and a captain decision for the paid endpoints.
+- The verification commands are recorded in `VERIFICATION.md`. Focused Gong gates, static gates,
+  connector boundary, release workflow, generated candidates/sweep/subject, and the 69-command
+  dispatch sweep passed. `go test ./...` and `make verify` both stop at unrelated generated-skill
+  drift; source-import, validate, and surface-sync remain blocked by the fixed query-bearing Gong
+  source URL. The shared certification matrix rejects Gong because it is not allowlisted.
 
 ## Captain hard certification gate
 
@@ -110,6 +135,10 @@ historical parity count or declaration-only validation result.
    commands, each applicable surface, pagination, required-input errors, reverse-ETL
    plan/preview/approval/apply/readback, binary paths, and cleanup. Record bounded counts,
    classifications, and non-secret fingerprints—not customer payloads or credentials.
+
+6. **Paid endpoint exclusion:** do not execute any Gong agentic endpoint. It consumes paid credits;
+   if a mandatory certification cell cannot be proven by ordinary REST endpoints, record that exact
+   cell as uncertified and stop for captain direction.
 
 ## CLI/docs parity
 

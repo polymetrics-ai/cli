@@ -1,14 +1,14 @@
-# Gong source audit — 2026-08-21 UTC
+# Gong source audit — 2026-08-23 UTC
 
 ## Locked official source
 
 - Source: `https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=`.
-- Retrieved credential-free at `2026-08-21T22:55:13Z`.
+- Retrieved credential-free at `2026-08-23`.
 - OpenAPI `3.0.1`; info version `V2`; 59 paths; 69 operations.
 - Exact artifact: 453,797 bytes; SHA-256
   `294bf80b28e773d66a30bd0a8e76344140b17cf0225803e759d1e112b6b1fa13`.
 - Canonical sorted `(method, path, operation_id, deprecated)` inventory fingerprint:
-  `591484a79221a3993643898feef20050c57ca89a0acee028134c639e1fb99014`.
+  `46cc30f319526572258d56293795c9036ea11b0ebee16919c7bb498b020f61e5`.
   The committed source lock produces the identical fingerprint.
 - Method distribution: DELETE 3, GET 29, PATCH 1, POST 28, PUT 8.
 
@@ -34,10 +34,10 @@ with typed destructive confirmation.
   deep-clones ordinary provider JSON; the only output masking is for concrete configured
   credential values and retains an explicit marker. Connector docs and the focused surface test
   forbid wording or declarations that imply ordinary response-field redaction.
-- The merged parent `c3f83cbf6eabbae00219566fb02719ca2d6c480d` contains the published
-  structured-body, source-import, and closed multipart/runtime heads. Focused Gong multipart
-  conformance passed after that merge. The Batch 2/3 missing-foundation ledger was regenerated:
-  it contains zero Gong gap rows and retains 48 unrelated portfolio rows.
+- The reconciled `origin/main` tree `6410fe59c` contains the final squashed structured-body,
+  source-import, typed-header/binary/status/text, action-binding, and declaration-route heads.
+  The branch merge preserves that shared tree and retains only Gong-owned declarations and
+  evidence in the PR diff. Focused Gong multipart conformance must be re-run against this tree.
 - The strict source-importer lock schema is now used by the Gong source lock. Its scoped command
   is deliberately **not** marked green: `connectorgen source-import gong --check` rejects the
   official fixed query-bearing source URL with `artifact URL must not include a query`. Gong has
@@ -49,8 +49,43 @@ with typed destructive confirmation.
   Every command reached `missing --credential`; none returned `unknown command`, a partial-command
   block, or an API-surface preflight block. No request reached Gong.
 
-## Remaining live gate
+## Live certification boundary
 
-No approved non-echoing disposable Gong credential reference is available. Live App-path
-certification, provider readback, and cleanup remain unrun; no browser session or customer
-credential was used as a substitute.
+An approved disposable credential reference is available through a non-echoing local secret store.
+It is used only at point of execution through stdin/environment delivery to the persisted App and
+the repository certification harness; its values, account identifiers, and provider payloads are
+never written to evidence. Gong agentic endpoints are excluded because they consume paid credits.
+
+## Live bounded certification results
+
+- The persisted App credential path passed its declaration-owned authentication check without
+  emitting any credential value. The rebuilt binary SHA-256 was
+  `62b3018f956abcd0537f7944154bbabc497c7b4344b187885504a34f5cdcf075`.
+- A bounded `users list --limit 1` ETL invocation returned one record. The ordinary typed direct
+  read `users extensive --max-bytes 1048576` returned HTTP-200-classified success with a page
+  context. Its scoped external-proof run passed preflight, credential test, and direct read with
+  six pass stages, one documented skip, and zero leaked resources. The proof remains only in the
+  temporary certification project; its non-secret SHA-256 is recorded in `TDD-LEDGER.md`.
+- The built CLI rejected a missing required `--call-id` before provider I/O and rejected an
+  addressable `--page` for cursor navigation before provider I/O. These are the required-input and
+  pagination boundary checks; no provider payload was retained.
+- The repository `--full` harness made no writes and no agentic request. It observed 16 bounded
+  ETL records, seven passing ETL append cells, five failing append cells (`calls`,
+  `library_folders`, `flows`, `flow_folders`, and `permission_profiles`), 19 bounded rate-limit
+  events, and zero leaks. A valid bounded `calls list` attempt with both typed date bounds still
+  received HTTP-404 classification. These five stream cells therefore remain uncertified; the
+  report does not turn them into partial commands.
+- `GET /v2/targets` requires `workspaceId` in the current official document. The generated
+  `targets list` flag is not yet marked required, and a live call without it returned only
+  HTTP-400 classification. `params-import` reconciled the three multipart operation parameter
+  blocks (17 scanned, then zero drift), but the required direct-read flag must be projected by
+  `surface-sync`. That command is blocked because the canonical source descriptor cannot be
+  generated while the importer rejects Gong's fixed query-bearing source URL. No manual flag was
+  authored.
+- There are no declaration-owned, self-cleaning Gong write pairings for safe live create,
+  readback, and cleanup. All 27 provider writes stay implemented and certification-visible as
+  unassessed; none was sent. The three multipart writes retain generic conformance coverage, but
+  are not live-certified.
+- Two current source rows are agentic and paid: `GET /v2/entities/get-brief` (`generateBrief`)
+  and `GET /v2/entities/ask-entity` (`askEntity`). Neither was called. Their live cells are
+  uncertified pending a captain decision; no browser session or alternate authentication was used.

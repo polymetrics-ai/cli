@@ -7,17 +7,32 @@
 - [x] `scripts/gsd doctor` passed and command sources were resolved.
 - [x] Current official OpenAPI refetch returned 69 operations with the current GET/POST/PUT/PATCH/DELETE distribution and a current strict source lock.
 - [x] Exact method/path/operation-ID/deprecation comparison against the refreshed Gong source lock passed; the canonical inventory fingerprint is recorded in `SOURCE-AUDIT.md`.
-- [x] Current foundation parent `c3f83cbf6eabbae00219566fb02719ca2d6c480d` and Batch 2/3 reconciliation completed without rewriting preserved history.
+- [x] `origin/main` tree `6410fe59c` is merged without rewriting preserved history; shared/runtime and unrelated connector conflicts resolve to that final foundation tree, while the PR diff remains Gong-owned.
 - [ ] `go run ./cmd/connectorgen source-import gong --check` is blocked by the provider-neutral artifact URL policy: Gong's official fixed source requires `?version=`, while the importer rejects query-bearing artifact URLs and the query-free route is 404.
 - [ ] `go run ./cmd/connectorgen validate internal/connectors/defs/gong --json` remains blocked only by that same source-importer URL-policy dependency.
-- [ ] Scoped `surface-sync --check` remains pending after source-import support accepts the fixed official URL. The unscoped command also has unrelated Aircall source-projection drift and is not claimed as Gong evidence.
+- [ ] Scoped `surface-sync --check` remains pending after source-import support accepts the fixed official URL. Its current exact blocker is the missing canonical Gong source descriptor; the unscoped command also has unrelated Aircall source-projection drift and is not claimed as Gong evidence.
 - [x] Full direct-read reconciliation: all 30 implemented direct-read commands ran through the built binary in a fresh initialized project with no credential and each reached `missing --credential`; none was unknown or exact-endpoint blocked.
 - [x] Focused Gong full-surface, commandrunner, and multipart conformance tests pass with `-timeout 20m`; the three multipart actions use the merged generic approval-digest path.
 - [x] Batch 2/3 parity-map verification passes for 19 connectors / 5,127 documented operations; its regenerated foundation ledger contains zero Gong gap rows.
 - [x] Built `pm` credential-free command sweep classified all 69 implemented Gong paths (30 direct reads, 27 reverse-ETL writes, 12 ETL streams) as `missing --credential`; it made no provider request and saw zero unknown, partial, or unbound results.
 - [x] `pm help gong`, `pm gong`, and `pm gong calls get --help` render contextual help; manual, skill, and website generated artifacts were regenerated after the declaration changes.
-- [ ] `go vet ./...`, `go build ./cmd/pm`, individual `make verify` static gates, and detached `make connector-boundary` pass.
-- [ ] `go test -timeout 20m ./...` and `make verify` are attempted with a non-cutoff runner or truthfully left to CI.
+- [x] Gong parameter import reconciled the three multipart operations (`17` scanned, `0` remaining drift); Gong certification candidates and the 71-row certification sweep are generated and current.
+- [x] `go vet ./...` and `go build ./cmd/pm` pass.
+- [x] `tidy-check`, `docs-check`, `smoke-no-build`, `lint`, `agent-contract-check`,
+  `connector-boundary`, and `release-workflow-check` pass. Boundary scanned 552 connectors with
+  zero findings.
+- [ ] `go test -timeout 20m ./...` completed but failed in unrelated
+  `TestSkillsGenerateMatchesTrackedSkills` generated-skill drift (the failure names `pm-100ms`,
+  not Gong). The test output also contained repeated unavailable local Redis endpoint diagnostics.
+  No unrelated generated skills or runtime infrastructure were changed in this Gong branch.
+- [ ] `make verify` was attempted. It reaches formatting, tidy, vet, then fails at the same
+  repository-wide generated-skill drift before later gates; no Gong files outside this task were
+  altered to mask that baseline failure.
+- [ ] `make connectorgen-validate` is blocked by the single Gong query-bearing source-lock URL
+  policy finding. `make connectorgen-surface-sync` is blocked by the resulting missing canonical
+  source descriptor. `certification-matrix --connector gong --check` is blocked because Gong is
+  not in the shared static allowlist; no allowlist change was made. Gong certification candidates,
+  71-row sweep, and regenerated current subject all pass their `--check` modes.
 - [ ] Inline code review is recorded in `REVIEW.md`; automated-review route/dispositions are recorded in PR #3552.
 
 ## Captain hard certification gate
@@ -27,7 +42,9 @@
   destructive classification.
 - [ ] Every enabled supported operation is reachable through the built CLI, persisted App path,
   runtime help/manual, and website projection. The built CLI/help/manual/website portion is green;
-  persisted App-path live certification remains credential-blocked. Typed confirmation and approval
+  the persisted App path now proves authentication, one bounded ETL read, one bounded typed direct
+  read, input validation, and pagination validation. Five ETL cells, direct `targets list`
+  required-input projection, and live writes remain uncertified. Typed confirmation and approval
   guard writes; they do not reduce reachability.
 - [x] ETL reconciliation is proven credential-free: all 12 declared stream commands reach the built
   binary's credential preflight and have exact stream/API bindings.
@@ -35,8 +52,10 @@
   plan, preview, explicit approval, apply, acknowledgement, and provider readback—or exact-source
   `not_applicable` evidence is recorded.
 - [ ] Direct-read and direct-write reconciliation is proven against the real installed command
-  paths at credential preflight. Live pagination, provider required-input behavior, and mutation
-  readback remain in the disposable-credential stage.
+  paths at credential preflight. The disposable credential stage now proves one ordinary typed
+  direct read and cursor/required-input guards, but `targets list` required-input projection and
+  operation-specific live coverage remain incomplete. Mutation readback remains unexecuted because
+  no self-cleaning declaration-owned Gong pairing exists.
 - [x] Binary-download is exact-source `not_applicable`: every official Gong response contract is
   JSON or wildcard response metadata, with no binary response operation. Binary-upload has three
   exact multipart operations and focused generic conformance evidence.
@@ -45,20 +64,24 @@
   are masked with an explicit marker.
 - [ ] Live certification uses the persisted App path with an approved non-echoing disposable
   credential reference, supported CRUD/application commands, cleanup, and bounded non-secret
-  request/result fingerprints.
+  request/result fingerprints. The approved reference is now in use and scoped read proof is
+  recorded, but full parity is blocked by the five ETL cells, source-projection dependency,
+  unpaired writes, and paid-agentic exclusion described in `SOURCE-AUDIT.md`.
 - [ ] No merge-ready claim appears in PR #3552 until every applicable item above is green.
 - [x] Captain missing-foundation ledger is generated and drift-checked from Batch 2/3 source maps:
   `.planning/phases/issue-4289-parity-map-batches-2-3-r1/traces/missing-foundation-gaps.json`.
   Gong has zero remaining rows; unrelated portfolio foundation gaps remain open.
 
-## Live certification hold
+## Live certification boundary
 
-No approved disposable Gong credential reference was provided or discovered. The live stage is
-therefore intentionally not run. Required eventual evidence is: persisted App-path credential
-use; reads, writes, application commands, pagination, required-input behavior, ETL,
-plan/preview/approval/apply/readback reverse ETL, binary routes if declared, representative CRUD
-with cleanup, and bounded non-secret request/result fingerprints. No browser session may replace
-connector authentication.
+The captain supplied an approved non-echoing disposable credential reference. The live stage now
+uses only the built CLI, persisted App path, and repository certification harness. Required
+evidence is: ordinary-REST authentication; reads, applicable writes/application commands,
+pagination, required-input behavior, ETL, plan/preview/approval/apply/readback reverse ETL,
+supported binary routes, representative CRUD with cleanup, and bounded non-secret
+request/result fingerprints. No browser session may replace connector authentication. No Gong
+agentic endpoint may be sent because it consumes paid credits; any mandatory such cell remains
+uncertified pending a captain decision.
 
 ## Accepted shared dependency
 
