@@ -137,6 +137,28 @@ weakened or skipped to advance a row.
   the source projection can truthfully repair stale citations and contradictory
   enabled/blocked ledger metadata.
 
+## Post-#4327 red/green revalidation
+
+- Green foundation observation: after merging `origin/main` at `02a2201ed`
+  (including #4327 at `e338cd301`), none of the seven former cycle or
+  descriptive `$ref` sibling errors recurred.
+- Re-run: `source-import` passed CircleCI and Sentry only (2/10). The full
+  `connectorgen validate` sweep passed CircleCI only (1/10).
+- New red: Asana (25) and Jira (16) reach source projection but have incomplete
+  executable action contracts (`cmd/connectorgen/sourceprojection.go:211`).
+  Bitbucket and Notion reach `schema depth limit exceeded`
+  (`cmd/connectorgen/sourceimport.go:4271`); Stripe reaches `reference depth
+  limit exceeded` (`cmd/connectorgen/sourceimport.go:5170`). Docker Hub has an
+  unresolved source reference (`cmd/connectorgen/sourceimport.go:5496`) and
+  existing SCIM `example` keywords rejected by the engine dialect
+  (`internal/connectors/engine/schema.go:168`). GitLab's provider path has a
+  placeholder with no required parameter (`cmd/connectorgen/sourceimport.go:6048`).
+  Vercel's live 400-operation source rejects OAS 3.0 `patternProperties`
+  (`cmd/connectorgen/sourceimport.go:4314`). Sentry remains blocked by its 34
+  read-only mutation coverage findings (`cmd/connectorgen/sourceprojection.go:1943-1948`).
+- No failure is a rendered-reference contract request: every observed error is
+  in the OpenAPI importer/projection/engine path after source retrieval.
+
 ## Sentry red/green evidence
 
 - Red: the baseline `pm sentry operations list` exited 2 with

@@ -122,6 +122,41 @@ The built baseline binary returned `error: unknown command "circleci"` (exit
   `cmd/connectorgen/sourceimport.go:5088-5091`, so Docker Hub is another
   #4326 consumer and its declaration repair is held.
 
+## Post-#4327 revalidation (2026-08-23)
+
+- The branch merged `origin/main` at `02a2201ed`, including #4327
+  (`e338cd301`). The former recursive-schema and OpenAPI 3.0 descriptive
+  `$ref`-sibling refusals no longer occur.
+- `source-import` passed only CircleCI and Sentry (2/10). `connectorgen
+  validate` passed CircleCI only (1/10); CircleCI remains security-blocked by
+  #4334 because the source-derived `signing-secret` flags remain ordinary CLI
+  flags.
+- Asana and Jira now reach source projection, which reports respectively 25
+  and 16 mutations without complete executable actions at
+  `cmd/connectorgen/sourceprojection.go:211`.
+- Bitbucket and Notion now fail provider schema-depth enforcement at
+  `cmd/connectorgen/sourceimport.go:4271` (Bitbucket's pull-request comment
+  response; Notion's meeting-notes response). Stripe fails reference-depth
+  enforcement at `cmd/connectorgen/sourceimport.go:5170` for `GET /v1/account`.
+- Docker Hub advances to an invalid provider reference
+  `#/components/responses/team_repo`, refused by `sourcePointer` at
+  `cmd/connectorgen/sourceimport.go:5496`; its existing SCIM operations also
+  contain unsupported `example` schema keywords, rejected by the engine at
+  `internal/connectors/engine/schema.go:168`.
+- GitLab advances to a malformed provider path contract: `epic_issue_id` has
+  no required path parameter, refused at
+  `cmd/connectorgen/sourceimport.go:6048`.
+- Vercel's mutable source refresh measured 10463249 bytes and SHA-256
+  `74cb7ff3dc0b89cc344b13ac9c6d5f1d9b7d7a9356cfd6b5a779da51fd43da28`
+  (400 operations), then rejects OpenAPI 3.0 `patternProperties` at
+  `cmd/connectorgen/sourceimport.go:4314`.
+- Sentry still has 34 mutation coverage findings at
+  `cmd/connectorgen/sourceprojection.go:1943-1948`, the already-open #4329
+  read-only source coverage gap.
+- None of these post-#4327 results requests a rendered-reference contract: all
+  failures occur after retrieval of the pinned OpenAPI source in the shared
+  importer, source projection, or engine schema dialect.
+
 ## Sentry source evidence
 
 - Red: the baseline `pm sentry operations list` exited 2 with
