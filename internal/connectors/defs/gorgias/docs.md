@@ -105,11 +105,9 @@ into the request; file path and content are redacted in plans.
 
 ### The binary download
 
-`GET /api/{file_type}/download/{domain_hash}/{resource_name}` is implemented as `files download`, a
-`binary_download` operation. The provider responds with an HTTP 307 redirect to signed, cross-host
-file storage (not a direct 200 with bytes), so the operation declares `allow_cross_host: true`; the
-Gorgias Basic-auth credential is never forwarded across that redirect. The response is written only
-beneath an explicit `--dest-root`.
+`GET /api/{file_type}/download/{domain_hash}/{resource_name}` remains partial. The provider documents
+an HTTP 307 redirect to signed cross-host file storage but does not declare a stable exact target-host
+allowlist or bounded final media contract, so the closed binary executor does not dispatch it.
 
 ## Known limits
 

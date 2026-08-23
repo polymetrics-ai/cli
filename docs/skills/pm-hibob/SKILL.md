@@ -1,0 +1,75 @@
+---
+name: pm-hibob
+description: HiBob connector knowledge and safe action guide.
+---
+
+# pm-hibob
+
+## Purpose
+
+Reads HiBob HR data: employee profiles, company named lists, and people field definitions via the HiBob REST API (read-only).
+
+## Icon
+
+- id: hibob
+- asset: icons/hibob.svg
+- source: official
+- review_status: official_verified
+- review_url: https://apidocs.hibob.com/
+
+## Capabilities
+
+- check=true catalog=true read=true write=false query=false
+- Integration type: api
+
+## Authentication
+
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
+
+## Configuration
+
+- base_url (required)
+- username (required)
+- password (secret) (required)
+
+## ETL Streams
+
+- profiles:
+  - primary key: id
+  - fields: displayName(string), email(string), firstName(string), fullName(string), id(string), personal_pronouns(string), surname(string), work_department(string), work_isManager(boolean), work_site(string), work_startDate(string), work_title(string)
+- named_lists:
+  - primary key: id
+  - fields: archived(boolean), children(object), id(string), name(string), parentId(string), value(string)
+- company_lists:
+  - primary key: id
+  - fields: category(string), description(string), id(string), name(string), type(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
+
+## Security
+
+- read risk: external HiBob API read of employee profile and HR metadata
+- approval: none; read-only, no obviously-safe reverse-ETL writes
+- Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Commands
+
+### Inspect as a manual
+
+```bash
+pm connectors inspect hibob
+```
+
+### Inspect as structured JSON
+
+```bash
+pm connectors inspect hibob --json
+```
+
+## Agent Rules
+
+- Run pm connectors inspect hibob before creating credentials or plans.
+- Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+- Never ask the user to paste secret values into chat.

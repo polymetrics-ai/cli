@@ -19,6 +19,7 @@ import (
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/coordination"
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
@@ -389,8 +390,8 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 				return fmt.Errorf("invalid --from-env %q, want field=ENV", spec)
 			}
 			secrets[key] = os.Getenv(env)
-			if secrets[key] == "" {
-				return fmt.Errorf("environment variable %s is empty", env)
+			if err := credential.RequirePersistentValue(key, secrets[key]); err != nil {
+				return validationErrorf("%v", err)
 			}
 		}
 		if field := flags.first("value-stdin"); field != "" {
@@ -398,7 +399,10 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			if err != nil {
 				return fmt.Errorf("read stdin secret: %w", err)
 			}
-			secrets[field] = strings.TrimRight(string(b), "\r\n")
+			secrets[field] = credential.NormalizeStdin(string(b))
+			if err := credential.RequirePersistentValue(field, secrets[field]); err != nil {
+				return validationErrorf("%v", err)
+			}
 		}
 		config, err := keyValues(flags.values["config"])
 		if err != nil {
@@ -502,6 +506,10 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 }
 
 func credentialCoordinationInputError(err error) error {
+	var emptySecret *credential.EmptySecretError
+	if errors.As(err, &emptySecret) {
+		return validationErrorf("%v", err)
+	}
 	var declarationErr *app.CredentialCoordinationDeclarationError
 	if errors.As(err, &declarationErr) {
 		return validationErrorf("%v", err)
@@ -653,6 +661,18 @@ func catalogStatusMessage(status *connectors.DiscoveryStatus) string {
 	}
 }
 
+// shouldPresentETLTerminalRun accepts only the App's durable terminal
+// presentation proof. Successful state updates return the stored terminal run;
+// may-have-committed updates return an exact reload; and a definite no-commit
+// returns Run{}. The accompanying operational error controls the categorized
+// nonzero exit, never whether a durable terminal envelope is emitted.
+func shouldPresentETLTerminalRun(run app.Run) bool {
+	if run.ID == "" || !app.IsTerminalETLRunStatus(run.Status) || run.CompletedAt.IsZero() {
+		return false
+	}
+	return true
+}
+
 // pmcert:workflow etl
 func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool, cfg config.Config) error {
 	if len(args) == 0 {
@@ -727,6 +747,9 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		} else if transportApproval {
 			return runApprovedTransportETL(ctx, a, strictFlags, approval, stdout, jsonOut)
 		}
+		if err := validateLegacyETLRunFlags(args[1:]); err != nil {
+			return err
+		}
 		flags := parseFlags(args[1:])
 		batchSize, err := parseIntFlag("batch-size", flags.first("batch-size"), 0)
 		if err != nil {
@@ -736,24 +759,35 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if err != nil {
 			return err
 		}
-		run, err := a.RunETL(ctx, app.RunETLRequest{
+		run, runErr := a.RunETL(ctx, app.RunETLRequest{
 			Connection:         flags.first("connection"),
 			Stream:             flags.first("stream"),
 			BatchSize:          batchSize,
 			MaxInFlightBatches: maxInFlightBatches,
 		})
-		if err != nil {
-			return err
+		if runErr != nil && !shouldPresentETLTerminalRun(run) {
+			return runErr
 		}
 		runtimeRecorded := false
-		if flags.first("runtime") == "true" {
+		if runErr == nil && flags.first("runtime") == "true" {
 			if err := recordRuntimeETL(ctx, run, cfg); err != nil {
-				return err
+				runErr = err
+			} else {
+				runtimeRecorded = true
 			}
-			runtimeRecorded = true
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": runtimeRecorded})
+			if err := writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": runtimeRecorded}); err != nil {
+				return err
+			}
+			if runErr != nil {
+				return alreadyReportedExecutionError(runErr)
+			}
+			return nil
+		}
+		if runErr != nil {
+			_, _ = fmt.Fprintf(stdout, "ETL run %s ended with status %s; inspect it with pm etl status %s\n", run.ID, run.Status, run.ID)
+			return alreadyReportedExecutionError(runErr)
 		}
 		if runtimeRecorded {
 			_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d runtime_recorded=true\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
@@ -1112,7 +1146,7 @@ func connectorCommandConfirmationHelp(connector connectors.Connector, cmd connec
 // here, so runtime help and the generated manual/skill/website docs cannot
 // document different flags.
 func writeConnectorDownloadFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
-	if cmd.Intent != "binary_download" {
+	if cmd.Intent != "binary_download" && cmd.Intent != "text_export" {
 		return
 	}
 	b.WriteString("\nDOWNLOAD FLAGS\n")
@@ -1141,10 +1175,17 @@ func writeConnectorGlobalFlags(b *strings.Builder, surface *connectors.CommandSu
 func writeConnectorFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) {
 	fmt.Fprintf(b, "  --%s", strings.TrimLeft(flag.Name, "-"))
 	if flag.Type != "" {
-		fmt.Fprintf(b, " (%s)", flag.Type)
+		flagType := flag.Type
+		if flag.Type == "json" && flag.AllowBareString {
+			flagType = "json or string"
+		}
+		fmt.Fprintf(b, " (%s)", flagType)
 	}
 	if flag.Required {
 		b.WriteString(" required")
+	}
+	if flag.Repeatable {
+		b.WriteString(" repeatable")
 	}
 	if flag.EnvOnly {
 		fmt.Fprintf(b, " env-only (use --from-env %s=ENV)", strings.TrimLeft(flag.Name, "-"))
@@ -1332,41 +1373,110 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		if errors.As(err, &blocked) {
 			return connectorCommandBlockedError(err)
 		}
+		// An executor may have a post-provider result before it can construct a
+		// receipt (for example, a legacy parser failure). Emit that one bounded
+		// result envelope before the categorized nonzero error instead of
+		// erasing provider status/path evidence at the CLI boundary.
+		if connectorCommandHasPostProviderResult(result) {
+			if outputErr := writeConnectorCommandFailureResult(stdout, stderr, jsonOut, result, rows, err); outputErr != nil {
+				return outputErr
+			}
+			return alreadyReportedExecutionError(err)
+		}
 		return err
 	}
+	return writeConnectorCommandResult(stdout, stderr, jsonOut, result, rows)
+}
+
+func connectorCommandHasPostProviderResult(result commandrunner.Result) bool {
+	return result.DirectRead != nil || result.BinaryDownload != nil || result.StatusCheck != nil
+}
+
+func writeConnectorCommandResult(stdout, stderr io.Writer, jsonOut bool, result commandrunner.Result, rows []connectors.Record) error {
+	return writeConnectorCommandResultEnvelope(stdout, stderr, jsonOut, result, rows, nil)
+}
+
+func writeConnectorCommandFailureResult(stdout, stderr io.Writer, jsonOut bool, result commandrunner.Result, rows []connectors.Record, executionErr error) error {
+	return writeConnectorCommandResultEnvelope(stdout, stderr, jsonOut, result, rows, executionErr)
+}
+
+func writeConnectorCommandResultEnvelope(stdout, stderr io.Writer, jsonOut bool, result commandrunner.Result, rows []connectors.Record, executionErr error) error {
 	if result.BinaryDownload != nil {
-		if jsonOut {
-			return writeJSON(stdout, envelope{
-				"kind":      "ConnectorCommandBinaryDownload",
-				"connector": result.Connector,
-				"command":   result.Command,
-				"operation": result.BinaryDownload.Operation,
-				"record":    result.BinaryDownload.Record,
-			})
+		out := envelope{
+			"kind":      "ConnectorCommandBinaryDownload",
+			"connector": result.Connector,
+			"command":   result.Command,
+			"operation": result.BinaryDownload.Operation,
+			"method":    result.BinaryDownload.Method,
+			"path":      result.BinaryDownload.Path,
+			"status":    result.BinaryDownload.Status,
+			"headers":   result.BinaryDownload.Headers,
+			"record":    result.BinaryDownload.Record,
+			"receipt":   result.BinaryDownload.Receipt,
 		}
-		b, _ := json.MarshalIndent(result.BinaryDownload.Record, "", "  ")
+		if executionErr != nil {
+			out["error"] = publicErrorEnvelope(executionErr)
+		}
+		if jsonOut {
+			return writeJSON(stdout, out)
+		}
+		b, _ := json.MarshalIndent(out, "", "  ")
+		_, _ = fmt.Fprintln(stdout, string(b))
+		return nil
+	}
+	if result.StatusCheck != nil {
+		out := envelope{
+			"kind":       "ConnectorCommandStatusCheck",
+			"connector":  result.Connector,
+			"command":    result.Command,
+			"operation":  result.StatusCheck.Operation,
+			"method":     result.StatusCheck.Method,
+			"path":       result.StatusCheck.Path,
+			"status":     result.StatusCheck.Status,
+			"body_bytes": result.StatusCheck.BodyBytes,
+			"headers":    result.StatusCheck.Headers,
+			"receipt":    result.StatusCheck.Receipt,
+		}
+		if executionErr != nil {
+			out["error"] = publicErrorEnvelope(executionErr)
+		}
+		if jsonOut {
+			return writeJSON(stdout, out)
+		}
+		if len(result.StatusCheck.Headers) == 0 {
+			_, err := fmt.Fprintf(stdout, "connector=%s command=%q operation=%s method=%s path=%s status=%d body_bytes=%d\n", result.Connector, result.Command, result.StatusCheck.Operation, result.StatusCheck.Method, result.StatusCheck.Path, result.StatusCheck.Status, result.StatusCheck.BodyBytes)
+			return err
+		}
+		b, _ := json.MarshalIndent(out, "", "  ")
 		_, _ = fmt.Fprintln(stdout, string(b))
 		return nil
 	}
 	if result.DirectRead != nil {
+		out := envelope{
+			"kind":      "ConnectorCommandDirectRead",
+			"connector": result.Connector,
+			"command":   result.Command,
+			"operation": result.DirectRead.Operation,
+			"method":    result.DirectRead.Method,
+			"path":      result.DirectRead.Path,
+			"status":    result.DirectRead.Status,
+			"headers":   result.DirectRead.Headers,
+			"response":  result.DirectRead.Body,
+			"receipt":   result.DirectRead.Receipt,
+		}
+		if executionErr != nil {
+			out["error"] = publicErrorEnvelope(executionErr)
+		}
+		if directReadPageIsReported(result.DirectRead.Page) {
+			out["page"] = result.DirectRead.Page
+		}
+		if result.DirectRead.GraphQL != nil {
+			out["graphql"] = result.DirectRead.GraphQL
+		}
 		if jsonOut {
-			out := envelope{
-				"kind":      "ConnectorCommandDirectRead",
-				"connector": result.Connector,
-				"command":   result.Command,
-				"method":    result.DirectRead.Method,
-				"path":      result.DirectRead.Path,
-				"status":    result.DirectRead.Status,
-				"response":  result.DirectRead.Body,
-			}
-			// A connector that reports no page context has none; an all-zero
-			// page would read as a measured, incomplete result.
-			if directReadPageIsReported(result.DirectRead.Page) {
-				out["page"] = result.DirectRead.Page
-			}
 			return writeJSON(stdout, out)
 		}
-		b, _ := json.MarshalIndent(result.DirectRead.Body, "", "  ")
+		b, _ := json.MarshalIndent(out, "", "  ")
 		_, _ = fmt.Fprintln(stdout, string(b))
 		// A human reading this must not have to infer completeness from the row
 		// count. The notice goes to stderr so piping the body stays lossless.
@@ -1689,6 +1799,9 @@ func connectorCommandPage(flags parsedFlags) (int, string, error) {
 		return 0, "", validationErrorf("invalid --page %d, want a positive page number", page)
 	}
 	cursor := flags.first("page-cursor")
+	if err := connectors.ValidateDirectReadPageCursor(cursor); err != nil {
+		return 0, "", validationErrorf("invalid --page-cursor: %v", err)
+	}
 	if raw != "" && cursor != "" {
 		return 0, "", validationErrorf("--page and --page-cursor are mutually exclusive; a connector addresses pages either by number or by cursor")
 	}
@@ -1758,11 +1871,21 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 			return validationErrorf("invalid --confirm: %v", err)
 		}
 		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approval.token, Confirmation: confirmation, WithheldFlags: resolvedFlags})
-		if err != nil {
+		if err != nil && run.ID == "" {
 			return err
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
+			if outputErr := writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run}); outputErr != nil {
+				return outputErr
+			}
+			if err != nil {
+				return alreadyReportedExecutionError(err)
+			}
+			return nil
+		}
+		if err != nil {
+			_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s ended with status %s; inspect it with pm reverse status %s\n", run.ID, run.Status, run.ID)
+			return alreadyReportedExecutionError(err)
 		}
 		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
 		return nil
@@ -1840,6 +1963,8 @@ func safeReversePlanForOutput(plan app.ReversePlan) app.ReversePlan {
 	plan.ConnectorCommandRecord = nil
 	plan.ConnectorCommandPathParams = nil
 	plan.ConnectorCommandQuery = nil
+	plan.ConnectorCommandHeaders = nil
+	plan.ConnectorCommandHeaderValues = nil
 	plan.Sample = app.RedactReversePlanRecords(plan.Sample, plan.RedactFields)
 	return plan
 }
@@ -2094,11 +2219,21 @@ func runReverse(ctx context.Context, a *app.App, args []string, approval reverse
 			return validationErrorf("invalid --confirm: %v", err)
 		}
 		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: approval.token, Confirmation: confirmation, WithheldFlags: resolvedFlags})
-		if err != nil {
+		if err != nil && run.ID == "" {
 			return err
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
+			if outputErr := writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run}); outputErr != nil {
+				return outputErr
+			}
+			if err != nil {
+				return alreadyReportedExecutionError(err)
+			}
+			return nil
+		}
+		if err != nil {
+			_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s ended with status %s; inspect it with pm reverse status %s\n", run.ID, run.Status, run.ID)
+			return alreadyReportedExecutionError(err)
 		}
 		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
 		return nil

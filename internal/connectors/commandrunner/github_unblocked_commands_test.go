@@ -156,10 +156,10 @@ func TestGitHubCapabilityEscapesStayNonExecutableWithoutUnsafeClassification(t *
 	}
 }
 
-// The historical gh-style aliases below now reuse exact declared REST or
-// fixed-document GraphQL contracts. Preflight is the runtime-owned admission
-// seam: it proves the aliases are not help-only strings and cannot drift from
-// the same command dispatch the binary invokes.
+// Historical gh-style aliases with an exact declared REST or fixed-document
+// GraphQL contract are executable. Preflight is the runtime-owned admission
+// seam: it proves they are not help-only strings and cannot drift from the
+// same command dispatch the binary invokes.
 func TestGitHubLegacyAliasesPassRuntimePreflight(t *testing.T) {
 	aliases := []string{
 		"issue view", "pr view", "release view", "ruleset view", "run view", "workflow view",

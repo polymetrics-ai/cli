@@ -267,6 +267,10 @@ func runCertificationMatrix(args []string, stdout, stderr io.Writer) int {
 		logf(stderr, "connectorgen certification-matrix: resolve repository root: %v\n", err)
 		return 1
 	}
+	if _, err := loadCurrentCertificationSubject(absRoot); err != nil {
+		logf(stderr, "connectorgen certification-matrix: %v\n", err)
+		return 1
+	}
 	result, err := generateCertificationMatrix(absRoot, absRoot, check, all, connector)
 	if err != nil {
 		logf(stderr, "connectorgen certification-matrix: %v\n", err)
@@ -803,6 +807,7 @@ func buildCapabilityMatrixForConnectors(repoRoot string, names []string) (capabi
 	if err != nil {
 		return capabilityMatrix{}, err
 	}
+	evidence = currentCertificationEvidence(repoRoot, evidence)
 	sources, err := matrixConnectorSourcesForNames(bundles, names)
 	if err != nil {
 		return capabilityMatrix{}, err
@@ -1417,6 +1422,20 @@ func matchingCapabilityEvidence(evidence []acceptedEvidence, connectorName, kind
 	return matched
 }
 
+func currentCertificationEvidence(repoRoot string, evidence []acceptedEvidence) []acceptedEvidence {
+	subject, err := loadCurrentCertificationSubject(repoRoot)
+	if err != nil {
+		// Only the production command may project a certification matrix. It
+		// requires a current subject before reaching this core, while direct
+		// in-memory callers keep their explicit evidence fixture semantics.
+		// This prevents test-only matrix construction from silently becoming a
+		// second production acceptance boundary.
+		return evidence
+	}
+	live, _ := classifyEvidenceForCertificationSubject(evidence, subject)
+	return live
+}
+
 func certificationComplete(cells []certificationCell) bool {
 	applicable := 0
 	for _, cell := range cells {
@@ -1861,7 +1880,7 @@ func discoverFunctionKinds(repoRoot string) ([]functionKind, error) {
 		}
 	}
 
-	operationSource := filepath.Join(repoRoot, "internal", "connectors", "engine", "bundle.go")
+	operationSource := filepath.Join(repoRoot, "internal", "connectors", "engine", "operation_kind.go")
 	operations, err := operationKindsFromSource(repoRoot, operationSource)
 	if err != nil {
 		return nil, err
@@ -1945,43 +1964,37 @@ func operationKindsFromSource(repoRoot, path string) (map[string]string, error) 
 	}
 	found := map[string]string{}
 	for _, decl := range file.Decls {
-		fn, ok := decl.(*ast.FuncDecl)
-		if !ok || fn.Name.Name != "expectedOperationBlock" {
+		gen, ok := decl.(*ast.GenDecl)
+		if !ok || gen.Tok != token.VAR {
 			continue
 		}
-		ast.Inspect(fn.Body, func(node ast.Node) bool {
-			switchStmt, ok := node.(*ast.SwitchStmt)
+		for _, spec := range gen.Specs {
+			valueSpec, ok := spec.(*ast.ValueSpec)
+			if !ok || len(valueSpec.Names) != 1 || valueSpec.Names[0].Name != "operationKindContracts" || len(valueSpec.Values) != 1 {
+				continue
+			}
+			literal, ok := valueSpec.Values[0].(*ast.CompositeLit)
 			if !ok {
-				return true
+				continue
 			}
-			ident, ok := switchStmt.Tag.(*ast.Ident)
-			if !ok || ident.Name != "kind" {
-				return true
-			}
-			for _, clauseNode := range switchStmt.Body.List {
-				clause, ok := clauseNode.(*ast.CaseClause)
+			for _, element := range literal.Elts {
+				entry, ok := element.(*ast.KeyValueExpr)
 				if !ok {
 					continue
 				}
-				for _, expr := range clause.List {
-					literal, ok := expr.(*ast.BasicLit)
-					if !ok || literal.Kind != token.STRING {
-						continue
-					}
-					value, err := strconv.Unquote(literal.Value)
-					if err == nil {
-						// The literal itself is not a source construct. The enclosing
-						// function plus its operation discriminator is stable across
-						// line insertions and distinguishes sibling case clauses.
-						found[value] = sourceSymbol(repoRoot, path, fn.Name.Name+"(kind="+value+")")
-					}
+				key, ok := entry.Key.(*ast.BasicLit)
+				if !ok || key.Kind != token.STRING {
+					continue
+				}
+				value, err := strconv.Unquote(key.Value)
+				if err == nil {
+					found[value] = sourceSymbol(repoRoot, path, "operationKindContracts(kind="+value+")")
 				}
 			}
-			return false
-		})
+		}
 	}
 	if len(found) == 0 {
-		return nil, fmt.Errorf("operation source %q declares no expectedOperationBlock cases", path)
+		return nil, fmt.Errorf("operation source %q declares no operationKindContracts entries", path)
 	}
 	return found, nil
 }
@@ -2144,6 +2157,12 @@ func validateSymbolSourceAnchor(anchor string) error {
 	}
 	if strings.HasPrefix(symbol, "expectedOperationBlock(kind=") && strings.HasSuffix(symbol, ")") {
 		kind := strings.TrimSuffix(strings.TrimPrefix(symbol, "expectedOperationBlock(kind="), ")")
+		if isSafeProofIdentifier(kind) {
+			return nil
+		}
+	}
+	if strings.HasPrefix(symbol, "operationKindContracts(kind=") && strings.HasSuffix(symbol, ")") {
+		kind := strings.TrimSuffix(strings.TrimPrefix(symbol, "operationKindContracts(kind="), ")")
 		if isSafeProofIdentifier(kind) {
 			return nil
 		}

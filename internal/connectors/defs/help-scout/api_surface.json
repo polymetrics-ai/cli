@@ -981,66 +981,36 @@
     {
       "method": "GET",
       "path": "/v3/conversations/{conversationId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Open foundation gap declarative-operation-route-override: internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
-        "notes": "Owner: cli-operation-route-override-foundation-r1. Minimal closure: Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
+      "covered_by": {
+        "direct_read": "direct get-conversation-v3"
       }
     },
     {
       "method": "GET",
       "path": "/v3/conversations/{conversationId}/threads",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Open foundation gap declarative-operation-route-override: internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
-        "notes": "Owner: cli-operation-route-override-foundation-r1. Minimal closure: Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
+      "covered_by": {
+        "direct_read": "direct list-conversation-threads-v3"
       }
     },
     {
       "method": "GET",
       "path": "/v3/customers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Open foundation gap declarative-operation-route-override: internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
-        "notes": "Owner: cli-operation-route-override-foundation-r1. Minimal closure: Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
+      "covered_by": {
+        "direct_read": "direct list-customers-v3"
       }
     },
     {
       "method": "GET",
       "path": "/v3/system-users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Open foundation gap declarative-operation-route-override: internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
-        "notes": "Owner: cli-operation-route-override-foundation-r1. Minimal closure: Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
+      "covered_by": {
+        "direct_read": "direct list-system-users-v3"
       }
     },
     {
       "method": "GET",
       "path": "/v3/system-users/{systemUserId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Open foundation gap declarative-operation-route-override: internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
-        "notes": "Owner: cli-operation-route-override-foundation-r1. Minimal closure: Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
+      "covered_by": {
+        "direct_read": "direct get-system-user-v3"
       }
     }
   ]

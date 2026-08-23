@@ -1,6 +1,7 @@
 package commandrunner
 
 import (
+	"encoding/json"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -13,8 +14,8 @@ func TestCoerceFlagValueNumber(t *testing.T) {
 	if err != nil {
 		t.Fatalf("coerceFlagValue: %v", err)
 	}
-	if got != 12.34 {
-		t.Fatalf("coerceFlagValue = %#v, want 12.34", got)
+	if got != json.Number("12.34") {
+		t.Fatalf("coerceFlagValue = %#v, want exact json.Number(12.34)", got)
 	}
 
 	for _, value := range []string{"NaN", "+Inf", "twelve"} {

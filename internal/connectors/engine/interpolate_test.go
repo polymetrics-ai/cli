@@ -127,6 +127,51 @@ func TestInterpolatePathDefaultURLEncode(t *testing.T) {
 	}
 }
 
+func TestInterpolatePathRevalidatesFilteredOutput(t *testing.T) {
+	tests := []struct {
+		name string
+		tmpl string
+		vars Vars
+		want string
+	}{
+		{
+			name: "last path segment cannot create query or fragment",
+			tmpl: "/objects/{{ record.uri | last_path_segment }}",
+			vars: Vars{Record: map[string]any{"uri": "https://provider.example/unsafe?admin=true#fragment"}},
+			want: "/objects/unsafe%3Fadmin%3Dtrue%23fragment",
+		},
+		{
+			name: "join cannot create path separators",
+			tmpl: "/objects/{{ record.parts | join:/ }}",
+			vars: Vars{Record: map[string]any{"parts": []any{"parent", "child"}}},
+			want: "/objects/parent%2Fchild",
+		},
+		{
+			name: "const cannot inject path syntax",
+			tmpl: "/objects/{{ config.ignored | const:../admin?x#y\\z }}",
+			vars: Vars{Config: map[string]string{"ignored": "value"}},
+			want: "/objects/..%2Fadmin%3Fx%23y%5Cz",
+		},
+		{
+			name: "terminal urlencode is not double encoded",
+			tmpl: "/objects/{{ config.id | urlencode }}",
+			vars: Vars{Config: map[string]string{"id": "a/b"}},
+			want: "/objects/a%2Fb",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := InterpolatePath(test.tmpl, test.vars)
+			if err != nil {
+				t.Fatalf("InterpolatePath: %v", err)
+			}
+			if got != test.want {
+				t.Fatalf("InterpolatePath = %q, want %q", got, test.want)
+			}
+		})
+	}
+}
+
 func TestInterpolatePathPreservesIntegerIDsWithoutScientificNotation(t *testing.T) {
 	tests := []struct {
 		name string
@@ -968,4 +1013,30 @@ func TestResolveCheckAuthFieldsValidatesAllTemplatedFields(t *testing.T) {
 			t.Fatalf("unexpected error: %v", err)
 		}
 	})
+}
+
+func TestSecretFilterErrorsNeverExposeResolvedValues(t *testing.T) {
+	const secret = "secret-canary-header"
+	vars := Vars{Secrets: map[string]string{"token": secret}}
+	for _, tc := range []struct {
+		name    string
+		resolve func(string, Vars) (string, error)
+	}{
+		{name: "interpolate", resolve: Interpolate},
+		{name: "header", resolve: InterpolateHeader},
+		{name: "path", resolve: InterpolatePath},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := tc.resolve("{{ secrets.token | unix_seconds }}", vars)
+			if err == nil {
+				t.Fatal("secret filter error = nil, want rejection")
+			}
+			if strings.Contains(err.Error(), secret) {
+				t.Fatalf("secret filter error exposed value: %v", err)
+			}
+			if !strings.Contains(err.Error(), "secrets.token") {
+				t.Fatalf("secret filter error = %v, want reference metadata", err)
+			}
+		})
+	}
 }

@@ -148,13 +148,39 @@ type StreamConfig struct {
 }
 
 type StreamState struct {
-	Connection          string                           `json:"connection"`
-	Stream              string                           `json:"stream"`
-	Checkpoint          *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
-	GenerationID        int64                            `json:"generation_id"`
-	LastSuccessfulRunID string                           `json:"last_successful_run_id,omitempty"`
-	RecordsLoaded       int                              `json:"records_loaded,omitempty"`
-	UpdatedAt           time.Time                        `json:"updated_at"`
+	Connection                         string                           `json:"connection"`
+	Stream                             string                           `json:"stream"`
+	Checkpoint                         *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
+	CommittedTransportReceipts         []TransportReceiptCommit         `json:"committed_transport_receipts,omitempty"`
+	TransportReceiptAssociationVersion uint                             `json:"transport_receipt_association_version,omitempty"`
+	LegacyCommittedTransportCheckpoint *synccontract.CheckpointEnvelope `json:"legacy_committed_transport_checkpoint,omitempty"`
+	GenerationID                       int64                            `json:"generation_id"`
+	// ActiveWorkID and ActiveWorkFence form one durable, connection-and-stream
+	// scoped work lease. They are present only while a source/stage/destination
+	// run owns the stream; effects and checkpoint commits renew the same fence
+	// before touching I/O, and terminal completion clears the work ID without
+	// rewinding the monotonic fence.
+	ActiveWorkID         string     `json:"active_work_id,omitempty"`
+	ActiveWorkFence      int64      `json:"active_work_fence,omitempty"`
+	ActiveWorkLeaseUntil *time.Time `json:"active_work_lease_until,omitempty"`
+	LastSuccessfulRunID  string     `json:"last_successful_run_id,omitempty"`
+	RecordsLoaded        int        `json:"records_loaded,omitempty"`
+	UpdatedAt            time.Time  `json:"updated_at"`
+}
+
+type TransportReceiptCommit struct {
+	ReceiptID        string            `json:"receipt_id"`
+	Owner            string            `json:"owner"`
+	Generation       int64             `json:"generation"`
+	Stream           string            `json:"stream"`
+	Mode             synccontract.Mode `json:"mode"`
+	CheckpointSHA256 string            `json:"checkpoint_sha256"`
+	TombstonesSHA256 string            `json:"tombstones_sha256"`
+	ManifestSHA256   string            `json:"manifest_sha256"`
+	ContentSHA256    string            `json:"content_sha256"`
+	ParquetSHA256    string            `json:"parquet_sha256"`
+	Records          int               `json:"records"`
+	Tombstones       int               `json:"tombstones"`
 }
 
 type CreateConnectionRequest struct {
@@ -240,34 +266,62 @@ type RunETLRequest struct {
 	// MaxInFlightBatches is an optional ordered Arrow full-overwrite pipeline
 	// bound. Zero means the caller did not select the CLI/app capability
 	// control; admitted fast paths choose their documented default of two.
-	MaxInFlightBatches  int                               `json:"max_in_flight_batches,omitempty"`
-	DestinationApproval synctransport.DestinationApproval `json:"-"`
+	MaxInFlightBatches           int                               `json:"max_in_flight_batches,omitempty"`
+	DestinationApproval          synctransport.DestinationApproval `json:"-"`
+	rateParkingResumeCheckpoint  *synccontract.CheckpointEnvelope
+	rateParkingRearmAttemptRunID string
+}
+
+// ETLRunStatusDeliveredReconciliationRequired is terminal proof that the
+// declared destination effect and checkpoint are durable, while only local
+// post-checkpoint bookkeeping remains. Retrying this run repairs from the
+// recorded evidence; it must never replay provider I/O.
+const ETLRunStatusDeliveredReconciliationRequired = "delivered_reconciliation_required"
+
+// DeliveryReconciliation records the closed, declaration-owned cleanup that
+// remains after durable delivery. It contains only internal plan identities
+// and stage state, never credentials, provider configuration, or payloads.
+type DeliveryReconciliation struct {
+	State                             string `json:"state"`
+	StageRetirement                   bool   `json:"stage_retirement,omitempty"`
+	PostgresManagedTargetPlanID       string `json:"postgres_managed_target_plan_id,omitempty"`
+	DeclarativeTypedDestinationPlanID string `json:"declarative_typed_destination_plan_id,omitempty"`
+	// EmptyPublication is the sealed durable witness for an empty
+	// full-overwrite whose provider receipt has already been read back. It
+	// permits only local terminal-state repair; it never represents a source
+	// checkpoint or permission to re-enter the destination route.
+	EmptyPublication                *synccontract.PublicationWitness               `json:"empty_publication,omitempty"`
+	EmptyPublicationReadBackPending *synctransport.EmptyPublicationReadBackReceipt `json:"empty_publication_read_back_pending,omitempty"`
 }
 
 type Run struct {
-	ID                 string            `json:"id"`
-	Type               string            `json:"type"`
-	Connection         string            `json:"connection,omitempty"`
-	Stream             string            `json:"stream,omitempty"`
-	Status             string            `json:"status"`
-	RecordsRead        int               `json:"records_read"`
-	RecordsTransformed int               `json:"records_transformed"`
-	RecordsLoaded      int               `json:"records_loaded"`
-	RecordsFailed      int               `json:"records_failed"`
-	BatchCount         int               `json:"batch_count,omitempty"`
-	Checkpoint         map[string]string `json:"checkpoint,omitempty"`
+	ID                                string            `json:"id"`
+	Type                              string            `json:"type"`
+	Connection                        string            `json:"connection,omitempty"`
+	Stream                            string            `json:"stream,omitempty"`
+	Status                            string            `json:"status"`
+	RecordsRead                       int               `json:"records_read"`
+	RecordsTransformed                int               `json:"records_transformed"`
+	RecordsLoaded                     int               `json:"records_loaded"`
+	RecordsFailed                     int               `json:"records_failed"`
+	BatchSize                         int               `json:"batch_size,omitempty"`
+	BatchCount                        int               `json:"batch_count,omitempty"`
+	Checkpoint                        map[string]string `json:"checkpoint,omitempty"`
+	DeclarativeTypedDestinationPlanID string            `json:"declarative_typed_destination_plan_id,omitempty"`
+	RateParkingRearmAttemptRunID      string            `json:"rate_parking_rearm_attempt_run_id,omitempty"`
 	// TransportPhaseMeasurement is emitted with the terminal run transition on
 	// closed source -> warehouse -> destination transports. It deliberately
 	// contains counts and elapsed times only, never records, paths, tokens, or
 	// connector configuration.
 	TransportPhaseMeasurement *TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
-	// DestinationResults retains each completed declarative typed destination
-	// action's full provider result. Secret-bearing values have an explicit
-	// masked marker; ordinary provider fields are not filtered by scope or tier.
-	DestinationResults []json.RawMessage `json:"destination_results,omitempty"`
-	Error              string            `json:"error,omitempty"`
-	StartedAt          time.Time         `json:"started_at"`
-	CompletedAt        time.Time         `json:"completed_at,omitempty"`
+	// DestinationResults retains each provider-successful declarative typed
+	// destination action's sanitized result, including evidence preserved when a
+	// later local receipt or acknowledgement step fails before checkpoint.
+	DestinationResults     []json.RawMessage       `json:"destination_results,omitempty"`
+	DeliveryReconciliation *DeliveryReconciliation `json:"delivery_reconciliation,omitempty"`
+	Error                  string                  `json:"error,omitempty"`
+	StartedAt              time.Time               `json:"started_at"`
+	CompletedAt            time.Time               `json:"completed_at,omitempty"`
 }
 
 type TransportPhaseMeasurement struct {
@@ -293,6 +347,7 @@ type TransportPhaseMeasurement struct {
 	TransformElapsedNanos            int64   `json:"transform_elapsed_ns"`
 	ParquetCloseElapsedNanos         int64   `json:"parquet_close_fsync_elapsed_ns"`
 	BinaryCOPYElapsedNanos           int64   `json:"binary_copy_elapsed_ns"`
+	ReadBackElapsedNanos             int64   `json:"read_back_elapsed_ns"`
 	IndexConstraintBuildElapsedNanos int64   `json:"index_constraint_build_elapsed_ns"`
 	PublishReceiptElapsedNanos       int64   `json:"publish_receipt_elapsed_ns"`
 	CheckpointElapsedNanos           int64   `json:"checkpoint_elapsed_ns"`
@@ -397,14 +452,19 @@ type ReversePlan struct {
 	ConnectorCommandPath  []string          `json:"connector_command_path,omitempty"`
 	// ConnectorCommandOperation identifies a direct_write operation. When it is
 	// empty, the plan retains the existing writes.json action path.
-	ConnectorCommandOperation  string                       `json:"connector_command_operation,omitempty"`
-	ConnectorCommandPathParams map[string]string            `json:"connector_command_path_params,omitempty"`
-	ConnectorCommandQuery      map[string]string            `json:"connector_command_query,omitempty"`
-	ConnectorCommandRecord     connectors.Record            `json:"connector_command_record,omitempty"`
-	PayloadIdentity            []PayloadIdentity            `json:"payload_identity,omitempty"`
-	ConfirmationChallenge      string                       `json:"confirmation_challenge,omitempty"`
-	ConfirmationPolicy         connectors.WriteConfirmation `json:"confirmation,omitempty"`
-	RedactFields               []string                     `json:"redact_fields,omitempty"`
+	ConnectorCommandOperation  string            `json:"connector_command_operation,omitempty"`
+	ConnectorCommandPathParams map[string]string `json:"connector_command_path_params,omitempty"`
+	ConnectorCommandQuery      map[string]string `json:"connector_command_query,omitempty"`
+	// ConnectorCommandHeaders is the closed, declaration-owned request-header
+	// input for a direct_write plan. It participates in the plan hash and the
+	// engine preview digest; CLI presentation clears it like the body record.
+	ConnectorCommandHeaders      map[string]string            `json:"connector_command_headers,omitempty"`
+	ConnectorCommandHeaderValues map[string][]string          `json:"connector_command_header_values,omitempty"`
+	ConnectorCommandRecord       connectors.Record            `json:"connector_command_record,omitempty"`
+	PayloadIdentity              []PayloadIdentity            `json:"payload_identity,omitempty"`
+	ConfirmationChallenge        string                       `json:"confirmation_challenge,omitempty"`
+	ConfirmationPolicy           connectors.WriteConfirmation `json:"confirmation,omitempty"`
+	RedactFields                 []string                     `json:"redact_fields,omitempty"`
 	// WithheldFields names the record fields this plan actually removed before
 	// persisting, which is a subset of RedactFields: a declared field the
 	// operator never supplied was never present and is never owed back. Only
@@ -429,10 +489,15 @@ type ReversePlan struct {
 	// definition-selected transport writes. They bind a pre-run approval to
 	// one connection configuration; neither field is caller-selectable write
 	// input and neither contains an approval token or credential material.
-	TransportConnectionID  string `json:"transport_connection_id,omitempty"`
-	TransportStream        string `json:"transport_stream,omitempty"`
-	TransportBindingSHA256 string `json:"transport_binding_sha256,omitempty"`
-	TransportForwardPlanID string `json:"transport_forward_plan_id,omitempty"`
+	TransportConnectionID           string `json:"transport_connection_id,omitempty"`
+	TransportStream                 string `json:"transport_stream,omitempty"`
+	TransportBindingSHA256          string `json:"transport_binding_sha256,omitempty"`
+	TransportActionDefinitionSHA256 string `json:"transport_action_definition_sha256,omitempty"`
+	// TransportPhysicalActions is the complete provider mutation set visible in
+	// a persisted reverse-ETL plan. A paired tombstone delete is therefore
+	// reviewable before preview/token approval rather than materialized later.
+	TransportPhysicalActions []synctransport.DestinationPhysicalAction `json:"transport_physical_actions,omitempty"`
+	TransportForwardPlanID   string                                    `json:"transport_forward_plan_id,omitempty"`
 	// AuthorizationLifetime is a bounded day-scale lifetime requested when a
 	// PostgreSQL managed-target transport plan is created. It is included in
 	// the sealed plan hash before its single-use approval token is issued.
@@ -530,11 +595,8 @@ type ReverseRun struct {
 	RecordsFailed    int    `json:"records_failed"`
 	Error            string `json:"error,omitempty"`
 	// DestinationResult retains the complete typed write result for regular
-	// reverse ETL. Credential material is represented as an explicit masked
-	// marker; normal provider fields are retained unchanged.
-	DestinationResult json.RawMessage `json:"destination_result,omitempty"`
-	// OperationDirectWrite is populated only for a successful direct_write
-	// command. Its body is decoded according to the operation output policy.
+	// reverse ETL.
+	DestinationResult    json.RawMessage                        `json:"destination_result,omitempty"`
 	OperationDirectWrite *connectors.OperationDirectWriteResult `json:"operation_direct_write,omitempty"`
 	StartedAt            time.Time                              `json:"started_at"`
 	CompletedAt          time.Time                              `json:"completed_at,omitempty"`

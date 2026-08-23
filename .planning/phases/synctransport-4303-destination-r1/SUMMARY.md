@@ -33,6 +33,8 @@ The persisted application path now carries a stable `destination_action` on a
 stream configuration, so one connector can expose multiple named typed actions
 without action inference or runtime selection. Exact selected-action schema
 properties accept both snake_case and camelCase bindings and reject all other
-names before I/O. Acknowledged typed writes preserve complete ordinary provider
-response status, headers, and bodies in persisted App/CLI results; only the
-credential boundary masks values in place with an explicit marker.
+names before I/O. Acknowledged typed writes preserve every provider-returned
+response field, key, value, receipt, status, body, occurrence ID, and
+credential-equal byte verbatim in persisted App/CLI results, without
+redaction, replacement, omission, masking, or in-place sanitization. Only
+system-generated diagnostics, plans, logs, and errors are rendered secret-safely.

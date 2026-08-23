@@ -2,6 +2,8 @@ package engine
 
 import (
 	"context"
+	"crypto/sha256"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -12,6 +14,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/credential"
 )
 
 // recordingSecretStore is an in-memory connectors.SecretStore for asserting
@@ -230,6 +233,125 @@ func TestBuildOAuth2RefreshTokenUnresolvedKeysError(t *testing.T) {
 				t.Fatalf("error leaked a credential: %v", err)
 			}
 		})
+	}
+}
+
+func TestBuildOAuth2RefreshTokenRejectsTransportOnlyDeclaredMaterial(t *testing.T) {
+	srv, calls, _ := refreshTokenServer(t, false)
+	base := AuthSpec{
+		Mode:         "oauth2_refresh_token",
+		TokenURL:     "{{ config.token_url }}",
+		ClientID:     "{{ config.client_id }}",
+		ClientSecret: "{{ secrets.client_secret }}",
+		RefreshToken: "{{ secrets.refresh_token }}",
+	}
+	fields := []struct {
+		name       string
+		credential string
+		wantField  string
+	}{
+		{name: "refresh token", credential: "refresh_token", wantField: "OAuth2 refresh token"},
+		{name: "client ID", credential: "client_id", wantField: "OAuth2 client ID"},
+		{name: "declared client secret", credential: "client_secret", wantField: "OAuth2 client secret"},
+	}
+	values := []struct {
+		name  string
+		value string
+	}{
+		{name: "empty", value: ""},
+		{name: "LF only", value: "\n"},
+		{name: "CRLF only", value: "\r\n"},
+	}
+
+	for _, field := range fields {
+		for _, value := range values {
+			t.Run(field.name+" "+value.name, func(t *testing.T) {
+				config := map[string]string{
+					"token_url": srv.URL,
+					"client_id": "oauth-client-id-redaction-canary",
+				}
+				secrets := map[string]string{
+					"client_secret": "oauth-client-secret-redaction-canary",
+					"refresh_token": "oauth-refresh-token-redaction-canary",
+				}
+				switch field.credential {
+				case "client_id":
+					config["client_id"] = value.value
+				default:
+					secrets[field.credential] = value.value
+				}
+				cfg := cfgWith(config, secrets)
+				_, err := selectAuth(context.Background(), cfg, []AuthSpec{base}, nil)
+				var empty *credential.EmptySecretError
+				if !errors.As(err, &empty) {
+					t.Fatalf("selectAuth() error type = %T, want EmptySecretError", err)
+				}
+				if empty.Field != field.wantField {
+					t.Fatalf("empty credential field = %q, want %q", empty.Field, field.wantField)
+				}
+				for _, canary := range []string{"oauth-client-id-redaction-canary", "oauth-client-secret-redaction-canary", "oauth-refresh-token-redaction-canary"} {
+					if strings.Contains(err.Error(), canary) {
+						t.Fatal("credential validation error exposed a credential value")
+					}
+				}
+				if got := calls(); got != 0 {
+					t.Fatalf("token endpoint calls = %d, want 0", got)
+				}
+			})
+		}
+	}
+}
+
+func TestBuildOAuth2RefreshTokenOmitsUndeclaredPublicClientSecret(t *testing.T) {
+	const (
+		clientID     = "oauth-public-client-id-canary\n"
+		refreshToken = "oauth-public-refresh-token-canary\n"
+	)
+	var gotForm map[string][]string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Errorf("ParseForm() error = %v", err)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		gotForm = r.PostForm
+		_, _ = w.Write([]byte(`{"access_token":"public-client-access-token","expires_in":3600}`))
+	}))
+	defer srv.Close()
+
+	spec := AuthSpec{
+		Mode:         "oauth2_refresh_token",
+		TokenURL:     "{{ config.token_url }}",
+		ClientID:     "{{ config.client_id }}",
+		RefreshToken: "{{ secrets.refresh_token }}",
+	}
+	cfg := cfgWith(
+		map[string]string{"token_url": srv.URL, "client_id": clientID},
+		map[string]string{"refresh_token": refreshToken},
+	)
+	auth, err := selectAuth(context.Background(), cfg, []AuthSpec{spec}, nil)
+	if err != nil {
+		t.Fatalf("selectAuth() error = %v", err)
+	}
+	req, err := http.NewRequest(http.MethodGet, "https://api.example.com/public", nil)
+	if err != nil {
+		t.Fatalf("NewRequest() error = %v", err)
+	}
+	applyToRequest(t, auth, req)
+	if _, present := gotForm["client_secret"]; present {
+		t.Fatal("public-client token form emitted an undeclared client secret")
+	}
+	for key, want := range map[string]string{"client_id": clientID, "refresh_token": refreshToken} {
+		got := gotForm[key]
+		if len(got) != 1 {
+			t.Fatalf("token form %s count = %d, want 1", key, len(got))
+		}
+		if gotLength, wantLength := len(got[0]), len(want); gotLength != wantLength {
+			t.Fatalf("token form %s length = %d, want %d", key, gotLength, wantLength)
+		}
+		if gotHash, wantHash := sha256.Sum256([]byte(got[0])), sha256.Sum256([]byte(want)); gotHash != wantHash {
+			t.Fatalf("token form %s SHA-256 = %x, want %x", key, gotHash, wantHash)
+		}
 	}
 }
 

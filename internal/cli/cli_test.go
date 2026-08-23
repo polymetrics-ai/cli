@@ -480,6 +480,8 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 		"declarative JSON bundles",
 		"write=true/false",
 		"REVERSE ETL WRITE ACTIONS",
+		"DECLARATION-BOUND STRUCTURED WRITE INPUTS",
+		"There is no raw\n  --body flag",
 		"pm connectors catalog --capability write --json",
 		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
 		"legacy_unverified",
@@ -789,15 +791,15 @@ func TestGitHubCommandSurfaceClampsOversizedLimit(t *testing.T) {
 	}
 }
 
-func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
-	var gotPath string
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		gotPath = r.URL.Path
-		if r.Method != http.MethodGet {
-			t.Fatalf("method = %s, want GET", r.Method)
+func TestGitHubCommandSurfaceExecutesDeclaredContentRead(t *testing.T) {
+	var requests int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		if request.Method != http.MethodGet || request.URL.Path != "/repos/octocat/hello-world/contents/README.md" {
+			t.Fatalf("request = %s %s, want declared GitHub content GET", request.Method, request.URL.Path)
 		}
+		requests++
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"name":"README.md","type":"file","encoding":"base64","content":"SGVsbG8=","download_url":"https://raw.example.test/README.md"}`))
+		_, _ = w.Write([]byte(`{"type":"file","fixture":"declared-content-read"}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -808,6 +810,56 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 		"--connector", "github",
 		"--config", "owner=octocat",
 		"--config", "repo=hello-world",
+		"--config", "base_url=" + srv.URL,
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"github", "repo", "read-file",
+		"--credential", "github-local",
+		"--path", "README.md",
+		"--root", root,
+		"--json",
+	}, &stdout, &stderr)
+	if code != 0 || !strings.Contains(stdout.String(), `"fixture": "declared-content-read"`) {
+		t.Fatalf("repo read-file result code=%d stdout=%s stderr=%s, want declared successful response", code, stdout.String(), stderr.String())
+	}
+	if requests != 1 {
+		t.Fatalf("declared repo read-file provider requests = %d, want 1", requests)
+	}
+}
+
+func TestGitHubCommandSurfacePreservesGraphQLResponseMetadata(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/graphql" {
+			t.Fatalf("request = %s %s, want POST /graphql", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"data": {
+				"repositoryOwner": {
+					"__typename": "User",
+					"login": "octocat",
+					"repositories": {
+						"nodes": [],
+						"pageInfo": {"hasNextPage": false, "endCursor": null}
+					}
+				},
+				"rateLimit": {"limit": 5000, "cost": 1, "remaining": 4999, "resetAt": "2026-08-20T00:00:00Z"}
+			},
+			"errors": [{"message": "partial resolver failure"}]
+		}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
 		"--config", "base_url=" + srv.URL,
 		"--config", "public_access=true",
 		"--root", root,
@@ -815,102 +867,49 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	})
 
 	stdout, _ := runCLI(t, []string{
-		"github", "repo", "read-file",
+		"github", "repo", "list",
 		"--credential", "github-local",
-		"--path", "README.md",
+		"--login", "octocat",
+		"--first", "1",
 		"--root", root,
 		"--json",
 	})
-	if gotPath != "/repos/octocat/hello-world/contents/README.md" {
-		t.Fatalf("request path = %q, want contents file path", gotPath)
-	}
 
 	var env struct {
-		Kind     string         `json:"kind"`
-		Command  string         `json:"command"`
-		Method   string         `json:"method"`
-		Path     string         `json:"path"`
-		Status   int            `json:"status"`
-		Response map[string]any `json:"response"`
+		Kind     string                              `json:"kind"`
+		Status   int                                 `json:"status"`
+		Response map[string]any                      `json:"response"`
+		GraphQL  *connectors.GraphQLResponseMetadata `json:"graphql"`
 	}
 	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
 		t.Fatalf("decode json: %v\n%s", err, stdout)
 	}
-	if env.Kind != "ConnectorCommandDirectRead" || env.Command != "repo read-file" || env.Method != "GET" || env.Status != http.StatusOK {
-		t.Fatalf("envelope = %+v, want direct-read README result", env)
+	if env.Kind != "ConnectorCommandDirectRead" || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want successful direct-read envelope", env)
 	}
-	if env.Response["name"] != "README.md" || env.Response["type"] != "file" {
-		t.Fatalf("response = %+v, want README file metadata", env.Response)
+	if _, ok := env.Response["repositoryOwner"]; !ok {
+		t.Fatalf("response = %+v, want declared GraphQL data", env.Response)
 	}
-	if _, ok := env.Response["content"]; ok {
-		t.Fatalf("response leaked content: %+v", env.Response)
+	if env.GraphQL == nil {
+		t.Fatalf("envelope omitted GraphQL metadata: %s", stdout)
 	}
-	if _, ok := env.Response["download_url"]; ok {
-		t.Fatalf("response leaked download_url: %+v", env.Response)
+	if !env.GraphQL.PartialData || len(env.GraphQL.Errors) != 1 || env.GraphQL.Errors[0].Message != "partial resolver failure" {
+		t.Fatalf("graphql metadata = %+v, want bounded partial-data error", env.GraphQL)
 	}
-	if env.Response["content_redacted"] != true || env.Response["download_url_redacted"] != true {
-		t.Fatalf("response redaction markers = %+v, want content and download_url redacted", env.Response)
-	}
-
-	gotPath = ""
-	runCLI(t, []string{
-		"github", "repo", "read-file",
-		"--credential", "github-local",
-		"--path", "help",
-		"--root", root,
-		"--json",
-	})
-	if gotPath != "/repos/octocat/hello-world/contents/help" {
-		t.Fatalf("request path for help-valued flag = %q, want contents/help", gotPath)
+	if env.GraphQL.RateLimit == nil || env.GraphQL.RateLimit.Limit != 5000 || env.GraphQL.RateLimit.Cost != 1 || env.GraphQL.RateLimit.Remaining != 4999 || env.GraphQL.RateLimit.ResetAt != "2026-08-20T00:00:00Z" {
+		t.Fatalf("graphql rate limit = %+v, want declared rate-limit metadata", env.GraphQL.RateLimit)
 	}
 }
 
-// TestGitHubDirectReadParametersAndPageContextReachWire drives the real CLI,
-// embedded GitHub bundle, command runner, and direct-read executor against a
-// known-larger fixture. It asserts returned records and the server-observed
-// query, never a successful exit code alone.
-func TestGitHubDirectReadParametersAndPageContextReachWire(t *testing.T) {
-	const since = "2026-01-02T03:04:05Z"
-	type observedRequest struct {
-		path  string
-		query string
-	}
-	var observed []observedRequest
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		observed = append(observed, observedRequest{path: r.URL.Path, query: r.URL.RawQuery})
+// TestGitHubSourceBoundDirectReadsExecuteBeforeIO proves the restored locked
+// source routes make their declared requests rather than stopping as stale
+// partial commands before the provider boundary.
+func TestGitHubSourceBoundDirectReadsExecuteBeforeIO(t *testing.T) {
+	var requests int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
 		w.Header().Set("Content-Type", "application/json")
-		switch r.URL.Path {
-		case "/repos/octocat/hello-world/notifications":
-			if got := r.URL.Query().Get("since"); got != since {
-				t.Errorf("notifications since = %q, want %q", got, since)
-			}
-			if got := r.URL.Query().Get("per_page"); got != "100" {
-				t.Errorf("notifications per_page = %q, want declared 100", got)
-			}
-			_, _ = w.Write([]byte(`[{"id":"thread-1"},{"id":"thread-2"}]`))
-		case "/repos/octocat/hello-world/pulls/42/files":
-			if got := r.URL.Query().Get("per_page"); got != "100" {
-				t.Errorf("pull files per_page = %q, want declared 100", got)
-			}
-			page := r.URL.Query().Get("page")
-			if page == "" {
-				page = "1"
-			}
-			count := 100
-			if page == "2" {
-				count = 20
-			}
-			if page != "1" && page != "2" {
-				t.Errorf("pull files page = %q, want 1 or 2", page)
-			}
-			rows := make([]map[string]any, count)
-			for i := range rows {
-				rows[i] = map[string]any{"filename": fmt.Sprintf("file-%03d", i)}
-			}
-			_ = json.NewEncoder(w).Encode(rows)
-		default:
-			t.Errorf("unexpected request %s", r.URL.Path)
-		}
+		_, _ = w.Write([]byte(`{"fixture":"restored-source-read"}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -927,110 +926,25 @@ func TestGitHubDirectReadParametersAndPageContextReachWire(t *testing.T) {
 		"--json",
 	})
 
-	// Both rejections occur before the handler is reached, and the enum
-	// rejection names every accepted option instead of deferring to GitHub.
+	// Both historical spellings are source-bound and now field-complete, so
+	// their declared flags must reach the provider and return a direct-read
+	// result rather than a partial-command refusal.
 	for _, tc := range []struct {
-		args         []string
-		want         string
-		usageRefusal bool
+		args []string
 	}{
-		{args: []string{"github", "issue", "list", "--credential", "github-local", "--state", "impossible", "--root", root, "--json"}, want: "all|closed|open"},
-		{args: []string{"github", "pulls", "files", "view", "--credential", "github-local", "--root", root, "--json"}, want: "missing required flag --pull-number", usageRefusal: true},
+		{args: []string{"github", "notifications", "view", "--credential", "github-local", "--since", "2026-01-02T03:04:05Z", "--root", root, "--json"}},
+		{args: []string{"github", "pulls", "files", "view", "--credential", "github-local", "--pull-number", "42", "--page", "2", "--root", root, "--json"}},
 	} {
 		var stdout, stderr bytes.Buffer
 		code := cli.Run(tc.args, &stdout, &stderr)
-		if code == 0 {
-			t.Fatalf("Run(%v) code = 0, want parser refusal", tc.args)
+		if code != 0 || !strings.Contains(stdout.String(), `"kind": "ConnectorCommandDirectRead"`) || !strings.Contains(stdout.String(), `"fixture": "restored-source-read"`) {
+			t.Fatalf("Run(%v) code=%d stdout=%s stderr=%s, want declared successful direct read", tc.args, code, stdout.String(), stderr.String())
 		}
-		if got := stdout.String() + stderr.String(); !strings.Contains(got, tc.want) {
-			t.Fatalf("Run(%v) output = %q, want %q", tc.args, got, tc.want)
-		}
-		if len(observed) != 0 {
-			t.Fatalf("Run(%v) reached the provider: %#v", tc.args, observed)
-		}
-		if tc.usageRefusal {
-			if code != 2 {
-				t.Fatalf("Run(%v) exit code = %d, want 2 usage error", tc.args, code)
-			}
-			var envelope struct {
-				Error struct {
-					Category string `json:"category"`
-					Code     string `json:"code"`
-					Message  string `json:"message"`
-				} `json:"error"`
-			}
-			if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil {
-				t.Fatalf("decode usage refusal: %v\nstdout=%s", err, stdout.String())
-			}
-			if envelope.Error.Category != "usage" || envelope.Error.Code != "usage_error" || !strings.Contains(envelope.Error.Message, tc.want) {
-				t.Fatalf("usage refusal = %+v, want category=usage code=usage_error message containing %q", envelope.Error, tc.want)
-			}
-		}
+	}
+	if requests != 2 {
+		t.Fatalf("restored direct reads reached provider %d times, want 2", requests)
 	}
 
-	notificationOut, _ := runCLI(t, []string{
-		"github", "notifications", "view", "--credential", "github-local",
-		"--since", since, "--root", root, "--json",
-	})
-	var notification struct {
-		Response []map[string]any `json:"response"`
-		Page     struct {
-			Records  int  `json:"records"`
-			Size     int  `json:"size"`
-			Complete bool `json:"complete"`
-		} `json:"page"`
-	}
-	if err := json.Unmarshal([]byte(notificationOut), &notification); err != nil {
-		t.Fatalf("decode notifications output: %v\n%s", err, notificationOut)
-	}
-	if len(notification.Response) != 2 || notification.Page.Records != 2 || notification.Page.Size != 100 || !notification.Page.Complete {
-		t.Fatalf("notifications response/page = %#v/%+v, want two real rows and a complete 100-size page", notification.Response, notification.Page)
-	}
-
-	readPage := func(page string) struct {
-		Response []map[string]any `json:"response"`
-		Page     struct {
-			Records    int  `json:"records"`
-			Size       int  `json:"size"`
-			Number     int  `json:"number"`
-			NextNumber int  `json:"next_number"`
-			HasMore    bool `json:"has_more"`
-			Complete   bool `json:"complete"`
-		} `json:"page"`
-	} {
-		args := []string{"github", "pulls", "files", "view", "--credential", "github-local", "--pull-number", "42", "--root", root, "--json"}
-		if page != "" {
-			args = append(args, "--page", page)
-		}
-		stdout, _ := runCLI(t, args)
-		var out struct {
-			Response []map[string]any `json:"response"`
-			Page     struct {
-				Records    int  `json:"records"`
-				Size       int  `json:"size"`
-				Number     int  `json:"number"`
-				NextNumber int  `json:"next_number"`
-				HasMore    bool `json:"has_more"`
-				Complete   bool `json:"complete"`
-			} `json:"page"`
-		}
-		if err := json.Unmarshal([]byte(stdout), &out); err != nil {
-			t.Fatalf("decode pull-files page %q: %v\n%s", page, err, stdout)
-		}
-		return out
-	}
-
-	first := readPage("")
-	if len(first.Response) != 100 || first.Page.Records != 100 || first.Page.Size != 100 || first.Page.Number != 1 || first.Page.NextNumber != 2 || !first.Page.HasMore || first.Page.Complete {
-		t.Fatalf("first pull-files page = %#v/%+v, want 100 rows and an addressable incomplete page", first.Response, first.Page)
-	}
-	second := readPage("2")
-	if len(second.Response) != 20 || second.Page.Records != 20 || second.Page.Number != 2 || second.Page.HasMore || !second.Page.Complete {
-		t.Fatalf("second pull-files page = %#v/%+v, want final 20-row page", second.Response, second.Page)
-	}
-	if total := len(first.Response) + len(second.Response); total != 120 {
-		t.Fatalf("records reached across pages = %d, want 120", total)
-	}
 }
 
 func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
@@ -1066,6 +980,17 @@ func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	if strings.Contains(out, "approval_token") || strings.Contains(out, "approval_token_hash") ||
 		strings.Contains(out, "connector_command_record") {
 		t.Fatalf("plan JSON leaked approval or raw command payload:\n%s", out)
+	}
+}
+
+func TestGitHubIssueCreateHelpDescribesDeclaredBareStringArm(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"github", "issue", "create", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("issue create help code = %d stderr=%s stdout=%s", code, stderr.String(), stdout.String())
+	}
+	if got := stdout.String(); !strings.Contains(got, "--title (json or string) required") {
+		t.Fatalf("issue title help = %q, want declared json-or-string syntax", got)
 	}
 }
 

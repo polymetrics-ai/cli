@@ -73,6 +73,9 @@ type postgresDurabilityQuerier interface {
 }
 
 func postgresPreflightDurability(ctx context.Context, querier postgresDurabilityQuerier) error {
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return err
+	}
 	var fsync, synchronousCommit string
 	if err := querier.QueryRow(ctx, "SELECT current_setting('fsync'), current_setting('synchronous_commit')").Scan(&fsync, &synchronousCommit); err != nil {
 		if contextErr := ctx.Err(); contextErr != nil {

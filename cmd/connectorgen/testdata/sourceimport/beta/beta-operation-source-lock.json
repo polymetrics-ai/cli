@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "connector": "beta",
+  "rest": {
+    "source_url": "https://fixtures.polymetrics.invalid/beta-openapi.json",
+    "sha256": "b2dfc440d936be29d1f0f33ccd4080d79728fb91541e83639d8ac63dfbbae736",
+    "bytes": 641,
+    "swagger": "2.0"
+  }
+}

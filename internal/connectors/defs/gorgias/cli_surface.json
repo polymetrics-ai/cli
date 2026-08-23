@@ -352,15 +352,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.list_account_settings",
-      "flags": [
-        {
-          "name": "type",
-          "type": "string",
-          "summary": "Filter settings by type.",
-          "maps_to": "query.type",
-          "required": false
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/list-account-settings",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -400,15 +392,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_custom_field",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-custom-field",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -428,15 +412,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.list_customer_custom_field_values",
-      "flags": [
-        {
-          "name": "customer-id",
-          "type": "string",
-          "summary": "Path parameter `customer_id`.",
-          "maps_to": "path.customer_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/list-customer-custom-fields-values",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -456,15 +432,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_customer",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-customer",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -504,15 +472,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_event",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-event",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -552,15 +512,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_integration",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-integration",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -600,15 +552,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_job",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-job",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -648,15 +592,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_macro",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-macro",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -696,15 +632,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_metric_card",
-      "flags": [
-        {
-          "name": "slug",
-          "type": "string",
-          "summary": "Path parameter `slug`.",
-          "maps_to": "path.slug",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-metric-card",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -744,15 +672,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_voice_call_event",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-voice-call-event",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -792,15 +712,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_voice_call_recording",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-voice-call-recording",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -840,15 +752,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_voice_call",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-voice-call",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -888,15 +792,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_rule",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-rule",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -916,15 +812,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_satisfaction_survey",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-satisfaction-survey",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -964,15 +852,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_tag",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-tag",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1012,15 +892,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_team",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-team",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1040,15 +912,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_ticket",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-ticket",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1068,15 +932,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.list_ticket_custom_fields",
-      "flags": [
-        {
-          "name": "ticket-id",
-          "type": "string",
-          "summary": "Path parameter `ticket_id`.",
-          "maps_to": "path.ticket_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/list-ticket-custom-fields",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1096,22 +952,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_ticket_message",
-      "flags": [
-        {
-          "name": "ticket-id",
-          "type": "string",
-          "summary": "Path parameter `ticket_id`.",
-          "maps_to": "path.ticket_id",
-          "required": true
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-ticket-message",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1159,15 +1000,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.list_ticket_tags",
-      "flags": [
-        {
-          "name": "ticket-id",
-          "type": "string",
-          "summary": "Path parameter `ticket_id`.",
-          "maps_to": "path.ticket_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/list-ticket-tags",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1207,15 +1040,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_user",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-user",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1255,15 +1080,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_view",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-view",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1283,15 +1100,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.list_view_items",
-      "flags": [
-        {
-          "name": "view-id",
-          "type": "string",
-          "summary": "Path parameter `view_id`.",
-          "maps_to": "path.view_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/list-view-items",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1331,15 +1140,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_widget",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Path parameter `id`.",
-          "maps_to": "path.id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-widget",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1411,50 +1212,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "gorgias.get_legacy_statistic",
-      "flags": [
-        {
-          "name": "name",
-          "type": "enum",
-          "summary": "The name of the statistic to retrieve.",
-          "maps_to": "path.name",
-          "required": true,
-          "values": [
-            "overview",
-            "total-tickets-created",
-            "total-tickets-replied",
-            "total-tickets-closed",
-            "total-messages-sent",
-            "total-messages-received",
-            "median-first-response-time",
-            "median-resolution-time",
-            "total-one-touch-tickets",
-            "support-volume",
-            "resolution-time",
-            "first-response-time",
-            "tickets-created-per-hour-per-weekday",
-            "tickets-per-tag",
-            "tickets-created-per-channel",
-            "tickets-created-per-channel-per-day",
-            "tickets-closed-per-agent",
-            "tickets-closed-per-agent-per-day",
-            "messages-sent-per-macro",
-            "satisfaction-surveys",
-            "latest-satisfaction-surveys",
-            "intents-occurrence",
-            "intents-overview",
-            "intents-breakdown-per-day",
-            "revenue-overview",
-            "revenue-per-agent",
-            "revenue-per-day",
-            "revenue-per-ticket",
-            "self-service-volume-per-flow",
-            "self-service-article-recommendation-performance",
-            "self-service-top-reported-issues",
-            "self-service-products-with-most-issues-and-return-requests",
-            "self-service-workflows-performance"
-          ]
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.gorgias.com/reference/get-legacy-statistic",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1472,7 +1230,7 @@
       "path": "files download",
       "summary": "Download a file",
       "intent": "binary_download",
-      "availability": "implemented",
+      "availability": "partial",
       "operation": "gorgias.download_file",
       "flags": [
         {
@@ -1504,7 +1262,7 @@
           "path": "/api/{file_type}/download/{domain_hash}/{resource_name}"
         }
       ],
-      "notes": "Bounded Gorgias download; the provider responds with a 307 redirect to signed cross-host file storage, which this operation follows (allow_cross_host) without forwarding the Gorgias credential. The provider response is written only beneath an explicit --dest-root.",
+      "notes": "Blocked: the provider documents a signed cross-host redirect without a stable exact host allowlist or a bounded final media contract.",
       "examples": [
         "pm gorgias files download --file-type \"<value>\" --domain-hash \"<value>\" --resource-name \"<value>\" --dest-root ./downloads"
       ]

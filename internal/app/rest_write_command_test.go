@@ -210,6 +210,9 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 		if got := r.Form.Get("dir"); got != "1" {
 			t.Fatalf("dir = %q, want 1", got)
 		}
+		if got := r.Header.Get("X-Change-Reason"); got != "correctness" {
+			t.Fatalf("X-Change-Reason = %q, want declaration-owned header", got)
+		}
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"ok":true,"token":"fixture-token"}`))
 	}))
@@ -217,12 +220,19 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 
 	a := setupRestWriteDemoAppWithBundle(t, ctx, server.URL, func(bundle *engine.Bundle) {
 		bundle.CLISurface.Commands[0].RedactFields = []string{"id"}
+		bundle.Operations[0].REST.Parameters = []engine.OperationParameter{{
+			Name: "X-Change-Reason", In: "header", Type: "string", Required: true,
+			Values: []string{"correctness", "moderation"}, Schema: json.RawMessage(`{"type":"string","enum":["correctness","moderation"]}`), MaxBytes: 32,
+		}}
+		bundle.CLISurface.Commands[0].Flags = append(bundle.CLISurface.Commands[0].Flags,
+			engine.CLIFlag{Name: "header-x-change-reason", Type: "enum", Values: []string{"correctness", "moderation"}, Required: true, MapsTo: "header.X-Change-Reason"},
+		)
 	})
 	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 		Connector:  restWriteDemoConnector,
 		Credential: "restwrite-local",
 		Path:       []string{"vote"},
-		Flags:      map[string][]string{"id": {"t3_abc"}, "dir": {"1"}},
+		Flags:      map[string][]string{"id": {"t3_abc"}, "dir": {"1"}, "header-x-change-reason": {"correctness"}},
 		Preview:    true,
 	})
 	if err != nil {
@@ -236,6 +246,9 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	}
 	if plan.ConnectorCommandOperation != "restwrite-demo.vote" {
 		t.Fatalf("plan operation = %q, want restwrite-demo.vote", plan.ConnectorCommandOperation)
+	}
+	if got := plan.ConnectorCommandHeaders["X-Change-Reason"]; got != "correctness" {
+		t.Fatalf("plan headers = %#v, want preview-bound declared header", plan.ConnectorCommandHeaders)
 	}
 	if plan.ApprovalToken == "" || plan.ConfirmationChallenge != "destructive" {
 		t.Fatalf("plan approval/confirmation = %q/%q, want a single-use token and destructive confirmation", plan.ApprovalToken, plan.ConfirmationChallenge)
@@ -288,15 +301,107 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	}
 }
 
+func TestDirectWriteCommandBindsStructuredBodyHeadersQueryAndPath(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPatch || r.URL.Path != "/api/widgets/w_1" {
+			t.Fatalf("request = %s %s, want PATCH /api/widgets/w_1", r.Method, r.URL.Path)
+		}
+		if got := r.URL.Query().Get("dry_run"); got != "true" {
+			t.Fatalf("dry_run query = %q, want true", got)
+		}
+		if got := r.Header.Get("X-Change-Reason"); got != "correctness" {
+			t.Fatalf("X-Change-Reason = %q, want declaration-owned header", got)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode request body: %v", err)
+		}
+		payload, ok := body["payload"].(map[string]any)
+		if !ok || payload["fixed"] != "provider" || payload["name"] != "Ada" {
+			t.Fatalf("request body = %#v, want declaration-bound static and caller payload", body)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"updated":true}`))
+	}))
+	defer server.Close()
+
+	a := setupRestWriteDemoAppWithBundle(t, ctx, server.URL, func(bundle *engine.Bundle) {
+		for index := range bundle.Operations {
+			if bundle.Operations[index].ID != "restwrite-demo.widget-update" {
+				continue
+			}
+			rest := *bundle.Operations[index].REST
+			rest.BodySchema = json.RawMessage(`{
+				"type":"object",
+				"additionalProperties":false,
+				"required":["payload"],
+				"properties":{"payload":{"type":"object","additionalProperties":false,"required":["fixed","name"],"properties":{"fixed":{"type":"string"},"name":{"type":"string"}}}}
+			}`)
+			rest.Body = map[string]any{"payload": map[string]any{"fixed": "provider"}}
+			rest.Parameters = []engine.OperationParameter{
+				{Name: "dry_run", In: "query", Type: "boolean", Required: true, Schema: json.RawMessage(`{"type":"boolean"}`), MaxBytes: 5},
+				{Name: "X-Change-Reason", In: "header", Type: "string", Required: true, Values: []string{"correctness"}, Schema: json.RawMessage(`{"type":"string","enum":["correctness"]}`), MaxBytes: 32},
+			}
+			bundle.Operations[index].REST = &rest
+		}
+		for index := range bundle.CLISurface.Commands {
+			if bundle.CLISurface.Commands[index].Path != "widget update" {
+				continue
+			}
+			bundle.CLISurface.Commands[index].Flags = []engine.CLIFlag{
+				{Name: "id", Type: "string", Summary: "Target id.", MapsTo: "path.id", Required: true},
+				{Name: "name", Type: "string", Summary: "New widget name.", MapsTo: "body.payload.name", Required: true},
+				{Name: "dry-run", Type: "boolean", Summary: "Use the declared dry-run query.", MapsTo: "query.dry_run", Required: true},
+				{Name: "header-x-change-reason", Type: "enum", Summary: "Use the declared change reason.", Values: []string{"correctness"}, MapsTo: "header.X-Change-Reason", Required: true},
+			}
+		}
+	})
+
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  restWriteDemoConnector,
+		Credential: "restwrite-local",
+		Path:       []string{"widget", "update"},
+		Flags: map[string][]string{
+			"id":                     {"w_1"},
+			"name":                   {"Ada"},
+			"dry-run":                {"true"},
+			"header-x-change-reason": {"correctness"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	if calls != 0 || preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+		t.Fatalf("plan/preview/calls = %#v/%#v/%d, want no-network preview and approval", plan, preview, calls)
+	}
+	if got := plan.ConnectorCommandHeaders["X-Change-Reason"]; got != "correctness" {
+		t.Fatalf("plan headers = %#v, want declaration-owned header", plan.ConnectorCommandHeaders)
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL: %v", err)
+	}
+	if calls != 1 || run.Status != "completed" || run.OperationDirectWrite == nil {
+		t.Fatalf("run/calls = %#v/%d, want one completed declared write", run, calls)
+	}
+}
+
 func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.T) {
 	ctx := context.Background()
 	for _, tt := range []struct {
 		name     string
 		policy   string
 		wantBody bool
+		bodyless bool
 	}{
 		{name: "json returns complete decoded body", policy: "json", wantBody: true},
 		{name: "none retains complete response body", policy: "none", wantBody: true},
+		{name: "none accepts bodyless response", policy: "none", bodyless: true},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			calls := 0
@@ -311,6 +416,11 @@ func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.
 				}
 				if body["name"] != "Ada" {
 					t.Fatalf("request body = %#v, want typed name Ada", body)
+				}
+				if tt.bodyless {
+					w.Header().Set("X-Provider-Receipt", "receipt-204")
+					w.WriteHeader(http.StatusNoContent)
+					return
 				}
 				w.Header().Set("Content-Type", "application/json")
 				_, _ = w.Write([]byte(`{"updated":true,"id":"w_1","nested":{"state":"complete"}}`))
@@ -352,6 +462,14 @@ func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.
 			}
 			if calls != 1 || run.Status != "completed" || run.OperationDirectWrite == nil {
 				t.Fatalf("run/calls = %#v/%d, want one completed direct write", run, calls)
+			}
+			if tt.bodyless {
+				if run.OperationDirectWrite.Status != http.StatusNoContent {
+					t.Fatalf("bodyless response status = %d, want %d", run.OperationDirectWrite.Status, http.StatusNoContent)
+				}
+				if receipt := run.OperationDirectWrite.Headers["X-Provider-Receipt"].Values; len(receipt) != 1 || receipt[0] != "receipt-204" {
+					t.Fatalf("bodyless response receipt header = %#v, want receipt-204", receipt)
+				}
 			}
 			if !tt.wantBody {
 				if run.OperationDirectWrite.Body != nil {
@@ -617,11 +735,13 @@ func TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload(
 	})
 }
 
-func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
+func TestDirectWriteCommandFailurePersistsProviderResponse(t *testing.T) {
 	ctx := context.Background()
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls++
+		w.Header().Add("X-Provider-Receipt", "receipt-one")
+		w.Header().Add("X-Provider-Receipt", "receipt-two")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(`{"error":"fixture failure","token":"server-token"}`))
@@ -649,13 +769,19 @@ func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
 		t.Fatal("RunReverseETL error = nil, want HTTP 500")
 	}
 	if calls != 1 || run.Status != "failed" {
-		t.Fatalf("failed run/calls = %+v/%d, want one failed direct write", run, calls)
+		t.Fatal("failed run did not record one failed direct write")
 	}
-	if !strings.Contains(err.Error(), "server-token") {
-		t.Fatalf("RunReverseETL error = %q, want complete provider error content", err)
+	if strings.Contains(err.Error(), "server-token") {
+		t.Fatal("RunReverseETL error leaked a provider response")
 	}
-	if !strings.Contains(run.Error, "server-token") {
-		t.Fatalf("persisted direct-write error = %q, want complete provider error content", run.Error)
+	if strings.Contains(run.Error, "server-token") {
+		t.Fatal("persisted direct-write error leaked a provider response")
+	}
+	if run.OperationDirectWrite == nil || !run.OperationDirectWrite.ResponseReceived || run.OperationDirectWrite.Status != http.StatusInternalServerError || run.OperationDirectWrite.BodyRaw != `{"error":"fixture failure","token":"server-token"}` {
+		t.Fatal("failed direct write did not retain the complete provider response")
+	}
+	if receipt := run.OperationDirectWrite.Headers["X-Provider-Receipt"].Values; len(receipt) != 2 || receipt[0] != "receipt-one" || receipt[1] != "receipt-two" {
+		t.Fatal("failed direct write did not retain the provider receipt")
 	}
 }
 
@@ -715,5 +841,100 @@ func TestNonDestructiveDirectWriteStillRequiresPreviewAndSingleUseApproval(t *te
 	}
 	if calls != 1 {
 		t.Fatalf("replayed safe approval reached the network; calls = %d", calls)
+	}
+}
+
+func TestStructuredRESTStaticBodyPlanSurvivesReload(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPatch || r.URL.Path != "/api/widgets/w_1" {
+			t.Fatalf("request = %s %s, want PATCH /api/widgets/w_1", r.Method, r.URL.Path)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		payload, ok := body["payload"].(map[string]any)
+		if !ok || payload["fixed"] != "provider" || payload["name"] != "Ada" {
+			t.Fatalf("body = %#v, want merged static and caller payload", body)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"updated":true}`))
+	}))
+	defer server.Close()
+
+	configure := func(bundle *engine.Bundle) {
+		for index := range bundle.Operations {
+			if bundle.Operations[index].ID != "restwrite-demo.widget-update" {
+				continue
+			}
+			rest := *bundle.Operations[index].REST
+			rest.BodySchema = json.RawMessage(`{
+				"type":"object",
+				"additionalProperties":false,
+				"required":["payload"],
+				"properties":{"payload":{"type":"object","additionalProperties":false,"required":["fixed","name"],"properties":{"fixed":{"type":"string"},"name":{"type":"string"}}}}
+			}`)
+			rest.Body = map[string]any{"payload": map[string]any{"fixed": "provider"}}
+			bundle.Operations[index].REST = &rest
+		}
+		for index := range bundle.CLISurface.Commands {
+			if bundle.CLISurface.Commands[index].Path != "widget update" {
+				continue
+			}
+			bundle.CLISurface.Commands[index].Flags = []engine.CLIFlag{
+				{Name: "id", Type: "string", Summary: "Target id.", MapsTo: "path.id", Required: true},
+				{Name: "name", Type: "string", Summary: "New widget name.", MapsTo: "body.payload.name", Required: true},
+			}
+		}
+	}
+
+	a, root := operationWithholdingApp(t, ctx, server.URL, configure)
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  restWriteDemoConnector,
+		Credential: "restwrite-local",
+		Path:       []string{"widget", "update"},
+		Flags:      map[string][]string{"id": {"w_1"}, "name": {"Ada"}},
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	payload, ok := plan.ConnectorCommandRecord["payload"].(map[string]any)
+	if !ok {
+		t.Fatalf("ConnectorCommandRecord = %#v, want caller payload", plan.ConnectorCommandRecord)
+	}
+	if _, present := payload["fixed"]; present {
+		t.Fatalf("ConnectorCommandRecord = %#v, must not persist a static-body sentinel", plan.ConnectorCommandRecord)
+	}
+	if strings.Contains(stateBytes(t, root), `"fixed":{}`) {
+		t.Fatal("state.json persisted a static-body sentinel")
+	}
+
+	reopened, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	bundle, err := engine.Load(os.DirFS("testdata/bundles"), restWriteDemoConnector)
+	if err != nil {
+		t.Fatalf("engine.Load(%s): %v", restWriteDemoConnector, err)
+	}
+	configure(&bundle)
+	reopened.Registry().Register(engine.New(bundle, nil))
+
+	previewed, preview, err := reopened.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan: %v", err)
+	}
+	if preview.Digest == "" || previewed.ApprovalToken == "" || calls != 0 {
+		t.Fatalf("preview = %#v token %q calls %d, want digest/token/no network", preview, previewed.ApprovalToken, calls)
+	}
+	run, err := reopened.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: previewed.ID, ApprovalToken: previewed.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL: %v", err)
+	}
+	if run.Status != "completed" || run.OperationDirectWrite == nil || calls != 1 {
+		t.Fatalf("run/calls = %#v/%d, want one completed direct write", run, calls)
 	}
 }

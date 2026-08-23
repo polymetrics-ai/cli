@@ -4,9 +4,9 @@ Reads and writes the documented Help Scout Mailbox API v2 surface using OAuth2 c
 authentication.
 
 Current official operation ledger: 144 documented HTTP operations (79 GET, 21 POST, 20 PUT, 18
-DELETE, 6 PATCH). Implemented rows: 139 = 24 stream-backed reads + 49 bounded direct reads + 65
-typed writes + 1 binary download. Blocked/planned rows: 5. Certified rows: 0 (fixture-only; no live
-provider calls were made).
+DELETE, 6 PATCH). Implemented rows: 144 = 24 stream-backed reads + 54 bounded direct reads + 65
+typed writes + 1 binary download. Certified rows: 0 (fixture-only; no live provider calls were
+made).
 
 Readable streams: `conversations`, `conversations_threads`, `customer_properties`, `customers`,
 `customers_chats`, `customers_emails`, `customers_phones`, `customers_social_profiles`,
@@ -48,6 +48,9 @@ Authentication behavior:
   `secrets.client_secret`.
 
 Requests use the configured `base_url` value after applying defaults.
+Mailbox API v3 direct reads select the declaration-owned `mailbox_v3` route: it retains the
+configured host (including an approved test proxy) but resolves the documented `/v3` path from the
+host root, never as `/v2/v3`. Callers cannot select a route or URL.
 
 Connection checks call GET `/mailboxes`.
 

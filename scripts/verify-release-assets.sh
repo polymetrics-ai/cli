@@ -10,6 +10,7 @@ fi
 PRINT_SUBJECTS=0
 PRINT_EXPECTED_RELEASE_ASSETS=0
 REQUIRE_EXACT_RELEASE_ASSETS=0
+TARGETS=''
 RELEASE_VERSION=${RELEASE_VERSION:-}
 REQUIRE_TRUST_EVIDENCE=${REQUIRE_TRUST_EVIDENCE:-0}
 VERIFY_GITHUB_ATTESTATIONS=${VERIFY_GITHUB_ATTESTATIONS:-0}
@@ -17,6 +18,13 @@ ALLOW_UNSIGNED_TRUST_FIXTURES=${ALLOW_UNSIGNED_TRUST_FIXTURES:-0}
 COSIGN_CERT_OIDC_ISSUER=${COSIGN_CERT_OIDC_ISSUER:-https://token.actions.githubusercontent.com}
 GITHUB_ATTESTATION_REPO=${GITHUB_ATTESTATION_REPO:-${GITHUB_REPOSITORY:-polymetrics-ai/cli}}
 GITHUB_ATTESTATION_CERT_OIDC_ISSUER=${GITHUB_ATTESTATION_CERT_OIDC_ISSUER:-$COSIGN_CERT_OIDC_ISSUER}
+
+# These ceilings leave room for supported target differences while refusing a
+# regression that restores provider source-lock payloads to every installed pm.
+# Archive and extracted-binary measurements are both retained: repetitive JSON
+# compresses well, but remains a large installed executable.
+MAX_ARCHIVE_BYTES=$((48 * 1024 * 1024))
+MAX_INSTALLED_PM_BYTES=$((160 * 1024 * 1024))
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -35,6 +43,14 @@ while [[ $# -gt 0 ]]; do
         exit 2
       fi
       RELEASE_VERSION=$2
+      shift
+      ;;
+    --targets)
+      if [[ $# -lt 2 || -z "${2:-}" ]]; then
+        printf '%s\n' '--targets requires a value' >&2
+        exit 2
+      fi
+      TARGETS=$2
       shift
       ;;
     --require-trust-evidence)
@@ -69,6 +85,43 @@ package_targets=(
   "rpm arm64 aarch64"
 )
 
+target_exists() {
+  local wanted=$1 target goos goarch
+  for target in "${archive_targets[@]}"; do
+    read -r goos goarch _ <<<"$target"
+    [[ "$wanted" == "$goos/$goarch" ]] && return 0
+  done
+  return 1
+}
+
+# selected reports whether a target is in --targets, and is always true when no
+# filter was given. A scoped verifier is used by the PR packaging job and the
+# production-layout test; a release invokes it without this filter and still
+# requires the complete four-target archive/package set.
+selected() {
+  local goos=$1 goarch=$2 entry
+  [[ -z "$TARGETS" ]] && return 0
+  IFS=',' read -ra entries <<<"$TARGETS"
+  for entry in "${entries[@]}"; do
+    [[ "$entry" == "$goos/$goarch" ]] && return 0
+  done
+  return 1
+}
+
+validate_targets() {
+  local entry
+  [[ -z "$TARGETS" ]] && return 0
+  IFS=',' read -ra entries <<<"$TARGETS"
+  for entry in "${entries[@]}"; do
+    if [[ -z "$entry" ]] || ! target_exists "$entry"; then
+      printf 'unsupported release target: %s\n' "$entry" >&2
+      exit 2
+    fi
+  done
+}
+
+validate_targets
+
 validate_release_version() {
   local version=$1
   if [[ ! "$version" =~ ^[A-Za-z0-9][A-Za-z0-9._+-]*$ ]]; then
@@ -93,11 +146,13 @@ expected_subject_names_for_version() {
 
   for target in "${archive_targets[@]}"; do
     read -r goos goarch extension _ <<<"$target"
+    selected "$goos" "$goarch" || continue
     printf 'pm_%s_%s_%s.%s\n' "$version" "$goos" "$goarch" "$extension"
   done
 
   for target in "${package_targets[@]}"; do
-    read -r format _ package_arch <<<"$target"
+    read -r format goarch package_arch <<<"$target"
+    selected linux "$goarch" || continue
     printf 'pm_%s_linux_%s.%s\n' "$version" "$package_arch" "$format"
   done
 
@@ -339,6 +394,7 @@ assets=()
 asset_paths=()
 for target in "${archive_targets[@]}"; do
   read -r goos goarch extension binary_name <<<"$target"
+  selected "$goos" "$goarch" || continue
   pattern="$DIST_DIR/pm_*_${goos}_${goarch}.${extension}"
   matches=("$DIST_DIR"/pm_*_"${goos}"_"${goarch}"."${extension}")
   asset=$(one_match "$goos/$goarch archive" "$pattern" "${matches[@]}")
@@ -352,10 +408,21 @@ for target in "${archive_targets[@]}"; do
   fi
   expected=$(printf '%s\n' LICENSE NOTICE README.md "$binary_name" | LC_ALL=C sort)
   compare_exact "archive contents: $asset" "$expected" "$contents"
+  size_guard_args=(
+    --archive "$asset"
+    --binary "$binary_name"
+    --max-archive-bytes "$MAX_ARCHIVE_BYTES"
+    --max-installed-binary-bytes "$MAX_INSTALLED_PM_BYTES"
+  )
+  if [[ "$PRINT_SUBJECTS" == "1" ]]; then
+    size_guard_args+=(--quiet)
+  fi
+  ./scripts/verify-release-size-budget.sh "${size_guard_args[@]}"
 done
 
 for target in "${package_targets[@]}"; do
   read -r format goarch package_arch <<<"$target"
+  selected linux "$goarch" || continue
   pattern="$DIST_DIR/pm_*_linux_${package_arch}.${format}"
   matches=("$DIST_DIR"/pm_*_linux_"${package_arch}"."${format}")
   asset=$(one_match "linux/$goarch $format package" "$pattern" "${matches[@]}")

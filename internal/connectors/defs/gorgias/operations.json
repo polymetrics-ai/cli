@@ -700,7 +700,7 @@
       "id": "gorgias.download_file",
       "kind": "binary_download",
       "summary": "Download a file",
-      "description": "Official Gorgias file download. The provider responds 307 redirecting to signed, cross-host file storage, so this operation declares allow_cross_host; the download credential (Basic auth) is never forwarded across that redirect by the runtime.",
+      "description": "Official Gorgias file download. The provider documents a signed cross-host redirect without a stable target-host allowlist or a bounded final media contract, so this operation remains non-executable.",
       "source_url": "https://developers.gorgias.com/reference/download-file",
       "risk": "medium",
       "approval": "none",
@@ -710,8 +710,7 @@
         "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
         "max_bytes": 104857600,
         "allow_overwrite": false,
-        "extract_archives": false,
-        "allow_cross_host": true
+        "extract_archives": false
       }
     }
   ]

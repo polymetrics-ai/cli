@@ -1,0 +1,24 @@
+{
+  "record": {
+    "operations": [
+      {
+        "resourceName": "customers/synthetic-conformance-value/recommendations/1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/recommendations:apply",
+    "body": {
+      "operations": [
+        {
+          "resourceName": "customers/synthetic-conformance-value/recommendations/1"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

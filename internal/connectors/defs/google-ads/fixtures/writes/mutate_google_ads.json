@@ -1,0 +1,16 @@
+{
+  "record": {
+    "partialFailure": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/googleAds:mutate",
+    "body": {
+      "partialFailure": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -2,6 +2,7 @@ package mixpanel
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/base64"
 	"net/http"
 	"testing"
@@ -71,6 +72,34 @@ func TestAuthenticator_FallsBackToApiSecretWhenPasswordUnset(t *testing.T) {
 	}
 	if got, want := authHeader(t, auth), wantBasic("config-user", "legacy-secret"); got != want {
 		t.Fatalf("Authorization = %q, want %q", got, want)
+	}
+}
+
+func TestAuthenticator_AllowsApiSecretWithoutUsername(t *testing.T) {
+	password := "mixpanel-api-secret-canary"
+	h := New().(*Hooks)
+	auth, err := h.Authenticator(context.Background(), connectors.RuntimeConfig{
+		Secrets: map[string]string{"api_secret": password},
+	}, engine.AuthSpec{})
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req, err := http.NewRequest(http.MethodGet, "https://example.com", nil)
+	if err != nil {
+		t.Fatalf("NewRequest: %v", err)
+	}
+	if err := auth.Apply(context.Background(), req); err != nil {
+		t.Fatalf("Apply: %v", err)
+	}
+	username, gotPassword, ok := req.BasicAuth()
+	if !ok || len(username) != 0 {
+		t.Fatal("Basic auth did not preserve the declaration-authorized blank username")
+	}
+	if gotLength, wantLength := len(gotPassword), len(password); gotLength != wantLength {
+		t.Fatalf("api_secret length = %d, want %d", gotLength, wantLength)
+	}
+	if gotHash, wantHash := sha256.Sum256([]byte(gotPassword)), sha256.Sum256([]byte(password)); gotHash != wantHash {
+		t.Fatalf("api_secret SHA-256 = %x, want %x", gotHash, wantHash)
 	}
 }
 

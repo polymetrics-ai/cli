@@ -1,0 +1,16 @@
+{
+  "record": {
+    "responseContentType": "UNSPECIFIED"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value:mutate",
+    "body": {
+      "responseContentType": "UNSPECIFIED"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

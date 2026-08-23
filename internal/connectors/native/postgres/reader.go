@@ -90,6 +90,9 @@ func (c Connector) snapshot(ctx context.Context, pool *pgxpool.Pool, schema, str
 		sql += " LIMIT " + strconv.Itoa(limit)
 	}
 
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return err
+	}
 	rows, err := pool.Query(ctx, sql, args...)
 	if err != nil {
 		return fmt.Errorf("read postgres %s: %w", stream, err)

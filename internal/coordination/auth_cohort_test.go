@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 func testAuthCohortKey(t *testing.T, binding string) connectors.AuthCohortKey {
@@ -241,6 +242,38 @@ func TestAuthCohortCoordinator_RestartAndRaceNeverAdmitAFencedCohort(t *testing.
 	}
 	if err := member.Check(context.Background()); !errors.Is(err, ErrAuthCohortEpochMismatch) {
 		t.Fatalf("stale pre-restart member = %v, want ErrAuthCohortEpochMismatch", err)
+	}
+}
+
+func TestAuthCohortRuntimeStopsNextSendAcrossCoordinators(t *testing.T) {
+	store := NewMemoryAuthCohortHealthStore()
+	cohort := testAuthCohortKey(t, "cross-coordinator-next-send")
+	first := NewAuthCohortCoordinator(store)
+	second := NewAuthCohortCoordinator(store)
+	runtime, err := NewAuthCohortRuntime(context.Background(), first, cohort)
+	if err != nil {
+		t.Fatalf("NewAuthCohortRuntime() error = %v", err)
+	}
+	sends := 0
+	err = runtime.Execute(context.Background(), func(ctx context.Context) error {
+		if err := connsdk.CheckRequestAdmission(ctx); err != nil {
+			return err
+		}
+		sends++
+		if err := second.Fence(cohort, AuthenticationOutcomeVerifiedInvalid); err != nil {
+			return err
+		}
+		if err := connsdk.CheckRequestAdmission(ctx); err != nil {
+			return err
+		}
+		sends++
+		return nil
+	})
+	if !errors.Is(err, ErrAuthCohortFenced) {
+		t.Fatalf("Execute() error = %T %v, want cross-coordinator fence before second send", err, err)
+	}
+	if sends != 1 {
+		t.Fatalf("sends after durable fence = %d, want exactly the first admitted send", sends)
 	}
 }
 

@@ -4,13 +4,17 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/connectors/transportpolicy"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/synctransport"
 )
@@ -155,9 +159,11 @@ func appendDefinitionTransportEvidence(values []connectors.ConformanceEvidenceRe
 type declarativeTypedDestinationExecutor struct{}
 
 type declarativeTypedDestinationContract struct {
-	connector  *engine.Connector
-	descriptor connectors.DestinationTransportDescriptor
-	actions    map[string]connectors.WriteActionInfo
+	connector          connectors.DeclarativeTypedDestination
+	readBack           connectors.DeclarativeTypedDestinationReadBack
+	descriptor         connectors.DestinationTransportDescriptor
+	actions            map[string]connectors.WriteActionInfo
+	idempotencyHeaders map[string]string
 }
 
 func (*declarativeTypedDestinationExecutor) TransportExecutorReference() connectors.TransportExecutorReference {
@@ -180,7 +186,42 @@ func (e *declarativeTypedDestinationExecutor) PlanDestination(_ context.Context,
 	if _, err := contract.plan(request.Source, request.Stream, request.Mode, request.ApplyStrategy); err != nil {
 		return synctransport.DestinationPlan{}, err
 	}
-	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy}, nil
+	actionDefinitionSHA256, err := contract.actionDefinitionDigest(request.ApplyStrategy.Action)
+	if err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(request.Approval, actionDefinitionSHA256); err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	if err := validateDeclarativeTypedDestinationIdempotencyProof(request.Approval, contract.descriptor.Executor, actionDefinitionSHA256, contract.idempotencyHeaders[request.ApplyStrategy.Action]); err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	tombstoneActionDefinitionSHA256 := ""
+	tombstoneIdempotencyKeyHeader := ""
+	if request.ApplyStrategy.TombstoneAction != "" {
+		if _, err := contract.tombstoneBinding(request.Source, request.Stream, request.Mode, request.ApplyStrategy); err != nil {
+			return synctransport.DestinationPlan{}, err
+		}
+		tombstoneActionDefinitionSHA256, err = contract.actionDefinitionDigest(request.ApplyStrategy.TombstoneAction)
+		if err != nil {
+			return synctransport.DestinationPlan{}, err
+		}
+		if err := validateDeclarativeTypedDestinationTombstoneApprovalDefinition(request.Approval, tombstoneActionDefinitionSHA256); err != nil {
+			return synctransport.DestinationPlan{}, err
+		}
+		if err := validateDeclarativeTypedDestinationTombstoneIdempotencyProof(request.Approval, contract.descriptor.Executor, tombstoneActionDefinitionSHA256, contract.idempotencyHeaders[request.ApplyStrategy.TombstoneAction]); err != nil {
+			return synctransport.DestinationPlan{}, err
+		}
+		tombstoneIdempotencyKeyHeader = contract.idempotencyHeaders[request.ApplyStrategy.TombstoneAction]
+	}
+	physicalActions := declarativeTypedDestinationPhysicalActions(declarativeTypedDestinationBinding{
+		Action: request.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, IdempotencyKeyHeader: contract.idempotencyHeaders[request.ApplyStrategy.Action],
+		TombstoneAction: request.ApplyStrategy.TombstoneAction, TombstoneActionDefinitionSHA256: tombstoneActionDefinitionSHA256, TombstoneIdempotencyKeyHeader: tombstoneIdempotencyKeyHeader,
+	})
+	if err := validateDeclarativeTypedDestinationApprovedPhysicalActions(request.Approval, physicalActions); err != nil {
+		return synctransport.DestinationPlan{}, err
+	}
+	return synctransport.DestinationPlan{ApplyStrategy: request.ApplyStrategy, ActionDefinitionSHA256: actionDefinitionSHA256, TombstoneActionDefinitionSHA256: tombstoneActionDefinitionSHA256, PhysicalActions: physicalActions}, nil
 }
 
 func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Context, request synctransport.DestinationApplyRequest) (synccontract.DownstreamAcknowledgement, error) {
@@ -198,53 +239,319 @@ func (e *declarativeTypedDestinationExecutor) ApplyDestination(ctx context.Conte
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
-	if err := validateDeclarativeTypedDestinationWorkset(request); err != nil {
-		return synccontract.DownstreamAcknowledgement{}, err
-	}
-	records, err := declarativeTypedDestinationRecords(request.Workset.Records, binding)
+	actionDefinitionSHA256, err := contract.actionDefinitionDigest(request.Plan.ApplyStrategy.Action)
 	if err != nil {
 		return synccontract.DownstreamAcknowledgement{}, err
 	}
-	writeEvidence := request.Approval.Evidence
-	if request.Approval.IssueWriteEvidence != nil {
-		writeEvidence, err = request.Approval.IssueWriteEvidence(ctx)
+	if request.Plan.ActionDefinitionSHA256 != actionDefinitionSHA256 {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination action %q definition changed; replan and reapprove", request.Plan.ApplyStrategy.Action)
+	}
+	if err := validateDeclarativeTypedDestinationApprovalDefinition(request.Approval, actionDefinitionSHA256); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	if err := validateDeclarativeTypedDestinationIdempotencyProof(request.Approval, contract.descriptor.Executor, actionDefinitionSHA256, contract.idempotencyHeaders[request.Plan.ApplyStrategy.Action]); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	var tombstoneBinding *connectors.DestinationSourceBinding
+	var tombstoneActionDefinitionSHA256, tombstoneIdempotencyKeyHeader string
+	if request.Plan.ApplyStrategy.TombstoneAction != "" {
+		resolvedTombstoneBinding, bindingErr := contract.tombstoneBinding(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy)
+		if bindingErr != nil {
+			return synccontract.DownstreamAcknowledgement{}, bindingErr
+		}
+		tombstoneBinding = &resolvedTombstoneBinding
+		tombstoneActionDefinitionSHA256, err = contract.actionDefinitionDigest(request.Plan.ApplyStrategy.TombstoneAction)
 		if err != nil {
-			return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("authorize declarative typed destination action %q: %w", request.Plan.ApplyStrategy.Action, err)
+			return synccontract.DownstreamAcknowledgement{}, err
+		}
+		if request.Plan.TombstoneActionDefinitionSHA256 != tombstoneActionDefinitionSHA256 {
+			return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination tombstone action %q definition changed; replan and reapprove", request.Plan.ApplyStrategy.TombstoneAction)
+		}
+		if err := validateDeclarativeTypedDestinationTombstoneApprovalDefinition(request.Approval, tombstoneActionDefinitionSHA256); err != nil {
+			return synccontract.DownstreamAcknowledgement{}, err
+		}
+		if err := validateDeclarativeTypedDestinationTombstoneIdempotencyProof(request.Approval, contract.descriptor.Executor, tombstoneActionDefinitionSHA256, contract.idempotencyHeaders[request.Plan.ApplyStrategy.TombstoneAction]); err != nil {
+			return synccontract.DownstreamAcknowledgement{}, err
+		}
+		tombstoneIdempotencyKeyHeader = contract.idempotencyHeaders[request.Plan.ApplyStrategy.TombstoneAction]
+	}
+	physicalActions := declarativeTypedDestinationPhysicalActions(declarativeTypedDestinationBinding{
+		Action: request.Plan.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, IdempotencyKeyHeader: contract.idempotencyHeaders[request.Plan.ApplyStrategy.Action],
+		TombstoneAction: request.Plan.ApplyStrategy.TombstoneAction, TombstoneActionDefinitionSHA256: tombstoneActionDefinitionSHA256, TombstoneIdempotencyKeyHeader: tombstoneIdempotencyKeyHeader,
+	})
+	if err := validateDeclarativeTypedDestinationPhysicalActions(request.Plan.PhysicalActions, physicalActions); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination plan %w", err)
+	}
+	if err := validateDeclarativeTypedDestinationApprovedPhysicalActions(request.Approval, physicalActions); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	recordPolicy, err := contract.readBackPolicy(request.Plan.ApplyStrategy)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	tombstonePolicy, err := contract.tombstoneReadBackPolicy(request.Plan.ApplyStrategy)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	if err := validateDeclarativeTypedDestinationWorkset(request, binding, tombstoneBinding, recordPolicy, tombstonePolicy); err != nil {
+		return synccontract.DownstreamAcknowledgement{}, err
+	}
+	results := make([]declarativeTypedDestinationActionResult, 0, 2)
+	var recordReceipt json.RawMessage
+	if len(request.Workset.Records) != 0 {
+		records, mapErr := declarativeTypedDestinationRecords(request.Workset.Records, binding)
+		if mapErr != nil {
+			return synccontract.DownstreamAcknowledgement{}, mapErr
+		}
+		result, writeErr := declarativeTypedDestinationWrite(ctx, contract, request, request.Plan.ApplyStrategy.Action, records)
+		results = append(results, declarativeTypedDestinationActionResult{Action: request.Plan.ApplyStrategy.Action, Result: result})
+		output, outputErr := declarativeTypedDestinationApplyOutput(results, request.Runtime.Secrets)
+		if outputErr != nil {
+			return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(outputErr, results, request.Runtime.Secrets)
+		}
+		if writeErr != nil {
+			return synccontract.DownstreamAcknowledgement{}, synctransport.NewDestinationApplyOutputError(writeErr, output)
+		}
+		policy := recordPolicy
+		recordReceipt, err = declarativeTypedDestinationReadBackReceipt(result, policy, actionDefinitionSHA256)
+		if err != nil {
+			return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(fmt.Errorf("extract declarative typed destination action %q read-back receipt: %w", request.Plan.ApplyStrategy.Action, err), results, request.Runtime.Secrets)
 		}
 	}
-	if writeEvidence == nil {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination action %q has no write evidence", request.Plan.ApplyStrategy.Action)
+	var tombstoneReceipt json.RawMessage
+	if len(request.Workset.Tombstones) != 0 {
+		tombstones, mapErr := declarativeTypedDestinationTombstoneRecords(request.Workset.Tombstones, *tombstoneBinding)
+		if mapErr != nil {
+			return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(mapErr, results, request.Runtime.Secrets)
+		}
+		result, writeErr := declarativeTypedDestinationWrite(ctx, contract, request, request.Plan.ApplyStrategy.TombstoneAction, tombstones)
+		results = append(results, declarativeTypedDestinationActionResult{Action: request.Plan.ApplyStrategy.TombstoneAction, Result: result})
+		output, outputErr := declarativeTypedDestinationApplyOutput(results, request.Runtime.Secrets)
+		if outputErr != nil {
+			return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(outputErr, results, request.Runtime.Secrets)
+		}
+		if writeErr != nil {
+			return synccontract.DownstreamAcknowledgement{}, synctransport.NewDestinationApplyOutputError(writeErr, output)
+		}
+		policy := tombstonePolicy
+		tombstoneReceipt, err = declarativeTypedDestinationTombstoneAbsenceReceipt(tombstones, *policy, tombstoneActionDefinitionSHA256)
+		if err != nil {
+			return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(fmt.Errorf("construct declarative typed destination tombstone action %q absence receipt: %w", request.Plan.ApplyStrategy.TombstoneAction, err), results, request.Runtime.Secrets)
+		}
 	}
-	writeRequest := connectors.WriteRequest{
-		Stream:   request.Stream,
-		Table:    "sync_transport",
-		Action:   request.Plan.ApplyStrategy.Action,
-		Config:   request.Runtime,
-		Approval: writeEvidence,
+	output, outputErr := declarativeTypedDestinationApplyOutput(results, request.Runtime.Secrets)
+	if outputErr != nil {
+		return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(outputErr, results, request.Runtime.Secrets)
 	}
-	if err := contract.connector.ValidateWrite(ctx, writeRequest, records); err != nil {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("validate declarative typed destination action %q: %w", writeRequest.Action, err)
-	}
-	result, err := contract.connector.Write(ctx, writeRequest, records)
-	if err != nil {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply declarative typed destination action %q: %w", writeRequest.Action, err)
-	}
-	if result.RecordsWritten != len(records) || result.RecordsFailed != 0 {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("declarative typed destination action %q wrote=%d failed=%d, want %d durable writes", writeRequest.Action, result.RecordsWritten, result.RecordsFailed, len(records))
-	}
-	output, err := json.Marshal(connectors.SanitizeWriteResultForOutput(result, request.Runtime.Secrets))
-	if err != nil {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("encode declarative typed destination action %q output: %w", writeRequest.Action, err)
+	privateReceipt, receiptErr := declarativeTypedDestinationCompositeReceipt(recordReceipt, tombstoneReceipt)
+	if receiptErr != nil {
+		return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(receiptErr, results, request.Runtime.Secrets)
 	}
 	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(contract.connector.Name(), time.Now().UTC())
 	if err != nil {
-		return synccontract.DownstreamAcknowledgement{}, err
+		return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(err, results, request.Runtime.Secrets)
 	}
 	acknowledgement, err = acknowledgement.WithOutput(output)
 	if err != nil {
-		return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("attach declarative typed destination action %q output: %w", writeRequest.Action, err)
+		return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(fmt.Errorf("attach declarative typed destination action %q output: %w", request.Plan.ApplyStrategy.Action, err), results, request.Runtime.Secrets)
+	}
+	acknowledgement, err = acknowledgement.WithPrivateReceipt(privateReceipt)
+	if err != nil {
+		return synccontract.DownstreamAcknowledgement{}, declarativeTypedDestinationApplyFailure(fmt.Errorf("attach declarative typed destination action %q private read-back receipt: %w", request.Plan.ApplyStrategy.Action, err), results, request.Runtime.Secrets)
 	}
 	return acknowledgement, nil
+}
+
+type declarativeTypedDestinationActionResult struct {
+	Action string                 `json:"action"`
+	Result connectors.WriteResult `json:"result"`
+}
+
+type declarativeTypedDestinationCompositeReadBackReceipt struct {
+	Version    int             `json:"version"`
+	Records    json.RawMessage `json:"records,omitempty"`
+	Tombstones json.RawMessage `json:"tombstones,omitempty"`
+}
+
+func declarativeTypedDestinationWrite(ctx context.Context, contract declarativeTypedDestinationContract, request synctransport.DestinationApplyRequest, action string, records []connectors.Record) (connectors.WriteResult, error) {
+	writeEvidence := request.Approval.Evidence
+	var err error
+	if request.Approval.IssueWriteEvidence != nil {
+		writeEvidence, err = request.Approval.IssueWriteEvidence(ctx)
+		if err != nil {
+			return connectors.WriteResult{}, fmt.Errorf("authorize declarative typed destination action %q: %w", action, err)
+		}
+	}
+	if writeEvidence == nil {
+		return connectors.WriteResult{}, fmt.Errorf("declarative typed destination action %q has no write evidence", action)
+	}
+	writeRequest := connectors.WriteRequest{
+		Stream: request.Stream, Table: "sync_transport", Action: action, Config: request.Runtime, Approval: writeEvidence,
+		DeliveryOccurrence: declarativeTypedDestinationDeliveryOccurrence(request),
+	}
+	if err := contract.connector.ValidateWrite(ctx, writeRequest, records); err != nil {
+		return connectors.WriteResult{}, fmt.Errorf("validate declarative typed destination action %q: %w", action, err)
+	}
+	result, err := contract.connector.Write(transportpolicy.MarkDestructive(ctx), writeRequest, records)
+	if err != nil {
+		return result, fmt.Errorf("apply declarative typed destination action %q: %w", action, err)
+	}
+	completed := result.RecordsWritten
+	if declared, found := contract.actions[action]; found && declared.Kind == "delete" {
+		completed += result.RecordsUnchanged
+	}
+	if completed != len(records) || result.RecordsFailed != 0 {
+		return result, fmt.Errorf("declarative typed destination action %q wrote=%d unchanged=%d failed=%d, want %d durable outcomes", action, result.RecordsWritten, result.RecordsUnchanged, result.RecordsFailed, len(records))
+	}
+	return result, nil
+}
+
+func declarativeTypedDestinationDeliveryOccurrence(request synctransport.DestinationApplyRequest) string {
+	// Receipt/workset identity is issued by the durable stage and validated
+	// before this call. Keep the connection and checkpoint in the opaque hash
+	// input as defense in depth against a future stage reusing a local ID.
+	return strings.Join([]string{
+		"polymetrics/declarative-typed-destination-delivery/v1",
+		request.ConnectionID,
+		request.Workset.ID,
+		request.Receipt.CheckpointSHA256,
+	}, "\x00")
+}
+
+func declarativeTypedDestinationApplyOutput(results []declarativeTypedDestinationActionResult, secrets map[string]string) (json.RawMessage, error) {
+	if len(results) == 1 && results[0].Action != "" {
+		return json.Marshal(connectors.SanitizeWriteResultForOutput(results[0].Result, secrets))
+	}
+	for index := range results {
+		results[index].Result = connectors.SanitizeWriteResultForOutput(results[index].Result, secrets)
+	}
+	return json.Marshal(struct {
+		Actions []declarativeTypedDestinationActionResult `json:"actions"`
+	}{Actions: results})
+}
+
+// declarativeTypedDestinationApplyFailure preserves the complete sanitized
+// provider evidence once any physical action has returned. Receipt assembly,
+// acknowledgement construction, and other local work can still fail, but
+// they cannot erase evidence of a provider mutation from the failed run.
+func declarativeTypedDestinationApplyFailure(err error, results []declarativeTypedDestinationActionResult, secrets map[string]string) error {
+	if err == nil || len(results) == 0 {
+		return err
+	}
+	output, outputErr := declarativeTypedDestinationApplyOutput(results, secrets)
+	if outputErr != nil {
+		return fmt.Errorf("%w; serialize sanitized provider output: %v", err, outputErr)
+	}
+	return synctransport.NewDestinationApplyOutputError(err, output)
+}
+
+func declarativeTypedDestinationCompositeReceipt(records, tombstones json.RawMessage) (json.RawMessage, error) {
+	if len(records) != 0 && len(tombstones) == 0 {
+		return append(json.RawMessage(nil), records...), nil
+	}
+	if len(tombstones) == 0 {
+		return nil, fmt.Errorf("declarative typed destination has no read-back receipt")
+	}
+	receipt, err := json.Marshal(declarativeTypedDestinationCompositeReadBackReceipt{Version: 1, Records: records, Tombstones: tombstones})
+	if err != nil {
+		return nil, fmt.Errorf("encode declarative typed destination composite read-back receipt: %w", err)
+	}
+	if len(receipt) > synccontract.MaxPrivateReceiptBytes {
+		return nil, fmt.Errorf("declarative typed destination composite read-back receipt exceeds its byte bound")
+	}
+	return receipt, nil
+}
+
+func declarativeTypedDestinationReadBackReceipt(result connectors.WriteResult, policy connectors.DestinationReadBackPolicy, actionDefinitionSHA256 string) (json.RawMessage, error) {
+	return declarativeTypedDestinationReadBackReceiptForLocator(result, policy.ReceiptLocator, policy.MaxRecords, actionDefinitionSHA256)
+}
+
+func declarativeTypedDestinationReadBackReceiptForLocator(result connectors.WriteResult, locator connectors.DestinationReceiptLocator, maxRecords int, actionDefinitionSHA256 string) (json.RawMessage, error) {
+	if err := locator.Validate(); err != nil {
+		return nil, err
+	}
+	// A typed destination action is one declaration-owned physical request per
+	// record. A compound protocol needs a dedicated closed adapter instead of
+	// letting this generic path guess a receipt occurrence.
+	if locator.ResponseIndex != 0 {
+		return nil, fmt.Errorf("declarative typed destination receipt locator response_index %d is unavailable for a single-action write", locator.ResponseIndex)
+	}
+	if result.RecordsWritten < 1 || len(result.ProviderResponses) != result.RecordsWritten {
+		return nil, fmt.Errorf("declarative typed destination write has incomplete provider receipts")
+	}
+	responses := make(map[int]connectors.WriteProviderResponse, len(result.ProviderResponses))
+	for _, response := range result.ProviderResponses {
+		if _, duplicate := responses[response.RecordIndex]; duplicate {
+			return nil, fmt.Errorf("declarative typed destination write duplicates provider receipt index %d", response.RecordIndex)
+		}
+		responses[response.RecordIndex] = response
+	}
+	locators := make([]string, 0, result.RecordsWritten)
+	for recordIndex := 0; recordIndex < result.RecordsWritten; recordIndex++ {
+		response, found := responses[recordIndex]
+		if !found {
+			return nil, fmt.Errorf("declarative typed destination write is missing provider receipt index %d", recordIndex)
+		}
+		body, ok := response.Body.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("declarative typed destination provider receipt %d has no JSON object body", recordIndex)
+		}
+		value, found := body[locator.BodyField]
+		if !found {
+			return nil, fmt.Errorf("declarative typed destination provider receipt %d is missing locator field %q", recordIndex, locator.BodyField)
+		}
+		locatorValue, err := declarativeTypedDestinationReceiptLocatorValue(value, locator.MaxValueBytes)
+		if err != nil {
+			return nil, fmt.Errorf("declarative typed destination provider receipt %d locator: %w", recordIndex, err)
+		}
+		locators = append(locators, locatorValue)
+	}
+	return connectors.NewDeclarativeTypedDestinationReadBackReceipt(actionDefinitionSHA256, locator, locators, maxRecords)
+}
+
+// declarativeTypedDestinationTombstoneAbsenceReceipt is the sealed bridge
+// from the durable tombstone workset to its independent absence read-back.
+// Missing-ok DELETE responses are intentionally allowed to have no receipt
+// body, so they cannot be forced through a response-derived locator. The
+// declared tombstone identity is already part of the exact action mapping and
+// is re-read from the durable workset; the subsequent provider GET still has
+// to prove absence before the checkpoint can advance.
+func declarativeTypedDestinationTombstoneAbsenceReceipt(records []connectors.Record, policy connectors.DestinationTombstoneReadBackPolicy, actionDefinitionSHA256 string) (json.RawMessage, error) {
+	if len(policy.Identity) != 1 {
+		return nil, fmt.Errorf("requires exactly one declared tombstone identity for bounded absence read-back")
+	}
+	identityField := policy.Identity[0].ExpectedField
+	locators := make([]string, 0, len(records))
+	for index, record := range records {
+		value, found := record[identityField]
+		if !found {
+			return nil, fmt.Errorf("tombstone record %d has no declared identity field %q", index, identityField)
+		}
+		locator, err := declarativeTypedDestinationReceiptLocatorValue(value, policy.ReceiptLocator.MaxValueBytes)
+		if err != nil {
+			return nil, fmt.Errorf("tombstone record %d identity locator: %w", index, err)
+		}
+		locators = append(locators, locator)
+	}
+	return connectors.NewDeclarativeTypedDestinationReadBackReceipt(actionDefinitionSHA256, policy.ReceiptLocator, locators, policy.MaxRecords)
+}
+
+func declarativeTypedDestinationReceiptLocatorValue(value any, maxBytes int) (string, error) {
+	var locator string
+	switch typed := value.(type) {
+	case string:
+		locator = typed
+	case json.Number:
+		locator = typed.String()
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, bool:
+		locator = fmt.Sprint(typed)
+	default:
+		return "", fmt.Errorf("must be a scalar string, number, integer, or boolean")
+	}
+	if locator == "" || len(locator) > maxBytes {
+		return "", fmt.Errorf("is outside its byte bound")
+	}
+	return locator, nil
 }
 
 // validateDeclarativeTypedDestinationApproval keeps the generic adapter on
@@ -265,7 +572,76 @@ func validateDeclarativeTypedDestinationApproval(approval synctransport.Destinat
 	return nil
 }
 
-func (e *declarativeTypedDestinationExecutor) ReadBackDestination(_ context.Context, request synctransport.DestinationReadBackRequest) error {
+func validateDeclarativeTypedDestinationApprovedPhysicalActions(approval synctransport.DestinationApproval, expected []synctransport.DestinationPhysicalAction) error {
+	if approval.Target.Scope == connectors.WriteApprovalScopeFixture {
+		return nil
+	}
+	if err := validateDeclarativeTypedDestinationPhysicalActions(approval.PhysicalActions, expected); err != nil {
+		return fmt.Errorf("declarative typed destination approval %w; replan and reapprove", err)
+	}
+	return nil
+}
+
+func validateDeclarativeTypedDestinationApprovalDefinition(approval synctransport.DestinationApproval, actionDefinitionSHA256 string) error {
+	if approval.Target.Scope == connectors.WriteApprovalScopeFixture {
+		return nil
+	}
+	if !constantTimeStringEqual(approval.ActionDefinitionSHA256, actionDefinitionSHA256) {
+		return fmt.Errorf("declarative typed destination approval does not bind action definition; replan and reapprove")
+	}
+	return nil
+}
+
+func validateDeclarativeTypedDestinationTombstoneApprovalDefinition(approval synctransport.DestinationApproval, actionDefinitionSHA256 string) error {
+	if approval.Target.Scope == connectors.WriteApprovalScopeFixture {
+		return nil
+	}
+	if !constantTimeStringEqual(approval.TombstoneActionDefinitionSHA256, actionDefinitionSHA256) {
+		return fmt.Errorf("declarative typed destination approval does not bind tombstone action definition; replan and reapprove")
+	}
+	return nil
+}
+
+// validateDeclarativeTypedDestinationIdempotencyProof keeps declaration
+// conformance separate from action admission. The descriptor can honestly say
+// it expects keyed delivery, but only the approved, definition-bound action
+// proof can show which provider header carries that stable key. Fixture scope
+// remains a hermetic test seam; production plans are always sealed below.
+func validateDeclarativeTypedDestinationIdempotencyProof(approval synctransport.DestinationApproval, executor connectors.TransportExecutorReference, actionDefinitionSHA256, header string) error {
+	if approval.Target.Scope == connectors.WriteApprovalScopeFixture {
+		return nil
+	}
+	if err := executor.Validate(); err != nil {
+		return fmt.Errorf("declarative typed destination idempotency executor: %w", err)
+	}
+	if strings.TrimSpace(header) == "" {
+		return fmt.Errorf("declarative typed destination action has no independent idempotency proof")
+	}
+	proof := approval.IdempotencyProof
+	if proof.Executor != executor || !constantTimeStringEqual(proof.ActionDefinitionSHA256, actionDefinitionSHA256) || !strings.EqualFold(strings.TrimSpace(proof.EffectiveHeader), header) {
+		return fmt.Errorf("declarative typed destination approval does not bind the exact executor, action definition, and idempotency header")
+	}
+	return nil
+}
+
+func validateDeclarativeTypedDestinationTombstoneIdempotencyProof(approval synctransport.DestinationApproval, executor connectors.TransportExecutorReference, actionDefinitionSHA256, header string) error {
+	if approval.Target.Scope == connectors.WriteApprovalScopeFixture {
+		return nil
+	}
+	if err := executor.Validate(); err != nil {
+		return fmt.Errorf("declarative typed destination tombstone idempotency executor: %w", err)
+	}
+	if strings.TrimSpace(header) == "" {
+		return fmt.Errorf("declarative typed destination tombstone action has no independent idempotency proof")
+	}
+	proof := approval.TombstoneIdempotencyProof
+	if proof.Executor != executor || !constantTimeStringEqual(proof.ActionDefinitionSHA256, actionDefinitionSHA256) || !strings.EqualFold(strings.TrimSpace(proof.EffectiveHeader), header) {
+		return fmt.Errorf("declarative typed destination approval does not bind the exact tombstone executor, action definition, and idempotency header")
+	}
+	return nil
+}
+
+func (e *declarativeTypedDestinationExecutor) ReadBackDestination(ctx context.Context, request synctransport.DestinationReadBackRequest) error {
 	if e == nil {
 		return fmt.Errorf("declarative typed destination is unavailable")
 	}
@@ -273,8 +649,16 @@ func (e *declarativeTypedDestinationExecutor) ReadBackDestination(_ context.Cont
 	if err != nil {
 		return err
 	}
-	if _, err := contract.plan(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy); err != nil {
+	binding, err := contract.plan(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy)
+	if err != nil {
 		return err
+	}
+	actionDefinitionSHA256, err := contract.actionDefinitionDigest(request.Plan.ApplyStrategy.Action)
+	if err != nil {
+		return err
+	}
+	if request.Plan.ActionDefinitionSHA256 != actionDefinitionSHA256 {
+		return fmt.Errorf("declarative typed destination action %q definition changed; replan and reapprove", request.Plan.ApplyStrategy.Action)
 	}
 	if request.Workset.ID == "" {
 		return fmt.Errorf("declarative typed destination read-back requires a reopened workset")
@@ -282,15 +666,221 @@ func (e *declarativeTypedDestinationExecutor) ReadBackDestination(_ context.Cont
 	if request.Acknowledgement.Sink != contract.connector.Name() || request.Acknowledgement.AcknowledgedAt.IsZero() {
 		return fmt.Errorf("declarative typed destination read-back requires its durable acknowledgement")
 	}
+	privateReceipt, found := request.Acknowledgement.PrivateReceipt()
+	if !found {
+		return fmt.Errorf("declarative typed destination read-back requires its private provider receipt")
+	}
+	var tombstoneBinding *connectors.DestinationSourceBinding
+	var tombstoneActionDefinitionSHA256 string
+	if len(request.Workset.Tombstones) != 0 {
+		resolvedTombstoneBinding, bindingErr := contract.tombstoneBinding(request.Source, request.Stream, request.Mode, request.Plan.ApplyStrategy)
+		if bindingErr != nil {
+			return bindingErr
+		}
+		tombstoneBinding = &resolvedTombstoneBinding
+		tombstoneActionDefinitionSHA256, err = contract.actionDefinitionDigest(request.Plan.ApplyStrategy.TombstoneAction)
+		if err != nil {
+			return err
+		}
+		if request.Plan.TombstoneActionDefinitionSHA256 != tombstoneActionDefinitionSHA256 {
+			return fmt.Errorf("declarative typed destination tombstone action %q definition changed; replan and reapprove", request.Plan.ApplyStrategy.TombstoneAction)
+		}
+	}
+	if len(request.Workset.Records) != 0 {
+		expected, mapErr := declarativeTypedDestinationRecords(request.Workset.Records, binding)
+		if mapErr != nil {
+			return mapErr
+		}
+		policy, policyErr := contract.readBackPolicy(request.Plan.ApplyStrategy)
+		if policyErr != nil {
+			return policyErr
+		}
+		if len(expected) > policy.MaxRecords {
+			return fmt.Errorf("declarative typed destination read-back expected records exceed declared max_records %d", policy.MaxRecords)
+		}
+		recordReceipt, receiptErr := declarativeTypedDestinationReceiptPart(privateReceipt, false)
+		if receiptErr != nil {
+			return receiptErr
+		}
+		if err := declarativeTypedDestinationReadBack(ctx, contract.readBack, request.Runtime, policy.Operation, policy.MaxRecords, policy.MaxAttempts, policy.TimeoutMilliseconds, policy.RetryDelayMilliseconds, policy.ReceiptLocator, actionDefinitionSHA256, recordReceipt, func(provider []connectors.Record) error {
+			return matchDeclarativeTypedDestinationProviderState(expected, provider, policy)
+		}); err != nil {
+			return err
+		}
+	}
+	if len(request.Workset.Tombstones) != 0 {
+		expected, mapErr := declarativeTypedDestinationTombstoneRecords(request.Workset.Tombstones, *tombstoneBinding)
+		if mapErr != nil {
+			return mapErr
+		}
+		policy, policyErr := contract.tombstoneReadBackPolicy(request.Plan.ApplyStrategy)
+		if policyErr != nil {
+			return policyErr
+		}
+		if len(expected) > policy.MaxRecords {
+			return fmt.Errorf("declarative typed destination tombstone read-back expected records exceed declared max_records %d", policy.MaxRecords)
+		}
+		tombstoneReceipt, receiptErr := declarativeTypedDestinationReceiptPart(privateReceipt, true)
+		if receiptErr != nil {
+			return receiptErr
+		}
+		if err := declarativeTypedDestinationReadBack(ctx, contract.readBack, request.Runtime, policy.Operation, policy.MaxRecords, policy.MaxAttempts, policy.TimeoutMilliseconds, policy.RetryDelayMilliseconds, policy.ReceiptLocator, tombstoneActionDefinitionSHA256, tombstoneReceipt, func(provider []connectors.Record) error {
+			return matchDeclarativeTypedDestinationProviderAbsence(expected, provider, *policy)
+		}); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
-func declarativeTypedDestinationContractFor(connector connectors.Connector) (declarativeTypedDestinationContract, error) {
-	candidate, ok := connector.(*engine.Connector)
-	if !ok || candidate == nil {
-		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires an engine connector")
+func declarativeTypedDestinationReceiptPart(privateReceipt json.RawMessage, tombstones bool) (json.RawMessage, error) {
+	if !tombstones {
+		var composite declarativeTypedDestinationCompositeReadBackReceipt
+		if err := json.Unmarshal(privateReceipt, &composite); err == nil && composite.Version == 1 && len(composite.Tombstones) != 0 {
+			if len(composite.Records) == 0 {
+				return nil, fmt.Errorf("declarative typed destination composite receipt is missing ordinary record evidence")
+			}
+			return append(json.RawMessage(nil), composite.Records...), nil
+		}
+		return append(json.RawMessage(nil), privateReceipt...), nil
 	}
-	definition := candidate.Definition()
+	var composite declarativeTypedDestinationCompositeReadBackReceipt
+	decoder := json.NewDecoder(bytes.NewReader(privateReceipt))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&composite); err != nil || composite.Version != 1 || len(composite.Tombstones) == 0 {
+		return nil, fmt.Errorf("declarative typed destination tombstone read-back requires its composite private receipt")
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		return nil, fmt.Errorf("declarative typed destination composite receipt has trailing values")
+	}
+	return append(json.RawMessage(nil), composite.Tombstones...), nil
+}
+
+func declarativeTypedDestinationReadBack(ctx context.Context, reader connectors.DeclarativeTypedDestinationReadBack, runtime connectors.RuntimeConfig, operation string, maxRecords, maxAttempts, timeoutMilliseconds, retryDelayMilliseconds int, locator connectors.DestinationReceiptLocator, actionDefinitionSHA256 string, receipt json.RawMessage, match func([]connectors.Record) error) error {
+	readCtx, cancel := context.WithTimeout(ctx, time.Duration(timeoutMilliseconds)*time.Millisecond)
+	defer cancel()
+	var lastErr error
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		provider, readErr := reader.ReadBackDeclarativeDestination(readCtx, connectors.DeclarativeTypedDestinationReadBackRequest{Operation: operation, Runtime: runtime, MaxRecords: maxRecords, Receipt: receipt, ReceiptLocator: locator, ActionDefinitionSHA256: actionDefinitionSHA256})
+		if readErr == nil {
+			readErr = match(provider)
+		}
+		if readErr == nil {
+			return nil
+		}
+		lastErr = readErr
+		if attempt == maxAttempts {
+			break
+		}
+		timer := time.NewTimer(time.Duration(retryDelayMilliseconds) * time.Millisecond)
+		select {
+		case <-readCtx.Done():
+			timer.Stop()
+			return fmt.Errorf("declarative typed destination provider read-back: %w", readCtx.Err())
+		case <-timer.C:
+		}
+	}
+	return fmt.Errorf("declarative typed destination provider read-back did not confirm expected state: %w", lastErr)
+}
+
+func matchDeclarativeTypedDestinationProviderState(expected, provider []connectors.Record, policy connectors.DestinationReadBackPolicy) error {
+	providerByIdentity := make(map[string]connectors.Record, len(provider))
+	for _, record := range provider {
+		identity, err := declarativeDestinationReadBackIdentity(record, policy.Identity, true)
+		if err != nil {
+			return err
+		}
+		if _, duplicate := providerByIdentity[identity]; duplicate {
+			return fmt.Errorf("provider read-back returned duplicate destination identity")
+		}
+		providerByIdentity[identity] = record
+	}
+	seenExpected := make(map[string]struct{}, len(expected))
+	for _, record := range expected {
+		identity, err := declarativeDestinationReadBackIdentity(record, policy.Identity, false)
+		if err != nil {
+			return err
+		}
+		if _, duplicate := seenExpected[identity]; duplicate {
+			return fmt.Errorf("destination workset contains duplicate read-back identity")
+		}
+		seenExpected[identity] = struct{}{}
+		actual, found := providerByIdentity[identity]
+		if !found {
+			return fmt.Errorf("provider read-back is missing an expected destination identity")
+		}
+		for _, field := range policy.Expected {
+			want, wantFound := record[field.ExpectedField]
+			got, gotFound := actual[field.ProviderField]
+			if !wantFound || !gotFound {
+				return fmt.Errorf("provider read-back field %q does not match expected destination state", field.ProviderField)
+			}
+			equal, err := declarativeReadBackValuesEqual(want, got)
+			if err != nil {
+				return fmt.Errorf("provider read-back field %q comparison: %w", field.ProviderField, err)
+			}
+			if !equal {
+				return fmt.Errorf("provider read-back field %q does not match expected destination state", field.ProviderField)
+			}
+		}
+	}
+	return nil
+}
+
+func matchDeclarativeTypedDestinationProviderAbsence(expected, provider []connectors.Record, policy connectors.DestinationTombstoneReadBackPolicy) error {
+	providerByIdentity := make(map[string]struct{}, len(provider))
+	for _, record := range provider {
+		identity, err := declarativeDestinationReadBackIdentity(record, policy.Identity, true)
+		if err != nil {
+			return err
+		}
+		if _, duplicate := providerByIdentity[identity]; duplicate {
+			return fmt.Errorf("provider tombstone read-back returned duplicate destination identity")
+		}
+		providerByIdentity[identity] = struct{}{}
+	}
+	for _, record := range expected {
+		identity, err := declarativeDestinationReadBackIdentity(record, policy.Identity, false)
+		if err != nil {
+			return err
+		}
+		if _, found := providerByIdentity[identity]; found {
+			return fmt.Errorf("provider tombstone read-back still contains an expected deleted destination identity")
+		}
+	}
+	return nil
+}
+
+func declarativeDestinationReadBackIdentity(record connectors.Record, fields []connectors.DestinationReadBackField, provider bool) (string, error) {
+	values := make([]any, 0, len(fields))
+	for _, field := range fields {
+		name := field.ExpectedField
+		if provider {
+			name = field.ProviderField
+		}
+		value, found := record[name]
+		if !found || value == nil {
+			return "", fmt.Errorf("destination read-back identity field %q is missing", name)
+		}
+		values = append(values, value)
+	}
+	canonical, err := canonicalDeclarativeReadBackValue(values)
+	if err != nil {
+		return "", fmt.Errorf("canonicalize destination read-back identity: %w", err)
+	}
+	return hashString(string(canonical)), nil
+}
+
+func declarativeTypedDestinationContractFor(connector connectors.Connector) (declarativeTypedDestinationContract, error) {
+	candidate, ok := connector.(connectors.DeclarativeTypedDestination)
+	if !ok || declarativeTypedDestinationIsNil(candidate) {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires a registered typed write capability")
+	}
+	definition, defined := connectors.DefinitionOf(candidate)
+	if !defined {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires a definition")
+	}
 	if definition.SyncTransport == nil || definition.SyncTransport.Destination == nil {
 		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires a destination declaration")
 	}
@@ -304,22 +894,55 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 	if descriptor.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
 		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires durable_warehouse acknowledgement")
 	}
-	if descriptor.Delivery.Idempotency != connectors.DeliveryIdempotencyKeyed || descriptor.Delivery.Deletes != connectors.DeliveryDeletesUnavailable {
-		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires keyed idempotency and unavailable deletes")
+	if descriptor.Delivery.Idempotency != connectors.DeliveryIdempotencyKeyed || (descriptor.Delivery.Deletes != connectors.DeliveryDeletesUnavailable && descriptor.Delivery.Deletes != connectors.DeliveryDeletesTombstone) {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires keyed idempotency and declared delete semantics")
 	}
 	if len(descriptor.SourceBindings) == 0 {
 		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires explicit source bindings")
 	}
+	recordActions := make(map[string]struct{}, len(descriptor.SourceBindings))
+	tombstoneActions := make(map[string]struct{}, len(descriptor.SourceBindings))
 	for _, binding := range descriptor.SourceBindings {
+		if binding.Action == "" {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires an action-owned source binding")
+		}
+		if binding.Batch == nil {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q requires a declaration batch", binding.Action)
+		}
+		if err := binding.Batch.Validate(); err != nil {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q batch disposition: %w", binding.Action, err)
+		}
+		if binding.TombstoneMapping != nil {
+			tombstoneActions[binding.Action] = struct{}{}
+			continue
+		}
 		if binding.RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires input_fields source mapping")
 		}
+		recordActions[binding.Action] = struct{}{}
+	}
+	if descriptor.ReadBack != nil || descriptor.TombstoneReadBack != nil {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination requires action-owned read-back declarations")
+	}
+	if descriptor.Delivery.Deletes != connectors.DeliveryDeletesTombstone && len(tombstoneActions) != 0 {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination with unavailable deletes cannot declare tombstone bindings or read-back")
+	}
+	readBack, ok := candidate.(connectors.DeclarativeTypedDestinationReadBack)
+	if !ok || reflect.ValueOf(readBack).Kind() == reflect.Pointer && reflect.ValueOf(readBack).IsNil() {
+		return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination does not implement its declared provider read-back")
 	}
 	actions := make(map[string]connectors.WriteActionInfo, len(definition.WriteActions))
+	idempotencyHeaders := make(map[string]string, len(definition.WriteActions))
 	for _, action := range definition.WriteActions {
+		if _, duplicate := actions[action.Name]; duplicate {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination duplicates write action %q", action.Name)
+		}
 		actions[action.Name] = action
 	}
 	for _, strategy := range descriptor.ApplyStrategies {
+		if _, bound := recordActions[strategy.Action]; !bound {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q has no action-owned source binding", strategy.Action)
+		}
 		action, found := actions[strategy.Action]
 		if !found || action.Name == "" || strings.TrimSpace(action.Method) == "" || strings.TrimSpace(action.Path) == "" {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination strategy %q names unavailable typed action %q", strategy.Mode, strategy.Action)
@@ -327,16 +950,88 @@ func declarativeTypedDestinationContractFor(connector connectors.Connector) (dec
 		if action.TransportBinding != nil {
 			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q selects a different closed adapter", action.Name)
 		}
+		if action.Kind == "delete" {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination ordinary apply action %q must not be a delete", action.Name)
+		}
+		header, err := candidate.DeclarativeTypedDestinationIdempotencyHeader(action.Name)
+		if err != nil {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q has no independent idempotency proof: %w", action.Name, err)
+		}
+		if strings.TrimSpace(header) == "" {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q has no independent idempotency proof", action.Name)
+		}
+		idempotencyHeaders[action.Name] = header
+		if strategy.ReadBack == nil {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q requires action-owned read-back", action.Name)
+		}
+		if strategy.ReadBack.ReceiptLocator.ResponseIndex != 0 {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q receipt locator response_index %d requires a dedicated compound destination adapter", action.Name, strategy.ReadBack.ReceiptLocator.ResponseIndex)
+		}
+		if strategy.ReadBack.Conformance != descriptor.Conformance {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q read-back conformance is not bound to the admitted destination evidence", action.Name)
+		}
+		if descriptor.Delivery.Deletes == connectors.DeliveryDeletesUnavailable {
+			if strategy.TombstoneAction != "" || strategy.TombstoneReadBack != nil {
+				return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination unavailable deletes cannot select tombstone action %q", strategy.TombstoneAction)
+			}
+			continue
+		}
+		if strategy.TombstoneAction == "" {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination action %q has no declaration-owned tombstone action", strategy.Action)
+		}
+		if _, bound := tombstoneActions[strategy.TombstoneAction]; !bound {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q has no exact tombstone source binding", strategy.TombstoneAction)
+		}
+		deleteAction, found := actions[strategy.TombstoneAction]
+		if !found || deleteAction.Name == "" || strings.TrimSpace(deleteAction.Method) == "" || strings.TrimSpace(deleteAction.Path) == "" || deleteAction.Kind != "delete" {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q must name an available delete action", strategy.TombstoneAction)
+		}
+		if deleteAction.TransportBinding != nil {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q selects a different closed adapter", deleteAction.Name)
+		}
+		deleteHeader, err := candidate.DeclarativeTypedDestinationIdempotencyHeader(deleteAction.Name)
+		if err != nil || strings.TrimSpace(deleteHeader) == "" {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q has no independent idempotency proof", deleteAction.Name)
+		}
+		idempotencyHeaders[deleteAction.Name] = deleteHeader
+		if strategy.TombstoneReadBack == nil {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q requires action-owned read-back", deleteAction.Name)
+		}
+		if strategy.TombstoneReadBack.ReceiptLocator.ResponseIndex != 0 {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q receipt locator response_index %d requires a dedicated compound destination adapter", deleteAction.Name, strategy.TombstoneReadBack.ReceiptLocator.ResponseIndex)
+		}
+		if strategy.TombstoneReadBack.Conformance != descriptor.Conformance {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q read-back conformance is not bound to the admitted destination evidence", deleteAction.Name)
+		}
+		if len(strategy.TombstoneReadBack.Identity) != 1 {
+			return declarativeTypedDestinationContract{}, fmt.Errorf("declarative typed destination tombstone action %q requires exactly one identity for bounded absence read-back", deleteAction.Name)
+		}
 	}
-	return declarativeTypedDestinationContract{connector: candidate, descriptor: descriptor, actions: actions}, nil
+	return declarativeTypedDestinationContract{connector: candidate, readBack: readBack, descriptor: descriptor, actions: actions, idempotencyHeaders: idempotencyHeaders}, nil
+}
+
+func declarativeTypedDestinationIsNil(candidate connectors.DeclarativeTypedDestination) bool {
+	if candidate == nil {
+		return true
+	}
+	value := reflect.ValueOf(candidate)
+	switch value.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice:
+		return value.IsNil()
+	default:
+		return false
+	}
 }
 
 func (c declarativeTypedDestinationContract) plan(source connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy) (connectors.DestinationSourceBinding, error) {
+	if mode == synccontract.ModeFullOverwrite {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination does not implement full_overwrite")
+	}
 	expected, err := c.descriptor.ApplyStrategyForAction(mode, strategy.Action)
 	if err != nil {
 		return connectors.DestinationSourceBinding{}, err
 	}
-	if expected != strategy {
+	if !reflect.DeepEqual(expected, strategy) {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q is not the declared strategy for mode %q", strategy.Action, mode)
 	}
 	if _, found := c.actions[strategy.Action]; !found {
@@ -346,19 +1041,116 @@ func (c declarativeTypedDestinationContract) plan(source connectors.Connector, s
 	if !declared {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination source has no transport declaration")
 	}
-	binding, admitted := c.descriptor.SourceBindingFor(sourceDescriptor.Executor, stream)
+	binding, admitted := c.descriptor.SourceBindingForAction(sourceDescriptor.Executor, stream, strategy.Action)
 	if !admitted {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination does not admit source executor %q for stream %q", sourceDescriptor.Executor.ID, stream)
+	}
+	if binding.Action != strategy.Action {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q has no exact source binding", strategy.Action)
 	}
 	if binding.RecordMapping.Kind != connectors.SourceRecordMappingKindInputFields {
 		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination requires input_fields source mapping")
 	}
-	for _, input := range binding.RecordMapping.Inputs {
-		if err := c.connector.PreflightWriteRecordField(strategy.Action, input.Input); err != nil {
-			return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q source input %q is not an exact record schema field: %w", strategy.Action, input.Input, err)
-		}
+	inputs := make([]string, len(binding.RecordMapping.Inputs))
+	for index, input := range binding.RecordMapping.Inputs {
+		inputs[index] = input.Input
+	}
+	if err := c.connector.PreflightWriteRecordFieldMapping(strategy.Action, inputs); err != nil {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q source inputs are not an exact complete record schema mapping: %w", strategy.Action, err)
+	}
+	policy, err := c.readBackPolicy(strategy)
+	if err != nil {
+		return connectors.DestinationSourceBinding{}, err
+	}
+	if err := validateDeclarativeTypedDestinationReadBackFields(strategy.Action, binding.RecordMapping.Inputs, policy.Identity, policy.Expected); err != nil {
+		return connectors.DestinationSourceBinding{}, err
 	}
 	return binding, nil
+}
+
+// tombstoneBinding resolves the delete action sealed beside an ordinary apply
+// strategy. It never falls back to the ordinary record mapping, so a source
+// tombstone can reach only the declaration-owned delete action and image.
+func (c declarativeTypedDestinationContract) tombstoneBinding(source connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy) (connectors.DestinationSourceBinding, error) {
+	if c.descriptor.Delivery.Deletes != connectors.DeliveryDeletesTombstone || strategy.TombstoneAction == "" {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination action %q does not declare tombstone delivery", strategy.Action)
+	}
+	if _, err := c.plan(source, stream, mode, strategy); err != nil {
+		return connectors.DestinationSourceBinding{}, err
+	}
+	sourceDescriptor, declared := connectors.SourceTransportDescriptorOf(source)
+	if !declared {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination source has no transport declaration")
+	}
+	binding, admitted := c.descriptor.SourceBindingForAction(sourceDescriptor.Executor, stream, strategy.TombstoneAction)
+	if !admitted || binding.Action != strategy.TombstoneAction || binding.TombstoneMapping == nil {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination tombstone action %q has no exact tombstone source binding", strategy.TombstoneAction)
+	}
+	inputs := make([]string, len(binding.TombstoneMapping.Inputs))
+	for index, input := range binding.TombstoneMapping.Inputs {
+		inputs[index] = input.Input
+	}
+	if err := c.connector.PreflightWriteRecordFieldMapping(strategy.TombstoneAction, inputs); err != nil {
+		return connectors.DestinationSourceBinding{}, fmt.Errorf("declarative typed destination tombstone action %q inputs are not an exact complete record schema mapping: %w", strategy.TombstoneAction, err)
+	}
+	policy, err := c.tombstoneReadBackPolicy(strategy)
+	if err != nil {
+		return connectors.DestinationSourceBinding{}, err
+	}
+	if err := validateDeclarativeTypedDestinationReadBackFields(strategy.TombstoneAction, binding.TombstoneMapping.Inputs, policy.Identity, nil); err != nil {
+		return connectors.DestinationSourceBinding{}, err
+	}
+	return binding, nil
+}
+
+func (c declarativeTypedDestinationContract) readBackPolicy(strategy connectors.DestinationApplyStrategy) (connectors.DestinationReadBackPolicy, error) {
+	if strategy.ReadBack == nil {
+		return connectors.DestinationReadBackPolicy{}, fmt.Errorf("declarative typed destination action %q requires action-owned read-back", strategy.Action)
+	}
+	return *strategy.ReadBack, nil
+}
+
+func (c declarativeTypedDestinationContract) tombstoneReadBackPolicy(strategy connectors.DestinationApplyStrategy) (*connectors.DestinationTombstoneReadBackPolicy, error) {
+	if strategy.TombstoneAction == "" {
+		return nil, nil
+	}
+	if strategy.TombstoneReadBack == nil {
+		return nil, fmt.Errorf("declarative typed destination tombstone action %q requires action-owned read-back", strategy.TombstoneAction)
+	}
+	policy := *strategy.TombstoneReadBack
+	return &policy, nil
+}
+
+func validateDeclarativeTypedDestinationReadBackFields(action string, inputs []connectors.SourceRecordInputBinding, identity, expected []connectors.DestinationReadBackField) error {
+	available := make(map[string]struct{}, len(inputs))
+	for _, input := range inputs {
+		available[input.Input] = struct{}{}
+	}
+	for _, field := range append(append([]connectors.DestinationReadBackField(nil), identity...), expected...) {
+		if _, found := available[field.ExpectedField]; !found {
+			return fmt.Errorf("declarative typed destination action %q action-owned read-back field %q is not supplied by its exact record mapping", action, field.ExpectedField)
+		}
+	}
+	return nil
+}
+
+func (c declarativeTypedDestinationContract) actionDefinitionDigest(action string) (string, error) {
+	digest, err := c.connector.DeclarativeTypedDestinationActionDigest(action)
+	if err != nil {
+		return "", fmt.Errorf("hash declarative typed destination action %q: %w", action, err)
+	}
+	if strings.TrimSpace(digest) == "" {
+		return "", fmt.Errorf("declarative typed destination action %q has no definition digest", action)
+	}
+	return digest, nil
+}
+
+func (c declarativeTypedDestinationContract) idempotencyHeader(action string) (string, error) {
+	header, found := c.idempotencyHeaders[action]
+	if !found || strings.TrimSpace(header) == "" {
+		return "", fmt.Errorf("declarative typed destination action %q has no independent idempotency proof", action)
+	}
+	return header, nil
 }
 
 // validateDeclarativeTypedDestinationSelection binds a registry-selected
@@ -375,20 +1167,198 @@ func validateDeclarativeTypedDestinationSelection(source, destination connectors
 	return err
 }
 
-func validateDeclarativeTypedDestinationWorkset(request synctransport.DestinationApplyRequest) error {
+// declarativeTypedDestinationEffectiveBatchSize clamps the source page to the
+// tightest declaration-owned action unit. The caller may ask to fetch fewer
+// rows, but cannot expand an acknowledged workset beyond either its ordinary
+// action or its paired tombstone action.
+func declarativeTypedDestinationEffectiveBatchSize(source, destination connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy, requested int) (int, error) {
+	if requested < 1 {
+		return 0, fmt.Errorf("declarative typed destination requested batch size must be positive")
+	}
+	contract, err := declarativeTypedDestinationContractFor(destination)
+	if err != nil {
+		return 0, err
+	}
+	binding, err := contract.plan(source, stream, mode, strategy)
+	if err != nil {
+		return 0, err
+	}
+	effective := requested
+	if binding.Batch.MaxRecords < effective {
+		effective = binding.Batch.MaxRecords
+	}
+	recordPolicy, err := contract.readBackPolicy(strategy)
+	if err != nil {
+		return 0, err
+	}
+	if recordPolicy.MaxRecords < effective {
+		effective = recordPolicy.MaxRecords
+	}
+	actionDefinitionSHA256, err := contract.actionDefinitionDigest(strategy.Action)
+	if err != nil {
+		return 0, err
+	}
+	var tombstonePolicy *connectors.DestinationTombstoneReadBackPolicy
+	tombstoneActionDefinitionSHA256 := ""
+	if strategy.TombstoneAction != "" {
+		tombstoneBinding, err := contract.tombstoneBinding(source, stream, mode, strategy)
+		if err != nil {
+			return 0, err
+		}
+		if tombstoneBinding.Batch.MaxRecords < effective {
+			effective = tombstoneBinding.Batch.MaxRecords
+		}
+		tombstonePolicy, err = contract.tombstoneReadBackPolicy(strategy)
+		if err != nil {
+			return 0, err
+		}
+		if tombstonePolicy.MaxRecords < effective {
+			effective = tombstonePolicy.MaxRecords
+		}
+		tombstoneActionDefinitionSHA256, err = contract.actionDefinitionDigest(strategy.TombstoneAction)
+		if err != nil {
+			return 0, err
+		}
+	}
+	safe, err := declarativeTypedDestinationMaximumReceiptUnit(actionDefinitionSHA256, recordPolicy, tombstoneActionDefinitionSHA256, tombstonePolicy, effective)
+	if err != nil {
+		return 0, err
+	}
+	if safe < effective {
+		effective = safe
+	}
+	if effective < 1 {
+		return 0, fmt.Errorf("declarative typed destination receipt bounds do not admit a single declaration-owned workset")
+	}
+	return effective, nil
+}
+
+func validateDeclarativeTypedDestinationWorkset(request synctransport.DestinationApplyRequest, binding connectors.DestinationSourceBinding, tombstoneBinding *connectors.DestinationSourceBinding, recordPolicy connectors.DestinationReadBackPolicy, tombstonePolicy *connectors.DestinationTombstoneReadBackPolicy) error {
 	if err := request.Receipt.Validate(); err != nil {
 		return fmt.Errorf("declarative typed destination receipt: %w", err)
 	}
 	if request.ConnectionID == "" || request.Receipt.Owner != request.ConnectionID || request.Receipt.ID != request.Workset.ID {
 		return fmt.Errorf("declarative typed destination receipt does not bind the reopened workset")
 	}
-	if len(request.Workset.Records) == 0 || request.Receipt.Records != len(request.Workset.Records) {
+	if request.Receipt.Records != len(request.Workset.Records) || request.Receipt.Tombstones != len(request.Workset.Tombstones) {
+		return fmt.Errorf("declarative typed destination receipt counts do not bind the reopened workset")
+	}
+	if len(request.Workset.Records) == 0 && len(request.Workset.Tombstones) == 0 {
 		return fmt.Errorf("declarative typed destination requires a non-empty reopened workset")
 	}
-	if len(request.Workset.Tombstones) != 0 || request.Receipt.Tombstones != 0 {
-		return fmt.Errorf("declarative typed destination does not support tombstone deletes")
+	if len(request.Workset.Records) > binding.Batch.MaxRecords {
+		return fmt.Errorf("declarative typed destination action %q workset has %d records, exceeding declaration batch maximum %d", binding.Action, len(request.Workset.Records), binding.Batch.MaxRecords)
+	}
+	if len(request.Workset.Records) > recordPolicy.MaxRecords {
+		return fmt.Errorf("declarative typed destination action %q workset has %d records, exceeding action-owned read-back maximum %d", binding.Action, len(request.Workset.Records), recordPolicy.MaxRecords)
+	}
+	if len(request.Workset.Tombstones) != 0 {
+		if tombstoneBinding == nil {
+			return fmt.Errorf("declarative typed destination does not declare tombstone deletes")
+		}
+		if len(request.Workset.Tombstones) > tombstoneBinding.Batch.MaxRecords {
+			return fmt.Errorf("declarative typed destination tombstone action %q workset has %d tombstones, exceeding declaration batch maximum %d", tombstoneBinding.Action, len(request.Workset.Tombstones), tombstoneBinding.Batch.MaxRecords)
+		}
+		if tombstonePolicy == nil {
+			return fmt.Errorf("declarative typed destination tombstone action %q has no action-owned read-back policy", tombstoneBinding.Action)
+		}
+		if len(request.Workset.Tombstones) > tombstonePolicy.MaxRecords {
+			return fmt.Errorf("declarative typed destination tombstone action %q workset has %d tombstones, exceeding action-owned read-back maximum %d", tombstoneBinding.Action, len(request.Workset.Tombstones), tombstonePolicy.MaxRecords)
+		}
+	}
+	if err := validateDeclarativeTypedDestinationReceiptBudget(len(request.Workset.Records), request.Plan.ActionDefinitionSHA256, recordPolicy, len(request.Workset.Tombstones), request.Plan.TombstoneActionDefinitionSHA256, tombstonePolicy); err != nil {
+		return err
 	}
 	return nil
+}
+
+// declarativeTypedDestinationMaximumReceiptUnit derives a single bounded
+// source unit from every receipt/acknowledgement limit before the source can
+// stage a workset. When tombstones are declared, the bound reserves their
+// worst-case escaped receipt and the exact composite envelope too.
+func declarativeTypedDestinationMaximumReceiptUnit(actionDefinitionSHA256 string, recordPolicy connectors.DestinationReadBackPolicy, tombstoneActionDefinitionSHA256 string, tombstonePolicy *connectors.DestinationTombstoneReadBackPolicy, upper int) (int, error) {
+	if upper < 1 {
+		return 0, fmt.Errorf("declarative typed destination receipt upper bound must be positive")
+	}
+	low, high := 1, upper
+	best := 0
+	for low <= high {
+		middle := low + (high-low)/2
+		tombstones := 0
+		if tombstonePolicy != nil {
+			tombstones = middle
+		}
+		if err := validateDeclarativeTypedDestinationReceiptBudget(middle, actionDefinitionSHA256, recordPolicy, tombstones, tombstoneActionDefinitionSHA256, tombstonePolicy); err == nil {
+			best = middle
+			low = middle + 1
+		} else {
+			high = middle - 1
+		}
+	}
+	if best == 0 {
+		return 0, fmt.Errorf("declarative typed destination receipt bounds cannot encode one provider response")
+	}
+	return best, nil
+}
+
+func validateDeclarativeTypedDestinationReceiptBudget(recordCount int, actionDefinitionSHA256 string, recordPolicy connectors.DestinationReadBackPolicy, tombstoneCount int, tombstoneActionDefinitionSHA256 string, tombstonePolicy *connectors.DestinationTombstoneReadBackPolicy) error {
+	var recordReceipt, tombstoneReceipt json.RawMessage
+	var err error
+	if recordCount != 0 {
+		recordReceipt, err = declarativeTypedDestinationWorstCaseReceipt(actionDefinitionSHA256, recordPolicy.ReceiptLocator, recordCount)
+		if err != nil {
+			return fmt.Errorf("declarative typed destination ordinary receipt budget: %w", err)
+		}
+	}
+	if tombstoneCount != 0 {
+		if tombstonePolicy == nil {
+			return fmt.Errorf("declarative typed destination tombstone receipt has no policy")
+		}
+		tombstoneReceipt, err = declarativeTypedDestinationWorstCaseReceipt(tombstoneActionDefinitionSHA256, tombstonePolicy.ReceiptLocator, tombstoneCount)
+		if err != nil {
+			return fmt.Errorf("declarative typed destination tombstone receipt budget: %w", err)
+		}
+	}
+	if len(recordReceipt) == 0 && len(tombstoneReceipt) == 0 {
+		return fmt.Errorf("declarative typed destination receipt budget has no provider action")
+	}
+	if len(tombstoneReceipt) == 0 {
+		if len(recordReceipt) > synccontract.MaxPrivateReceiptBytes {
+			return fmt.Errorf("declarative typed destination ordinary receipt budget exceeds %d bytes before provider I/O", synccontract.MaxPrivateReceiptBytes)
+		}
+		return nil
+	}
+	composite, err := json.Marshal(declarativeTypedDestinationCompositeReadBackReceipt{Version: 1, Records: recordReceipt, Tombstones: tombstoneReceipt})
+	if err != nil {
+		return fmt.Errorf("encode declarative typed destination composite receipt budget: %w", err)
+	}
+	if len(composite) > synccontract.MaxPrivateReceiptBytes {
+		return fmt.Errorf("declarative typed destination composite receipt budget exceeds %d bytes before provider I/O", synccontract.MaxPrivateReceiptBytes)
+	}
+	return nil
+}
+
+func declarativeTypedDestinationWorstCaseReceipt(actionDefinitionSHA256 string, locator connectors.DestinationReceiptLocator, records int) (json.RawMessage, error) {
+	if err := locator.Validate(); err != nil {
+		return nil, err
+	}
+	if len(strings.TrimSpace(actionDefinitionSHA256)) != 64 || records < 1 {
+		return nil, fmt.Errorf("requires declared action digest and positive record count")
+	}
+	locators := make([]string, records)
+	for index := range locators {
+		// NUL is six bytes after JSON escaping, the conservative per-byte JSON
+		// expansion allowed by a bounded provider scalar. This covers ordinary
+		// values as well as control-character-heavy provider receipts.
+		locators[index] = strings.Repeat("\x00", locator.MaxValueBytes)
+	}
+	receipt, err := json.Marshal(connectors.DeclarativeTypedDestinationReadBackReceipt{
+		Version: 1, ActionDefinitionSHA256: actionDefinitionSHA256, Locators: locators,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return receipt, nil
 }
 
 func declarativeTypedDestinationRecords(source []connectors.Record, binding connectors.DestinationSourceBinding) ([]connectors.Record, error) {
@@ -400,8 +1370,50 @@ func declarativeTypedDestinationRecords(source []connectors.Record, binding conn
 		record := make(connectors.Record, len(binding.RecordMapping.Inputs))
 		for _, input := range binding.RecordMapping.Inputs {
 			value, found := row[input.Field]
-			if !found || value == nil {
+			if !found {
 				return nil, fmt.Errorf("declarative typed destination source row %d has no value for action input %q", index, input.Input)
+			}
+			record[input.Input] = value
+		}
+		records = append(records, record)
+	}
+	return records, nil
+}
+
+func declarativeTypedDestinationTombstoneRecords(tombstones []synccontract.Tombstone, binding connectors.DestinationSourceBinding) ([]connectors.Record, error) {
+	if binding.TombstoneMapping == nil {
+		return nil, fmt.Errorf("declarative typed destination tombstone action %q has no tombstone mapping", binding.Action)
+	}
+	records := make([]connectors.Record, 0, len(tombstones))
+	for index, tombstone := range tombstones {
+		if err := tombstone.Validate(); err != nil {
+			return nil, fmt.Errorf("declarative typed destination tombstone %d: %w", index, err)
+		}
+		if tombstone.Operation != synccontract.OperationDelete {
+			return nil, fmt.Errorf("declarative typed destination tombstone %d has unsupported operation %q", index, tombstone.Operation)
+		}
+		image := tombstone.Key
+		if binding.TombstoneMapping.Image == connectors.TombstoneRecordMappingImageBefore {
+			if tombstone.DeleteImage != synccontract.DeleteImageBefore {
+				return nil, fmt.Errorf("declarative typed destination tombstone %d has no declared before image", index)
+			}
+			image = tombstone.Before
+		}
+		decoder := json.NewDecoder(bytes.NewReader(image))
+		decoder.UseNumber()
+		values := make(map[string]any)
+		if err := decoder.Decode(&values); err != nil {
+			return nil, fmt.Errorf("declarative typed destination tombstone %d declared image must be an object: %w", index, err)
+		}
+		var extra any
+		if err := decoder.Decode(&extra); err != io.EOF {
+			return nil, fmt.Errorf("declarative typed destination tombstone %d declared image has trailing values", index)
+		}
+		record := make(connectors.Record, len(binding.TombstoneMapping.Inputs))
+		for _, input := range binding.TombstoneMapping.Inputs {
+			value, found := values[input.Field]
+			if !found {
+				return nil, fmt.Errorf("declarative typed destination tombstone %d has no value for delete input %q", index, input.Input)
 			}
 			record[input.Input] = value
 		}
@@ -910,35 +1922,49 @@ func (*declarativeStreamSourceExecutor) TransportExecutorReference() connectors.
 func (*declarativeStreamSourceExecutor) AllowEmptySourceResult() {}
 
 func (e *declarativeStreamSourceExecutor) ReadTransport(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+	outcome, err := e.ReadTransportWithOutcome(ctx, request, emit)
+	if err != nil {
+		return err
+	}
+	if outcome.Exhausted {
+		return nil
+	}
+	return &synctransport.SourceBudgetStoppedError{Continuation: *outcome.Continuation.Clone()}
+}
+
+func (e *declarativeStreamSourceExecutor) ReadTransportWithOutcome(ctx context.Context, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (synctransport.SourceReadOutcome, error) {
 	if e == nil || request.Connector == nil {
-		return fmt.Errorf("declarative stream transport source is unavailable")
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport source is unavailable")
 	}
 	descriptor, ok := connectors.SourceTransportDescriptorOf(request.Connector)
 	if !ok || descriptor.Executor != declarativeStreamSourceReference || !transportContainsName(descriptor.EligibleStreams, request.Stream) {
-		return fmt.Errorf("declarative stream transport source received an undeclared connector or stream")
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport source received an undeclared connector or stream")
 	}
 	if !transportContainsMode(descriptor.Modes, request.Mode) {
-		return fmt.Errorf("declarative stream transport source does not support sync mode %q", request.Mode)
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport source does not support sync mode %q", request.Mode)
 	}
 	if request.BatchSize <= 0 || request.BatchSize > issueCollectionTransportMaxRecords {
-		return fmt.Errorf("declarative stream transport batch size must be between 1 and %d", issueCollectionTransportMaxRecords)
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport batch size must be between 1 and %d", issueCollectionTransportMaxRecords)
 	}
 	if err := request.Resume.Source.Validate(); err != nil || len(request.Resume.SourceGeneration) == 0 {
-		return fmt.Errorf("declarative stream transport source requires a complete resume identity")
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("declarative stream transport source requires a complete resume identity")
 	}
 	if request.Checkpoint != nil {
 		if err := request.Checkpoint.ValidateResume(request.Resume); err != nil {
-			return err
+			return synctransport.SourceReadOutcome{}, err
 		}
 	}
 	configuredIssue := strings.TrimSpace(request.Runtime.Config[issueLabelTransportSourceIssueConfig])
 	if configuredIssue != "" && request.Stream != "issues" {
-		return fmt.Errorf("%s is valid only for the issues stream", issueLabelTransportSourceIssueConfig)
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("%s is valid only for the issues stream", issueLabelTransportSourceIssueConfig)
 	}
 	if configuredIssue == "" {
 		return e.readDeclarativeCollection(ctx, request.Connector, request, emit)
 	}
-	return e.readConfiguredIssue(ctx, request.Connector, request, emit)
+	if err := e.readConfiguredIssue(ctx, request.Connector, request, emit); err != nil {
+		return synctransport.SourceReadOutcome{}, err
+	}
+	return synctransport.SourceReadOutcome{Exhausted: true}, nil
 }
 
 func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
@@ -993,10 +2019,14 @@ func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Contex
 // retains ownership of provider pagination. A persisted candidate is matched
 // and suppressed on resume, so acknowledged pages are not re-delivered even
 // though the provider sequence must be traversed again to recover its position.
-func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) error {
+func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (synctransport.SourceReadOutcome, error) {
 	maxPages, err := declarativeTransportMaxPages(request.Runtime.Config)
 	if err != nil {
-		return err
+		return synctransport.SourceReadOutcome{}, err
+	}
+	engineConnector, _, err := declarativeStreamTransportConnector(connector)
+	if err != nil {
+		return synctransport.SourceReadOutcome{}, err
 	}
 	records := make([]connectors.Record, 0, request.BatchSize)
 	pageOrdinal := 0
@@ -1006,7 +2036,8 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 	// strategies collapse an identical replay and retain a distinct version.
 	// Suppressing it by an old page hash would instead turn an ordinary provider
 	// update into an invalid checkpoint before the destination can compare it.
-	waitingForResume := request.Checkpoint != nil && !declarativeCollectionReplaysForMode(request.Mode)
+	waitingForResume := request.Checkpoint != nil && request.Checkpoint.Continuation == nil && !declarativeCollectionReplaysForMode(request.Mode)
+	deferCheckpoint := maxPages > 0 && declarativeCollectionIncrementalMode(request.Mode)
 	emitBatch := func() error {
 		if len(records) == 0 {
 			return nil
@@ -1023,14 +2054,19 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 			records = records[:0]
 			return nil
 		}
-		page := synctransport.SourcePage{Records: append([]connectors.Record(nil), records...), CandidateCheckpoint: candidate}
+		page := synctransport.SourcePage{Records: append([]connectors.Record(nil), records...), CandidateCheckpoint: candidate, DeferCheckpoint: deferCheckpoint}
 		records = records[:0]
 		return emit(page)
 	}
-	err = connector.Read(ctx, connectors.ReadRequest{
+	var continuation *connectors.ReadContinuation
+	if request.Checkpoint != nil && request.Checkpoint.Continuation != nil {
+		continuation = &connectors.ReadContinuation{Kind: request.Checkpoint.Continuation.Kind, Token: append([]byte(nil), request.Checkpoint.Continuation.Token...)}
+	}
+	err = engineConnector.ReadWithOutcome(ctx, connectors.ReadRequest{
 		Stream:           request.Stream,
 		Config:           request.Runtime,
 		MaxPages:         maxPages,
+		Continuation:     continuation,
 		PageDeadline:     request.UnitDeadline,
 		ObservePageFetch: request.RecordExtraction,
 	}, func(record connectors.Record) error {
@@ -1044,23 +2080,37 @@ func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.
 		}
 		return nil
 	})
-	if err != nil {
-		return fmt.Errorf("read declarative stream collection: %w", err)
+	var budgetStop *connectors.ReadBudgetStoppedError
+	if err != nil && !errors.As(err, &budgetStop) {
+		return synctransport.SourceReadOutcome{}, fmt.Errorf("read declarative stream collection: %w", err)
 	}
 	if err := ctx.Err(); err != nil {
-		return err
+		return synctransport.SourceReadOutcome{}, err
 	}
 	if err := emitBatch(); err != nil {
-		return err
+		return synctransport.SourceReadOutcome{}, err
 	}
 	if waitingForResume {
-		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "declarative stream resume page is no longer present")
+		return synctransport.SourceReadOutcome{}, synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeInvalidCheckpoint, "declarative stream resume page is no longer present")
 	}
-	return nil
+	if budgetStop != nil {
+		continuation := &synccontract.SourceContinuation{Kind: budgetStop.Continuation.Kind, Token: append(synccontract.OpaqueToken(nil), budgetStop.Continuation.Token...)}
+		return synctransport.SourceReadOutcome{Continuation: continuation}, nil
+	}
+	return synctransport.SourceReadOutcome{Exhausted: true}, nil
 }
 
 func declarativeCollectionReplaysForMode(mode synccontract.Mode) bool {
 	return mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
+}
+
+func declarativeCollectionIncrementalMode(mode synccontract.Mode) bool {
+	switch mode {
+	case synccontract.ModeIncrementalAppend, synccontract.ModeIncrementalUpsert, synccontract.ModeIncrementalDedupe, synccontract.ModeIncrementalDedupeHistory:
+		return true
+	default:
+		return false
+	}
 }
 
 func declarativeTransportMaxPages(config map[string]string) (int, error) {
@@ -1397,13 +2447,9 @@ func issueLabelNames(labels any) []string {
 }
 
 func cloneTransportRecord(record connectors.Record) (connectors.Record, error) {
-	encoded, err := json.Marshal(record)
+	clone, err := synctransport.CloneRecord(record)
 	if err != nil {
-		return nil, fmt.Errorf("encode issue record: %w", err)
-	}
-	var clone connectors.Record
-	if err := json.Unmarshal(encoded, &clone); err != nil {
-		return nil, fmt.Errorf("decode issue record: %w", err)
+		return nil, fmt.Errorf("clone declarative transport record: %w", err)
 	}
 	return clone, nil
 }

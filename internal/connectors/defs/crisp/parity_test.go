@@ -174,7 +174,7 @@ func TestCrispPageNumberMinimumRejectsCommandOverride(t *testing.T) {
 			}
 			for _, flag := range command.Flags {
 				if flag.Name == "page-number" {
-					if flag.Type != "integer" || flag.Minimum == nil || *flag.Minimum != 1 {
+					if flag.Type != "integer" || flag.Minimum == nil || flag.Minimum.String() != "1" {
 						t.Fatalf("page-number flag = %+v, want integer minimum 1", flag)
 					}
 					return
@@ -204,7 +204,7 @@ func TestCrispPageNumberMinimumRejectsCommandOverride(t *testing.T) {
 	if !errors.As(err, &minimumErr) {
 		t.Fatalf("Crisp page-number 0 error = %T %v, want MinimumFlagError", err, err)
 	}
-	if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+	if minimumErr.Parameter != "page-number" || minimumErr.Minimum.String() != "1" {
 		t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
 	}
 	if requests.Load() != 0 {
@@ -237,7 +237,7 @@ func TestCrispPageNumberMinimumRejectsConfigOverride(t *testing.T) {
 	if !errors.As(err, &minimumErr) {
 		t.Fatalf("Crisp config page_number 0 error = %T %v, want MinimumFlagError", err, err)
 	}
-	if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+	if minimumErr.Parameter != "page-number" || minimumErr.Minimum.String() != "1" {
 		t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
 	}
 	if requests.Load() != 0 {

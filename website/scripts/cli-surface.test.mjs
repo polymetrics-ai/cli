@@ -56,6 +56,17 @@ test('a binary_download command documents the runtime destination flags', () => 
   assert.equal(destRoot.required, true, '--dest-root must be marked required');
 });
 
+test('a text_export command documents the runtime destination flags', () => {
+  const mapped = mapCLISurface(
+    surfaceWith({
+      intent: 'text_export',
+      flags: [{ name: 'report-id', type: 'string', maps_to: 'path.report_id' }],
+    }),
+  );
+
+  assert.deepEqual(flagNames(mapped), ['report-id', ...sharedFlags.map((flag) => flag.name)]);
+});
+
 test('other intents are left exactly as the bundle declares them', () => {
   const mapped = mapCLISurface(
     surfaceWith({ intent: 'etl', flags: [{ name: 'issue-id', type: 'string' }] }),
@@ -102,6 +113,17 @@ test('declared scalar minima remain in website data', () => {
   assert.equal(mapped.commands[0].flags[0].minimum, 1);
 });
 
+test('declared repeatable flags remain in website data', () => {
+  const mapped = mapCLISurface(
+    surfaceWith({
+      intent: 'etl',
+      flags: [{ name: 'header-x-mode', type: 'string', repeatable: true, maps_to: 'header.X-Mode' }],
+    }),
+  );
+
+  assert.equal(mapped.commands[0].flags[0].repeatable, true);
+});
+
 // gen-connector-catalog.mjs re-maps gen-connector-bundles.mjs output, so an
 // unconditional append documented --dest-root twice on the catalog page.
 test('re-mapping already-mapped output does not duplicate the destination flags', () => {
@@ -126,4 +148,66 @@ test('a bundle-declared destination flag is not repeated', () => {
 
   assert.equal(flagNames(mapped).filter((name) => name === 'dest-root').length, 1);
   assert.equal(mapped.commands[0].flags[0].summary, 'bundle-declared');
+});
+
+test('TestWebsiteFlagProjectionPreservesEverySafetyProperty', () => {
+  const mapped = mapCLISurface(
+    surfaceWith({
+      intent: 'direct_write',
+      flags: [{
+        name: 'migration-source',
+        type: 'json',
+        summary: 'The source-declared migration document.',
+        values: ['source'],
+        maps_to: 'body.input',
+        format: 'date-time',
+        allow_empty: false,
+        minimum: 1,
+		maximum: 12,
+        required: true,
+        repeatable: true,
+        env_only: true,
+        max_items: 9,
+        min_items: 1,
+        max_bytes: 8192,
+      }],
+    }),
+  );
+
+  assert.deepEqual(mapped.commands[0].flags[0], {
+    name: 'migration-source',
+    type: 'json',
+    summary: 'The source-declared migration document.',
+    values: ['source'],
+    maps_to: 'body.input',
+    format: 'date-time',
+    allow_empty: false,
+    minimum: 1,
+	maximum: 12,
+    required: true,
+    repeatable: true,
+    env_only: true,
+    max_items: 9,
+    min_items: 1,
+    max_bytes: 8192,
+  });
+
+  const camel = mapCLISurface(mapped, { keyStyle: 'camel' });
+  assert.deepEqual(camel.commands[0].flags[0], {
+    name: 'migration-source',
+    type: 'json',
+    summary: 'The source-declared migration document.',
+    values: ['source'],
+    mapsTo: 'body.input',
+    format: 'date-time',
+    allowEmpty: false,
+    minimum: 1,
+	maximum: 12,
+    required: true,
+    repeatable: true,
+    envOnly: true,
+    maxItems: 9,
+    minItems: 1,
+    maxBytes: 8192,
+  });
 });

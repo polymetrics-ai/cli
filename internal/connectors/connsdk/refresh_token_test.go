@@ -2,6 +2,7 @@ package connsdk
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -11,6 +12,8 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"polymetrics.ai/internal/credential"
 )
 
 // tokenServer is a scriptable OAuth2 token endpoint. Each request increments
@@ -88,6 +91,79 @@ func TestOAuth2RefreshTokenFirstExchangeSetsBearer(t *testing.T) {
 	}
 	if gotForm["client_id"] != "cid" || gotForm["client_secret"] != "csecret" {
 		t.Fatalf("client credentials not sent: %+v", gotForm)
+	}
+}
+
+func TestOAuth2RefreshTokenPreservesFormCredentialBytes(t *testing.T) {
+	refreshToken := "refresh-token-canary\n"
+	clientID := "client-id-canary\n"
+	clientSecret := strings.Repeat("client-secret-canary-", 1024) + "\n"
+	var gotForm map[string]string
+	ts := newTokenServer(t, func(_ int, form map[string]string, w http.ResponseWriter) {
+		gotForm = form
+		_, _ = w.Write([]byte(`{"access_token":"access-token","expires_in":3600}`))
+	})
+
+	auth := &OAuth2RefreshToken{
+		TokenURL:     ts.URL,
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+		RefreshToken: refreshToken,
+	}
+	if err := auth.Apply(context.Background(), newReq(t)); err != nil {
+		t.Fatalf("Apply: %v", err)
+	}
+	assertCredentialBytes(t, gotForm["refresh_token"], refreshToken)
+	assertCredentialBytes(t, gotForm["client_id"], clientID)
+	assertCredentialBytes(t, gotForm["client_secret"], clientSecret)
+}
+
+func TestOAuth2RefreshTokenRejectsEmptyRequiredTokenBeforeExchange(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		token string
+	}{
+		{name: "empty"},
+		{name: "LF-only", token: "\n"},
+		{name: "CRLF-only", token: "\r\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			ts := newTokenServer(t, func(_ int, _ map[string]string, w http.ResponseWriter) {
+				w.WriteHeader(http.StatusInternalServerError)
+			})
+			auth := &OAuth2RefreshToken{TokenURL: ts.URL, RefreshToken: tt.token}
+			req := newReq(t)
+			err := auth.Apply(context.Background(), req)
+			if err == nil {
+				t.Fatal("Apply() accepted an empty refresh token")
+			}
+			var empty *credential.EmptySecretError
+			if !errors.As(err, &empty) {
+				t.Fatalf("Apply() error is not typed empty-secret classification: %T", err)
+			}
+			if got := atomic.LoadInt32(&ts.calls); got != 0 {
+				t.Fatalf("token endpoint calls = %d, want 0", got)
+			}
+			if got := req.Header.Get("Authorization"); got != "" {
+				t.Fatal("Authorization header emitted for empty refresh token")
+			}
+		})
+	}
+}
+
+func TestOAuth2RefreshTokenRejectsHeaderControlAccessToken(t *testing.T) {
+	ts := newTokenServer(t, func(_ int, _ map[string]string, w http.ResponseWriter) {
+		_, _ = w.Write([]byte(`{"access_token":"access-token\ncanary","expires_in":3600}`))
+	})
+	auth := &OAuth2RefreshToken{TokenURL: ts.URL, RefreshToken: "refresh-token-canary"}
+	req := newReq(t)
+	err := auth.Apply(context.Background(), req)
+	var invalid *credential.InvalidSecretValueError
+	if !errors.As(err, &invalid) {
+		t.Fatalf("Apply() error is not typed invalid-secret classification: %T", err)
+	}
+	if got := req.Header.Get("Authorization"); got != "" {
+		t.Fatal("Authorization header emitted for prohibited access-token bytes")
 	}
 }
 
