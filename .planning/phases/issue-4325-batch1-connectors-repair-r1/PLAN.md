@@ -74,6 +74,39 @@
    If it finds gaps, use `plan-phase 4325 --gaps` and
    `execute-phase 4325 --gaps-only` before repeating verification.
 
+## External foundation holds
+
+- **Asana:** pending #4326. The provider-owned OpenAPI 3.0 document cannot
+  import because `sourceReferenceResolver.referenceTargetWithCount`
+  (`cmd/connectorgen/sourceimport.go:5088-5091`) rejects its response `$ref`
+  with a `description` sibling. The connector keeps all 249 operations; no
+  connector-local omission, downgrade, or shim is permitted.
+- **Stripe:** remains pending issue #4323’s cyclic-schema importer work and is
+  intentionally sequenced after the independent connector slices.
+- **Jira, Notion, and Bitbucket:** are also pending the cyclic-schema importer
+  repair in PR #4327. Their live artifacts respectively reach recursive
+  `LinkGroup`, `publicApiAsyncTaskStatusResultJsonValue`, and `base_commit`
+  schemas at `sourceReferenceResolver.referenceTargetWithCount`
+  (`cmd/connectorgen/sourceimport.go:5107-5108`). The held refreshes retain
+  their real source sets; no local flattening or fabricated gap is permitted.
+- **CircleCI:** pending #4328. Its source-derived webhook actions contain
+  `signing-secret`, but `sourceProjectCommand` emits an ordinary reverse-ETL
+  shell flag and `checkCLISurfaceEnvOnlyFlags`
+  (`cmd/connectorgen/validate.go:896-928`) has no declarative-write secure
+  input mode. The held connector surface must not ship before the shared fix.
+- **Sentry and Vercel:** pending #4329. A connector with a CLI surface but no
+  write actions cannot source-cite unsupported mutations as read-only:
+  `validateSourceExecutableCoverage`
+  (`cmd/connectorgen/sourceprojection.go:1943-1948`) otherwise requires an
+  executable action for every mutation. The solution must be a shared,
+  source-cited read-only refusal, not an invented connector gap or `partial`
+  command.
+- **GitLab and Docker Hub:** are further #4326 consumers. Their OpenAPI
+  response references carry a legal `description` sibling, rejected by
+  `sourceReferenceResolver.referenceTargetWithCount`
+  (`cmd/connectorgen/sourceimport.go:5088-5091`); source refresh and evidence
+  regeneration remain held until that shared OAS 3.0 behavior lands.
+
 ## Commit and push checkpoints
 
 - Commit this plan and the red baseline separately from production repairs.

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "issue-4325-circleci-live-openapi-r1",
+    "created_at": "2026-08-23T00:00:00Z",
+    "record_count": 1
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 1,
+    "min_operations": 111,
+    "max_operations": 111,
+    "criteria": "Current CircleCI provider OpenAPI contract measured from its public HTTPS document."
+  },
+  "connectors": [
+    {
+      "connector": "circleci",
+      "operations_total": 111,
+      "operations_read": 61,
+      "operations_write": 50,
+      "artifact": {
+        "url": "https://circleci.com/api/v2/openapi.json",
+        "kind": "openapi",
+        "version": "CircleCI API v2; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-23"
+      },
+      "auth_model": "api-key-header, api-key-query, basic-auth, or bearer-auth",
+      "access_model": "public",
+      "evidence_source": "Provider-published CircleCI v2 OpenAPI document; measured 621321 bytes and SHA-256 61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07.",
+      "counting_note": "The OpenAPI paths contain 111 HTTP operations: 61 GET reads and 50 POST, PUT, PATCH, or DELETE mutations.",
+      "processed_at": "2026-08-23T00:00:00Z",
+      "selection_reason": "Independent gate repair requires a fresh provider-artifact ledger and real executable command surface."
+    }
+  ]
+}

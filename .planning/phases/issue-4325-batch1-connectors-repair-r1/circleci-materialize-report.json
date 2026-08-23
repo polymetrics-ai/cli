@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/issue-4325-batch1-connectors-repair-r1/circleci-materialize-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "circleci",
+      "artifact": {
+        "url": "https://circleci.com/api/v2/openapi.json",
+        "version": "CircleCI API v2; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-23",
+        "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07"
+      },
+      "artifact_operations": 111,
+      "declared_operations": 111,
+      "operation_split": {
+        "executable": 40,
+        "provider_blocked": 0,
+        "excluded": 71
+      },
+      "cli_commands": 43,
+      "operation_executors": 0
+    }
+  ],
+  "dropped": []
+}

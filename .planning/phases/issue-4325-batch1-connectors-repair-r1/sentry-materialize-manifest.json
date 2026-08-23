@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "issue-4325-sentry-live-openapi-r1",
+    "created_at": "2026-08-23T00:00:00Z",
+    "record_count": 1
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 1,
+    "min_operations": 223,
+    "max_operations": 223,
+    "criteria": "Current Sentry provider OpenAPI contract measured from its public HTTPS document."
+  },
+  "connectors": [
+    {
+      "connector": "sentry",
+      "operations_total": 223,
+      "operations_read": 120,
+      "operations_write": 103,
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+        "kind": "openapi",
+        "version": "Sentry API; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-23"
+      },
+      "auth_model": "bearer-auth",
+      "access_model": "public",
+      "evidence_source": "Provider-published Sentry OpenAPI document; measured 3868570 bytes and SHA-256 b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435.",
+      "counting_note": "The OpenAPI paths contain 223 HTTP operations: 120 GET reads and 103 DELETE, PATCH, POST, or PUT mutations.",
+      "processed_at": "2026-08-23T00:00:00Z",
+      "selection_reason": "Independent gate repair requires a fresh provider-artifact ledger and real executable command surface."
+    }
+  ]
+}

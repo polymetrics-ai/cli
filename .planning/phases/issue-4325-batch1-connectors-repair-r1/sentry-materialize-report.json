@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/issue-4325-batch1-connectors-repair-r1/sentry-materialize-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "sentry",
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+        "version": "Sentry API; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-23",
+        "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435"
+      },
+      "artifact_operations": 223,
+      "declared_operations": 223,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 0,
+        "excluded": 219
+      },
+      "cli_commands": 4,
+      "operation_executors": 0
+    }
+  ],
+  "dropped": []
+}
