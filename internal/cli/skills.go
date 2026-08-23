@@ -27,7 +27,7 @@ func runSkills(args []string, stdout io.Writer, jsonOut bool) error {
 		return validationErrorf("missing --dir")
 	}
 	registry := appRegistry()
-	generated, err := generateSkills(dir, registry.ListManifests())
+	generated, err := generateSkills(dir, registry)
 	if err != nil {
 		return err
 	}
@@ -38,11 +38,11 @@ func runSkills(args []string, stdout io.Writer, jsonOut bool) error {
 	return nil
 }
 
-func generateSkills(dir string, manifests []connectors.Manifest) ([]string, error) {
+func generateSkills(dir string, registry *connectors.Registry) ([]string, error) {
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return nil, fmt.Errorf("create skills dir: %w", err)
 	}
-	docs, err := baseSkillDocs(manifests)
+	docs, err := baseSkillDocsWithRegistry(registry.ListManifests(), registry)
 	if err != nil {
 		return nil, err
 	}
@@ -65,6 +65,13 @@ func generateSkills(dir string, manifests []connectors.Manifest) ([]string, erro
 }
 
 func baseSkillDocs(manifests []connectors.Manifest) ([]skillDoc, error) {
+	if len(manifests) == 0 {
+		return baseSkillDocsWithRegistry(manifests, nil)
+	}
+	return baseSkillDocsWithRegistry(manifests, appRegistry())
+}
+
+func baseSkillDocsWithRegistry(manifests []connectors.Manifest, registry *connectors.Registry) ([]skillDoc, error) {
 	docs := []skillDoc{
 		{
 			Name:        "pm-shared",
@@ -142,7 +149,7 @@ func baseSkillDocs(manifests []connectors.Manifest) ([]skillDoc, error) {
 		if manifest.Metadata.Name == "" {
 			continue
 		}
-		doc, err := connectorSkill(manifest.Metadata.Name)
+		doc, err := connectorSkillWithRegistry(registry, manifest.Metadata.Name)
 		if err != nil {
 			return nil, err
 		}
@@ -151,8 +158,10 @@ func baseSkillDocs(manifests []connectors.Manifest) ([]skillDoc, error) {
 	return docs, nil
 }
 
-func connectorSkill(name string) (skillDoc, error) {
-	registry := appRegistry()
+func connectorSkillWithRegistry(registry *connectors.Registry, name string) (skillDoc, error) {
+	if registry == nil {
+		return skillDoc{}, fmt.Errorf("publish connector skill %q: registry is required", name)
+	}
 	connector, ok := registry.Get(name)
 	if !ok {
 		return skillDoc{}, fmt.Errorf("publish connector skill %q: manifest has no registered connector", name)
