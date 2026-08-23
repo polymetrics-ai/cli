@@ -235,8 +235,8 @@ func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sou
 	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
 		return sourceProjectionStats{}, fmt.Errorf("parse canonical source descriptor: %w", err)
 	}
-	if descriptor.SchemaVersion != 2 {
-		return sourceProjectionStats{}, fmt.Errorf("source descriptor schema_version = %d, want 2", descriptor.SchemaVersion)
+	if descriptor.SchemaVersion != 2 && descriptor.SchemaVersion != 3 {
+		return sourceProjectionStats{}, fmt.Errorf("source descriptor schema_version = %d, want 2 or 3", descriptor.SchemaVersion)
 	}
 	return projectSourceDescriptorToBundle(bundleDir, sourceImportResult{
 		Operations:     descriptor.Operations,
