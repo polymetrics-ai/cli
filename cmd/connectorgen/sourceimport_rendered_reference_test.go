@@ -205,6 +205,63 @@ func TestSourceImportVersion3RenderedReferenceProjectsCapturedCitation(t *testin
 	}
 }
 
+func TestSourceImportVersion3SwaggerTwoProjectsWithoutOpenAPIVersionInventory(t *testing.T) {
+	swagger := []byte(`{"swagger":"2.0","info":{"title":"fixture","version":"1"},"paths":{"/widgets":{"get":{"operationId":"listWidgets","responses":{"200":{"description":"ok"}}}}}}`)
+	digest := sha256.Sum256(swagger)
+	lockRaw, err := json.Marshal(map[string]any{
+		"schema_version": 3,
+		"connector":      "fixture",
+		"rest": map[string]any{
+			"retrieval": "hermetic Swagger 2.0 fixture capture",
+			"openapi":   []any{},
+			"source_documents": []any{map[string]any{
+				"id": "swagger",
+				"artifact": map[string]any{
+					"source_url": "https://fixtures.polymetrics.invalid/reference/swagger.json",
+					"sha256":     hex.EncodeToString(digest[:]),
+					"bytes":      len(swagger),
+					"swagger":    "2.0",
+				},
+				"published_source": map[string]any{
+					"source_url":  "https://docs.polymetrics.invalid/reference/swagger",
+					"capture_url": "https://fixtures.polymetrics.invalid/reference/swagger.json",
+					"sha256":      hex.EncodeToString(digest[:]),
+					"bytes":       len(swagger),
+					"adapter":     "fixture-swagger-capture-v1",
+				},
+				"operations": []any{map[string]any{
+					"id":              "fixture.rest.swagger.list-widgets",
+					"protocol":        "rest",
+					"method":          "GET",
+					"path":            "/widgets",
+					"operation_id":    "listWidgets",
+					"source_location": `paths["/widgets"].get`,
+				}},
+			}},
+		},
+		"counts": map[string]any{"rest": 1, "graphql_query": 0, "graphql_mutation": 0, "total": 1},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	lock, err := parseSourceImportLock(lockRaw, "fixture")
+	if err != nil {
+		t.Fatalf("parse Swagger 2.0 v3 lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return swagger, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import Swagger 2.0 v3 lock: %v", err)
+	}
+	if len(result.Operations) != 1 || result.Operations[0].Source.Form != "swagger" || result.Operations[0].Source.Version != "2.0" {
+		t.Fatalf("Swagger 2.0 operation projection = %#v", result.Operations)
+	}
+	if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: result.Operations}); len(findings) != 0 {
+		t.Fatalf("Swagger 2.0 source projection findings = %+v", findings)
+	}
+}
+
 func TestSourceImportVersion3RenderedReferenceRetainsCapturedEvidenceWithoutOperations(t *testing.T) {
 	raw, page := sourceImportV3RenderedReferenceLock(t, renderedReferenceCitationURL)
 	var wire map[string]any

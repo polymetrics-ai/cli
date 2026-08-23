@@ -754,6 +754,12 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 		}
 		switch kind {
 		case sourceImportDocumentKindOpenAPI:
+			if document.Artifact.Swagger != "" {
+				// Swagger 2.0 is a complete source description with its own form
+				// pin. It does not enter openapi_versions, which inventories only
+				// OpenAPI 3.0/3.1 documents.
+				break
+			}
 			openAPIDocuments++
 			if document.Artifact.OpenAPI == "" || !versions[document.Artifact.OpenAPI] {
 				return fmt.Errorf("source lock v3 REST document %q has an OpenAPI version outside the aggregate inventory", document.ID)

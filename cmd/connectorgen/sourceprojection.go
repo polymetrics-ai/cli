@@ -1869,7 +1869,12 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 				form := document.sourceKind()
 				version := ""
 				if form == sourceImportDocumentKindOpenAPI {
-					version = document.Artifact.OpenAPI
+					if document.Artifact.Swagger != "" {
+						form = "swagger"
+						version = document.Artifact.Swagger
+					} else {
+						version = document.Artifact.OpenAPI
+					}
 				}
 				expected[operation.ID] = expectedSource{
 					source: sourceImportSource{
