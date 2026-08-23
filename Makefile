@@ -114,10 +114,10 @@ github-parity-artifacts-check:
 	node scripts/gen-github-graphql-parity.mjs --check
 	node scripts/github-combined-operation-ledger.mjs --check
 
-# Requires the built pm binary so certification cannot silently retain proof
-# from another executable/build/declaration subject.
-connectorgen-certification-subject: build
-	go run ./cmd/connectorgen certification-subject --pm ./pm --check
+# The checked-in subject is deterministic repository identity. Individual live
+# proof records separately bind the pm binary and build that actually ran.
+connectorgen-certification-subject:
+	go run ./cmd/connectorgen certification-subject --check
 
 # Fails when the allowlisted connector certification shards drift.
 # Regenerate one connector with `go run ./cmd/connectorgen certification-matrix --connector <name>`.
