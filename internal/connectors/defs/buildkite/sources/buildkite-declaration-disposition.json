@@ -30,7 +30,7 @@
       "basis": "Official Buildkite rendered REST reference table has 129 unique HTTP method/path rows."
     },
     "enabled_operations": 9,
-    "declaration_pending_operations": 106,
+    "declaration_pending_operations": 123,
     "disabled_operations": 0,
     "documented_deletes": 22,
     "enabled_deletes": 2,
@@ -52,27 +52,12 @@
     "writes_actions": 17,
     "terminal_commands": 0,
     "live_certification": "pending",
-    "gap_ids": [
-      "application-generic-destination-dispatch"
-    ],
-    "foundation_gaps": [
-      {
-        "id": "application-generic-destination-dispatch",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-        "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path.",
-        "count": 17,
-        "scope": "shared_destination_runtime",
-        "note": "Reverse-ETL eligibility is an attribute on typed direct writes, not an endpoint parity class. The affected surface is not enabled until the shared App/CLI dispatch gap closes."
-      }
-    ],
+    "gap_ids": [],
+    "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 106
-      },
-      {
-        "key": "foundation-gap",
-        "count": 17
+        "count": 123
       }
     ],
     "transport": {
@@ -81,15 +66,11 @@
         "evidence": "internal/connectors/defs/buildkite/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
       },
       "destination_transport": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "declaration-pending",
+        "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
       }
     },
-    "foundation_gap_operations": 17
+    "foundation_gap_operations": 0
   },
   "ledger_dispositions": [
     {
@@ -451,32 +432,24 @@
         "operation_id": "put-v2-organizations-org-slug-agents-id-pause-9",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"pause_agent\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"pause_agent\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -501,32 +474,24 @@
         "operation_id": "put-v2-organizations-org-slug-agents-id-resume-10",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"resume_agent\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"resume_agent\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -551,32 +516,24 @@
         "operation_id": "put-v2-organizations-org-slug-agents-id-stop-11",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"stop_agent\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"stop_agent\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -2735,32 +2692,24 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-63",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"create_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"create_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -2828,32 +2777,24 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-65",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"create_build\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"create_build\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -3088,32 +3029,24 @@
         "operation_id": "put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-cancel-71",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"cancel_build\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"cancel_build\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -3558,32 +3491,24 @@
         "operation_id": "put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-rebuild-82",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"rebuild_build\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"rebuild_build\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -3608,32 +3533,24 @@
         "operation_id": "delete-v2-organizations-org-slug-pipelines-slug-83",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"delete_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"delete_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -3700,32 +3617,24 @@
         "operation_id": "patch-v2-organizations-org-slug-pipelines-slug-85",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"update_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"update_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -3750,32 +3659,24 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-slug-archive-86",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"archive_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"archive_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -3800,32 +3701,24 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-slug-unarchive-87",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"unarchive_pipeline\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"unarchive_pipeline\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -4725,32 +4618,24 @@
         "operation_id": "post-v2-organizations-org-slug-teams-109",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"create_team\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"create_team\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -4775,32 +4660,24 @@
         "operation_id": "delete-v2-organizations-org-slug-teams-team-uuid-110",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"delete_team\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"delete_team\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -4867,32 +4744,24 @@
         "operation_id": "patch-v2-organizations-org-slug-teams-team-uuid-112",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"update_team\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"update_team\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -5631,32 +5500,24 @@
         "operation_id": "put-organizations-org-slug-jobs-job-id-retry-130",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"retry_job\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"retry_job\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -5681,32 +5542,24 @@
         "operation_id": "put-organizations-org-slug-jobs-job-id-unblock-131",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"unblock_job\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"unblock_job\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     },
@@ -5731,32 +5584,24 @@
         "operation_id": "post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-132",
         "deprecated": false
       },
-      "state": "foundation-gap",
+      "state": "declaration-pending",
       "foundation": {
-        "state": "gap",
-        "foundation_gap": {
-          "id": "application-generic-destination-dispatch",
-          "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-          "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-        }
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; the absent connector-owned transport declaration is a declaration gap."
       },
       "rejection": {
-        "reason": "foundation-gap",
+        "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The exact provider action has a typed connector declaration, but the shared App/CLI path cannot yet dispatch it as a generic reverse-ETL destination.",
-        "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination."
+        "detail": "The exact provider action has a typed connector declaration, but no connector-owned destination transport declaration and conformance evidence.",
+        "evidence": "internal/connectors/defs/buildkite/sync_transport.json"
       },
       "declaration": {
-        "status": "foundation-gap; typed direct-write action \"create_annotation\" binds the normalized source endpoint but is not enabled for reverse ETL until shared App/CLI dispatch exists",
+        "status": "declaration-pending; typed direct-write action \"create_annotation\" needs a connector-owned destination transport declaration and conformance evidence",
         "command": null,
         "reverse_etl_eligibility": {
-          "eligible": true,
-          "state": "foundation-gap",
-          "foundation_gap": {
-            "id": "application-generic-destination-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:40-74: App dispatch selects the legacy issue-label and managed-warehouse paths but does not yet admit a definition-preflighted generic typed destination.",
-            "minimal_change": "complete #4304 App/CLI dispatch integration so any definition-selected declarative_typed_destination that passes transport preflight enters the existing plan, preview, approval, execute path."
-          }
+          "eligible": false,
+          "state": "declaration-pending",
+          "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/buildkite/sync_transport.json is absent."
         }
       }
     }

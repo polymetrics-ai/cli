@@ -5,10 +5,10 @@
 - Operations found in provider source: 129
 - Coverage confidence: complete-rendered-reference — Official Buildkite rendered REST reference table has 129 unique HTTP method/path rows.
 - Enabled: 9
-- Foundation gap: 17
-- Declaration pending: 106
+- Foundation gap: 0
+- Declaration pending: 123
 - Disabled: 0
 - Documented DELETEs: 22; enabled DELETEs: 2
 - Parity classes: direct_read=50, direct_write=76, etl=6
-- Foundation gaps: application-generic-destination-dispatch
+- Foundation gaps: none
 - Public source retrieval: undefined
