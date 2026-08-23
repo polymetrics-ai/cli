@@ -2998,6 +2998,7 @@ func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, li
 	resolver.form = form
 	resolver.referenceIndex = index
 	resolver.schemaCycles = preflight.schemaCycles
+	resolver.schemaReferenceSiblingGaps = preflight.schemaReferenceSiblingGaps
 	resolver.references = 0
 	resolver.expansion = sourceSchemaExpansionBudget{}
 	resolver.responseExpansion = sourceResponseExpansionBudget{limit: sourceResolvedDescriptorLimit(limits)}
@@ -5545,7 +5546,9 @@ func importSourceDocumentResult(documentContext sourceImportDocumentContext, doc
 		if err := validateSourceImportResultIdentities(result); err != nil {
 			return sourceImportResult{}, err
 		}
-		result.Gaps = resolver.unreferencedSchemaCycleGaps(result.Operations)
+		result.Gaps = append(result.Gaps, resolver.unreferencedSchemaCycleGaps(result.Operations)...)
+		result.Gaps = append(result.Gaps, resolver.unreferencedSchemaReferenceSiblingGaps(result.Operations)...)
+		result.Gaps = sourceSortedGaps(result.Gaps)
 		return result, nil
 	}
 	paths, ok := rawPaths.(map[string]any)
@@ -5645,7 +5648,9 @@ func importSourceDocumentResult(documentContext sourceImportDocumentContext, doc
 	if err := validateSourceImportResultIdentities(result); err != nil {
 		return sourceImportResult{}, err
 	}
-	result.Gaps = resolver.unreferencedSchemaCycleGaps(result.Operations)
+	result.Gaps = append(result.Gaps, resolver.unreferencedSchemaCycleGaps(result.Operations)...)
+	result.Gaps = append(result.Gaps, resolver.unreferencedSchemaReferenceSiblingGaps(result.Operations)...)
+	result.Gaps = sourceSortedGaps(result.Gaps)
 	return result, nil
 }
 
@@ -6368,6 +6373,35 @@ func (r *sourceReferenceResolver) unreferencedSchemaCycleGaps(operations []sourc
 		gaps = append(gaps, sourceSchemaCycleGap(reference, "source schema "+reference))
 	}
 	return gaps
+}
+
+func (r *sourceReferenceResolver) unreferencedSchemaReferenceSiblingGaps(operations []sourceOperationDescriptor) []sourceContractGap {
+	if len(r.schemaReferenceSiblingGaps) == 0 {
+		return nil
+	}
+	used := map[string]bool{}
+	for _, operation := range operations {
+		for _, gap := range operation.Runtime.Gaps {
+			if gap.Foundation == sourceOpenAPI30ReferenceSiblingFoundation {
+				used[sourceContractGapIdentity(gap)] = true
+			}
+		}
+	}
+	seen := map[string]bool{}
+	gaps := make([]sourceContractGap, 0, len(r.schemaReferenceSiblingGaps))
+	for _, gap := range r.schemaReferenceSiblingGaps {
+		identity := sourceContractGapIdentity(gap)
+		if used[identity] || seen[identity] {
+			continue
+		}
+		seen[identity] = true
+		gaps = append(gaps, gap)
+	}
+	return sourceSortedGaps(gaps)
+}
+
+func sourceContractGapIdentity(gap sourceContractGap) string {
+	return gap.Foundation + "\x00" + gap.Location + "\x00" + gap.Reason
 }
 
 func (r *sourceReferenceResolver) schemaCycleGaps(value any, location string) []sourceContractGap {

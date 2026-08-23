@@ -1470,6 +1470,27 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 	if !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), `"foundation": "cli-recursive-schema-foundation-r1"`) {
 		t.Fatalf("unused recursive schema evidence disappeared from descriptor: %s", encoded)
 	}
+
+	unusedTypeSibling := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"Base":{"anyOf":[{"type":"object","additionalProperties":false,"properties":{}}]},"Unused":{"allOf":[{"$ref":"#/components/schemas/Base","type":"object"}]}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-grammar-type-sibling.json", unusedTypeSibling)
+	result, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return unusedTypeSibling, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("unused type sibling import: %v", err)
+	}
+	if len(result.Gaps) != 1 {
+		t.Fatalf("unused type sibling gaps = %#v", result.Gaps)
+	}
+	gap = result.Gaps[0]
+	if gap.Foundation != sourceOpenAPI30ReferenceSiblingFoundation || gap.Location != "schema reference #/components/schemas/Base" || !strings.Contains(gap.Reason, `sibling field "type"`) {
+		t.Fatalf("unused type sibling gap = %#v", gap)
+	}
+	encoded, err = marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal unused type sibling descriptor: %v", err)
+	}
+	if !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), `"foundation": "cli-openapi30-reference-sibling-foundation-r1"`) {
+		t.Fatalf("unused type sibling evidence disappeared from descriptor: %s", encoded)
+	}
 }
 
 func TestSourceImportPreservesExactYAMLNumericBounds(t *testing.T) {
