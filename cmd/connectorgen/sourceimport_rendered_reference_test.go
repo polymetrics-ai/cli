@@ -205,6 +205,62 @@ func TestSourceImportVersion3RenderedReferenceProjectsCapturedCitation(t *testin
 	}
 }
 
+func TestSourceImportVersion3RenderedReferenceRetainsCapturedEvidenceWithoutOperations(t *testing.T) {
+	raw, page := sourceImportV3RenderedReferenceLock(t, renderedReferenceCitationURL)
+	var wire map[string]any
+	if err := json.Unmarshal(raw, &wire); err != nil {
+		t.Fatal(err)
+	}
+	sidecar := []byte(`{"navigation":"reference index"}`)
+	sidecarDigest := sha256.Sum256(sidecar)
+	wire["rest"].(map[string]any)["source_documents"] = append(wire["rest"].(map[string]any)["source_documents"].([]any), map[string]any{
+		"id":           "sidecar",
+		"kind":         "rendered_reference",
+		"content_type": "application/json",
+		"artifact": map[string]any{
+			"source_url": "https://fixtures.polymetrics.invalid/reference/navigation.json",
+			"sha256":     hex.EncodeToString(sidecarDigest[:]),
+			"bytes":      len(sidecar),
+		},
+		"published_source": map[string]any{
+			"source_url":  "https://docs.polymetrics.invalid/reference",
+			"capture_url": "https://fixtures.polymetrics.invalid/reference/navigation.json",
+			"sha256":      hex.EncodeToString(sidecarDigest[:]),
+			"bytes":       len(sidecar),
+			"adapter":     "fixture-rendered-reference-capture-v1",
+		},
+		"operations": []any{},
+	})
+	raw, err := json.Marshal(wire)
+	if err != nil {
+		t.Fatal(err)
+	}
+	lock, err := parseSourceImportLock(raw, "fixture")
+	if err != nil {
+		t.Fatalf("parse rendered-reference lock with evidence-only sidecar: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		switch sourceURL {
+		case renderedReferenceArtifactURL:
+			return page, nil
+		case "https://fixtures.polymetrics.invalid/reference/navigation.json":
+			return sidecar, nil
+		default:
+			t.Fatalf("unexpected source fetch %q", sourceURL)
+			return nil, nil
+		}
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import rendered-reference lock with evidence-only sidecar: %v", err)
+	}
+	if len(result.Operations) != 1 || result.Operations[0].SourceID != "fixture.rest.reference.list-widgets" {
+		t.Fatalf("rendered-reference sidecar changed operation projection: %#v", result.Operations)
+	}
+	if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: result.Operations}); len(findings) != 0 {
+		t.Fatalf("rendered-reference sidecar source projection findings = %+v", findings)
+	}
+}
+
 func TestSourceImportVersion3RenderedReferenceProjectsYAMLPathFragment(t *testing.T) {
 	fragment := []byte("get:\n  operationId: listAudit\n  responses:\n    '200':\n      description: listed audit records\n")
 	digest := sha256.Sum256(fragment)
@@ -532,6 +588,48 @@ func TestSourceImportVersion3UnavailableSourceProjectsBlockingGap(t *testing.T) 
 		"fixture/sources/fixture-operation-descriptor.json":  &fstest.MapFile{Data: descriptorRaw},
 	}, engine.Bundle{Name: lock.Connector})
 	if len(findings) != 1 || !strings.Contains(findings[0].Message, "unavailable") || !strings.Contains(findings[0].Message, "https://docs.polymetrics.invalid/reference/availability") {
+		t.Fatalf("unavailable source findings = %+v", findings)
+	}
+}
+
+func TestSourceImportVersion3UnavailableSourceDoesNotRequireCapturedArtifact(t *testing.T) {
+	raw := sourceImportV3UnavailableLock(t)
+	var wire map[string]any
+	if err := json.Unmarshal(raw, &wire); err != nil {
+		t.Fatal(err)
+	}
+	document := wire["rest"].(map[string]any)["source_documents"].([]any)[0].(map[string]any)
+	delete(document, "content_type")
+	delete(document, "artifact")
+	delete(document, "published_source")
+	raw, err := json.Marshal(wire)
+	if err != nil {
+		t.Fatal(err)
+	}
+	lock, err := parseSourceImportLock(raw, "fixture")
+	if err != nil {
+		t.Fatalf("parse source-traced unavailable lock without capture: %v", err)
+	}
+	fetched := false
+	_, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		fetched = true
+		return nil, nil
+	}), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "unavailable") {
+		t.Fatalf("unavailable import error = %v", err)
+	}
+	if fetched {
+		t.Fatal("unavailable source attempted an artifact fetch")
+	}
+	descriptorRaw, err := json.Marshal(sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	findings := checkSourceProjection(fstest.MapFS{
+		"fixture/sources/fixture-operation-source-lock.json": &fstest.MapFile{Data: raw},
+		"fixture/sources/fixture-operation-descriptor.json":  &fstest.MapFile{Data: descriptorRaw},
+	}, engine.Bundle{Name: lock.Connector})
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "unavailable") || !strings.Contains(findings[0].Message, "provider has no usable API reference") {
 		t.Fatalf("unavailable source findings = %+v", findings)
 	}
 }

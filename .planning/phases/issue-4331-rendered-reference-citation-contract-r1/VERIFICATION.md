@@ -59,3 +59,28 @@ Using the final contract code at `be4ef9747`, source import was run read-only fr
 | Zoom (`.../1/cli`) | exit 1, 1 finding | 0 / 1 | Its incompatible top-level REST `retrieval` field is rejected by strict v3 decoding. |
 
 These are migration-owned schema collisions, not missing foundation kinds: mainline v3 remains authoritative and must not accept those alternate field names. The contract already contains and tests the discovered consumer representations: JSON/YAML rendered captures and path fragments, ZIP/gzip bundles, explicit unavailable sources, required non-empty coverage confidence, and citation/evidence integrity.
+
+## Post-mapping consumer dry-run (read-only)
+
+The prior raw preflight intentionally stopped at names that the migration drops. The corrective dry-run used a temporary Go test (deleted before commit) to read each consumer lock, write only its decided v3 mapping to `t.TempDir`, and invoke the production `parseSourceImportLock` strict parser on that copy. It did not fetch any provider URL or write to a consumer worktree. Full `connectorgen validate` is not the right structural command for these copies because the consumer lanes have not yet produced their canonical source descriptors.
+
+`go test -timeout 20m -run '^TestMigrationDryRunConsumerLocks$' -v ./cmd/connectorgen`: **PASS** — 47 / 70 mapped lock copies validate.
+
+| Lane | Mapped copies passing | Remaining migration correction |
+| --- | ---: | --- |
+| Batch 2/3 | 12 / 19 | Five claimed OpenAPI documents have no valid recorded 3.0/3.1 pin (`amazon-sqs` service model `2012-11-05`, Gmail discovery `v1`, unpinned Google Ads discovery, Google Calendar discovery `v3`, and Slack Swagger `2.0`); `miro` has a path ending in `?`; `trello` repeats an operation identity. |
+| Batch 6/7 | 19 / 20 | `iterable` repeats source operation identities. |
+| Batch 8/9/10 | 15 / 30 | Fifteen machine-readable documents have no recorded 3.0/3.1 pin: `auth0`, `brex`, `calendly`, `coda`, `commercetools`, `datadog`, `dbt`, `docuseal`, `firehydrant`, `looker`, `metabase`, `mode`, `okta`, `pagerduty`, and `posthog`. |
+| Zoom | 1 / 1 | None. |
+
+The dry-run covers the 889 rendered-reference documents (including JSON/YAML and zero-operation navigation pages), the ZIP/gzip bundles, all three unavailable declarations, 63 n8n path fragments, and Zoom's 35 Next-data documents. It establishes no missing rendered/bundle/unavailable contract kind. The 23 remaining locks need migration-owned source corrections: a valid OpenAPI 3.0/3.1 provenance pin where `kind: openapi` is claimed, a valid route string, or unique source operation IDs. Those are existing v3 invariants intentionally preserved by this foundation, not compatibility names or a new weaker representation path.
+
+## Final local regression after the dry-run refinement
+
+The shared machine was under concurrent cold-cache load, so Go compilation was deliberately capped without changing the repository's 20-minute test timeout:
+
+- `GOFLAGS='-p=3' go test -timeout 20m ./cmd/connectorgen`: **PASS** — `ok polymetrics.ai/cmd/connectorgen 181.477s`.
+- `GOFLAGS='-p=3' go vet ./cmd/connectorgen && GOFLAGS='-p=3' go build ./cmd/connectorgen && git diff --check`: **PASS**.
+- `GOFLAGS='-p=3' go run ./cmd/connectorgen validate`: **PASS** — 552 connectors, zero findings.
+- `GOFLAGS='-p=3' go run ./cmd/connectorgen surface-sync --check`: **PASS** — 552 connectors, zero changes.
+- `GOFLAGS='-p=3' go run ./cmd/agentcontractgen check`, `make connector-boundary`, `make lint`, `make tidy-check`, `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, and `make release-workflow-check`: **PASS**.

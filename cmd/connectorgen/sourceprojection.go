@@ -1808,7 +1808,7 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, err.Error())}
 	}
 	if unavailable, exists := sourceImportUnavailableDocument(lock); exists {
-		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, fmt.Sprintf("source inventory is unavailable: document %q cites %s: %s", unavailable.ID, unavailable.PublishedSource.SourceURL, unavailable.UnavailableReason))}
+		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, sourceImportUnavailableFindingMessage(unavailable))}
 	}
 	descriptorPath := filepath.ToSlash(filepath.Join(bundle.Name, "sources", bundle.Name+"-operation-descriptor.json"))
 	descriptorRaw, err := fs.ReadFile(fsys, descriptorPath)
@@ -1836,13 +1836,20 @@ func sourceImportUnavailableDocument(lock sourceImportLock) (sourceImportRESTDoc
 	return sourceImportRESTDocument{}, false
 }
 
+func sourceImportUnavailableFindingMessage(document sourceImportRESTDocument) string {
+	if document.PublishedSource.SourceURL != "" {
+		return fmt.Sprintf("source inventory is unavailable: document %q cites %s: %s", document.ID, document.PublishedSource.SourceURL, document.UnavailableReason)
+	}
+	return fmt.Sprintf("source inventory is unavailable: document %q: %s", document.ID, document.UnavailableReason)
+}
+
 func sourceProjectionFinding(connector, file, message string) Finding {
 	return Finding{Connector: connector, File: strings.TrimPrefix(file, connector+"/"), Rule: ruleSourceProjection, Message: message}
 }
 
 func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImportLock, descriptor sourceImportDescriptorDocument) []Finding {
 	if unavailable, exists := sourceImportUnavailableDocument(lock); exists {
-		return []Finding{sourceProjectionFinding(connector, file, fmt.Sprintf("source inventory is unavailable: document %q cites %s: %s", unavailable.ID, unavailable.PublishedSource.SourceURL, unavailable.UnavailableReason))}
+		return []Finding{sourceProjectionFinding(connector, file, sourceImportUnavailableFindingMessage(unavailable))}
 	}
 	wantSchemaVersion := 2
 	if lock.SchemaVersion == 3 {

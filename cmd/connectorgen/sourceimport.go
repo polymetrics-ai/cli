@@ -733,6 +733,19 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 		default:
 			return fmt.Errorf("source lock v3 REST document %q has unsupported kind %q", document.ID, kind)
 		}
+		if kind == sourceImportDocumentKindUnavailable {
+			requiresCoverageConfidence = true
+			if err := validateSourceImportUnavailableReason(document.UnavailableReason); err != nil {
+				return fmt.Errorf("source lock v3 unavailable document %q has invalid reason: %w", document.ID, err)
+			}
+			if len(document.Operations) != 0 {
+				return fmt.Errorf("source lock v3 unavailable document %q must not declare operations", document.ID)
+			}
+			if err := validateSourceImportUnavailableCapture(document); err != nil {
+				return fmt.Errorf("source lock v3 unavailable document %q has invalid capture: %w", document.ID, err)
+			}
+			continue
+		}
 		if err := validateSourceImportArtifact(document.Artifact); err != nil {
 			return fmt.Errorf("source lock v3 REST document %q has invalid artifact: %w", document.ID, err)
 		}
@@ -745,7 +758,7 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 			if document.Artifact.OpenAPI == "" || !versions[document.Artifact.OpenAPI] {
 				return fmt.Errorf("source lock v3 REST document %q has an OpenAPI version outside the aggregate inventory", document.ID)
 			}
-		case sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle, sourceImportDocumentKindUnavailable:
+		case sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle:
 			requiresCoverageConfidence = true
 			if document.Artifact.OpenAPI != "" || document.Artifact.Swagger != "" {
 				return fmt.Errorf("source lock v3 REST document %q kind %q must not declare an OpenAPI or Swagger version", document.ID, kind)
@@ -760,17 +773,15 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 				return fmt.Errorf("source lock v3 REST bundle document %q must declare an archive content type (application/zip, application/gzip, or application/x-gzip)", document.ID)
 			}
 		}
-		if kind == sourceImportDocumentKindUnavailable {
-			if err := validateSourceImportUnavailableReason(document.UnavailableReason); err != nil {
-				return fmt.Errorf("source lock v3 unavailable document %q has invalid reason: %w", document.ID, err)
-			}
-			if len(document.Operations) != 0 {
-				return fmt.Errorf("source lock v3 unavailable document %q must not declare operations", document.ID)
-			}
-			continue
-		}
 		if len(document.Operations) == 0 {
-			return fmt.Errorf("source lock v3 REST document %q has no operations", document.ID)
+			if kind == sourceImportDocumentKindOpenAPI {
+				return fmt.Errorf("source lock v3 REST document %q has no operations", document.ID)
+			}
+			// A rendered page or archive can be retained as hash-pinned coverage
+			// evidence even where it contributes no operation. Every declared
+			// operation still takes the same identity, citation, route, dedup, and
+			// count validation below; an empty evidence document cannot declare one.
+			continue
 		}
 		for _, operation := range document.Operations {
 			restCount++
@@ -852,6 +863,27 @@ func validateSourceImportUnavailableReason(value string) error {
 		return fmt.Errorf("reason must be non-empty provenance text")
 	}
 	return nil
+}
+
+// validateSourceImportUnavailableCapture permits an explicit unavailable
+// declaration to record a failed-source reason without fabricating captured
+// bytes. If a capture is available, it remains subject to the same complete
+// artifact and provenance checks as every other document kind. Unavailable
+// declarations have no operations and source import never fetches them.
+func validateSourceImportUnavailableCapture(document sourceImportRESTDocument) error {
+	if document.ContentType == "" && document.Artifact == (sourceImportArtifact{}) && document.PublishedSource == (sourceImportPublishedSource{}) {
+		return nil
+	}
+	if err := validateSourceImportDocumentContentType(document.ContentType); err != nil {
+		return err
+	}
+	if err := validateSourceImportArtifact(document.Artifact); err != nil {
+		return err
+	}
+	if err := validateSourceImportPublishedSource(document.PublishedSource); err != nil {
+		return err
+	}
+	return validateSourceImportCapturedDocumentEvidence(document)
 }
 
 func validateSourceImportCoverageConfidence(confidence sourceImportCoverageConfidence) error {
@@ -1231,6 +1263,9 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 	}
 	remainingArtifactBytes := sourceImportTotalArtifactLimit(limits)
 	for _, document := range lock.Rest.SourceDocuments {
+		if document.isUnavailable() {
+			return sourceImportResult{}, fmt.Errorf("source document %q is unavailable: %s", document.ID, document.UnavailableReason)
+		}
 		if document.Artifact.Bytes > remainingArtifactBytes {
 			return sourceImportResult{}, fmt.Errorf("source artifact corpus byte limit exceeded by document %q", document.ID)
 		}
@@ -1245,9 +1280,6 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 	result := sourceImportResult{DescriptorSchemaVersion: 3, Operations: []sourceOperationDescriptor{}}
 	for _, document := range lock.Rest.SourceDocuments {
 		raw := rawDocuments[document.ID]
-		if document.isUnavailable() {
-			return sourceImportResult{}, fmt.Errorf("source document %q is unavailable: %s (%s)", document.ID, document.UnavailableReason, document.PublishedSource.SourceURL)
-		}
 		if kind := document.sourceKind(); kind == sourceImportDocumentKindRenderedReference || kind == sourceImportDocumentKindBundle {
 			if kind == sourceImportDocumentKindRenderedReference {
 				if err := validateSourceImportRenderedReferenceCapture(raw); err != nil {
