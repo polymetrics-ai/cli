@@ -203,14 +203,29 @@ func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read write eligibility ledger: %v", err)
 	}
+	type sourceTrace struct {
+		URL           string `json:"url"`
+		Method        string `json:"method"`
+		Path          string `json:"path"`
+		SchemaPointer string `json:"schema_pointer"`
+		MaxItems      int    `json:"max_items"`
+	}
+	type foundationBlock struct {
+		GapID         string `json:"gap_id"`
+		Status        string `json:"status"`
+		TargetRelease string `json:"target_release"`
+		Decision      string `json:"decision"`
+	}
 	var ledger struct {
 		Actions []struct {
-			Name         string `json:"name"`
-			Kind         string `json:"kind"`
-			CLIReachable bool   `json:"cli_reachable"`
-			Disposition  string `json:"disposition"`
-			ReasonCode   string `json:"reason_code"`
-			Candidate    *struct {
+			Name              string           `json:"name"`
+			Kind              string           `json:"kind"`
+			CLIReachable      bool             `json:"cli_reachable"`
+			Disposition       string           `json:"disposition"`
+			ReasonCode        string           `json:"reason_code"`
+			SourceTrace       *sourceTrace     `json:"source_trace"`
+			FoundationBlocked *foundationBlock `json:"foundation_blocked"`
+			Candidate         *struct {
 				Mode        string `json:"mode"`
 				Strategy    string `json:"strategy"`
 				InputFields []struct {
@@ -238,11 +253,13 @@ func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
 		}
 	}
 	entries := make(map[string]struct {
-		Kind         string
-		CLIReachable bool
-		Disposition  string
-		ReasonCode   string
-		Candidate    bool
+		Kind              string
+		CLIReachable      bool
+		Disposition       string
+		ReasonCode        string
+		SourceTrace       *sourceTrace
+		FoundationBlocked *foundationBlock
+		Candidate         bool
 	}, len(ledger.Actions))
 	for _, action := range ledger.Actions {
 		if action.Name == "" {
@@ -260,12 +277,14 @@ func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
 			}
 		}
 		entries[action.Name] = struct {
-			Kind         string
-			CLIReachable bool
-			Disposition  string
-			ReasonCode   string
-			Candidate    bool
-		}{action.Kind, action.CLIReachable, action.Disposition, action.ReasonCode, action.Candidate != nil}
+			Kind              string
+			CLIReachable      bool
+			Disposition       string
+			ReasonCode        string
+			SourceTrace       *sourceTrace
+			FoundationBlocked *foundationBlock
+			Candidate         bool
+		}{action.Kind, action.CLIReachable, action.Disposition, action.ReasonCode, action.SourceTrace, action.FoundationBlocked, action.Candidate != nil}
 	}
 
 	counts := make(map[string]int)
@@ -291,6 +310,26 @@ func TestEveryTypedWriteHasEligibilityDisposition(t *testing.T) {
 		}
 		if strings.HasPrefix(action.Name, "batch_") && entry.Disposition != "semantic_array_envelope_incompatible" {
 			t.Errorf("batch action %q disposition = %q, want array-envelope semantic incompatibility", action.Name, entry.Disposition)
+		}
+		if strings.HasPrefix(action.Name, "batch_") {
+			if entry.SourceTrace == nil {
+				t.Errorf("batch action %q has no source trace", action.Name)
+			} else {
+				if entry.SourceTrace.URL != "https://docs.twenty.com/developers/extend/api" {
+					t.Errorf("batch action %q source URL = %q", action.Name, entry.SourceTrace.URL)
+				}
+				if entry.SourceTrace.Method != action.Method || entry.SourceTrace.Path != action.Path {
+					t.Errorf("batch action %q source route = %s %s, want %s %s", action.Name, entry.SourceTrace.Method, entry.SourceTrace.Path, action.Method, action.Path)
+				}
+				if entry.SourceTrace.SchemaPointer != "/record_schema/properties/records" || entry.SourceTrace.MaxItems != 60 {
+					t.Errorf("batch action %q source envelope = %#v, want records max 60", action.Name, entry.SourceTrace)
+				}
+			}
+			if entry.FoundationBlocked == nil {
+				t.Errorf("batch action %q is not explicitly foundation-blocked", action.Name)
+			} else if entry.FoundationBlocked.GapID != "foundation.reverse-etl.array-envelope-delivery.v1" || entry.FoundationBlocked.Status != "deferred" || entry.FoundationBlocked.TargetRelease != "0.3.1" || entry.FoundationBlocked.Decision != "captain_option_c" {
+				t.Errorf("batch action %q foundation block = %#v, want captain option-C 0.3.1 deferral", action.Name, entry.FoundationBlocked)
+			}
 		}
 	}
 	if got := len(entries); got != len(bundle.Writes) {

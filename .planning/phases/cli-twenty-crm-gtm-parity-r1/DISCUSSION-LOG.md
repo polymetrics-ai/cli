@@ -41,6 +41,12 @@
   no-tombstone contract. These are transport semantics, never safety,
   privilege, or destructive exclusions. Every action remains directly
   CLI-reachable through its implemented reverse-ETL command.
+- Captain decision (2026-08-23): option C defers the shared array-envelope
+  batch-action application-certification capability to 0.3.1. Record every
+  one of the 28 batch actions as a source-traced, foundation-blocked row; do
+  not build or await the foundation in 0.3.0, demote commands to partial, or
+  weaken the source/reachability test. Twenty remains workable but
+  non-certified for the deferred dispatch path.
 - Captain decision (2026-08-20): keep all 55 eligible actions required. Wait
   for #4304's persisted multi-action selection and exact per-action bindings;
   do not introduce a Twenty-local workaround. The final live gate must use the

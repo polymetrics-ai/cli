@@ -1,6 +1,11 @@
 # Verification checklist — Twenty CRM
 
 - [x] GSD command resolution and inline fallback recorded.
+- [x] Captain option-C batch-array release deferral: the red/green focused
+  eligibility test requires all 28 `batch_*` rows to carry a source URL, exact
+  POST route, `records` envelope pointer, 60-record bound, and explicit
+  `foundation.reverse-etl.array-envelope-delivery.v1` / `0.3.1` record while
+  their executable commands stay implemented.
 - [ ] Recovery assessment precedes bundle import.
 - [x] Targeted Twenty test red/green evidence recorded in `TDD-LEDGER.md`.
 - [x] Focused structural generator and conformance checks: `go run ./cmd/connectorgen validate internal/connectors/defs/twenty`, `go run ./cmd/connectorgen surface-sync --check`, and `go test -timeout 20m ./internal/connectors/conformance -run 'TestConformance/twenty'`.
@@ -29,6 +34,27 @@
   authenticated list/get with pagination, lane-owned create/read-back/update/
   delete/verified cleanup, ETL source, reverse-ETL plan/apply/acknowledgement
   plus independent API read-back, and binary transfer only if documented.
+
+## 2026-08-23 release reconciliation
+
+Captain option C defers only the provider-neutral array-envelope *application
+certification* to 0.3.1. `FOUNDATION-GAPS.json` carries the release decision
+and `write_eligibility.json` contains all 28 affected source-traced rows.
+Twenty therefore remains workable but non-certified: this slice neither uses a
+credential nor claims live batch dispatch, reverse-ETL acknowledgement, or
+fresh App-path proof. The 168-command surface remains implemented; no batch
+command is partial or disabled.
+
+### Exact local results
+
+- `go test -count=1 -timeout 20m ./internal/connectors/defs/twenty`: pass.
+- `go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$'`: pass.
+- `go run ./cmd/connectorgen validate internal/connectors/defs/twenty`: pass, 1 connector and 0 findings.
+- `go run ./cmd/connectorgen surface-sync --check`: pass, 553 connectors scanned and zero corrections.
+- `go run ./cmd/connectorgen certification-sweep --connector twenty --check`: pass, 172 rows and 168 CLI commands current.
+- `make connector-boundary`: pass, whole-tree outcome `clean` (553 connectors).
+- `make docs-check`, `make lint`, `go vet ./...`, and `go build ./cmd/pm`: pass. `./pm help twenty` and bare `./pm twenty` both rendered successfully.
+- `go test -count=1 -timeout 20m ./internal/cli`: fails after 1201.230s in unrelated generic sample-certification tests, beginning with `TestExtract_RLMExecutesWithFakeRunner` and `TestCertifyCLISingleConnectorPassExitsZero`: the current shared foundation rejects a generic `declarative_typed_destination` lacking an action-owned source binding. No Twenty test or artifact is implicated; this connector-only slice does not alter shared foundation code or weaken that failure.
 
 ## Historical live proof — superseded for final acceptance
 

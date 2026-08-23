@@ -65,6 +65,14 @@
         "eligible_pending_foundation_multiplicity": 55,
         "semantic_array_envelope_incompatible": 28,
         "semantic_tombstone_incompatible": 28,
+        "batch_array_envelope_certification": {
+          "status": "foundation_blocked_deferred_0_3_1",
+          "gap_id": "foundation.reverse-etl.array-envelope-delivery.v1",
+          "decision": "captain_option_c",
+          "target_release": "0.3.1",
+          "source_trace": "Each of the 28 batch rows locks the published source URL, exact POST route, records envelope schema pointer, and declared maxItems 60.",
+          "command_status": "all 28 remain implemented and CLI-reachable; none is partial or disabled"
+        },
         "rule": "Every action remains implemented and CLI-reachable. Safety, privilege, and destructive classification govern execution and cannot be an ineligibility reason."
       },
       "typed_destination": {
@@ -75,7 +83,7 @@
         "acknowledgement": "durable_warehouse",
         "delivery": "keyed, source_ordered, no tombstones",
         "conformance": "twenty_typed_destination/companies_name_append_v1",
-        "boundary": "The adapter cannot transport tombstones and cannot form a required batch records array from one source record. Those transport semantic limits do not remove, disable, or reclassify any typed delete or batch CLI command.",
+        "boundary": "The adapter cannot transport tombstones and cannot form a required batch records array from one source record. Captain option C defers only the 28 batch-action application certifications to 0.3.1. Those transport limits do not remove, disable, or reclassify any typed delete or batch CLI command.",
         "application_dispatch": "#4304 head d814875a902be684cb2a38b94f7a8077f66b70b1 is merged locally and persists a selected action, but its source-binding lookup is one mapping per executor/stream and cannot preserve each selected Twenty action's exact input fields.",
         "multiplicity_dependency": "write_eligibility.json records 55 record-shaped actions that need provider-neutral per-action source bindings. Final acceptance requires 56 record-shaped bindings with exact provider-sourced input fields; no connector workaround is present."
       }
@@ -96,7 +104,7 @@
   "reconciliation": {
     "documented_operations_accounted_for": 168,
     "declared_or_disabled": "168 declared, 0 disabled",
-    "dependency": "PR #4304 / fm/cli-reverse-etl-destination-r1",
-    "verification_contract": "connector-local red/green persisted per-action destination and all-action eligibility tests; the current refreshed #4304 source-binding limitation must first close without a connector workaround; then connectorgen validation and surface sync, ancestor proof plus installed App/CLI dispatch, certification checks, connector boundary, and fresh credentialed built-binary pagination, CRUD cleanup, ETL, reverse-ETL acknowledgement/read-back, and documented-binary proof against the dedicated instance."
+    "dependency": "foundation rollup content is present on main; batch-array application certification is explicitly deferred to 0.3.1 by captain option C",
+    "verification_contract": "connector-local red/green persisted per-action destination and all-action eligibility tests prove the 28 batch rows retain exact source traces and implemented command reachability. This connector remains non-certified: fresh credentialed built-binary pagination, CRUD cleanup, ETL, reverse-ETL acknowledgement/read-back, and documented-binary proof are not claimed by this deferral slice."
   }
 }

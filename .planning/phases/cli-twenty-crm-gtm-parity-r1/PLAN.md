@@ -1,19 +1,38 @@
 # Twenty CRM all-ops recovery plan
 
-## Task delivery header
+## Task Delivery Header
 
-- Primary issue: #277 — Twenty CRM all-ops CLI parity.
-- Active branch / PR: `fm/cli-twenty-crm-gtm-parity-r1` / #4298, stacked on
-  `fm/cli-reverse-etl-destination-r1` / #4304.
-- Scope: connector-local Twenty definitions, generated projections, and the
-  dedicated disposable `pm-twenty-cert-r1` live-certification evidence. No
-  production GTM workspace, generic writer, foundation bypass, force-push, or
-  merge is permitted.
-- Delivery mode: direct PR; status evidence is appended only at supervisor
-  checkpoints. Every commit and the PR body carry `Refs #277`.
-- Current live-certification gate: diagnose the bounded companies-list HTTP
-  403 read-only. First prove the built CLI and an independent bearer request
-  return HTTP 200 before any mutation or reverse-ETL proof.
+- Issue: Refs #277 — Twenty CRM all-ops CLI parity.
+- Base branch: `main`.
+- Merges into: `main`.
+- Delivery: PR #4298 is open against `main`; this reconciliation slice is
+  committed, pushed, and its API-reported base is verified after the push.
+- Working branch: `fm/cli-twenty-crm-gtm-parity-r1`.
+- Task: Preserve all 168 Twenty commands as implemented and make the 28
+  documented batch actions explicit, source-traced foundation-blocked rows.
+  Captain option C defers only array-envelope *certification* to 0.3.1; it
+  does not hide, disable, or mark a working command partial.
+- Verification: run the connector-local TDD test, `connectorgen validate`,
+  `surface-sync --check`, certification sweep, generated/doc checks, the
+  connector boundary, and an actual commandrunner preflight sweep.
+
+## Evidence Table
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Batch actions are explicitly deferred, source-traced, and still reachable | live | The connector test reads every one of the 28 rows, matches its `POST` path to `writes.json`, requires the source URL/`records` envelope/60-record bound and 0.3.1 foundation gap, then proves the corresponding command remains `implemented`. |
+| The connector is candidly non-certified | live | The seven-surface ledger and foundation-gap row state the 0.3.1 deferral while preserving all 168 commands; no live credential or runtime artifact is read in this slice. |
+
+## 2026-08-23 captain decision — array-envelope certification
+
+Option C is authoritative for this release: no array-envelope foundation is
+built or awaited in this Twenty lane. The 28 exact provider batch actions stay
+user-reachable as implemented reverse-ETL commands, but their application
+batch certification is explicitly deferred to 0.3.1. This slice adds a
+per-action source trace (published URL, exact method/path, envelope property,
+and declared maximum) plus a stable foundation gap reference. It deliberately
+does not claim a batch dispatch proof, alter foundation code, touch a live
+credential, or recast any command as partial.
 
 ## GSD and skills
 

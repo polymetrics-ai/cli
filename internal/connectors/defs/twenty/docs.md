@@ -51,6 +51,13 @@ surface without credentials. Implemented list commands read ETL streams; get com
 direct reads; create, update, batch, and delete commands remain subject to reverse-ETL plan,
 preview, approval, and execute safeguards.
 
+The documented batch commands stay implemented and user-reachable. Their
+application batch-dispatch certification is explicitly deferred to 0.3.1:
+`write_eligibility.json` source-traces every batch `POST /rest/batch/...`
+route to the published Twenty API, locks the provider-owned `records` envelope
+and 60-record limit, and names the foundation block. This is neither a partial
+command classification nor a claim that batch delivery was certified.
+
 ## Fixture conformance and certification
 
 S7 adds synthetic, credential-free replay fixtures for all 28 read streams and all 112 write actions.

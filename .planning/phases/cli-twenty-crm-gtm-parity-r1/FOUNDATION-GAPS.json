@@ -14,7 +14,7 @@
       "operations.json": "a489c815907cef64d44c5c71f994fa9b874fc2a69c5807ba6ab1765b7231e198",
       "streams.json": "100da1c2ac04e46a574016f06a28aa93f8c15c2f7fd2df2febc10ff4b258c8f3",
       "writes.json": "5188fe0dea80e93471b476e91c75a33e2b6ca7fc8c9835144b87591acf7535f8",
-      "write_eligibility.json": "8b9ac70d6f07a44edc708cabaaa9f2c216f14f922440fdef3d2f81b16842b8da",
+      "write_eligibility.json": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1",
       "cli_surface.json": "0f5037f58cb1735852d2a9164ef98c56d83f0a719221d65200f3161d811d4b54"
     },
     "source_locked_provider_operation_count": 168,
@@ -181,7 +181,7 @@
         "kind": "record_shaped_create_update_actions",
         "members_source": {
           "file": "internal/connectors/defs/twenty/write_eligibility.json",
-          "sha256": "8b9ac70d6f07a44edc708cabaaa9f2c216f14f922440fdef3d2f81b16842b8da",
+          "sha256": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1",
           "selector": "$.actions[?(@.disposition == 'eligible_pending_foundation_multiplicity')]",
           "identity": "name",
           "expected_count": 55
@@ -235,7 +235,7 @@
         "kind": "batch_array_envelope_actions",
         "members_source": {
           "file": "internal/connectors/defs/twenty/write_eligibility.json",
-          "sha256": "8b9ac70d6f07a44edc708cabaaa9f2c216f14f922440fdef3d2f81b16842b8da",
+          "sha256": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1",
           "selector": "$.actions[?(@.disposition == 'semantic_array_envelope_incompatible')]",
           "identity": "name",
           "expected_count": 28
@@ -248,7 +248,7 @@
       },
       "affected_surfaces": ["reverse_etl", "direct_write"],
       "failing_validator_or_runtime_evidence": [
-        "write_eligibility.json records exactly 28 provider batch actions as array_envelope_single_record_incompatible",
+        "write_eligibility.json records exactly 28 provider batch actions with source-traced POST routes, the provider-owned records envelope, a 60-record maximum, and a captain_option_c 0.3.1 foundation block",
         "the current destination contract delivers one record and has no provider-neutral grouping/array-envelope acknowledgement contract",
         "#4305 can materialize declared arrays but does not by itself prove source-record grouping into an exact batch envelope"
       ],
@@ -266,10 +266,16 @@
       },
       "owning_issue_or_lane": {
         "issue": null,
-        "lane": "foundation-routing-required",
-        "ownership_status": "unassigned shared capability; do not solve in Twenty"
+        "lane": "0.3.1-foundation-planning",
+        "ownership_status": "captain option C: defer batch-action certification; do not solve or wait in Twenty 0.3.0"
       },
-      "status": "open",
+      "release_deferral": {
+        "decision": "captain_option_c",
+        "target_release": "0.3.1",
+        "blocks_0_3_0": false,
+        "scope": "application batch dispatch certification only; all 28 typed reverse-ETL commands remain implemented and CLI-reachable"
+      },
+      "status": "deferred_0_3_1",
       "enabled_for_merge_verdict": false,
       "exact_closure_verification": {
         "required_tests": [
@@ -287,7 +293,7 @@
         "kind": "typed_delete_actions",
         "members_source": {
           "file": "internal/connectors/defs/twenty/write_eligibility.json",
-          "sha256": "8b9ac70d6f07a44edc708cabaaa9f2c216f14f922440fdef3d2f81b16842b8da",
+          "sha256": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1",
           "selector": "$.actions[?(@.disposition == 'semantic_tombstone_incompatible')]",
           "identity": "name",
           "expected_count": 28

@@ -61,6 +61,16 @@ These dispositions do not alter CLI reachability: all 112 typed actions remain
 implemented. Safety, privilege, and destructive labels remain execution gates,
 not eligibility reasons.
 
+## 2026-08-23 release decision
+
+Captain option C defers array-envelope batch-action *application
+certification* to 0.3.1 and explicitly does not make it a 0.3.0 blocker.
+Each of the 28 batch rows now names the published source URL, its exact POST
+route, the provider-owned `records` envelope, and the declared 60-record
+maximum alongside the stable foundation-gap identifier. The connector stays
+workable but non-certified: every batch command remains implemented and
+CLI-reachable, while no batch dispatch or live acknowledgement is claimed.
+
 `SEVEN-SURFACE-LEDGER.json` is the machine-readable reconciliation. It records
 all 168 source-locked REST operations as declared with zero exclusions: 28 ETL
 reads, 28 operation-backed direct reads, and 112 typed reverse-ETL actions.

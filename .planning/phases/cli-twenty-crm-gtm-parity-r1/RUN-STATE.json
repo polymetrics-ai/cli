@@ -1,7 +1,7 @@
 {
   "issue": 277,
   "phase": "cli-twenty-crm-gtm-parity-r1",
-  "status": "blocked_shared_reverse_etl_per_action_source_binding",
+  "status": "workable_noncertified_batch_certification_deferred_0_3_1",
   "workflow": [
     "discuss-phase",
     "plan-phase --tdd",
@@ -11,13 +11,21 @@
   ],
   "inline_manual_fallback": "No compatible isolated Pi worker runtime is available; execute the resolved GSD prompts inline.",
   "target_connector": "twenty",
-  "base_branch": "fm/cli-reverse-etl-destination-r1",
+  "base_branch": "main",
   "working_branch": "fm/cli-twenty-crm-gtm-parity-r1",
   "foundation_dependency": {
     "issue": 4304,
     "current_observed_sha": "d814875a902be684cb2a38b94f7a8077f66b70b1",
     "required_state": "provider-neutral persisted per-action source bindings with exact action-specific input mappings",
     "captain_decision": "all 55 eligible actions remain mandatory; no connector workaround"
+  },
+  "batch_array_envelope_release_deferral": {
+    "gap_id": "foundation.reverse-etl.array-envelope-delivery.v1",
+    "decision": "captain_option_c",
+    "target_release": "0.3.1",
+    "blocks_0_3_0": false,
+    "scope": "certification of application batch dispatch only; all 28 documented batch commands remain implemented and CLI-reachable",
+    "evidence": "write_eligibility.json has 28 source-traced rows with the published URL, exact POST route, records envelope pointer, and maxItems 60; the connector test enforces those rows and command reachability"
   },
   "live_certification_preparation": {
     "authorization": "Firstmate approved one resume using the exact normalized local-storage enum parsed from the pinned upstream source.",
@@ -79,7 +87,7 @@
   },
   "captain_foundation_gap_ledger": {
     "path": ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-GAPS.json",
-    "status": "open_gaps_block_merge_ready_verdict",
+    "status": "batch_gap_deferred_0_3_1_other_gaps_remain_noncertified",
     "deduplicated_open_gap_count": 6,
     "known_provider_operations_enabled_for_merge_verdict_count": 0,
     "dynamic_workspace_inventory": "pending_not_not_applicable"

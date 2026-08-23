@@ -8,7 +8,7 @@
   "source_traces": {
     "write_eligibility": {
       "path": "internal/connectors/defs/twenty/write_eligibility.json",
-      "sha256": "8b9ac70d6f07a44edc708cabaaa9f2c216f14f922440fdef3d2f81b16842b8da"
+      "sha256": "fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1"
     },
     "writes": {
       "path": "internal/connectors/defs/twenty/writes.json",

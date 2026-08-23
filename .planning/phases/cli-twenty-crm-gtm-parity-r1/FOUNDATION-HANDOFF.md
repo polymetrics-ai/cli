@@ -17,7 +17,7 @@ state.
 
 | Source | SHA-256 | Exact role |
 | --- | --- | --- |
-| `internal/connectors/defs/twenty/write_eligibility.json` | `8b9ac70d6f07a44edc708cabaaa9f2c216f14f922440fdef3d2f81b16842b8da` | Action membership and exact candidate input-to-source-field mappings. |
+| `internal/connectors/defs/twenty/write_eligibility.json` | `fd42ae4f098b38e4500a26e29bea2f59a2592da94d467be2b0e3ebfed8bccfe1` | Action membership and exact candidate input-to-source-field mappings. |
 | `internal/connectors/defs/twenty/writes.json` | `5188fe0dea80e93471b476e91c75a33e2b6ca7fc8c9835144b87591acf7535f8` | Provider-owned typed action schemas, methods, paths, and body fields. |
 | `internal/connectors/defs/twenty/sync_transport.json` | `d4b10c0d26ce159d8c6c9fb7d2e4c740332adc7e28aeee869f19388eaf51bc58` | Current declarative source/destination contract and its one binding. |
 
@@ -78,7 +78,7 @@ observable contract above, not a specific field name or JSON representation.
 | Gap | Exact Twenty selector | Count | Required closure evidence |
 | --- | --- | ---: | --- |
 | Per-action source bindings | `$.actions[?(@.disposition == 'eligible_pending_foundation_multiplicity')]` | 55 | At least two actions on one executor/stream with different mappings each select their own mapping; all 55 become definition-bound and persist/reopen with exact acknowledgements. |
-| Batch array-envelope delivery | `$.actions[?(@.disposition == 'semantic_array_envelope_incompatible')]` | 28 | Bounded grouping produces the provider-owned `records` array; empty, over-limit, malformed, cross-action, and post-approval mutation fail before I/O; acknowledgement accounts for every member. |
+| Batch array-envelope delivery | `$.actions[?(@.disposition == 'semantic_array_envelope_incompatible')]` | 28 | Captain option C defers this foundation-backed application certification to 0.3.1. Each row remains implemented and CLI-reachable and carries its exact published POST route, `records` envelope, and 60-record bound; this is not a partial-command classification. |
 | Tombstone workset delivery | `$.actions[?(@.disposition == 'semantic_tombstone_incompatible')]` | 28 | Typed confirmation, plan/preview/approval seal, workset ownership, idempotency, acknowledgement, and independent absence verification for only declared records. |
 
 All 112 reverse-ETL commands remain `implemented`; the three groups are a
