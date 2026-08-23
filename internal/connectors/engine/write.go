@@ -994,13 +994,6 @@ func bodyTypeOf(action WriteAction) string {
 	return action.BodyType
 }
 
-func writeActionBaseURL(b Bundle, action WriteAction) string {
-	if action.BaseURL != "" {
-		return action.BaseURL
-	}
-	return b.HTTP.URL
-}
-
 // buildJSONBody returns every record field not consumed by path_fields
 // (design §B.2 default body construction rule).
 func buildJSONBody(rec connectors.Record, pathFields []string) map[string]any {
