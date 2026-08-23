@@ -9,7 +9,7 @@
   "pr_number": 4334,
   "pr_url": "https://github.com/polymetrics-ai/cli/pull/4334",
   "pr_base": "main",
-  "pr_head_sha": "a9ad7ed56025f0bc2bfe46d35bca1ce9a46054a1",
+  "pr_creation_head_sha": "a9ad7ed56025f0bc2bfe46d35bca1ce9a46054a1",
   "production_scope": [
     "cmd/connectorgen/validate.go",
     "cmd/connectorgen/sourceprojection.go",
